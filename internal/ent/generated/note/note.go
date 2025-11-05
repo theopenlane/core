@@ -128,12 +128,16 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"control_comments",
 	"entity_notes",
+	"finding_comments",
 	"internal_policy_comments",
 	"procedure_comments",
 	"program_notes",
+	"remediation_comments",
+	"review_comments",
 	"risk_comments",
 	"subcontrol_comments",
 	"task_comments",
+	"vulnerability_comments",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

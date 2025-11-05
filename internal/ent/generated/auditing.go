@@ -34,6 +34,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/entitytypehistory"
 	"github.com/theopenlane/core/internal/ent/generated/evidencehistory"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupsettinghistory"
@@ -52,6 +54,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/procedurehistory"
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scanhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjobhistory"
@@ -68,6 +72,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfighistory"
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 )
 
 type Change struct {
@@ -328,11 +333,35 @@ func (_m *ActionPlanHistory) changes(new *ActionPlanHistory) []Change {
 	if !reflect.DeepEqual(_m.ActionPlanKindID, new.ActionPlanKindID) {
 		changes = append(changes, NewChange(actionplanhistory.FieldActionPlanKindID, _m.ActionPlanKindID, new.ActionPlanKindID))
 	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(actionplanhistory.FieldTitle, _m.Title, new.Title))
+	}
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(actionplanhistory.FieldDescription, _m.Description, new.Description))
+	}
 	if !reflect.DeepEqual(_m.DueDate, new.DueDate) {
 		changes = append(changes, NewChange(actionplanhistory.FieldDueDate, _m.DueDate, new.DueDate))
 	}
+	if !reflect.DeepEqual(_m.CompletedAt, new.CompletedAt) {
+		changes = append(changes, NewChange(actionplanhistory.FieldCompletedAt, _m.CompletedAt, new.CompletedAt))
+	}
 	if !reflect.DeepEqual(_m.Priority, new.Priority) {
 		changes = append(changes, NewChange(actionplanhistory.FieldPriority, _m.Priority, new.Priority))
+	}
+	if !reflect.DeepEqual(_m.RequiresApproval, new.RequiresApproval) {
+		changes = append(changes, NewChange(actionplanhistory.FieldRequiresApproval, _m.RequiresApproval, new.RequiresApproval))
+	}
+	if !reflect.DeepEqual(_m.Blocked, new.Blocked) {
+		changes = append(changes, NewChange(actionplanhistory.FieldBlocked, _m.Blocked, new.Blocked))
+	}
+	if !reflect.DeepEqual(_m.BlockerReason, new.BlockerReason) {
+		changes = append(changes, NewChange(actionplanhistory.FieldBlockerReason, _m.BlockerReason, new.BlockerReason))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(actionplanhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.RawPayload, new.RawPayload) {
+		changes = append(changes, NewChange(actionplanhistory.FieldRawPayload, _m.RawPayload, new.RawPayload))
 	}
 	if !reflect.DeepEqual(_m.Source, new.Source) {
 		changes = append(changes, NewChange(actionplanhistory.FieldSource, _m.Source, new.Source))
@@ -1491,6 +1520,231 @@ func (_m *FileHistory) Diff(history *FileHistory) (*HistoryDiff[FileHistory], er
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[FileHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *FindingHistory) changes(new *FindingHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(findinghistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(findinghistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(findinghistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(findinghistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(findinghistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(findinghistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(findinghistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.ExternalOwnerID, new.ExternalOwnerID) {
+		changes = append(changes, NewChange(findinghistory.FieldExternalOwnerID, _m.ExternalOwnerID, new.ExternalOwnerID))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(findinghistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.ResourceName, new.ResourceName) {
+		changes = append(changes, NewChange(findinghistory.FieldResourceName, _m.ResourceName, new.ResourceName))
+	}
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(findinghistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(_m.State, new.State) {
+		changes = append(changes, NewChange(findinghistory.FieldState, _m.State, new.State))
+	}
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(findinghistory.FieldCategory, _m.Category, new.Category))
+	}
+	if !reflect.DeepEqual(_m.Categories, new.Categories) {
+		changes = append(changes, NewChange(findinghistory.FieldCategories, _m.Categories, new.Categories))
+	}
+	if !reflect.DeepEqual(_m.FindingClass, new.FindingClass) {
+		changes = append(changes, NewChange(findinghistory.FieldFindingClass, _m.FindingClass, new.FindingClass))
+	}
+	if !reflect.DeepEqual(_m.Severity, new.Severity) {
+		changes = append(changes, NewChange(findinghistory.FieldSeverity, _m.Severity, new.Severity))
+	}
+	if !reflect.DeepEqual(_m.NumericSeverity, new.NumericSeverity) {
+		changes = append(changes, NewChange(findinghistory.FieldNumericSeverity, _m.NumericSeverity, new.NumericSeverity))
+	}
+	if !reflect.DeepEqual(_m.Score, new.Score) {
+		changes = append(changes, NewChange(findinghistory.FieldScore, _m.Score, new.Score))
+	}
+	if !reflect.DeepEqual(_m.Impact, new.Impact) {
+		changes = append(changes, NewChange(findinghistory.FieldImpact, _m.Impact, new.Impact))
+	}
+	if !reflect.DeepEqual(_m.Exploitability, new.Exploitability) {
+		changes = append(changes, NewChange(findinghistory.FieldExploitability, _m.Exploitability, new.Exploitability))
+	}
+	if !reflect.DeepEqual(_m.Priority, new.Priority) {
+		changes = append(changes, NewChange(findinghistory.FieldPriority, _m.Priority, new.Priority))
+	}
+	if !reflect.DeepEqual(_m.Open, new.Open) {
+		changes = append(changes, NewChange(findinghistory.FieldOpen, _m.Open, new.Open))
+	}
+	if !reflect.DeepEqual(_m.BlocksProduction, new.BlocksProduction) {
+		changes = append(changes, NewChange(findinghistory.FieldBlocksProduction, _m.BlocksProduction, new.BlocksProduction))
+	}
+	if !reflect.DeepEqual(_m.Production, new.Production) {
+		changes = append(changes, NewChange(findinghistory.FieldProduction, _m.Production, new.Production))
+	}
+	if !reflect.DeepEqual(_m.Public, new.Public) {
+		changes = append(changes, NewChange(findinghistory.FieldPublic, _m.Public, new.Public))
+	}
+	if !reflect.DeepEqual(_m.Validated, new.Validated) {
+		changes = append(changes, NewChange(findinghistory.FieldValidated, _m.Validated, new.Validated))
+	}
+	if !reflect.DeepEqual(_m.AssessmentID, new.AssessmentID) {
+		changes = append(changes, NewChange(findinghistory.FieldAssessmentID, _m.AssessmentID, new.AssessmentID))
+	}
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(findinghistory.FieldDescription, _m.Description, new.Description))
+	}
+	if !reflect.DeepEqual(_m.Recommendation, new.Recommendation) {
+		changes = append(changes, NewChange(findinghistory.FieldRecommendation, _m.Recommendation, new.Recommendation))
+	}
+	if !reflect.DeepEqual(_m.RecommendedActions, new.RecommendedActions) {
+		changes = append(changes, NewChange(findinghistory.FieldRecommendedActions, _m.RecommendedActions, new.RecommendedActions))
+	}
+	if !reflect.DeepEqual(_m.References, new.References) {
+		changes = append(changes, NewChange(findinghistory.FieldReferences, _m.References, new.References))
+	}
+	if !reflect.DeepEqual(_m.StepsToReproduce, new.StepsToReproduce) {
+		changes = append(changes, NewChange(findinghistory.FieldStepsToReproduce, _m.StepsToReproduce, new.StepsToReproduce))
+	}
+	if !reflect.DeepEqual(_m.Targets, new.Targets) {
+		changes = append(changes, NewChange(findinghistory.FieldTargets, _m.Targets, new.Targets))
+	}
+	if !reflect.DeepEqual(_m.TargetDetails, new.TargetDetails) {
+		changes = append(changes, NewChange(findinghistory.FieldTargetDetails, _m.TargetDetails, new.TargetDetails))
+	}
+	if !reflect.DeepEqual(_m.Vector, new.Vector) {
+		changes = append(changes, NewChange(findinghistory.FieldVector, _m.Vector, new.Vector))
+	}
+	if !reflect.DeepEqual(_m.RemediationSLA, new.RemediationSLA) {
+		changes = append(changes, NewChange(findinghistory.FieldRemediationSLA, _m.RemediationSLA, new.RemediationSLA))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(findinghistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.EventTime, new.EventTime) {
+		changes = append(changes, NewChange(findinghistory.FieldEventTime, _m.EventTime, new.EventTime))
+	}
+	if !reflect.DeepEqual(_m.ReportedAt, new.ReportedAt) {
+		changes = append(changes, NewChange(findinghistory.FieldReportedAt, _m.ReportedAt, new.ReportedAt))
+	}
+	if !reflect.DeepEqual(_m.SourceUpdatedAt, new.SourceUpdatedAt) {
+		changes = append(changes, NewChange(findinghistory.FieldSourceUpdatedAt, _m.SourceUpdatedAt, new.SourceUpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.ExternalURI, new.ExternalURI) {
+		changes = append(changes, NewChange(findinghistory.FieldExternalURI, _m.ExternalURI, new.ExternalURI))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(findinghistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.RawPayload, new.RawPayload) {
+		changes = append(changes, NewChange(findinghistory.FieldRawPayload, _m.RawPayload, new.RawPayload))
+	}
+	return changes
+}
+
+func (_m *FindingHistory) Diff(history *FindingHistory) (*HistoryDiff[FindingHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[FindingHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[FindingHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *FindingControlHistory) changes(new *FindingControlHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.FindingID, new.FindingID) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldFindingID, _m.FindingID, new.FindingID))
+	}
+	if !reflect.DeepEqual(_m.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldControlID, _m.ControlID, new.ControlID))
+	}
+	if !reflect.DeepEqual(_m.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldStandardID, _m.StandardID, new.StandardID))
+	}
+	if !reflect.DeepEqual(_m.ExternalStandard, new.ExternalStandard) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldExternalStandard, _m.ExternalStandard, new.ExternalStandard))
+	}
+	if !reflect.DeepEqual(_m.ExternalStandardVersion, new.ExternalStandardVersion) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldExternalStandardVersion, _m.ExternalStandardVersion, new.ExternalStandardVersion))
+	}
+	if !reflect.DeepEqual(_m.ExternalControlID, new.ExternalControlID) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldExternalControlID, _m.ExternalControlID, new.ExternalControlID))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.DiscoveredAt, new.DiscoveredAt) {
+		changes = append(changes, NewChange(findingcontrolhistory.FieldDiscoveredAt, _m.DiscoveredAt, new.DiscoveredAt))
+	}
+	return changes
+}
+
+func (_m *FindingControlHistory) Diff(history *FindingControlHistory) (*HistoryDiff[FindingControlHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[FindingControlHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[FindingControlHistory]{
 			Old:     history,
 			New:     _m,
 			Changes: history.changes(_m),
@@ -2906,6 +3160,213 @@ func (_m *ProgramMembershipHistory) Diff(history *ProgramMembershipHistory) (*Hi
 	return nil, ErrIdenticalHistory
 }
 
+func (_m *RemediationHistory) changes(new *RemediationHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(remediationhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(remediationhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(remediationhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(remediationhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.ExternalOwnerID, new.ExternalOwnerID) {
+		changes = append(changes, NewChange(remediationhistory.FieldExternalOwnerID, _m.ExternalOwnerID, new.ExternalOwnerID))
+	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(remediationhistory.FieldTitle, _m.Title, new.Title))
+	}
+	if !reflect.DeepEqual(_m.State, new.State) {
+		changes = append(changes, NewChange(remediationhistory.FieldState, _m.State, new.State))
+	}
+	if !reflect.DeepEqual(_m.Intent, new.Intent) {
+		changes = append(changes, NewChange(remediationhistory.FieldIntent, _m.Intent, new.Intent))
+	}
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(remediationhistory.FieldSummary, _m.Summary, new.Summary))
+	}
+	if !reflect.DeepEqual(_m.Explanation, new.Explanation) {
+		changes = append(changes, NewChange(remediationhistory.FieldExplanation, _m.Explanation, new.Explanation))
+	}
+	if !reflect.DeepEqual(_m.Instructions, new.Instructions) {
+		changes = append(changes, NewChange(remediationhistory.FieldInstructions, _m.Instructions, new.Instructions))
+	}
+	if !reflect.DeepEqual(_m.OwnerReference, new.OwnerReference) {
+		changes = append(changes, NewChange(remediationhistory.FieldOwnerReference, _m.OwnerReference, new.OwnerReference))
+	}
+	if !reflect.DeepEqual(_m.RepositoryURI, new.RepositoryURI) {
+		changes = append(changes, NewChange(remediationhistory.FieldRepositoryURI, _m.RepositoryURI, new.RepositoryURI))
+	}
+	if !reflect.DeepEqual(_m.PullRequestURI, new.PullRequestURI) {
+		changes = append(changes, NewChange(remediationhistory.FieldPullRequestURI, _m.PullRequestURI, new.PullRequestURI))
+	}
+	if !reflect.DeepEqual(_m.TicketReference, new.TicketReference) {
+		changes = append(changes, NewChange(remediationhistory.FieldTicketReference, _m.TicketReference, new.TicketReference))
+	}
+	if !reflect.DeepEqual(_m.DueAt, new.DueAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldDueAt, _m.DueAt, new.DueAt))
+	}
+	if !reflect.DeepEqual(_m.CompletedAt, new.CompletedAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldCompletedAt, _m.CompletedAt, new.CompletedAt))
+	}
+	if !reflect.DeepEqual(_m.PrGeneratedAt, new.PrGeneratedAt) {
+		changes = append(changes, NewChange(remediationhistory.FieldPrGeneratedAt, _m.PrGeneratedAt, new.PrGeneratedAt))
+	}
+	if !reflect.DeepEqual(_m.Error, new.Error) {
+		changes = append(changes, NewChange(remediationhistory.FieldError, _m.Error, new.Error))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(remediationhistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.ExternalURI, new.ExternalURI) {
+		changes = append(changes, NewChange(remediationhistory.FieldExternalURI, _m.ExternalURI, new.ExternalURI))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(remediationhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	return changes
+}
+
+func (_m *RemediationHistory) Diff(history *RemediationHistory) (*HistoryDiff[RemediationHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[RemediationHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[RemediationHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *ReviewHistory) changes(new *ReviewHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(reviewhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(reviewhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(reviewhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(reviewhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.ExternalOwnerID, new.ExternalOwnerID) {
+		changes = append(changes, NewChange(reviewhistory.FieldExternalOwnerID, _m.ExternalOwnerID, new.ExternalOwnerID))
+	}
+	if !reflect.DeepEqual(_m.Title, new.Title) {
+		changes = append(changes, NewChange(reviewhistory.FieldTitle, _m.Title, new.Title))
+	}
+	if !reflect.DeepEqual(_m.State, new.State) {
+		changes = append(changes, NewChange(reviewhistory.FieldState, _m.State, new.State))
+	}
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(reviewhistory.FieldCategory, _m.Category, new.Category))
+	}
+	if !reflect.DeepEqual(_m.Classification, new.Classification) {
+		changes = append(changes, NewChange(reviewhistory.FieldClassification, _m.Classification, new.Classification))
+	}
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(reviewhistory.FieldSummary, _m.Summary, new.Summary))
+	}
+	if !reflect.DeepEqual(_m.Details, new.Details) {
+		changes = append(changes, NewChange(reviewhistory.FieldDetails, _m.Details, new.Details))
+	}
+	if !reflect.DeepEqual(_m.Reporter, new.Reporter) {
+		changes = append(changes, NewChange(reviewhistory.FieldReporter, _m.Reporter, new.Reporter))
+	}
+	if !reflect.DeepEqual(_m.Approved, new.Approved) {
+		changes = append(changes, NewChange(reviewhistory.FieldApproved, _m.Approved, new.Approved))
+	}
+	if !reflect.DeepEqual(_m.ReviewedAt, new.ReviewedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldReviewedAt, _m.ReviewedAt, new.ReviewedAt))
+	}
+	if !reflect.DeepEqual(_m.ReportedAt, new.ReportedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldReportedAt, _m.ReportedAt, new.ReportedAt))
+	}
+	if !reflect.DeepEqual(_m.ApprovedAt, new.ApprovedAt) {
+		changes = append(changes, NewChange(reviewhistory.FieldApprovedAt, _m.ApprovedAt, new.ApprovedAt))
+	}
+	if !reflect.DeepEqual(_m.ReviewerID, new.ReviewerID) {
+		changes = append(changes, NewChange(reviewhistory.FieldReviewerID, _m.ReviewerID, new.ReviewerID))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(reviewhistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.ExternalURI, new.ExternalURI) {
+		changes = append(changes, NewChange(reviewhistory.FieldExternalURI, _m.ExternalURI, new.ExternalURI))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(reviewhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.RawPayload, new.RawPayload) {
+		changes = append(changes, NewChange(reviewhistory.FieldRawPayload, _m.RawPayload, new.RawPayload))
+	}
+	return changes
+}
+
+func (_m *ReviewHistory) Diff(history *ReviewHistory) (*HistoryDiff[ReviewHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[ReviewHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[ReviewHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (_m *RiskHistory) changes(new *RiskHistory) []Change {
 	var changes []Change
 	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
@@ -4211,6 +4672,141 @@ func (_m *UserSettingHistory) Diff(history *UserSettingHistory) (*HistoryDiff[Us
 	return nil, ErrIdenticalHistory
 }
 
+func (_m *VulnerabilityHistory) changes(new *VulnerabilityHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.ExternalOwnerID, new.ExternalOwnerID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldExternalOwnerID, _m.ExternalOwnerID, new.ExternalOwnerID))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.CveID, new.CveID) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldCveID, _m.CveID, new.CveID))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(_m.Category, new.Category) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldCategory, _m.Category, new.Category))
+	}
+	if !reflect.DeepEqual(_m.Severity, new.Severity) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSeverity, _m.Severity, new.Severity))
+	}
+	if !reflect.DeepEqual(_m.Score, new.Score) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldScore, _m.Score, new.Score))
+	}
+	if !reflect.DeepEqual(_m.Impact, new.Impact) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldImpact, _m.Impact, new.Impact))
+	}
+	if !reflect.DeepEqual(_m.Exploitability, new.Exploitability) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldExploitability, _m.Exploitability, new.Exploitability))
+	}
+	if !reflect.DeepEqual(_m.Priority, new.Priority) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldPriority, _m.Priority, new.Priority))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.Summary, new.Summary) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSummary, _m.Summary, new.Summary))
+	}
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDescription, _m.Description, new.Description))
+	}
+	if !reflect.DeepEqual(_m.Vector, new.Vector) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldVector, _m.Vector, new.Vector))
+	}
+	if !reflect.DeepEqual(_m.RemediationSLA, new.RemediationSLA) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldRemediationSLA, _m.RemediationSLA, new.RemediationSLA))
+	}
+	if !reflect.DeepEqual(_m.Open, new.Open) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldOpen, _m.Open, new.Open))
+	}
+	if !reflect.DeepEqual(_m.Blocking, new.Blocking) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldBlocking, _m.Blocking, new.Blocking))
+	}
+	if !reflect.DeepEqual(_m.Production, new.Production) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldProduction, _m.Production, new.Production))
+	}
+	if !reflect.DeepEqual(_m.Public, new.Public) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldPublic, _m.Public, new.Public))
+	}
+	if !reflect.DeepEqual(_m.Validated, new.Validated) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldValidated, _m.Validated, new.Validated))
+	}
+	if !reflect.DeepEqual(_m.References, new.References) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldReferences, _m.References, new.References))
+	}
+	if !reflect.DeepEqual(_m.Impacts, new.Impacts) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldImpacts, _m.Impacts, new.Impacts))
+	}
+	if !reflect.DeepEqual(_m.PublishedAt, new.PublishedAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldPublishedAt, _m.PublishedAt, new.PublishedAt))
+	}
+	if !reflect.DeepEqual(_m.DiscoveredAt, new.DiscoveredAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldDiscoveredAt, _m.DiscoveredAt, new.DiscoveredAt))
+	}
+	if !reflect.DeepEqual(_m.SourceUpdatedAt, new.SourceUpdatedAt) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldSourceUpdatedAt, _m.SourceUpdatedAt, new.SourceUpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.ExternalURI, new.ExternalURI) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldExternalURI, _m.ExternalURI, new.ExternalURI))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.RawPayload, new.RawPayload) {
+		changes = append(changes, NewChange(vulnerabilityhistory.FieldRawPayload, _m.RawPayload, new.RawPayload))
+	}
+	return changes
+}
+
+func (_m *VulnerabilityHistory) Diff(history *VulnerabilityHistory) (*HistoryDiff[VulnerabilityHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[VulnerabilityHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[VulnerabilityHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (c Change) String(op history.OpType) string {
 	var newstr, oldstr string
 	if c.New != nil {
@@ -4333,6 +4929,18 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditFindingControlHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditFindingHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditGroupHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -4441,6 +5049,18 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	}
 	result.Edges = append(result.Edges, record.Edges...)
 
+	record, err = auditRemediationHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditReviewHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
 	record, err = auditRiskHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
@@ -4532,6 +5152,12 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditUserSettingHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditVulnerabilityHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5150,6 +5776,88 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditFileHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("FindingControlHistory", "History") {
+		// map AuditLogWhereInput to FindingControlHistoryWhereInput
+		whereInput := &FindingControlHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to FindingControlHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &FindingControlHistoryOrder{
+			Field:     FindingControlHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditFindingControlHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("FindingHistory", "History") {
+		// map AuditLogWhereInput to FindingHistoryWhereInput
+		whereInput := &FindingHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to FindingHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &FindingHistoryOrder{
+			Field:     FindingHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditFindingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -5894,6 +6602,88 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 
 		return
 	}
+	if where.Table == strings.TrimSuffix("RemediationHistory", "History") {
+		// map AuditLogWhereInput to RemediationHistoryWhereInput
+		whereInput := &RemediationHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to RemediationHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &RemediationHistoryOrder{
+			Field:     RemediationHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditRemediationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("ReviewHistory", "History") {
+		// map AuditLogWhereInput to ReviewHistoryWhereInput
+		whereInput := &ReviewHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to ReviewHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &ReviewHistoryOrder{
+			Field:     ReviewHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditReviewHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
 	if where.Table == strings.TrimSuffix("RiskHistory", "History") {
 		// map AuditLogWhereInput to RiskHistoryWhereInput
 		whereInput := &RiskHistoryWhereInput{}
@@ -6544,6 +7334,47 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditUserSettingHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("VulnerabilityHistory", "History") {
+		// map AuditLogWhereInput to VulnerabilityHistoryWhereInput
+		whereInput := &VulnerabilityHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to VulnerabilityHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &VulnerabilityHistoryOrder{
+			Field:     VulnerabilityHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditVulnerabilityHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -7649,6 +8480,152 @@ func auditFileHistory(ctx context.Context, config config, after *Cursor, first *
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &FileHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type findingcontrolhistoryref struct {
+	Ref string
+}
+
+func auditFindingControlHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *FindingControlHistoryOrder, where *FindingControlHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []FindingControlHistoryPaginateOption{
+		WithFindingControlHistoryOrder(orderBy),
+		WithFindingControlHistoryFilter(where.Filter),
+	}
+
+	client := NewFindingControlHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "FindingControlHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&FindingControlHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&FindingControlHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					findingcontrolhistory.Ref(curr.Node.Ref),
+					findingcontrolhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(findingcontrolhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &FindingControlHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type findinghistoryref struct {
+	Ref string
+}
+
+func auditFindingHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *FindingHistoryOrder, where *FindingHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []FindingHistoryPaginateOption{
+		WithFindingHistoryOrder(orderBy),
+		WithFindingHistoryFilter(where.Filter),
+	}
+
+	client := NewFindingHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "FindingHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&FindingHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&FindingHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					findinghistory.Ref(curr.Node.Ref),
+					findinghistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(findinghistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &FindingHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)
@@ -8983,6 +9960,152 @@ func auditProgramMembershipHistory(ctx context.Context, config config, after *Cu
 	return result, nil
 }
 
+type remediationhistoryref struct {
+	Ref string
+}
+
+func auditRemediationHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *RemediationHistoryOrder, where *RemediationHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []RemediationHistoryPaginateOption{
+		WithRemediationHistoryOrder(orderBy),
+		WithRemediationHistoryFilter(where.Filter),
+	}
+
+	client := NewRemediationHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "RemediationHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&RemediationHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&RemediationHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					remediationhistory.Ref(curr.Node.Ref),
+					remediationhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(remediationhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &RemediationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type reviewhistoryref struct {
+	Ref string
+}
+
+func auditReviewHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *ReviewHistoryOrder, where *ReviewHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []ReviewHistoryPaginateOption{
+		WithReviewHistoryOrder(orderBy),
+		WithReviewHistoryFilter(where.Filter),
+	}
+
+	client := NewReviewHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "ReviewHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&ReviewHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&ReviewHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					reviewhistory.Ref(curr.Node.Ref),
+					reviewhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(reviewhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &ReviewHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
 type riskhistoryref struct {
 	Ref string
 }
@@ -10131,6 +11254,79 @@ func auditUserSettingHistory(ctx context.Context, config config, after *Cursor, 
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &UserSettingHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type vulnerabilityhistoryref struct {
+	Ref string
+}
+
+func auditVulnerabilityHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *VulnerabilityHistoryOrder, where *VulnerabilityHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []VulnerabilityHistoryPaginateOption{
+		WithVulnerabilityHistoryOrder(orderBy),
+		WithVulnerabilityHistoryFilter(where.Filter),
+	}
+
+	client := NewVulnerabilityHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "VulnerabilityHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&VulnerabilityHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&VulnerabilityHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					vulnerabilityhistory.Ref(curr.Node.Ref),
+					vulnerabilityhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(vulnerabilityhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &VulnerabilityHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

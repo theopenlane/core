@@ -46,6 +46,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		eventResults                      *generated.EventConnection
 		evidenceResults                   *generated.EvidenceConnection
 		fileResults                       *generated.FileConnection
+		findingResults                    *generated.FindingConnection
 		groupResults                      *generated.GroupConnection
 		integrationResults                *generated.IntegrationConnection
 		internalpolicyResults             *generated.InternalPolicyConnection
@@ -63,6 +64,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		personalaccesstokenResults        *generated.PersonalAccessTokenConnection
 		procedureResults                  *generated.ProcedureConnection
 		programResults                    *generated.ProgramConnection
+		remediationResults                *generated.RemediationConnection
+		reviewResults                     *generated.ReviewConnection
 		riskResults                       *generated.RiskConnection
 		scanResults                       *generated.ScanConnection
 		standardResults                   *generated.StandardConnection
@@ -77,6 +80,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		trustcenterdocResults             *generated.TrustCenterDocConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
+		vulnerabilityResults              *generated.VulnerabilityConnection
 		webauthnResults                   *generated.WebauthnConnection
 	)
 
@@ -303,6 +307,18 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			findingResults, err = searchFindings(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, findingResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			groupResults, err = searchGroups(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -507,6 +523,30 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			remediationResults, err = searchRemediations(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, remediationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			reviewResults, err = searchReviews(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, reviewResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			riskResults, err = searchRisks(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -675,6 +715,18 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		},
 		func() {
 			var err error
+			vulnerabilityResults, err = searchVulnerabilities(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, vulnerabilityResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			webauthnResults, err = searchWebauthns(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -787,6 +839,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += fileResults.TotalCount
 	}
+	if findingResults != nil && len(findingResults.Edges) > 0 {
+		res.Findings = findingResults
+
+		res.TotalCount += findingResults.TotalCount
+	}
 	if groupResults != nil && len(groupResults.Edges) > 0 {
 		res.Groups = groupResults
 
@@ -872,6 +929,16 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 		res.TotalCount += programResults.TotalCount
 	}
+	if remediationResults != nil && len(remediationResults.Edges) > 0 {
+		res.Remediations = remediationResults
+
+		res.TotalCount += remediationResults.TotalCount
+	}
+	if reviewResults != nil && len(reviewResults.Edges) > 0 {
+		res.Reviews = reviewResults
+
+		res.TotalCount += reviewResults.TotalCount
+	}
 	if riskResults != nil && len(riskResults.Edges) > 0 {
 		res.Risks = riskResults
 
@@ -941,6 +1008,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.UserSettings = usersettingResults
 
 		res.TotalCount += usersettingResults.TotalCount
+	}
+	if vulnerabilityResults != nil && len(vulnerabilityResults.Edges) > 0 {
+		res.Vulnerabilities = vulnerabilityResults
+
+		res.TotalCount += vulnerabilityResults.TotalCount
 	}
 	if webauthnResults != nil && len(webauthnResults.Edges) > 0 {
 		res.Webauthns = webauthnResults
@@ -1274,6 +1346,24 @@ func (r *queryResolver) AdminFileSearch(ctx context.Context, query string, after
 	// return the results
 	return fileResults, nil
 }
+func (r *queryResolver) AdminFindingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FindingConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	findingResults, err := adminSearchFindings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return findingResults, nil
+}
 func (r *queryResolver) AdminGroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
@@ -1580,6 +1670,42 @@ func (r *queryResolver) AdminProgramSearch(ctx context.Context, query string, af
 	// return the results
 	return programResults, nil
 }
+func (r *queryResolver) AdminRemediationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RemediationConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	remediationResults, err := adminSearchRemediations(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return remediationResults, nil
+}
+func (r *queryResolver) AdminReviewSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ReviewConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	reviewResults, err := adminSearchReviews(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return reviewResults, nil
+}
 func (r *queryResolver) AdminRiskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
 	// ensure the user is a system admin
 	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
@@ -1831,6 +1957,24 @@ func (r *queryResolver) AdminUserSettingSearch(ctx context.Context, query string
 
 	// return the results
 	return usersettingResults, nil
+}
+func (r *queryResolver) AdminVulnerabilitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.VulnerabilityConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	vulnerabilityResults, err := adminSearchVulnerabilities(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return vulnerabilityResults, nil
 }
 func (r *queryResolver) AdminWebauthnSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
 	// ensure the user is a system admin

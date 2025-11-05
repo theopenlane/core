@@ -56,11 +56,15 @@ type Entity struct {
 	Status string `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EntityQuery when eager-loading is set.
-	Edges                EntityEdges `json:"edges"`
-	entity_type_entities *string
-	risk_entities        *string
-	scan_entities        *string
-	selectValues         sql.SelectValues
+	Edges                  EntityEdges `json:"edges"`
+	entity_type_entities   *string
+	finding_entities       *string
+	remediation_entities   *string
+	review_entities        *string
+	risk_entities          *string
+	scan_entities          *string
+	vulnerability_entities *string
+	selectValues           sql.SelectValues
 }
 
 // EntityEdges holds the relations/edges for other nodes in the graph.
@@ -222,9 +226,17 @@ func (*Entity) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case entity.ForeignKeys[0]: // entity_type_entities
 			values[i] = new(sql.NullString)
-		case entity.ForeignKeys[1]: // risk_entities
+		case entity.ForeignKeys[1]: // finding_entities
 			values[i] = new(sql.NullString)
-		case entity.ForeignKeys[2]: // scan_entities
+		case entity.ForeignKeys[2]: // remediation_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[3]: // review_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[4]: // risk_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[5]: // scan_entities
+			values[i] = new(sql.NullString)
+		case entity.ForeignKeys[6]: // vulnerability_entities
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -364,17 +376,45 @@ func (_m *Entity) assignValues(columns []string, values []any) error {
 			}
 		case entity.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_entities", values[i])
+			} else if value.Valid {
+				_m.finding_entities = new(string)
+				*_m.finding_entities = value.String
+			}
+		case entity.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_entities", values[i])
+			} else if value.Valid {
+				_m.remediation_entities = new(string)
+				*_m.remediation_entities = value.String
+			}
+		case entity.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_entities", values[i])
+			} else if value.Valid {
+				_m.review_entities = new(string)
+				*_m.review_entities = value.String
+			}
+		case entity.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_entities", values[i])
 			} else if value.Valid {
 				_m.risk_entities = new(string)
 				*_m.risk_entities = value.String
 			}
-		case entity.ForeignKeys[2]:
+		case entity.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field scan_entities", values[i])
 			} else if value.Valid {
 				_m.scan_entities = new(string)
 				*_m.scan_entities = value.String
+			}
+		case entity.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_entities", values[i])
+			} else if value.Valid {
+				_m.vulnerability_entities = new(string)
+				*_m.vulnerability_entities = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

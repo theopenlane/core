@@ -39,6 +39,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -88,6 +92,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -124,6 +132,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 
 	"entgo.io/ent/dialect/sql"
@@ -134,7 +144,7 @@ import (
 
 // schemaGraph holds a representation of ent/schema at runtime.
 var schemaGraph = func() *sqlgraph.Schema {
-	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 121)}
+	graph := &sqlgraph.Schema{Nodes: make([]*sqlgraph.Node, 131)}
 	graph.Nodes[0] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   apitoken.Table,
@@ -210,8 +220,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplan.FieldSystemInternalID:                {Type: field.TypeString, Column: actionplan.FieldSystemInternalID},
 			actionplan.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplan.FieldActionPlanKindName},
 			actionplan.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplan.FieldActionPlanKindID},
+			actionplan.FieldTitle:                           {Type: field.TypeString, Column: actionplan.FieldTitle},
+			actionplan.FieldDescription:                     {Type: field.TypeString, Column: actionplan.FieldDescription},
 			actionplan.FieldDueDate:                         {Type: field.TypeTime, Column: actionplan.FieldDueDate},
+			actionplan.FieldCompletedAt:                     {Type: field.TypeTime, Column: actionplan.FieldCompletedAt},
 			actionplan.FieldPriority:                        {Type: field.TypeEnum, Column: actionplan.FieldPriority},
+			actionplan.FieldRequiresApproval:                {Type: field.TypeBool, Column: actionplan.FieldRequiresApproval},
+			actionplan.FieldBlocked:                         {Type: field.TypeBool, Column: actionplan.FieldBlocked},
+			actionplan.FieldBlockerReason:                   {Type: field.TypeString, Column: actionplan.FieldBlockerReason},
+			actionplan.FieldMetadata:                        {Type: field.TypeJSON, Column: actionplan.FieldMetadata},
+			actionplan.FieldRawPayload:                      {Type: field.TypeJSON, Column: actionplan.FieldRawPayload},
 			actionplan.FieldSource:                          {Type: field.TypeString, Column: actionplan.FieldSource},
 		},
 	}
@@ -261,8 +279,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 			actionplanhistory.FieldSystemInternalID:                {Type: field.TypeString, Column: actionplanhistory.FieldSystemInternalID},
 			actionplanhistory.FieldActionPlanKindName:              {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindName},
 			actionplanhistory.FieldActionPlanKindID:                {Type: field.TypeString, Column: actionplanhistory.FieldActionPlanKindID},
+			actionplanhistory.FieldTitle:                           {Type: field.TypeString, Column: actionplanhistory.FieldTitle},
+			actionplanhistory.FieldDescription:                     {Type: field.TypeString, Column: actionplanhistory.FieldDescription},
 			actionplanhistory.FieldDueDate:                         {Type: field.TypeTime, Column: actionplanhistory.FieldDueDate},
+			actionplanhistory.FieldCompletedAt:                     {Type: field.TypeTime, Column: actionplanhistory.FieldCompletedAt},
 			actionplanhistory.FieldPriority:                        {Type: field.TypeEnum, Column: actionplanhistory.FieldPriority},
+			actionplanhistory.FieldRequiresApproval:                {Type: field.TypeBool, Column: actionplanhistory.FieldRequiresApproval},
+			actionplanhistory.FieldBlocked:                         {Type: field.TypeBool, Column: actionplanhistory.FieldBlocked},
+			actionplanhistory.FieldBlockerReason:                   {Type: field.TypeString, Column: actionplanhistory.FieldBlockerReason},
+			actionplanhistory.FieldMetadata:                        {Type: field.TypeJSON, Column: actionplanhistory.FieldMetadata},
+			actionplanhistory.FieldRawPayload:                      {Type: field.TypeJSON, Column: actionplanhistory.FieldRawPayload},
 			actionplanhistory.FieldSource:                          {Type: field.TypeString, Column: actionplanhistory.FieldSource},
 		},
 	}
@@ -1305,6 +1331,178 @@ var schemaGraph = func() *sqlgraph.Schema {
 	}
 	graph.Nodes[36] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
+			Table:   finding.Table,
+			Columns: finding.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: finding.FieldID,
+			},
+		},
+		Type: "Finding",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			finding.FieldCreatedAt:          {Type: field.TypeTime, Column: finding.FieldCreatedAt},
+			finding.FieldUpdatedAt:          {Type: field.TypeTime, Column: finding.FieldUpdatedAt},
+			finding.FieldCreatedBy:          {Type: field.TypeString, Column: finding.FieldCreatedBy},
+			finding.FieldUpdatedBy:          {Type: field.TypeString, Column: finding.FieldUpdatedBy},
+			finding.FieldDeletedAt:          {Type: field.TypeTime, Column: finding.FieldDeletedAt},
+			finding.FieldDeletedBy:          {Type: field.TypeString, Column: finding.FieldDeletedBy},
+			finding.FieldTags:               {Type: field.TypeJSON, Column: finding.FieldTags},
+			finding.FieldExternalID:         {Type: field.TypeString, Column: finding.FieldExternalID},
+			finding.FieldExternalOwnerID:    {Type: field.TypeString, Column: finding.FieldExternalOwnerID},
+			finding.FieldSource:             {Type: field.TypeString, Column: finding.FieldSource},
+			finding.FieldResourceName:       {Type: field.TypeString, Column: finding.FieldResourceName},
+			finding.FieldDisplayName:        {Type: field.TypeString, Column: finding.FieldDisplayName},
+			finding.FieldState:              {Type: field.TypeString, Column: finding.FieldState},
+			finding.FieldCategory:           {Type: field.TypeString, Column: finding.FieldCategory},
+			finding.FieldCategories:         {Type: field.TypeJSON, Column: finding.FieldCategories},
+			finding.FieldFindingClass:       {Type: field.TypeString, Column: finding.FieldFindingClass},
+			finding.FieldSeverity:           {Type: field.TypeString, Column: finding.FieldSeverity},
+			finding.FieldNumericSeverity:    {Type: field.TypeFloat64, Column: finding.FieldNumericSeverity},
+			finding.FieldScore:              {Type: field.TypeFloat64, Column: finding.FieldScore},
+			finding.FieldImpact:             {Type: field.TypeFloat64, Column: finding.FieldImpact},
+			finding.FieldExploitability:     {Type: field.TypeFloat64, Column: finding.FieldExploitability},
+			finding.FieldPriority:           {Type: field.TypeString, Column: finding.FieldPriority},
+			finding.FieldOpen:               {Type: field.TypeBool, Column: finding.FieldOpen},
+			finding.FieldBlocksProduction:   {Type: field.TypeBool, Column: finding.FieldBlocksProduction},
+			finding.FieldProduction:         {Type: field.TypeBool, Column: finding.FieldProduction},
+			finding.FieldPublic:             {Type: field.TypeBool, Column: finding.FieldPublic},
+			finding.FieldValidated:          {Type: field.TypeBool, Column: finding.FieldValidated},
+			finding.FieldAssessmentID:       {Type: field.TypeString, Column: finding.FieldAssessmentID},
+			finding.FieldDescription:        {Type: field.TypeString, Column: finding.FieldDescription},
+			finding.FieldRecommendation:     {Type: field.TypeString, Column: finding.FieldRecommendation},
+			finding.FieldRecommendedActions: {Type: field.TypeString, Column: finding.FieldRecommendedActions},
+			finding.FieldReferences:         {Type: field.TypeJSON, Column: finding.FieldReferences},
+			finding.FieldStepsToReproduce:   {Type: field.TypeJSON, Column: finding.FieldStepsToReproduce},
+			finding.FieldTargets:            {Type: field.TypeJSON, Column: finding.FieldTargets},
+			finding.FieldTargetDetails:      {Type: field.TypeJSON, Column: finding.FieldTargetDetails},
+			finding.FieldVector:             {Type: field.TypeString, Column: finding.FieldVector},
+			finding.FieldRemediationSLA:     {Type: field.TypeInt, Column: finding.FieldRemediationSLA},
+			finding.FieldStatus:             {Type: field.TypeString, Column: finding.FieldStatus},
+			finding.FieldEventTime:          {Type: field.TypeTime, Column: finding.FieldEventTime},
+			finding.FieldReportedAt:         {Type: field.TypeTime, Column: finding.FieldReportedAt},
+			finding.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: finding.FieldSourceUpdatedAt},
+			finding.FieldExternalURI:        {Type: field.TypeString, Column: finding.FieldExternalURI},
+			finding.FieldMetadata:           {Type: field.TypeJSON, Column: finding.FieldMetadata},
+			finding.FieldRawPayload:         {Type: field.TypeJSON, Column: finding.FieldRawPayload},
+		},
+	}
+	graph.Nodes[37] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   findingcontrol.Table,
+			Columns: findingcontrol.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: findingcontrol.FieldID,
+			},
+		},
+		Type: "FindingControl",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			findingcontrol.FieldCreatedAt:               {Type: field.TypeTime, Column: findingcontrol.FieldCreatedAt},
+			findingcontrol.FieldUpdatedAt:               {Type: field.TypeTime, Column: findingcontrol.FieldUpdatedAt},
+			findingcontrol.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldCreatedBy},
+			findingcontrol.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrol.FieldUpdatedBy},
+			findingcontrol.FieldFindingID:               {Type: field.TypeString, Column: findingcontrol.FieldFindingID},
+			findingcontrol.FieldControlID:               {Type: field.TypeString, Column: findingcontrol.FieldControlID},
+			findingcontrol.FieldStandardID:              {Type: field.TypeString, Column: findingcontrol.FieldStandardID},
+			findingcontrol.FieldExternalStandard:        {Type: field.TypeString, Column: findingcontrol.FieldExternalStandard},
+			findingcontrol.FieldExternalStandardVersion: {Type: field.TypeString, Column: findingcontrol.FieldExternalStandardVersion},
+			findingcontrol.FieldExternalControlID:       {Type: field.TypeString, Column: findingcontrol.FieldExternalControlID},
+			findingcontrol.FieldSource:                  {Type: field.TypeString, Column: findingcontrol.FieldSource},
+			findingcontrol.FieldMetadata:                {Type: field.TypeJSON, Column: findingcontrol.FieldMetadata},
+			findingcontrol.FieldDiscoveredAt:            {Type: field.TypeTime, Column: findingcontrol.FieldDiscoveredAt},
+		},
+	}
+	graph.Nodes[38] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   findingcontrolhistory.Table,
+			Columns: findingcontrolhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: findingcontrolhistory.FieldID,
+			},
+		},
+		Type: "FindingControlHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			findingcontrolhistory.FieldHistoryTime:             {Type: field.TypeTime, Column: findingcontrolhistory.FieldHistoryTime},
+			findingcontrolhistory.FieldRef:                     {Type: field.TypeString, Column: findingcontrolhistory.FieldRef},
+			findingcontrolhistory.FieldOperation:               {Type: field.TypeEnum, Column: findingcontrolhistory.FieldOperation},
+			findingcontrolhistory.FieldCreatedAt:               {Type: field.TypeTime, Column: findingcontrolhistory.FieldCreatedAt},
+			findingcontrolhistory.FieldUpdatedAt:               {Type: field.TypeTime, Column: findingcontrolhistory.FieldUpdatedAt},
+			findingcontrolhistory.FieldCreatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldCreatedBy},
+			findingcontrolhistory.FieldUpdatedBy:               {Type: field.TypeString, Column: findingcontrolhistory.FieldUpdatedBy},
+			findingcontrolhistory.FieldFindingID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldFindingID},
+			findingcontrolhistory.FieldControlID:               {Type: field.TypeString, Column: findingcontrolhistory.FieldControlID},
+			findingcontrolhistory.FieldStandardID:              {Type: field.TypeString, Column: findingcontrolhistory.FieldStandardID},
+			findingcontrolhistory.FieldExternalStandard:        {Type: field.TypeString, Column: findingcontrolhistory.FieldExternalStandard},
+			findingcontrolhistory.FieldExternalStandardVersion: {Type: field.TypeString, Column: findingcontrolhistory.FieldExternalStandardVersion},
+			findingcontrolhistory.FieldExternalControlID:       {Type: field.TypeString, Column: findingcontrolhistory.FieldExternalControlID},
+			findingcontrolhistory.FieldSource:                  {Type: field.TypeString, Column: findingcontrolhistory.FieldSource},
+			findingcontrolhistory.FieldMetadata:                {Type: field.TypeJSON, Column: findingcontrolhistory.FieldMetadata},
+			findingcontrolhistory.FieldDiscoveredAt:            {Type: field.TypeTime, Column: findingcontrolhistory.FieldDiscoveredAt},
+		},
+	}
+	graph.Nodes[39] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   findinghistory.Table,
+			Columns: findinghistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: findinghistory.FieldID,
+			},
+		},
+		Type: "FindingHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			findinghistory.FieldHistoryTime:        {Type: field.TypeTime, Column: findinghistory.FieldHistoryTime},
+			findinghistory.FieldRef:                {Type: field.TypeString, Column: findinghistory.FieldRef},
+			findinghistory.FieldOperation:          {Type: field.TypeEnum, Column: findinghistory.FieldOperation},
+			findinghistory.FieldCreatedAt:          {Type: field.TypeTime, Column: findinghistory.FieldCreatedAt},
+			findinghistory.FieldUpdatedAt:          {Type: field.TypeTime, Column: findinghistory.FieldUpdatedAt},
+			findinghistory.FieldCreatedBy:          {Type: field.TypeString, Column: findinghistory.FieldCreatedBy},
+			findinghistory.FieldUpdatedBy:          {Type: field.TypeString, Column: findinghistory.FieldUpdatedBy},
+			findinghistory.FieldDeletedAt:          {Type: field.TypeTime, Column: findinghistory.FieldDeletedAt},
+			findinghistory.FieldDeletedBy:          {Type: field.TypeString, Column: findinghistory.FieldDeletedBy},
+			findinghistory.FieldTags:               {Type: field.TypeJSON, Column: findinghistory.FieldTags},
+			findinghistory.FieldExternalID:         {Type: field.TypeString, Column: findinghistory.FieldExternalID},
+			findinghistory.FieldExternalOwnerID:    {Type: field.TypeString, Column: findinghistory.FieldExternalOwnerID},
+			findinghistory.FieldSource:             {Type: field.TypeString, Column: findinghistory.FieldSource},
+			findinghistory.FieldResourceName:       {Type: field.TypeString, Column: findinghistory.FieldResourceName},
+			findinghistory.FieldDisplayName:        {Type: field.TypeString, Column: findinghistory.FieldDisplayName},
+			findinghistory.FieldState:              {Type: field.TypeString, Column: findinghistory.FieldState},
+			findinghistory.FieldCategory:           {Type: field.TypeString, Column: findinghistory.FieldCategory},
+			findinghistory.FieldCategories:         {Type: field.TypeJSON, Column: findinghistory.FieldCategories},
+			findinghistory.FieldFindingClass:       {Type: field.TypeString, Column: findinghistory.FieldFindingClass},
+			findinghistory.FieldSeverity:           {Type: field.TypeString, Column: findinghistory.FieldSeverity},
+			findinghistory.FieldNumericSeverity:    {Type: field.TypeFloat64, Column: findinghistory.FieldNumericSeverity},
+			findinghistory.FieldScore:              {Type: field.TypeFloat64, Column: findinghistory.FieldScore},
+			findinghistory.FieldImpact:             {Type: field.TypeFloat64, Column: findinghistory.FieldImpact},
+			findinghistory.FieldExploitability:     {Type: field.TypeFloat64, Column: findinghistory.FieldExploitability},
+			findinghistory.FieldPriority:           {Type: field.TypeString, Column: findinghistory.FieldPriority},
+			findinghistory.FieldOpen:               {Type: field.TypeBool, Column: findinghistory.FieldOpen},
+			findinghistory.FieldBlocksProduction:   {Type: field.TypeBool, Column: findinghistory.FieldBlocksProduction},
+			findinghistory.FieldProduction:         {Type: field.TypeBool, Column: findinghistory.FieldProduction},
+			findinghistory.FieldPublic:             {Type: field.TypeBool, Column: findinghistory.FieldPublic},
+			findinghistory.FieldValidated:          {Type: field.TypeBool, Column: findinghistory.FieldValidated},
+			findinghistory.FieldAssessmentID:       {Type: field.TypeString, Column: findinghistory.FieldAssessmentID},
+			findinghistory.FieldDescription:        {Type: field.TypeString, Column: findinghistory.FieldDescription},
+			findinghistory.FieldRecommendation:     {Type: field.TypeString, Column: findinghistory.FieldRecommendation},
+			findinghistory.FieldRecommendedActions: {Type: field.TypeString, Column: findinghistory.FieldRecommendedActions},
+			findinghistory.FieldReferences:         {Type: field.TypeJSON, Column: findinghistory.FieldReferences},
+			findinghistory.FieldStepsToReproduce:   {Type: field.TypeJSON, Column: findinghistory.FieldStepsToReproduce},
+			findinghistory.FieldTargets:            {Type: field.TypeJSON, Column: findinghistory.FieldTargets},
+			findinghistory.FieldTargetDetails:      {Type: field.TypeJSON, Column: findinghistory.FieldTargetDetails},
+			findinghistory.FieldVector:             {Type: field.TypeString, Column: findinghistory.FieldVector},
+			findinghistory.FieldRemediationSLA:     {Type: field.TypeInt, Column: findinghistory.FieldRemediationSLA},
+			findinghistory.FieldStatus:             {Type: field.TypeString, Column: findinghistory.FieldStatus},
+			findinghistory.FieldEventTime:          {Type: field.TypeTime, Column: findinghistory.FieldEventTime},
+			findinghistory.FieldReportedAt:         {Type: field.TypeTime, Column: findinghistory.FieldReportedAt},
+			findinghistory.FieldSourceUpdatedAt:    {Type: field.TypeTime, Column: findinghistory.FieldSourceUpdatedAt},
+			findinghistory.FieldExternalURI:        {Type: field.TypeString, Column: findinghistory.FieldExternalURI},
+			findinghistory.FieldMetadata:           {Type: field.TypeJSON, Column: findinghistory.FieldMetadata},
+			findinghistory.FieldRawPayload:         {Type: field.TypeJSON, Column: findinghistory.FieldRawPayload},
+		},
+	}
+	graph.Nodes[40] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
 			Table:   group.Table,
 			Columns: group.Columns,
 			ID: &sqlgraph.FieldSpec{
@@ -1335,7 +1533,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			group.FieldScimGroupMailing: {Type: field.TypeString, Column: group.FieldScimGroupMailing},
 		},
 	}
-	graph.Nodes[37] = &sqlgraph.Node{
+	graph.Nodes[41] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   grouphistory.Table,
 			Columns: grouphistory.Columns,
@@ -1370,7 +1568,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			grouphistory.FieldScimGroupMailing: {Type: field.TypeString, Column: grouphistory.FieldScimGroupMailing},
 		},
 	}
-	graph.Nodes[38] = &sqlgraph.Node{
+	graph.Nodes[42] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembership.Table,
 			Columns: groupmembership.Columns,
@@ -1390,7 +1588,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembership.FieldUserID:    {Type: field.TypeString, Column: groupmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[39] = &sqlgraph.Node{
+	graph.Nodes[43] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupmembershiphistory.Table,
 			Columns: groupmembershiphistory.Columns,
@@ -1413,7 +1611,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: groupmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[40] = &sqlgraph.Node{
+	graph.Nodes[44] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsetting.Table,
 			Columns: groupsetting.Columns,
@@ -1437,7 +1635,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsetting.FieldGroupID:      {Type: field.TypeString, Column: groupsetting.FieldGroupID},
 		},
 	}
-	graph.Nodes[41] = &sqlgraph.Node{
+	graph.Nodes[45] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   groupsettinghistory.Table,
 			Columns: groupsettinghistory.Columns,
@@ -1464,7 +1662,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			groupsettinghistory.FieldGroupID:      {Type: field.TypeString, Column: groupsettinghistory.FieldGroupID},
 		},
 	}
-	graph.Nodes[42] = &sqlgraph.Node{
+	graph.Nodes[46] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hush.Table,
 			Columns: hush.Columns,
@@ -1496,7 +1694,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hush.FieldExpiresAt:        {Type: field.TypeTime, Column: hush.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[43] = &sqlgraph.Node{
+	graph.Nodes[47] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   hushhistory.Table,
 			Columns: hushhistory.Columns,
@@ -1531,7 +1729,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			hushhistory.FieldExpiresAt:        {Type: field.TypeTime, Column: hushhistory.FieldExpiresAt},
 		},
 	}
-	graph.Nodes[44] = &sqlgraph.Node{
+	graph.Nodes[48] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   impersonationevent.Table,
 			Columns: impersonationevent.Columns,
@@ -1560,7 +1758,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			impersonationevent.FieldTargetUserID:      {Type: field.TypeString, Column: impersonationevent.FieldTargetUserID},
 		},
 	}
-	graph.Nodes[45] = &sqlgraph.Node{
+	graph.Nodes[49] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integration.Table,
 			Columns: integration.Columns,
@@ -1589,7 +1787,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integration.FieldMetadata:         {Type: field.TypeJSON, Column: integration.FieldMetadata},
 		},
 	}
-	graph.Nodes[46] = &sqlgraph.Node{
+	graph.Nodes[50] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   integrationhistory.Table,
 			Columns: integrationhistory.Columns,
@@ -1621,7 +1819,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			integrationhistory.FieldMetadata:         {Type: field.TypeJSON, Column: integrationhistory.FieldMetadata},
 		},
 	}
-	graph.Nodes[47] = &sqlgraph.Node{
+	graph.Nodes[51] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicy.Table,
 			Columns: internalpolicy.Columns,
@@ -1667,7 +1865,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicy.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicy.FieldInternalPolicyKindID},
 		},
 	}
-	graph.Nodes[48] = &sqlgraph.Node{
+	graph.Nodes[52] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   internalpolicyhistory.Table,
 			Columns: internalpolicyhistory.Columns,
@@ -1716,7 +1914,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			internalpolicyhistory.FieldInternalPolicyKindID:            {Type: field.TypeString, Column: internalpolicyhistory.FieldInternalPolicyKindID},
 		},
 	}
-	graph.Nodes[49] = &sqlgraph.Node{
+	graph.Nodes[53] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   invite.Table,
 			Columns: invite.Columns,
@@ -1745,7 +1943,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			invite.FieldOwnershipTransfer: {Type: field.TypeBool, Column: invite.FieldOwnershipTransfer},
 		},
 	}
-	graph.Nodes[50] = &sqlgraph.Node{
+	graph.Nodes[54] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobresult.Table,
 			Columns: jobresult.Columns,
@@ -1772,7 +1970,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobresult.FieldLog:            {Type: field.TypeString, Column: jobresult.FieldLog},
 		},
 	}
-	graph.Nodes[51] = &sqlgraph.Node{
+	graph.Nodes[55] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunner.Table,
 			Columns: jobrunner.Columns,
@@ -1803,7 +2001,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunner.FieldOs:               {Type: field.TypeString, Column: jobrunner.FieldOs},
 		},
 	}
-	graph.Nodes[52] = &sqlgraph.Node{
+	graph.Nodes[56] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnerregistrationtoken.Table,
 			Columns: jobrunnerregistrationtoken.Columns,
@@ -1828,7 +2026,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnerregistrationtoken.FieldJobRunnerID: {Type: field.TypeString, Column: jobrunnerregistrationtoken.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[53] = &sqlgraph.Node{
+	graph.Nodes[57] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobrunnertoken.Table,
 			Columns: jobrunnertoken.Columns,
@@ -1856,7 +2054,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunnertoken.FieldRevokedAt:     {Type: field.TypeTime, Column: jobrunnertoken.FieldRevokedAt},
 		},
 	}
-	graph.Nodes[54] = &sqlgraph.Node{
+	graph.Nodes[58] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobtemplate.Table,
 			Columns: jobtemplate.Columns,
@@ -1888,7 +2086,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobtemplate.FieldCron:             {Type: field.TypeString, Column: jobtemplate.FieldCron},
 		},
 	}
-	graph.Nodes[55] = &sqlgraph.Node{
+	graph.Nodes[59] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   jobtemplatehistory.Table,
 			Columns: jobtemplatehistory.Columns,
@@ -1923,7 +2121,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobtemplatehistory.FieldCron:             {Type: field.TypeString, Column: jobtemplatehistory.FieldCron},
 		},
 	}
-	graph.Nodes[56] = &sqlgraph.Node{
+	graph.Nodes[60] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappabledomain.Table,
 			Columns: mappabledomain.Columns,
@@ -1945,7 +2143,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappabledomain.FieldZoneID:    {Type: field.TypeString, Column: mappabledomain.FieldZoneID},
 		},
 	}
-	graph.Nodes[57] = &sqlgraph.Node{
+	graph.Nodes[61] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappabledomainhistory.Table,
 			Columns: mappabledomainhistory.Columns,
@@ -1970,7 +2168,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappabledomainhistory.FieldZoneID:      {Type: field.TypeString, Column: mappabledomainhistory.FieldZoneID},
 		},
 	}
-	graph.Nodes[58] = &sqlgraph.Node{
+	graph.Nodes[62] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappedcontrol.Table,
 			Columns: mappedcontrol.Columns,
@@ -1998,7 +2196,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrol.FieldSource:           {Type: field.TypeEnum, Column: mappedcontrol.FieldSource},
 		},
 	}
-	graph.Nodes[59] = &sqlgraph.Node{
+	graph.Nodes[63] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   mappedcontrolhistory.Table,
 			Columns: mappedcontrolhistory.Columns,
@@ -2029,7 +2227,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			mappedcontrolhistory.FieldSource:           {Type: field.TypeEnum, Column: mappedcontrolhistory.FieldSource},
 		},
 	}
-	graph.Nodes[60] = &sqlgraph.Node{
+	graph.Nodes[64] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrative.Table,
 			Columns: narrative.Columns,
@@ -2057,7 +2255,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrative.FieldDetails:          {Type: field.TypeString, Column: narrative.FieldDetails},
 		},
 	}
-	graph.Nodes[61] = &sqlgraph.Node{
+	graph.Nodes[65] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   narrativehistory.Table,
 			Columns: narrativehistory.Columns,
@@ -2088,7 +2286,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			narrativehistory.FieldDetails:          {Type: field.TypeString, Column: narrativehistory.FieldDetails},
 		},
 	}
-	graph.Nodes[62] = &sqlgraph.Node{
+	graph.Nodes[66] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   note.Table,
 			Columns: note.Columns,
@@ -2110,7 +2308,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			note.FieldText:      {Type: field.TypeString, Column: note.FieldText},
 		},
 	}
-	graph.Nodes[63] = &sqlgraph.Node{
+	graph.Nodes[67] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   notehistory.Table,
 			Columns: notehistory.Columns,
@@ -2135,7 +2333,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notehistory.FieldText:        {Type: field.TypeString, Column: notehistory.FieldText},
 		},
 	}
-	graph.Nodes[64] = &sqlgraph.Node{
+	graph.Nodes[68] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   onboarding.Table,
 			Columns: onboarding.Columns,
@@ -2156,7 +2354,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			onboarding.FieldCompliance:     {Type: field.TypeJSON, Column: onboarding.FieldCompliance},
 		},
 	}
-	graph.Nodes[65] = &sqlgraph.Node{
+	graph.Nodes[69] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembership.Table,
 			Columns: orgmembership.Columns,
@@ -2176,7 +2374,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembership.FieldUserID:         {Type: field.TypeString, Column: orgmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[66] = &sqlgraph.Node{
+	graph.Nodes[70] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmembershiphistory.Table,
 			Columns: orgmembershiphistory.Columns,
@@ -2199,7 +2397,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmembershiphistory.FieldUserID:         {Type: field.TypeString, Column: orgmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[67] = &sqlgraph.Node{
+	graph.Nodes[71] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgmodule.Table,
 			Columns: orgmodule.Columns,
@@ -2229,7 +2427,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgmodule.FieldPriceID:         {Type: field.TypeString, Column: orgmodule.FieldPriceID},
 		},
 	}
-	graph.Nodes[68] = &sqlgraph.Node{
+	graph.Nodes[72] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgprice.Table,
 			Columns: orgprice.Columns,
@@ -2256,7 +2454,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgprice.FieldSubscriptionID: {Type: field.TypeString, Column: orgprice.FieldSubscriptionID},
 		},
 	}
-	graph.Nodes[69] = &sqlgraph.Node{
+	graph.Nodes[73] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgproduct.Table,
 			Columns: orgproduct.Columns,
@@ -2283,7 +2481,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgproduct.FieldPriceID:         {Type: field.TypeString, Column: orgproduct.FieldPriceID},
 		},
 	}
-	graph.Nodes[70] = &sqlgraph.Node{
+	graph.Nodes[74] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscription.Table,
 			Columns: orgsubscription.Columns,
@@ -2310,7 +2508,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscription.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscription.FieldDaysUntilDue},
 		},
 	}
-	graph.Nodes[71] = &sqlgraph.Node{
+	graph.Nodes[75] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   orgsubscriptionhistory.Table,
 			Columns: orgsubscriptionhistory.Columns,
@@ -2340,7 +2538,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			orgsubscriptionhistory.FieldDaysUntilDue:             {Type: field.TypeString, Column: orgsubscriptionhistory.FieldDaysUntilDue},
 		},
 	}
-	graph.Nodes[72] = &sqlgraph.Node{
+	graph.Nodes[76] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organization.Table,
 			Columns: organization.Columns,
@@ -2370,7 +2568,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organization.FieldStripeCustomerID:     {Type: field.TypeString, Column: organization.FieldStripeCustomerID},
 		},
 	}
-	graph.Nodes[73] = &sqlgraph.Node{
+	graph.Nodes[77] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationhistory.Table,
 			Columns: organizationhistory.Columns,
@@ -2403,7 +2601,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationhistory.FieldStripeCustomerID:     {Type: field.TypeString, Column: organizationhistory.FieldStripeCustomerID},
 		},
 	}
-	graph.Nodes[74] = &sqlgraph.Node{
+	graph.Nodes[78] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsetting.Table,
 			Columns: organizationsetting.Columns,
@@ -2448,7 +2646,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsetting.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsetting.FieldPaymentMethodAdded},
 		},
 	}
-	graph.Nodes[75] = &sqlgraph.Node{
+	graph.Nodes[79] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   organizationsettinghistory.Table,
 			Columns: organizationsettinghistory.Columns,
@@ -2496,7 +2694,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			organizationsettinghistory.FieldPaymentMethodAdded:               {Type: field.TypeBool, Column: organizationsettinghistory.FieldPaymentMethodAdded},
 		},
 	}
-	graph.Nodes[76] = &sqlgraph.Node{
+	graph.Nodes[80] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   passwordresettoken.Table,
 			Columns: passwordresettoken.Columns,
@@ -2520,7 +2718,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			passwordresettoken.FieldSecret:    {Type: field.TypeBytes, Column: passwordresettoken.FieldSecret},
 		},
 	}
-	graph.Nodes[77] = &sqlgraph.Node{
+	graph.Nodes[81] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   personalaccesstoken.Table,
 			Columns: personalaccesstoken.Columns,
@@ -2552,7 +2750,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			personalaccesstoken.FieldRevokedAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldRevokedAt},
 		},
 	}
-	graph.Nodes[78] = &sqlgraph.Node{
+	graph.Nodes[82] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedure.Table,
 			Columns: procedure.Columns,
@@ -2598,7 +2796,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedure.FieldProcedureKindID:                 {Type: field.TypeString, Column: procedure.FieldProcedureKindID},
 		},
 	}
-	graph.Nodes[79] = &sqlgraph.Node{
+	graph.Nodes[83] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   procedurehistory.Table,
 			Columns: procedurehistory.Columns,
@@ -2647,7 +2845,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			procedurehistory.FieldProcedureKindID:                 {Type: field.TypeString, Column: procedurehistory.FieldProcedureKindID},
 		},
 	}
-	graph.Nodes[80] = &sqlgraph.Node{
+	graph.Nodes[84] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   program.Table,
 			Columns: program.Columns,
@@ -2685,7 +2883,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			program.FieldProgramOwnerID:       {Type: field.TypeString, Column: program.FieldProgramOwnerID},
 		},
 	}
-	graph.Nodes[81] = &sqlgraph.Node{
+	graph.Nodes[85] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programhistory.Table,
 			Columns: programhistory.Columns,
@@ -2726,7 +2924,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programhistory.FieldProgramOwnerID:       {Type: field.TypeString, Column: programhistory.FieldProgramOwnerID},
 		},
 	}
-	graph.Nodes[82] = &sqlgraph.Node{
+	graph.Nodes[86] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembership.Table,
 			Columns: programmembership.Columns,
@@ -2746,7 +2944,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembership.FieldUserID:    {Type: field.TypeString, Column: programmembership.FieldUserID},
 		},
 	}
-	graph.Nodes[83] = &sqlgraph.Node{
+	graph.Nodes[87] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   programmembershiphistory.Table,
 			Columns: programmembershiphistory.Columns,
@@ -2769,7 +2967,167 @@ var schemaGraph = func() *sqlgraph.Schema {
 			programmembershiphistory.FieldUserID:      {Type: field.TypeString, Column: programmembershiphistory.FieldUserID},
 		},
 	}
-	graph.Nodes[84] = &sqlgraph.Node{
+	graph.Nodes[88] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   remediation.Table,
+			Columns: remediation.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: remediation.FieldID,
+			},
+		},
+		Type: "Remediation",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			remediation.FieldCreatedAt:       {Type: field.TypeTime, Column: remediation.FieldCreatedAt},
+			remediation.FieldUpdatedAt:       {Type: field.TypeTime, Column: remediation.FieldUpdatedAt},
+			remediation.FieldCreatedBy:       {Type: field.TypeString, Column: remediation.FieldCreatedBy},
+			remediation.FieldUpdatedBy:       {Type: field.TypeString, Column: remediation.FieldUpdatedBy},
+			remediation.FieldDeletedAt:       {Type: field.TypeTime, Column: remediation.FieldDeletedAt},
+			remediation.FieldDeletedBy:       {Type: field.TypeString, Column: remediation.FieldDeletedBy},
+			remediation.FieldTags:            {Type: field.TypeJSON, Column: remediation.FieldTags},
+			remediation.FieldExternalID:      {Type: field.TypeString, Column: remediation.FieldExternalID},
+			remediation.FieldExternalOwnerID: {Type: field.TypeString, Column: remediation.FieldExternalOwnerID},
+			remediation.FieldTitle:           {Type: field.TypeString, Column: remediation.FieldTitle},
+			remediation.FieldState:           {Type: field.TypeString, Column: remediation.FieldState},
+			remediation.FieldIntent:          {Type: field.TypeString, Column: remediation.FieldIntent},
+			remediation.FieldSummary:         {Type: field.TypeString, Column: remediation.FieldSummary},
+			remediation.FieldExplanation:     {Type: field.TypeString, Column: remediation.FieldExplanation},
+			remediation.FieldInstructions:    {Type: field.TypeString, Column: remediation.FieldInstructions},
+			remediation.FieldOwnerReference:  {Type: field.TypeString, Column: remediation.FieldOwnerReference},
+			remediation.FieldRepositoryURI:   {Type: field.TypeString, Column: remediation.FieldRepositoryURI},
+			remediation.FieldPullRequestURI:  {Type: field.TypeString, Column: remediation.FieldPullRequestURI},
+			remediation.FieldTicketReference: {Type: field.TypeString, Column: remediation.FieldTicketReference},
+			remediation.FieldDueAt:           {Type: field.TypeTime, Column: remediation.FieldDueAt},
+			remediation.FieldCompletedAt:     {Type: field.TypeTime, Column: remediation.FieldCompletedAt},
+			remediation.FieldPrGeneratedAt:   {Type: field.TypeTime, Column: remediation.FieldPrGeneratedAt},
+			remediation.FieldError:           {Type: field.TypeString, Column: remediation.FieldError},
+			remediation.FieldSource:          {Type: field.TypeString, Column: remediation.FieldSource},
+			remediation.FieldExternalURI:     {Type: field.TypeString, Column: remediation.FieldExternalURI},
+			remediation.FieldMetadata:        {Type: field.TypeJSON, Column: remediation.FieldMetadata},
+		},
+	}
+	graph.Nodes[89] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   remediationhistory.Table,
+			Columns: remediationhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: remediationhistory.FieldID,
+			},
+		},
+		Type: "RemediationHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			remediationhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: remediationhistory.FieldHistoryTime},
+			remediationhistory.FieldRef:             {Type: field.TypeString, Column: remediationhistory.FieldRef},
+			remediationhistory.FieldOperation:       {Type: field.TypeEnum, Column: remediationhistory.FieldOperation},
+			remediationhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldCreatedAt},
+			remediationhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldUpdatedAt},
+			remediationhistory.FieldCreatedBy:       {Type: field.TypeString, Column: remediationhistory.FieldCreatedBy},
+			remediationhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: remediationhistory.FieldUpdatedBy},
+			remediationhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: remediationhistory.FieldDeletedAt},
+			remediationhistory.FieldDeletedBy:       {Type: field.TypeString, Column: remediationhistory.FieldDeletedBy},
+			remediationhistory.FieldTags:            {Type: field.TypeJSON, Column: remediationhistory.FieldTags},
+			remediationhistory.FieldExternalID:      {Type: field.TypeString, Column: remediationhistory.FieldExternalID},
+			remediationhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: remediationhistory.FieldExternalOwnerID},
+			remediationhistory.FieldTitle:           {Type: field.TypeString, Column: remediationhistory.FieldTitle},
+			remediationhistory.FieldState:           {Type: field.TypeString, Column: remediationhistory.FieldState},
+			remediationhistory.FieldIntent:          {Type: field.TypeString, Column: remediationhistory.FieldIntent},
+			remediationhistory.FieldSummary:         {Type: field.TypeString, Column: remediationhistory.FieldSummary},
+			remediationhistory.FieldExplanation:     {Type: field.TypeString, Column: remediationhistory.FieldExplanation},
+			remediationhistory.FieldInstructions:    {Type: field.TypeString, Column: remediationhistory.FieldInstructions},
+			remediationhistory.FieldOwnerReference:  {Type: field.TypeString, Column: remediationhistory.FieldOwnerReference},
+			remediationhistory.FieldRepositoryURI:   {Type: field.TypeString, Column: remediationhistory.FieldRepositoryURI},
+			remediationhistory.FieldPullRequestURI:  {Type: field.TypeString, Column: remediationhistory.FieldPullRequestURI},
+			remediationhistory.FieldTicketReference: {Type: field.TypeString, Column: remediationhistory.FieldTicketReference},
+			remediationhistory.FieldDueAt:           {Type: field.TypeTime, Column: remediationhistory.FieldDueAt},
+			remediationhistory.FieldCompletedAt:     {Type: field.TypeTime, Column: remediationhistory.FieldCompletedAt},
+			remediationhistory.FieldPrGeneratedAt:   {Type: field.TypeTime, Column: remediationhistory.FieldPrGeneratedAt},
+			remediationhistory.FieldError:           {Type: field.TypeString, Column: remediationhistory.FieldError},
+			remediationhistory.FieldSource:          {Type: field.TypeString, Column: remediationhistory.FieldSource},
+			remediationhistory.FieldExternalURI:     {Type: field.TypeString, Column: remediationhistory.FieldExternalURI},
+			remediationhistory.FieldMetadata:        {Type: field.TypeJSON, Column: remediationhistory.FieldMetadata},
+		},
+	}
+	graph.Nodes[90] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   review.Table,
+			Columns: review.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: review.FieldID,
+			},
+		},
+		Type: "Review",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			review.FieldCreatedAt:       {Type: field.TypeTime, Column: review.FieldCreatedAt},
+			review.FieldUpdatedAt:       {Type: field.TypeTime, Column: review.FieldUpdatedAt},
+			review.FieldCreatedBy:       {Type: field.TypeString, Column: review.FieldCreatedBy},
+			review.FieldUpdatedBy:       {Type: field.TypeString, Column: review.FieldUpdatedBy},
+			review.FieldDeletedAt:       {Type: field.TypeTime, Column: review.FieldDeletedAt},
+			review.FieldDeletedBy:       {Type: field.TypeString, Column: review.FieldDeletedBy},
+			review.FieldTags:            {Type: field.TypeJSON, Column: review.FieldTags},
+			review.FieldExternalID:      {Type: field.TypeString, Column: review.FieldExternalID},
+			review.FieldExternalOwnerID: {Type: field.TypeString, Column: review.FieldExternalOwnerID},
+			review.FieldTitle:           {Type: field.TypeString, Column: review.FieldTitle},
+			review.FieldState:           {Type: field.TypeString, Column: review.FieldState},
+			review.FieldCategory:        {Type: field.TypeString, Column: review.FieldCategory},
+			review.FieldClassification:  {Type: field.TypeString, Column: review.FieldClassification},
+			review.FieldSummary:         {Type: field.TypeString, Column: review.FieldSummary},
+			review.FieldDetails:         {Type: field.TypeString, Column: review.FieldDetails},
+			review.FieldReporter:        {Type: field.TypeString, Column: review.FieldReporter},
+			review.FieldApproved:        {Type: field.TypeBool, Column: review.FieldApproved},
+			review.FieldReviewedAt:      {Type: field.TypeTime, Column: review.FieldReviewedAt},
+			review.FieldReportedAt:      {Type: field.TypeTime, Column: review.FieldReportedAt},
+			review.FieldApprovedAt:      {Type: field.TypeTime, Column: review.FieldApprovedAt},
+			review.FieldReviewerID:      {Type: field.TypeString, Column: review.FieldReviewerID},
+			review.FieldSource:          {Type: field.TypeString, Column: review.FieldSource},
+			review.FieldExternalURI:     {Type: field.TypeString, Column: review.FieldExternalURI},
+			review.FieldMetadata:        {Type: field.TypeJSON, Column: review.FieldMetadata},
+			review.FieldRawPayload:      {Type: field.TypeJSON, Column: review.FieldRawPayload},
+		},
+	}
+	graph.Nodes[91] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   reviewhistory.Table,
+			Columns: reviewhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: reviewhistory.FieldID,
+			},
+		},
+		Type: "ReviewHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			reviewhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: reviewhistory.FieldHistoryTime},
+			reviewhistory.FieldRef:             {Type: field.TypeString, Column: reviewhistory.FieldRef},
+			reviewhistory.FieldOperation:       {Type: field.TypeEnum, Column: reviewhistory.FieldOperation},
+			reviewhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldCreatedAt},
+			reviewhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldUpdatedAt},
+			reviewhistory.FieldCreatedBy:       {Type: field.TypeString, Column: reviewhistory.FieldCreatedBy},
+			reviewhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: reviewhistory.FieldUpdatedBy},
+			reviewhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: reviewhistory.FieldDeletedAt},
+			reviewhistory.FieldDeletedBy:       {Type: field.TypeString, Column: reviewhistory.FieldDeletedBy},
+			reviewhistory.FieldTags:            {Type: field.TypeJSON, Column: reviewhistory.FieldTags},
+			reviewhistory.FieldExternalID:      {Type: field.TypeString, Column: reviewhistory.FieldExternalID},
+			reviewhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: reviewhistory.FieldExternalOwnerID},
+			reviewhistory.FieldTitle:           {Type: field.TypeString, Column: reviewhistory.FieldTitle},
+			reviewhistory.FieldState:           {Type: field.TypeString, Column: reviewhistory.FieldState},
+			reviewhistory.FieldCategory:        {Type: field.TypeString, Column: reviewhistory.FieldCategory},
+			reviewhistory.FieldClassification:  {Type: field.TypeString, Column: reviewhistory.FieldClassification},
+			reviewhistory.FieldSummary:         {Type: field.TypeString, Column: reviewhistory.FieldSummary},
+			reviewhistory.FieldDetails:         {Type: field.TypeString, Column: reviewhistory.FieldDetails},
+			reviewhistory.FieldReporter:        {Type: field.TypeString, Column: reviewhistory.FieldReporter},
+			reviewhistory.FieldApproved:        {Type: field.TypeBool, Column: reviewhistory.FieldApproved},
+			reviewhistory.FieldReviewedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldReviewedAt},
+			reviewhistory.FieldReportedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldReportedAt},
+			reviewhistory.FieldApprovedAt:      {Type: field.TypeTime, Column: reviewhistory.FieldApprovedAt},
+			reviewhistory.FieldReviewerID:      {Type: field.TypeString, Column: reviewhistory.FieldReviewerID},
+			reviewhistory.FieldSource:          {Type: field.TypeString, Column: reviewhistory.FieldSource},
+			reviewhistory.FieldExternalURI:     {Type: field.TypeString, Column: reviewhistory.FieldExternalURI},
+			reviewhistory.FieldMetadata:        {Type: field.TypeJSON, Column: reviewhistory.FieldMetadata},
+			reviewhistory.FieldRawPayload:      {Type: field.TypeJSON, Column: reviewhistory.FieldRawPayload},
+		},
+	}
+	graph.Nodes[92] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   risk.Table,
 			Columns: risk.Columns,
@@ -2807,7 +3165,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			risk.FieldDelegateID:       {Type: field.TypeString, Column: risk.FieldDelegateID},
 		},
 	}
-	graph.Nodes[85] = &sqlgraph.Node{
+	graph.Nodes[93] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   riskhistory.Table,
 			Columns: riskhistory.Columns,
@@ -2848,7 +3206,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			riskhistory.FieldDelegateID:       {Type: field.TypeString, Column: riskhistory.FieldDelegateID},
 		},
 	}
-	graph.Nodes[86] = &sqlgraph.Node{
+	graph.Nodes[94] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scan.Table,
 			Columns: scan.Columns,
@@ -2873,7 +3231,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scan.FieldStatus:    {Type: field.TypeEnum, Column: scan.FieldStatus},
 		},
 	}
-	graph.Nodes[87] = &sqlgraph.Node{
+	graph.Nodes[95] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scanhistory.Table,
 			Columns: scanhistory.Columns,
@@ -2901,7 +3259,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scanhistory.FieldStatus:      {Type: field.TypeEnum, Column: scanhistory.FieldStatus},
 		},
 	}
-	graph.Nodes[88] = &sqlgraph.Node{
+	graph.Nodes[96] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjob.Table,
 			Columns: scheduledjob.Columns,
@@ -2927,7 +3285,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjob.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[89] = &sqlgraph.Node{
+	graph.Nodes[97] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjobhistory.Table,
 			Columns: scheduledjobhistory.Columns,
@@ -2956,7 +3314,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjobhistory.FieldJobRunnerID},
 		},
 	}
-	graph.Nodes[90] = &sqlgraph.Node{
+	graph.Nodes[98] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   scheduledjobrun.Table,
 			Columns: scheduledjobrun.Columns,
@@ -2981,7 +3339,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobrun.FieldScript:                {Type: field.TypeString, Column: scheduledjobrun.FieldScript},
 		},
 	}
-	graph.Nodes[91] = &sqlgraph.Node{
+	graph.Nodes[99] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standard.Table,
 			Columns: standard.Columns,
@@ -3019,7 +3377,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldVersion:              {Type: field.TypeString, Column: standard.FieldVersion},
 		},
 	}
-	graph.Nodes[92] = &sqlgraph.Node{
+	graph.Nodes[100] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   standardhistory.Table,
 			Columns: standardhistory.Columns,
@@ -3060,7 +3418,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldVersion:              {Type: field.TypeString, Column: standardhistory.FieldVersion},
 		},
 	}
-	graph.Nodes[93] = &sqlgraph.Node{
+	graph.Nodes[101] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrol.Table,
 			Columns: subcontrol.Columns,
@@ -3112,7 +3470,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrol.FieldControlID:                  {Type: field.TypeString, Column: subcontrol.FieldControlID},
 		},
 	}
-	graph.Nodes[94] = &sqlgraph.Node{
+	graph.Nodes[102] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subcontrolhistory.Table,
 			Columns: subcontrolhistory.Columns,
@@ -3167,7 +3525,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subcontrolhistory.FieldControlID:                  {Type: field.TypeString, Column: subcontrolhistory.FieldControlID},
 		},
 	}
-	graph.Nodes[95] = &sqlgraph.Node{
+	graph.Nodes[103] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subprocessor.Table,
 			Columns: subprocessor.Columns,
@@ -3195,7 +3553,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessor.FieldLogoLocalFileID:  {Type: field.TypeString, Column: subprocessor.FieldLogoLocalFileID},
 		},
 	}
-	graph.Nodes[96] = &sqlgraph.Node{
+	graph.Nodes[104] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subprocessorhistory.Table,
 			Columns: subprocessorhistory.Columns,
@@ -3226,7 +3584,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessorhistory.FieldLogoLocalFileID:  {Type: field.TypeString, Column: subprocessorhistory.FieldLogoLocalFileID},
 		},
 	}
-	graph.Nodes[97] = &sqlgraph.Node{
+	graph.Nodes[105] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   subscriber.Table,
 			Columns: subscriber.Columns,
@@ -3257,7 +3615,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subscriber.FieldSendAttempts:  {Type: field.TypeInt, Column: subscriber.FieldSendAttempts},
 		},
 	}
-	graph.Nodes[98] = &sqlgraph.Node{
+	graph.Nodes[106] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tfasetting.Table,
 			Columns: tfasetting.Columns,
@@ -3283,7 +3641,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tfasetting.FieldTotpAllowed:     {Type: field.TypeBool, Column: tfasetting.FieldTotpAllowed},
 		},
 	}
-	graph.Nodes[99] = &sqlgraph.Node{
+	graph.Nodes[107] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   tagdefinition.Table,
 			Columns: tagdefinition.Columns,
@@ -3311,7 +3669,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			tagdefinition.FieldColor:            {Type: field.TypeString, Column: tagdefinition.FieldColor},
 		},
 	}
-	graph.Nodes[100] = &sqlgraph.Node{
+	graph.Nodes[108] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   task.Table,
 			Columns: task.Columns,
@@ -3346,7 +3704,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			task.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: task.FieldExternalReferenceURL},
 		},
 	}
-	graph.Nodes[101] = &sqlgraph.Node{
+	graph.Nodes[109] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   taskhistory.Table,
 			Columns: taskhistory.Columns,
@@ -3384,7 +3742,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			taskhistory.FieldExternalReferenceURL: {Type: field.TypeJSON, Column: taskhistory.FieldExternalReferenceURL},
 		},
 	}
-	graph.Nodes[102] = &sqlgraph.Node{
+	graph.Nodes[110] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   template.Table,
 			Columns: template.Columns,
@@ -3415,7 +3773,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			template.FieldTrustCenterID:    {Type: field.TypeString, Column: template.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[103] = &sqlgraph.Node{
+	graph.Nodes[111] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   templatehistory.Table,
 			Columns: templatehistory.Columns,
@@ -3449,7 +3807,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			templatehistory.FieldTrustCenterID:    {Type: field.TypeString, Column: templatehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[104] = &sqlgraph.Node{
+	graph.Nodes[112] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenter.Table,
 			Columns: trustcenter.Columns,
@@ -3472,7 +3830,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[105] = &sqlgraph.Node{
+	graph.Nodes[113] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliance.Table,
 			Columns: trustcentercompliance.Columns,
@@ -3494,7 +3852,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliance.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliance.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[106] = &sqlgraph.Node{
+	graph.Nodes[114] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentercompliancehistory.Table,
 			Columns: trustcentercompliancehistory.Columns,
@@ -3519,7 +3877,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentercompliancehistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcentercompliancehistory.FieldTrustCenterID},
 		},
 	}
-	graph.Nodes[107] = &sqlgraph.Node{
+	graph.Nodes[115] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdoc.Table,
 			Columns: trustcenterdoc.Columns,
@@ -3547,7 +3905,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdoc.FieldVisibility},
 		},
 	}
-	graph.Nodes[108] = &sqlgraph.Node{
+	graph.Nodes[116] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterdochistory.Table,
 			Columns: trustcenterdochistory.Columns,
@@ -3578,7 +3936,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdochistory.FieldVisibility},
 		},
 	}
-	graph.Nodes[109] = &sqlgraph.Node{
+	graph.Nodes[117] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterhistory.Table,
 			Columns: trustcenterhistory.Columns,
@@ -3604,7 +3962,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
 		},
 	}
-	graph.Nodes[110] = &sqlgraph.Node{
+	graph.Nodes[118] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersetting.Table,
 			Columns: trustcentersetting.Columns,
@@ -3638,7 +3996,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersetting.FieldSecondaryForegroundColor},
 		},
 	}
-	graph.Nodes[111] = &sqlgraph.Node{
+	graph.Nodes[119] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersettinghistory.Table,
 			Columns: trustcentersettinghistory.Columns,
@@ -3675,7 +4033,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryForegroundColor},
 		},
 	}
-	graph.Nodes[112] = &sqlgraph.Node{
+	graph.Nodes[120] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessor.Table,
 			Columns: trustcentersubprocessor.Columns,
@@ -3698,7 +4056,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessor.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessor.FieldCategory},
 		},
 	}
-	graph.Nodes[113] = &sqlgraph.Node{
+	graph.Nodes[121] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcentersubprocessorhistory.Table,
 			Columns: trustcentersubprocessorhistory.Columns,
@@ -3724,7 +4082,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersubprocessorhistory.FieldCategory:       {Type: field.TypeString, Column: trustcentersubprocessorhistory.FieldCategory},
 		},
 	}
-	graph.Nodes[114] = &sqlgraph.Node{
+	graph.Nodes[122] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfig.Table,
 			Columns: trustcenterwatermarkconfig.Columns,
@@ -3752,7 +4110,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfig.FieldFont},
 		},
 	}
-	graph.Nodes[115] = &sqlgraph.Node{
+	graph.Nodes[123] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   trustcenterwatermarkconfighistory.Table,
 			Columns: trustcenterwatermarkconfighistory.Columns,
@@ -3783,7 +4141,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldFont:          {Type: field.TypeEnum, Column: trustcenterwatermarkconfighistory.FieldFont},
 		},
 	}
-	graph.Nodes[116] = &sqlgraph.Node{
+	graph.Nodes[124] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   user.Table,
 			Columns: user.Columns,
@@ -3822,7 +4180,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			user.FieldScimLocale:            {Type: field.TypeString, Column: user.FieldScimLocale},
 		},
 	}
-	graph.Nodes[117] = &sqlgraph.Node{
+	graph.Nodes[125] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   userhistory.Table,
 			Columns: userhistory.Columns,
@@ -3864,7 +4222,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			userhistory.FieldScimLocale:            {Type: field.TypeString, Column: userhistory.FieldScimLocale},
 		},
 	}
-	graph.Nodes[118] = &sqlgraph.Node{
+	graph.Nodes[126] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersetting.Table,
 			Columns: usersetting.Columns,
@@ -3893,7 +4251,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersetting.FieldPhoneNumber:       {Type: field.TypeString, Column: usersetting.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[119] = &sqlgraph.Node{
+	graph.Nodes[127] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   usersettinghistory.Table,
 			Columns: usersettinghistory.Columns,
@@ -3925,7 +4283,108 @@ var schemaGraph = func() *sqlgraph.Schema {
 			usersettinghistory.FieldPhoneNumber:       {Type: field.TypeString, Column: usersettinghistory.FieldPhoneNumber},
 		},
 	}
-	graph.Nodes[120] = &sqlgraph.Node{
+	graph.Nodes[128] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vulnerability.Table,
+			Columns: vulnerability.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vulnerability.FieldID,
+			},
+		},
+		Type: "Vulnerability",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vulnerability.FieldCreatedAt:       {Type: field.TypeTime, Column: vulnerability.FieldCreatedAt},
+			vulnerability.FieldUpdatedAt:       {Type: field.TypeTime, Column: vulnerability.FieldUpdatedAt},
+			vulnerability.FieldCreatedBy:       {Type: field.TypeString, Column: vulnerability.FieldCreatedBy},
+			vulnerability.FieldUpdatedBy:       {Type: field.TypeString, Column: vulnerability.FieldUpdatedBy},
+			vulnerability.FieldDeletedAt:       {Type: field.TypeTime, Column: vulnerability.FieldDeletedAt},
+			vulnerability.FieldDeletedBy:       {Type: field.TypeString, Column: vulnerability.FieldDeletedBy},
+			vulnerability.FieldTags:            {Type: field.TypeJSON, Column: vulnerability.FieldTags},
+			vulnerability.FieldExternalOwnerID: {Type: field.TypeString, Column: vulnerability.FieldExternalOwnerID},
+			vulnerability.FieldExternalID:      {Type: field.TypeString, Column: vulnerability.FieldExternalID},
+			vulnerability.FieldCveID:           {Type: field.TypeString, Column: vulnerability.FieldCveID},
+			vulnerability.FieldSource:          {Type: field.TypeString, Column: vulnerability.FieldSource},
+			vulnerability.FieldDisplayName:     {Type: field.TypeString, Column: vulnerability.FieldDisplayName},
+			vulnerability.FieldCategory:        {Type: field.TypeString, Column: vulnerability.FieldCategory},
+			vulnerability.FieldSeverity:        {Type: field.TypeString, Column: vulnerability.FieldSeverity},
+			vulnerability.FieldScore:           {Type: field.TypeFloat64, Column: vulnerability.FieldScore},
+			vulnerability.FieldImpact:          {Type: field.TypeFloat64, Column: vulnerability.FieldImpact},
+			vulnerability.FieldExploitability:  {Type: field.TypeFloat64, Column: vulnerability.FieldExploitability},
+			vulnerability.FieldPriority:        {Type: field.TypeString, Column: vulnerability.FieldPriority},
+			vulnerability.FieldStatus:          {Type: field.TypeString, Column: vulnerability.FieldStatus},
+			vulnerability.FieldSummary:         {Type: field.TypeString, Column: vulnerability.FieldSummary},
+			vulnerability.FieldDescription:     {Type: field.TypeString, Column: vulnerability.FieldDescription},
+			vulnerability.FieldVector:          {Type: field.TypeString, Column: vulnerability.FieldVector},
+			vulnerability.FieldRemediationSLA:  {Type: field.TypeInt, Column: vulnerability.FieldRemediationSLA},
+			vulnerability.FieldOpen:            {Type: field.TypeBool, Column: vulnerability.FieldOpen},
+			vulnerability.FieldBlocking:        {Type: field.TypeBool, Column: vulnerability.FieldBlocking},
+			vulnerability.FieldProduction:      {Type: field.TypeBool, Column: vulnerability.FieldProduction},
+			vulnerability.FieldPublic:          {Type: field.TypeBool, Column: vulnerability.FieldPublic},
+			vulnerability.FieldValidated:       {Type: field.TypeBool, Column: vulnerability.FieldValidated},
+			vulnerability.FieldReferences:      {Type: field.TypeJSON, Column: vulnerability.FieldReferences},
+			vulnerability.FieldImpacts:         {Type: field.TypeJSON, Column: vulnerability.FieldImpacts},
+			vulnerability.FieldPublishedAt:     {Type: field.TypeTime, Column: vulnerability.FieldPublishedAt},
+			vulnerability.FieldDiscoveredAt:    {Type: field.TypeTime, Column: vulnerability.FieldDiscoveredAt},
+			vulnerability.FieldSourceUpdatedAt: {Type: field.TypeTime, Column: vulnerability.FieldSourceUpdatedAt},
+			vulnerability.FieldExternalURI:     {Type: field.TypeString, Column: vulnerability.FieldExternalURI},
+			vulnerability.FieldMetadata:        {Type: field.TypeJSON, Column: vulnerability.FieldMetadata},
+			vulnerability.FieldRawPayload:      {Type: field.TypeJSON, Column: vulnerability.FieldRawPayload},
+		},
+	}
+	graph.Nodes[129] = &sqlgraph.Node{
+		NodeSpec: sqlgraph.NodeSpec{
+			Table:   vulnerabilityhistory.Table,
+			Columns: vulnerabilityhistory.Columns,
+			ID: &sqlgraph.FieldSpec{
+				Type:   field.TypeString,
+				Column: vulnerabilityhistory.FieldID,
+			},
+		},
+		Type: "VulnerabilityHistory",
+		Fields: map[string]*sqlgraph.FieldSpec{
+			vulnerabilityhistory.FieldHistoryTime:     {Type: field.TypeTime, Column: vulnerabilityhistory.FieldHistoryTime},
+			vulnerabilityhistory.FieldRef:             {Type: field.TypeString, Column: vulnerabilityhistory.FieldRef},
+			vulnerabilityhistory.FieldOperation:       {Type: field.TypeEnum, Column: vulnerabilityhistory.FieldOperation},
+			vulnerabilityhistory.FieldCreatedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldCreatedAt},
+			vulnerabilityhistory.FieldUpdatedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldUpdatedAt},
+			vulnerabilityhistory.FieldCreatedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldCreatedBy},
+			vulnerabilityhistory.FieldUpdatedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldUpdatedBy},
+			vulnerabilityhistory.FieldDeletedAt:       {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDeletedAt},
+			vulnerabilityhistory.FieldDeletedBy:       {Type: field.TypeString, Column: vulnerabilityhistory.FieldDeletedBy},
+			vulnerabilityhistory.FieldTags:            {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldTags},
+			vulnerabilityhistory.FieldExternalOwnerID: {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalOwnerID},
+			vulnerabilityhistory.FieldExternalID:      {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalID},
+			vulnerabilityhistory.FieldCveID:           {Type: field.TypeString, Column: vulnerabilityhistory.FieldCveID},
+			vulnerabilityhistory.FieldSource:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldSource},
+			vulnerabilityhistory.FieldDisplayName:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldDisplayName},
+			vulnerabilityhistory.FieldCategory:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldCategory},
+			vulnerabilityhistory.FieldSeverity:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldSeverity},
+			vulnerabilityhistory.FieldScore:           {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldScore},
+			vulnerabilityhistory.FieldImpact:          {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldImpact},
+			vulnerabilityhistory.FieldExploitability:  {Type: field.TypeFloat64, Column: vulnerabilityhistory.FieldExploitability},
+			vulnerabilityhistory.FieldPriority:        {Type: field.TypeString, Column: vulnerabilityhistory.FieldPriority},
+			vulnerabilityhistory.FieldStatus:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldStatus},
+			vulnerabilityhistory.FieldSummary:         {Type: field.TypeString, Column: vulnerabilityhistory.FieldSummary},
+			vulnerabilityhistory.FieldDescription:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldDescription},
+			vulnerabilityhistory.FieldVector:          {Type: field.TypeString, Column: vulnerabilityhistory.FieldVector},
+			vulnerabilityhistory.FieldRemediationSLA:  {Type: field.TypeInt, Column: vulnerabilityhistory.FieldRemediationSLA},
+			vulnerabilityhistory.FieldOpen:            {Type: field.TypeBool, Column: vulnerabilityhistory.FieldOpen},
+			vulnerabilityhistory.FieldBlocking:        {Type: field.TypeBool, Column: vulnerabilityhistory.FieldBlocking},
+			vulnerabilityhistory.FieldProduction:      {Type: field.TypeBool, Column: vulnerabilityhistory.FieldProduction},
+			vulnerabilityhistory.FieldPublic:          {Type: field.TypeBool, Column: vulnerabilityhistory.FieldPublic},
+			vulnerabilityhistory.FieldValidated:       {Type: field.TypeBool, Column: vulnerabilityhistory.FieldValidated},
+			vulnerabilityhistory.FieldReferences:      {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldReferences},
+			vulnerabilityhistory.FieldImpacts:         {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldImpacts},
+			vulnerabilityhistory.FieldPublishedAt:     {Type: field.TypeTime, Column: vulnerabilityhistory.FieldPublishedAt},
+			vulnerabilityhistory.FieldDiscoveredAt:    {Type: field.TypeTime, Column: vulnerabilityhistory.FieldDiscoveredAt},
+			vulnerabilityhistory.FieldSourceUpdatedAt: {Type: field.TypeTime, Column: vulnerabilityhistory.FieldSourceUpdatedAt},
+			vulnerabilityhistory.FieldExternalURI:     {Type: field.TypeString, Column: vulnerabilityhistory.FieldExternalURI},
+			vulnerabilityhistory.FieldMetadata:        {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldMetadata},
+			vulnerabilityhistory.FieldRawPayload:      {Type: field.TypeJSON, Column: vulnerabilityhistory.FieldRawPayload},
+		},
+	}
+	graph.Nodes[130] = &sqlgraph.Node{
 		NodeSpec: sqlgraph.NodeSpec{
 			Table:   webauthn.Table,
 			Columns: webauthn.Columns,
@@ -4049,6 +4508,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ActionPlan",
 		"Program",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Task",
+	)
+	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"ActionPlan",
+		"Integration",
 	)
 	graph.MustAddE(
 		"file",
@@ -4531,6 +5062,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Scan",
 	)
 	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   control.FindingsTable,
+			Columns: control.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Control",
+		"Finding",
+	)
+	graph.MustAddE(
 		"control_implementations",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -4589,6 +5132,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Control",
 		"MappedControl",
+	)
+	graph.MustAddE(
+		"control_mappings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   control.ControlMappingsTable,
+			Columns: []string{control.ControlMappingsColumn},
+			Bidi:    false,
+		},
+		"Control",
+		"FindingControl",
 	)
 	graph.MustAddE(
 		"owner",
@@ -5707,6 +6262,234 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"User",
 	)
 	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   finding.IntegrationsTable,
+			Columns: finding.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"Integration",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.VulnerabilitiesTable,
+			Columns: []string{finding.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.ActionPlansTable,
+			Columns: finding.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   finding.ControlsTable,
+			Columns: finding.ControlsPrimaryKey,
+			Bidi:    false,
+		},
+		"Finding",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.SubcontrolsTable,
+			Columns: []string{finding.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.RisksTable,
+			Columns: []string{finding.RisksColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Risk",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.ProgramsTable,
+			Columns: []string{finding.ProgramsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Program",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.AssetsTable,
+			Columns: []string{finding.AssetsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Asset",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.EntitiesTable,
+			Columns: []string{finding.EntitiesColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Entity",
+	)
+	graph.MustAddE(
+		"scans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.ScansTable,
+			Columns: []string{finding.ScansColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Scan",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.TasksTable,
+			Columns: []string{finding.TasksColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Task",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.RemediationsTable,
+			Columns: []string{finding.RemediationsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.ReviewsTable,
+			Columns: []string{finding.ReviewsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Review",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.CommentsTable,
+			Columns: []string{finding.CommentsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"Note",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   finding.FilesTable,
+			Columns: []string{finding.FilesColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"File",
+	)
+	graph.MustAddE(
+		"control_mappings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: true,
+			Table:   finding.ControlMappingsTable,
+			Columns: []string{finding.ControlMappingsColumn},
+			Bidi:    false,
+		},
+		"Finding",
+		"FindingControl",
+	)
+	graph.MustAddE(
+		"finding",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   findingcontrol.FindingTable,
+			Columns: []string{findingcontrol.FindingColumn},
+			Bidi:    false,
+		},
+		"FindingControl",
+		"Finding",
+	)
+	graph.MustAddE(
+		"control",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   findingcontrol.ControlTable,
+			Columns: []string{findingcontrol.ControlColumn},
+			Bidi:    false,
+		},
+		"FindingControl",
+		"Control",
+	)
+	graph.MustAddE(
+		"standard",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   findingcontrol.StandardTable,
+			Columns: []string{findingcontrol.StandardColumn},
+			Bidi:    false,
+		},
+		"FindingControl",
+		"Standard",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -6353,6 +7136,78 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Integration",
 		"Event",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.FindingsTable,
+			Columns: integration.FindingsPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.VulnerabilitiesTable,
+			Columns: integration.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.ReviewsTable,
+			Columns: integration.ReviewsPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"Review",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.RemediationsTable,
+			Columns: integration.RemediationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   integration.TasksTable,
+			Columns: []string{integration.TasksColumn},
+			Bidi:    false,
+		},
+		"Integration",
+		"Task",
+	)
+	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   integration.ActionPlansTable,
+			Columns: integration.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Integration",
+		"ActionPlan",
 	)
 	graph.MustAddE(
 		"owner",
@@ -8671,6 +9526,354 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"OrgMembership",
 	)
 	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   remediation.IntegrationsTable,
+			Columns: remediation.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Remediation",
+		"Integration",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.FindingsTable,
+			Columns: []string{remediation.FindingsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.VulnerabilitiesTable,
+			Columns: []string{remediation.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   remediation.ActionPlansTable,
+			Columns: remediation.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Remediation",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.TasksTable,
+			Columns: []string{remediation.TasksColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Task",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.ControlsTable,
+			Columns: []string{remediation.ControlsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.SubcontrolsTable,
+			Columns: []string{remediation.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.RisksTable,
+			Columns: []string{remediation.RisksColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Risk",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.ProgramsTable,
+			Columns: []string{remediation.ProgramsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Program",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.AssetsTable,
+			Columns: []string{remediation.AssetsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Asset",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.EntitiesTable,
+			Columns: []string{remediation.EntitiesColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Entity",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.ReviewsTable,
+			Columns: []string{remediation.ReviewsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Review",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.CommentsTable,
+			Columns: []string{remediation.CommentsColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"Note",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   remediation.FilesTable,
+			Columns: []string{remediation.FilesColumn},
+			Bidi:    false,
+		},
+		"Remediation",
+		"File",
+	)
+	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   review.IntegrationsTable,
+			Columns: review.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Review",
+		"Integration",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.FindingsTable,
+			Columns: []string{review.FindingsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Finding",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.VulnerabilitiesTable,
+			Columns: []string{review.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   review.ActionPlansTable,
+			Columns: review.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Review",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.RemediationsTable,
+			Columns: []string{review.RemediationsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.ControlsTable,
+			Columns: []string{review.ControlsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.SubcontrolsTable,
+			Columns: []string{review.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.RisksTable,
+			Columns: []string{review.RisksColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Risk",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.ProgramsTable,
+			Columns: []string{review.ProgramsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Program",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.AssetsTable,
+			Columns: []string{review.AssetsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Asset",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.EntitiesTable,
+			Columns: []string{review.EntitiesColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Entity",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.TasksTable,
+			Columns: []string{review.TasksColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Task",
+	)
+	graph.MustAddE(
+		"reviewer",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   review.ReviewerTable,
+			Columns: []string{review.ReviewerColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"User",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.CommentsTable,
+			Columns: []string{review.CommentsColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"Note",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   review.FilesTable,
+			Columns: []string{review.FilesColumn},
+			Bidi:    false,
+		},
+		"Review",
+		"File",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -9595,6 +10798,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"ControlImplementation",
 	)
 	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Task",
+		"ActionPlan",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -10231,6 +11446,186 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"integrations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   vulnerability.IntegrationsTable,
+			Columns: vulnerability.IntegrationsPrimaryKey,
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Integration",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.FindingsTable,
+			Columns: []string{vulnerability.FindingsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Finding",
+	)
+	graph.MustAddE(
+		"action_plans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   vulnerability.ActionPlansTable,
+			Columns: vulnerability.ActionPlansPrimaryKey,
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"ActionPlan",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.ControlsTable,
+			Columns: []string{vulnerability.ControlsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Control",
+	)
+	graph.MustAddE(
+		"subcontrols",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.SubcontrolsTable,
+			Columns: []string{vulnerability.SubcontrolsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Subcontrol",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.RisksTable,
+			Columns: []string{vulnerability.RisksColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Risk",
+	)
+	graph.MustAddE(
+		"programs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.ProgramsTable,
+			Columns: []string{vulnerability.ProgramsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Program",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.AssetsTable,
+			Columns: []string{vulnerability.AssetsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Asset",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.EntitiesTable,
+			Columns: []string{vulnerability.EntitiesColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Entity",
+	)
+	graph.MustAddE(
+		"scans",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.ScansTable,
+			Columns: []string{vulnerability.ScansColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Scan",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.TasksTable,
+			Columns: []string{vulnerability.TasksColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Task",
+	)
+	graph.MustAddE(
+		"remediations",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.RemediationsTable,
+			Columns: []string{vulnerability.RemediationsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Remediation",
+	)
+	graph.MustAddE(
+		"reviews",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.ReviewsTable,
+			Columns: []string{vulnerability.ReviewsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Review",
+	)
+	graph.MustAddE(
+		"comments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.CommentsTable,
+			Columns: []string{vulnerability.CommentsColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"Note",
+	)
+	graph.MustAddE(
+		"files",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   vulnerability.FilesTable,
+			Columns: []string{vulnerability.FilesColumn},
+			Bidi:    false,
+		},
+		"Vulnerability",
+		"File",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -10600,14 +11995,54 @@ func (f *ActionPlanFilter) WhereActionPlanKindID(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldActionPlanKindID))
 }
 
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ActionPlanFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *ActionPlanFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldDescription))
+}
+
 // WhereDueDate applies the entql time.Time predicate on the due_date field.
 func (f *ActionPlanFilter) WhereDueDate(p entql.TimeP) {
 	f.Where(p.Field(actionplan.FieldDueDate))
 }
 
+// WhereCompletedAt applies the entql time.Time predicate on the completed_at field.
+func (f *ActionPlanFilter) WhereCompletedAt(p entql.TimeP) {
+	f.Where(p.Field(actionplan.FieldCompletedAt))
+}
+
 // WherePriority applies the entql string predicate on the priority field.
 func (f *ActionPlanFilter) WherePriority(p entql.StringP) {
 	f.Where(p.Field(actionplan.FieldPriority))
+}
+
+// WhereRequiresApproval applies the entql bool predicate on the requires_approval field.
+func (f *ActionPlanFilter) WhereRequiresApproval(p entql.BoolP) {
+	f.Where(p.Field(actionplan.FieldRequiresApproval))
+}
+
+// WhereBlocked applies the entql bool predicate on the blocked field.
+func (f *ActionPlanFilter) WhereBlocked(p entql.BoolP) {
+	f.Where(p.Field(actionplan.FieldBlocked))
+}
+
+// WhereBlockerReason applies the entql string predicate on the blocker_reason field.
+func (f *ActionPlanFilter) WhereBlockerReason(p entql.StringP) {
+	f.Where(p.Field(actionplan.FieldBlockerReason))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ActionPlanFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(actionplan.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *ActionPlanFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(actionplan.FieldRawPayload))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -10707,6 +12142,90 @@ func (f *ActionPlanFilter) WhereHasPrograms() {
 // WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
 func (f *ActionPlanFilter) WhereHasProgramsWith(preds ...predicate.Program) {
 	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ActionPlanFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *ActionPlanFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *ActionPlanFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *ActionPlanFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *ActionPlanFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *ActionPlanFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *ActionPlanFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -10942,14 +12461,54 @@ func (f *ActionPlanHistoryFilter) WhereActionPlanKindID(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldActionPlanKindID))
 }
 
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ActionPlanHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldTitle))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *ActionPlanHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldDescription))
+}
+
 // WhereDueDate applies the entql time.Time predicate on the due_date field.
 func (f *ActionPlanHistoryFilter) WhereDueDate(p entql.TimeP) {
 	f.Where(p.Field(actionplanhistory.FieldDueDate))
 }
 
+// WhereCompletedAt applies the entql time.Time predicate on the completed_at field.
+func (f *ActionPlanHistoryFilter) WhereCompletedAt(p entql.TimeP) {
+	f.Where(p.Field(actionplanhistory.FieldCompletedAt))
+}
+
 // WherePriority applies the entql string predicate on the priority field.
 func (f *ActionPlanHistoryFilter) WherePriority(p entql.StringP) {
 	f.Where(p.Field(actionplanhistory.FieldPriority))
+}
+
+// WhereRequiresApproval applies the entql bool predicate on the requires_approval field.
+func (f *ActionPlanHistoryFilter) WhereRequiresApproval(p entql.BoolP) {
+	f.Where(p.Field(actionplanhistory.FieldRequiresApproval))
+}
+
+// WhereBlocked applies the entql bool predicate on the blocked field.
+func (f *ActionPlanHistoryFilter) WhereBlocked(p entql.BoolP) {
+	f.Where(p.Field(actionplanhistory.FieldBlocked))
+}
+
+// WhereBlockerReason applies the entql string predicate on the blocker_reason field.
+func (f *ActionPlanHistoryFilter) WhereBlockerReason(p entql.StringP) {
+	f.Where(p.Field(actionplanhistory.FieldBlockerReason))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ActionPlanHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(actionplanhistory.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *ActionPlanHistoryFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(actionplanhistory.FieldRawPayload))
 }
 
 // WhereSource applies the entql string predicate on the source field.
@@ -12728,6 +14287,20 @@ func (f *ControlFilter) WhereHasScansWith(preds ...predicate.Scan) {
 	})))
 }
 
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ControlFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasControlImplementations applies a predicate to check if query has an edge control_implementations.
 func (f *ControlFilter) WhereHasControlImplementations() {
 	f.Where(entql.HasEdge("control_implementations"))
@@ -12792,6 +14365,20 @@ func (f *ControlFilter) WhereHasMappedFromControls() {
 // WhereHasMappedFromControlsWith applies a predicate to check if query has an edge mapped_from_controls with a given conditions (other predicates).
 func (f *ControlFilter) WhereHasMappedFromControlsWith(preds ...predicate.MappedControl) {
 	f.Where(entql.HasEdgeWith("mapped_from_controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlMappings applies a predicate to check if query has an edge control_mappings.
+func (f *ControlFilter) WhereHasControlMappings() {
+	f.Where(entql.HasEdge("control_mappings"))
+}
+
+// WhereHasControlMappingsWith applies a predicate to check if query has an edge control_mappings with a given conditions (other predicates).
+func (f *ControlFilter) WhereHasControlMappingsWith(preds ...predicate.FindingControl) {
+	f.Where(entql.HasEdgeWith("control_mappings", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -17236,6 +18823,1032 @@ func (f *FileHistoryFilter) WhereLastAccessedAt(p entql.TimeP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *FindingQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the FindingQuery builder.
+func (_q *FindingQuery) Filter() *FindingFilter {
+	return &FindingFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *FindingMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the FindingMutation builder.
+func (m *FindingMutation) Filter() *FindingFilter {
+	return &FindingFilter{config: m.config, predicateAdder: m}
+}
+
+// FindingFilter provides a generic filtering capability at runtime for FindingQuery.
+type FindingFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *FindingFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *FindingFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *FindingFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *FindingFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *FindingFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(finding.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *FindingFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(finding.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *FindingFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *FindingFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(finding.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *FindingFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *FindingFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *FindingFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldExternalOwnerID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *FindingFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(finding.FieldSource))
+}
+
+// WhereResourceName applies the entql string predicate on the resource_name field.
+func (f *FindingFilter) WhereResourceName(p entql.StringP) {
+	f.Where(p.Field(finding.FieldResourceName))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *FindingFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(finding.FieldDisplayName))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *FindingFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(finding.FieldState))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *FindingFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(finding.FieldCategory))
+}
+
+// WhereCategories applies the entql json.RawMessage predicate on the categories field.
+func (f *FindingFilter) WhereCategories(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldCategories))
+}
+
+// WhereFindingClass applies the entql string predicate on the finding_class field.
+func (f *FindingFilter) WhereFindingClass(p entql.StringP) {
+	f.Where(p.Field(finding.FieldFindingClass))
+}
+
+// WhereSeverity applies the entql string predicate on the severity field.
+func (f *FindingFilter) WhereSeverity(p entql.StringP) {
+	f.Where(p.Field(finding.FieldSeverity))
+}
+
+// WhereNumericSeverity applies the entql float64 predicate on the numeric_severity field.
+func (f *FindingFilter) WhereNumericSeverity(p entql.Float64P) {
+	f.Where(p.Field(finding.FieldNumericSeverity))
+}
+
+// WhereScore applies the entql float64 predicate on the score field.
+func (f *FindingFilter) WhereScore(p entql.Float64P) {
+	f.Where(p.Field(finding.FieldScore))
+}
+
+// WhereImpact applies the entql float64 predicate on the impact field.
+func (f *FindingFilter) WhereImpact(p entql.Float64P) {
+	f.Where(p.Field(finding.FieldImpact))
+}
+
+// WhereExploitability applies the entql float64 predicate on the exploitability field.
+func (f *FindingFilter) WhereExploitability(p entql.Float64P) {
+	f.Where(p.Field(finding.FieldExploitability))
+}
+
+// WherePriority applies the entql string predicate on the priority field.
+func (f *FindingFilter) WherePriority(p entql.StringP) {
+	f.Where(p.Field(finding.FieldPriority))
+}
+
+// WhereOpen applies the entql bool predicate on the open field.
+func (f *FindingFilter) WhereOpen(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldOpen))
+}
+
+// WhereBlocksProduction applies the entql bool predicate on the blocks_production field.
+func (f *FindingFilter) WhereBlocksProduction(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldBlocksProduction))
+}
+
+// WhereProduction applies the entql bool predicate on the production field.
+func (f *FindingFilter) WhereProduction(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldProduction))
+}
+
+// WherePublic applies the entql bool predicate on the public field.
+func (f *FindingFilter) WherePublic(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldPublic))
+}
+
+// WhereValidated applies the entql bool predicate on the validated field.
+func (f *FindingFilter) WhereValidated(p entql.BoolP) {
+	f.Where(p.Field(finding.FieldValidated))
+}
+
+// WhereAssessmentID applies the entql string predicate on the assessment_id field.
+func (f *FindingFilter) WhereAssessmentID(p entql.StringP) {
+	f.Where(p.Field(finding.FieldAssessmentID))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *FindingFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(finding.FieldDescription))
+}
+
+// WhereRecommendation applies the entql string predicate on the recommendation field.
+func (f *FindingFilter) WhereRecommendation(p entql.StringP) {
+	f.Where(p.Field(finding.FieldRecommendation))
+}
+
+// WhereRecommendedActions applies the entql string predicate on the recommended_actions field.
+func (f *FindingFilter) WhereRecommendedActions(p entql.StringP) {
+	f.Where(p.Field(finding.FieldRecommendedActions))
+}
+
+// WhereReferences applies the entql json.RawMessage predicate on the references field.
+func (f *FindingFilter) WhereReferences(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldReferences))
+}
+
+// WhereStepsToReproduce applies the entql json.RawMessage predicate on the steps_to_reproduce field.
+func (f *FindingFilter) WhereStepsToReproduce(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldStepsToReproduce))
+}
+
+// WhereTargets applies the entql json.RawMessage predicate on the targets field.
+func (f *FindingFilter) WhereTargets(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldTargets))
+}
+
+// WhereTargetDetails applies the entql json.RawMessage predicate on the target_details field.
+func (f *FindingFilter) WhereTargetDetails(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldTargetDetails))
+}
+
+// WhereVector applies the entql string predicate on the vector field.
+func (f *FindingFilter) WhereVector(p entql.StringP) {
+	f.Where(p.Field(finding.FieldVector))
+}
+
+// WhereRemediationSLA applies the entql int predicate on the remediation_sla field.
+func (f *FindingFilter) WhereRemediationSLA(p entql.IntP) {
+	f.Where(p.Field(finding.FieldRemediationSLA))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *FindingFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(finding.FieldStatus))
+}
+
+// WhereEventTime applies the entql time.Time predicate on the event_time field.
+func (f *FindingFilter) WhereEventTime(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldEventTime))
+}
+
+// WhereReportedAt applies the entql time.Time predicate on the reported_at field.
+func (f *FindingFilter) WhereReportedAt(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldReportedAt))
+}
+
+// WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
+func (f *FindingFilter) WhereSourceUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(finding.FieldSourceUpdatedAt))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *FindingFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(finding.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FindingFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *FindingFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(finding.FieldRawPayload))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *FindingFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *FindingFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *FindingFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *FindingFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *FindingFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *FindingFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *FindingFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *FindingFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *FindingFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasScans applies a predicate to check if query has an edge scans.
+func (f *FindingFilter) WhereHasScans() {
+	f.Where(entql.HasEdge("scans"))
+}
+
+// WhereHasScansWith applies a predicate to check if query has an edge scans with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasScansWith(preds ...predicate.Scan) {
+	f.Where(entql.HasEdgeWith("scans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *FindingFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *FindingFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *FindingFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *FindingFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *FindingFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControlMappings applies a predicate to check if query has an edge control_mappings.
+func (f *FindingFilter) WhereHasControlMappings() {
+	f.Where(entql.HasEdge("control_mappings"))
+}
+
+// WhereHasControlMappingsWith applies a predicate to check if query has an edge control_mappings with a given conditions (other predicates).
+func (f *FindingFilter) WhereHasControlMappingsWith(preds ...predicate.FindingControl) {
+	f.Where(entql.HasEdgeWith("control_mappings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *FindingControlQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the FindingControlQuery builder.
+func (_q *FindingControlQuery) Filter() *FindingControlFilter {
+	return &FindingControlFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *FindingControlMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the FindingControlMutation builder.
+func (m *FindingControlMutation) Filter() *FindingControlFilter {
+	return &FindingControlFilter{config: m.config, predicateAdder: m}
+}
+
+// FindingControlFilter provides a generic filtering capability at runtime for FindingControlQuery.
+type FindingControlFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *FindingControlFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *FindingControlFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *FindingControlFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrol.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *FindingControlFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrol.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *FindingControlFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *FindingControlFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldUpdatedBy))
+}
+
+// WhereFindingID applies the entql string predicate on the finding_id field.
+func (f *FindingControlFilter) WhereFindingID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldFindingID))
+}
+
+// WhereControlID applies the entql string predicate on the control_id field.
+func (f *FindingControlFilter) WhereControlID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldControlID))
+}
+
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *FindingControlFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldStandardID))
+}
+
+// WhereExternalStandard applies the entql string predicate on the external_standard field.
+func (f *FindingControlFilter) WhereExternalStandard(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldExternalStandard))
+}
+
+// WhereExternalStandardVersion applies the entql string predicate on the external_standard_version field.
+func (f *FindingControlFilter) WhereExternalStandardVersion(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldExternalStandardVersion))
+}
+
+// WhereExternalControlID applies the entql string predicate on the external_control_id field.
+func (f *FindingControlFilter) WhereExternalControlID(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldExternalControlID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *FindingControlFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(findingcontrol.FieldSource))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FindingControlFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(findingcontrol.FieldMetadata))
+}
+
+// WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
+func (f *FindingControlFilter) WhereDiscoveredAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrol.FieldDiscoveredAt))
+}
+
+// WhereHasFinding applies a predicate to check if query has an edge finding.
+func (f *FindingControlFilter) WhereHasFinding() {
+	f.Where(entql.HasEdge("finding"))
+}
+
+// WhereHasFindingWith applies a predicate to check if query has an edge finding with a given conditions (other predicates).
+func (f *FindingControlFilter) WhereHasFindingWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("finding", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControl applies a predicate to check if query has an edge control.
+func (f *FindingControlFilter) WhereHasControl() {
+	f.Where(entql.HasEdge("control"))
+}
+
+// WhereHasControlWith applies a predicate to check if query has an edge control with a given conditions (other predicates).
+func (f *FindingControlFilter) WhereHasControlWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("control", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandard applies a predicate to check if query has an edge standard.
+func (f *FindingControlFilter) WhereHasStandard() {
+	f.Where(entql.HasEdge("standard"))
+}
+
+// WhereHasStandardWith applies a predicate to check if query has an edge standard with a given conditions (other predicates).
+func (f *FindingControlFilter) WhereHasStandardWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standard", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *FindingControlHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the FindingControlHistoryQuery builder.
+func (_q *FindingControlHistoryQuery) Filter() *FindingControlHistoryFilter {
+	return &FindingControlHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *FindingControlHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the FindingControlHistoryMutation builder.
+func (m *FindingControlHistoryMutation) Filter() *FindingControlHistoryFilter {
+	return &FindingControlHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// FindingControlHistoryFilter provides a generic filtering capability at runtime for FindingControlHistoryQuery.
+type FindingControlHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *FindingControlHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *FindingControlHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *FindingControlHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(findingcontrolhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *FindingControlHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *FindingControlHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *FindingControlHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrolhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *FindingControlHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrolhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *FindingControlHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *FindingControlHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldUpdatedBy))
+}
+
+// WhereFindingID applies the entql string predicate on the finding_id field.
+func (f *FindingControlHistoryFilter) WhereFindingID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldFindingID))
+}
+
+// WhereControlID applies the entql string predicate on the control_id field.
+func (f *FindingControlHistoryFilter) WhereControlID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldControlID))
+}
+
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *FindingControlHistoryFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldStandardID))
+}
+
+// WhereExternalStandard applies the entql string predicate on the external_standard field.
+func (f *FindingControlHistoryFilter) WhereExternalStandard(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldExternalStandard))
+}
+
+// WhereExternalStandardVersion applies the entql string predicate on the external_standard_version field.
+func (f *FindingControlHistoryFilter) WhereExternalStandardVersion(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldExternalStandardVersion))
+}
+
+// WhereExternalControlID applies the entql string predicate on the external_control_id field.
+func (f *FindingControlHistoryFilter) WhereExternalControlID(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldExternalControlID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *FindingControlHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(findingcontrolhistory.FieldSource))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FindingControlHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(findingcontrolhistory.FieldMetadata))
+}
+
+// WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
+func (f *FindingControlHistoryFilter) WhereDiscoveredAt(p entql.TimeP) {
+	f.Where(p.Field(findingcontrolhistory.FieldDiscoveredAt))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *FindingHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the FindingHistoryQuery builder.
+func (_q *FindingHistoryQuery) Filter() *FindingHistoryFilter {
+	return &FindingHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *FindingHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the FindingHistoryMutation builder.
+func (m *FindingHistoryMutation) Filter() *FindingHistoryFilter {
+	return &FindingHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// FindingHistoryFilter provides a generic filtering capability at runtime for FindingHistoryQuery.
+type FindingHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *FindingHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *FindingHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *FindingHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *FindingHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *FindingHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *FindingHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *FindingHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *FindingHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *FindingHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *FindingHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *FindingHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *FindingHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *FindingHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *FindingHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldExternalOwnerID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *FindingHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldSource))
+}
+
+// WhereResourceName applies the entql string predicate on the resource_name field.
+func (f *FindingHistoryFilter) WhereResourceName(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldResourceName))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *FindingHistoryFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldDisplayName))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *FindingHistoryFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldState))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *FindingHistoryFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldCategory))
+}
+
+// WhereCategories applies the entql json.RawMessage predicate on the categories field.
+func (f *FindingHistoryFilter) WhereCategories(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldCategories))
+}
+
+// WhereFindingClass applies the entql string predicate on the finding_class field.
+func (f *FindingHistoryFilter) WhereFindingClass(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldFindingClass))
+}
+
+// WhereSeverity applies the entql string predicate on the severity field.
+func (f *FindingHistoryFilter) WhereSeverity(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldSeverity))
+}
+
+// WhereNumericSeverity applies the entql float64 predicate on the numeric_severity field.
+func (f *FindingHistoryFilter) WhereNumericSeverity(p entql.Float64P) {
+	f.Where(p.Field(findinghistory.FieldNumericSeverity))
+}
+
+// WhereScore applies the entql float64 predicate on the score field.
+func (f *FindingHistoryFilter) WhereScore(p entql.Float64P) {
+	f.Where(p.Field(findinghistory.FieldScore))
+}
+
+// WhereImpact applies the entql float64 predicate on the impact field.
+func (f *FindingHistoryFilter) WhereImpact(p entql.Float64P) {
+	f.Where(p.Field(findinghistory.FieldImpact))
+}
+
+// WhereExploitability applies the entql float64 predicate on the exploitability field.
+func (f *FindingHistoryFilter) WhereExploitability(p entql.Float64P) {
+	f.Where(p.Field(findinghistory.FieldExploitability))
+}
+
+// WherePriority applies the entql string predicate on the priority field.
+func (f *FindingHistoryFilter) WherePriority(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldPriority))
+}
+
+// WhereOpen applies the entql bool predicate on the open field.
+func (f *FindingHistoryFilter) WhereOpen(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldOpen))
+}
+
+// WhereBlocksProduction applies the entql bool predicate on the blocks_production field.
+func (f *FindingHistoryFilter) WhereBlocksProduction(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldBlocksProduction))
+}
+
+// WhereProduction applies the entql bool predicate on the production field.
+func (f *FindingHistoryFilter) WhereProduction(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldProduction))
+}
+
+// WherePublic applies the entql bool predicate on the public field.
+func (f *FindingHistoryFilter) WherePublic(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldPublic))
+}
+
+// WhereValidated applies the entql bool predicate on the validated field.
+func (f *FindingHistoryFilter) WhereValidated(p entql.BoolP) {
+	f.Where(p.Field(findinghistory.FieldValidated))
+}
+
+// WhereAssessmentID applies the entql string predicate on the assessment_id field.
+func (f *FindingHistoryFilter) WhereAssessmentID(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldAssessmentID))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *FindingHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldDescription))
+}
+
+// WhereRecommendation applies the entql string predicate on the recommendation field.
+func (f *FindingHistoryFilter) WhereRecommendation(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldRecommendation))
+}
+
+// WhereRecommendedActions applies the entql string predicate on the recommended_actions field.
+func (f *FindingHistoryFilter) WhereRecommendedActions(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldRecommendedActions))
+}
+
+// WhereReferences applies the entql json.RawMessage predicate on the references field.
+func (f *FindingHistoryFilter) WhereReferences(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldReferences))
+}
+
+// WhereStepsToReproduce applies the entql json.RawMessage predicate on the steps_to_reproduce field.
+func (f *FindingHistoryFilter) WhereStepsToReproduce(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldStepsToReproduce))
+}
+
+// WhereTargets applies the entql json.RawMessage predicate on the targets field.
+func (f *FindingHistoryFilter) WhereTargets(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldTargets))
+}
+
+// WhereTargetDetails applies the entql json.RawMessage predicate on the target_details field.
+func (f *FindingHistoryFilter) WhereTargetDetails(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldTargetDetails))
+}
+
+// WhereVector applies the entql string predicate on the vector field.
+func (f *FindingHistoryFilter) WhereVector(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldVector))
+}
+
+// WhereRemediationSLA applies the entql int predicate on the remediation_sla field.
+func (f *FindingHistoryFilter) WhereRemediationSLA(p entql.IntP) {
+	f.Where(p.Field(findinghistory.FieldRemediationSLA))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *FindingHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldStatus))
+}
+
+// WhereEventTime applies the entql time.Time predicate on the event_time field.
+func (f *FindingHistoryFilter) WhereEventTime(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldEventTime))
+}
+
+// WhereReportedAt applies the entql time.Time predicate on the reported_at field.
+func (f *FindingHistoryFilter) WhereReportedAt(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldReportedAt))
+}
+
+// WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
+func (f *FindingHistoryFilter) WhereSourceUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(findinghistory.FieldSourceUpdatedAt))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *FindingHistoryFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(findinghistory.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *FindingHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *FindingHistoryFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(findinghistory.FieldRawPayload))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *GroupQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -17264,7 +19877,7 @@ type GroupFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[36].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -17931,7 +20544,7 @@ type GroupHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[37].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18081,7 +20694,7 @@ type GroupMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[38].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18212,7 +20825,7 @@ type GroupMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[39].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18302,7 +20915,7 @@ type GroupSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[40].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18411,7 +21024,7 @@ type GroupSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *GroupSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[41].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18521,7 +21134,7 @@ type HushFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[42].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18712,7 +21325,7 @@ type HushHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *HushHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[43].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -18862,7 +21475,7 @@ type ImpersonationEventFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ImpersonationEventFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[44].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19024,7 +21637,7 @@ type IntegrationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[45].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19171,6 +21784,90 @@ func (f *IntegrationFilter) WhereHasEventsWith(preds ...predicate.Event) {
 	})))
 }
 
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *IntegrationFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *IntegrationFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *IntegrationFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *IntegrationFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *IntegrationFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *IntegrationFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *IntegrationFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *IntegrationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -19200,7 +21897,7 @@ type IntegrationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *IntegrationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[46].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19335,7 +22032,7 @@ type InternalPolicyFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[47].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19778,7 +22475,7 @@ type InternalPolicyHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InternalPolicyHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[48].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -19998,7 +22695,7 @@ type InviteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *InviteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[49].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20160,7 +22857,7 @@ type JobResultFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobResultFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[50].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20312,7 +23009,7 @@ type JobRunnerFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[51].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20470,7 +23167,7 @@ type JobRunnerRegistrationTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerRegistrationTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[52].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20598,7 +23295,7 @@ type JobRunnerTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobRunnerTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[53].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20741,7 +23438,7 @@ type JobTemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobTemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[54].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -20904,7 +23601,7 @@ type JobTemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *JobTemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[55].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21054,7 +23751,7 @@ type MappableDomainFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappableDomainFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[56].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21153,7 +23850,7 @@ type MappableDomainHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappableDomainHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[57].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21253,7 +23950,7 @@ type MappedControlFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappedControlFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[58].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21466,7 +24163,7 @@ type MappedControlHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *MappedControlHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[59].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21596,7 +24293,7 @@ type NarrativeFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[60].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21823,7 +24520,7 @@ type NarrativeHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NarrativeHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[61].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -21953,7 +24650,7 @@ type NoteFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[62].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22150,7 +24847,7 @@ type NoteHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *NoteHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[63].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22250,7 +24947,7 @@ type OnboardingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OnboardingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[64].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22344,7 +25041,7 @@ type OrgMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[65].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22461,7 +25158,7 @@ type OrgMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[66].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22551,7 +25248,7 @@ type OrgModuleFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgModuleFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[67].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22732,7 +25429,7 @@ type OrgPriceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgPriceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[68].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -22898,7 +25595,7 @@ type OrgProductFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgProductFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[69].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23064,7 +25761,7 @@ type OrgSubscriptionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[70].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23244,7 +25941,7 @@ type OrgSubscriptionHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrgSubscriptionHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[71].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -23369,7 +26066,7 @@ type OrganizationFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[72].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24516,7 +27213,7 @@ type OrganizationHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[73].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24656,7 +27353,7 @@ type OrganizationSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[74].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -24884,7 +27581,7 @@ type OrganizationSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *OrganizationSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[75].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25099,7 +27796,7 @@ type PasswordResetTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PasswordResetTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[76].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25208,7 +27905,7 @@ type PersonalAccessTokenFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *PersonalAccessTokenFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[77].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25385,7 +28082,7 @@ type ProcedureFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[78].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -25800,7 +28497,7 @@ type ProcedureHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProcedureHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[79].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26020,7 +28717,7 @@ type ProgramFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[80].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26465,7 +29162,7 @@ type ProgramHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[81].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26645,7 +29342,7 @@ type ProgramMembershipFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[82].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26762,7 +29459,7 @@ type ProgramMembershipHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ProgramMembershipHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[83].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -26824,6 +29521,1112 @@ func (f *ProgramMembershipHistoryFilter) WhereUserID(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *RemediationQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the RemediationQuery builder.
+func (_q *RemediationQuery) Filter() *RemediationFilter {
+	return &RemediationFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *RemediationMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the RemediationMutation builder.
+func (m *RemediationMutation) Filter() *RemediationFilter {
+	return &RemediationFilter{config: m.config, predicateAdder: m}
+}
+
+// RemediationFilter provides a generic filtering capability at runtime for RemediationQuery.
+type RemediationFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *RemediationFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *RemediationFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *RemediationFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *RemediationFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *RemediationFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *RemediationFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *RemediationFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *RemediationFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *RemediationFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(remediation.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *RemediationFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *RemediationFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldExternalOwnerID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *RemediationFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldTitle))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *RemediationFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldState))
+}
+
+// WhereIntent applies the entql string predicate on the intent field.
+func (f *RemediationFilter) WhereIntent(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldIntent))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *RemediationFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldSummary))
+}
+
+// WhereExplanation applies the entql string predicate on the explanation field.
+func (f *RemediationFilter) WhereExplanation(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldExplanation))
+}
+
+// WhereInstructions applies the entql string predicate on the instructions field.
+func (f *RemediationFilter) WhereInstructions(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldInstructions))
+}
+
+// WhereOwnerReference applies the entql string predicate on the owner_reference field.
+func (f *RemediationFilter) WhereOwnerReference(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldOwnerReference))
+}
+
+// WhereRepositoryURI applies the entql string predicate on the repository_uri field.
+func (f *RemediationFilter) WhereRepositoryURI(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldRepositoryURI))
+}
+
+// WherePullRequestURI applies the entql string predicate on the pull_request_uri field.
+func (f *RemediationFilter) WherePullRequestURI(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldPullRequestURI))
+}
+
+// WhereTicketReference applies the entql string predicate on the ticket_reference field.
+func (f *RemediationFilter) WhereTicketReference(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldTicketReference))
+}
+
+// WhereDueAt applies the entql time.Time predicate on the due_at field.
+func (f *RemediationFilter) WhereDueAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldDueAt))
+}
+
+// WhereCompletedAt applies the entql time.Time predicate on the completed_at field.
+func (f *RemediationFilter) WhereCompletedAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldCompletedAt))
+}
+
+// WherePrGeneratedAt applies the entql time.Time predicate on the pr_generated_at field.
+func (f *RemediationFilter) WherePrGeneratedAt(p entql.TimeP) {
+	f.Where(p.Field(remediation.FieldPrGeneratedAt))
+}
+
+// WhereError applies the entql string predicate on the error field.
+func (f *RemediationFilter) WhereError(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldError))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *RemediationFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldSource))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *RemediationFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(remediation.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *RemediationFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(remediation.FieldMetadata))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *RemediationFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *RemediationFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *RemediationFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *RemediationFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *RemediationFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *RemediationFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *RemediationFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *RemediationFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *RemediationFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *RemediationFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *RemediationFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *RemediationFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *RemediationFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *RemediationFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *RemediationFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *RemediationHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the RemediationHistoryQuery builder.
+func (_q *RemediationHistoryQuery) Filter() *RemediationHistoryFilter {
+	return &RemediationHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *RemediationHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the RemediationHistoryMutation builder.
+func (m *RemediationHistoryMutation) Filter() *RemediationHistoryFilter {
+	return &RemediationHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// RemediationHistoryFilter provides a generic filtering capability at runtime for RemediationHistoryQuery.
+type RemediationHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *RemediationHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *RemediationHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *RemediationHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *RemediationHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *RemediationHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *RemediationHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *RemediationHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *RemediationHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *RemediationHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *RemediationHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *RemediationHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *RemediationHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(remediationhistory.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *RemediationHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *RemediationHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldExternalOwnerID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *RemediationHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldTitle))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *RemediationHistoryFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldState))
+}
+
+// WhereIntent applies the entql string predicate on the intent field.
+func (f *RemediationHistoryFilter) WhereIntent(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldIntent))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *RemediationHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldSummary))
+}
+
+// WhereExplanation applies the entql string predicate on the explanation field.
+func (f *RemediationHistoryFilter) WhereExplanation(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldExplanation))
+}
+
+// WhereInstructions applies the entql string predicate on the instructions field.
+func (f *RemediationHistoryFilter) WhereInstructions(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldInstructions))
+}
+
+// WhereOwnerReference applies the entql string predicate on the owner_reference field.
+func (f *RemediationHistoryFilter) WhereOwnerReference(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldOwnerReference))
+}
+
+// WhereRepositoryURI applies the entql string predicate on the repository_uri field.
+func (f *RemediationHistoryFilter) WhereRepositoryURI(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldRepositoryURI))
+}
+
+// WherePullRequestURI applies the entql string predicate on the pull_request_uri field.
+func (f *RemediationHistoryFilter) WherePullRequestURI(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldPullRequestURI))
+}
+
+// WhereTicketReference applies the entql string predicate on the ticket_reference field.
+func (f *RemediationHistoryFilter) WhereTicketReference(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldTicketReference))
+}
+
+// WhereDueAt applies the entql time.Time predicate on the due_at field.
+func (f *RemediationHistoryFilter) WhereDueAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldDueAt))
+}
+
+// WhereCompletedAt applies the entql time.Time predicate on the completed_at field.
+func (f *RemediationHistoryFilter) WhereCompletedAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldCompletedAt))
+}
+
+// WherePrGeneratedAt applies the entql time.Time predicate on the pr_generated_at field.
+func (f *RemediationHistoryFilter) WherePrGeneratedAt(p entql.TimeP) {
+	f.Where(p.Field(remediationhistory.FieldPrGeneratedAt))
+}
+
+// WhereError applies the entql string predicate on the error field.
+func (f *RemediationHistoryFilter) WhereError(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldError))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *RemediationHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldSource))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *RemediationHistoryFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(remediationhistory.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *RemediationHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(remediationhistory.FieldMetadata))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *ReviewQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ReviewQuery builder.
+func (_q *ReviewQuery) Filter() *ReviewFilter {
+	return &ReviewFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ReviewMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ReviewMutation builder.
+func (m *ReviewMutation) Filter() *ReviewFilter {
+	return &ReviewFilter{config: m.config, predicateAdder: m}
+}
+
+// ReviewFilter provides a generic filtering capability at runtime for ReviewQuery.
+type ReviewFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ReviewFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ReviewFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(review.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ReviewFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ReviewFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *ReviewFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(review.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ReviewFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(review.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *ReviewFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *ReviewFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(review.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *ReviewFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(review.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *ReviewFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(review.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *ReviewFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(review.FieldExternalOwnerID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ReviewFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(review.FieldTitle))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *ReviewFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(review.FieldState))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *ReviewFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(review.FieldCategory))
+}
+
+// WhereClassification applies the entql string predicate on the classification field.
+func (f *ReviewFilter) WhereClassification(p entql.StringP) {
+	f.Where(p.Field(review.FieldClassification))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ReviewFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(review.FieldSummary))
+}
+
+// WhereDetails applies the entql string predicate on the details field.
+func (f *ReviewFilter) WhereDetails(p entql.StringP) {
+	f.Where(p.Field(review.FieldDetails))
+}
+
+// WhereReporter applies the entql string predicate on the reporter field.
+func (f *ReviewFilter) WhereReporter(p entql.StringP) {
+	f.Where(p.Field(review.FieldReporter))
+}
+
+// WhereApproved applies the entql bool predicate on the approved field.
+func (f *ReviewFilter) WhereApproved(p entql.BoolP) {
+	f.Where(p.Field(review.FieldApproved))
+}
+
+// WhereReviewedAt applies the entql time.Time predicate on the reviewed_at field.
+func (f *ReviewFilter) WhereReviewedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldReviewedAt))
+}
+
+// WhereReportedAt applies the entql time.Time predicate on the reported_at field.
+func (f *ReviewFilter) WhereReportedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldReportedAt))
+}
+
+// WhereApprovedAt applies the entql time.Time predicate on the approved_at field.
+func (f *ReviewFilter) WhereApprovedAt(p entql.TimeP) {
+	f.Where(p.Field(review.FieldApprovedAt))
+}
+
+// WhereReviewerID applies the entql string predicate on the reviewer_id field.
+func (f *ReviewFilter) WhereReviewerID(p entql.StringP) {
+	f.Where(p.Field(review.FieldReviewerID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *ReviewFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(review.FieldSource))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *ReviewFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(review.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ReviewFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(review.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *ReviewFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(review.FieldRawPayload))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *ReviewFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ReviewFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *ReviewFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *ReviewFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *ReviewFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *ReviewFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *ReviewFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *ReviewFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *ReviewFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *ReviewFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *ReviewFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *ReviewFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviewer applies a predicate to check if query has an edge reviewer.
+func (f *ReviewFilter) WhereHasReviewer() {
+	f.Where(entql.HasEdge("reviewer"))
+}
+
+// WhereHasReviewerWith applies a predicate to check if query has an edge reviewer with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasReviewerWith(preds ...predicate.User) {
+	f.Where(entql.HasEdgeWith("reviewer", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *ReviewFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *ReviewFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *ReviewFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *ReviewHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the ReviewHistoryQuery builder.
+func (_q *ReviewHistoryQuery) Filter() *ReviewHistoryFilter {
+	return &ReviewHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *ReviewHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the ReviewHistoryMutation builder.
+func (m *ReviewHistoryMutation) Filter() *ReviewHistoryFilter {
+	return &ReviewHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// ReviewHistoryFilter provides a generic filtering capability at runtime for ReviewHistoryQuery.
+type ReviewHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *ReviewHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *ReviewHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *ReviewHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *ReviewHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *ReviewHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *ReviewHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *ReviewHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *ReviewHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *ReviewHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *ReviewHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *ReviewHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *ReviewHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(reviewhistory.FieldTags))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *ReviewHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldExternalID))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *ReviewHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldExternalOwnerID))
+}
+
+// WhereTitle applies the entql string predicate on the title field.
+func (f *ReviewHistoryFilter) WhereTitle(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldTitle))
+}
+
+// WhereState applies the entql string predicate on the state field.
+func (f *ReviewHistoryFilter) WhereState(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldState))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *ReviewHistoryFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldCategory))
+}
+
+// WhereClassification applies the entql string predicate on the classification field.
+func (f *ReviewHistoryFilter) WhereClassification(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldClassification))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *ReviewHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldSummary))
+}
+
+// WhereDetails applies the entql string predicate on the details field.
+func (f *ReviewHistoryFilter) WhereDetails(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldDetails))
+}
+
+// WhereReporter applies the entql string predicate on the reporter field.
+func (f *ReviewHistoryFilter) WhereReporter(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldReporter))
+}
+
+// WhereApproved applies the entql bool predicate on the approved field.
+func (f *ReviewHistoryFilter) WhereApproved(p entql.BoolP) {
+	f.Where(p.Field(reviewhistory.FieldApproved))
+}
+
+// WhereReviewedAt applies the entql time.Time predicate on the reviewed_at field.
+func (f *ReviewHistoryFilter) WhereReviewedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldReviewedAt))
+}
+
+// WhereReportedAt applies the entql time.Time predicate on the reported_at field.
+func (f *ReviewHistoryFilter) WhereReportedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldReportedAt))
+}
+
+// WhereApprovedAt applies the entql time.Time predicate on the approved_at field.
+func (f *ReviewHistoryFilter) WhereApprovedAt(p entql.TimeP) {
+	f.Where(p.Field(reviewhistory.FieldApprovedAt))
+}
+
+// WhereReviewerID applies the entql string predicate on the reviewer_id field.
+func (f *ReviewHistoryFilter) WhereReviewerID(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldReviewerID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *ReviewHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldSource))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *ReviewHistoryFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(reviewhistory.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ReviewHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(reviewhistory.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *ReviewHistoryFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(reviewhistory.FieldRawPayload))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *RiskQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -26852,7 +30655,7 @@ type RiskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[84].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -27283,7 +31086,7 @@ type RiskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *RiskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[85].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -27463,7 +31266,7 @@ type ScanFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScanFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[86].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -27647,7 +31450,7 @@ type ScanHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScanHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[87].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -27762,7 +31565,7 @@ type ScheduledJobFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[88].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -27937,7 +31740,7 @@ type ScheduledJobHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[89].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28057,7 +31860,7 @@ type ScheduledJobRunFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *ScheduledJobRunFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[90].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28199,7 +32002,7 @@ type StandardFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[91].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28406,7 +32209,7 @@ type StandardHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *StandardHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[92].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -28586,7 +32389,7 @@ type SubcontrolFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[93].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29087,7 +32890,7 @@ type SubcontrolHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubcontrolHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[94].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29337,7 +33140,7 @@ type SubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[95].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29508,7 +33311,7 @@ type SubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[96].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29638,7 +33441,7 @@ type SubscriberFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *SubscriberFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[97].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29796,7 +33599,7 @@ type TFASettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TFASettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[98].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -29915,7 +33718,7 @@ type TagDefinitionFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TagDefinitionFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[99].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30044,7 +33847,7 @@ type TaskFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[100].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30361,6 +34164,20 @@ func (f *TaskFilter) WhereHasControlImplementationsWith(preds ...predicate.Contr
 	})))
 }
 
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *TaskFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *TaskFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasEvidence applies a predicate to check if query has an edge evidence.
 func (f *TaskFilter) WhereHasEvidence() {
 	f.Where(entql.HasEdge("evidence"))
@@ -30404,7 +34221,7 @@ type TaskHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TaskHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[101].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30569,7 +34386,7 @@ type TemplateFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[102].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30755,7 +34572,7 @@ type TemplateHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TemplateHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[103].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[111].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -30900,7 +34717,7 @@ type TrustCenterFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[104].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[112].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31102,7 +34919,7 @@ type TrustCenterComplianceFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[105].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[113].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31215,7 +35032,7 @@ type TrustCenterComplianceHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterComplianceHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[106].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[114].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31315,7 +35132,7 @@ type TrustCenterDocFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[107].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[115].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31472,7 +35289,7 @@ type TrustCenterDocHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterDocHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[108].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[116].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31602,7 +35419,7 @@ type TrustCenterHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[109].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[117].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31707,7 +35524,7 @@ type TrustCenterSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[110].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[118].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -31908,7 +35725,7 @@ type TrustCenterSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[111].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[119].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -32068,7 +35885,7 @@ type TrustCenterSubprocessorFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[112].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[120].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -32186,7 +36003,7 @@ type TrustCenterSubprocessorHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterSubprocessorHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[113].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[121].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -32291,7 +36108,7 @@ type TrustCenterWatermarkConfigFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[114].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[122].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -32448,7 +36265,7 @@ type TrustCenterWatermarkConfigHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *TrustCenterWatermarkConfigHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[115].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[123].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -32578,7 +36395,7 @@ type UserFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[116].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[124].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -33070,7 +36887,7 @@ type UserHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[117].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[125].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -33255,7 +37072,7 @@ type UserSettingFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[118].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[126].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -33417,7 +37234,7 @@ type UserSettingHistoryFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *UserSettingHistoryFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[119].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[127].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})
@@ -33524,6 +37341,671 @@ func (f *UserSettingHistoryFilter) WherePhoneNumber(p entql.StringP) {
 }
 
 // addPredicate implements the predicateAdder interface.
+func (_q *VulnerabilityQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VulnerabilityQuery builder.
+func (_q *VulnerabilityQuery) Filter() *VulnerabilityFilter {
+	return &VulnerabilityFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VulnerabilityMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VulnerabilityMutation builder.
+func (m *VulnerabilityMutation) Filter() *VulnerabilityFilter {
+	return &VulnerabilityFilter{config: m.config, predicateAdder: m}
+}
+
+// VulnerabilityFilter provides a generic filtering capability at runtime for VulnerabilityQuery.
+type VulnerabilityFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VulnerabilityFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[128].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VulnerabilityFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldID))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VulnerabilityFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VulnerabilityFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VulnerabilityFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VulnerabilityFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VulnerabilityFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VulnerabilityFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *VulnerabilityFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldTags))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *VulnerabilityFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldExternalOwnerID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *VulnerabilityFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldExternalID))
+}
+
+// WhereCveID applies the entql string predicate on the cve_id field.
+func (f *VulnerabilityFilter) WhereCveID(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldCveID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *VulnerabilityFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSource))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *VulnerabilityFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDisplayName))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *VulnerabilityFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldCategory))
+}
+
+// WhereSeverity applies the entql string predicate on the severity field.
+func (f *VulnerabilityFilter) WhereSeverity(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSeverity))
+}
+
+// WhereScore applies the entql float64 predicate on the score field.
+func (f *VulnerabilityFilter) WhereScore(p entql.Float64P) {
+	f.Where(p.Field(vulnerability.FieldScore))
+}
+
+// WhereImpact applies the entql float64 predicate on the impact field.
+func (f *VulnerabilityFilter) WhereImpact(p entql.Float64P) {
+	f.Where(p.Field(vulnerability.FieldImpact))
+}
+
+// WhereExploitability applies the entql float64 predicate on the exploitability field.
+func (f *VulnerabilityFilter) WhereExploitability(p entql.Float64P) {
+	f.Where(p.Field(vulnerability.FieldExploitability))
+}
+
+// WherePriority applies the entql string predicate on the priority field.
+func (f *VulnerabilityFilter) WherePriority(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldPriority))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *VulnerabilityFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldStatus))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *VulnerabilityFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldSummary))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *VulnerabilityFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldDescription))
+}
+
+// WhereVector applies the entql string predicate on the vector field.
+func (f *VulnerabilityFilter) WhereVector(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldVector))
+}
+
+// WhereRemediationSLA applies the entql int predicate on the remediation_sla field.
+func (f *VulnerabilityFilter) WhereRemediationSLA(p entql.IntP) {
+	f.Where(p.Field(vulnerability.FieldRemediationSLA))
+}
+
+// WhereOpen applies the entql bool predicate on the open field.
+func (f *VulnerabilityFilter) WhereOpen(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldOpen))
+}
+
+// WhereBlocking applies the entql bool predicate on the blocking field.
+func (f *VulnerabilityFilter) WhereBlocking(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldBlocking))
+}
+
+// WhereProduction applies the entql bool predicate on the production field.
+func (f *VulnerabilityFilter) WhereProduction(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldProduction))
+}
+
+// WherePublic applies the entql bool predicate on the public field.
+func (f *VulnerabilityFilter) WherePublic(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldPublic))
+}
+
+// WhereValidated applies the entql bool predicate on the validated field.
+func (f *VulnerabilityFilter) WhereValidated(p entql.BoolP) {
+	f.Where(p.Field(vulnerability.FieldValidated))
+}
+
+// WhereReferences applies the entql json.RawMessage predicate on the references field.
+func (f *VulnerabilityFilter) WhereReferences(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldReferences))
+}
+
+// WhereImpacts applies the entql json.RawMessage predicate on the impacts field.
+func (f *VulnerabilityFilter) WhereImpacts(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldImpacts))
+}
+
+// WherePublishedAt applies the entql time.Time predicate on the published_at field.
+func (f *VulnerabilityFilter) WherePublishedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldPublishedAt))
+}
+
+// WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
+func (f *VulnerabilityFilter) WhereDiscoveredAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldDiscoveredAt))
+}
+
+// WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
+func (f *VulnerabilityFilter) WhereSourceUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerability.FieldSourceUpdatedAt))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *VulnerabilityFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(vulnerability.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *VulnerabilityFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *VulnerabilityFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(vulnerability.FieldRawPayload))
+}
+
+// WhereHasIntegrations applies a predicate to check if query has an edge integrations.
+func (f *VulnerabilityFilter) WhereHasIntegrations() {
+	f.Where(entql.HasEdge("integrations"))
+}
+
+// WhereHasIntegrationsWith applies a predicate to check if query has an edge integrations with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasIntegrationsWith(preds ...predicate.Integration) {
+	f.Where(entql.HasEdgeWith("integrations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *VulnerabilityFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasActionPlans applies a predicate to check if query has an edge action_plans.
+func (f *VulnerabilityFilter) WhereHasActionPlans() {
+	f.Where(entql.HasEdge("action_plans"))
+}
+
+// WhereHasActionPlansWith applies a predicate to check if query has an edge action_plans with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasActionPlansWith(preds ...predicate.ActionPlan) {
+	f.Where(entql.HasEdgeWith("action_plans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *VulnerabilityFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasSubcontrols applies a predicate to check if query has an edge subcontrols.
+func (f *VulnerabilityFilter) WhereHasSubcontrols() {
+	f.Where(entql.HasEdge("subcontrols"))
+}
+
+// WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
+	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *VulnerabilityFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPrograms applies a predicate to check if query has an edge programs.
+func (f *VulnerabilityFilter) WhereHasPrograms() {
+	f.Where(entql.HasEdge("programs"))
+}
+
+// WhereHasProgramsWith applies a predicate to check if query has an edge programs with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasProgramsWith(preds ...predicate.Program) {
+	f.Where(entql.HasEdgeWith("programs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *VulnerabilityFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *VulnerabilityFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasScans applies a predicate to check if query has an edge scans.
+func (f *VulnerabilityFilter) WhereHasScans() {
+	f.Where(entql.HasEdge("scans"))
+}
+
+// WhereHasScansWith applies a predicate to check if query has an edge scans with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasScansWith(preds ...predicate.Scan) {
+	f.Where(entql.HasEdgeWith("scans", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *VulnerabilityFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRemediations applies a predicate to check if query has an edge remediations.
+func (f *VulnerabilityFilter) WhereHasRemediations() {
+	f.Where(entql.HasEdge("remediations"))
+}
+
+// WhereHasRemediationsWith applies a predicate to check if query has an edge remediations with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasRemediationsWith(preds ...predicate.Remediation) {
+	f.Where(entql.HasEdgeWith("remediations", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasReviews applies a predicate to check if query has an edge reviews.
+func (f *VulnerabilityFilter) WhereHasReviews() {
+	f.Where(entql.HasEdge("reviews"))
+}
+
+// WhereHasReviewsWith applies a predicate to check if query has an edge reviews with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasReviewsWith(preds ...predicate.Review) {
+	f.Where(entql.HasEdgeWith("reviews", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasComments applies a predicate to check if query has an edge comments.
+func (f *VulnerabilityFilter) WhereHasComments() {
+	f.Where(entql.HasEdge("comments"))
+}
+
+// WhereHasCommentsWith applies a predicate to check if query has an edge comments with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasCommentsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("comments", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFiles applies a predicate to check if query has an edge files.
+func (f *VulnerabilityFilter) WhereHasFiles() {
+	f.Where(entql.HasEdge("files"))
+}
+
+// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
+func (f *VulnerabilityFilter) WhereHasFilesWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// addPredicate implements the predicateAdder interface.
+func (_q *VulnerabilityHistoryQuery) addPredicate(pred func(s *sql.Selector)) {
+	_q.predicates = append(_q.predicates, pred)
+}
+
+// Filter returns a Filter implementation to apply filters on the VulnerabilityHistoryQuery builder.
+func (_q *VulnerabilityHistoryQuery) Filter() *VulnerabilityHistoryFilter {
+	return &VulnerabilityHistoryFilter{config: _q.config, predicateAdder: _q}
+}
+
+// addPredicate implements the predicateAdder interface.
+func (m *VulnerabilityHistoryMutation) addPredicate(pred func(s *sql.Selector)) {
+	m.predicates = append(m.predicates, pred)
+}
+
+// Filter returns an entql.Where implementation to apply filters on the VulnerabilityHistoryMutation builder.
+func (m *VulnerabilityHistoryMutation) Filter() *VulnerabilityHistoryFilter {
+	return &VulnerabilityHistoryFilter{config: m.config, predicateAdder: m}
+}
+
+// VulnerabilityHistoryFilter provides a generic filtering capability at runtime for VulnerabilityHistoryQuery.
+type VulnerabilityHistoryFilter struct {
+	predicateAdder
+	config
+}
+
+// Where applies the entql predicate on the query filter.
+func (f *VulnerabilityHistoryFilter) Where(p entql.P) {
+	f.addPredicate(func(s *sql.Selector) {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[129].Type, p, s); err != nil {
+			s.AddError(err)
+		}
+	})
+}
+
+// WhereID applies the entql string predicate on the id field.
+func (f *VulnerabilityHistoryFilter) WhereID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldID))
+}
+
+// WhereHistoryTime applies the entql time.Time predicate on the history_time field.
+func (f *VulnerabilityHistoryFilter) WhereHistoryTime(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldHistoryTime))
+}
+
+// WhereRef applies the entql string predicate on the ref field.
+func (f *VulnerabilityHistoryFilter) WhereRef(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldRef))
+}
+
+// WhereOperation applies the entql string predicate on the operation field.
+func (f *VulnerabilityHistoryFilter) WhereOperation(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldOperation))
+}
+
+// WhereCreatedAt applies the entql time.Time predicate on the created_at field.
+func (f *VulnerabilityHistoryFilter) WhereCreatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldCreatedAt))
+}
+
+// WhereUpdatedAt applies the entql time.Time predicate on the updated_at field.
+func (f *VulnerabilityHistoryFilter) WhereUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldUpdatedAt))
+}
+
+// WhereCreatedBy applies the entql string predicate on the created_by field.
+func (f *VulnerabilityHistoryFilter) WhereCreatedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldCreatedBy))
+}
+
+// WhereUpdatedBy applies the entql string predicate on the updated_by field.
+func (f *VulnerabilityHistoryFilter) WhereUpdatedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldUpdatedBy))
+}
+
+// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
+func (f *VulnerabilityHistoryFilter) WhereDeletedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDeletedAt))
+}
+
+// WhereDeletedBy applies the entql string predicate on the deleted_by field.
+func (f *VulnerabilityHistoryFilter) WhereDeletedBy(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDeletedBy))
+}
+
+// WhereTags applies the entql json.RawMessage predicate on the tags field.
+func (f *VulnerabilityHistoryFilter) WhereTags(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldTags))
+}
+
+// WhereExternalOwnerID applies the entql string predicate on the external_owner_id field.
+func (f *VulnerabilityHistoryFilter) WhereExternalOwnerID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldExternalOwnerID))
+}
+
+// WhereExternalID applies the entql string predicate on the external_id field.
+func (f *VulnerabilityHistoryFilter) WhereExternalID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldExternalID))
+}
+
+// WhereCveID applies the entql string predicate on the cve_id field.
+func (f *VulnerabilityHistoryFilter) WhereCveID(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldCveID))
+}
+
+// WhereSource applies the entql string predicate on the source field.
+func (f *VulnerabilityHistoryFilter) WhereSource(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSource))
+}
+
+// WhereDisplayName applies the entql string predicate on the display_name field.
+func (f *VulnerabilityHistoryFilter) WhereDisplayName(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDisplayName))
+}
+
+// WhereCategory applies the entql string predicate on the category field.
+func (f *VulnerabilityHistoryFilter) WhereCategory(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldCategory))
+}
+
+// WhereSeverity applies the entql string predicate on the severity field.
+func (f *VulnerabilityHistoryFilter) WhereSeverity(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSeverity))
+}
+
+// WhereScore applies the entql float64 predicate on the score field.
+func (f *VulnerabilityHistoryFilter) WhereScore(p entql.Float64P) {
+	f.Where(p.Field(vulnerabilityhistory.FieldScore))
+}
+
+// WhereImpact applies the entql float64 predicate on the impact field.
+func (f *VulnerabilityHistoryFilter) WhereImpact(p entql.Float64P) {
+	f.Where(p.Field(vulnerabilityhistory.FieldImpact))
+}
+
+// WhereExploitability applies the entql float64 predicate on the exploitability field.
+func (f *VulnerabilityHistoryFilter) WhereExploitability(p entql.Float64P) {
+	f.Where(p.Field(vulnerabilityhistory.FieldExploitability))
+}
+
+// WherePriority applies the entql string predicate on the priority field.
+func (f *VulnerabilityHistoryFilter) WherePriority(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldPriority))
+}
+
+// WhereStatus applies the entql string predicate on the status field.
+func (f *VulnerabilityHistoryFilter) WhereStatus(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldStatus))
+}
+
+// WhereSummary applies the entql string predicate on the summary field.
+func (f *VulnerabilityHistoryFilter) WhereSummary(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSummary))
+}
+
+// WhereDescription applies the entql string predicate on the description field.
+func (f *VulnerabilityHistoryFilter) WhereDescription(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDescription))
+}
+
+// WhereVector applies the entql string predicate on the vector field.
+func (f *VulnerabilityHistoryFilter) WhereVector(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldVector))
+}
+
+// WhereRemediationSLA applies the entql int predicate on the remediation_sla field.
+func (f *VulnerabilityHistoryFilter) WhereRemediationSLA(p entql.IntP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldRemediationSLA))
+}
+
+// WhereOpen applies the entql bool predicate on the open field.
+func (f *VulnerabilityHistoryFilter) WhereOpen(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldOpen))
+}
+
+// WhereBlocking applies the entql bool predicate on the blocking field.
+func (f *VulnerabilityHistoryFilter) WhereBlocking(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldBlocking))
+}
+
+// WhereProduction applies the entql bool predicate on the production field.
+func (f *VulnerabilityHistoryFilter) WhereProduction(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldProduction))
+}
+
+// WherePublic applies the entql bool predicate on the public field.
+func (f *VulnerabilityHistoryFilter) WherePublic(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldPublic))
+}
+
+// WhereValidated applies the entql bool predicate on the validated field.
+func (f *VulnerabilityHistoryFilter) WhereValidated(p entql.BoolP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldValidated))
+}
+
+// WhereReferences applies the entql json.RawMessage predicate on the references field.
+func (f *VulnerabilityHistoryFilter) WhereReferences(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldReferences))
+}
+
+// WhereImpacts applies the entql json.RawMessage predicate on the impacts field.
+func (f *VulnerabilityHistoryFilter) WhereImpacts(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldImpacts))
+}
+
+// WherePublishedAt applies the entql time.Time predicate on the published_at field.
+func (f *VulnerabilityHistoryFilter) WherePublishedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldPublishedAt))
+}
+
+// WhereDiscoveredAt applies the entql time.Time predicate on the discovered_at field.
+func (f *VulnerabilityHistoryFilter) WhereDiscoveredAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldDiscoveredAt))
+}
+
+// WhereSourceUpdatedAt applies the entql time.Time predicate on the source_updated_at field.
+func (f *VulnerabilityHistoryFilter) WhereSourceUpdatedAt(p entql.TimeP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldSourceUpdatedAt))
+}
+
+// WhereExternalURI applies the entql string predicate on the external_uri field.
+func (f *VulnerabilityHistoryFilter) WhereExternalURI(p entql.StringP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldExternalURI))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *VulnerabilityHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldMetadata))
+}
+
+// WhereRawPayload applies the entql json.RawMessage predicate on the raw_payload field.
+func (f *VulnerabilityHistoryFilter) WhereRawPayload(p entql.BytesP) {
+	f.Where(p.Field(vulnerabilityhistory.FieldRawPayload))
+}
+
+// addPredicate implements the predicateAdder interface.
 func (_q *WebauthnQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
 }
@@ -33552,7 +38034,7 @@ type WebauthnFilter struct {
 // Where applies the entql predicate on the query filter.
 func (f *WebauthnFilter) Where(p entql.P) {
 	f.addPredicate(func(s *sql.Selector) {
-		if err := schemaGraph.EvalP(schemaGraph.Nodes[120].Type, p, s); err != nil {
+		if err := schemaGraph.EvalP(schemaGraph.Nodes[130].Type, p, s); err != nil {
 			s.AddError(err)
 		}
 	})

@@ -122,6 +122,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_risks(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}
@@ -254,6 +256,8 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_risks(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}
@@ -386,6 +390,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_risks(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}
@@ -518,6 +524,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_risks(ctx, field)
 			case "controlImplementations":
 				return ec.fieldContext_Task_controlImplementations(ctx, field)
+			case "actionPlans":
+				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
 			}

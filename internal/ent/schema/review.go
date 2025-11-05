@@ -3,15 +3,13 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
-	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -50,12 +48,12 @@ func (Review) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("external_id"),
 			),
-		field.String("owner_id").
+		field.String("external_owner_id").
 			Comment("external identifier from the integration source for the review").
 			Optional().
 			Annotations(
 				entx.FieldSearchable(),
-				entgql.OrderField("owner_id"),
+				entgql.OrderField("external_owner_id"),
 			),
 		field.String("title").
 			Comment("title of the review").
@@ -168,66 +166,61 @@ func (r Review) Edges() []ent.Edge {
 	}
 }
 
+// Mixin of the Review
 func (r Review) Mixin() []ent.Mixin {
-	return mixinConfig{}.getMixins(r)
+	return mixinConfig{
+		// prefix:           "RVW",
+		additionalMixins: []ent.Mixin{
+			// 	newObjectOwnedMixin[generated.Review](r,
+			// 		withParents(
+			// 			Program{},
+			// 			Control{},
+			// 			Subcontrol{},
+			// 			Risk{},
+			// 			ActionPlan{},
+			// 			Finding{},
+			// 			Vulnerability{},
+			// 			Asset{},
+			// 			Entity{},
+			// 			Task{},
+			// 		),
+			// 		withOrganizationOwner(true),
+			// 	),
+			// 	newGroupPermissionsMixin(),
+			// 	mixin.NewSystemOwnedMixin(),
+		},
+	}.getMixins(r)
 }
 
-// Mixin of the Review
-//
-//	func (r Review) Mixin() []ent.Mixin {
-//		return mixinConfig{
-//			prefix: "RVW",
-//			additionalMixins: []ent.Mixin{
-//				newObjectOwnedMixin[generated.Review](r,
-//					withParents(
-//						Program{},
-//						Control{},
-//						Subcontrol{},
-//						Risk{},
-//						ActionPlan{},
-//						Finding{},
-//						Vulnerability{},
-//						Asset{},
-//						Entity{},
-//						Task{},
-//					),
-//					withOrganizationOwner(true),
-//				),
-//				newGroupPermissionsMixin(),
-//				mixin.NewSystemOwnedMixin(),
-//			},
-//		}.getMixins(r)
-//	}
-//
 // Indexes of the Review
 func (Review) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("external_id", ownerFieldName).
-			Unique().
-			Annotations(
-				entsql.IndexWhere("deleted_at is NULL"),
-			),
+		// index.Fields("external_id", "external_owner_id", ownerFieldName).
+		// 	Unique().
+		// 	Annotations(
+		// 		entsql.IndexWhere("deleted_at is NULL"),
+		// 	),
 	}
 }
 
 // Annotations of the Review
 func (Review) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
+		// entfga.SelfAccessChecks(),
 		entx.Exportable{},
 	}
 }
 
 // Policy of the Review
-//func (r Review) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckOrgWriteAccess(),
-//			policy.CheckCreateAccess(),
-//			entfga.CheckEditAccess[*generated.ReviewMutation](),
-//		),
-//	)
-//}
+func (r Review) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+			policy.CheckCreateAccess(),
+			// entfga.CheckEditAccess[*generated.ReviewMutation](),
+		),
+	)
+}
 
 func (Review) Modules() []models.OrgModule {
 	return []models.OrgModule{

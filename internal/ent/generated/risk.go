@@ -78,6 +78,10 @@ type Risk struct {
 	control_objective_risks          *string
 	custom_type_enum_risks           *string
 	custom_type_enum_risk_categories *string
+	finding_risks                    *string
+	remediation_risks                *string
+	review_risks                     *string
+	vulnerability_risks              *string
 	selectValues                     sql.SelectValues
 }
 
@@ -343,6 +347,14 @@ func (*Risk) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case risk.ForeignKeys[2]: // custom_type_enum_risk_categories
 			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[3]: // finding_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[4]: // remediation_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[5]: // review_risks
+			values[i] = new(sql.NullString)
+		case risk.ForeignKeys[6]: // vulnerability_risks
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -536,6 +548,34 @@ func (_m *Risk) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.custom_type_enum_risk_categories = new(string)
 				*_m.custom_type_enum_risk_categories = value.String
+			}
+		case risk.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_risks", values[i])
+			} else if value.Valid {
+				_m.finding_risks = new(string)
+				*_m.finding_risks = value.String
+			}
+		case risk.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_risks", values[i])
+			} else if value.Valid {
+				_m.remediation_risks = new(string)
+				*_m.remediation_risks = value.String
+			}
+		case risk.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_risks", values[i])
+			} else if value.Valid {
+				_m.review_risks = new(string)
+				*_m.review_risks = value.String
+			}
+		case risk.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_risks", values[i])
+			} else if value.Valid {
+				_m.vulnerability_risks = new(string)
+				*_m.vulnerability_risks = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

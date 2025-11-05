@@ -43,6 +43,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/export"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -86,6 +90,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -122,6 +130,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 )
 
@@ -299,6 +309,26 @@ var filehistoryImplementors = []string{"FileHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*FileHistory) IsNode() {}
+
+var findingImplementors = []string{"Finding", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Finding) IsNode() {}
+
+var findingcontrolImplementors = []string{"FindingControl", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*FindingControl) IsNode() {}
+
+var findingcontrolhistoryImplementors = []string{"FindingControlHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*FindingControlHistory) IsNode() {}
+
+var findinghistoryImplementors = []string{"FindingHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*FindingHistory) IsNode() {}
 
 var groupImplementors = []string{"Group", "Node"}
 
@@ -515,6 +545,26 @@ var programmembershiphistoryImplementors = []string{"ProgramMembershipHistory", 
 // IsNode implements the Node interface check for GQLGen.
 func (*ProgramMembershipHistory) IsNode() {}
 
+var remediationImplementors = []string{"Remediation", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Remediation) IsNode() {}
+
+var remediationhistoryImplementors = []string{"RemediationHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*RemediationHistory) IsNode() {}
+
+var reviewImplementors = []string{"Review", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Review) IsNode() {}
+
+var reviewhistoryImplementors = []string{"ReviewHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*ReviewHistory) IsNode() {}
+
 var riskImplementors = []string{"Risk", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
@@ -694,6 +744,16 @@ var usersettinghistoryImplementors = []string{"UserSettingHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*UserSettingHistory) IsNode() {}
+
+var vulnerabilityImplementors = []string{"Vulnerability", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Vulnerability) IsNode() {}
+
+var vulnerabilityhistoryImplementors = []string{"VulnerabilityHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*VulnerabilityHistory) IsNode() {}
 
 var webauthnImplementors = []string{"Webauthn", "Node"}
 
@@ -1060,6 +1120,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(filehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, filehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case finding.Table:
+		query := c.Finding.Query().
+			Where(finding.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, findingImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case findingcontrol.Table:
+		query := c.FindingControl.Query().
+			Where(findingcontrol.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, findingcontrolImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case findingcontrolhistory.Table:
+		query := c.FindingControlHistory.Query().
+			Where(findingcontrolhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, findingcontrolhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case findinghistory.Table:
+		query := c.FindingHistory.Query().
+			Where(findinghistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, findinghistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1451,6 +1547,42 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case remediation.Table:
+		query := c.Remediation.Query().
+			Where(remediation.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, remediationImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case remediationhistory.Table:
+		query := c.RemediationHistory.Query().
+			Where(remediationhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, remediationhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case review.Table:
+		query := c.Review.Query().
+			Where(review.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, reviewImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case reviewhistory.Table:
+		query := c.ReviewHistory.Query().
+			Where(reviewhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, reviewhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	case risk.Table:
 		query := c.Risk.Query().
 			Where(risk.ID(id))
@@ -1771,6 +1903,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(usersettinghistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, usersettinghistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vulnerability.Table:
+		query := c.Vulnerability.Query().
+			Where(vulnerability.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vulnerabilityImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case vulnerabilityhistory.Table:
+		query := c.VulnerabilityHistory.Query().
+			Where(vulnerabilityhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, vulnerabilityhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2389,6 +2539,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.FileHistory.Query().
 			Where(filehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, filehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case finding.Table:
+		query := c.Finding.Query().
+			Where(finding.IDIn(ids...))
+		query, err := query.CollectFields(ctx, findingImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case findingcontrol.Table:
+		query := c.FindingControl.Query().
+			Where(findingcontrol.IDIn(ids...))
+		query, err := query.CollectFields(ctx, findingcontrolImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case findingcontrolhistory.Table:
+		query := c.FindingControlHistory.Query().
+			Where(findingcontrolhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, findingcontrolhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case findinghistory.Table:
+		query := c.FindingHistory.Query().
+			Where(findinghistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, findinghistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -3089,6 +3303,70 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 				*noder = node
 			}
 		}
+	case remediation.Table:
+		query := c.Remediation.Query().
+			Where(remediation.IDIn(ids...))
+		query, err := query.CollectFields(ctx, remediationImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case remediationhistory.Table:
+		query := c.RemediationHistory.Query().
+			Where(remediationhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, remediationhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case review.Table:
+		query := c.Review.Query().
+			Where(review.IDIn(ids...))
+		query, err := query.CollectFields(ctx, reviewImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case reviewhistory.Table:
+		query := c.ReviewHistory.Query().
+			Where(reviewhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, reviewhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
 	case risk.Table:
 		query := c.Risk.Query().
 			Where(risk.IDIn(ids...))
@@ -3653,6 +3931,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.UserSettingHistory.Query().
 			Where(usersettinghistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, usersettinghistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vulnerability.Table:
+		query := c.Vulnerability.Query().
+			Where(vulnerability.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vulnerabilityImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case vulnerabilityhistory.Table:
+		query := c.VulnerabilityHistory.Query().
+			Where(vulnerabilityhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, vulnerabilityhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

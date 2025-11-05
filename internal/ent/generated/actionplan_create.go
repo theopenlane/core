@@ -14,10 +14,16 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/group"
+	"github.com/theopenlane/core/internal/ent/generated/integration"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/program"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/review"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -412,6 +418,26 @@ func (_c *ActionPlanCreate) SetNillableActionPlanKindID(v *string) *ActionPlanCr
 	return _c
 }
 
+// SetTitle sets the "title" field.
+func (_c *ActionPlanCreate) SetTitle(v string) *ActionPlanCreate {
+	_c.mutation.SetTitle(v)
+	return _c
+}
+
+// SetDescription sets the "description" field.
+func (_c *ActionPlanCreate) SetDescription(v string) *ActionPlanCreate {
+	_c.mutation.SetDescription(v)
+	return _c
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableDescription(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetDescription(*v)
+	}
+	return _c
+}
+
 // SetDueDate sets the "due_date" field.
 func (_c *ActionPlanCreate) SetDueDate(v time.Time) *ActionPlanCreate {
 	_c.mutation.SetDueDate(v)
@@ -422,6 +448,20 @@ func (_c *ActionPlanCreate) SetDueDate(v time.Time) *ActionPlanCreate {
 func (_c *ActionPlanCreate) SetNillableDueDate(v *time.Time) *ActionPlanCreate {
 	if v != nil {
 		_c.SetDueDate(*v)
+	}
+	return _c
+}
+
+// SetCompletedAt sets the "completed_at" field.
+func (_c *ActionPlanCreate) SetCompletedAt(v time.Time) *ActionPlanCreate {
+	_c.mutation.SetCompletedAt(v)
+	return _c
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableCompletedAt(v *time.Time) *ActionPlanCreate {
+	if v != nil {
+		_c.SetCompletedAt(*v)
 	}
 	return _c
 }
@@ -437,6 +477,60 @@ func (_c *ActionPlanCreate) SetNillablePriority(v *enums.Priority) *ActionPlanCr
 	if v != nil {
 		_c.SetPriority(*v)
 	}
+	return _c
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_c *ActionPlanCreate) SetRequiresApproval(v bool) *ActionPlanCreate {
+	_c.mutation.SetRequiresApproval(v)
+	return _c
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableRequiresApproval(v *bool) *ActionPlanCreate {
+	if v != nil {
+		_c.SetRequiresApproval(*v)
+	}
+	return _c
+}
+
+// SetBlocked sets the "blocked" field.
+func (_c *ActionPlanCreate) SetBlocked(v bool) *ActionPlanCreate {
+	_c.mutation.SetBlocked(v)
+	return _c
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableBlocked(v *bool) *ActionPlanCreate {
+	if v != nil {
+		_c.SetBlocked(*v)
+	}
+	return _c
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_c *ActionPlanCreate) SetBlockerReason(v string) *ActionPlanCreate {
+	_c.mutation.SetBlockerReason(v)
+	return _c
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_c *ActionPlanCreate) SetNillableBlockerReason(v *string) *ActionPlanCreate {
+	if v != nil {
+		_c.SetBlockerReason(*v)
+	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *ActionPlanCreate) SetMetadata(v map[string]interface{}) *ActionPlanCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_c *ActionPlanCreate) SetRawPayload(v map[string]interface{}) *ActionPlanCreate {
+	_c.mutation.SetRawPayload(v)
 	return _c
 }
 
@@ -531,6 +625,96 @@ func (_c *ActionPlanCreate) AddPrograms(v ...*Program) *ActionPlanCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddProgramIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *ActionPlanCreate) AddFindingIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *ActionPlanCreate) AddFindings(v ...*Finding) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *ActionPlanCreate) AddVulnerabilityIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *ActionPlanCreate) AddVulnerabilities(v ...*Vulnerability) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddReviewIDs adds the "reviews" edge to the Review entity by IDs.
+func (_c *ActionPlanCreate) AddReviewIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddReviewIDs(ids...)
+	return _c
+}
+
+// AddReviews adds the "reviews" edges to the Review entity.
+func (_c *ActionPlanCreate) AddReviews(v ...*Review) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddReviewIDs(ids...)
+}
+
+// AddRemediationIDs adds the "remediations" edge to the Remediation entity by IDs.
+func (_c *ActionPlanCreate) AddRemediationIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddRemediationIDs(ids...)
+	return _c
+}
+
+// AddRemediations adds the "remediations" edges to the Remediation entity.
+func (_c *ActionPlanCreate) AddRemediations(v ...*Remediation) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRemediationIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *ActionPlanCreate) AddTaskIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *ActionPlanCreate) AddTasks(v ...*Task) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
+}
+
+// AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
+func (_c *ActionPlanCreate) AddIntegrationIDs(ids ...string) *ActionPlanCreate {
+	_c.mutation.AddIntegrationIDs(ids...)
+	return _c
+}
+
+// AddIntegrations adds the "integrations" edges to the Integration entity.
+func (_c *ActionPlanCreate) AddIntegrations(v ...*Integration) *ActionPlanCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddIntegrationIDs(ids...)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -641,6 +825,14 @@ func (_c *ActionPlanCreate) defaults() error {
 		v := actionplan.DefaultSystemOwned
 		_c.mutation.SetSystemOwned(v)
 	}
+	if _, ok := _c.mutation.RequiresApproval(); !ok {
+		v := actionplan.DefaultRequiresApproval
+		_c.mutation.SetRequiresApproval(v)
+	}
+	if _, ok := _c.mutation.Blocked(); !ok {
+		v := actionplan.DefaultBlocked
+		_c.mutation.SetBlocked(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if actionplan.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized actionplan.DefaultID (forgotten import generated/runtime?)")
@@ -676,10 +868,24 @@ func (_c *ActionPlanCreate) check() error {
 			return &ValidationError{Name: "review_frequency", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.review_frequency": %w`, err)}
 		}
 	}
+	if _, ok := _c.mutation.Title(); !ok {
+		return &ValidationError{Name: "title", err: errors.New(`generated: missing required field "ActionPlan.title"`)}
+	}
+	if v, ok := _c.mutation.Title(); ok {
+		if err := actionplan.TitleValidator(v); err != nil {
+			return &ValidationError{Name: "title", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.title": %w`, err)}
+		}
+	}
 	if v, ok := _c.mutation.Priority(); ok {
 		if err := actionplan.PriorityValidator(v); err != nil {
 			return &ValidationError{Name: "priority", err: fmt.Errorf(`generated: validator failed for field "ActionPlan.priority": %w`, err)}
 		}
+	}
+	if _, ok := _c.mutation.RequiresApproval(); !ok {
+		return &ValidationError{Name: "requires_approval", err: errors.New(`generated: missing required field "ActionPlan.requires_approval"`)}
+	}
+	if _, ok := _c.mutation.Blocked(); !ok {
+		return &ValidationError{Name: "blocked", err: errors.New(`generated: missing required field "ActionPlan.blocked"`)}
 	}
 	return nil
 }
@@ -825,13 +1031,45 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 		_spec.SetField(actionplan.FieldActionPlanKindName, field.TypeString, value)
 		_node.ActionPlanKindName = value
 	}
+	if value, ok := _c.mutation.Title(); ok {
+		_spec.SetField(actionplan.FieldTitle, field.TypeString, value)
+		_node.Title = value
+	}
+	if value, ok := _c.mutation.Description(); ok {
+		_spec.SetField(actionplan.FieldDescription, field.TypeString, value)
+		_node.Description = value
+	}
 	if value, ok := _c.mutation.DueDate(); ok {
 		_spec.SetField(actionplan.FieldDueDate, field.TypeTime, value)
 		_node.DueDate = value
 	}
+	if value, ok := _c.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplan.FieldCompletedAt, field.TypeTime, value)
+		_node.CompletedAt = &value
+	}
 	if value, ok := _c.mutation.Priority(); ok {
 		_spec.SetField(actionplan.FieldPriority, field.TypeEnum, value)
 		_node.Priority = value
+	}
+	if value, ok := _c.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplan.FieldRequiresApproval, field.TypeBool, value)
+		_node.RequiresApproval = value
+	}
+	if value, ok := _c.mutation.Blocked(); ok {
+		_spec.SetField(actionplan.FieldBlocked, field.TypeBool, value)
+		_node.Blocked = value
+	}
+	if value, ok := _c.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplan.FieldBlockerReason, field.TypeString, value)
+		_node.BlockerReason = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(actionplan.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
+	}
+	if value, ok := _c.mutation.RawPayload(); ok {
+		_spec.SetField(actionplan.FieldRawPayload, field.TypeJSON, value)
+		_node.RawPayload = value
 	}
 	if value, ok := _c.mutation.Source(); ok {
 		_spec.SetField(actionplan.FieldSource, field.TypeString, value)
@@ -955,6 +1193,108 @@ func (_c *ActionPlanCreate) createSpec() (*ActionPlan, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ProgramActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.FindingsTable,
+			Columns: actionplan.FindingsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.FindingActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.VulnerabilitiesTable,
+			Columns: actionplan.VulnerabilitiesPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.VulnerabilityActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ReviewsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.ReviewsTable,
+			Columns: actionplan.ReviewsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(review.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ReviewActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RemediationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.RemediationsTable,
+			Columns: actionplan.RemediationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(remediation.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.RemediationActionPlans
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: false,
+			Table:   actionplan.TasksTable,
+			Columns: actionplan.TasksPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlanTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.IntegrationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   actionplan.IntegrationsTable,
+			Columns: actionplan.IntegrationsPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(integration.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.IntegrationActionPlans
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

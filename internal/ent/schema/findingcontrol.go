@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/accessmap"
-	"github.com/theopenlane/iam/entfga"
 
+	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -44,7 +44,6 @@ func (FindingControl) Fields() []ent.Field {
 			Immutable().
 			Comment("the id of the finding associated with the control"),
 		field.String("control_id").
-			Optional().
 			Immutable().
 			Comment("the id of the control mapped to the finding when it exists in the catalog"),
 		field.String("standard_id").
@@ -91,6 +90,7 @@ func (fc FindingControl) Edges() []ent.Edge {
 			fromSchema: fc,
 			edgeSchema: Control{},
 			field:      "control_id",
+			required:   true,
 			immutable:  true,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
@@ -136,17 +136,15 @@ func (FindingControl) Modules() []models.OrgModule {
 // Annotations of the FindingControl
 func (FindingControl) Annotations() []schema.Annotation {
 	return []schema.Annotation{
-		entfga.SelfAccessChecks(),
+		// entfga.SelfAccessChecks(),
 	}
 }
 
 // Policy of the FindingControl
-//func (FindingControl) Policy() ent.Policy {
-//	return policy.NewPolicy(
-//		policy.WithMutationRules(
-//			policy.CheckOrgWriteAccess(),
-//			entfga.CheckEditAccess[*generated.FindingControlMutation](),
-//		),
-//	)
-//}
-//
+func (FindingControl) Policy() ent.Policy {
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			policy.CheckOrgWriteAccess(),
+		),
+	)
+}

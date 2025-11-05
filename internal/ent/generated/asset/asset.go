@@ -141,7 +141,11 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "assets"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"finding_assets",
+	"remediation_assets",
+	"review_assets",
 	"risk_assets",
+	"vulnerability_assets",
 }
 
 var (

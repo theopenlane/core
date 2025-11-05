@@ -40,6 +40,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		eventResults                      *generated.EventConnection
 		evidenceResults                   *generated.EvidenceConnection
 		fileResults                       *generated.FileConnection
+		findingResults                    *generated.FindingConnection
 		groupResults                      *generated.GroupConnection
 		integrationResults                *generated.IntegrationConnection
 		internalpolicyResults             *generated.InternalPolicyConnection
@@ -57,6 +58,8 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		personalaccesstokenResults        *generated.PersonalAccessTokenConnection
 		procedureResults                  *generated.ProcedureConnection
 		programResults                    *generated.ProgramConnection
+		remediationResults                *generated.RemediationConnection
+		reviewResults                     *generated.ReviewConnection
 		riskResults                       *generated.RiskConnection
 		scanResults                       *generated.ScanConnection
 		standardResults                   *generated.StandardConnection
@@ -71,6 +74,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		trustcenterdocResults             *generated.TrustCenterDocConnection
 		userResults                       *generated.UserConnection
 		usersettingResults                *generated.UserSettingConnection
+		vulnerabilityResults              *generated.VulnerabilityConnection
 		webauthnResults                   *generated.WebauthnConnection
 	)
 
@@ -297,6 +301,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			findingResults, err = searchFindings(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, findingResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			groupResults, err = searchGroups(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -501,6 +517,30 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			remediationResults, err = searchRemediations(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, remediationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			reviewResults, err = searchReviews(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, reviewResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			riskResults, err = searchRisks(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -669,6 +709,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			vulnerabilityResults, err = searchVulnerabilities(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, vulnerabilityResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			webauthnResults, err = searchWebauthns(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -781,6 +833,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += fileResults.TotalCount
 	}
+	if findingResults != nil && len(findingResults.Edges) > 0 {
+		res.Findings = findingResults
+
+		res.TotalCount += findingResults.TotalCount
+	}
 	if groupResults != nil && len(groupResults.Edges) > 0 {
 		res.Groups = groupResults
 
@@ -866,6 +923,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += programResults.TotalCount
 	}
+	if remediationResults != nil && len(remediationResults.Edges) > 0 {
+		res.Remediations = remediationResults
+
+		res.TotalCount += remediationResults.TotalCount
+	}
+	if reviewResults != nil && len(reviewResults.Edges) > 0 {
+		res.Reviews = reviewResults
+
+		res.TotalCount += reviewResults.TotalCount
+	}
 	if riskResults != nil && len(riskResults.Edges) > 0 {
 		res.Risks = riskResults
 
@@ -935,6 +1002,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.UserSettings = usersettingResults
 
 		res.TotalCount += usersettingResults.TotalCount
+	}
+	if vulnerabilityResults != nil && len(vulnerabilityResults.Edges) > 0 {
+		res.Vulnerabilities = vulnerabilityResults
+
+		res.TotalCount += vulnerabilityResults.TotalCount
 	}
 	if webauthnResults != nil && len(webauthnResults.Edges) > 0 {
 		res.Webauthns = webauthnResults
@@ -1124,6 +1196,16 @@ func (r *queryResolver) FileSearch(ctx context.Context, query string, after *ent
 	// return the results
 	return fileResults, nil
 }
+func (r *queryResolver) FindingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FindingConnection, error) {
+	findingResults, err := searchFindings(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return findingResults, nil
+}
 func (r *queryResolver) GroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.GroupConnection, error) {
 	groupResults, err := searchGroups(ctx, query, after, first, before, last)
 
@@ -1294,6 +1376,26 @@ func (r *queryResolver) ProgramSearch(ctx context.Context, query string, after *
 	// return the results
 	return programResults, nil
 }
+func (r *queryResolver) RemediationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RemediationConnection, error) {
+	remediationResults, err := searchRemediations(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return remediationResults, nil
+}
+func (r *queryResolver) ReviewSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ReviewConnection, error) {
+	reviewResults, err := searchReviews(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return reviewResults, nil
+}
 func (r *queryResolver) RiskSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.RiskConnection, error) {
 	riskResults, err := searchRisks(ctx, query, after, first, before, last)
 
@@ -1433,6 +1535,16 @@ func (r *queryResolver) UserSettingSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return usersettingResults, nil
+}
+func (r *queryResolver) VulnerabilitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.VulnerabilityConnection, error) {
+	vulnerabilityResults, err := searchVulnerabilities(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return vulnerabilityResults, nil
 }
 func (r *queryResolver) WebauthnSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
 	webauthnResults, err := searchWebauthns(ctx, query, after, first, before, last)

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up finding by ID
+    """
+     finding(
+        """
+        ID of the finding
+        """
+        id: ID!
+    ):  Finding!
+}
+
+extend type Mutation{
+    """
+    Create a new finding
+    """
+    createFinding(
+        """
+        values of the finding
+        """
+        input: CreateFindingInput!
+    ): FindingCreatePayload!
+    """
+    Create multiple new findings
+    """
+    createBulkFinding(
+        """
+        values of the finding
+        """
+        input: [CreateFindingInput!]
+    ): FindingBulkCreatePayload!
+    """
+    Create multiple new findings via file upload
+    """
+    createBulkCSVFinding(
+        """
+        csv file containing values of the finding
+        """
+        input: Upload!
+    ): FindingBulkCreatePayload!
+    """
+    Update an existing finding
+    """
+    updateFinding(
+        """
+        ID of the finding
+        """
+        id: ID!
+        """
+        New values for the finding
+        """
+        input: UpdateFindingInput!
+    ): FindingUpdatePayload!
+    """
+    Delete an existing finding
+    """
+    deleteFinding(
+        """
+        ID of the finding
+        """
+        id: ID!
+    ): FindingDeletePayload!
+}
+
+"""
+Return response for createFinding mutation
+"""
+type FindingCreatePayload {
+    """
+    Created finding
+    """
+    finding: Finding!
+}
+
+"""
+Return response for updateFinding mutation
+"""
+type FindingUpdatePayload {
+    """
+    Updated finding
+    """
+    finding: Finding!
+}
+
+"""
+Return response for deleteFinding mutation
+"""
+type FindingDeletePayload {
+    """
+    Deleted finding ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkFinding mutation
+"""
+type FindingBulkCreatePayload {
+    """
+    Created findings
+    """
+    findings: [Finding!]
+}

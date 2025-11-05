@@ -585,6 +585,40 @@ func (_u *ActionPlanHistoryUpdate) ClearActionPlanKindID() *ActionPlanHistoryUpd
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ActionPlanHistoryUpdate) SetTitle(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableTitle(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ActionPlanHistoryUpdate) SetDescription(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableDescription(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ActionPlanHistoryUpdate) ClearDescription() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdate) SetDueDate(v time.Time) *ActionPlanHistoryUpdate {
 	_u.mutation.SetDueDate(v)
@@ -605,6 +639,26 @@ func (_u *ActionPlanHistoryUpdate) ClearDueDate() *ActionPlanHistoryUpdate {
 	return _u
 }
 
+// SetCompletedAt sets the "completed_at" field.
+func (_u *ActionPlanHistoryUpdate) SetCompletedAt(v time.Time) *ActionPlanHistoryUpdate {
+	_u.mutation.SetCompletedAt(v)
+	return _u
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableCompletedAt(v *time.Time) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetCompletedAt(*v)
+	}
+	return _u
+}
+
+// ClearCompletedAt clears the value of the "completed_at" field.
+func (_u *ActionPlanHistoryUpdate) ClearCompletedAt() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearCompletedAt()
+	return _u
+}
+
 // SetPriority sets the "priority" field.
 func (_u *ActionPlanHistoryUpdate) SetPriority(v enums.Priority) *ActionPlanHistoryUpdate {
 	_u.mutation.SetPriority(v)
@@ -622,6 +676,78 @@ func (_u *ActionPlanHistoryUpdate) SetNillablePriority(v *enums.Priority) *Actio
 // ClearPriority clears the value of the "priority" field.
 func (_u *ActionPlanHistoryUpdate) ClearPriority() *ActionPlanHistoryUpdate {
 	_u.mutation.ClearPriority()
+	return _u
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_u *ActionPlanHistoryUpdate) SetRequiresApproval(v bool) *ActionPlanHistoryUpdate {
+	_u.mutation.SetRequiresApproval(v)
+	return _u
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableRequiresApproval(v *bool) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetRequiresApproval(*v)
+	}
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ActionPlanHistoryUpdate) SetBlocked(v bool) *ActionPlanHistoryUpdate {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableBlocked(v *bool) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetBlocked(*v)
+	}
+	return _u
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_u *ActionPlanHistoryUpdate) SetBlockerReason(v string) *ActionPlanHistoryUpdate {
+	_u.mutation.SetBlockerReason(v)
+	return _u
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdate) SetNillableBlockerReason(v *string) *ActionPlanHistoryUpdate {
+	if v != nil {
+		_u.SetBlockerReason(*v)
+	}
+	return _u
+}
+
+// ClearBlockerReason clears the value of the "blocker_reason" field.
+func (_u *ActionPlanHistoryUpdate) ClearBlockerReason() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearBlockerReason()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *ActionPlanHistoryUpdate) SetMetadata(v map[string]interface{}) *ActionPlanHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ActionPlanHistoryUpdate) ClearMetadata() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_u *ActionPlanHistoryUpdate) SetRawPayload(v map[string]interface{}) *ActionPlanHistoryUpdate {
+	_u.mutation.SetRawPayload(v)
+	return _u
+}
+
+// ClearRawPayload clears the value of the "raw_payload" field.
+func (_u *ActionPlanHistoryUpdate) ClearRawPayload() *ActionPlanHistoryUpdate {
+	_u.mutation.ClearRawPayload()
 	return _u
 }
 
@@ -948,17 +1074,56 @@ func (_u *ActionPlanHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	if _u.mutation.ActionPlanKindIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
+	if value, ok := _u.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplanhistory.FieldCompletedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CompletedAtCleared() {
+		_spec.ClearField(actionplanhistory.FieldCompletedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 	}
 	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplanhistory.FieldRequiresApproval, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(actionplanhistory.FieldBlocked, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplanhistory.FieldBlockerReason, field.TypeString, value)
+	}
+	if _u.mutation.BlockerReasonCleared() {
+		_spec.ClearField(actionplanhistory.FieldBlockerReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(actionplanhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(actionplanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RawPayload(); ok {
+		_spec.SetField(actionplanhistory.FieldRawPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawPayloadCleared() {
+		_spec.ClearField(actionplanhistory.FieldRawPayload, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)
@@ -1542,6 +1707,40 @@ func (_u *ActionPlanHistoryUpdateOne) ClearActionPlanKindID() *ActionPlanHistory
 	return _u
 }
 
+// SetTitle sets the "title" field.
+func (_u *ActionPlanHistoryUpdateOne) SetTitle(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetTitle(v)
+	return _u
+}
+
+// SetNillableTitle sets the "title" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableTitle(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetTitle(*v)
+	}
+	return _u
+}
+
+// SetDescription sets the "description" field.
+func (_u *ActionPlanHistoryUpdateOne) SetDescription(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetDescription(v)
+	return _u
+}
+
+// SetNillableDescription sets the "description" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableDescription(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetDescription(*v)
+	}
+	return _u
+}
+
+// ClearDescription clears the value of the "description" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearDescription() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearDescription()
+	return _u
+}
+
 // SetDueDate sets the "due_date" field.
 func (_u *ActionPlanHistoryUpdateOne) SetDueDate(v time.Time) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetDueDate(v)
@@ -1562,6 +1761,26 @@ func (_u *ActionPlanHistoryUpdateOne) ClearDueDate() *ActionPlanHistoryUpdateOne
 	return _u
 }
 
+// SetCompletedAt sets the "completed_at" field.
+func (_u *ActionPlanHistoryUpdateOne) SetCompletedAt(v time.Time) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetCompletedAt(v)
+	return _u
+}
+
+// SetNillableCompletedAt sets the "completed_at" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableCompletedAt(v *time.Time) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetCompletedAt(*v)
+	}
+	return _u
+}
+
+// ClearCompletedAt clears the value of the "completed_at" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearCompletedAt() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearCompletedAt()
+	return _u
+}
+
 // SetPriority sets the "priority" field.
 func (_u *ActionPlanHistoryUpdateOne) SetPriority(v enums.Priority) *ActionPlanHistoryUpdateOne {
 	_u.mutation.SetPriority(v)
@@ -1579,6 +1798,78 @@ func (_u *ActionPlanHistoryUpdateOne) SetNillablePriority(v *enums.Priority) *Ac
 // ClearPriority clears the value of the "priority" field.
 func (_u *ActionPlanHistoryUpdateOne) ClearPriority() *ActionPlanHistoryUpdateOne {
 	_u.mutation.ClearPriority()
+	return _u
+}
+
+// SetRequiresApproval sets the "requires_approval" field.
+func (_u *ActionPlanHistoryUpdateOne) SetRequiresApproval(v bool) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetRequiresApproval(v)
+	return _u
+}
+
+// SetNillableRequiresApproval sets the "requires_approval" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableRequiresApproval(v *bool) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetRequiresApproval(*v)
+	}
+	return _u
+}
+
+// SetBlocked sets the "blocked" field.
+func (_u *ActionPlanHistoryUpdateOne) SetBlocked(v bool) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetBlocked(v)
+	return _u
+}
+
+// SetNillableBlocked sets the "blocked" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableBlocked(v *bool) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetBlocked(*v)
+	}
+	return _u
+}
+
+// SetBlockerReason sets the "blocker_reason" field.
+func (_u *ActionPlanHistoryUpdateOne) SetBlockerReason(v string) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetBlockerReason(v)
+	return _u
+}
+
+// SetNillableBlockerReason sets the "blocker_reason" field if the given value is not nil.
+func (_u *ActionPlanHistoryUpdateOne) SetNillableBlockerReason(v *string) *ActionPlanHistoryUpdateOne {
+	if v != nil {
+		_u.SetBlockerReason(*v)
+	}
+	return _u
+}
+
+// ClearBlockerReason clears the value of the "blocker_reason" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearBlockerReason() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearBlockerReason()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *ActionPlanHistoryUpdateOne) SetMetadata(v map[string]interface{}) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearMetadata() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
+// SetRawPayload sets the "raw_payload" field.
+func (_u *ActionPlanHistoryUpdateOne) SetRawPayload(v map[string]interface{}) *ActionPlanHistoryUpdateOne {
+	_u.mutation.SetRawPayload(v)
+	return _u
+}
+
+// ClearRawPayload clears the value of the "raw_payload" field.
+func (_u *ActionPlanHistoryUpdateOne) ClearRawPayload() *ActionPlanHistoryUpdateOne {
+	_u.mutation.ClearRawPayload()
 	return _u
 }
 
@@ -1935,17 +2226,56 @@ func (_u *ActionPlanHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Actio
 	if _u.mutation.ActionPlanKindIDCleared() {
 		_spec.ClearField(actionplanhistory.FieldActionPlanKindID, field.TypeString)
 	}
+	if value, ok := _u.mutation.Title(); ok {
+		_spec.SetField(actionplanhistory.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Description(); ok {
+		_spec.SetField(actionplanhistory.FieldDescription, field.TypeString, value)
+	}
+	if _u.mutation.DescriptionCleared() {
+		_spec.ClearField(actionplanhistory.FieldDescription, field.TypeString)
+	}
 	if value, ok := _u.mutation.DueDate(); ok {
 		_spec.SetField(actionplanhistory.FieldDueDate, field.TypeTime, value)
 	}
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(actionplanhistory.FieldDueDate, field.TypeTime)
 	}
+	if value, ok := _u.mutation.CompletedAt(); ok {
+		_spec.SetField(actionplanhistory.FieldCompletedAt, field.TypeTime, value)
+	}
+	if _u.mutation.CompletedAtCleared() {
+		_spec.ClearField(actionplanhistory.FieldCompletedAt, field.TypeTime)
+	}
 	if value, ok := _u.mutation.Priority(); ok {
 		_spec.SetField(actionplanhistory.FieldPriority, field.TypeEnum, value)
 	}
 	if _u.mutation.PriorityCleared() {
 		_spec.ClearField(actionplanhistory.FieldPriority, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.RequiresApproval(); ok {
+		_spec.SetField(actionplanhistory.FieldRequiresApproval, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.Blocked(); ok {
+		_spec.SetField(actionplanhistory.FieldBlocked, field.TypeBool, value)
+	}
+	if value, ok := _u.mutation.BlockerReason(); ok {
+		_spec.SetField(actionplanhistory.FieldBlockerReason, field.TypeString, value)
+	}
+	if _u.mutation.BlockerReasonCleared() {
+		_spec.ClearField(actionplanhistory.FieldBlockerReason, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(actionplanhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(actionplanhistory.FieldMetadata, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.RawPayload(); ok {
+		_spec.SetField(actionplanhistory.FieldRawPayload, field.TypeJSON, value)
+	}
+	if _u.mutation.RawPayloadCleared() {
+		_spec.ClearField(actionplanhistory.FieldRawPayload, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.Source(); ok {
 		_spec.SetField(actionplanhistory.FieldSource, field.TypeString, value)

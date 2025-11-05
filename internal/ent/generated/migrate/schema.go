@@ -91,8 +91,16 @@ var (
 		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_name", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
+		{Name: "requires_approval", Type: field.TypeBool, Default: false},
+		{Name: "blocked", Type: field.TypeBool, Default: false},
+		{Name: "blocker_reason", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "approver_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
@@ -111,49 +119,49 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "action_plans_groups_approver",
-				Columns:    []*schema.Column{ActionPlansColumns[31]},
+				Columns:    []*schema.Column{ActionPlansColumns[39]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_groups_delegate",
-				Columns:    []*schema.Column{ActionPlansColumns[32]},
+				Columns:    []*schema.Column{ActionPlansColumns[40]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_custom_type_enums_action_plan_kind",
-				Columns:    []*schema.Column{ActionPlansColumns[33]},
+				Columns:    []*schema.Column{ActionPlansColumns[41]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_files_file",
-				Columns:    []*schema.Column{ActionPlansColumns[34]},
+				Columns:    []*schema.Column{ActionPlansColumns[42]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_custom_type_enums_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[35]},
+				Columns:    []*schema.Column{ActionPlansColumns[43]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_organizations_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[36]},
+				Columns:    []*schema.Column{ActionPlansColumns[44]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_subcontrols_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[37]},
+				Columns:    []*schema.Column{ActionPlansColumns[45]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "action_plans_users_action_plans",
-				Columns:    []*schema.Column{ActionPlansColumns[38]},
+				Columns:    []*schema.Column{ActionPlansColumns[46]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -162,7 +170,7 @@ var (
 			{
 				Name:    "actionplan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ActionPlansColumns[36]},
+				Columns: []*schema.Column{ActionPlansColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -207,8 +215,16 @@ var (
 		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_name", Type: field.TypeString, Nullable: true},
 		{Name: "action_plan_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "due_date", Type: field.TypeTime, Nullable: true},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "priority", Type: field.TypeEnum, Nullable: true, Enums: []string{"LOW", "MEDIUM", "HIGH", "CRITICAL"}},
+		{Name: "requires_approval", Type: field.TypeBool, Default: false},
+		{Name: "blocked", Type: field.TypeBool, Default: false},
+		{Name: "blocker_reason", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "source", Type: field.TypeString, Nullable: true},
 	}
 	// ActionPlanHistoryTable holds the schema information for the "action_plan_history" table.
@@ -450,8 +466,12 @@ var (
 		{Name: "website", Type: field.TypeString, Nullable: true},
 		{Name: "cpe", Type: field.TypeString, Nullable: true},
 		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_assets", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_assets", Type: field.TypeString, Nullable: true},
+		{Name: "review_assets", Type: field.TypeString, Nullable: true},
 		{Name: "risk_assets", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_assets", Type: field.TypeString, Nullable: true},
 	}
 	// AssetsTable holds the schema information for the "assets" table.
 	AssetsTable = &schema.Table{
@@ -460,15 +480,39 @@ var (
 		PrimaryKey: []*schema.Column{AssetsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "assets_organizations_assets",
+				Symbol:     "assets_findings_assets",
 				Columns:    []*schema.Column{AssetsColumns[18]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_organizations_assets",
+				Columns:    []*schema.Column{AssetsColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "assets_remediations_assets",
+				Columns:    []*schema.Column{AssetsColumns[20]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_reviews_assets",
+				Columns:    []*schema.Column{AssetsColumns[21]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "assets_risks_assets",
-				Columns:    []*schema.Column{AssetsColumns[19]},
+				Columns:    []*schema.Column{AssetsColumns[22]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_vulnerabilities_assets",
+				Columns:    []*schema.Column{AssetsColumns[23]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -476,7 +520,7 @@ var (
 			{
 				Name:    "asset_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssetsColumns[18]},
+				Columns: []*schema.Column{AssetsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -484,7 +528,7 @@ var (
 			{
 				Name:    "asset_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssetsColumns[12], AssetsColumns[18]},
+				Columns: []*schema.Column{AssetsColumns[12], AssetsColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -649,7 +693,10 @@ var (
 		{Name: "control_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_controls", Type: field.TypeString, Nullable: true},
+		{Name: "review_controls", Type: field.TypeString, Nullable: true},
 		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_controls", Type: field.TypeString, Nullable: true},
 	}
 	// ControlsTable holds the schema information for the "controls" table.
 	ControlsTable = &schema.Table{
@@ -694,9 +741,27 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_standards_controls",
+				Symbol:     "controls_remediations_controls",
 				Columns:    []*schema.Column{ControlsColumns[40]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_reviews_controls",
+				Columns:    []*schema.Column{ControlsColumns[41]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_standards_controls",
+				Columns:    []*schema.Column{ControlsColumns[42]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_vulnerabilities_controls",
+				Columns:    []*schema.Column{ControlsColumns[43]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -717,7 +782,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[40], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -725,7 +790,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[40], ControlsColumns[33], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[33], ControlsColumns[39]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
 				},
@@ -741,7 +806,7 @@ var (
 			{
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[40], ControlsColumns[5], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[5], ControlsColumns[39]},
 			},
 			{
 				Name:    "control_reference_id_deleted_at_owner_id",
@@ -1390,9 +1455,13 @@ var (
 		{Name: "status", Type: field.TypeString, Nullable: true, Default: "active"},
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
+		{Name: "finding_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_entities", Type: field.TypeString, Nullable: true},
+		{Name: "review_entities", Type: field.TypeString, Nullable: true},
 		{Name: "risk_entities", Type: field.TypeString, Nullable: true},
 		{Name: "scan_entities", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_entities", Type: field.TypeString, Nullable: true},
 	}
 	// EntitiesTable holds the schema information for the "entities" table.
 	EntitiesTable = &schema.Table{
@@ -1413,21 +1482,45 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_organizations_entities",
+				Symbol:     "entities_findings_entities",
 				Columns:    []*schema.Column{EntitiesColumns[18]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_organizations_entities",
+				Columns:    []*schema.Column{EntitiesColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "entities_remediations_entities",
+				Columns:    []*schema.Column{EntitiesColumns[20]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_reviews_entities",
+				Columns:    []*schema.Column{EntitiesColumns[21]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[19]},
+				Columns:    []*schema.Column{EntitiesColumns[22]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_scans_entities",
-				Columns:    []*schema.Column{EntitiesColumns[20]},
+				Columns:    []*schema.Column{EntitiesColumns[23]},
 				RefColumns: []*schema.Column{ScansColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_vulnerabilities_entities",
+				Columns:    []*schema.Column{EntitiesColumns[24]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1435,7 +1528,7 @@ var (
 			{
 				Name:    "entity_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[18]},
+				Columns: []*schema.Column{EntitiesColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1443,7 +1536,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[11], EntitiesColumns[18]},
+				Columns: []*schema.Column{EntitiesColumns[11], EntitiesColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1758,8 +1851,12 @@ var (
 		{Name: "storage_provider", Type: field.TypeString, Nullable: true},
 		{Name: "last_accessed_at", Type: field.TypeTime, Nullable: true},
 		{Name: "export_files", Type: field.TypeString, Nullable: true},
+		{Name: "finding_files", Type: field.TypeString, Nullable: true},
 		{Name: "integration_files", Type: field.TypeString, Nullable: true},
 		{Name: "note_files", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_files", Type: field.TypeString, Nullable: true},
+		{Name: "review_files", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_files", Type: field.TypeString, Nullable: true},
 	}
 	// FilesTable holds the schema information for the "files" table.
 	FilesTable = &schema.Table{
@@ -1774,15 +1871,39 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "files_integrations_files",
+				Symbol:     "files_findings_files",
 				Columns:    []*schema.Column{FilesColumns[30]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_integrations_files",
+				Columns:    []*schema.Column{FilesColumns[31]},
 				RefColumns: []*schema.Column{IntegrationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "files_notes_files",
-				Columns:    []*schema.Column{FilesColumns[31]},
+				Columns:    []*schema.Column{FilesColumns[32]},
 				RefColumns: []*schema.Column{NotesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_remediations_files",
+				Columns:    []*schema.Column{FilesColumns[33]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_reviews_files",
+				Columns:    []*schema.Column{FilesColumns[34]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "files_vulnerabilities_files",
+				Columns:    []*schema.Column{FilesColumns[35]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -1873,6 +1994,230 @@ var (
 				Name:    "filehistory_history_time",
 				Unique:  false,
 				Columns: []*schema.Column{FileHistoryColumns[1]},
+			},
+		},
+	}
+	// FindingsColumns holds the columns for the "findings" table.
+	FindingsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "resource_name", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_class", Type: field.TypeString, Nullable: true},
+		{Name: "severity", Type: field.TypeString, Nullable: true},
+		{Name: "numeric_severity", Type: field.TypeFloat64, Nullable: true},
+		{Name: "score", Type: field.TypeFloat64, Nullable: true},
+		{Name: "impact", Type: field.TypeFloat64, Nullable: true},
+		{Name: "exploitability", Type: field.TypeFloat64, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "open", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "blocks_production", Type: field.TypeBool, Nullable: true},
+		{Name: "production", Type: field.TypeBool, Nullable: true},
+		{Name: "public", Type: field.TypeBool, Nullable: true},
+		{Name: "validated", Type: field.TypeBool, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "recommendation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "recommended_actions", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "steps_to_reproduce", Type: field.TypeJSON, Nullable: true},
+		{Name: "targets", Type: field.TypeJSON, Nullable: true},
+		{Name: "target_details", Type: field.TypeJSON, Nullable: true},
+		{Name: "vector", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_sla", Type: field.TypeInt, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "event_time", Type: field.TypeTime, Nullable: true},
+		{Name: "reported_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+		{Name: "remediation_findings", Type: field.TypeString, Nullable: true},
+		{Name: "review_findings", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_findings", Type: field.TypeString, Nullable: true},
+	}
+	// FindingsTable holds the schema information for the "findings" table.
+	FindingsTable = &schema.Table{
+		Name:       "findings",
+		Columns:    FindingsColumns,
+		PrimaryKey: []*schema.Column{FindingsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "findings_remediations_findings",
+				Columns:    []*schema.Column{FindingsColumns[45]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_reviews_findings",
+				Columns:    []*schema.Column{FindingsColumns[46]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_vulnerabilities_findings",
+				Columns:    []*schema.Column{FindingsColumns[47]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// FindingControlsColumns holds the columns for the "finding_controls" table.
+	FindingControlsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "external_standard", Type: field.TypeString, Nullable: true},
+		{Name: "external_standard_version", Type: field.TypeString, Nullable: true},
+		{Name: "external_control_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
+		{Name: "finding_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+	}
+	// FindingControlsTable holds the schema information for the "finding_controls" table.
+	FindingControlsTable = &schema.Table{
+		Name:       "finding_controls",
+		Columns:    FindingControlsColumns,
+		PrimaryKey: []*schema.Column{FindingControlsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "finding_controls_findings_finding",
+				Columns:    []*schema.Column{FindingControlsColumns[11]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "finding_controls_controls_control",
+				Columns:    []*schema.Column{FindingControlsColumns[12]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "finding_controls_standards_standard",
+				Columns:    []*schema.Column{FindingControlsColumns[13]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "findingcontrol_finding_id_control_id",
+				Unique:  true,
+				Columns: []*schema.Column{FindingControlsColumns[11], FindingControlsColumns[12]},
+			},
+		},
+	}
+	// FindingControlHistoryColumns holds the columns for the "finding_control_history" table.
+	FindingControlHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "finding_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString},
+		{Name: "standard_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_standard", Type: field.TypeString, Nullable: true},
+		{Name: "external_standard_version", Type: field.TypeString, Nullable: true},
+		{Name: "external_control_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
+	}
+	// FindingControlHistoryTable holds the schema information for the "finding_control_history" table.
+	FindingControlHistoryTable = &schema.Table{
+		Name:       "finding_control_history",
+		Columns:    FindingControlHistoryColumns,
+		PrimaryKey: []*schema.Column{FindingControlHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "findingcontrolhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{FindingControlHistoryColumns[1]},
+			},
+		},
+	}
+	// FindingHistoryColumns holds the columns for the "finding_history" table.
+	FindingHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "resource_name", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "categories", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_class", Type: field.TypeString, Nullable: true},
+		{Name: "severity", Type: field.TypeString, Nullable: true},
+		{Name: "numeric_severity", Type: field.TypeFloat64, Nullable: true},
+		{Name: "score", Type: field.TypeFloat64, Nullable: true},
+		{Name: "impact", Type: field.TypeFloat64, Nullable: true},
+		{Name: "exploitability", Type: field.TypeFloat64, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "open", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "blocks_production", Type: field.TypeBool, Nullable: true},
+		{Name: "production", Type: field.TypeBool, Nullable: true},
+		{Name: "public", Type: field.TypeBool, Nullable: true},
+		{Name: "validated", Type: field.TypeBool, Nullable: true},
+		{Name: "assessment_id", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "recommendation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "recommended_actions", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "steps_to_reproduce", Type: field.TypeJSON, Nullable: true},
+		{Name: "targets", Type: field.TypeJSON, Nullable: true},
+		{Name: "target_details", Type: field.TypeJSON, Nullable: true},
+		{Name: "vector", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_sla", Type: field.TypeInt, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "event_time", Type: field.TypeTime, Nullable: true},
+		{Name: "reported_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+	}
+	// FindingHistoryTable holds the schema information for the "finding_history" table.
+	FindingHistoryTable = &schema.Table{
+		Name:       "finding_history",
+		Columns:    FindingHistoryColumns,
+		PrimaryKey: []*schema.Column{FindingHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "findinghistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{FindingHistoryColumns[1]},
 			},
 		},
 	}
@@ -3211,13 +3556,17 @@ var (
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "control_comments", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
+		{Name: "finding_comments", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_comments", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "procedure_comments", Type: field.TypeString, Nullable: true},
 		{Name: "program_notes", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_comments", Type: field.TypeString, Nullable: true},
+		{Name: "review_comments", Type: field.TypeString, Nullable: true},
 		{Name: "risk_comments", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
 	NotesTable = &schema.Table{
@@ -3238,45 +3587,69 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_internal_policies_comments",
+				Symbol:     "notes_findings_comments",
 				Columns:    []*schema.Column{NotesColumns[11]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_internal_policies_comments",
+				Columns:    []*schema.Column{NotesColumns[12]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[12]},
+				Columns:    []*schema.Column{NotesColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_procedures_comments",
-				Columns:    []*schema.Column{NotesColumns[13]},
+				Columns:    []*schema.Column{NotesColumns[14]},
 				RefColumns: []*schema.Column{ProceduresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[14]},
+				Columns:    []*schema.Column{NotesColumns[15]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "notes_remediations_comments",
+				Columns:    []*schema.Column{NotesColumns[16]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_reviews_comments",
+				Columns:    []*schema.Column{NotesColumns[17]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "notes_risks_comments",
-				Columns:    []*schema.Column{NotesColumns[15]},
+				Columns:    []*schema.Column{NotesColumns[18]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_subcontrols_comments",
-				Columns:    []*schema.Column{NotesColumns[16]},
+				Columns:    []*schema.Column{NotesColumns[19]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[17]},
+				Columns:    []*schema.Column{NotesColumns[20]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_vulnerabilities_comments",
+				Columns:    []*schema.Column{NotesColumns[21]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3284,12 +3657,12 @@ var (
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[7], NotesColumns[12]},
+				Columns: []*schema.Column{NotesColumns[7], NotesColumns[13]},
 			},
 			{
 				Name:    "note_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[12]},
+				Columns: []*schema.Column{NotesColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4109,9 +4482,13 @@ var (
 		{Name: "auditor", Type: field.TypeString, Nullable: true},
 		{Name: "auditor_email", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_programs", Type: field.TypeString, Nullable: true},
+		{Name: "finding_programs", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_kind_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_programs", Type: field.TypeString, Nullable: true},
+		{Name: "review_programs", Type: field.TypeString, Nullable: true},
 		{Name: "program_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "vulnerability_programs", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
 	ProgramsTable = &schema.Table{
@@ -4126,21 +4503,45 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_organizations_programs",
+				Symbol:     "programs_findings_programs",
 				Columns:    []*schema.Column{ProgramsColumns[24]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_organizations_programs",
+				Columns:    []*schema.Column{ProgramsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "programs_custom_type_enums_program_kind",
-				Columns:    []*schema.Column{ProgramsColumns[25]},
+				Columns:    []*schema.Column{ProgramsColumns[26]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "programs_remediations_programs",
+				Columns:    []*schema.Column{ProgramsColumns[27]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_reviews_programs",
+				Columns:    []*schema.Column{ProgramsColumns[28]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "programs_users_program_owner",
-				Columns:    []*schema.Column{ProgramsColumns[26]},
+				Columns:    []*schema.Column{ProgramsColumns[29]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "programs_vulnerabilities_programs",
+				Columns:    []*schema.Column{ProgramsColumns[30]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4148,12 +4549,12 @@ var (
 			{
 				Name:    "program_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[24]},
+				Columns: []*schema.Column{ProgramsColumns[7], ProgramsColumns[25]},
 			},
 			{
 				Name:    "program_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ProgramsColumns[24]},
+				Columns: []*schema.Column{ProgramsColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4277,6 +4678,220 @@ var (
 			},
 		},
 	}
+	// RemediationsColumns holds the columns for the "remediations" table.
+	RemediationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "intent", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "explanation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "instructions", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "owner_reference", Type: field.TypeString, Nullable: true},
+		{Name: "repository_uri", Type: field.TypeString, Nullable: true},
+		{Name: "pull_request_uri", Type: field.TypeString, Nullable: true},
+		{Name: "ticket_reference", Type: field.TypeString, Nullable: true},
+		{Name: "due_at", Type: field.TypeTime, Nullable: true},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "pr_generated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "error", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_remediations", Type: field.TypeString, Nullable: true},
+		{Name: "review_remediations", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_remediations", Type: field.TypeString, Nullable: true},
+	}
+	// RemediationsTable holds the schema information for the "remediations" table.
+	RemediationsTable = &schema.Table{
+		Name:       "remediations",
+		Columns:    RemediationsColumns,
+		PrimaryKey: []*schema.Column{RemediationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "remediations_findings_remediations",
+				Columns:    []*schema.Column{RemediationsColumns[27]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "remediations_reviews_remediations",
+				Columns:    []*schema.Column{RemediationsColumns[28]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "remediations_vulnerabilities_remediations",
+				Columns:    []*schema.Column{RemediationsColumns[29]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// RemediationHistoryColumns holds the columns for the "remediation_history" table.
+	RemediationHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString, Nullable: true},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "intent", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "explanation", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "instructions", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "owner_reference", Type: field.TypeString, Nullable: true},
+		{Name: "repository_uri", Type: field.TypeString, Nullable: true},
+		{Name: "pull_request_uri", Type: field.TypeString, Nullable: true},
+		{Name: "ticket_reference", Type: field.TypeString, Nullable: true},
+		{Name: "due_at", Type: field.TypeTime, Nullable: true},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "pr_generated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "error", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+	}
+	// RemediationHistoryTable holds the schema information for the "remediation_history" table.
+	RemediationHistoryTable = &schema.Table{
+		Name:       "remediation_history",
+		Columns:    RemediationHistoryColumns,
+		PrimaryKey: []*schema.Column{RemediationHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "remediationhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{RemediationHistoryColumns[1]},
+			},
+		},
+	}
+	// ReviewsColumns holds the columns for the "reviews" table.
+	ReviewsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "classification", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "reporter", Type: field.TypeString, Nullable: true},
+		{Name: "approved", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "reviewed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "reported_at", Type: field.TypeTime, Nullable: true},
+		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_reviews", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_reviews", Type: field.TypeString, Nullable: true},
+		{Name: "reviewer_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_reviews", Type: field.TypeString, Nullable: true},
+	}
+	// ReviewsTable holds the schema information for the "reviews" table.
+	ReviewsTable = &schema.Table{
+		Name:       "reviews",
+		Columns:    ReviewsColumns,
+		PrimaryKey: []*schema.Column{ReviewsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "reviews_findings_reviews",
+				Columns:    []*schema.Column{ReviewsColumns[25]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_remediations_reviews",
+				Columns:    []*schema.Column{ReviewsColumns[26]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_users_reviewer",
+				Columns:    []*schema.Column{ReviewsColumns[27]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "reviews_vulnerabilities_reviews",
+				Columns:    []*schema.Column{ReviewsColumns[28]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// ReviewHistoryColumns holds the columns for the "review_history" table.
+	ReviewHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "state", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "classification", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "details", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "reporter", Type: field.TypeString, Nullable: true},
+		{Name: "approved", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "reviewed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "reported_at", Type: field.TypeTime, Nullable: true},
+		{Name: "approved_at", Type: field.TypeTime, Nullable: true},
+		{Name: "reviewer_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+	}
+	// ReviewHistoryTable holds the schema information for the "review_history" table.
+	ReviewHistoryTable = &schema.Table{
+		Name:       "review_history",
+		Columns:    ReviewHistoryColumns,
+		PrimaryKey: []*schema.Column{ReviewHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "reviewhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{ReviewHistoryColumns[1]},
+			},
+		},
+	}
 	// RisksColumns holds the columns for the "risks" table.
 	RisksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -4303,11 +4918,15 @@ var (
 		{Name: "control_objective_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risk_categories", Type: field.TypeString, Nullable: true},
+		{Name: "finding_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_risks", Type: field.TypeString, Nullable: true},
+		{Name: "review_risks", Type: field.TypeString, Nullable: true},
 		{Name: "risk_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_category_id", Type: field.TypeString, Nullable: true},
 		{Name: "stakeholder_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_risks", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
 	RisksTable = &schema.Table{
@@ -4334,33 +4953,57 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_organizations_risks",
+				Symbol:     "risks_findings_risks",
 				Columns:    []*schema.Column{RisksColumns[24]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_organizations_risks",
+				Columns:    []*schema.Column{RisksColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "risks_remediations_risks",
+				Columns:    []*schema.Column{RisksColumns[26]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_reviews_risks",
+				Columns:    []*schema.Column{RisksColumns[27]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "risks_custom_type_enums_risk_kind",
-				Columns:    []*schema.Column{RisksColumns[25]},
+				Columns:    []*schema.Column{RisksColumns[28]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risk_category",
-				Columns:    []*schema.Column{RisksColumns[26]},
+				Columns:    []*schema.Column{RisksColumns[29]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_stakeholder",
-				Columns:    []*schema.Column{RisksColumns[27]},
+				Columns:    []*schema.Column{RisksColumns[30]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_delegate",
-				Columns:    []*schema.Column{RisksColumns[28]},
+				Columns:    []*schema.Column{RisksColumns[31]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_vulnerabilities_risks",
+				Columns:    []*schema.Column{RisksColumns[32]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4368,12 +5011,12 @@ var (
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[7], RisksColumns[24]},
+				Columns: []*schema.Column{RisksColumns[7], RisksColumns[25]},
 			},
 			{
 				Name:    "risk_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[24]},
+				Columns: []*schema.Column{RisksColumns[25]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4441,8 +5084,10 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "PROCESSING", "COMPLETED", "FAILED"}, Default: "PROCESSING"},
 		{Name: "control_scans", Type: field.TypeString, Nullable: true},
 		{Name: "entity_scans", Type: field.TypeString, Nullable: true},
+		{Name: "finding_scans", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "risk_scans", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_scans", Type: field.TypeString, Nullable: true},
 	}
 	// ScansTable holds the schema information for the "scans" table.
 	ScansTable = &schema.Table{
@@ -4463,15 +5108,27 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "scans_organizations_scans",
+				Symbol:     "scans_findings_scans",
 				Columns:    []*schema.Column{ScansColumns[14]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_organizations_scans",
+				Columns:    []*schema.Column{ScansColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scans_risks_scans",
-				Columns:    []*schema.Column{ScansColumns[15]},
+				Columns:    []*schema.Column{ScansColumns[16]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "scans_vulnerabilities_scans",
+				Columns:    []*schema.Column{ScansColumns[17]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4479,7 +5136,7 @@ var (
 			{
 				Name:    "scan_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScansColumns[14]},
+				Columns: []*schema.Column{ScansColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4797,13 +5454,17 @@ var (
 		{Name: "ref_code", Type: field.TypeString},
 		{Name: "control_id", Type: field.TypeString},
 		{Name: "custom_type_enum_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "finding_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "program_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "review_subcontrols", Type: field.TypeString, Nullable: true},
 		{Name: "control_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
 		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_subcontrols", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_subcontrols", Type: field.TypeString, Nullable: true},
 	}
 	// SubcontrolsTable holds the schema information for the "subcontrols" table.
 	SubcontrolsTable = &schema.Table{
@@ -4824,45 +5485,69 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "subcontrols_organizations_subcontrols",
+				Symbol:     "subcontrols_findings_subcontrols",
 				Columns:    []*schema.Column{SubcontrolsColumns[36]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_organizations_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[37]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_programs_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[37]},
+				Columns:    []*schema.Column{SubcontrolsColumns[38]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "subcontrols_remediations_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[39]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_reviews_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[40]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "subcontrols_groups_control_owner",
-				Columns:    []*schema.Column{SubcontrolsColumns[38]},
+				Columns:    []*schema.Column{SubcontrolsColumns[41]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_groups_delegate",
-				Columns:    []*schema.Column{SubcontrolsColumns[39]},
+				Columns:    []*schema.Column{SubcontrolsColumns[42]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_entities_responsible_party",
-				Columns:    []*schema.Column{SubcontrolsColumns[40]},
+				Columns:    []*schema.Column{SubcontrolsColumns[43]},
 				RefColumns: []*schema.Column{EntitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_custom_type_enums_subcontrol_kind",
-				Columns:    []*schema.Column{SubcontrolsColumns[41]},
+				Columns:    []*schema.Column{SubcontrolsColumns[44]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "subcontrols_users_subcontrols",
-				Columns:    []*schema.Column{SubcontrolsColumns[42]},
+				Columns:    []*schema.Column{SubcontrolsColumns[45]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "subcontrols_vulnerabilities_subcontrols",
+				Columns:    []*schema.Column{SubcontrolsColumns[46]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -4870,12 +5555,12 @@ var (
 			{
 				Name:    "subcontrol_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[36]},
+				Columns: []*schema.Column{SubcontrolsColumns[7], SubcontrolsColumns[37]},
 			},
 			{
 				Name:    "subcontrol_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[36]},
+				Columns: []*schema.Column{SubcontrolsColumns[37]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4891,7 +5576,7 @@ var (
 			{
 				Name:    "subcontrol_control_id_ref_code_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[34], SubcontrolsColumns[33], SubcontrolsColumns[36]},
+				Columns: []*schema.Column{SubcontrolsColumns[34], SubcontrolsColumns[33], SubcontrolsColumns[37]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4899,12 +5584,12 @@ var (
 			{
 				Name:    "subcontrol_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[12], SubcontrolsColumns[5], SubcontrolsColumns[36]},
+				Columns: []*schema.Column{SubcontrolsColumns[12], SubcontrolsColumns[5], SubcontrolsColumns[37]},
 			},
 			{
 				Name:    "subcontrol_auditor_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{SubcontrolsColumns[13], SubcontrolsColumns[5], SubcontrolsColumns[36]},
+				Columns: []*schema.Column{SubcontrolsColumns[13], SubcontrolsColumns[5], SubcontrolsColumns[37]},
 			},
 		},
 	}
@@ -5235,10 +5920,15 @@ var (
 		{Name: "idempotency_key", Type: field.TypeString, Nullable: true},
 		{Name: "external_reference_url", Type: field.TypeJSON, Nullable: true},
 		{Name: "custom_type_enum_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "finding_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "integration_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "review_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "task_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
+		{Name: "vulnerability_tasks", Type: field.TypeString, Nullable: true},
 	}
 	// TasksTable holds the schema information for the "tasks" table.
 	TasksTable = &schema.Table{
@@ -5253,27 +5943,57 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_organizations_tasks",
+				Symbol:     "tasks_findings_tasks",
 				Columns:    []*schema.Column{TasksColumns[20]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_integrations_tasks",
+				Columns:    []*schema.Column{TasksColumns[21]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_organizations_tasks",
+				Columns:    []*schema.Column{TasksColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "tasks_remediations_tasks",
+				Columns:    []*schema.Column{TasksColumns[23]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_reviews_tasks",
+				Columns:    []*schema.Column{TasksColumns[24]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "tasks_custom_type_enums_task_kind",
-				Columns:    []*schema.Column{TasksColumns[21]},
+				Columns:    []*schema.Column{TasksColumns[25]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[22]},
+				Columns:    []*schema.Column{TasksColumns[26]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[23]},
+				Columns:    []*schema.Column{TasksColumns[27]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_vulnerabilities_tasks",
+				Columns:    []*schema.Column{TasksColumns[28]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -5281,12 +6001,12 @@ var (
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[7], TasksColumns[20]},
+				Columns: []*schema.Column{TasksColumns[7], TasksColumns[22]},
 			},
 			{
 				Name:    "task_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[20]},
+				Columns: []*schema.Column{TasksColumns[22]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6127,6 +6847,131 @@ var (
 			},
 		},
 	}
+	// VulnerabilitiesColumns holds the columns for the "vulnerabilities" table.
+	VulnerabilitiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "cve_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "severity", Type: field.TypeString, Nullable: true},
+		{Name: "score", Type: field.TypeFloat64, Nullable: true},
+		{Name: "impact", Type: field.TypeFloat64, Nullable: true},
+		{Name: "exploitability", Type: field.TypeFloat64, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "vector", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_sla", Type: field.TypeInt, Nullable: true},
+		{Name: "open", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "blocking", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "production", Type: field.TypeBool, Nullable: true},
+		{Name: "public", Type: field.TypeBool, Nullable: true},
+		{Name: "validated", Type: field.TypeBool, Nullable: true},
+		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "impacts", Type: field.TypeJSON, Nullable: true},
+		{Name: "published_at", Type: field.TypeTime, Nullable: true},
+		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+		{Name: "finding_vulnerabilities", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_vulnerabilities", Type: field.TypeString, Nullable: true},
+		{Name: "review_vulnerabilities", Type: field.TypeString, Nullable: true},
+	}
+	// VulnerabilitiesTable holds the schema information for the "vulnerabilities" table.
+	VulnerabilitiesTable = &schema.Table{
+		Name:       "vulnerabilities",
+		Columns:    VulnerabilitiesColumns,
+		PrimaryKey: []*schema.Column{VulnerabilitiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vulnerabilities_findings_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[37]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_remediations_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[38]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_reviews_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[39]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// VulnerabilityHistoryColumns holds the columns for the "vulnerability_history" table.
+	VulnerabilityHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "cve_id", Type: field.TypeString, Nullable: true},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "category", Type: field.TypeString, Nullable: true},
+		{Name: "severity", Type: field.TypeString, Nullable: true},
+		{Name: "score", Type: field.TypeFloat64, Nullable: true},
+		{Name: "impact", Type: field.TypeFloat64, Nullable: true},
+		{Name: "exploitability", Type: field.TypeFloat64, Nullable: true},
+		{Name: "priority", Type: field.TypeString, Nullable: true},
+		{Name: "status", Type: field.TypeString, Nullable: true},
+		{Name: "summary", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "vector", Type: field.TypeString, Nullable: true},
+		{Name: "remediation_sla", Type: field.TypeInt, Nullable: true},
+		{Name: "open", Type: field.TypeBool, Nullable: true, Default: true},
+		{Name: "blocking", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "production", Type: field.TypeBool, Nullable: true},
+		{Name: "public", Type: field.TypeBool, Nullable: true},
+		{Name: "validated", Type: field.TypeBool, Nullable: true},
+		{Name: "references", Type: field.TypeJSON, Nullable: true},
+		{Name: "impacts", Type: field.TypeJSON, Nullable: true},
+		{Name: "published_at", Type: field.TypeTime, Nullable: true},
+		{Name: "discovered_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source_updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "external_uri", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+	}
+	// VulnerabilityHistoryTable holds the schema information for the "vulnerability_history" table.
+	VulnerabilityHistoryTable = &schema.Table{
+		Name:       "vulnerability_history",
+		Columns:    VulnerabilityHistoryColumns,
+		PrimaryKey: []*schema.Column{VulnerabilityHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "vulnerabilityhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{VulnerabilityHistoryColumns[1]},
+			},
+		},
+	}
 	// WebauthnsColumns holds the columns for the "webauthns" table.
 	WebauthnsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -6158,6 +7003,31 @@ var (
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// ActionPlanTasksColumns holds the columns for the "action_plan_tasks" table.
+	ActionPlanTasksColumns = []*schema.Column{
+		{Name: "action_plan_id", Type: field.TypeString},
+		{Name: "task_id", Type: field.TypeString},
+	}
+	// ActionPlanTasksTable holds the schema information for the "action_plan_tasks" table.
+	ActionPlanTasksTable = &schema.Table{
+		Name:       "action_plan_tasks",
+		Columns:    ActionPlanTasksColumns,
+		PrimaryKey: []*schema.Column{ActionPlanTasksColumns[0], ActionPlanTasksColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "action_plan_tasks_action_plan_id",
+				Columns:    []*schema.Column{ActionPlanTasksColumns[0]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "action_plan_tasks_task_id",
+				Columns:    []*schema.Column{ActionPlanTasksColumns[1]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.Cascade,
 			},
 		},
 	}
@@ -6986,6 +7856,31 @@ var (
 			},
 		},
 	}
+	// FindingActionPlansColumns holds the columns for the "finding_action_plans" table.
+	FindingActionPlansColumns = []*schema.Column{
+		{Name: "finding_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// FindingActionPlansTable holds the schema information for the "finding_action_plans" table.
+	FindingActionPlansTable = &schema.Table{
+		Name:       "finding_action_plans",
+		Columns:    FindingActionPlansColumns,
+		PrimaryKey: []*schema.Column{FindingActionPlansColumns[0], FindingActionPlansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "finding_action_plans_finding_id",
+				Columns:    []*schema.Column{FindingActionPlansColumns[0]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "finding_action_plans_action_plan_id",
+				Columns:    []*schema.Column{FindingActionPlansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// GroupEventsColumns holds the columns for the "group_events" table.
 	GroupEventsColumns = []*schema.Column{
 		{Name: "group_id", Type: field.TypeString},
@@ -7157,6 +8052,131 @@ var (
 				Symbol:     "integration_events_event_id",
 				Columns:    []*schema.Column{IntegrationEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// IntegrationFindingsColumns holds the columns for the "integration_findings" table.
+	IntegrationFindingsColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "finding_id", Type: field.TypeString},
+	}
+	// IntegrationFindingsTable holds the schema information for the "integration_findings" table.
+	IntegrationFindingsTable = &schema.Table{
+		Name:       "integration_findings",
+		Columns:    IntegrationFindingsColumns,
+		PrimaryKey: []*schema.Column{IntegrationFindingsColumns[0], IntegrationFindingsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_findings_integration_id",
+				Columns:    []*schema.Column{IntegrationFindingsColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_findings_finding_id",
+				Columns:    []*schema.Column{IntegrationFindingsColumns[1]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// IntegrationVulnerabilitiesColumns holds the columns for the "integration_vulnerabilities" table.
+	IntegrationVulnerabilitiesColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "vulnerability_id", Type: field.TypeString},
+	}
+	// IntegrationVulnerabilitiesTable holds the schema information for the "integration_vulnerabilities" table.
+	IntegrationVulnerabilitiesTable = &schema.Table{
+		Name:       "integration_vulnerabilities",
+		Columns:    IntegrationVulnerabilitiesColumns,
+		PrimaryKey: []*schema.Column{IntegrationVulnerabilitiesColumns[0], IntegrationVulnerabilitiesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_vulnerabilities_integration_id",
+				Columns:    []*schema.Column{IntegrationVulnerabilitiesColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_vulnerabilities_vulnerability_id",
+				Columns:    []*schema.Column{IntegrationVulnerabilitiesColumns[1]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// IntegrationReviewsColumns holds the columns for the "integration_reviews" table.
+	IntegrationReviewsColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "review_id", Type: field.TypeString},
+	}
+	// IntegrationReviewsTable holds the schema information for the "integration_reviews" table.
+	IntegrationReviewsTable = &schema.Table{
+		Name:       "integration_reviews",
+		Columns:    IntegrationReviewsColumns,
+		PrimaryKey: []*schema.Column{IntegrationReviewsColumns[0], IntegrationReviewsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_reviews_integration_id",
+				Columns:    []*schema.Column{IntegrationReviewsColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_reviews_review_id",
+				Columns:    []*schema.Column{IntegrationReviewsColumns[1]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// IntegrationRemediationsColumns holds the columns for the "integration_remediations" table.
+	IntegrationRemediationsColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "remediation_id", Type: field.TypeString},
+	}
+	// IntegrationRemediationsTable holds the schema information for the "integration_remediations" table.
+	IntegrationRemediationsTable = &schema.Table{
+		Name:       "integration_remediations",
+		Columns:    IntegrationRemediationsColumns,
+		PrimaryKey: []*schema.Column{IntegrationRemediationsColumns[0], IntegrationRemediationsColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_remediations_integration_id",
+				Columns:    []*schema.Column{IntegrationRemediationsColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_remediations_remediation_id",
+				Columns:    []*schema.Column{IntegrationRemediationsColumns[1]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// IntegrationActionPlansColumns holds the columns for the "integration_action_plans" table.
+	IntegrationActionPlansColumns = []*schema.Column{
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// IntegrationActionPlansTable holds the schema information for the "integration_action_plans" table.
+	IntegrationActionPlansTable = &schema.Table{
+		Name:       "integration_action_plans",
+		Columns:    IntegrationActionPlansColumns,
+		PrimaryKey: []*schema.Column{IntegrationActionPlansColumns[0], IntegrationActionPlansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "integration_action_plans_integration_id",
+				Columns:    []*schema.Column{IntegrationActionPlansColumns[0]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "integration_action_plans_action_plan_id",
+				Columns:    []*schema.Column{IntegrationActionPlansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -8361,6 +9381,56 @@ var (
 			},
 		},
 	}
+	// RemediationActionPlansColumns holds the columns for the "remediation_action_plans" table.
+	RemediationActionPlansColumns = []*schema.Column{
+		{Name: "remediation_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// RemediationActionPlansTable holds the schema information for the "remediation_action_plans" table.
+	RemediationActionPlansTable = &schema.Table{
+		Name:       "remediation_action_plans",
+		Columns:    RemediationActionPlansColumns,
+		PrimaryKey: []*schema.Column{RemediationActionPlansColumns[0], RemediationActionPlansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "remediation_action_plans_remediation_id",
+				Columns:    []*schema.Column{RemediationActionPlansColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "remediation_action_plans_action_plan_id",
+				Columns:    []*schema.Column{RemediationActionPlansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
+	// ReviewActionPlansColumns holds the columns for the "review_action_plans" table.
+	ReviewActionPlansColumns = []*schema.Column{
+		{Name: "review_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// ReviewActionPlansTable holds the schema information for the "review_action_plans" table.
+	ReviewActionPlansTable = &schema.Table{
+		Name:       "review_action_plans",
+		Columns:    ReviewActionPlansColumns,
+		PrimaryKey: []*schema.Column{ReviewActionPlansColumns[0], ReviewActionPlansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "review_action_plans_review_id",
+				Columns:    []*schema.Column{ReviewActionPlansColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "review_action_plans_action_plan_id",
+				Columns:    []*schema.Column{ReviewActionPlansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// RiskBlockedGroupsColumns holds the columns for the "risk_blocked_groups" table.
 	RiskBlockedGroupsColumns = []*schema.Column{
 		{Name: "risk_id", Type: field.TypeString},
@@ -8961,6 +10031,31 @@ var (
 			},
 		},
 	}
+	// VulnerabilityActionPlansColumns holds the columns for the "vulnerability_action_plans" table.
+	VulnerabilityActionPlansColumns = []*schema.Column{
+		{Name: "vulnerability_id", Type: field.TypeString},
+		{Name: "action_plan_id", Type: field.TypeString},
+	}
+	// VulnerabilityActionPlansTable holds the schema information for the "vulnerability_action_plans" table.
+	VulnerabilityActionPlansTable = &schema.Table{
+		Name:       "vulnerability_action_plans",
+		Columns:    VulnerabilityActionPlansColumns,
+		PrimaryKey: []*schema.Column{VulnerabilityActionPlansColumns[0], VulnerabilityActionPlansColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "vulnerability_action_plans_vulnerability_id",
+				Columns:    []*schema.Column{VulnerabilityActionPlansColumns[0]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "vulnerability_action_plans_action_plan_id",
+				Columns:    []*schema.Column{VulnerabilityActionPlansColumns[1]},
+				RefColumns: []*schema.Column{ActionPlansColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		APITokensTable,
@@ -8999,6 +10094,10 @@ var (
 		FilesTable,
 		FileDownloadTokensTable,
 		FileHistoryTable,
+		FindingsTable,
+		FindingControlsTable,
+		FindingControlHistoryTable,
+		FindingHistoryTable,
 		GroupsTable,
 		GroupHistoryTable,
 		GroupMembershipsTable,
@@ -9047,6 +10146,10 @@ var (
 		ProgramHistoryTable,
 		ProgramMembershipsTable,
 		ProgramMembershipHistoryTable,
+		RemediationsTable,
+		RemediationHistoryTable,
+		ReviewsTable,
+		ReviewHistoryTable,
 		RisksTable,
 		RiskHistoryTable,
 		ScansTable,
@@ -9083,7 +10186,10 @@ var (
 		UserHistoryTable,
 		UserSettingsTable,
 		UserSettingHistoryTable,
+		VulnerabilitiesTable,
+		VulnerabilityHistoryTable,
 		WebauthnsTable,
+		ActionPlanTasksTable,
 		ContactFilesTable,
 		ControlControlObjectivesTable,
 		ControlTasksTable,
@@ -9117,6 +10223,7 @@ var (
 		EvidenceFilesTable,
 		FileEventsTable,
 		FileSecretsTable,
+		FindingActionPlansTable,
 		GroupEventsTable,
 		GroupFilesTable,
 		GroupTasksTable,
@@ -9124,6 +10231,11 @@ var (
 		HushEventsTable,
 		IntegrationSecretsTable,
 		IntegrationEventsTable,
+		IntegrationFindingsTable,
+		IntegrationVulnerabilitiesTable,
+		IntegrationReviewsTable,
+		IntegrationRemediationsTable,
+		IntegrationActionPlansTable,
 		InternalPolicyBlockedGroupsTable,
 		InternalPolicyEditorsTable,
 		InternalPolicyControlObjectivesTable,
@@ -9172,6 +10284,8 @@ var (
 		ProgramEvidenceTable,
 		ProgramNarrativesTable,
 		ProgramActionPlansTable,
+		RemediationActionPlansTable,
+		ReviewActionPlansTable,
 		RiskBlockedGroupsTable,
 		RiskEditorsTable,
 		RiskViewersTable,
@@ -9196,6 +10310,7 @@ var (
 		UserFilesTable,
 		UserEventsTable,
 		UserSettingFilesTable,
+		VulnerabilityActionPlansTable,
 	}
 )
 
@@ -9223,8 +10338,12 @@ func init() {
 	AssessmentResponseHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_response_history",
 	}
-	AssetsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	AssetsTable.ForeignKeys[1].RefTable = RisksTable
+	AssetsTable.ForeignKeys[0].RefTable = FindingsTable
+	AssetsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	AssetsTable.ForeignKeys[2].RefTable = RemediationsTable
+	AssetsTable.ForeignKeys[3].RefTable = ReviewsTable
+	AssetsTable.ForeignKeys[4].RefTable = RisksTable
+	AssetsTable.ForeignKeys[5].RefTable = VulnerabilitiesTable
 	AssetHistoryTable.Annotation = &entsql.Annotation{
 		Table: "asset_history",
 	}
@@ -9238,7 +10357,10 @@ func init() {
 	ControlsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
 	ControlsTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
 	ControlsTable.ForeignKeys[5].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[6].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[6].RefTable = RemediationsTable
+	ControlsTable.ForeignKeys[7].RefTable = ReviewsTable
+	ControlsTable.ForeignKeys[8].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -9273,9 +10395,13 @@ func init() {
 	EmailVerificationTokensTable.ForeignKeys[0].RefTable = UsersTable
 	EntitiesTable.ForeignKeys[0].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[1].RefTable = EntityTypesTable
-	EntitiesTable.ForeignKeys[2].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[3].RefTable = RisksTable
-	EntitiesTable.ForeignKeys[4].RefTable = ScansTable
+	EntitiesTable.ForeignKeys[2].RefTable = FindingsTable
+	EntitiesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[4].RefTable = RemediationsTable
+	EntitiesTable.ForeignKeys[5].RefTable = ReviewsTable
+	EntitiesTable.ForeignKeys[6].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[7].RefTable = ScansTable
+	EntitiesTable.ForeignKeys[8].RefTable = VulnerabilitiesTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
@@ -9290,11 +10416,27 @@ func init() {
 	}
 	ExportsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	FilesTable.ForeignKeys[0].RefTable = ExportsTable
-	FilesTable.ForeignKeys[1].RefTable = IntegrationsTable
-	FilesTable.ForeignKeys[2].RefTable = NotesTable
+	FilesTable.ForeignKeys[1].RefTable = FindingsTable
+	FilesTable.ForeignKeys[2].RefTable = IntegrationsTable
+	FilesTable.ForeignKeys[3].RefTable = NotesTable
+	FilesTable.ForeignKeys[4].RefTable = RemediationsTable
+	FilesTable.ForeignKeys[5].RefTable = ReviewsTable
+	FilesTable.ForeignKeys[6].RefTable = VulnerabilitiesTable
 	FileDownloadTokensTable.ForeignKeys[0].RefTable = UsersTable
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
+	}
+	FindingsTable.ForeignKeys[0].RefTable = RemediationsTable
+	FindingsTable.ForeignKeys[1].RefTable = ReviewsTable
+	FindingsTable.ForeignKeys[2].RefTable = VulnerabilitiesTable
+	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
+	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
+	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
+	FindingControlHistoryTable.Annotation = &entsql.Annotation{
+		Table: "finding_control_history",
+	}
+	FindingHistoryTable.Annotation = &entsql.Annotation{
+		Table: "finding_history",
 	}
 	GroupsTable.ForeignKeys[0].RefTable = AssessmentsTable
 	GroupsTable.ForeignKeys[1].RefTable = AssessmentsTable
@@ -9379,13 +10521,17 @@ func init() {
 	}
 	NotesTable.ForeignKeys[0].RefTable = ControlsTable
 	NotesTable.ForeignKeys[1].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[2].RefTable = InternalPoliciesTable
-	NotesTable.ForeignKeys[3].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[4].RefTable = ProceduresTable
-	NotesTable.ForeignKeys[5].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[6].RefTable = RisksTable
-	NotesTable.ForeignKeys[7].RefTable = SubcontrolsTable
-	NotesTable.ForeignKeys[8].RefTable = TasksTable
+	NotesTable.ForeignKeys[2].RefTable = FindingsTable
+	NotesTable.ForeignKeys[3].RefTable = InternalPoliciesTable
+	NotesTable.ForeignKeys[4].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[5].RefTable = ProceduresTable
+	NotesTable.ForeignKeys[6].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[7].RefTable = RemediationsTable
+	NotesTable.ForeignKeys[8].RefTable = ReviewsTable
+	NotesTable.ForeignKeys[9].RefTable = RisksTable
+	NotesTable.ForeignKeys[10].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[11].RefTable = TasksTable
+	NotesTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
@@ -9429,9 +10575,13 @@ func init() {
 		Table: "procedure_history",
 	}
 	ProgramsTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
-	ProgramsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	ProgramsTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	ProgramsTable.ForeignKeys[3].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[1].RefTable = FindingsTable
+	ProgramsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ProgramsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
+	ProgramsTable.ForeignKeys[4].RefTable = RemediationsTable
+	ProgramsTable.ForeignKeys[5].RefTable = ReviewsTable
+	ProgramsTable.ForeignKeys[6].RefTable = UsersTable
+	ProgramsTable.ForeignKeys[7].RefTable = VulnerabilitiesTable
 	ProgramHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_history",
 	}
@@ -9441,21 +10591,40 @@ func init() {
 	ProgramMembershipHistoryTable.Annotation = &entsql.Annotation{
 		Table: "program_membership_history",
 	}
+	RemediationsTable.ForeignKeys[0].RefTable = FindingsTable
+	RemediationsTable.ForeignKeys[1].RefTable = ReviewsTable
+	RemediationsTable.ForeignKeys[2].RefTable = VulnerabilitiesTable
+	RemediationHistoryTable.Annotation = &entsql.Annotation{
+		Table: "remediation_history",
+	}
+	ReviewsTable.ForeignKeys[0].RefTable = FindingsTable
+	ReviewsTable.ForeignKeys[1].RefTable = RemediationsTable
+	ReviewsTable.ForeignKeys[2].RefTable = UsersTable
+	ReviewsTable.ForeignKeys[3].RefTable = VulnerabilitiesTable
+	ReviewHistoryTable.Annotation = &entsql.Annotation{
+		Table: "review_history",
+	}
 	RisksTable.ForeignKeys[0].RefTable = ControlObjectivesTable
 	RisksTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[3].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[5].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[6].RefTable = GroupsTable
-	RisksTable.ForeignKeys[7].RefTable = GroupsTable
+	RisksTable.ForeignKeys[3].RefTable = FindingsTable
+	RisksTable.ForeignKeys[4].RefTable = OrganizationsTable
+	RisksTable.ForeignKeys[5].RefTable = RemediationsTable
+	RisksTable.ForeignKeys[6].RefTable = ReviewsTable
+	RisksTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
+	RisksTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
+	RisksTable.ForeignKeys[9].RefTable = GroupsTable
+	RisksTable.ForeignKeys[10].RefTable = GroupsTable
+	RisksTable.ForeignKeys[11].RefTable = VulnerabilitiesTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
 	ScansTable.ForeignKeys[0].RefTable = ControlsTable
 	ScansTable.ForeignKeys[1].RefTable = EntitiesTable
-	ScansTable.ForeignKeys[2].RefTable = OrganizationsTable
-	ScansTable.ForeignKeys[3].RefTable = RisksTable
+	ScansTable.ForeignKeys[2].RefTable = FindingsTable
+	ScansTable.ForeignKeys[3].RefTable = OrganizationsTable
+	ScansTable.ForeignKeys[4].RefTable = RisksTable
+	ScansTable.ForeignKeys[5].RefTable = VulnerabilitiesTable
 	ScanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "scan_history",
 	}
@@ -9474,13 +10643,17 @@ func init() {
 	}
 	SubcontrolsTable.ForeignKeys[0].RefTable = ControlsTable
 	SubcontrolsTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
-	SubcontrolsTable.ForeignKeys[2].RefTable = OrganizationsTable
-	SubcontrolsTable.ForeignKeys[3].RefTable = ProgramsTable
-	SubcontrolsTable.ForeignKeys[4].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[5].RefTable = GroupsTable
-	SubcontrolsTable.ForeignKeys[6].RefTable = EntitiesTable
-	SubcontrolsTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
-	SubcontrolsTable.ForeignKeys[8].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[2].RefTable = FindingsTable
+	SubcontrolsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	SubcontrolsTable.ForeignKeys[4].RefTable = ProgramsTable
+	SubcontrolsTable.ForeignKeys[5].RefTable = RemediationsTable
+	SubcontrolsTable.ForeignKeys[6].RefTable = ReviewsTable
+	SubcontrolsTable.ForeignKeys[7].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[8].RefTable = GroupsTable
+	SubcontrolsTable.ForeignKeys[9].RefTable = EntitiesTable
+	SubcontrolsTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
+	SubcontrolsTable.ForeignKeys[11].RefTable = UsersTable
+	SubcontrolsTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
 	SubcontrolHistoryTable.Annotation = &entsql.Annotation{
 		Table: "subcontrol_history",
 	}
@@ -9493,10 +10666,15 @@ func init() {
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TagDefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TasksTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[1].RefTable = OrganizationsTable
-	TasksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[3].RefTable = UsersTable
-	TasksTable.ForeignKeys[4].RefTable = UsersTable
+	TasksTable.ForeignKeys[1].RefTable = FindingsTable
+	TasksTable.ForeignKeys[2].RefTable = IntegrationsTable
+	TasksTable.ForeignKeys[3].RefTable = OrganizationsTable
+	TasksTable.ForeignKeys[4].RefTable = RemediationsTable
+	TasksTable.ForeignKeys[5].RefTable = ReviewsTable
+	TasksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
+	TasksTable.ForeignKeys[7].RefTable = UsersTable
+	TasksTable.ForeignKeys[8].RefTable = UsersTable
+	TasksTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
@@ -9554,7 +10732,15 @@ func init() {
 	UserSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_setting_history",
 	}
+	VulnerabilitiesTable.ForeignKeys[0].RefTable = FindingsTable
+	VulnerabilitiesTable.ForeignKeys[1].RefTable = RemediationsTable
+	VulnerabilitiesTable.ForeignKeys[2].RefTable = ReviewsTable
+	VulnerabilityHistoryTable.Annotation = &entsql.Annotation{
+		Table: "vulnerability_history",
+	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
+	ActionPlanTasksTable.ForeignKeys[0].RefTable = ActionPlansTable
+	ActionPlanTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable
 	ContactFilesTable.ForeignKeys[1].RefTable = FilesTable
 	ControlControlObjectivesTable.ForeignKeys[0].RefTable = ControlsTable
@@ -9621,6 +10807,8 @@ func init() {
 	FileEventsTable.ForeignKeys[1].RefTable = EventsTable
 	FileSecretsTable.ForeignKeys[0].RefTable = FilesTable
 	FileSecretsTable.ForeignKeys[1].RefTable = HushesTable
+	FindingActionPlansTable.ForeignKeys[0].RefTable = FindingsTable
+	FindingActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	GroupEventsTable.ForeignKeys[0].RefTable = GroupsTable
 	GroupEventsTable.ForeignKeys[1].RefTable = EventsTable
 	GroupFilesTable.ForeignKeys[0].RefTable = GroupsTable
@@ -9635,6 +10823,16 @@ func init() {
 	IntegrationSecretsTable.ForeignKeys[1].RefTable = HushesTable
 	IntegrationEventsTable.ForeignKeys[0].RefTable = IntegrationsTable
 	IntegrationEventsTable.ForeignKeys[1].RefTable = EventsTable
+	IntegrationFindingsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationFindingsTable.ForeignKeys[1].RefTable = FindingsTable
+	IntegrationVulnerabilitiesTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationVulnerabilitiesTable.ForeignKeys[1].RefTable = VulnerabilitiesTable
+	IntegrationReviewsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationReviewsTable.ForeignKeys[1].RefTable = ReviewsTable
+	IntegrationRemediationsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationRemediationsTable.ForeignKeys[1].RefTable = RemediationsTable
+	IntegrationActionPlansTable.ForeignKeys[0].RefTable = IntegrationsTable
+	IntegrationActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	InternalPolicyBlockedGroupsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
 	InternalPolicyBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	InternalPolicyEditorsTable.ForeignKeys[0].RefTable = InternalPoliciesTable
@@ -9731,6 +10929,10 @@ func init() {
 	ProgramNarrativesTable.ForeignKeys[1].RefTable = NarrativesTable
 	ProgramActionPlansTable.ForeignKeys[0].RefTable = ProgramsTable
 	ProgramActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	RemediationActionPlansTable.ForeignKeys[0].RefTable = RemediationsTable
+	RemediationActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
+	ReviewActionPlansTable.ForeignKeys[0].RefTable = ReviewsTable
+	ReviewActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 	RiskBlockedGroupsTable.ForeignKeys[0].RefTable = RisksTable
 	RiskBlockedGroupsTable.ForeignKeys[1].RefTable = GroupsTable
 	RiskEditorsTable.ForeignKeys[0].RefTable = RisksTable
@@ -9779,4 +10981,6 @@ func init() {
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
 	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
 	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
+	VulnerabilityActionPlansTable.ForeignKeys[0].RefTable = VulnerabilitiesTable
+	VulnerabilityActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 }

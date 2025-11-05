@@ -450,6 +450,31 @@ extend type Query{
         last: Int
     ): FileConnection
     """
+    Search across Finding objects
+    """
+    adminFindingSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): FindingConnection
+    """
     Search across Group objects
     """
     adminGroupSearch(
@@ -875,6 +900,56 @@ extend type Query{
         last: Int
     ): ProgramConnection
     """
+    Search across Remediation objects
+    """
+    adminRemediationSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): RemediationConnection
+    """
+    Search across Review objects
+    """
+    adminReviewSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): ReviewConnection
+    """
     Search across Risk objects
     """
     adminRiskSearch(
@@ -1224,6 +1299,31 @@ extend type Query{
         """
         last: Int
     ): UserSettingConnection
+    """
+    Search across Vulnerability objects
+    """
+    adminVulnerabilitySearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): VulnerabilityConnection
     """
     Search across Webauthn objects
     """

@@ -107,8 +107,12 @@ type Subcontrol struct {
 	// The values are being populated by the SubcontrolQuery when eager-loading is set.
 	Edges                        SubcontrolEdges `json:"edges"`
 	custom_type_enum_subcontrols *string
+	finding_subcontrols          *string
 	program_subcontrols          *string
+	remediation_subcontrols      *string
+	review_subcontrols           *string
 	user_subcontrols             *string
+	vulnerability_subcontrols    *string
 	selectValues                 sql.SelectValues
 }
 
@@ -371,9 +375,17 @@ func (*Subcontrol) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case subcontrol.ForeignKeys[0]: // custom_type_enum_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[1]: // program_subcontrols
+		case subcontrol.ForeignKeys[1]: // finding_subcontrols
 			values[i] = new(sql.NullString)
-		case subcontrol.ForeignKeys[2]: // user_subcontrols
+		case subcontrol.ForeignKeys[2]: // program_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[3]: // remediation_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[4]: // review_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[5]: // user_subcontrols
+			values[i] = new(sql.NullString)
+		case subcontrol.ForeignKeys[6]: // vulnerability_subcontrols
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -662,17 +674,45 @@ func (_m *Subcontrol) assignValues(columns []string, values []any) error {
 			}
 		case subcontrol.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_subcontrols", values[i])
+			} else if value.Valid {
+				_m.finding_subcontrols = new(string)
+				*_m.finding_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field program_subcontrols", values[i])
 			} else if value.Valid {
 				_m.program_subcontrols = new(string)
 				*_m.program_subcontrols = value.String
 			}
-		case subcontrol.ForeignKeys[2]:
+		case subcontrol.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_subcontrols", values[i])
+			} else if value.Valid {
+				_m.remediation_subcontrols = new(string)
+				*_m.remediation_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_subcontrols", values[i])
+			} else if value.Valid {
+				_m.review_subcontrols = new(string)
+				*_m.review_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field user_subcontrols", values[i])
 			} else if value.Valid {
 				_m.user_subcontrols = new(string)
 				*_m.user_subcontrols = value.String
+			}
+		case subcontrol.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_subcontrols", values[i])
+			} else if value.Valid {
+				_m.vulnerability_subcontrols = new(string)
+				*_m.vulnerability_subcontrols = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

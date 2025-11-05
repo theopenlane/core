@@ -55,6 +55,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/core/internal/ent/generated/filehistory"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/findingcontrolhistory"
+	"github.com/theopenlane/core/internal/ent/generated/findinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/grouphistory"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
@@ -103,6 +107,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/programhistory"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/ent/generated/programmembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/remediation"
+	"github.com/theopenlane/core/internal/ent/generated/remediationhistory"
+	"github.com/theopenlane/core/internal/ent/generated/review"
+	"github.com/theopenlane/core/internal/ent/generated/reviewhistory"
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/riskhistory"
 	"github.com/theopenlane/core/internal/ent/generated/scan"
@@ -139,6 +147,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/objects"
@@ -237,6 +247,14 @@ type Client struct {
 	FileDownloadToken *FileDownloadTokenClient
 	// FileHistory is the client for interacting with the FileHistory builders.
 	FileHistory *FileHistoryClient
+	// Finding is the client for interacting with the Finding builders.
+	Finding *FindingClient
+	// FindingControl is the client for interacting with the FindingControl builders.
+	FindingControl *FindingControlClient
+	// FindingControlHistory is the client for interacting with the FindingControlHistory builders.
+	FindingControlHistory *FindingControlHistoryClient
+	// FindingHistory is the client for interacting with the FindingHistory builders.
+	FindingHistory *FindingHistoryClient
 	// Group is the client for interacting with the Group builders.
 	Group *GroupClient
 	// GroupHistory is the client for interacting with the GroupHistory builders.
@@ -333,6 +351,14 @@ type Client struct {
 	ProgramMembership *ProgramMembershipClient
 	// ProgramMembershipHistory is the client for interacting with the ProgramMembershipHistory builders.
 	ProgramMembershipHistory *ProgramMembershipHistoryClient
+	// Remediation is the client for interacting with the Remediation builders.
+	Remediation *RemediationClient
+	// RemediationHistory is the client for interacting with the RemediationHistory builders.
+	RemediationHistory *RemediationHistoryClient
+	// Review is the client for interacting with the Review builders.
+	Review *ReviewClient
+	// ReviewHistory is the client for interacting with the ReviewHistory builders.
+	ReviewHistory *ReviewHistoryClient
 	// Risk is the client for interacting with the Risk builders.
 	Risk *RiskClient
 	// RiskHistory is the client for interacting with the RiskHistory builders.
@@ -405,6 +431,10 @@ type Client struct {
 	UserSetting *UserSettingClient
 	// UserSettingHistory is the client for interacting with the UserSettingHistory builders.
 	UserSettingHistory *UserSettingHistoryClient
+	// Vulnerability is the client for interacting with the Vulnerability builders.
+	Vulnerability *VulnerabilityClient
+	// VulnerabilityHistory is the client for interacting with the VulnerabilityHistory builders.
+	VulnerabilityHistory *VulnerabilityHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
 
@@ -463,6 +493,10 @@ func (c *Client) init() {
 	c.File = NewFileClient(c.config)
 	c.FileDownloadToken = NewFileDownloadTokenClient(c.config)
 	c.FileHistory = NewFileHistoryClient(c.config)
+	c.Finding = NewFindingClient(c.config)
+	c.FindingControl = NewFindingControlClient(c.config)
+	c.FindingControlHistory = NewFindingControlHistoryClient(c.config)
+	c.FindingHistory = NewFindingHistoryClient(c.config)
 	c.Group = NewGroupClient(c.config)
 	c.GroupHistory = NewGroupHistoryClient(c.config)
 	c.GroupMembership = NewGroupMembershipClient(c.config)
@@ -511,6 +545,10 @@ func (c *Client) init() {
 	c.ProgramHistory = NewProgramHistoryClient(c.config)
 	c.ProgramMembership = NewProgramMembershipClient(c.config)
 	c.ProgramMembershipHistory = NewProgramMembershipHistoryClient(c.config)
+	c.Remediation = NewRemediationClient(c.config)
+	c.RemediationHistory = NewRemediationHistoryClient(c.config)
+	c.Review = NewReviewClient(c.config)
+	c.ReviewHistory = NewReviewHistoryClient(c.config)
 	c.Risk = NewRiskClient(c.config)
 	c.RiskHistory = NewRiskHistoryClient(c.config)
 	c.Scan = NewScanClient(c.config)
@@ -547,6 +585,8 @@ func (c *Client) init() {
 	c.UserHistory = NewUserHistoryClient(c.config)
 	c.UserSetting = NewUserSettingClient(c.config)
 	c.UserSettingHistory = NewUserSettingHistoryClient(c.config)
+	c.Vulnerability = NewVulnerabilityClient(c.config)
+	c.VulnerabilityHistory = NewVulnerabilityHistoryClient(c.config)
 	c.Webauthn = NewWebauthnClient(c.config)
 }
 
@@ -785,6 +825,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		File:                              NewFileClient(cfg),
 		FileDownloadToken:                 NewFileDownloadTokenClient(cfg),
 		FileHistory:                       NewFileHistoryClient(cfg),
+		Finding:                           NewFindingClient(cfg),
+		FindingControl:                    NewFindingControlClient(cfg),
+		FindingControlHistory:             NewFindingControlHistoryClient(cfg),
+		FindingHistory:                    NewFindingHistoryClient(cfg),
 		Group:                             NewGroupClient(cfg),
 		GroupHistory:                      NewGroupHistoryClient(cfg),
 		GroupMembership:                   NewGroupMembershipClient(cfg),
@@ -833,6 +877,10 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		ProgramHistory:                    NewProgramHistoryClient(cfg),
 		ProgramMembership:                 NewProgramMembershipClient(cfg),
 		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
+		Remediation:                       NewRemediationClient(cfg),
+		RemediationHistory:                NewRemediationHistoryClient(cfg),
+		Review:                            NewReviewClient(cfg),
+		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		Risk:                              NewRiskClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		Scan:                              NewScanClient(cfg),
@@ -869,6 +917,8 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		UserHistory:                       NewUserHistoryClient(cfg),
 		UserSetting:                       NewUserSettingClient(cfg),
 		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Vulnerability:                     NewVulnerabilityClient(cfg),
+		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
 	}, nil
 }
@@ -925,6 +975,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		File:                              NewFileClient(cfg),
 		FileDownloadToken:                 NewFileDownloadTokenClient(cfg),
 		FileHistory:                       NewFileHistoryClient(cfg),
+		Finding:                           NewFindingClient(cfg),
+		FindingControl:                    NewFindingControlClient(cfg),
+		FindingControlHistory:             NewFindingControlHistoryClient(cfg),
+		FindingHistory:                    NewFindingHistoryClient(cfg),
 		Group:                             NewGroupClient(cfg),
 		GroupHistory:                      NewGroupHistoryClient(cfg),
 		GroupMembership:                   NewGroupMembershipClient(cfg),
@@ -973,6 +1027,10 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		ProgramHistory:                    NewProgramHistoryClient(cfg),
 		ProgramMembership:                 NewProgramMembershipClient(cfg),
 		ProgramMembershipHistory:          NewProgramMembershipHistoryClient(cfg),
+		Remediation:                       NewRemediationClient(cfg),
+		RemediationHistory:                NewRemediationHistoryClient(cfg),
+		Review:                            NewReviewClient(cfg),
+		ReviewHistory:                     NewReviewHistoryClient(cfg),
 		Risk:                              NewRiskClient(cfg),
 		RiskHistory:                       NewRiskHistoryClient(cfg),
 		Scan:                              NewScanClient(cfg),
@@ -1009,6 +1067,8 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		UserHistory:                       NewUserHistoryClient(cfg),
 		UserSetting:                       NewUserSettingClient(cfg),
 		UserSettingHistory:                NewUserSettingHistoryClient(cfg),
+		Vulnerability:                     NewVulnerabilityClient(cfg),
+		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
 	}, nil
 }
@@ -1048,19 +1108,21 @@ func (c *Client) Use(hooks ...Hook) {
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
 		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
-		c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.ImpersonationEvent, c.Integration, c.IntegrationHistory,
-		c.InternalPolicy, c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
-		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
-		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
-		c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
+		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
+		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
+		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
+		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Remediation, c.RemediationHistory, c.Review, c.ReviewHistory, c.Risk,
 		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
@@ -1070,7 +1132,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
 		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Vulnerability,
+		c.VulnerabilityHistory, c.Webauthn,
 	} {
 		n.Use(hooks...)
 	}
@@ -1089,19 +1152,21 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
 		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
 		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
-		c.FileDownloadToken, c.FileHistory, c.Group, c.GroupHistory, c.GroupMembership,
-		c.GroupMembershipHistory, c.GroupSetting, c.GroupSettingHistory, c.Hush,
-		c.HushHistory, c.ImpersonationEvent, c.Integration, c.IntegrationHistory,
-		c.InternalPolicy, c.InternalPolicyHistory, c.Invite, c.JobResult, c.JobRunner,
-		c.JobRunnerRegistrationToken, c.JobRunnerToken, c.JobTemplate,
-		c.JobTemplateHistory, c.MappableDomain, c.MappableDomainHistory,
-		c.MappedControl, c.MappedControlHistory, c.Narrative, c.NarrativeHistory,
-		c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership, c.OrgMembershipHistory,
-		c.OrgModule, c.OrgPrice, c.OrgProduct, c.OrgSubscription,
-		c.OrgSubscriptionHistory, c.Organization, c.OrganizationHistory,
-		c.OrganizationSetting, c.OrganizationSettingHistory, c.PasswordResetToken,
-		c.PersonalAccessToken, c.Procedure, c.ProcedureHistory, c.Program,
-		c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory, c.Risk,
+		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
+		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
+		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
+		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
+		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
+		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
+		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
+		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
+		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
+		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
+		c.Program, c.ProgramHistory, c.ProgramMembership, c.ProgramMembershipHistory,
+		c.Remediation, c.RemediationHistory, c.Review, c.ReviewHistory, c.Risk,
 		c.RiskHistory, c.Scan, c.ScanHistory, c.ScheduledJob, c.ScheduledJobHistory,
 		c.ScheduledJobRun, c.Standard, c.StandardHistory, c.Subcontrol,
 		c.SubcontrolHistory, c.Subprocessor, c.SubprocessorHistory, c.Subscriber,
@@ -1111,7 +1176,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenterHistory, c.TrustCenterSetting, c.TrustCenterSettingHistory,
 		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
 		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
-		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Webauthn,
+		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Vulnerability,
+		c.VulnerabilityHistory, c.Webauthn,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1264,6 +1330,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.FileDownloadToken.mutate(ctx, m)
 	case *FileHistoryMutation:
 		return c.FileHistory.mutate(ctx, m)
+	case *FindingMutation:
+		return c.Finding.mutate(ctx, m)
+	case *FindingControlMutation:
+		return c.FindingControl.mutate(ctx, m)
+	case *FindingControlHistoryMutation:
+		return c.FindingControlHistory.mutate(ctx, m)
+	case *FindingHistoryMutation:
+		return c.FindingHistory.mutate(ctx, m)
 	case *GroupMutation:
 		return c.Group.mutate(ctx, m)
 	case *GroupHistoryMutation:
@@ -1360,6 +1434,14 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.ProgramMembership.mutate(ctx, m)
 	case *ProgramMembershipHistoryMutation:
 		return c.ProgramMembershipHistory.mutate(ctx, m)
+	case *RemediationMutation:
+		return c.Remediation.mutate(ctx, m)
+	case *RemediationHistoryMutation:
+		return c.RemediationHistory.mutate(ctx, m)
+	case *ReviewMutation:
+		return c.Review.mutate(ctx, m)
+	case *ReviewHistoryMutation:
+		return c.ReviewHistory.mutate(ctx, m)
 	case *RiskMutation:
 		return c.Risk.mutate(ctx, m)
 	case *RiskHistoryMutation:
@@ -1432,6 +1514,10 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.UserSetting.mutate(ctx, m)
 	case *UserSettingHistoryMutation:
 		return c.UserSettingHistory.mutate(ctx, m)
+	case *VulnerabilityMutation:
+		return c.Vulnerability.mutate(ctx, m)
+	case *VulnerabilityHistoryMutation:
+		return c.VulnerabilityHistory.mutate(ctx, m)
 	case *WebauthnMutation:
 		return c.Webauthn.mutate(ctx, m)
 	default:
@@ -1828,6 +1914,120 @@ func (c *ActionPlanClient) QueryPrograms(_m *ActionPlan) *ProgramQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.ProgramActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a ActionPlan.
+func (c *ActionPlanClient) QueryFindings(_m *ActionPlan) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.FindingsTable, actionplan.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a ActionPlan.
+func (c *ActionPlanClient) QueryVulnerabilities(_m *ActionPlan) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.VulnerabilitiesTable, actionplan.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.VulnerabilityActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviews queries the reviews edge of a ActionPlan.
+func (c *ActionPlanClient) QueryReviews(_m *ActionPlan) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.ReviewsTable, actionplan.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.ReviewActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a ActionPlan.
+func (c *ActionPlanClient) QueryRemediations(_m *ActionPlan) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.RemediationsTable, actionplan.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.RemediationActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a ActionPlan.
+func (c *ActionPlanClient) QueryTasks(_m *ActionPlan) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, actionplan.TasksTable, actionplan.TasksPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.ActionPlanTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegrations queries the integrations edge of a ActionPlan.
+func (c *ActionPlanClient) QueryIntegrations(_m *ActionPlan) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(actionplan.Table, actionplan.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, actionplan.IntegrationsTable, actionplan.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationActionPlans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -3944,6 +4144,25 @@ func (c *ControlClient) QueryScans(_m *Control) *ScanQuery {
 	return query
 }
 
+// QueryFindings queries the findings edge of a Control.
+func (c *ControlClient) QueryFindings(_m *Control) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, control.FindingsTable, control.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlImplementations queries the control_implementations edge of a Control.
 func (c *ControlClient) QueryControlImplementations(_m *Control) *ControlImplementationQuery {
 	query := (&ControlImplementationClient{config: c.config}).Query()
@@ -4033,6 +4252,25 @@ func (c *ControlClient) QueryMappedFromControls(_m *Control) *MappedControlQuery
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.MappedControl
 		step.Edge.Schema = schemaConfig.MappedControlFromControls
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlMappings queries the control_mappings edge of a Control.
+func (c *ControlClient) QueryControlMappings(_m *Control) *FindingControlQuery {
+	query := (&FindingControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, control.ControlMappingsTable, control.ControlMappingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -9072,6 +9310,907 @@ func (c *FileHistoryClient) mutate(ctx context.Context, m *FileHistoryMutation) 
 	}
 }
 
+// FindingClient is a client for the Finding schema.
+type FindingClient struct {
+	config
+}
+
+// NewFindingClient returns a client for the Finding from the given config.
+func NewFindingClient(c config) *FindingClient {
+	return &FindingClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `finding.Hooks(f(g(h())))`.
+func (c *FindingClient) Use(hooks ...Hook) {
+	c.hooks.Finding = append(c.hooks.Finding, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `finding.Intercept(f(g(h())))`.
+func (c *FindingClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Finding = append(c.inters.Finding, interceptors...)
+}
+
+// Create returns a builder for creating a Finding entity.
+func (c *FindingClient) Create() *FindingCreate {
+	mutation := newFindingMutation(c.config, OpCreate)
+	return &FindingCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Finding entities.
+func (c *FindingClient) CreateBulk(builders ...*FindingCreate) *FindingCreateBulk {
+	return &FindingCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FindingClient) MapCreateBulk(slice any, setFunc func(*FindingCreate, int)) *FindingCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FindingCreateBulk{err: fmt.Errorf("calling to FindingClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FindingCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FindingCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Finding.
+func (c *FindingClient) Update() *FindingUpdate {
+	mutation := newFindingMutation(c.config, OpUpdate)
+	return &FindingUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FindingClient) UpdateOne(_m *Finding) *FindingUpdateOne {
+	mutation := newFindingMutation(c.config, OpUpdateOne, withFinding(_m))
+	return &FindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FindingClient) UpdateOneID(id string) *FindingUpdateOne {
+	mutation := newFindingMutation(c.config, OpUpdateOne, withFindingID(id))
+	return &FindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Finding.
+func (c *FindingClient) Delete() *FindingDelete {
+	mutation := newFindingMutation(c.config, OpDelete)
+	return &FindingDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FindingClient) DeleteOne(_m *Finding) *FindingDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FindingClient) DeleteOneID(id string) *FindingDeleteOne {
+	builder := c.Delete().Where(finding.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FindingDeleteOne{builder}
+}
+
+// Query returns a query builder for Finding.
+func (c *FindingClient) Query() *FindingQuery {
+	return &FindingQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFinding},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Finding entity by its id.
+func (c *FindingClient) Get(ctx context.Context, id string) (*Finding, error) {
+	return c.Query().Where(finding.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FindingClient) GetX(ctx context.Context, id string) *Finding {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryIntegrations queries the integrations edge of a Finding.
+func (c *FindingClient) QueryIntegrations(_m *Finding) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, finding.IntegrationsTable, finding.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationFindings
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a Finding.
+func (c *FindingClient) QueryVulnerabilities(_m *Finding) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.VulnerabilitiesTable, finding.VulnerabilitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Finding.
+func (c *FindingClient) QueryActionPlans(_m *Finding) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.ActionPlansTable, finding.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.FindingActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Finding.
+func (c *FindingClient) QueryControls(_m *Finding) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, finding.ControlsTable, finding.ControlsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Finding.
+func (c *FindingClient) QuerySubcontrols(_m *Finding) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.SubcontrolsTable, finding.SubcontrolsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Finding.
+func (c *FindingClient) QueryRisks(_m *Finding) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.RisksTable, finding.RisksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Finding.
+func (c *FindingClient) QueryPrograms(_m *Finding) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.ProgramsTable, finding.ProgramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Finding.
+func (c *FindingClient) QueryAssets(_m *Finding) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.AssetsTable, finding.AssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Finding.
+func (c *FindingClient) QueryEntities(_m *Finding) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.EntitiesTable, finding.EntitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Finding.
+func (c *FindingClient) QueryScans(_m *Finding) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.ScansTable, finding.ScansColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Finding.
+func (c *FindingClient) QueryTasks(_m *Finding) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.TasksTable, finding.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a Finding.
+func (c *FindingClient) QueryRemediations(_m *Finding) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.RemediationsTable, finding.RemediationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.Remediation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviews queries the reviews edge of a Finding.
+func (c *FindingClient) QueryReviews(_m *Finding) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.ReviewsTable, finding.ReviewsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Review
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Finding.
+func (c *FindingClient) QueryComments(_m *Finding) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.CommentsTable, finding.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Finding.
+func (c *FindingClient) QueryFiles(_m *Finding) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, finding.FilesTable, finding.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControlMappings queries the control_mappings edge of a Finding.
+func (c *FindingClient) QueryControlMappings(_m *Finding) *FindingControlQuery {
+	query := (&FindingControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(findingcontrol.Table, findingcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, finding.ControlMappingsTable, finding.ControlMappingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.FindingControl
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FindingClient) Hooks() []Hook {
+	hooks := c.hooks.Finding
+	return append(hooks[:len(hooks):len(hooks)], finding.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FindingClient) Interceptors() []Interceptor {
+	inters := c.inters.Finding
+	return append(inters[:len(inters):len(inters)], finding.Interceptors[:]...)
+}
+
+func (c *FindingClient) mutate(ctx context.Context, m *FindingMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FindingCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FindingUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FindingUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FindingDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Finding mutation op: %q", m.Op())
+	}
+}
+
+// FindingControlClient is a client for the FindingControl schema.
+type FindingControlClient struct {
+	config
+}
+
+// NewFindingControlClient returns a client for the FindingControl from the given config.
+func NewFindingControlClient(c config) *FindingControlClient {
+	return &FindingControlClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `findingcontrol.Hooks(f(g(h())))`.
+func (c *FindingControlClient) Use(hooks ...Hook) {
+	c.hooks.FindingControl = append(c.hooks.FindingControl, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `findingcontrol.Intercept(f(g(h())))`.
+func (c *FindingControlClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FindingControl = append(c.inters.FindingControl, interceptors...)
+}
+
+// Create returns a builder for creating a FindingControl entity.
+func (c *FindingControlClient) Create() *FindingControlCreate {
+	mutation := newFindingControlMutation(c.config, OpCreate)
+	return &FindingControlCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FindingControl entities.
+func (c *FindingControlClient) CreateBulk(builders ...*FindingControlCreate) *FindingControlCreateBulk {
+	return &FindingControlCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FindingControlClient) MapCreateBulk(slice any, setFunc func(*FindingControlCreate, int)) *FindingControlCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FindingControlCreateBulk{err: fmt.Errorf("calling to FindingControlClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FindingControlCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FindingControlCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FindingControl.
+func (c *FindingControlClient) Update() *FindingControlUpdate {
+	mutation := newFindingControlMutation(c.config, OpUpdate)
+	return &FindingControlUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FindingControlClient) UpdateOne(_m *FindingControl) *FindingControlUpdateOne {
+	mutation := newFindingControlMutation(c.config, OpUpdateOne, withFindingControl(_m))
+	return &FindingControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FindingControlClient) UpdateOneID(id string) *FindingControlUpdateOne {
+	mutation := newFindingControlMutation(c.config, OpUpdateOne, withFindingControlID(id))
+	return &FindingControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FindingControl.
+func (c *FindingControlClient) Delete() *FindingControlDelete {
+	mutation := newFindingControlMutation(c.config, OpDelete)
+	return &FindingControlDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FindingControlClient) DeleteOne(_m *FindingControl) *FindingControlDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FindingControlClient) DeleteOneID(id string) *FindingControlDeleteOne {
+	builder := c.Delete().Where(findingcontrol.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FindingControlDeleteOne{builder}
+}
+
+// Query returns a query builder for FindingControl.
+func (c *FindingControlClient) Query() *FindingControlQuery {
+	return &FindingControlQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFindingControl},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FindingControl entity by its id.
+func (c *FindingControlClient) Get(ctx context.Context, id string) (*FindingControl, error) {
+	return c.Query().Where(findingcontrol.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FindingControlClient) GetX(ctx context.Context, id string) *FindingControl {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryFinding queries the finding edge of a FindingControl.
+func (c *FindingControlClient) QueryFinding(_m *FindingControl) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(findingcontrol.Table, findingcontrol.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, findingcontrol.FindingTable, findingcontrol.FindingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControl queries the control edge of a FindingControl.
+func (c *FindingControlClient) QueryControl(_m *FindingControl) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(findingcontrol.Table, findingcontrol.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, findingcontrol.ControlTable, findingcontrol.ControlColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandard queries the standard edge of a FindingControl.
+func (c *FindingControlClient) QueryStandard(_m *FindingControl) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(findingcontrol.Table, findingcontrol.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, findingcontrol.StandardTable, findingcontrol.StandardColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.FindingControl
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *FindingControlClient) Hooks() []Hook {
+	hooks := c.hooks.FindingControl
+	return append(hooks[:len(hooks):len(hooks)], findingcontrol.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FindingControlClient) Interceptors() []Interceptor {
+	inters := c.inters.FindingControl
+	return append(inters[:len(inters):len(inters)], findingcontrol.Interceptors[:]...)
+}
+
+func (c *FindingControlClient) mutate(ctx context.Context, m *FindingControlMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FindingControlCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FindingControlUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FindingControlUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FindingControlDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown FindingControl mutation op: %q", m.Op())
+	}
+}
+
+// FindingControlHistoryClient is a client for the FindingControlHistory schema.
+type FindingControlHistoryClient struct {
+	config
+}
+
+// NewFindingControlHistoryClient returns a client for the FindingControlHistory from the given config.
+func NewFindingControlHistoryClient(c config) *FindingControlHistoryClient {
+	return &FindingControlHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `findingcontrolhistory.Hooks(f(g(h())))`.
+func (c *FindingControlHistoryClient) Use(hooks ...Hook) {
+	c.hooks.FindingControlHistory = append(c.hooks.FindingControlHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `findingcontrolhistory.Intercept(f(g(h())))`.
+func (c *FindingControlHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FindingControlHistory = append(c.inters.FindingControlHistory, interceptors...)
+}
+
+// Create returns a builder for creating a FindingControlHistory entity.
+func (c *FindingControlHistoryClient) Create() *FindingControlHistoryCreate {
+	mutation := newFindingControlHistoryMutation(c.config, OpCreate)
+	return &FindingControlHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FindingControlHistory entities.
+func (c *FindingControlHistoryClient) CreateBulk(builders ...*FindingControlHistoryCreate) *FindingControlHistoryCreateBulk {
+	return &FindingControlHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FindingControlHistoryClient) MapCreateBulk(slice any, setFunc func(*FindingControlHistoryCreate, int)) *FindingControlHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FindingControlHistoryCreateBulk{err: fmt.Errorf("calling to FindingControlHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FindingControlHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FindingControlHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FindingControlHistory.
+func (c *FindingControlHistoryClient) Update() *FindingControlHistoryUpdate {
+	mutation := newFindingControlHistoryMutation(c.config, OpUpdate)
+	return &FindingControlHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FindingControlHistoryClient) UpdateOne(_m *FindingControlHistory) *FindingControlHistoryUpdateOne {
+	mutation := newFindingControlHistoryMutation(c.config, OpUpdateOne, withFindingControlHistory(_m))
+	return &FindingControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FindingControlHistoryClient) UpdateOneID(id string) *FindingControlHistoryUpdateOne {
+	mutation := newFindingControlHistoryMutation(c.config, OpUpdateOne, withFindingControlHistoryID(id))
+	return &FindingControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FindingControlHistory.
+func (c *FindingControlHistoryClient) Delete() *FindingControlHistoryDelete {
+	mutation := newFindingControlHistoryMutation(c.config, OpDelete)
+	return &FindingControlHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FindingControlHistoryClient) DeleteOne(_m *FindingControlHistory) *FindingControlHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FindingControlHistoryClient) DeleteOneID(id string) *FindingControlHistoryDeleteOne {
+	builder := c.Delete().Where(findingcontrolhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FindingControlHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for FindingControlHistory.
+func (c *FindingControlHistoryClient) Query() *FindingControlHistoryQuery {
+	return &FindingControlHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFindingControlHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FindingControlHistory entity by its id.
+func (c *FindingControlHistoryClient) Get(ctx context.Context, id string) (*FindingControlHistory, error) {
+	return c.Query().Where(findingcontrolhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FindingControlHistoryClient) GetX(ctx context.Context, id string) *FindingControlHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *FindingControlHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.FindingControlHistory
+	return append(hooks[:len(hooks):len(hooks)], findingcontrolhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FindingControlHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.FindingControlHistory
+	return append(inters[:len(inters):len(inters)], findingcontrolhistory.Interceptors[:]...)
+}
+
+func (c *FindingControlHistoryClient) mutate(ctx context.Context, m *FindingControlHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FindingControlHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FindingControlHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FindingControlHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FindingControlHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown FindingControlHistory mutation op: %q", m.Op())
+	}
+}
+
+// FindingHistoryClient is a client for the FindingHistory schema.
+type FindingHistoryClient struct {
+	config
+}
+
+// NewFindingHistoryClient returns a client for the FindingHistory from the given config.
+func NewFindingHistoryClient(c config) *FindingHistoryClient {
+	return &FindingHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `findinghistory.Hooks(f(g(h())))`.
+func (c *FindingHistoryClient) Use(hooks ...Hook) {
+	c.hooks.FindingHistory = append(c.hooks.FindingHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `findinghistory.Intercept(f(g(h())))`.
+func (c *FindingHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.FindingHistory = append(c.inters.FindingHistory, interceptors...)
+}
+
+// Create returns a builder for creating a FindingHistory entity.
+func (c *FindingHistoryClient) Create() *FindingHistoryCreate {
+	mutation := newFindingHistoryMutation(c.config, OpCreate)
+	return &FindingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of FindingHistory entities.
+func (c *FindingHistoryClient) CreateBulk(builders ...*FindingHistoryCreate) *FindingHistoryCreateBulk {
+	return &FindingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *FindingHistoryClient) MapCreateBulk(slice any, setFunc func(*FindingHistoryCreate, int)) *FindingHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &FindingHistoryCreateBulk{err: fmt.Errorf("calling to FindingHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*FindingHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &FindingHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for FindingHistory.
+func (c *FindingHistoryClient) Update() *FindingHistoryUpdate {
+	mutation := newFindingHistoryMutation(c.config, OpUpdate)
+	return &FindingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *FindingHistoryClient) UpdateOne(_m *FindingHistory) *FindingHistoryUpdateOne {
+	mutation := newFindingHistoryMutation(c.config, OpUpdateOne, withFindingHistory(_m))
+	return &FindingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *FindingHistoryClient) UpdateOneID(id string) *FindingHistoryUpdateOne {
+	mutation := newFindingHistoryMutation(c.config, OpUpdateOne, withFindingHistoryID(id))
+	return &FindingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for FindingHistory.
+func (c *FindingHistoryClient) Delete() *FindingHistoryDelete {
+	mutation := newFindingHistoryMutation(c.config, OpDelete)
+	return &FindingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *FindingHistoryClient) DeleteOne(_m *FindingHistory) *FindingHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *FindingHistoryClient) DeleteOneID(id string) *FindingHistoryDeleteOne {
+	builder := c.Delete().Where(findinghistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &FindingHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for FindingHistory.
+func (c *FindingHistoryClient) Query() *FindingHistoryQuery {
+	return &FindingHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeFindingHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a FindingHistory entity by its id.
+func (c *FindingHistoryClient) Get(ctx context.Context, id string) (*FindingHistory, error) {
+	return c.Query().Where(findinghistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *FindingHistoryClient) GetX(ctx context.Context, id string) *FindingHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *FindingHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.FindingHistory
+	return append(hooks[:len(hooks):len(hooks)], findinghistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *FindingHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.FindingHistory
+	return append(inters[:len(inters):len(inters)], findinghistory.Interceptors[:]...)
+}
+
+func (c *FindingHistoryClient) mutate(ctx context.Context, m *FindingHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&FindingHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&FindingHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&FindingHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&FindingHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown FindingHistory mutation op: %q", m.Op())
+	}
+}
+
 // GroupClient is a client for the Group schema.
 type GroupClient struct {
 	config
@@ -11415,6 +12554,120 @@ func (c *IntegrationClient) QueryEvents(_m *Integration) *EventQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Event
 		step.Edge.Schema = schemaConfig.IntegrationEvents
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Integration.
+func (c *IntegrationClient) QueryFindings(_m *Integration) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.FindingsTable, integration.FindingsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.IntegrationFindings
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a Integration.
+func (c *IntegrationClient) QueryVulnerabilities(_m *Integration) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.VulnerabilitiesTable, integration.VulnerabilitiesPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.IntegrationVulnerabilities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviews queries the reviews edge of a Integration.
+func (c *IntegrationClient) QueryReviews(_m *Integration) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.ReviewsTable, integration.ReviewsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.IntegrationReviews
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a Integration.
+func (c *IntegrationClient) QueryRemediations(_m *Integration) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.RemediationsTable, integration.RemediationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.IntegrationRemediations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Integration.
+func (c *IntegrationClient) QueryTasks(_m *Integration) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.TasksTable, integration.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Integration.
+func (c *IntegrationClient) QueryActionPlans(_m *Integration) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, integration.ActionPlansTable, integration.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.IntegrationActionPlans
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -20243,6 +21496,1097 @@ func (c *ProgramMembershipHistoryClient) mutate(ctx context.Context, m *ProgramM
 	}
 }
 
+// RemediationClient is a client for the Remediation schema.
+type RemediationClient struct {
+	config
+}
+
+// NewRemediationClient returns a client for the Remediation from the given config.
+func NewRemediationClient(c config) *RemediationClient {
+	return &RemediationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `remediation.Hooks(f(g(h())))`.
+func (c *RemediationClient) Use(hooks ...Hook) {
+	c.hooks.Remediation = append(c.hooks.Remediation, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `remediation.Intercept(f(g(h())))`.
+func (c *RemediationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Remediation = append(c.inters.Remediation, interceptors...)
+}
+
+// Create returns a builder for creating a Remediation entity.
+func (c *RemediationClient) Create() *RemediationCreate {
+	mutation := newRemediationMutation(c.config, OpCreate)
+	return &RemediationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Remediation entities.
+func (c *RemediationClient) CreateBulk(builders ...*RemediationCreate) *RemediationCreateBulk {
+	return &RemediationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *RemediationClient) MapCreateBulk(slice any, setFunc func(*RemediationCreate, int)) *RemediationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &RemediationCreateBulk{err: fmt.Errorf("calling to RemediationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*RemediationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &RemediationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Remediation.
+func (c *RemediationClient) Update() *RemediationUpdate {
+	mutation := newRemediationMutation(c.config, OpUpdate)
+	return &RemediationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RemediationClient) UpdateOne(_m *Remediation) *RemediationUpdateOne {
+	mutation := newRemediationMutation(c.config, OpUpdateOne, withRemediation(_m))
+	return &RemediationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RemediationClient) UpdateOneID(id string) *RemediationUpdateOne {
+	mutation := newRemediationMutation(c.config, OpUpdateOne, withRemediationID(id))
+	return &RemediationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Remediation.
+func (c *RemediationClient) Delete() *RemediationDelete {
+	mutation := newRemediationMutation(c.config, OpDelete)
+	return &RemediationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RemediationClient) DeleteOne(_m *Remediation) *RemediationDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RemediationClient) DeleteOneID(id string) *RemediationDeleteOne {
+	builder := c.Delete().Where(remediation.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RemediationDeleteOne{builder}
+}
+
+// Query returns a query builder for Remediation.
+func (c *RemediationClient) Query() *RemediationQuery {
+	return &RemediationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRemediation},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Remediation entity by its id.
+func (c *RemediationClient) Get(ctx context.Context, id string) (*Remediation, error) {
+	return c.Query().Where(remediation.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RemediationClient) GetX(ctx context.Context, id string) *Remediation {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryIntegrations queries the integrations edge of a Remediation.
+func (c *RemediationClient) QueryIntegrations(_m *Remediation) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, remediation.IntegrationsTable, remediation.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationRemediations
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Remediation.
+func (c *RemediationClient) QueryFindings(_m *Remediation) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.FindingsTable, remediation.FindingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a Remediation.
+func (c *RemediationClient) QueryVulnerabilities(_m *Remediation) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.VulnerabilitiesTable, remediation.VulnerabilitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Remediation.
+func (c *RemediationClient) QueryActionPlans(_m *Remediation) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, remediation.ActionPlansTable, remediation.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.RemediationActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Remediation.
+func (c *RemediationClient) QueryTasks(_m *Remediation) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.TasksTable, remediation.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Remediation.
+func (c *RemediationClient) QueryControls(_m *Remediation) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.ControlsTable, remediation.ControlsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Remediation.
+func (c *RemediationClient) QuerySubcontrols(_m *Remediation) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.SubcontrolsTable, remediation.SubcontrolsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Remediation.
+func (c *RemediationClient) QueryRisks(_m *Remediation) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.RisksTable, remediation.RisksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Remediation.
+func (c *RemediationClient) QueryPrograms(_m *Remediation) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.ProgramsTable, remediation.ProgramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Remediation.
+func (c *RemediationClient) QueryAssets(_m *Remediation) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.AssetsTable, remediation.AssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Remediation.
+func (c *RemediationClient) QueryEntities(_m *Remediation) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.EntitiesTable, remediation.EntitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviews queries the reviews edge of a Remediation.
+func (c *RemediationClient) QueryReviews(_m *Remediation) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.ReviewsTable, remediation.ReviewsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Review
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Remediation.
+func (c *RemediationClient) QueryComments(_m *Remediation) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.CommentsTable, remediation.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Remediation.
+func (c *RemediationClient) QueryFiles(_m *Remediation) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(remediation.Table, remediation.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, remediation.FilesTable, remediation.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *RemediationClient) Hooks() []Hook {
+	hooks := c.hooks.Remediation
+	return append(hooks[:len(hooks):len(hooks)], remediation.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *RemediationClient) Interceptors() []Interceptor {
+	inters := c.inters.Remediation
+	return append(inters[:len(inters):len(inters)], remediation.Interceptors[:]...)
+}
+
+func (c *RemediationClient) mutate(ctx context.Context, m *RemediationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RemediationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RemediationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RemediationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RemediationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Remediation mutation op: %q", m.Op())
+	}
+}
+
+// RemediationHistoryClient is a client for the RemediationHistory schema.
+type RemediationHistoryClient struct {
+	config
+}
+
+// NewRemediationHistoryClient returns a client for the RemediationHistory from the given config.
+func NewRemediationHistoryClient(c config) *RemediationHistoryClient {
+	return &RemediationHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `remediationhistory.Hooks(f(g(h())))`.
+func (c *RemediationHistoryClient) Use(hooks ...Hook) {
+	c.hooks.RemediationHistory = append(c.hooks.RemediationHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `remediationhistory.Intercept(f(g(h())))`.
+func (c *RemediationHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.RemediationHistory = append(c.inters.RemediationHistory, interceptors...)
+}
+
+// Create returns a builder for creating a RemediationHistory entity.
+func (c *RemediationHistoryClient) Create() *RemediationHistoryCreate {
+	mutation := newRemediationHistoryMutation(c.config, OpCreate)
+	return &RemediationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of RemediationHistory entities.
+func (c *RemediationHistoryClient) CreateBulk(builders ...*RemediationHistoryCreate) *RemediationHistoryCreateBulk {
+	return &RemediationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *RemediationHistoryClient) MapCreateBulk(slice any, setFunc func(*RemediationHistoryCreate, int)) *RemediationHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &RemediationHistoryCreateBulk{err: fmt.Errorf("calling to RemediationHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*RemediationHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &RemediationHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for RemediationHistory.
+func (c *RemediationHistoryClient) Update() *RemediationHistoryUpdate {
+	mutation := newRemediationHistoryMutation(c.config, OpUpdate)
+	return &RemediationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *RemediationHistoryClient) UpdateOne(_m *RemediationHistory) *RemediationHistoryUpdateOne {
+	mutation := newRemediationHistoryMutation(c.config, OpUpdateOne, withRemediationHistory(_m))
+	return &RemediationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *RemediationHistoryClient) UpdateOneID(id string) *RemediationHistoryUpdateOne {
+	mutation := newRemediationHistoryMutation(c.config, OpUpdateOne, withRemediationHistoryID(id))
+	return &RemediationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for RemediationHistory.
+func (c *RemediationHistoryClient) Delete() *RemediationHistoryDelete {
+	mutation := newRemediationHistoryMutation(c.config, OpDelete)
+	return &RemediationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *RemediationHistoryClient) DeleteOne(_m *RemediationHistory) *RemediationHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *RemediationHistoryClient) DeleteOneID(id string) *RemediationHistoryDeleteOne {
+	builder := c.Delete().Where(remediationhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &RemediationHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for RemediationHistory.
+func (c *RemediationHistoryClient) Query() *RemediationHistoryQuery {
+	return &RemediationHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeRemediationHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a RemediationHistory entity by its id.
+func (c *RemediationHistoryClient) Get(ctx context.Context, id string) (*RemediationHistory, error) {
+	return c.Query().Where(remediationhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *RemediationHistoryClient) GetX(ctx context.Context, id string) *RemediationHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *RemediationHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.RemediationHistory
+	return append(hooks[:len(hooks):len(hooks)], remediationhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *RemediationHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.RemediationHistory
+	return append(inters[:len(inters):len(inters)], remediationhistory.Interceptors[:]...)
+}
+
+func (c *RemediationHistoryClient) mutate(ctx context.Context, m *RemediationHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&RemediationHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&RemediationHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&RemediationHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&RemediationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown RemediationHistory mutation op: %q", m.Op())
+	}
+}
+
+// ReviewClient is a client for the Review schema.
+type ReviewClient struct {
+	config
+}
+
+// NewReviewClient returns a client for the Review from the given config.
+func NewReviewClient(c config) *ReviewClient {
+	return &ReviewClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `review.Hooks(f(g(h())))`.
+func (c *ReviewClient) Use(hooks ...Hook) {
+	c.hooks.Review = append(c.hooks.Review, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `review.Intercept(f(g(h())))`.
+func (c *ReviewClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Review = append(c.inters.Review, interceptors...)
+}
+
+// Create returns a builder for creating a Review entity.
+func (c *ReviewClient) Create() *ReviewCreate {
+	mutation := newReviewMutation(c.config, OpCreate)
+	return &ReviewCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Review entities.
+func (c *ReviewClient) CreateBulk(builders ...*ReviewCreate) *ReviewCreateBulk {
+	return &ReviewCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReviewClient) MapCreateBulk(slice any, setFunc func(*ReviewCreate, int)) *ReviewCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReviewCreateBulk{err: fmt.Errorf("calling to ReviewClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReviewCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReviewCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Review.
+func (c *ReviewClient) Update() *ReviewUpdate {
+	mutation := newReviewMutation(c.config, OpUpdate)
+	return &ReviewUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReviewClient) UpdateOne(_m *Review) *ReviewUpdateOne {
+	mutation := newReviewMutation(c.config, OpUpdateOne, withReview(_m))
+	return &ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReviewClient) UpdateOneID(id string) *ReviewUpdateOne {
+	mutation := newReviewMutation(c.config, OpUpdateOne, withReviewID(id))
+	return &ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Review.
+func (c *ReviewClient) Delete() *ReviewDelete {
+	mutation := newReviewMutation(c.config, OpDelete)
+	return &ReviewDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReviewClient) DeleteOne(_m *Review) *ReviewDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReviewClient) DeleteOneID(id string) *ReviewDeleteOne {
+	builder := c.Delete().Where(review.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReviewDeleteOne{builder}
+}
+
+// Query returns a query builder for Review.
+func (c *ReviewClient) Query() *ReviewQuery {
+	return &ReviewQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReview},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Review entity by its id.
+func (c *ReviewClient) Get(ctx context.Context, id string) (*Review, error) {
+	return c.Query().Where(review.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReviewClient) GetX(ctx context.Context, id string) *Review {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryIntegrations queries the integrations edge of a Review.
+func (c *ReviewClient) QueryIntegrations(_m *Review) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, review.IntegrationsTable, review.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationReviews
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Review.
+func (c *ReviewClient) QueryFindings(_m *Review) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.FindingsTable, review.FindingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities queries the vulnerabilities edge of a Review.
+func (c *ReviewClient) QueryVulnerabilities(_m *Review) *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.VulnerabilitiesTable, review.VulnerabilitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Review.
+func (c *ReviewClient) QueryActionPlans(_m *Review) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, review.ActionPlansTable, review.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ReviewActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a Review.
+func (c *ReviewClient) QueryRemediations(_m *Review) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.RemediationsTable, review.RemediationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.Remediation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Review.
+func (c *ReviewClient) QueryControls(_m *Review) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.ControlsTable, review.ControlsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Review.
+func (c *ReviewClient) QuerySubcontrols(_m *Review) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.SubcontrolsTable, review.SubcontrolsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Review.
+func (c *ReviewClient) QueryRisks(_m *Review) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.RisksTable, review.RisksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Review.
+func (c *ReviewClient) QueryPrograms(_m *Review) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.ProgramsTable, review.ProgramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Review.
+func (c *ReviewClient) QueryAssets(_m *Review) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.AssetsTable, review.AssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Review.
+func (c *ReviewClient) QueryEntities(_m *Review) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.EntitiesTable, review.EntitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Review.
+func (c *ReviewClient) QueryTasks(_m *Review) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.TasksTable, review.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviewer queries the reviewer edge of a Review.
+func (c *ReviewClient) QueryReviewer(_m *Review) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, review.ReviewerTable, review.ReviewerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Review
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Review.
+func (c *ReviewClient) QueryComments(_m *Review) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.CommentsTable, review.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Review.
+func (c *ReviewClient) QueryFiles(_m *Review) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(review.Table, review.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, review.FilesTable, review.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *ReviewClient) Hooks() []Hook {
+	hooks := c.hooks.Review
+	return append(hooks[:len(hooks):len(hooks)], review.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReviewClient) Interceptors() []Interceptor {
+	inters := c.inters.Review
+	return append(inters[:len(inters):len(inters)], review.Interceptors[:]...)
+}
+
+func (c *ReviewClient) mutate(ctx context.Context, m *ReviewMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReviewCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReviewUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReviewUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReviewDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Review mutation op: %q", m.Op())
+	}
+}
+
+// ReviewHistoryClient is a client for the ReviewHistory schema.
+type ReviewHistoryClient struct {
+	config
+}
+
+// NewReviewHistoryClient returns a client for the ReviewHistory from the given config.
+func NewReviewHistoryClient(c config) *ReviewHistoryClient {
+	return &ReviewHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `reviewhistory.Hooks(f(g(h())))`.
+func (c *ReviewHistoryClient) Use(hooks ...Hook) {
+	c.hooks.ReviewHistory = append(c.hooks.ReviewHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `reviewhistory.Intercept(f(g(h())))`.
+func (c *ReviewHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.ReviewHistory = append(c.inters.ReviewHistory, interceptors...)
+}
+
+// Create returns a builder for creating a ReviewHistory entity.
+func (c *ReviewHistoryClient) Create() *ReviewHistoryCreate {
+	mutation := newReviewHistoryMutation(c.config, OpCreate)
+	return &ReviewHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of ReviewHistory entities.
+func (c *ReviewHistoryClient) CreateBulk(builders ...*ReviewHistoryCreate) *ReviewHistoryCreateBulk {
+	return &ReviewHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *ReviewHistoryClient) MapCreateBulk(slice any, setFunc func(*ReviewHistoryCreate, int)) *ReviewHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &ReviewHistoryCreateBulk{err: fmt.Errorf("calling to ReviewHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*ReviewHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &ReviewHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for ReviewHistory.
+func (c *ReviewHistoryClient) Update() *ReviewHistoryUpdate {
+	mutation := newReviewHistoryMutation(c.config, OpUpdate)
+	return &ReviewHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *ReviewHistoryClient) UpdateOne(_m *ReviewHistory) *ReviewHistoryUpdateOne {
+	mutation := newReviewHistoryMutation(c.config, OpUpdateOne, withReviewHistory(_m))
+	return &ReviewHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *ReviewHistoryClient) UpdateOneID(id string) *ReviewHistoryUpdateOne {
+	mutation := newReviewHistoryMutation(c.config, OpUpdateOne, withReviewHistoryID(id))
+	return &ReviewHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for ReviewHistory.
+func (c *ReviewHistoryClient) Delete() *ReviewHistoryDelete {
+	mutation := newReviewHistoryMutation(c.config, OpDelete)
+	return &ReviewHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *ReviewHistoryClient) DeleteOne(_m *ReviewHistory) *ReviewHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *ReviewHistoryClient) DeleteOneID(id string) *ReviewHistoryDeleteOne {
+	builder := c.Delete().Where(reviewhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &ReviewHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for ReviewHistory.
+func (c *ReviewHistoryClient) Query() *ReviewHistoryQuery {
+	return &ReviewHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeReviewHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a ReviewHistory entity by its id.
+func (c *ReviewHistoryClient) Get(ctx context.Context, id string) (*ReviewHistory, error) {
+	return c.Query().Where(reviewhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *ReviewHistoryClient) GetX(ctx context.Context, id string) *ReviewHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *ReviewHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.ReviewHistory
+	return append(hooks[:len(hooks):len(hooks)], reviewhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *ReviewHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.ReviewHistory
+	return append(inters[:len(inters):len(inters)], reviewhistory.Interceptors[:]...)
+}
+
+func (c *ReviewHistoryClient) mutate(ctx context.Context, m *ReviewHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&ReviewHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&ReviewHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&ReviewHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&ReviewHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown ReviewHistory mutation op: %q", m.Op())
+	}
+}
+
 // RiskClient is a client for the Risk schema.
 type RiskClient struct {
 	config
@@ -23974,6 +26318,25 @@ func (c *TaskClient) QueryControlImplementations(_m *Task) *ControlImplementatio
 	return query
 }
 
+// QueryActionPlans queries the action_plans edge of a Task.
+func (c *TaskClient) QueryActionPlans(_m *Task) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, task.ActionPlansTable, task.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.ActionPlanTasks
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryEvidence queries the evidence edge of a Task.
 func (c *TaskClient) QueryEvidence(_m *Task) *EvidenceQuery {
 	query := (&EvidenceClient{config: c.config}).Query()
@@ -27573,6 +29936,561 @@ func (c *UserSettingHistoryClient) mutate(ctx context.Context, m *UserSettingHis
 	}
 }
 
+// VulnerabilityClient is a client for the Vulnerability schema.
+type VulnerabilityClient struct {
+	config
+}
+
+// NewVulnerabilityClient returns a client for the Vulnerability from the given config.
+func NewVulnerabilityClient(c config) *VulnerabilityClient {
+	return &VulnerabilityClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vulnerability.Hooks(f(g(h())))`.
+func (c *VulnerabilityClient) Use(hooks ...Hook) {
+	c.hooks.Vulnerability = append(c.hooks.Vulnerability, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vulnerability.Intercept(f(g(h())))`.
+func (c *VulnerabilityClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Vulnerability = append(c.inters.Vulnerability, interceptors...)
+}
+
+// Create returns a builder for creating a Vulnerability entity.
+func (c *VulnerabilityClient) Create() *VulnerabilityCreate {
+	mutation := newVulnerabilityMutation(c.config, OpCreate)
+	return &VulnerabilityCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Vulnerability entities.
+func (c *VulnerabilityClient) CreateBulk(builders ...*VulnerabilityCreate) *VulnerabilityCreateBulk {
+	return &VulnerabilityCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VulnerabilityClient) MapCreateBulk(slice any, setFunc func(*VulnerabilityCreate, int)) *VulnerabilityCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VulnerabilityCreateBulk{err: fmt.Errorf("calling to VulnerabilityClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VulnerabilityCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VulnerabilityCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Vulnerability.
+func (c *VulnerabilityClient) Update() *VulnerabilityUpdate {
+	mutation := newVulnerabilityMutation(c.config, OpUpdate)
+	return &VulnerabilityUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VulnerabilityClient) UpdateOne(_m *Vulnerability) *VulnerabilityUpdateOne {
+	mutation := newVulnerabilityMutation(c.config, OpUpdateOne, withVulnerability(_m))
+	return &VulnerabilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VulnerabilityClient) UpdateOneID(id string) *VulnerabilityUpdateOne {
+	mutation := newVulnerabilityMutation(c.config, OpUpdateOne, withVulnerabilityID(id))
+	return &VulnerabilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Vulnerability.
+func (c *VulnerabilityClient) Delete() *VulnerabilityDelete {
+	mutation := newVulnerabilityMutation(c.config, OpDelete)
+	return &VulnerabilityDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VulnerabilityClient) DeleteOne(_m *Vulnerability) *VulnerabilityDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VulnerabilityClient) DeleteOneID(id string) *VulnerabilityDeleteOne {
+	builder := c.Delete().Where(vulnerability.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VulnerabilityDeleteOne{builder}
+}
+
+// Query returns a query builder for Vulnerability.
+func (c *VulnerabilityClient) Query() *VulnerabilityQuery {
+	return &VulnerabilityQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVulnerability},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Vulnerability entity by its id.
+func (c *VulnerabilityClient) Get(ctx context.Context, id string) (*Vulnerability, error) {
+	return c.Query().Where(vulnerability.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VulnerabilityClient) GetX(ctx context.Context, id string) *Vulnerability {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryIntegrations queries the integrations edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryIntegrations(_m *Vulnerability) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, vulnerability.IntegrationsTable, vulnerability.IntegrationsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.IntegrationVulnerabilities
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFindings queries the findings edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryFindings(_m *Vulnerability) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.FindingsTable, vulnerability.FindingsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryActionPlans queries the action_plans edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryActionPlans(_m *Vulnerability) *ActionPlanQuery {
+	query := (&ActionPlanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(actionplan.Table, actionplan.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, vulnerability.ActionPlansTable, vulnerability.ActionPlansPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.ActionPlan
+		step.Edge.Schema = schemaConfig.VulnerabilityActionPlans
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControls queries the controls edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryControls(_m *Vulnerability) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ControlsTable, vulnerability.ControlsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QuerySubcontrols queries the subcontrols edge of a Vulnerability.
+func (c *VulnerabilityClient) QuerySubcontrols(_m *Vulnerability) *SubcontrolQuery {
+	query := (&SubcontrolClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(subcontrol.Table, subcontrol.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.SubcontrolsTable, vulnerability.SubcontrolsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Subcontrol
+		step.Edge.Schema = schemaConfig.Subcontrol
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRisks queries the risks edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryRisks(_m *Vulnerability) *RiskQuery {
+	query := (&RiskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.RisksTable, vulnerability.RisksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPrograms queries the programs edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryPrograms(_m *Vulnerability) *ProgramQuery {
+	query := (&ProgramClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(program.Table, program.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ProgramsTable, vulnerability.ProgramsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Program
+		step.Edge.Schema = schemaConfig.Program
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssets queries the assets edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryAssets(_m *Vulnerability) *AssetQuery {
+	query := (&AssetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.AssetsTable, vulnerability.AssetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEntities queries the entities edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryEntities(_m *Vulnerability) *EntityQuery {
+	query := (&EntityClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.EntitiesTable, vulnerability.EntitiesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryScans queries the scans edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryScans(_m *Vulnerability) *ScanQuery {
+	query := (&ScanClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(scan.Table, scan.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ScansTable, vulnerability.ScansColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Scan
+		step.Edge.Schema = schemaConfig.Scan
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTasks queries the tasks edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryTasks(_m *Vulnerability) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.TasksTable, vulnerability.TasksColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryRemediations queries the remediations edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryRemediations(_m *Vulnerability) *RemediationQuery {
+	query := (&RemediationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(remediation.Table, remediation.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.RemediationsTable, vulnerability.RemediationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Remediation
+		step.Edge.Schema = schemaConfig.Remediation
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryReviews queries the reviews edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryReviews(_m *Vulnerability) *ReviewQuery {
+	query := (&ReviewClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(review.Table, review.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.ReviewsTable, vulnerability.ReviewsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Review
+		step.Edge.Schema = schemaConfig.Review
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryComments queries the comments edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryComments(_m *Vulnerability) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.CommentsTable, vulnerability.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFiles queries the files edge of a Vulnerability.
+func (c *VulnerabilityClient) QueryFiles(_m *Vulnerability) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(vulnerability.Table, vulnerability.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, vulnerability.FilesTable, vulnerability.FilesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.File
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *VulnerabilityClient) Hooks() []Hook {
+	hooks := c.hooks.Vulnerability
+	return append(hooks[:len(hooks):len(hooks)], vulnerability.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VulnerabilityClient) Interceptors() []Interceptor {
+	inters := c.inters.Vulnerability
+	return append(inters[:len(inters):len(inters)], vulnerability.Interceptors[:]...)
+}
+
+func (c *VulnerabilityClient) mutate(ctx context.Context, m *VulnerabilityMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VulnerabilityCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VulnerabilityUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VulnerabilityUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VulnerabilityDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Vulnerability mutation op: %q", m.Op())
+	}
+}
+
+// VulnerabilityHistoryClient is a client for the VulnerabilityHistory schema.
+type VulnerabilityHistoryClient struct {
+	config
+}
+
+// NewVulnerabilityHistoryClient returns a client for the VulnerabilityHistory from the given config.
+func NewVulnerabilityHistoryClient(c config) *VulnerabilityHistoryClient {
+	return &VulnerabilityHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `vulnerabilityhistory.Hooks(f(g(h())))`.
+func (c *VulnerabilityHistoryClient) Use(hooks ...Hook) {
+	c.hooks.VulnerabilityHistory = append(c.hooks.VulnerabilityHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `vulnerabilityhistory.Intercept(f(g(h())))`.
+func (c *VulnerabilityHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.VulnerabilityHistory = append(c.inters.VulnerabilityHistory, interceptors...)
+}
+
+// Create returns a builder for creating a VulnerabilityHistory entity.
+func (c *VulnerabilityHistoryClient) Create() *VulnerabilityHistoryCreate {
+	mutation := newVulnerabilityHistoryMutation(c.config, OpCreate)
+	return &VulnerabilityHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of VulnerabilityHistory entities.
+func (c *VulnerabilityHistoryClient) CreateBulk(builders ...*VulnerabilityHistoryCreate) *VulnerabilityHistoryCreateBulk {
+	return &VulnerabilityHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *VulnerabilityHistoryClient) MapCreateBulk(slice any, setFunc func(*VulnerabilityHistoryCreate, int)) *VulnerabilityHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &VulnerabilityHistoryCreateBulk{err: fmt.Errorf("calling to VulnerabilityHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*VulnerabilityHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &VulnerabilityHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for VulnerabilityHistory.
+func (c *VulnerabilityHistoryClient) Update() *VulnerabilityHistoryUpdate {
+	mutation := newVulnerabilityHistoryMutation(c.config, OpUpdate)
+	return &VulnerabilityHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *VulnerabilityHistoryClient) UpdateOne(_m *VulnerabilityHistory) *VulnerabilityHistoryUpdateOne {
+	mutation := newVulnerabilityHistoryMutation(c.config, OpUpdateOne, withVulnerabilityHistory(_m))
+	return &VulnerabilityHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *VulnerabilityHistoryClient) UpdateOneID(id string) *VulnerabilityHistoryUpdateOne {
+	mutation := newVulnerabilityHistoryMutation(c.config, OpUpdateOne, withVulnerabilityHistoryID(id))
+	return &VulnerabilityHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for VulnerabilityHistory.
+func (c *VulnerabilityHistoryClient) Delete() *VulnerabilityHistoryDelete {
+	mutation := newVulnerabilityHistoryMutation(c.config, OpDelete)
+	return &VulnerabilityHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *VulnerabilityHistoryClient) DeleteOne(_m *VulnerabilityHistory) *VulnerabilityHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *VulnerabilityHistoryClient) DeleteOneID(id string) *VulnerabilityHistoryDeleteOne {
+	builder := c.Delete().Where(vulnerabilityhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &VulnerabilityHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for VulnerabilityHistory.
+func (c *VulnerabilityHistoryClient) Query() *VulnerabilityHistoryQuery {
+	return &VulnerabilityHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeVulnerabilityHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a VulnerabilityHistory entity by its id.
+func (c *VulnerabilityHistoryClient) Get(ctx context.Context, id string) (*VulnerabilityHistory, error) {
+	return c.Query().Where(vulnerabilityhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *VulnerabilityHistoryClient) GetX(ctx context.Context, id string) *VulnerabilityHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *VulnerabilityHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.VulnerabilityHistory
+	return append(hooks[:len(hooks):len(hooks)], vulnerabilityhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *VulnerabilityHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.VulnerabilityHistory
+	return append(inters[:len(inters):len(inters)], vulnerabilityhistory.Interceptors[:]...)
+}
+
+func (c *VulnerabilityHistoryClient) mutate(ctx context.Context, m *VulnerabilityHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&VulnerabilityHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&VulnerabilityHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&VulnerabilityHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&VulnerabilityHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown VulnerabilityHistory mutation op: %q", m.Op())
+	}
+}
+
 // WebauthnClient is a client for the Webauthn schema.
 type WebauthnClient struct {
 	config
@@ -27738,7 +30656,8 @@ type (
 		DNSVerificationHistory, DocumentData, DocumentDataHistory,
 		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
 		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
-		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		Finding, FindingControl, FindingControlHistory, FindingHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
 		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
 		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
 		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
@@ -27748,16 +30667,18 @@ type (
 		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,
+		RemediationHistory, Review, ReviewHistory, Risk, RiskHistory, Scan,
+		ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
 		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
 		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
 		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
 		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
 		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Hook
+		UserHistory, UserSetting, UserSettingHistory, Vulnerability,
+		VulnerabilityHistory, Webauthn []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
@@ -27768,7 +30689,8 @@ type (
 		DNSVerificationHistory, DocumentData, DocumentDataHistory,
 		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
 		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
-		Group, GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
+		Finding, FindingControl, FindingControlHistory, FindingHistory, Group,
+		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
 		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
 		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
 		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
@@ -27778,16 +30700,18 @@ type (
 		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
-		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Risk, RiskHistory,
-		Scan, ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun,
-		Standard, StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
+		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,
+		RemediationHistory, Review, ReviewHistory, Risk, RiskHistory, Scan,
+		ScanHistory, ScheduledJob, ScheduledJobHistory, ScheduledJobRun, Standard,
+		StandardHistory, Subcontrol, SubcontrolHistory, Subprocessor,
 		SubprocessorHistory, Subscriber, TFASetting, TagDefinition, Task, TaskHistory,
 		Template, TemplateHistory, TrustCenter, TrustCenterCompliance,
 		TrustCenterComplianceHistory, TrustCenterDoc, TrustCenterDocHistory,
 		TrustCenterHistory, TrustCenterSetting, TrustCenterSettingHistory,
 		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
-		UserHistory, UserSetting, UserSettingHistory, Webauthn []ent.Interceptor
+		UserHistory, UserSetting, UserSettingHistory, Vulnerability,
+		VulnerabilityHistory, Webauthn []ent.Interceptor
 	}
 )
 
