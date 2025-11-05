@@ -1,4 +1,3 @@
-
 mutation CreateBulkCSVSubprocessor($input: Upload!) {
   createBulkCSVSubprocessor(input: $input) {
     subprocessors {
@@ -109,6 +108,7 @@ query GetAllSubprocessors {
     }
   }
 }
+
 query GetSubprocessorByID($subprocessorId: ID!) {
   subprocessor(id: $subprocessorId) {
     createdAt
@@ -163,8 +163,13 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
     }
   }
 }
+
 mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
-  updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
+  updateSubprocessor(
+    id: $updateSubprocessorId
+    input: $input
+    logoFile: $logoFile
+  ) {
     subprocessor {
       createdAt
       createdBy
