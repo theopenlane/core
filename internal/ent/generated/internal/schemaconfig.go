@@ -9,6 +9,7 @@ import "context"
 type SchemaConfig struct {
 	APIToken                           string // APIToken table.
 	ActionPlan                         string // ActionPlan table.
+	ActionPlanTasks                    string // ActionPlan-tasks->Task table.
 	ActionPlanHistory                  string // ActionPlanHistory table.
 	Assessment                         string // Assessment table.
 	AssessmentHistory                  string // AssessmentHistory table.
@@ -76,6 +77,12 @@ type SchemaConfig struct {
 	FileSecrets                        string // File-secrets->Hush table.
 	FileDownloadToken                  string // FileDownloadToken table.
 	FileHistory                        string // FileHistory table.
+	Finding                            string // Finding table.
+	FindingActionPlans                 string // Finding-action_plans->ActionPlan table.
+	FindingControls                    string // Finding-controls->Control table.
+	FindingControl                     string // FindingControl table.
+	FindingControlHistory              string // FindingControlHistory table.
+	FindingHistory                     string // FindingHistory table.
 	Group                              string // Group table.
 	GroupEvents                        string // Group-events->Event table.
 	GroupFiles                         string // Group-files->File table.
@@ -93,6 +100,11 @@ type SchemaConfig struct {
 	Integration                        string // Integration table.
 	IntegrationSecrets                 string // Integration-secrets->Hush table.
 	IntegrationEvents                  string // Integration-events->Event table.
+	IntegrationFindings                string // Integration-findings->Finding table.
+	IntegrationVulnerabilities         string // Integration-vulnerabilities->Vulnerability table.
+	IntegrationReviews                 string // Integration-reviews->Review table.
+	IntegrationRemediations            string // Integration-remediations->Remediation table.
+	IntegrationActionPlans             string // Integration-action_plans->ActionPlan table.
 	IntegrationHistory                 string // IntegrationHistory table.
 	InternalPolicy                     string // InternalPolicy table.
 	InternalPolicyBlockedGroups        string // InternalPolicy-blocked_groups->Group table.
@@ -179,6 +191,12 @@ type SchemaConfig struct {
 	ProgramHistory                     string // ProgramHistory table.
 	ProgramMembership                  string // ProgramMembership table.
 	ProgramMembershipHistory           string // ProgramMembershipHistory table.
+	Remediation                        string // Remediation table.
+	RemediationActionPlans             string // Remediation-action_plans->ActionPlan table.
+	RemediationHistory                 string // RemediationHistory table.
+	Review                             string // Review table.
+	ReviewActionPlans                  string // Review-action_plans->ActionPlan table.
+	ReviewHistory                      string // ReviewHistory table.
 	Risk                               string // Risk table.
 	RiskBlockedGroups                  string // Risk-blocked_groups->Group table.
 	RiskEditors                        string // Risk-editors->Group table.
@@ -242,6 +260,9 @@ type SchemaConfig struct {
 	UserSetting                        string // UserSetting table.
 	UserSettingFiles                   string // UserSetting-files->File table.
 	UserSettingHistory                 string // UserSettingHistory table.
+	Vulnerability                      string // Vulnerability table.
+	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
+	VulnerabilityHistory               string // VulnerabilityHistory table.
 	Webauthn                           string // Webauthn table.
 }
 

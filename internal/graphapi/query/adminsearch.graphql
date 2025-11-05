@@ -53,6 +53,11 @@ query AdminSearch($query: String!) {
           systemInternalID
           actionPlanKindName
           actionPlanKindID
+          title
+          description
+          blockerReason
+          metadata
+          rawPayload
           source
         }
       }
@@ -422,6 +427,49 @@ query AdminSearch($query: String!) {
           metadata
           storageRegion
           storageProvider
+        }
+      }
+    }
+    findings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          externalID
+          externalOwnerID
+          source
+          resourceName
+          displayName
+          state
+          category
+          categories
+          findingClass
+          severity
+          priority
+          assessmentID
+          description
+          recommendation
+          recommendedActions
+          references
+          stepsToReproduce
+          targets
+          targetDetails
+          vector
+          status
+          externalURI
+          metadata
+          rawPayload
         }
       }
     }
@@ -809,6 +857,73 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    remediations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          externalID
+          externalOwnerID
+          title
+          state
+          intent
+          summary
+          explanation
+          instructions
+          ownerReference
+          repositoryURI
+          pullRequestURI
+          ticketReference
+          error
+          source
+          externalURI
+          metadata
+        }
+      }
+    }
+    reviews {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          externalID
+          externalOwnerID
+          title
+          state
+          category
+          classification
+          summary
+          details
+          reporter
+          reviewerID
+          source
+          externalURI
+          metadata
+          rawPayload
+        }
+      }
+    }
     risks {
       totalCount
       pageInfo {
@@ -1134,6 +1249,42 @@ query AdminSearch($query: String!) {
           id
           tags
           userID
+        }
+      }
+    }
+    vulnerabilities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          externalOwnerID
+          externalID
+          cveID
+          source
+          displayName
+          category
+          severity
+          priority
+          status
+          summary
+          description
+          vector
+          references
+          impacts
+          externalURI
+          metadata
+          rawPayload
         }
       }
     }

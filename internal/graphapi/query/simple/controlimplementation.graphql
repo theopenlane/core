@@ -1,6 +1,5 @@
-
-mutation CreateBulkCSVControlImplementation($input: Upload!) {
-  createBulkCSVControlImplementation(input: $input) {
+mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
+  createBulkControlImplementation(input: $input) {
     controlImplementations {
       createdAt
       createdBy
@@ -25,8 +24,8 @@ mutation CreateBulkCSVControlImplementation($input: Upload!) {
   }
 }
 
-mutation CreateBulkControlImplementation($input: [CreateControlImplementationInput!]) {
-  createBulkControlImplementation(input: $input) {
+mutation CreateBulkCSVControlImplementation($input: Upload!) {
+  createBulkCSVControlImplementation(input: $input) {
     controlImplementations {
       createdAt
       createdBy
@@ -131,6 +130,7 @@ query GetAllControlImplementations {
     }
   }
 }
+
 query GetControlImplementationByID($controlImplementationId: ID!) {
   controlImplementation(id: $controlImplementationId) {
     createdAt
@@ -203,6 +203,7 @@ query GetControlImplementations($first: Int, $last: Int, $where: ControlImplemen
     }
   }
 }
+
 mutation UpdateControlImplementation($updateControlImplementationId: ID!, $input: UpdateControlImplementationInput!) {
   updateControlImplementation(id: $updateControlImplementationId, input: $input) {
     controlImplementation {

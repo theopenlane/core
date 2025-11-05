@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/actionplan"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
@@ -496,6 +497,21 @@ func (_c *TaskCreate) AddControlImplementations(v ...*ControlImplementation) *Ta
 	return _c.AddControlImplementationIDs(ids...)
 }
 
+// AddActionPlanIDs adds the "action_plans" edge to the ActionPlan entity by IDs.
+func (_c *TaskCreate) AddActionPlanIDs(ids ...string) *TaskCreate {
+	_c.mutation.AddActionPlanIDs(ids...)
+	return _c
+}
+
+// AddActionPlans adds the "action_plans" edges to the ActionPlan entity.
+func (_c *TaskCreate) AddActionPlans(v ...*ActionPlan) *TaskCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddActionPlanIDs(ids...)
+}
+
 // AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
 func (_c *TaskCreate) AddEvidenceIDs(ids ...string) *TaskCreate {
 	_c.mutation.AddEvidenceIDs(ids...)
@@ -968,6 +984,23 @@ func (_c *TaskCreate) createSpec() (*Task, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ControlImplementationTasks
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ActionPlansIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2M,
+			Inverse: true,
+			Table:   task.ActionPlansTable,
+			Columns: task.ActionPlansPrimaryKey,
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(actionplan.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.ActionPlanTasks
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

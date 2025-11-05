@@ -299,8 +299,12 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"custom_type_enum_subcontrols",
+	"finding_subcontrols",
 	"program_subcontrols",
+	"remediation_subcontrols",
+	"review_subcontrols",
 	"user_subcontrols",
+	"vulnerability_subcontrols",
 }
 
 var (

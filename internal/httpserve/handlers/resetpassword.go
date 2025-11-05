@@ -31,6 +31,10 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// setup viewer context
 	ctxWithToken := token.NewContextWithResetToken(ctx.Request().Context(), req.Token)
 

@@ -1073,6 +1073,44 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	}, nil
 }
 
+// bulkCreateFinding uses the CreateBulk function to create multiple Finding entities
+func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*generated.CreateFindingInput) (*model.FindingBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.FindingCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Finding.Create().SetInput(*data)
+	}
+
+	res, err := c.Finding.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "finding"})
+	}
+
+	// return response
+	return &model.FindingBulkCreatePayload{
+		Findings: res,
+	}, nil
+}
+
+// bulkCreateFindingControl uses the CreateBulk function to create multiple FindingControl entities
+func (r *mutationResolver) bulkCreateFindingControl(ctx context.Context, input []*generated.CreateFindingControlInput) (*model.FindingControlBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.FindingControlCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.FindingControl.Create().SetInput(*data)
+	}
+
+	res, err := c.FindingControl.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "findingcontrol"})
+	}
+
+	// return response
+	return &model.FindingControlBulkCreatePayload{
+		FindingControls: res,
+	}, nil
+}
+
 // bulkCreateGroup uses the CreateBulk function to create multiple Group entities
 func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generated.CreateGroupInput) (*model.GroupBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -2201,6 +2239,44 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 	}, nil
 }
 
+// bulkCreateRemediation uses the CreateBulk function to create multiple Remediation entities
+func (r *mutationResolver) bulkCreateRemediation(ctx context.Context, input []*generated.CreateRemediationInput) (*model.RemediationBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.RemediationCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Remediation.Create().SetInput(*data)
+	}
+
+	res, err := c.Remediation.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "remediation"})
+	}
+
+	// return response
+	return &model.RemediationBulkCreatePayload{
+		Remediations: res,
+	}, nil
+}
+
+// bulkCreateReview uses the CreateBulk function to create multiple Review entities
+func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*generated.CreateReviewInput) (*model.ReviewBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.ReviewCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Review.Create().SetInput(*data)
+	}
+
+	res, err := c.Review.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "review"})
+	}
+
+	// return response
+	return &model.ReviewBulkCreatePayload{
+		Reviews: res,
+	}, nil
+}
+
 // bulkCreateRisk uses the CreateBulk function to create multiple Risk entities
 func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generated.CreateRiskInput) (*model.RiskBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -3096,5 +3172,24 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 
 	return &model.UserSettingBulkDeletePayload{
 		DeletedIDs: deletedIDs,
+	}, nil
+}
+
+// bulkCreateVulnerability uses the CreateBulk function to create multiple Vulnerability entities
+func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []*generated.CreateVulnerabilityInput) (*model.VulnerabilityBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.VulnerabilityCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.Vulnerability.Create().SetInput(*data)
+	}
+
+	res, err := c.Vulnerability.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "vulnerability"})
+	}
+
+	// return response
+	return &model.VulnerabilityBulkCreatePayload{
+		Vulnerabilities: res,
 	}, nil
 }

@@ -21,7 +21,7 @@ var (
 	errNoPaymentMethodAttached = errors.New("A valid payment method is required to create tokens. Contact your organization admin to add one in billing.") //nolint:staticcheck,revive
 )
 
-// RequirePaymentMethod makes sure the organization has a payment mehod ( card or any other)
+// RequirePaymentMethod makes sure the organization has a payment method ( card or any other)
 // added to stripe already
 func RequirePaymentMethod() privacy.MutationRuleFunc {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {

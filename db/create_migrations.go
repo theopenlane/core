@@ -59,7 +59,7 @@ func main() {
 	// "connected database is not clean: found table"
 	// it means it's likely hitting a connection limit issue and you need
 	// to increase the max connections
-	maxConnections := 20
+	maxConnections := 40
 
 	tf, err := testutils.GetPostgresDockerTest(pgDBURI, 5*time.Minute, maxConnections)
 	if err != nil {

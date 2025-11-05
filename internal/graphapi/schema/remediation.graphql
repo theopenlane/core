@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up remediation by ID
+    """
+     remediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+    ):  Remediation!
+}
+
+extend type Mutation{
+    """
+    Create a new remediation
+    """
+    createRemediation(
+        """
+        values of the remediation
+        """
+        input: CreateRemediationInput!
+    ): RemediationCreatePayload!
+    """
+    Create multiple new remediations
+    """
+    createBulkRemediation(
+        """
+        values of the remediation
+        """
+        input: [CreateRemediationInput!]
+    ): RemediationBulkCreatePayload!
+    """
+    Create multiple new remediations via file upload
+    """
+    createBulkCSVRemediation(
+        """
+        csv file containing values of the remediation
+        """
+        input: Upload!
+    ): RemediationBulkCreatePayload!
+    """
+    Update an existing remediation
+    """
+    updateRemediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+        """
+        New values for the remediation
+        """
+        input: UpdateRemediationInput!
+    ): RemediationUpdatePayload!
+    """
+    Delete an existing remediation
+    """
+    deleteRemediation(
+        """
+        ID of the remediation
+        """
+        id: ID!
+    ): RemediationDeletePayload!
+}
+
+"""
+Return response for createRemediation mutation
+"""
+type RemediationCreatePayload {
+    """
+    Created remediation
+    """
+    remediation: Remediation!
+}
+
+"""
+Return response for updateRemediation mutation
+"""
+type RemediationUpdatePayload {
+    """
+    Updated remediation
+    """
+    remediation: Remediation!
+}
+
+"""
+Return response for deleteRemediation mutation
+"""
+type RemediationDeletePayload {
+    """
+    Deleted remediation ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkRemediation mutation
+"""
+type RemediationBulkCreatePayload {
+    """
+    Created remediations
+    """
+    remediations: [Remediation!]
+}

@@ -46,11 +46,13 @@ type Scan struct {
 	Status enums.ScanStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScanQuery when eager-loading is set.
-	Edges         ScanEdges `json:"edges"`
-	control_scans *string
-	entity_scans  *string
-	risk_scans    *string
-	selectValues  sql.SelectValues
+	Edges               ScanEdges `json:"edges"`
+	control_scans       *string
+	entity_scans        *string
+	finding_scans       *string
+	risk_scans          *string
+	vulnerability_scans *string
+	selectValues        sql.SelectValues
 }
 
 // ScanEdges holds the relations/edges for other nodes in the graph.
@@ -151,7 +153,11 @@ func (*Scan) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case scan.ForeignKeys[1]: // entity_scans
 			values[i] = new(sql.NullString)
-		case scan.ForeignKeys[2]: // risk_scans
+		case scan.ForeignKeys[2]: // finding_scans
+			values[i] = new(sql.NullString)
+		case scan.ForeignKeys[3]: // risk_scans
+			values[i] = new(sql.NullString)
+		case scan.ForeignKeys[4]: // vulnerability_scans
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -266,10 +272,24 @@ func (_m *Scan) assignValues(columns []string, values []any) error {
 			}
 		case scan.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_scans", values[i])
+			} else if value.Valid {
+				_m.finding_scans = new(string)
+				*_m.finding_scans = value.String
+			}
+		case scan.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_scans", values[i])
 			} else if value.Valid {
 				_m.risk_scans = new(string)
 				*_m.risk_scans = value.String
+			}
+		case scan.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_scans", values[i])
+			} else if value.Valid {
+				_m.vulnerability_scans = new(string)
+				*_m.vulnerability_scans = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -21,6 +21,10 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)

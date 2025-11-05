@@ -76,6 +76,10 @@ type Program struct {
 	// The values are being populated by the ProgramQuery when eager-loading is set.
 	Edges                     ProgramEdges `json:"edges"`
 	custom_type_enum_programs *string
+	finding_programs          *string
+	remediation_programs      *string
+	review_programs           *string
+	vulnerability_programs    *string
 	selectValues              sql.SelectValues
 }
 
@@ -347,6 +351,14 @@ func (*Program) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case program.ForeignKeys[0]: // custom_type_enum_programs
 			values[i] = new(sql.NullString)
+		case program.ForeignKeys[1]: // finding_programs
+			values[i] = new(sql.NullString)
+		case program.ForeignKeys[2]: // remediation_programs
+			values[i] = new(sql.NullString)
+		case program.ForeignKeys[3]: // review_programs
+			values[i] = new(sql.NullString)
+		case program.ForeignKeys[4]: // vulnerability_programs
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -526,6 +538,34 @@ func (_m *Program) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.custom_type_enum_programs = new(string)
 				*_m.custom_type_enum_programs = value.String
+			}
+		case program.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field finding_programs", values[i])
+			} else if value.Valid {
+				_m.finding_programs = new(string)
+				*_m.finding_programs = value.String
+			}
+		case program.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field remediation_programs", values[i])
+			} else if value.Valid {
+				_m.remediation_programs = new(string)
+				*_m.remediation_programs = value.String
+			}
+		case program.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field review_programs", values[i])
+			} else if value.Valid {
+				_m.review_programs = new(string)
+				*_m.review_programs = value.String
+			}
+		case program.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field vulnerability_programs", values[i])
+			} else if value.Valid {
+				_m.vulnerability_programs = new(string)
+				*_m.vulnerability_programs = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -114,7 +114,9 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"control_scans",
 	"entity_scans",
+	"finding_scans",
 	"risk_scans",
+	"vulnerability_scans",
 }
 
 var (

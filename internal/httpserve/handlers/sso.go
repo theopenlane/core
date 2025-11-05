@@ -45,6 +45,10 @@ func (h *Handler) SSOLoginHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	orgID := in.OrganizationID
 	if orgID == "" {
 		// if no org ID in query, try to get it from cookie
