@@ -7,6 +7,7 @@ import (
 
 	"entgo.io/ent"
 	"github.com/rs/zerolog"
+	"github.com/samber/lo"
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -15,6 +16,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
@@ -310,21 +312,26 @@ func fetchOrganizationCustomerByOrgSettingID(inv *entitlementInvocation, orgSett
 		stripeCustomerID = *org.StripeCustomerID
 	}
 
+	contact := entitlements.ContactInfo{
+		Email: orgSetting.BillingEmail,
+		Phone: orgSetting.BillingPhone,
+	}
+
+	if address := orgSetting.BillingAddress; address != (models.Address{}) {
+		contact.Line1 = lo.ToPtr(address.Line1)
+		contact.Line2 = lo.ToPtr(address.Line2)
+		contact.City = lo.ToPtr(address.City)
+		contact.State = lo.ToPtr(address.State)
+		contact.Country = lo.ToPtr(address.Country)
+		contact.PostalCode = lo.ToPtr(address.PostalCode)
+	}
+
 	return &entitlements.OrganizationCustomer{
 		OrganizationID:         org.ID,
 		OrganizationName:       org.Name,
 		OrganizationSettingsID: orgSetting.ID,
 		StripeCustomerID:       stripeCustomerID,
-		ContactInfo: entitlements.ContactInfo{
-			Email:      orgSetting.BillingEmail,
-			Phone:      orgSetting.BillingPhone,
-			Line1:      &orgSetting.BillingAddress.Line1,
-			Line2:      &orgSetting.BillingAddress.Line2,
-			City:       &orgSetting.BillingAddress.City,
-			State:      &orgSetting.BillingAddress.State,
-			Country:    &orgSetting.BillingAddress.Country,
-			PostalCode: &orgSetting.BillingAddress.PostalCode,
-		},
+		ContactInfo:            contact,
 	}, nil
 }
 

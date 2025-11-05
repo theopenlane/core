@@ -2,13 +2,13 @@ package soiree
 
 import "context"
 
-// Listener handles an event via the provided event context wrapper.
+// Listener handles an event via the provided event context wrapper
 type Listener func(*EventContext) error
 
-// Hook allows callers to execute logic before or after the main listener.
+// Hook allows callers to execute logic before or after the main listener
 type Hook func(*EventContext) error
 
-// listenerItem stores a listener along with its unique identifier and priority.
+// listenerItem stores a listener along with its unique identifier and priority
 type listenerItem struct {
 	listener  Listener
 	priority  Priority
@@ -16,31 +16,31 @@ type listenerItem struct {
 	postHooks []Hook
 }
 
-// ListenerOption configures listener behaviour.
+// ListenerOption configures listener behavior
 type ListenerOption func(*listenerItem)
 
-// WithPriority sets the priority of a listener.
+// WithPriority sets the priority of a listener
 func WithPriority(priority Priority) ListenerOption {
 	return func(item *listenerItem) {
 		item.priority = priority
 	}
 }
 
-// WithPreHooks registers hook functions that run before the listener.
-// Hooks should only perform lightweight context setup or validation; they must not run business logic.
+// WithPreHooks registers hook functions that run before the listener
 func WithPreHooks(hooks ...Hook) ListenerOption {
 	return func(item *listenerItem) {
 		item.preHooks = append(item.preHooks, hooks...)
 	}
 }
 
-// WithPostHooks registers hook functions that run after the listener.
+// WithPostHooks registers hook functions that run after the listener
 func WithPostHooks(hooks ...Hook) ListenerOption {
 	return func(item *listenerItem) {
 		item.postHooks = append(item.postHooks, hooks...)
 	}
 }
 
+// call executes the listener along with its pre- and post-hooks
 func (item *listenerItem) call(ctx *EventContext) error {
 	for _, hook := range item.preHooks {
 		if hook == nil {
@@ -53,6 +53,10 @@ func (item *listenerItem) call(ctx *EventContext) error {
 	}
 
 	err := item.listener(ctx)
+
+	if event := ctx.Event(); event != nil && event.IsAborted() {
+		return err
+	}
 
 	for _, hook := range item.postHooks {
 		if hook == nil {
@@ -67,7 +71,7 @@ func (item *listenerItem) call(ctx *EventContext) error {
 	return err
 }
 
-// Context bundles the event, payload, and client for a listener.
+// Context bundles the event, payload, and client for a listener
 type EventContext struct {
 	event     Event
 	payload   any
@@ -75,6 +79,7 @@ type EventContext struct {
 	hasClient bool
 }
 
+// newEventContext constructs a new EventContext from the supplied event
 func newEventContext(event Event) *EventContext {
 	ctx := &EventContext{
 		event:   event,
@@ -89,7 +94,7 @@ func newEventContext(event Event) *EventContext {
 	return ctx
 }
 
-// Context returns the underlying request context.
+// Context returns the underlying request context
 func (c *EventContext) Context() context.Context {
 	if c == nil || c.event == nil {
 		return context.Background()
@@ -98,7 +103,7 @@ func (c *EventContext) Context() context.Context {
 	return c.event.Context()
 }
 
-// Event exposes the underlying event.
+// Event exposes the underlying event
 func (c *EventContext) Event() Event {
 	if c == nil {
 		return nil
@@ -107,7 +112,7 @@ func (c *EventContext) Event() Event {
 	return c.event
 }
 
-// Payload returns the raw payload attached to the event.
+// Payload returns the raw payload attached to the event
 func (c *EventContext) Payload() any {
 	if c == nil {
 		return nil
@@ -127,7 +132,7 @@ func (c *EventContext) setPayload(value any) {
 	}
 }
 
-// Client returns the associated client if available.
+// Client returns the associated client if available
 func (c *EventContext) Client() (any, bool) {
 	if c == nil || !c.hasClient {
 		return nil, false
@@ -136,7 +141,7 @@ func (c *EventContext) Client() (any, bool) {
 	return c.client, true
 }
 
-// Properties exposes the underlying property map, ensuring one exists.
+// Properties exposes the underlying property map, ensuring one exists
 func (c *EventContext) Properties() Properties {
 	if c == nil || c.event == nil {
 		return NewProperties()
@@ -145,7 +150,7 @@ func (c *EventContext) Properties() Properties {
 	props := c.event.Properties()
 	if props == nil {
 		// Older callers sometimes left properties unset; hydrate an empty map on demand so helper
-		// methods can safely mutate it and downstream listeners all see the same backing map.
+		// methods can safely mutate it and downstream listeners all see the same backing map
 		props = NewProperties()
 		c.event.SetProperties(props)
 	}
@@ -162,8 +167,7 @@ func (c *EventContext) Property(key string) (any, bool) {
 
 	val, ok := props[key]
 	if !ok || val == nil {
-		// Treat zero values the same way legacy code did—absence and explicit nil should both
-		// short circuit so callers can distinguish “not present” from empty strings.
+		// nil should short circuit so callers can distinguish “not present” from empty strings
 		return nil, false
 	}
 
@@ -185,7 +189,7 @@ func (c *EventContext) PropertyString(key string) (string, bool) {
 	return str, true
 }
 
-// SetProperty mutates a property on the event.
+// SetProperty mutates a property on the event
 func (c *EventContext) SetProperty(key string, value any) {
 	if c == nil {
 		return
@@ -194,7 +198,7 @@ func (c *EventContext) SetProperty(key string, value any) {
 	c.Properties().Set(key, value)
 }
 
-// Abort marks the event as aborted.
+// Abort marks the event as aborted
 func (c *EventContext) Abort() {
 	if c == nil || c.event == nil {
 		return
@@ -203,7 +207,7 @@ func (c *EventContext) Abort() {
 	c.event.SetAborted(true)
 }
 
-// PayloadAs attempts to cast the payload to the requested type.
+// PayloadAs attempts to cast the payload to the requested type
 func PayloadAs[T any](ctx *EventContext) (T, bool) {
 	var zero T
 	if ctx == nil {
@@ -218,9 +222,10 @@ func PayloadAs[T any](ctx *EventContext) (T, bool) {
 	return value, true
 }
 
-// ClientAs attempts to cast the client to the requested type.
+// ClientAs attempts to cast the client to the requested type
 func ClientAs[T any](ctx *EventContext) (T, bool) {
 	var zero T
+
 	if ctx == nil {
 		return zero, false
 	}

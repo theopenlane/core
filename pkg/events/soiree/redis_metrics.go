@@ -7,6 +7,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus/promauto"
 )
 
+// redisMetrics holds Prometheus metrics for Redis-backed Soiree stores
 type redisMetrics struct {
 	redisEventsPersisted  prometheus.Counter
 	redisEventsDequeued   prometheus.Counter
@@ -14,6 +15,7 @@ type redisMetrics struct {
 	redisQueueLength      prometheus.Gauge
 }
 
+// newRedisMetrics constructs a new redisMetrics instance with the provided Prometheus registerer
 func newRedisMetrics(reg prometheus.Registerer) *redisMetrics {
 	return &redisMetrics{
 		redisEventsPersisted: promauto.With(reg).NewCounter(prometheus.CounterOpts{
@@ -35,9 +37,10 @@ func newRedisMetrics(reg prometheus.Registerer) *redisMetrics {
 	}
 }
 
-// Default metrics for production use
+// defaultRedisMetrics holds the default metrics instance used by Redis stores
 var defaultRedisMetrics = newRedisMetrics(prometheus.DefaultRegisterer)
 
+// initQueueLength initializes the redisQueueLength gauge with the current length of the Redis queue
 func (s *RedisStore) initQueueLength() {
 	n, err := s.client.LLen(context.Background(), "soiree:queue").Result()
 	if err == nil {

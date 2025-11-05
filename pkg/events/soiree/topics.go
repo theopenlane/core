@@ -6,6 +6,7 @@ import (
 )
 
 // Topic represents an event channel to which listeners can subscribe
+// check out topics_typed.go for strongly typed topic support
 type Topic struct {
 	// Name signifies the topic's unique identifier
 	Name string
@@ -62,6 +63,7 @@ func (t *Topic) AddListener(id string, listener Listener, opts ...ListenerOption
 	}
 
 	t.listeners[id] = item
+
 	t.addSortedListenerID(id, item.priority)
 }
 
@@ -75,6 +77,7 @@ func (t *Topic) RemoveListener(id string) error {
 	}
 
 	delete(t.listeners, id)
+
 	t.removeSortedListenerID(id)
 
 	return nil

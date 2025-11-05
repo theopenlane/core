@@ -2,19 +2,12 @@ package soiree
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"sync"
 	"sync/atomic"
 	"time"
 
 	"github.com/cenkalti/backoff/v5"
-)
-
-var (
-	errNilEventPool       = errors.New("event pool is nil")
-	errMissingTypedUnwrap = errors.New("soiree: missing unwrap helper for typed topic")
-	errMissingTypedWrap   = errors.New("soiree: missing wrap helper for typed topic")
 )
 
 // EventPool struct is controlling subscribing and unsubscribing listeners to topics, and emitting events to all subscribers

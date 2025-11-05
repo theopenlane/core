@@ -150,6 +150,7 @@ func (p *PondPool) CompletedTasks() int {
 	return uintToInt(p.pool.CompletedTasks())
 }
 
+// uintToInt safely converts a uint64 to an int, capping at math.MaxInt if overflow would occur
 func uintToInt(v uint64) int {
 	if v > uint64(math.MaxInt) {
 		return math.MaxInt

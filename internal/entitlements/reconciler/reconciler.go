@@ -192,7 +192,12 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	if cust.Prices == nil && r.db != nil && r.db.EntConfig != nil {
 		// Mutations that create orgs no longer populate prices inline; seed the defaults here so
 		// the reconciler mirrors the legacy PopulatePricesForOrganizationCustomer behaviour.
-		cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+		useSandbox := false
+
+		modules := &r.db.EntConfig.Modules
+		useSandbox = modules.UseSandbox
+
+		cust.Prices = internalentitlements.TrialMonthlyPrices(useSandbox)
 	}
 
 	// Set metadata for personal organizations

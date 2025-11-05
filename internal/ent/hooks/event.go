@@ -14,6 +14,7 @@ import (
 
 	entgen "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/entx"
@@ -40,7 +41,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			emit := func() {
 				eventID := &EventID{}
 				if op == SoftDeleteOne {
-					eventID, err = parseSoftDeleteEventID(mutation)
+					eventID, err = parseSoftDeleteEventID(ctx, mutation)
 					if err != nil {
 						log.Err(err).Msg("Failed to parse soft delete event ID")
 
@@ -147,18 +148,22 @@ func parseEventID(retVal ent.Value) (*EventID, error) {
 }
 
 // parseSoftDeleteEventID extracts the EventID from a soft delete mutation
-func parseSoftDeleteEventID(mutation ent.Mutation) (*EventID, error) {
-	m, ok := mutation.(*entgen.OrganizationMutation)
+func parseSoftDeleteEventID(ctx context.Context, mutation ent.Mutation) (*EventID, error) {
+	mut, ok := mutation.(utils.GenericMutation)
 	if !ok {
 		return nil, ErrUnableToDetermineEventID
 	}
 
-	id, ok := m.ID()
-	if !ok {
+	ids := getMutationIDs(ctx, mut)
+	if len(ids) == 0 || ids[0] == "" {
 		return nil, ErrUnableToDetermineEventID
 	}
 
-	return &EventID{ID: id}, nil
+	if len(ids) > 1 {
+		log.Warn().Strs("mutation_ids", ids).Msg("Soft delete mutation returned multiple IDs; emitting event for first ID")
+	}
+
+	return &EventID{ID: ids[0]}, nil
 }
 
 // getOperation determines the operation type from the context and mutation
@@ -184,7 +189,7 @@ func getOperation(ctx context.Context, mutation ent.Mutation) string {
 
 // emitEventOn determines whether to emit events for a given mutation
 func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
-	return func(ctx context.Context, m entgen.Mutation) bool {
+	return func(_ context.Context, m entgen.Mutation) bool {
 		if e == nil || m == nil {
 			return false
 		}
@@ -206,7 +211,6 @@ func (e *Eventer) emitEventOn() func(context.Context, entgen.Mutation) bool {
 
 		// Listener registration drives emission: if no subscribers, we avoid creating events altogether
 		// This mirrors the old static allowlist, but removes the need to keep two separate sources of truth in sync
-		_ = ctx
 		listeners, ok := e.listeners[entity]
 		return ok && len(listeners) > 0
 	}
