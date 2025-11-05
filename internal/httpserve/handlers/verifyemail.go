@@ -24,6 +24,10 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// setup viewer context
 	ctxWithToken := token.NewContextWithVerifyToken(ctx.Request().Context(), in.Token)
 

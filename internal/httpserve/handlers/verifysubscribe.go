@@ -26,6 +26,10 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// setup viewer context
 	ctxWithToken := token.NewContextWithVerifyToken(ctx.Request().Context(), in.Token)
 

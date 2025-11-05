@@ -19,6 +19,10 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	out := &models.ForgotPasswordReply{
 		Reply: rout.Reply{
 			Success: true,

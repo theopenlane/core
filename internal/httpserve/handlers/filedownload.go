@@ -42,6 +42,10 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	if h.ObjectStore == nil {
 		return h.InternalServerError(ctx, ErrObjectStoreUnavailable, openapi)
 	}

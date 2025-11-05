@@ -65,7 +65,8 @@ See the [README](/config/README.md) in the `config` directory.
 ### Starting the Server
 
 1. Copy the config, this is in .gitignore so you do not have to worry about
-   accidentally committing secrets
+   accidentally committing secrets. This will be done automatically if it doesn't
+   already exist when starting the api server locally with the Taskfile.
 
    ```bash
    cp ./config/config-dev.example.yaml ./config/.config.yaml
