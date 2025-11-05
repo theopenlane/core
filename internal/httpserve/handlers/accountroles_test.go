@@ -36,6 +36,13 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 			},
 		},
 		{
+			name: "happy path, default roles access",
+			request: models.AccountRolesRequest{
+				ObjectIDs:  []string{testUser1.OrganizationID, testUser1.PersonalOrgID, testUser2.OrganizationID},
+				ObjectType: "organization",
+			},
+		},
+		{
 			name: "happy path, provide roles",
 			request: models.AccountRolesRequest{
 				ObjectID:   testUser1.OrganizationID,
@@ -101,8 +108,13 @@ func (suite *HandlerTestSuite) TestAccountRolesHandler() {
 
 			// if no roles are provided we expect all the roles, adding a number to assume its higher
 			// than our current model has
-			if len(tc.expectedRoles) == 0 {
+			if len(tc.expectedRoles) == 0 && len(tc.request.ObjectIDs) == 0 {
 				assert.Greater(t, len(out.Roles), 5)
+			} else if len(tc.request.ObjectIDs) > 0 {
+				assert.Len(t, out.ObjectRoles, len(tc.request.ObjectIDs))
+				assert.Len(t, out.ObjectRoles[testUser2.OrganizationID], 0)
+				assert.Greater(t, len(out.ObjectRoles[testUser1.OrganizationID]), 5)
+				assert.Greater(t, len(out.ObjectRoles[testUser1.PersonalOrgID]), 5)
 			} else {
 				assert.ElementsMatch(t, tc.expectedRoles, out.Roles)
 			}
