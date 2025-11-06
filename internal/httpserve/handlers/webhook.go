@@ -72,6 +72,10 @@ var (
 		},
 		[]string{"event_type", "status_code"},
 	)
+
+	errPayloadEmpty = errors.New("payload is empty")
+
+	errMissingSecret = errors.New("webhook secret is missing")
 )
 
 func init() {
@@ -87,13 +91,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	req := ctx.Request()
 	res := ctx.Response()
 
-	webhookReq := &models.StripeWebhookRequest{}
-	if err := ctx.Bind(webhookReq); err != nil {
-		webhookResponseCounter.WithLabelValues("query_param_parse_failure", "400").Inc()
-		log.Error().Err(err).Msg("failed to parse query parameters")
-
-		return h.BadRequest(ctx, err, openapi)
-	}
+	webhookReq := &models.StripeWebhookRequest{APIVersion: ctx.QueryParam("api_version")}
 
 	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookDiscardAPIVersion != "" {
 		if webhookReq.APIVersion == h.Entitlements.Config.StripeWebhookDiscardAPIVersion {
@@ -121,7 +119,23 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
+	log.Info().Msgf("version: %s", webhookReq.APIVersion)
+
+	if payload == nil {
+		webhookResponseCounter.WithLabelValues("empty_payload", "400").Inc()
+		log.Error().Msg("empty payload received")
+
+		return h.BadRequest(ctx, errPayloadEmpty, openapi)
+	}
+
 	webhookSecret := h.Entitlements.Config.GetWebhookSecretForVersion(webhookReq.APIVersion)
+
+	if webhookSecret == "" {
+		webhookResponseCounter.WithLabelValues("missing_webhook_secret", "500").Inc()
+		log.Error().Str("api_version", webhookReq.APIVersion).Msg("missing webhook secret for API version")
+
+		return h.InternalServerError(ctx, errMissingSecret, openapi)
+	}
 
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), webhookSecret)
 	if err != nil {
