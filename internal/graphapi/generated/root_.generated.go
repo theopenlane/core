@@ -40,6 +40,7 @@ type ResolverRoot interface {
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
+	Subscription() SubscriptionResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
