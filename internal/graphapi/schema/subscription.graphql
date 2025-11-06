@@ -1,0 +1,6 @@
+type Subscription {
+  """
+  Subscribe to task creation events for a specific user
+  """
+  taskCreated(userID: ID!): Task!
+}

@@ -1845,6 +1845,9 @@ type SubscriberUpdatePayload struct {
 	Subscriber *generated.Subscriber `json:"subscriber"`
 }
 
+type Subscription struct {
+}
+
 // Return response for createTFASetting mutation
 type TFASettingCreatePayload struct {
 	// Created tfaSetting

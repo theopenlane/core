@@ -29,6 +29,14 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input generated.Creat
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
 	}
 
+	// Publish task creation event to subscribers if assignee is set
+	if r.subscriptionManager != nil && input.AssigneeID != nil && *input.AssigneeID != "" {
+		if err := r.subscriptionManager.Publish(*input.AssigneeID, res); err != nil {
+			log.Error().Err(err).Str("task_id", res.ID).Str("assignee_id", *input.AssigneeID).
+				Msg("failed to publish task creation event")
+		}
+	}
+
 	return &model.TaskCreatePayload{
 		Task: res,
 	}, nil

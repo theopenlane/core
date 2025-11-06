@@ -59,13 +59,16 @@ type Resolver struct {
 	// mappable domain that trust center records will resolve to
 	trustCenterCnameTarget   string
 	defaultTrustCenterDomain string
+	// subscription manager for real-time updates
+	subscriptionManager *SubscriptionManager
 }
 
 // NewResolver returns a resolver configured with the given ent client
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
-		db:       db,
-		uploader: u,
+		db:                  db,
+		uploader:            u,
+		subscriptionManager: NewSubscriptionManager(),
 	}
 }
 
