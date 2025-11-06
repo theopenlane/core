@@ -459,6 +459,8 @@ tasks:
     env:
       CORE_AUTHZ_HOSTURL: http://localhost:8080
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    deps:
+      - task: ensure-config-api
     desc: runs the core server in dev mode, assumes all other dependencies are running
     cmds:
       - go run main.go serve --debug --pretty
@@ -597,3 +599,15 @@ tasks:
     cmds:
       - rover install --plugin supergraph@v2.8.2
       - rover install --plugin router@v1.50.0
+
+  ensure-config-api:
+    desc: Ensure local config files exist
+    silent: true
+    cmds:
+      - |
+        if [ ! -f config/.config.yaml ]; then
+          echo "📄 config/.config.yaml not found, copying from config-dev.example.yaml"
+          cp config/config-dev.example.yaml config/.config.yaml
+        else
+          echo "✅ config/.config.yaml already exists"
+        fi

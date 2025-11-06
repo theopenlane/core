@@ -27,6 +27,10 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	var orgID, userID string

@@ -69,6 +69,7 @@ query GetAllTrustCenterSettings {
     }
   }
 }
+
 query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
   trustCenterSetting(id: $trustCenterSettingId) {
     createdAt
@@ -137,8 +138,14 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
     }
   }
 }
+
 mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: UpdateTrustCenterSettingInput!, $logoFile: Upload, $faviconFile: Upload) {
-  updateTrustCenterSetting(id: $updateTrustCenterSettingId, input: $input, logoFile: $logoFile, faviconFile: $faviconFile) {
+  updateTrustCenterSetting(
+    id: $updateTrustCenterSettingId
+    input: $input
+    logoFile: $logoFile
+    faviconFile: $faviconFile
+  ) {
     trustCenterSetting {
       createdAt
       createdBy

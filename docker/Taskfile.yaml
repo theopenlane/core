@@ -69,8 +69,22 @@ tasks:
     vars:
       RIVERBOAT_TAG:
         sh: "uname=$(uname -m); if [ $uname = 'x86_64' ]; then echo 'amd64-latest'; else echo 'arm64-latest'; fi"
+    deps:
+      - task: ensure-config-river
     cmds:
       - "docker compose -f ./docker/docker-compose-riverboat.yml up -d"
+
+  ensure-config-river:
+    desc: Ensure local config files exist
+    silent: true
+    cmds:
+      - |
+        if [ ! -f configs/riverboat/.config.yaml ]; then
+          echo "📄 configs/riverboat/.config.yaml not found, copying from .config.dev.yaml"
+          cp configs/riverboat/.config.dev.yaml configs/riverboat/.config.yaml
+        else
+          echo "✅ configs/riverboat/.config.yaml already exists"
+        fi
 
   riverboat:down:
     dir: ..

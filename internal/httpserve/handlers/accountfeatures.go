@@ -23,6 +23,10 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	reqCtx := ctx.Request().Context()
 
 	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)

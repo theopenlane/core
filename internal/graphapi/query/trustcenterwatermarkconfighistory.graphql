@@ -1,5 +1,3 @@
-
-
 query GetAllTrustCenterWatermarkConfigHistories {
   trustCenterWatermarkConfigHistories {
     totalCount

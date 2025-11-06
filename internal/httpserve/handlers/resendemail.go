@@ -20,6 +20,10 @@ func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// set viewer context
 	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), in.Email)
 

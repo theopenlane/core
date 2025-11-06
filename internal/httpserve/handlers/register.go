@@ -32,6 +32,10 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	if isRegistrationContext(ctx) {
+		return nil
+	}
+
 	// create user
 	input := generated.CreateUserInput{
 		FirstName:         &req.FirstName,
