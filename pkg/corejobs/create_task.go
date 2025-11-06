@@ -105,7 +105,7 @@ func (w *CreateTaskWorker) Work(ctx context.Context, job *river.Job[CreateTaskAr
 
 	// Initialize Openlane client if not already set
 	if w.olClient == nil {
-		cl, err := w.Config.OpenlaneConfig.getOpenlaneClient()
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to create openlane client")
 			return err
