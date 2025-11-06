@@ -31,7 +31,8 @@ auth:
         issuer: ""
         jwksCacheTTL: 300000000000
         jwksEndpoint: ""
-        keys: null
+        keys:
+            default: ""
         kid: ""
         redis:
             blacklistPrefix: 'token:blacklist:'
@@ -186,7 +187,11 @@ jobQueue:
         Middleware: null
         PeriodicJobs: null
         PollOnly: false
-        Queues: null
+        Queues:
+            default:
+                FetchCooldown: 0
+                FetchPollInterval: 0
+                MaxWorkers: 0
         ReindexerSchedule: null
         ReindexerTimeout: 0
         RescueStuckJobsAfter: 0
@@ -295,7 +300,11 @@ ratelimit:
     includeMethod: false
     includePath: false
     keyPrefix: ""
-    options: null
+    options:
+        - expiration: 0
+          flushInterval: 0
+          requests: 500
+          window: 60000000000
     sendRetryAfterHeader: true
 redis:
     address: localhost:6379
@@ -316,13 +325,15 @@ server:
     cacheControl:
         enabled: true
         etagHeaders: null
-        noCacheHeaders: null
+        noCacheHeaders:
+            default: ""
     complexityLimit: 100
     cors:
         allowOrigins: null
         cookieInsecure: false
         enabled: true
-        prefixes: null
+        prefixes:
+            default: []
     csrfProtection:
         cookie: ol.csrf-token
         cookieDomain: ""
@@ -353,7 +364,8 @@ server:
     redirects:
         code: 0
         enabled: true
-        redirects: null
+        redirects:
+            default: ""
     secretManager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
@@ -389,11 +401,16 @@ slack:
 subscription:
     enabled: false
     privateStripeKey: ""
-    stripeBillingPortalSuccessURL: https://console.openlane.com/organization-settings/billing
+    stripeBillingPortalSuccessURL: https://console.theopenlane.io/organization-settings/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
+    stripeWebhookAPIVersion: 2025-10-29.clover
+    stripeWebhookDiscardAPIVersion: ""
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
-    stripeWebhookURL: https://api.openlane.com/v1/stripe/webhook
+    stripeWebhookSecrets:
+        2025-10-29.clover: ""
+        default: ""
+    stripeWebhookURL: https://api.theopenlane.io/stripe/webhook
 totp:
     codeLength: 6
     enabled: true

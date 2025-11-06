@@ -510,7 +510,7 @@ func TestCreateWebhookEndpoint(t *testing.T) {
 		Client: mockStripeClient,
 	}
 
-	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", entitlements.SupportedEventTypeStrings())
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", entitlements.SupportedEventTypeStrings(), stripe.APIVersion, false)
 	c.NoError(err)
 	c.Equal(expectedWebhook, webhook)
 }
@@ -541,7 +541,7 @@ func TestCreateWebhookEndpointDefaultEvents(t *testing.T) {
 		Client: mockStripeClient,
 	}
 
-	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", nil)
+	webhook, err := service.CreateWebhookEndpoint(context.Background(), "https://example.com/webhook", nil, "", false)
 	c.NoError(err)
 	c.Equal(expectedWebhook, webhook)
 }

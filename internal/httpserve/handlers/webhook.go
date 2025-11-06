@@ -27,6 +27,7 @@ import (
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	models "github.com/theopenlane/core/pkg/openapi"
 )
 
 const (
@@ -86,6 +87,32 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	req := ctx.Request()
 	res := ctx.Response()
 
+	webhookReq := &models.StripeWebhookRequest{}
+	if err := ctx.Bind(webhookReq); err != nil {
+		webhookResponseCounter.WithLabelValues("query_param_parse_failure", "400").Inc()
+		log.Error().Err(err).Msg("failed to parse query parameters")
+
+		return h.BadRequest(ctx, err, openapi)
+	}
+
+	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookDiscardAPIVersion != "" {
+		if webhookReq.APIVersion == h.Entitlements.Config.StripeWebhookDiscardAPIVersion {
+			webhookResponseCounter.WithLabelValues("api_version_discarded", "200").Inc()
+			log.Debug().Str("api_version", webhookReq.APIVersion).Msg("webhook with discard API version received, ignoring")
+
+			return h.Success(ctx, "webhook ignored - API version being discarded")
+		}
+	}
+
+	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookAPIVersion != "" {
+		if webhookReq.APIVersion != h.Entitlements.Config.StripeWebhookAPIVersion {
+			webhookResponseCounter.WithLabelValues("api_version_mismatch", "200").Inc()
+			log.Warn().Str("api_version", webhookReq.APIVersion).Str("expected_version", h.Entitlements.Config.StripeWebhookAPIVersion).Msg("webhook with unexpected API version")
+
+			return h.Success(ctx, "webhook ignored - API version mismatch")
+		}
+	}
+
 	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, maxBodyBytes))
 	if err != nil {
 		webhookResponseCounter.WithLabelValues("payload_exceeded", "500").Inc()
@@ -94,10 +121,12 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), h.Entitlements.Config.StripeWebhookSecret)
+	webhookSecret := h.Entitlements.Config.GetWebhookSecretForVersion(webhookReq.APIVersion)
+
+	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), webhookSecret)
 	if err != nil {
 		webhookResponseCounter.WithLabelValues("event_signature_failure", "400").Inc()
-		log.Error().Err(err).Msg("failed to construct event")
+		log.Error().Err(err).Str("api_version", webhookReq.APIVersion).Msg("failed to construct event")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
