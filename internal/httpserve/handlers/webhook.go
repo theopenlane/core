@@ -117,20 +117,22 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	log.Info().Msgf("version: %s", webhookReq.APIVersion)
 
+	errPayloadEmpty := errors.New("payload is empty")
 	if payload == nil {
 		webhookResponseCounter.WithLabelValues("empty_payload", "400").Inc()
 		log.Error().Msg("empty payload received")
 
-		return h.BadRequest(ctx, errors.New("empty payload"), openapi)
+		return h.BadRequest(ctx, errPayloadEmpty, openapi)
 	}
 
 	webhookSecret := h.Entitlements.Config.GetWebhookSecretForVersion(webhookReq.APIVersion)
 
+	errMissingSecret := errors.New("webhook secret is missing")
 	if webhookSecret == "" {
 		webhookResponseCounter.WithLabelValues("missing_webhook_secret", "500").Inc()
 		log.Error().Str("api_version", webhookReq.APIVersion).Msg("missing webhook secret for API version")
 
-		return h.InternalServerError(ctx, errors.New("missing webhook secret"), openapi)
+		return h.InternalServerError(ctx, errMissingSecret, openapi)
 	}
 
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), webhookSecret)
