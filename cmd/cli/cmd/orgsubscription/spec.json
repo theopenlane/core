@@ -1,0 +1,24 @@
+{
+  "name": "organization subscription",
+  "use": "org-subscription",
+  "aliases": ["organization-subscription"],
+  "short": "the subcommands for working with orgSubscriptions",
+  "list": {
+    "method": "GetAllOrgSubscriptions",
+    "root": "orgSubscriptions"
+  },
+  "get": {
+    "method": "GetOrgSubscriptionByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "orgSubscription id to query"},
+    "resultPath": ["orgSubscription"],
+    "listRoot": "orgSubscriptions",
+    "fallbackList": true,
+    "preHook": "orgSubscriptionGet"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Active", "path": ["active"]},
+    {"header": "StripeSubscriptionStatus", "path": ["stripeSubscriptionStatus"]},
+    {"header": "ExpiresAt", "path": ["expiresAt"]}
+  ]
+}

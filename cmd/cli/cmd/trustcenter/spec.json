@@ -1,0 +1,55 @@
+{
+  "name": "trustcenter",
+  "use": "trustcenter",
+  "short": "the subcommands for working with trust centers",
+  "list": {
+    "method": "GetAllTrustCenters",
+    "root": "trustCenters"
+  },
+  "get": {
+    "method": "GetTrustCenterByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center id to query"},
+    "resultPath": ["trustCenter"],
+    "listRoot": "trustCenters",
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTrustCenter",
+    "inputType": "openlaneclient.CreateTrustCenterInput",
+    "resultPath": ["createTrustCenter", "trustCenter"],
+    "fields": [
+      {"flag": {"name": "custom-domain-id", "shorthand": "d", "usage": "custom domain id for the trust center"}, "field": "CustomDomainID", "kind": "string"},
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags associated with the trust center"}, "field": "Tags", "kind": "stringSlice"},
+      {"flag": {"name": "org-id", "shorthand": "o", "usage": "organization id to associate with the trust center"}, "field": "OwnerID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateTrustCenter",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center id to update"},
+    "inputType": "openlaneclient.UpdateTrustCenterInput",
+    "resultPath": ["updateTrustCenter", "trustCenter"],
+    "fields": [
+      {"flag": {"name": "custom-domain-id", "shorthand": "d", "usage": "custom domain id for the trust center"}, "field": "CustomDomainID", "kind": "string"},
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags associated with the trust center"}, "field": "Tags", "kind": "stringSlice"},
+      {"flag": {"name": "append-tags", "shorthand": "a", "usage": "append tags to the trust center"}, "field": "AppendTags", "kind": "stringSlice"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteTrustCenter",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center id to delete"},
+    "resultPath": ["deleteTrustCenter", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Slug", "path": ["slug"]},
+    {"header": "CustomDomainID", "path": ["customDomainID"]},
+    {"header": "OwnerID", "path": ["ownerID"]},
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"},
+    {"header": "CreatedAt", "path": ["createdAt"]},
+    {"header": "UpdatedAt", "path": ["updatedAt"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

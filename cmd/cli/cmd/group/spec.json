@@ -1,0 +1,58 @@
+{
+  "name": "group",
+  "use": "group",
+  "short": "the subcommands for working with groups",
+  "list": {
+    "method": "GetAllGroups",
+    "root": "groups"
+  },
+  "get": {
+    "method": "GetGroupByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group id to query"},
+    "resultPath": ["group"],
+    "listRoot": "groups",
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateGroup",
+    "inputType": "openlaneclient.CreateGroupInput",
+    "resultPath": ["createGroup", "group"],
+    "preHook": "groupCreate",
+    "fields": [
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the group", "required": true}, "kind": "string"},
+      {"flag": {"name": "display-name", "shorthand": "s", "usage": "display name of the group"}, "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the group"}, "kind": "string"},
+      {"flag": {"name": "tags", "usage": "tags associated with the group"}, "kind": "stringSlice"},
+      {"flag": {"name": "private", "shorthand": "p", "usage": "set group to private"}, "kind": "bool"}
+    ]
+  },
+  "update": {
+    "method": "UpdateGroup",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group id to update"},
+    "inputType": "openlaneclient.UpdateGroupInput",
+    "resultPath": ["updateGroup", "group"],
+    "fields": [
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the group"}, "field": "Name", "kind": "string"},
+      {"flag": {"name": "display-name", "shorthand": "s", "usage": "display name of the group"}, "field": "DisplayName", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the group"}, "field": "Description", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteGroup",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group id to delete"},
+    "resultPath": ["deleteGroup", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Name", "path": ["name"]},
+    {"header": "Display Name", "path": ["displayName"]},
+    {"header": "Description", "path": ["description"]},
+    {"header": "Visibility", "path": ["setting", "visibility"]},
+    {"header": "Managed", "path": ["isManaged"]},
+    {"header": "Members", "path": ["members", "totalCount"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

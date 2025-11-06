@@ -31,6 +31,18 @@ func Register(spec CommandSpec) {
 
 	builder := commandBuilder{spec: spec, root: root}
 
+	if spec.Primary != nil {
+		if len(spec.Primary.Flags) > 0 {
+			registerFieldFlags(root, spec.Primary.Flags)
+		}
+
+		if spec.Primary.PreHook != nil {
+			root.RunE = func(c *cobra.Command, _ []string) error {
+				return spec.Primary.PreHook(c.Context(), c)
+			}
+		}
+	}
+
 	if spec.Get != nil {
 		root.AddCommand(builder.getCommand())
 	}
@@ -75,7 +87,30 @@ func (b commandBuilder) getCommand() *cobra.Command {
 		RunE: func(c *cobra.Command, _ []string) error {
 			ctx := c.Context()
 
-			id := cmdpkg.Config.String(getSpec.IDFlag.Name)
+			var (
+				client  *openlaneclient.OpenlaneClient
+				cleanup func()
+				err     error
+			)
+
+			if getSpec.PreHook != nil {
+				client, cleanup, err = acquireClient(ctx)
+				if err != nil {
+					return err
+				}
+
+				defer cleanup()
+
+				handled, out, hookErr := getSpec.PreHook(ctx, c, client)
+				if hookErr != nil {
+					return hookErr
+				}
+				if handled {
+					return renderOutput(c, out, b.getColumns(false))
+				}
+			}
+
+			id := strings.TrimSpace(cmdpkg.Config.String(getSpec.IDFlag.Name))
 			if id == "" {
 				if !getSpec.FallbackList || b.spec.List == nil {
 					return cmdpkg.NewRequiredFieldMissingError(fmt.Sprintf("%s id", b.spec.Name))
@@ -84,12 +119,13 @@ func (b commandBuilder) getCommand() *cobra.Command {
 				return b.executeList(ctx, c)
 			}
 
-			client, cleanup, err := acquireClient(ctx)
-			if err != nil {
-				return err
+			if client == nil {
+				client, cleanup, err = acquireClient(ctx)
+				if err != nil {
+					return err
+				}
+				defer cleanup()
 			}
-
-			defer cleanup()
 
 			out, err := b.executeGet(ctx, c, client, id)
 			if err != nil {
@@ -104,6 +140,10 @@ func (b commandBuilder) getCommand() *cobra.Command {
 		cmd.Flags().StringP(getSpec.IDFlag.Name, getSpec.IDFlag.Shorthand, "", getSpec.IDFlag.Usage)
 	} else {
 		cmd.Flags().String(getSpec.IDFlag.Name, "", getSpec.IDFlag.Usage)
+	}
+
+	if len(getSpec.Flags) > 0 {
+		registerFieldFlags(cmd, getSpec.Flags)
 	}
 
 	return cmd
@@ -173,6 +213,16 @@ func (b commandBuilder) updateCommand() *cobra.Command {
 
 			defer cleanup()
 
+			if updateSpec.PreHook != nil {
+				handled, out, hookErr := updateSpec.PreHook(ctx, c, client)
+				if hookErr != nil {
+					return hookErr
+				}
+				if handled {
+					return renderOutput(c, out, b.getColumns(false))
+				}
+			}
+
 			id := cmdpkg.Config.String(updateSpec.IDFlag.Name)
 			if strings.TrimSpace(id) == "" {
 				return cmdpkg.NewRequiredFieldMissingError(fmt.Sprintf("%s id", b.spec.Name))
@@ -222,6 +272,16 @@ func (b commandBuilder) deleteCommand() *cobra.Command {
 			}
 
 			defer cleanup()
+
+			if deleteSpec.PreHook != nil {
+				handled, out, hookErr := deleteSpec.PreHook(ctx, c, client)
+				if hookErr != nil {
+					return hookErr
+				}
+				if handled {
+					return renderOutput(c, out, b.getColumns(true))
+				}
+			}
 
 			id := cmdpkg.Config.String(deleteSpec.IDFlag.Name)
 			if strings.TrimSpace(id) == "" {
@@ -346,10 +406,21 @@ func registerFieldFlags(cmd *cobra.Command, fields []FieldSpec) {
 				cmd.Flags().String(field.Flag.Name, field.Flag.Default, field.Flag.Usage)
 			}
 		case ValueStringSlice:
+			defaults := []string{}
+			if field.Flag.Default != "" {
+				raw := strings.Split(field.Flag.Default, ",")
+				for _, item := range raw {
+					trimmed := strings.TrimSpace(item)
+					if trimmed != "" {
+						defaults = append(defaults, trimmed)
+					}
+				}
+			}
+
 			if field.Flag.Shorthand != "" {
-				cmd.Flags().StringSliceP(field.Flag.Name, field.Flag.Shorthand, []string{}, field.Flag.Usage)
+				cmd.Flags().StringSliceP(field.Flag.Name, field.Flag.Shorthand, defaults, field.Flag.Usage)
 			} else {
-				cmd.Flags().StringSlice(field.Flag.Name, []string{}, field.Flag.Usage)
+				cmd.Flags().StringSlice(field.Flag.Name, defaults, field.Flag.Usage)
 			}
 		case ValueBool:
 			defaultBool := false
@@ -380,6 +451,21 @@ func registerFieldFlags(cmd *cobra.Command, fields []FieldSpec) {
 				cmd.Flags().DurationP(field.Flag.Name, field.Flag.Shorthand, defaultDuration, field.Flag.Usage)
 			} else {
 				cmd.Flags().Duration(field.Flag.Name, defaultDuration, field.Flag.Usage)
+			}
+		case ValueInt:
+			defaultInt := int64(0)
+			if field.Flag.Default != "" {
+				parsed, err := strconv.ParseInt(field.Flag.Default, 10, 64)
+				if err != nil {
+					panic(fmt.Sprintf("invalid integer default for flag %s: %v", field.Flag.Name, err))
+				}
+				defaultInt = parsed
+			}
+
+			if field.Flag.Shorthand != "" {
+				cmd.Flags().Int64P(field.Flag.Name, field.Flag.Shorthand, defaultInt, field.Flag.Usage)
+			} else {
+				cmd.Flags().Int64(field.Flag.Name, defaultInt, field.Flag.Usage)
 			}
 		}
 	}
@@ -690,6 +776,16 @@ func buildInput(fields []FieldSpec, inputType reflect.Type, cmd *cobra.Command) 
 					raw = duration
 				}
 			}
+		case ValueInt:
+			rawInt := cmdpkg.Config.Int64(field.Flag.Name)
+			if cmd.Flags().Changed(field.Flag.Name) || cmdpkg.Config.Exists(field.Flag.Name) {
+				set = true
+				if field.Parser != nil {
+					raw, err = field.Parser(rawInt)
+				} else {
+					raw = rawInt
+				}
+			}
 		default:
 			return nil, fmt.Errorf("unsupported field kind for %s", field.Flag.Name)
 		}
@@ -703,6 +799,10 @@ func buildInput(fields []FieldSpec, inputType reflect.Type, cmd *cobra.Command) 
 				return nil, cmdpkg.NewRequiredFieldMissingError(field.Flag.Name)
 			}
 
+			continue
+		}
+
+		if field.Field == "" {
 			continue
 		}
 

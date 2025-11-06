@@ -1,0 +1,11 @@
+{
+  "name": "switch context",
+  "use": "switch",
+  "short": "switch organization contexts",
+  "primary": {
+    "fields": [
+      {"flag": {"name": "target-org", "shorthand": "t", "usage": "target organization to switch to", "required": true}, "kind": "string"}
+    ],
+    "preHook": "switchContext"
+  }
+}

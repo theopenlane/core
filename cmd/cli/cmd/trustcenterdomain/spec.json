@@ -1,0 +1,21 @@
+{
+  "name": "trust center domain",
+  "use": "trust-center-domain",
+  "aliases": ["trustcenterdomain"],
+  "short": "manage trust center custom domains",
+  "create": {
+    "method": "CreateTrustCenterDomain",
+    "inputType": "openlaneclient.CreateTrustCenterDomainInput",
+    "resultPath": ["createTrustCenterDomain", "customDomain"],
+    "fields": [
+      {"flag": {"name": "cname-record", "shorthand": "c", "usage": "CNAME record name for the custom domain", "required": true}, "field": "CnameRecord", "kind": "string"},
+      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center ID to associate the domain with", "required": true}, "field": "TrustCenterID", "kind": "string"}
+    ]
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "CNAME", "path": ["cnameRecord"]},
+    {"header": "DNSVerificationID", "path": ["dnsVerificationID"]},
+    {"header": "CreatedAt", "path": ["createdAt"]}
+  ]
+}

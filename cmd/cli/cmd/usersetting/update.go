@@ -4,38 +4,17 @@ package usersetting
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"github.com/samber/lo"
-	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var updateCmd = &cobra.Command{
-	Use:   "update",
-	Short: "update an existing user setting",
-	Run: func(cmd *cobra.Command, args []string) {
-		err := update(cmd.Context())
-		cobra.CheckErr(err)
-	},
-}
-
-func init() {
-	command.AddCommand(updateCmd)
-
-	updateCmd.Flags().StringP("id", "i", "", "user setting id to update")
-	updateCmd.Flags().String("status", "", "status of the user - active, inactive, suspended")
-	updateCmd.Flags().StringP("default-org", "o", "", "default organization id")
-	updateCmd.Flags().StringSliceP("tags", "t", []string{}, "tags associated with the user")
-	updateCmd.Flags().BoolP("silence-notifications", "s", false, "silence notifications")
-	updateCmd.Flags().Bool("enable-2fa", false, "enable 2fa authentication")
-	updateCmd.Flags().Bool("disable-2fa", false, "disable 2fa authentication")
-}
-
-// updateValidation validates the input flags provided by the user
+// updateValidation validates the input flags provided by the user.
 func updateValidation() (id string, input openlaneclient.UpdateUserSettingInput, err error) {
 	id = cmd.Config.String("id")
 
@@ -46,7 +25,7 @@ func updateValidation() (id string, input openlaneclient.UpdateUserSettingInput,
 	}
 
 	// set silenced at time if silence flag is set
-	if cmd.Config.Bool("silence") {
+	if cmd.Config.Bool("silence-notifications") {
 		now := time.Now().UTC()
 		input.SilencedAt = &now
 	} else {
@@ -75,36 +54,32 @@ func updateValidation() (id string, input openlaneclient.UpdateUserSettingInput,
 	return id, input, nil
 }
 
-// update an existing user setting
-func update(ctx context.Context) error {
-	// attempt to setup with token, otherwise fall back to JWT with session
-	client, err := cmd.TokenAuth(ctx, cmd.Config)
-	if err != nil || client == nil {
-		// setup http client
-		client, err = cmd.SetupClientWithAuth(ctx)
-		cobra.CheckErr(err)
-		defer cmd.StoreSessionCookies(client)
+// updateUserSetting executes the update mutation with the legacy semantics.
+func updateUserSetting(ctx context.Context, client *openlaneclient.OpenlaneClient) (*openlaneclient.UpdateUserSetting, error) {
+	if client == nil {
+		return nil, fmt.Errorf("client is required")
 	}
 
 	id, input, err := updateValidation()
-	cobra.CheckErr(err)
+	if err != nil {
+		return nil, err
+	}
 
 	if id == "" {
 		// get the user settings id
 		settings, err := client.GetAllUserSettings(ctx)
-		cobra.CheckErr(err)
+		if err != nil {
+			return nil, err
+		}
 
 		// this should never happen, but just in case
 		if len(settings.GetUserSettings().Edges) == 0 {
-			return cmd.ErrNotFound
+			return nil, cmd.ErrNotFound
 		}
 
 		id = settings.GetUserSettings().Edges[0].Node.ID
 	}
 
 	// update the user settings
-	o, err := client.UpdateUserSetting(ctx, id, input)
-	cobra.CheckErr(err)
-
-	return consoleOutput(o)
+	return client.UpdateUserSetting(ctx, id, input)
 }

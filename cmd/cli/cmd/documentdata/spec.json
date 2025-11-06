@@ -1,0 +1,36 @@
+{
+  "name": "document data",
+  "use": "document-data",
+  "short": "the subcommands for working with document data",
+  "get": {
+    "method": "GetDocumentDataByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "document data id to query"},
+    "resultPath": ["documentData"]
+  },
+  "create": {
+    "method": "CreateDocumentData",
+    "inputType": "openlaneclient.CreateDocumentDataInput",
+    "resultPath": ["createDocumentData", "documentData"],
+    "preHook": "documentDataCreate",
+    "fields": [
+      {"flag": {"name": "template-id", "shorthand": "t", "usage": "template id to use for the document data", "required": true}, "kind": "string"},
+      {"flag": {"name": "data", "shorthand": "d", "usage": "path to JSON data file", "required": true}, "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteDocumentData",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "document data id to delete"},
+    "resultPath": ["deleteDocumentData", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "TemplateID", "path": ["templateID"]},
+    {"header": "Data", "path": ["data"]},
+    {"header": "CreatedAt", "path": ["createdAt"]},
+    {"header": "UpdatedAt", "path": ["updatedAt"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

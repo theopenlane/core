@@ -1,0 +1,64 @@
+{
+  "name": "customdomain",
+  "use": "customdomain",
+  "short": "the subcommands for working with customdomains",
+  "list": {
+    "method": "GetAllCustomDomains",
+    "root": "CustomDomains"
+  },
+  "get": {
+    "method": "GetCustomDomainByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "customdomain id to query"},
+    "resultPath": ["customDomain"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateCustomDomain",
+    "inputType": "openlaneclient.CreateCustomDomainInput",
+    "resultPath": ["createCustomDomain", "customDomain"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the customdomain"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "cnameRecord", "shorthand": "c", "usage": "cname record of the customdomain", "required": true}, "field": "CnameRecord", "kind": "string"},
+    
+      {"flag": {"name": "mappableDomainID", "shorthand": "m", "usage": "mappable domain id of the customdomain", "required": true}, "field": "MappableDomainID", "kind": "string"},
+    
+      {"flag": {"name": "dnsVerificationID", "shorthand": "d", "usage": "dns verification id of the customdomain"}, "field": "DNSVerificationID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateCustomDomain",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "customdomain id to update"},
+    "inputType": "openlaneclient.UpdateCustomDomainInput",
+    "resultPath": ["updateCustomDomain", "customDomain"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the customdomain"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "dnsVerificationID", "shorthand": "d", "usage": "dns verification id of the customdomain"}, "field": "DNSVerificationID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteCustomDomain",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "customdomain id to delete"},
+    "resultPath": ["deleteCustomDomain", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "CnameRecord", "path": ["cnameRecord"]},
+  
+    {"header": "DnsVerificationId", "path": ["dnsVerificationID"]},
+  
+    {"header": "DnsTxtRecord", "path": ["dnsTxtRecord"]},
+  
+    {"header": "DnsTxtValue", "path": ["dnsTxtValue"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

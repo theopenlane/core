@@ -12,6 +12,7 @@ const (
 	ValueStringSlice
 	ValueBool
 	ValueDuration
+	ValueInt
 )
 
 // FlagSpec defines metadata for a cobra flag.
@@ -63,6 +64,8 @@ type GetSpec struct {
 	FallbackList bool
 	Where        *WhereSpec
 	ListRoot     string
+	Flags        []FieldSpec
+	PreHook      GetPreHook
 }
 
 // CreateSpec models the create command behaviour.
@@ -81,6 +84,13 @@ type UpdateSpec struct {
 	InputType  reflect.Type
 	Fields     []FieldSpec
 	ResultPath []string
+	PreHook    UpdatePreHook
+}
+
+// PrimarySpec models behaviour when invoking the resource command directly without subcommands.
+type PrimarySpec struct {
+	Flags   []FieldSpec
+	PreHook PrimaryPreHook
 }
 
 // DeleteSpec models the delete command behaviour.
@@ -89,6 +99,7 @@ type DeleteSpec struct {
 	IDFlag      FlagSpec
 	ResultPath  []string
 	ResultField string
+	PreHook     DeletePreHook
 }
 
 // CommandSpec defines the full lifecycle of a resource command.
@@ -104,4 +115,5 @@ type CommandSpec struct {
 	Delete        *DeleteSpec
 	Columns       []ColumnSpec
 	DeleteColumns []ColumnSpec
+	Primary       *PrimarySpec
 }

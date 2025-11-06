@@ -1,0 +1,64 @@
+{
+  "name": "program member",
+  "use": "program-members",
+  "aliases": ["programmembers"],
+  "short": "manage program members",
+  "list": {
+    "method": "GetAllProgramMemberships",
+    "root": "programMemberships"
+  },
+  "get": {
+    "method": "GetProgramMembershipByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "program membership id to query"},
+    "resultPath": ["programMembership"],
+    "listRoot": "programMemberships",
+    "fallbackList": true,
+    "preHook": "programMembershipGet",
+    "fields": [
+      {"flag": {"name": "program-id", "shorthand": "p", "usage": "program id to filter members"}, "kind": "string"}
+    ]
+  },
+  "create": {
+    "method": "CreateProgramMembership",
+    "inputType": "openlaneclient.CreateProgramMembershipInput",
+    "resultPath": ["createProgramMembership", "programMembership"],
+    "preHook": "programMembershipCreate",
+    "fields": [
+      {"flag": {"name": "program-id", "shorthand": "p", "usage": "program id", "required": true}, "field": "ProgramID", "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "field": "UserID", "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "member role (member, admin)", "default": "member"}, "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateProgramMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "program membership id to update"},
+    "inputType": "openlaneclient.UpdateProgramMembershipInput",
+    "resultPath": ["updateProgramMembership", "programMembership"],
+    "preHook": "programMembershipUpdate",
+    "fields": [
+      {"flag": {"name": "program-id", "shorthand": "p", "usage": "program id", "required": true}, "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "member role (member, admin)", "required": true}, "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteProgramMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "program membership id to delete"},
+    "resultPath": ["deleteProgramMembership", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "programMembershipDelete",
+    "fields": [
+      {"flag": {"name": "program-id", "shorthand": "p", "usage": "program id", "required": true}, "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "kind": "string"}
+    ]
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "ProgramID", "path": ["programID"]},
+    {"header": "UserID", "path": ["userID"]},
+    {"header": "Role", "path": ["role"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

@@ -18,7 +18,11 @@ type LoaderOptions struct {
 	TypeResolver TypeResolver
 	Parsers      map[string]ValueParser
 	Overrides    map[string]SpecOverride
-	CreateHooks  map[string]CreatePreHook
+	CreateHooks  map[string]CreateHookFactory
+	UpdateHooks  map[string]UpdateHookFactory
+	GetHooks     map[string]GetHookFactory
+	PrimaryHooks map[string]PrimaryHookFactory
+	DeleteHooks  map[string]DeleteHookFactory
 }
 
 // SpecOverride mutates a spec after it has been loaded.
@@ -85,7 +89,19 @@ func RegisterFromFS(fsys fs.FS, opts LoaderOptions) error {
 		opts.Parsers = DefaultParsers()
 	}
 	if opts.CreateHooks == nil {
-		opts.CreateHooks = map[string]CreatePreHook{}
+		opts.CreateHooks = map[string]CreateHookFactory{}
+	}
+	if opts.UpdateHooks == nil {
+		opts.UpdateHooks = map[string]UpdateHookFactory{}
+	}
+	if opts.GetHooks == nil {
+		opts.GetHooks = map[string]GetHookFactory{}
+	}
+	if opts.PrimaryHooks == nil {
+		opts.PrimaryHooks = map[string]PrimaryHookFactory{}
+	}
+	if opts.DeleteHooks == nil {
+		opts.DeleteHooks = map[string]DeleteHookFactory{}
 	}
 
 	specs, err := LoadSpecsFromFS(fsys, opts)
@@ -113,6 +129,7 @@ type fileCommandSpec struct {
 	Delete        *fileDeleteSpec  `json:"delete"`
 	Columns       []fileColumnSpec `json:"columns"`
 	DeleteColumns []fileColumnSpec `json:"deleteColumns"`
+	Primary       *filePrimarySpec `json:"primary"`
 }
 
 type fileListSpec struct {
@@ -128,12 +145,14 @@ type fileWhereSpec struct {
 }
 
 type fileGetSpec struct {
-	Method       string         `json:"method"`
-	IDFlag       FlagSpec       `json:"idFlag"`
-	ResultPath   []string       `json:"resultPath"`
-	FallbackList bool           `json:"fallbackList"`
-	Where        *fileWhereSpec `json:"where"`
-	ListRoot     string         `json:"listRoot"`
+	Method       string          `json:"method"`
+	IDFlag       FlagSpec        `json:"idFlag"`
+	ResultPath   []string        `json:"resultPath"`
+	FallbackList bool            `json:"fallbackList"`
+	Where        *fileWhereSpec  `json:"where"`
+	ListRoot     string          `json:"listRoot"`
+	Fields       []fileFieldSpec `json:"fields"`
+	PreHook      string          `json:"preHook"`
 }
 
 type fileCreateSpec struct {
@@ -150,6 +169,7 @@ type fileUpdateSpec struct {
 	InputType  string          `json:"inputType"`
 	Fields     []fileFieldSpec `json:"fields"`
 	ResultPath []string        `json:"resultPath"`
+	PreHook    string          `json:"preHook"`
 }
 
 type fileDeleteSpec struct {
@@ -157,6 +177,7 @@ type fileDeleteSpec struct {
 	IDFlag      FlagSpec `json:"idFlag"`
 	ResultPath  []string `json:"resultPath"`
 	ResultField string   `json:"resultField"`
+	PreHook     string   `json:"preHook"`
 }
 
 type fileFieldSpec struct {
@@ -170,6 +191,11 @@ type fileColumnSpec struct {
 	Header    string   `json:"header"`
 	Path      []string `json:"path"`
 	Formatter string   `json:"formatter"`
+}
+
+type filePrimarySpec struct {
+	Fields  []fileFieldSpec `json:"fields"`
+	PreHook string          `json:"preHook"`
 }
 
 func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
@@ -214,6 +240,24 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 
 			spec.Get.Where = where
 		}
+
+		if len(fileSpec.Get.Fields) > 0 {
+			fields, err := convertFields(fileSpec.Get.Fields, opts.Parsers)
+			if err != nil {
+				return CommandSpec{}, err
+			}
+
+			spec.Get.Flags = fields
+		}
+
+		if fileSpec.Get.PreHook != "" {
+			factory, ok := opts.GetHooks[fileSpec.Get.PreHook]
+			if !ok {
+				return CommandSpec{}, fmt.Errorf("unknown get preHook %q", fileSpec.Get.PreHook)
+			}
+
+			spec.Get.PreHook = factory(spec.Get)
+		}
 	}
 
 	if fileSpec.Create != nil {
@@ -241,12 +285,46 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 			return CommandSpec{}, fmt.Errorf("delete spec for %s missing id flag name", fileSpec.Name)
 		}
 
-		spec.Delete = &DeleteSpec{
+		deleteSpec := &DeleteSpec{
 			Method:      fileSpec.Delete.Method,
 			IDFlag:      fileSpec.Delete.IDFlag,
 			ResultPath:  fileSpec.Delete.ResultPath,
 			ResultField: fileSpec.Delete.ResultField,
 		}
+
+		if fileSpec.Delete.PreHook != "" {
+			factory, ok := opts.DeleteHooks[fileSpec.Delete.PreHook]
+			if !ok {
+				return CommandSpec{}, fmt.Errorf("unknown delete preHook %q", fileSpec.Delete.PreHook)
+			}
+			deleteSpec.PreHook = factory(deleteSpec)
+		}
+
+		spec.Delete = deleteSpec
+	}
+
+	if fileSpec.Primary != nil {
+		primary := &PrimarySpec{}
+
+		if len(fileSpec.Primary.Fields) > 0 {
+			fields, err := convertFields(fileSpec.Primary.Fields, opts.Parsers)
+			if err != nil {
+				return CommandSpec{}, err
+			}
+
+			primary.Flags = fields
+		}
+
+		if fileSpec.Primary.PreHook != "" {
+			factory, ok := opts.PrimaryHooks[fileSpec.Primary.PreHook]
+			if !ok {
+				return CommandSpec{}, fmt.Errorf("unknown primary preHook %q", fileSpec.Primary.PreHook)
+			}
+
+			primary.PreHook = factory(primary)
+		}
+
+		spec.Primary = primary
 	}
 
 	for i, column := range fileSpec.Columns {
@@ -335,11 +413,11 @@ func hydrateMutationSpec(in fileCreateSpec, opts LoaderOptions) (CreateSpec, err
 	}
 
 	if in.PreHook != "" {
-		hook, ok := opts.CreateHooks[in.PreHook]
+		factory, ok := opts.CreateHooks[in.PreHook]
 		if !ok {
 			return CreateSpec{}, fmt.Errorf("unknown create preHook %q", in.PreHook)
 		}
-		spec.PreHook = hook
+		spec.PreHook = factory(&spec)
 	}
 
 	return spec, nil
@@ -356,13 +434,23 @@ func hydrateUpdateSpec(in fileUpdateSpec, opts LoaderOptions) (UpdateSpec, error
 		return UpdateSpec{}, err
 	}
 
-	return UpdateSpec{
+	spec := UpdateSpec{
 		Method:     in.Method,
 		IDFlag:     in.IDFlag,
 		InputType:  inputType,
 		Fields:     fields,
 		ResultPath: in.ResultPath,
-	}, nil
+	}
+
+	if in.PreHook != "" {
+		factory, ok := opts.UpdateHooks[in.PreHook]
+		if !ok {
+			return UpdateSpec{}, fmt.Errorf("unknown update preHook %q", in.PreHook)
+		}
+		spec.PreHook = factory(&spec)
+	}
+
+	return spec, nil
 }
 
 func convertFields(in []fileFieldSpec, parsers map[string]ValueParser) ([]FieldSpec, error) {
@@ -403,6 +491,8 @@ func parseValueKind(kind string) (ValueKind, error) {
 		return ValueBool, nil
 	case "duration":
 		return ValueDuration, nil
+	case "int", "int64", "integer":
+		return ValueInt, nil
 	default:
 		return ValueString, fmt.Errorf("unknown value kind %q", kind)
 	}

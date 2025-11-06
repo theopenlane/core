@@ -1,0 +1,64 @@
+{
+  "name": "trustcentercompliance",
+  "use": "trustcentercompliance",
+  "short": "the subcommands for working with trustcentercompliances",
+  "list": {
+    "method": "GetAllTrustCenterCompliances",
+    "root": "TrustCenterCompliances"
+  },
+  "get": {
+    "method": "GetTrustCenterComplianceByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcentercompliance id to query"},
+    "resultPath": ["trustCenterCompliance"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTrustCenterCompliance",
+    "inputType": "openlaneclient.CreateTrustCenterComplianceInput",
+    "resultPath": ["createTrustCenterCompliance", "trustCenterCompliance"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the trustcentercompliance"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "trustCenterID", "shorthand": "r", "usage": "trust center id of the trustcentercompliance"}, "field": "TrustCenterID", "kind": "string"},
+    
+      {"flag": {"name": "standardID", "shorthand": "s", "usage": "standard id of the trustcentercompliance", "required": true}, "field": "StandardID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateTrustCenterCompliance",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcentercompliance id to update"},
+    "inputType": "openlaneclient.UpdateTrustCenterComplianceInput",
+    "resultPath": ["updateTrustCenterCompliance", "trustCenterCompliance"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the trustcentercompliance"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "trustCenterID", "shorthand": "r", "usage": "trust center id of the trustcentercompliance"}, "field": "TrustCenterID", "kind": "string"},
+    
+      {"flag": {"name": "standardID", "shorthand": "s", "usage": "standard id of the trustcentercompliance"}, "field": "StandardID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteTrustCenterCompliance",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcentercompliance id to delete"},
+    "resultPath": ["deleteTrustCenterCompliance", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "ShortName", "path": ["shortName"]},
+  
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"},
+  
+    {"header": "GoverningBody", "path": ["governingBody"]},
+  
+    {"header": "GoverningBodyLogoUrl", "path": ["governingBodyLogoURL"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

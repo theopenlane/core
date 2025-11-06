@@ -1,0 +1,48 @@
+{
+  "name": "organization-setting",
+  "use": "organizationsetting",
+  "aliases": ["org-setting", "org-settings"],
+  "short": "the subcommands for working with organization settings",
+  "list": {
+    "method": "GetAllOrganizationSettings",
+    "root": "organizationSettings"
+  },
+  "get": {
+    "method": "GetOrganizationSettingByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "organization setting id to retrieve"},
+    "resultPath": ["organizationSetting"],
+    "listRoot": "organizationSettings",
+    "fallbackList": true
+  },
+  "update": {
+    "method": "UpdateOrganizationSetting",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "organization setting id to update"},
+    "inputType": "openlaneclient.UpdateOrganizationSettingInput",
+    "resultPath": ["updateOrganizationSetting", "organizationSetting"],
+    "fields": [
+      {"flag": {"name": "domains", "shorthand": "d", "usage": "domains associated with the org"}, "field": "Domains", "kind": "stringSlice"},
+      {"flag": {"name": "billing-contact", "shorthand": "c", "usage": "billing contact for the org"}, "field": "BillingContact", "kind": "string"},
+      {"flag": {"name": "billing-email", "shorthand": "e", "usage": "billing email for the org"}, "field": "BillingEmail", "kind": "string"},
+      {"flag": {"name": "billing-phone", "shorthand": "p", "usage": "billing phone for the org"}, "field": "BillingPhone", "kind": "string"},
+      {"flag": {"name": "tax-identifier", "shorthand": "x", "usage": "tax identifier for the org"}, "field": "TaxIdentifier", "kind": "string"},
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags associated with the org"}, "field": "Tags", "kind": "stringSlice"},
+      {"flag": {"name": "append-allowed-domains", "shorthand": "a", "usage": "email domains allowed to access the org"}, "field": "AllowedEmailDomains", "kind": "stringSlice"},
+      {"flag": {"name": "clear-allowed-domains", "shorthand": "l", "usage": "clear email domains allowed to access the org"}, "field": "ClearAllowedEmailDomains", "kind": "bool"},
+      {"flag": {"name": "identity-provider", "usage": "SSO provider type"}, "field": "IdentityProvider", "kind": "string"},
+      {"flag": {"name": "client-id", "usage": "OIDC client ID"}, "field": "IdentityProviderClientID", "kind": "string"},
+      {"flag": {"name": "client-secret", "usage": "OIDC client secret"}, "field": "IdentityProviderClientSecret", "kind": "string"},
+      {"flag": {"name": "metadata-url", "usage": "SSO metadata URL"}, "field": "IdentityProviderMetadataEndpoint", "kind": "string"},
+      {"flag": {"name": "discovery-url", "usage": "OIDC discovery URL"}, "field": "OidcDiscoveryEndpoint", "kind": "string"},
+      {"flag": {"name": "enforce-sso", "usage": "enforce SSO login"}, "field": "IdentityProviderLoginEnforced", "kind": "bool"},
+      {"flag": {"name": "allow-matching-domains-autojoin", "usage": "allow matching email domains to auto join"}, "field": "AllowMatchingDomainsAutojoin", "kind": "bool"},
+      {"flag": {"name": "set-allowed-email-domains", "usage": "set allowed email domains for auto-join"}, "field": "AllowedEmailDomains", "kind": "stringSlice"}
+    ],
+    "preHook": "organizationSettingUpdate"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "BillingEmail", "path": ["billingEmail"]},
+    {"header": "IdentityProvider", "path": ["identityProvider"]},
+    {"header": "AllowedDomains", "path": ["allowedEmailDomains"], "formatter": "joinedStrings"}
+  ]
+}

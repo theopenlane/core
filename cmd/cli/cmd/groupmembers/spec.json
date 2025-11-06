@@ -1,0 +1,68 @@
+{
+  "name": "group member",
+  "use": "group-members",
+  "aliases": ["groupmembers"],
+  "short": "manage members of a group",
+  "list": {
+    "method": "GetAllGroupMemberships",
+    "root": "groupMemberships"
+  },
+  "get": {
+    "method": "GetGroupMembershipByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group membership id to query"},
+    "resultPath": ["groupMembership"],
+    "listRoot": "groupMemberships",
+    "fallbackList": true,
+    "preHook": "groupMembershipGet",
+    "fields": [
+      {"flag": {"name": "group-id", "shorthand": "g", "usage": "group id to filter members"}, "kind": "string"}
+    ]
+  },
+  "create": {
+    "method": "CreateGroupMembership",
+    "inputType": "openlaneclient.CreateGroupMembershipInput",
+    "resultPath": ["createGroupMembership", "groupMembership"],
+    "preHook": "groupMembershipCreate",
+    "fields": [
+      {"flag": {"name": "group-id", "shorthand": "g", "usage": "group id", "required": true}, "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "member role (member, admin)", "default": "member"}, "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateGroupMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group membership id to update"},
+    "inputType": "openlaneclient.UpdateGroupMembershipInput",
+    "resultPath": ["updateGroupMembership", "groupMembership"],
+    "preHook": "groupMembershipUpdate",
+    "fields": [
+      {"flag": {"name": "group-id", "shorthand": "g", "usage": "group id", "required": true}, "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "member role (member, admin)", "required": true}, "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteGroupMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "group membership id to delete"},
+    "resultPath": ["deleteGroupMembership", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "groupMembershipDelete",
+    "fields": [
+      {"flag": {"name": "group-id", "shorthand": "g", "usage": "group id", "required": true}, "kind": "string"},
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id", "required": true}, "kind": "string"}
+    ]
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "GroupID", "path": ["groupID"]},
+    {"header": "UserID", "path": ["user", "id"]},
+    {"header": "DisplayName", "path": ["user", "displayName"]},
+    {"header": "FirstName", "path": ["user", "firstName"]},
+    {"header": "LastName", "path": ["user", "lastName"]},
+    {"header": "Email", "path": ["user", "email"]},
+    {"header": "Role", "path": ["role"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

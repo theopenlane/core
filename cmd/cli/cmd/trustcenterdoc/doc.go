@@ -1,4 +1,4 @@
 //go:build cli
 
-// Package trustcenterdoc is our cobra cli for trust center document endpoints
+// Package trustcenterdoc is our cobra cli for trustCenterDoc endpoints
 package trustcenterdoc

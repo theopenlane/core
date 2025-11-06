@@ -1,0 +1,84 @@
+{
+  "name": "control",
+  "use": "control",
+  "short": "the subcommands for working with controls",
+  "list": {
+    "method": "GetAllControls",
+    "root": "controls"
+  },
+  "get": {
+    "method": "GetControlByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "control id to query"},
+    "resultPath": ["control"],
+    "listRoot": "controls",
+    "fallbackList": true,
+    "preHook": "controlGet",
+    "fields": [
+      {"flag": {"name": "ref-code", "shorthand": "r", "usage": "the unique reference code of the control"}, "kind": "string"}
+    ]
+  },
+  "create": {
+    "method": "CreateControl",
+    "inputType": "openlaneclient.CreateControlInput",
+    "resultPath": ["createControl", "control"],
+    "preHook": "controlCreate",
+    "fields": [
+      {"flag": {"name": "ref-code", "shorthand": "r", "usage": "the unique reference code of the control", "required": true}, "field": "RefCode", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the control"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source of the control"}, "field": "Source", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "a", "usage": "category of the control"}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "category-id", "shorthand": "i", "usage": "category id of the control"}, "field": "CategoryID", "kind": "string"},
+      {"flag": {"name": "subcategory", "shorthand": "b", "usage": "subcategory of the control"}, "field": "Subcategory", "kind": "string"},
+      {"flag": {"name": "status", "shorthand": "t", "usage": "status of the control"}, "field": "Status", "kind": "string"},
+      {"flag": {"name": "control-type", "shorthand": "y", "usage": "type of the control"}, "field": "ControlType", "kind": "string"},
+      {"flag": {"name": "mapped-categories", "shorthand": "m", "usage": "mapped categories of the control"}, "field": "MappedCategories", "kind": "stringSlice"},
+      {"flag": {"name": "framework-id", "shorthand": "f", "usage": "framework of the control"}, "field": "StandardID", "kind": "string"},
+      {"flag": {"name": "editors", "shorthand": "e", "usage": "group IDs with editor access"}, "field": "EditorIDs", "kind": "stringSlice"},
+      {"flag": {"name": "programs", "shorthand": "p", "usage": "program IDs associated with the control"}, "field": "ProgramIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateControl",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "control id to update"},
+    "inputType": "openlaneclient.UpdateControlInput",
+    "resultPath": ["updateControl", "control"],
+    "preHook": "controlUpdate",
+    "fields": [
+      {"flag": {"name": "ref-code", "shorthand": "r", "usage": "the unique reference code of the control"}, "field": "RefCode", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the control"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source of the control"}, "field": "Source", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the control"}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "category-id", "shorthand": "a", "usage": "category id of the control"}, "field": "CategoryID", "kind": "string"},
+      {"flag": {"name": "subcategory", "shorthand": "b", "usage": "subcategory of the control"}, "field": "Subcategory", "kind": "string"},
+      {"flag": {"name": "status", "shorthand": "t", "usage": "status of the control"}, "field": "Status", "kind": "string"},
+      {"flag": {"name": "control-type", "shorthand": "y", "usage": "type of the control"}, "field": "ControlType", "kind": "string"},
+      {"flag": {"name": "mapped-categories", "shorthand": "m", "usage": "mapped categories of the control"}, "field": "MappedCategories", "kind": "stringSlice"},
+      {"flag": {"name": "framework-id", "shorthand": "f", "usage": "framework of the control"}, "field": "StandardID", "kind": "string"},
+      {"flag": {"name": "add-programs", "usage": "add programs to the control"}, "field": "AddProgramIDs", "kind": "stringSlice"},
+      {"flag": {"name": "remove-programs", "usage": "remove programs from the control"}, "field": "RemoveProgramIDs", "kind": "stringSlice"},
+      {"flag": {"name": "add-editors", "usage": "add editor group IDs"}, "field": "AddEditorIDs", "kind": "stringSlice"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteControl",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "control id to delete"},
+    "resultPath": ["deleteControl", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "RefCode", "path": ["refCode"]},
+    {"header": "Description", "path": ["description"]},
+    {"header": "Source", "path": ["source"]},
+    {"header": "Category", "path": ["category"]},
+    {"header": "CategoryID", "path": ["categoryID"]},
+    {"header": "Subcategory", "path": ["subcategory"]},
+    {"header": "Status", "path": ["status"]},
+    {"header": "ControlType", "path": ["controlType"]},
+    {"header": "MappedCategories", "path": ["mappedCategories"], "formatter": "joinedStrings"},
+    {"header": "Standard", "path": ["referenceFramework"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

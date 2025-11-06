@@ -1,0 +1,37 @@
+{
+  "name": "user setting",
+  "use": "usersetting",
+  "short": "the subcommands for working with user settings",
+  "get": {
+    "method": "GetUserSettingByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "user setting id to retrieve"},
+    "resultPath": ["userSetting"],
+    "listRoot": "userSettings",
+    "fallbackList": true,
+    "preHook": "userSettingGet"
+  },
+  "update": {
+    "method": "UpdateUserSetting",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "user setting id to update"},
+    "inputType": "openlaneclient.UpdateUserSettingInput",
+    "resultPath": ["updateUserSetting", "userSetting"],
+    "preHook": "userSettingUpdate",
+    "fields": [
+      {"flag": {"name": "status", "usage": "status of the user - active, inactive, suspended"}, "kind": "string"},
+      {"flag": {"name": "default-org", "shorthand": "o", "usage": "default organization id"}, "kind": "string"},
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags associated with the user"}, "kind": "stringSlice"},
+      {"flag": {"name": "silence-notifications", "shorthand": "s", "usage": "silence notifications"}, "kind": "bool"},
+      {"flag": {"name": "enable-2fa", "usage": "enable 2fa authentication"}, "kind": "bool"},
+      {"flag": {"name": "disable-2fa", "usage": "disable 2fa authentication"}, "kind": "bool"}
+    ]
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "DefaultOrgName", "path": ["defaultOrg", "displayName"]},
+    {"header": "DefaultOrgID", "path": ["defaultOrg", "id"]},
+    {"header": "2FA", "path": ["isTfaEnabled"]},
+    {"header": "Status", "path": ["status"]},
+    {"header": "EmailConfirmed", "path": ["emailConfirmed"]},
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"}
+  ]
+}

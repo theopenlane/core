@@ -1,0 +1,65 @@
+{
+  "name": "organization",
+  "use": "organization",
+  "aliases": ["org"],
+  "short": "the subcommands for working with organizations",
+  "list": {
+    "method": "GetAllOrganizations",
+    "root": "organizations"
+  },
+  "get": {
+    "method": "GetOrganizationByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "organization id to get"},
+    "resultPath": ["organization"],
+    "listRoot": "organizations",
+    "fields": [
+      {"flag": {"name": "include-personal-orgs", "shorthand": "p", "usage": "include personal organizations in the result"}, "kind": "bool"},
+      {"flag": {"name": "current-only", "shorthand": "c", "usage": "get the current authorized organization only"}, "kind": "bool"}
+    ],
+    "preHook": "organizationGet"
+  },
+  "create": {
+    "method": "CreateOrganization",
+    "inputType": "openlaneclient.CreateOrganizationInput",
+    "resultPath": ["createOrganization", "organization"],
+    "fields": [
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the organization", "required": true}, "field": "Name", "kind": "string"},
+      {"flag": {"name": "display-name", "shorthand": "s", "usage": "display name of the organization"}, "field": "DisplayName", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the organization"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "parent-org-id", "shorthand": "p", "usage": "parent organization id, leave empty to create a root org"}, "field": "ParentID", "kind": "string"},
+      {"flag": {"name": "tags", "usage": "tags associated with the organization"}, "field": "Tags", "kind": "stringSlice"},
+      {"flag": {"name": "dedicated-db", "shorthand": "D", "usage": "create a dedicated database for the organization"}, "field": "DedicatedDb", "kind": "bool"},
+      {"flag": {"name": "avatar-file", "shorthand": "a", "usage": "local path to avatar file to upload"}, "field": "", "kind": "string"}
+    ],
+    "preHook": "organizationCreate"
+  },
+  "update": {
+    "method": "UpdateOrganization",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "organization id to update"},
+    "inputType": "openlaneclient.UpdateOrganizationInput",
+    "resultPath": ["updateOrganization", "organization"],
+    "fields": [
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the organization"}, "field": "Name", "kind": "string"},
+      {"flag": {"name": "display-name", "shorthand": "s", "usage": "display name of the organization"}, "field": "DisplayName", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the organization"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "avatar-file", "shorthand": "a", "usage": "local path to avatar file to upload"}, "field": "", "kind": "string"}
+    ],
+    "preHook": "organizationUpdate"
+  },
+  "delete": {
+    "method": "DeleteOrganization",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "organization id to delete"},
+    "resultPath": ["deleteOrganization", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Name", "path": ["name"]},
+    {"header": "DisplayName", "path": ["displayName"]},
+    {"header": "Description", "path": ["description"]},
+    {"header": "PersonalOrg", "path": ["personalOrg"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

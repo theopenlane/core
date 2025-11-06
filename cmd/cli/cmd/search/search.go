@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/go-viper/mapstructure/v2"
-	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/utils/cli/tables"
 
@@ -17,90 +16,64 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var command = &cobra.Command{
-	Use:   "search",
-	Short: "search for organizations, groups, users, subscribers, etc in the system",
-	Run: func(cmd *cobra.Command, args []string) {
-		err := search(cmd.Context())
-		cobra.CheckErr(err)
-	},
-}
-
-func init() {
-	cmd.RootCmd.AddCommand(command)
-
-	command.Flags().StringP("query", "q", "", "query string to search for")
-}
-
-// validate validates the required fields for the command
-func validate() (string, error) {
+func buildSearchQuery() (string, error) {
 	query := cmd.Config.String("query")
-	if query == "" {
+	if strings.TrimSpace(query) == "" {
 		return "", cmd.NewRequiredFieldMissingError("query")
 	}
 
 	return query, nil
 }
 
-// search searches for organizations, groups, users, subscribers, etc in the system
-func search(ctx context.Context) error { // setup http client
-	// attempt to setup with token, otherwise fall back to JWT with session
-	client, err := cmd.TokenAuth(ctx, cmd.Config)
-	if err != nil || client == nil {
-		// setup http client
-		client, err = cmd.SetupClientWithAuth(ctx)
-		cobra.CheckErr(err)
-		defer cmd.StoreSessionCookies(client)
+func executeSearch(ctx context.Context, client *openlaneclient.OpenlaneClient) (*openlaneclient.GlobalSearch, error) {
+	if client == nil {
+		return nil, fmt.Errorf("client is required")
 	}
 
-	// filter options
-	query, err := validate()
-	cobra.CheckErr(err)
+	query, err := buildSearchQuery()
+	if err != nil {
+		return nil, err
+	}
 
-	results, err := client.GlobalSearch(ctx, query)
-	cobra.CheckErr(err)
-
-	return consoleOutput(results)
+	return client.GlobalSearch(ctx, query)
 }
 
-func consoleOutput(results *openlaneclient.GlobalSearch) error {
+func renderSearchResults(results *openlaneclient.GlobalSearch) error {
 	var fullResult map[string]any
 
-	err := mapstructure.Decode(results, &fullResult)
-	cobra.CheckErr(err)
-
-	// check if the output format is JSON and print the output in JSON format
-	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
-		return jsonOutput(fullResult)
+	if err := mapstructure.Decode(results, &fullResult); err != nil {
+		return err
 	}
 
-	tableOutput(fullResult)
+	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
+		payload, err := json.Marshal(fullResult)
+		if err != nil {
+			return err
+		}
+		return cmd.JSONPrint(payload)
+	}
 
-	return nil
+	return tableOutput(fullResult)
 }
 
-// tableOutput prints the output in a table format
-func tableOutput(results map[string]any) {
-
+func tableOutput(results map[string]any) error {
 	for _, r := range results {
-
 		tmp, err := json.Marshal(r)
-		cobra.CheckErr(err)
+		if err != nil {
+			return err
+		}
 
 		var res map[string]any
-		err = json.Unmarshal(tmp, &res)
-		cobra.CheckErr(err)
+		if err := json.Unmarshal(tmp, &res); err != nil {
+			return err
+		}
 
 		for k, v := range res {
-			// setup the table writer per object type
 			writer := tables.NewTableWriter(cmd.RootCmd.OutOrStdout())
-
-			// skip the totalCount field
 			if strings.EqualFold(k, "totalCount") {
 				continue
 			}
 
-			// print the object type header
 			fmt.Println(strings.ToUpper(k))
 
 			edge, ok := v.(map[string]any)
@@ -122,58 +95,48 @@ func tableOutput(results map[string]any) {
 				}
 
 				tmp, err := json.Marshal(n["node"])
-				cobra.CheckErr(err)
+				if err != nil {
+					return err
+				}
 
 				var res map[string]any
-				err = json.Unmarshal(tmp, &res)
-				cobra.CheckErr(err)
-
-				// add headers the first time
+				if err := json.Unmarshal(tmp, &res); err != nil {
+					return err
+				}
 
 				if i == 0 {
 					headers = parseHeaders(writer, res)
 				}
 
-				// add rows
 				parseRows(writer, res, headers)
-
 			}
 
-			// render the table
 			writer.Render()
 		}
-
 	}
+
+	return nil
 }
 
-// parseHeaders parses the headers from the result and sets them in the table
-// the id column is always added as the first column
 func parseHeaders(writer tables.TableOutputWriter, res map[string]any) []string {
 	if len(res) == 0 {
 		return nil
 	}
 
 	headers := make([]string, len(res))
-
-	// always add the ID as the first column
 	headers[0] = "ID"
 
-	// add other fields with ordering correctly
 	i := 1
-	for k, _ := range res {
+	for k := range res {
 		if strings.EqualFold(k, "id") {
 			continue
 		}
 
 		headers[i] = k
-
 		i++
 	}
 
-	// add empty row
 	writer.AddRow()
-
-	// add headers
 	writer.SetHeaders(headers...)
 
 	return headers
@@ -184,31 +147,16 @@ func parseRows(writer tables.TableOutputWriter, res map[string]any, headers []st
 		return
 	}
 
-	values := make([]any, len(res))
-
-	// always add the ID as the first column
+	values := make([]any, len(headers))
 	values[0] = res["id"]
 
-	// add other fields with ordering correctly
 	for i, h := range headers {
 		if strings.EqualFold(h, "id") {
 			continue
 		}
 
 		values[i] = res[h]
-
-		i++
 	}
 
 	writer.AddRow(values...)
-
-	return
-}
-
-// jsonOutput prints the output in a JSON format
-func jsonOutput(out any) error {
-	s, err := json.Marshal(out)
-	cobra.CheckErr(err)
-
-	return cmd.JSONPrint(s)
 }

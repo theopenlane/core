@@ -1,0 +1,72 @@
+{
+  "name": "groupsetting",
+  "use": "groupsetting",
+  "short": "the subcommands for working with groupsettings",
+  "list": {
+    "method": "GetAllGroupSettings",
+    "root": "GroupSettings"
+  },
+  "get": {
+    "method": "GetGroupSettingByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "groupsetting id to query"},
+    "resultPath": ["groupSetting"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateGroupSetting",
+    "inputType": "openlaneclient.CreateGroupSettingInput",
+    "resultPath": ["createGroupSetting", "groupSetting"],
+    "fields": [
+      {"flag": {"name": "visibility", "shorthand": "v", "usage": "visibility of the groupsetting"}, "field": "Visibility", "kind": "string"},
+    
+      {"flag": {"name": "joinPolicy", "shorthand": "j", "usage": "join policy of the groupsetting"}, "field": "JoinPolicy", "kind": "string"},
+    
+      {"flag": {"name": "syncToSlack", "shorthand": "s", "usage": "sync to slack of the groupsetting"}, "field": "SyncToSlack", "kind": "bool"},
+    
+      {"flag": {"name": "syncToGithub", "shorthand": "y", "usage": "sync to github of the groupsetting"}, "field": "SyncToGithub", "kind": "bool"},
+    
+      {"flag": {"name": "groupID", "shorthand": "g", "usage": "group id of the groupsetting"}, "field": "GroupID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateGroupSetting",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "groupsetting id to update"},
+    "inputType": "openlaneclient.UpdateGroupSettingInput",
+    "resultPath": ["updateGroupSetting", "groupSetting"],
+    "fields": [
+      {"flag": {"name": "visibility", "shorthand": "v", "usage": "visibility of the groupsetting"}, "field": "Visibility", "kind": "string"},
+    
+      {"flag": {"name": "joinPolicy", "shorthand": "j", "usage": "join policy of the groupsetting"}, "field": "JoinPolicy", "kind": "string"},
+    
+      {"flag": {"name": "syncToSlack", "shorthand": "s", "usage": "sync to slack of the groupsetting"}, "field": "SyncToSlack", "kind": "bool"},
+    
+      {"flag": {"name": "syncToGithub", "shorthand": "y", "usage": "sync to github of the groupsetting"}, "field": "SyncToGithub", "kind": "bool"},
+    
+      {"flag": {"name": "groupID", "shorthand": "g", "usage": "group id of the groupsetting"}, "field": "GroupID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteGroupSetting",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "groupsetting id to delete"},
+    "resultPath": ["deleteGroupSetting", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "JoinPolicy", "path": ["joinPolicy"]},
+  
+    {"header": "SyncToGithub", "path": ["syncToGithub"]},
+  
+    {"header": "SyncToSlack", "path": ["syncToSlack"]},
+  
+    {"header": "Visibility", "path": ["visibility"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

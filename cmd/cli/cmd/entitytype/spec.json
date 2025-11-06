@@ -1,0 +1,56 @@
+{
+  "name": "entitytype",
+  "use": "entitytype",
+  "short": "the subcommands for working with entitytypes",
+  "list": {
+    "method": "GetAllEntityTypes",
+    "root": "EntityTypes"
+  },
+  "get": {
+    "method": "GetEntityTypeByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entitytype id to query"},
+    "resultPath": ["entityType"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateEntityType",
+    "inputType": "openlaneclient.CreateEntityTypeInput",
+    "resultPath": ["createEntityType", "entityType"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the entitytype"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the entitytype", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "entityIDs", "shorthand": "e", "usage": "entity i ds of the entitytype"}, "field": "EntityIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateEntityType",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entitytype id to update"},
+    "inputType": "openlaneclient.UpdateEntityTypeInput",
+    "resultPath": ["updateEntityType", "entityType"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the entitytype"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the entitytype"}, "field": "Name", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteEntityType",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entitytype id to delete"},
+    "resultPath": ["deleteEntityType", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

@@ -1,0 +1,76 @@
+{
+  "name": "evidence",
+  "use": "evidence",
+  "short": "the subcommands for working with evidences",
+  "list": {
+    "method": "GetAllEvidences",
+    "root": "Evidences"
+  },
+  "get": {
+    "method": "GetEvidenceByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "evidence id to query"},
+    "resultPath": ["evidence"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateEvidence",
+    "inputType": "openlaneclient.CreateEvidenceInput",
+    "resultPath": ["createEvidence", "evidence"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the evidence"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the evidence", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the evidence"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "collectionProcedure", "shorthand": "c", "usage": "collection procedure of the evidence"}, "field": "CollectionProcedure", "kind": "string"},
+    
+      {"flag": {"name": "creationDate", "shorthand": "r", "usage": "creation date of the evidence"}, "field": "CreationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "renewalDate", "shorthand": "e", "usage": "renewal date of the evidence"}, "field": "RenewalDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source of the evidence"}, "field": "Source", "kind": "string"},
+    
+      {"flag": {"name": "isAutomated", "shorthand": "i", "usage": "is automated of the evidence"}, "field": "IsAutomated", "kind": "bool"}
+    ]
+  },
+  "update": {
+    "method": "UpdateEvidence",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "evidence id to update"},
+    "inputType": "openlaneclient.UpdateEvidenceInput",
+    "resultPath": ["updateEvidence", "evidence"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the evidence"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the evidence"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the evidence"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "collectionProcedure", "shorthand": "c", "usage": "collection procedure of the evidence"}, "field": "CollectionProcedure", "kind": "string"},
+    
+      {"flag": {"name": "creationDate", "shorthand": "r", "usage": "creation date of the evidence"}, "field": "CreationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "renewalDate", "shorthand": "e", "usage": "renewal date of the evidence"}, "field": "RenewalDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source of the evidence"}, "field": "Source", "kind": "string"},
+    
+      {"flag": {"name": "isAutomated", "shorthand": "i", "usage": "is automated of the evidence"}, "field": "IsAutomated", "kind": "bool"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteEvidence",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "evidence id to delete"},
+    "resultPath": ["deleteEvidence", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "PresignedUrl", "path": ["presignedURL"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

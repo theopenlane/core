@@ -1,4 +1,4 @@
 //go:build cli
 
-// Package groupsetting provides commands for managing group settings
+// Package groupsetting is our cobra cli for groupSetting endpoints
 package groupsetting

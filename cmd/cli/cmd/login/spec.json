@@ -1,0 +1,11 @@
+{
+  "name": "login",
+  "use": "login",
+  "short": "authenticate with the API using password credentials",
+  "primary": {
+    "fields": [
+      {"flag": {"name": "username", "shorthand": "u", "usage": "username (email) to authenticate with password auth"}, "kind": "string"}
+    ],
+    "preHook": "loginPrimary"
+  }
+}

@@ -1,0 +1,46 @@
+{
+  "name": "user",
+  "use": "user",
+  "short": "the subcommands for working with the user",
+  "get": {
+    "method": "GetUserByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "user id to query"},
+    "resultPath": ["user"],
+    "listRoot": "users",
+    "fields": [
+      {"flag": {"name": "self", "shorthand": "s", "usage": "get only details of the current user", "default": "true"}, "kind": "bool"}
+    ],
+    "preHook": "userGet"
+  },
+  "update": {
+    "method": "UpdateUser",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "user id to update"},
+    "inputType": "openlaneclient.UpdateUserInput",
+    "resultPath": ["updateUser", "user"],
+    "fields": [
+      {"flag": {"name": "first-name", "shorthand": "f", "usage": "first name of the user"}, "field": "FirstName", "kind": "string"},
+      {"flag": {"name": "last-name", "shorthand": "l", "usage": "last name of the user"}, "field": "LastName", "kind": "string"},
+      {"flag": {"name": "display-name", "shorthand": "d", "usage": "display name of the user"}, "field": "DisplayName", "kind": "string"},
+      {"flag": {"name": "email", "shorthand": "e", "usage": "email of the user"}, "field": "Email", "kind": "string"},
+      {"flag": {"name": "avatar-file", "shorthand": "a", "usage": "local path to avatar file to upload"}, "field": "", "kind": "string"}
+    ],
+    "preHook": "userUpdate"
+  },
+  "delete": {
+    "method": "DeleteUser",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "user id to delete"},
+    "resultPath": ["deleteUser", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Email", "path": ["email"]},
+    {"header": "FirstName", "path": ["firstName"]},
+    {"header": "LastName", "path": ["lastName"]},
+    {"header": "DisplayName", "path": ["displayName"]},
+    {"header": "AuthProvider", "path": ["authProvider"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

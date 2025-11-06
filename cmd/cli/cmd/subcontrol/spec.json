@@ -1,0 +1,66 @@
+{
+  "name": "subcontrol",
+  "use": "subcontrol",
+  "short": "the subcommands for working with subcontrols",
+  "list": {
+    "method": "GetAllSubcontrols",
+    "root": "subcontrols"
+  },
+  "get": {
+    "method": "GetSubcontrolByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subcontrol id to query"},
+    "resultPath": ["subcontrol"],
+    "fallbackList": true,
+    "preHook": "subcontrolGet"
+  },
+  "create": {
+    "method": "CreateSubcontrol",
+    "inputType": "openlaneclient.CreateSubcontrolInput",
+    "resultPath": ["createSubcontrol", "subcontrol"],
+    "preHook": "subcontrolCreate",
+    "fields": [
+      {"flag": {"name": "ref-code", "shorthand": "r", "required": true, "usage": "unique reference code"}, "field": "RefCode", "kind": "string"},
+      {"flag": {"name": "control", "shorthand": "c", "required": true, "usage": "parent control id"}, "field": "ControlID", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source"}, "field": "Source", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "a", "usage": "category"}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "category-id", "shorthand": "i", "usage": "category id"}, "field": "CategoryID", "kind": "string"},
+      {"flag": {"name": "subcategory", "shorthand": "b", "usage": "subcategory"}, "field": "Subcategory", "kind": "string"},
+      {"flag": {"name": "status", "shorthand": "t", "usage": "status"}, "field": "Status", "kind": "string"},
+      {"flag": {"name": "control-type", "shorthand": "y", "usage": "control type"}, "field": "ControlType", "kind": "string"},
+      {"flag": {"name": "mapped-categories", "shorthand": "m", "usage": "mapped categories"}, "field": "MappedCategories", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateSubcontrol",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subcontrol id to update"},
+    "inputType": "openlaneclient.UpdateSubcontrolInput",
+    "resultPath": ["updateSubcontrol", "subcontrol"],
+    "preHook": "subcontrolUpdate",
+    "fields": [
+      {"flag": {"name": "ref-code", "shorthand": "r", "usage": "unique reference code"}, "field": "RefCode", "kind": "string"},
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description"}, "field": "Description", "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "source"}, "field": "Source", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "a", "usage": "category"}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "category-id", "shorthand": "c", "usage": "category id"}, "field": "CategoryID", "kind": "string"},
+      {"flag": {"name": "subcategory", "shorthand": "b", "usage": "subcategory"}, "field": "Subcategory", "kind": "string"},
+      {"flag": {"name": "status", "shorthand": "t", "usage": "status"}, "field": "Status", "kind": "string"},
+      {"flag": {"name": "control-type", "shorthand": "y", "usage": "control type"}, "field": "ControlType", "kind": "string"},
+      {"flag": {"name": "mapped-categories", "shorthand": "m", "usage": "mapped categories"}, "field": "MappedCategories", "kind": "stringSlice"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteSubcontrol",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subcontrol id to delete"},
+    "resultPath": ["deleteSubcontrol", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "subcontrolDelete"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "RefCode", "path": ["refCode"]},
+    {"header": "Description", "path": ["description"]},
+    {"header": "Status", "path": ["status"]}
+  ],
+  "deleteColumns": [{"header": "DeletedID", "path": ["deletedID"]}]
+}

@@ -1,0 +1,65 @@
+{
+  "name": "org member",
+  "use": "org-members",
+  "aliases": ["orgmembers"],
+  "short": "manage organization members",
+  "list": {
+    "method": "GetOrgMemberships",
+    "root": "orgMemberships",
+    "filterMethod": "GetOrgMemberships"
+  },
+  "get": {
+    "method": "GetOrgMemberships",
+    "idFlag": {"name": "user-id", "shorthand": "u", "usage": "user id to filter memberships"},
+    "resultPath": ["orgMemberships", "edges"],
+    "listRoot": "orgMemberships",
+    "fallbackList": true,
+    "preHook": "orgMembershipGet",
+    "fields": [
+      {"flag": {"name": "org-id", "shorthand": "o", "usage": "organization id to filter memberships"}, "kind": "string"}
+    ]
+  },
+  "create": {
+    "method": "CreateOrgMembership",
+    "inputType": "openlaneclient.CreateOrgMembershipInput",
+    "resultPath": ["createOrgMembership", "orgMembership"],
+    "preHook": "orgMembershipCreate",
+    "fields": [
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id to add", "required": true}, "field": "UserID", "kind": "string"},
+      {"flag": {"name": "org-id", "shorthand": "o", "usage": "organization id"}, "field": "OrganizationID", "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "role to assign (member, admin)", "default": "member"}, "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateOrgMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "org membership id to update"},
+    "inputType": "openlaneclient.UpdateOrgMembershipInput",
+    "resultPath": ["updateOrgMembership", "orgMembership"],
+    "preHook": "orgMembershipUpdate",
+    "fields": [
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id to locate membership", "required": true}, "kind": "string"},
+      {"flag": {"name": "org-id", "shorthand": "o", "usage": "organization id"}, "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "role to assign (member, admin)", "required": true}, "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteOrgMembership",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "org membership id to delete"},
+    "resultPath": ["deleteOrgMembership", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "orgMembershipDelete",
+    "fields": [
+      {"flag": {"name": "user-id", "shorthand": "u", "usage": "user id to remove", "required": true}, "kind": "string"},
+      {"flag": {"name": "org-id", "shorthand": "o", "usage": "organization id"}, "kind": "string"}
+    ]
+  },
+  "columns": [
+    {"header": "ID", "path": ["node", "id"]},
+    {"header": "OrgID", "path": ["node", "organizationID"]},
+    {"header": "UserID", "path": ["node", "userID"]},
+    {"header": "Role", "path": ["node", "role"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

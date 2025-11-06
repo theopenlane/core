@@ -36,7 +36,19 @@
 - [x] Convert a mutation-heavy resource (e.g. `program`) to validate enum parsing, duration handling, and delete/list outputs.
 - [x] Convert a token resource (e.g. `personalaccesstokens`) to exercise custom table formatters and duration parsing.
 - [x] Convert a standards/resource (e.g. `standard`) to validate enum parsing, multi-field specs, and generator defaults.
+- [x] Convert high-touch commands (`organization`, `user`, `apitokens`, `organizationsetting`, `login`) to spec-driven flow with the necessary hooks for file uploads and interactive authentication.
 - [ ] Migrate remaining generated resources in manageable batches, deleting obsolete `create/update/delete/get/root.go` files per directory and pruning the imports in `cmd/cli/main.go`.
+  - [x] Migrate `group` to spec-driven flow (spec + hooks + register wiring)
+  - [x] Migrate `file` to spec-driven flow
+  - [x] Migrate `documentdata` to spec-driven flow
+  - [x] Migrate `subcontrol` to spec-driven flow
+  - [x] Migrate `trustcenter` to spec-driven flow (with settings subcommands retained via helpers)
+  - [x] Migrate `trustcenter-domain` to spec-driven flow
+  - [x] Migrate `trustcentersubprocessors` to spec-driven flow
+  - [x] Migrate `control` to spec-driven flow (preserving role/program editors through hooks)
+  - [x] Migrate `groupmembers` and `orgmembers` to spec-driven flow
+  - [x] Migrate `programmembers` to spec-driven flow
+  - [x] Migrate `template` to spec-driven flow with JSON file parsing helpers
 - [ ] Port shared helpers (`consoleOutput`, enum coercion, validation errors) into the new package and remove duplicate copies from resource folders.
 - [ ] Ensure history-only commands (read-only) and other variants (bulk, CSV, multi-id) are either spec-supported or called out for manual retention.
 - [ ] Update documentation and internal runbooks referencing the old directory structure or hand-edit expectations.

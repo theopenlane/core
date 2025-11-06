@@ -1,0 +1,14 @@
+{
+  "name": "register",
+  "use": "register",
+  "short": "register a new user",
+  "primary": {
+    "fields": [
+      {"flag": {"name": "email", "shorthand": "e", "usage": "email of the user", "required": true}, "kind": "string"},
+      {"flag": {"name": "password", "shorthand": "p", "usage": "password of the user", "required": true}, "kind": "string"},
+      {"flag": {"name": "first-name", "shorthand": "f", "usage": "first name of the user", "required": true}, "kind": "string"},
+      {"flag": {"name": "last-name", "shorthand": "l", "usage": "last name of the user", "required": true}, "kind": "string"}
+    ],
+    "preHook": "registerUser"
+  }
+}

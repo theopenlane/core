@@ -1,0 +1,58 @@
+{
+  "name": "trust center subprocessor",
+  "use": "trustcentersubprocessors",
+  "short": "manage trust center subprocessors",
+  "list": {
+    "method": "GetAllTrustCenterSubprocessors",
+    "root": "trustCenterSubprocessors"
+  },
+  "get": {
+    "method": "GetTrustCenterSubprocessorByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center subprocessor id to query"},
+    "resultPath": ["trustCenterSubprocessor"],
+    "listRoot": "trustCenterSubprocessors",
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTrustCenterSubprocessor",
+    "inputType": "openlaneclient.CreateTrustCenterSubprocessorInput",
+    "resultPath": ["createTrustCenterSubprocessor", "trustCenterSubprocessor"],
+    "fields": [
+      {"flag": {"name": "subprocessor-id", "shorthand": "s", "usage": "ID of the subprocessor", "required": true}, "field": "SubprocessorID", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the subprocessor", "required": true}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center ID"}, "field": "TrustCenterID", "kind": "string"},
+      {"flag": {"name": "countries", "usage": "countries where the subprocessor operates"}, "field": "Countries", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateTrustCenterSubprocessor",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center subprocessor id to update"},
+    "inputType": "openlaneclient.UpdateTrustCenterSubprocessorInput",
+    "resultPath": ["updateTrustCenterSubprocessor", "trustCenterSubprocessor"],
+    "fields": [
+      {"flag": {"name": "subprocessor-id", "shorthand": "s", "usage": "ID of the subprocessor"}, "field": "SubprocessorID", "kind": "string"},
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the subprocessor"}, "field": "Category", "kind": "string"},
+      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center ID"}, "field": "TrustCenterID", "kind": "string"},
+      {"flag": {"name": "countries", "usage": "countries where the subprocessor operates"}, "field": "Countries", "kind": "stringSlice"},
+      {"flag": {"name": "append-countries", "usage": "append countries to the existing list"}, "field": "AppendCountries", "kind": "stringSlice"},
+      {"flag": {"name": "clear-countries", "usage": "clear all countries"}, "field": "ClearCountries", "kind": "bool"},
+      {"flag": {"name": "clear-trust-center", "usage": "clear the trust center association"}, "field": "ClearTrustCenter", "kind": "bool"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteTrustCenterSubprocessor",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center subprocessor id to delete"},
+    "resultPath": ["deleteTrustCenterSubprocessor", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "TrustCenterID", "path": ["trustCenterID"]},
+    {"header": "SubprocessorName", "path": ["subprocessor", "name"]},
+    {"header": "Category", "path": ["category"]},
+    {"header": "Countries", "path": ["countries"], "formatter": "joinedStrings"}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

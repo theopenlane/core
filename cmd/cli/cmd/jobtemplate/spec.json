@@ -1,0 +1,74 @@
+{
+  "name": "jobtemplate",
+  "use": "jobtemplate",
+  "short": "the subcommands for working with jobtemplates",
+  "list": {
+    "method": "GetAllJobTemplates",
+    "root": "JobTemplates"
+  },
+  "get": {
+    "method": "GetJobTemplateByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobtemplate id to query"},
+    "resultPath": ["jobTemplate"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateJobTemplate",
+    "inputType": "openlaneclient.CreateJobTemplateInput",
+    "resultPath": ["createJobTemplate", "jobTemplate"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the jobtemplate"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "title", "shorthand": "i", "usage": "title of the jobtemplate", "required": true}, "field": "Title", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the jobtemplate"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "platform", "shorthand": "p", "usage": "platform of the jobtemplate", "required": true}, "field": "Platform", "kind": "string"},
+    
+      {"flag": {"name": "downloadURL", "shorthand": "o", "usage": "download url of the jobtemplate", "required": true}, "field": "DownloadURL", "kind": "string"},
+    
+      {"flag": {"name": "cron", "shorthand": "c", "usage": "cron of the jobtemplate"}, "field": "Cron", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateJobTemplate",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobtemplate id to update"},
+    "inputType": "openlaneclient.UpdateJobTemplateInput",
+    "resultPath": ["updateJobTemplate", "jobTemplate"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the jobtemplate"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "title", "shorthand": "i", "usage": "title of the jobtemplate"}, "field": "Title", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the jobtemplate"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "downloadURL", "shorthand": "o", "usage": "download url of the jobtemplate"}, "field": "DownloadURL", "kind": "string"},
+    
+      {"flag": {"name": "cron", "shorthand": "c", "usage": "cron of the jobtemplate"}, "field": "Cron", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteJobTemplate",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobtemplate id to delete"},
+    "resultPath": ["deleteJobTemplate", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "DisplayId", "path": ["displayID"]},
+  
+    {"header": "Title", "path": ["title"]},
+  
+    {"header": "Cron", "path": ["cron"]},
+  
+    {"header": "Description", "path": ["description"]},
+  
+    {"header": "DownloadUrl", "path": ["downloadURL"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

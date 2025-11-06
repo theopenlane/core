@@ -1,0 +1,48 @@
+{
+  "name": "invite",
+  "use": "invite",
+  "short": "manage organization invitations",
+  "list": {
+    "method": "GetAllInvites",
+    "root": "invites"
+  },
+  "get": {
+    "method": "GetInviteByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "invite id to query"},
+    "resultPath": ["invite"],
+    "listRoot": "invites",
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateInvite",
+    "inputType": "openlaneclient.CreateInviteInput",
+    "resultPath": ["createInvite", "invite"],
+    "preHook": "inviteCreate",
+    "fields": [
+      {"flag": {"name": "email", "shorthand": "e", "usage": "destination email for the invitation", "required": true}, "field": "Recipient", "kind": "string"},
+      {"flag": {"name": "role", "shorthand": "r", "usage": "role for the user in the organization", "default": "member"}, "field": "Role", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteInvite",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "invite id to delete"},
+    "resultPath": ["deleteInvite", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "inviteDelete"
+  },
+  "primary": {
+    "fields": [
+      {"flag": {"name": "token", "shorthand": "t", "usage": "invite token", "required": true}, "kind": "string"}
+    ],
+    "preHook": "inviteAccept"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Recipient", "path": ["recipient"]},
+    {"header": "Role", "path": ["role"]},
+    {"header": "Status", "path": ["status"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

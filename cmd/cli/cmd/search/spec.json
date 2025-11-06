@@ -1,0 +1,11 @@
+{
+  "name": "search",
+  "use": "search",
+  "short": "search for organizations, groups, users, subscribers, etc.",
+  "primary": {
+    "fields": [
+      {"flag": {"name": "query", "shorthand": "q", "usage": "query string to search for", "required": true}, "kind": "string"}
+    ],
+    "preHook": "globalSearch"
+  }
+}

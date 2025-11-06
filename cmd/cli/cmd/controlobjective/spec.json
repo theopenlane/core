@@ -1,0 +1,80 @@
+{
+  "name": "controlobjective",
+  "use": "controlobjective",
+  "short": "the subcommands for working with controlobjectives",
+  "list": {
+    "method": "GetAllControlObjectives",
+    "root": "ControlObjectives"
+  },
+  "get": {
+    "method": "GetControlObjectiveByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlobjective id to query"},
+    "resultPath": ["controlObjective"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateControlObjective",
+    "inputType": "openlaneclient.CreateControlObjectiveInput",
+    "resultPath": ["createControlObjective", "controlObjective"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the controlobjective"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the controlobjective"}, "field": "Revision", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the controlobjective", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "desiredOutcome", "shorthand": "d", "usage": "desired outcome of the controlobjective"}, "field": "DesiredOutcome", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the controlobjective"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "source", "shorthand": "o", "usage": "source of the controlobjective"}, "field": "Source", "kind": "string"},
+    
+      {"flag": {"name": "controlObjectiveType", "shorthand": "c", "usage": "control objective type of the controlobjective"}, "field": "ControlObjectiveType", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "a", "usage": "category of the controlobjective"}, "field": "Category", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateControlObjective",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlobjective id to update"},
+    "inputType": "openlaneclient.UpdateControlObjectiveInput",
+    "resultPath": ["updateControlObjective", "controlObjective"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the controlobjective"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the controlobjective"}, "field": "Revision", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the controlobjective"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "desiredOutcome", "shorthand": "d", "usage": "desired outcome of the controlobjective"}, "field": "DesiredOutcome", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the controlobjective"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "source", "shorthand": "o", "usage": "source of the controlobjective"}, "field": "Source", "kind": "string"},
+    
+      {"flag": {"name": "controlObjectiveType", "shorthand": "c", "usage": "control objective type of the controlobjective"}, "field": "ControlObjectiveType", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "a", "usage": "category of the controlobjective"}, "field": "Category", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteControlObjective",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlobjective id to delete"},
+    "resultPath": ["deleteControlObjective", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "DisplayId", "path": ["displayID"]},
+  
+    {"header": "RefCode", "path": ["refCode"]},
+  
+    {"header": "Description", "path": ["description"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

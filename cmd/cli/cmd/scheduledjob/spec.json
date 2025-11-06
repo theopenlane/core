@@ -1,0 +1,62 @@
+{
+  "name": "scheduledjob",
+  "use": "scheduledjob",
+  "short": "the subcommands for working with scheduledjobs",
+  "list": {
+    "method": "GetAllScheduledJobs",
+    "root": "ScheduledJobs"
+  },
+  "get": {
+    "method": "GetScheduledJobByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "scheduledjob id to query"},
+    "resultPath": ["scheduledJob"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateScheduledJob",
+    "inputType": "openlaneclient.CreateScheduledJobInput",
+    "resultPath": ["createScheduledJob", "scheduledJob"],
+    "fields": [
+      {"flag": {"name": "active", "shorthand": "a", "usage": "active of the scheduledjob"}, "field": "Active", "kind": "bool"},
+    
+      {"flag": {"name": "cron", "shorthand": "c", "usage": "cron of the scheduledjob"}, "field": "Cron", "kind": "string"},
+    
+      {"flag": {"name": "jobTemplateID", "shorthand": "j", "usage": "job template id of the scheduledjob", "required": true}, "field": "JobTemplateID", "kind": "string"},
+    
+      {"flag": {"name": "controlIDs", "shorthand": "o", "usage": "control i ds of the scheduledjob"}, "field": "ControlIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "subcontrolIDs", "shorthand": "s", "usage": "subcontrol i ds of the scheduledjob"}, "field": "SubcontrolIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "jobRunnerID", "shorthand": "b", "usage": "job runner id of the scheduledjob"}, "field": "JobRunnerID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateScheduledJob",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "scheduledjob id to update"},
+    "inputType": "openlaneclient.UpdateScheduledJobInput",
+    "resultPath": ["updateScheduledJob", "scheduledJob"],
+    "fields": [
+      {"flag": {"name": "active", "shorthand": "a", "usage": "active of the scheduledjob"}, "field": "Active", "kind": "bool"},
+    
+      {"flag": {"name": "cron", "shorthand": "c", "usage": "cron of the scheduledjob"}, "field": "Cron", "kind": "string"},
+    
+      {"flag": {"name": "jobTemplateID", "shorthand": "j", "usage": "job template id of the scheduledjob"}, "field": "JobTemplateID", "kind": "string"},
+    
+      {"flag": {"name": "jobRunnerID", "shorthand": "o", "usage": "job runner id of the scheduledjob"}, "field": "JobRunnerID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteScheduledJob",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "scheduledjob id to delete"},
+    "resultPath": ["deleteScheduledJob", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

@@ -1,0 +1,34 @@
+{
+  "name": "file",
+  "use": "file",
+  "short": "the subcommands for working with files",
+  "list": {
+    "method": "GetAllFiles",
+    "root": "files"
+  },
+  "get": {
+    "method": "GetFileByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "file id to query"},
+    "resultPath": ["file"],
+    "listRoot": "files",
+    "fallbackList": true
+  },
+  "delete": {
+    "method": "DeleteFile",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "file id to delete"},
+    "resultPath": ["deleteFile", "deletedID"],
+    "resultField": "deletedID"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "URI", "path": ["uri"]},
+    {"header": "ProvidedFileName", "path": ["providedFileName"]},
+    {"header": "CategoryType", "path": ["md5Hash"]},
+    {"header": "DetectedMimeType", "path": ["detectedMimeType"]},
+    {"header": "FileExtension", "path": ["providedFileExtension"]},
+    {"header": "StoragePath", "path": ["storagePath"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

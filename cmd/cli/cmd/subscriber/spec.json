@@ -1,0 +1,57 @@
+{
+  "name": "subscriber",
+  "use": "subscriber",
+  "short": "the subcommands for working with subscribers",
+  "list": {
+    "method": "GetSubscribers",
+    "root": "subscribers"
+  },
+  "get": {
+    "method": "GetSubscriberByEmail",
+    "idFlag": {"name": "email", "shorthand": "e", "usage": "subscriber email to query"},
+    "resultPath": ["subscriber"],
+    "listRoot": "subscribers",
+    "fallbackList": true,
+    "preHook": "subscriberGet",
+    "fields": [
+      {"flag": {"name": "active", "shorthand": "a", "usage": "filter on active subscribers", "default": "true"}, "kind": "bool"}
+    ]
+  },
+  "create": {
+    "method": "CreateBulkSubscriber",
+    "resultPath": ["createBulkSubscriber", "subscribers"],
+    "preHook": "subscriberCreate",
+    "fields": [
+      {"flag": {"name": "emails", "shorthand": "e", "usage": "email addresses to subscribe", "required": true}, "kind": "stringSlice"},
+      {"flag": {"name": "tags", "usage": "tags associated with each subscriber"}, "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateSubscriber",
+    "idFlag": {"name": "email", "shorthand": "e", "usage": "subscriber email to update"},
+    "resultPath": ["updateSubscriber", "subscriber"],
+    "preHook": "subscriberUpdate",
+    "fields": [
+      {"flag": {"name": "phone-number", "shorthand": "p", "usage": "phone number to add or update"}, "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteSubscriber",
+    "idFlag": {"name": "email", "shorthand": "e", "usage": "subscriber email to delete"},
+    "resultPath": ["deleteSubscriber", "email"],
+    "resultField": "email",
+    "preHook": "subscriberDelete",
+    "fields": [
+      {"flag": {"name": "organization-id", "shorthand": "o", "usage": "organization ID when using a personal access token"}, "kind": "string"}
+    ]
+  },
+  "columns": [
+    {"header": "Email", "path": ["email"]},
+    {"header": "Active", "path": ["active"]},
+    {"header": "Unsubscribed", "path": ["unsubscribed"]},
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["email"]}
+  ]
+}

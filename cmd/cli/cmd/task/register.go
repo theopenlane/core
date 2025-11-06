@@ -24,8 +24,8 @@ func init() {
 	if err := speccli.RegisterFromFS(specFS, speccli.LoaderOptions{
 		TypeResolver: speccli.StaticTypeResolver(typeMap),
 		Parsers:      speccli.DefaultParsers(),
-		CreateHooks: map[string]speccli.CreatePreHook{
-			"taskCSV": taskCSVHook,
+		CreateHooks: map[string]speccli.CreateHookFactory{
+			"taskCSV": func(_ *speccli.CreateSpec) speccli.CreatePreHook { return taskCSVHook },
 		},
 	}); err != nil {
 		panic(fmt.Sprintf("failed to register task command: %v", err))

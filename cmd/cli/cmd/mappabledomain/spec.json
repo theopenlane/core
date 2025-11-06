@@ -1,0 +1,58 @@
+{
+  "name": "mappabledomain",
+  "use": "mappabledomain",
+  "short": "the subcommands for working with mappabledomains",
+  "list": {
+    "method": "GetAllMappableDomains",
+    "root": "MappableDomains"
+  },
+  "get": {
+    "method": "GetMappableDomainByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mappabledomain id to query"},
+    "resultPath": ["mappableDomain"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateMappableDomain",
+    "inputType": "openlaneclient.CreateMappableDomainInput",
+    "resultPath": ["createMappableDomain", "mappableDomain"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the mappabledomain"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the mappabledomain", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "zoneID", "shorthand": "z", "usage": "zone id of the mappabledomain", "required": true}, "field": "ZoneID", "kind": "string"},
+    
+      {"flag": {"name": "customDomainIDs", "shorthand": "c", "usage": "custom domain i ds of the mappabledomain"}, "field": "CustomDomainIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateMappableDomain",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mappabledomain id to update"},
+    "inputType": "openlaneclient.UpdateMappableDomainInput",
+    "resultPath": ["updateMappableDomain", "mappableDomain"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the mappabledomain"}, "field": "Tags", "kind": "stringSlice"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteMappableDomain",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mappabledomain id to delete"},
+    "resultPath": ["deleteMappableDomain", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"},
+  
+    {"header": "ZoneId", "path": ["zoneID"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

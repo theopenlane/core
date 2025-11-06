@@ -1,0 +1,76 @@
+{
+  "name": "risk",
+  "use": "risk",
+  "short": "the subcommands for working with risks",
+  "list": {
+    "method": "GetAllRisks",
+    "root": "Risks"
+  },
+  "get": {
+    "method": "GetRiskByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "risk id to query"},
+    "resultPath": ["risk"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateRisk",
+    "inputType": "openlaneclient.CreateRiskInput",
+    "resultPath": ["createRisk", "risk"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the risk"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "riskKindName", "shorthand": "r", "usage": "risk kind name of the risk"}, "field": "RiskKindName", "kind": "string"},
+    
+      {"flag": {"name": "riskCategoryName", "shorthand": "i", "usage": "risk category name of the risk"}, "field": "RiskCategoryName", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the risk", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the risk"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "riskType", "shorthand": "k", "usage": "risk type of the risk"}, "field": "RiskType", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the risk"}, "field": "Category", "kind": "string"},
+    
+      {"flag": {"name": "impact", "shorthand": "m", "usage": "impact of the risk"}, "field": "Impact", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateRisk",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "risk id to update"},
+    "inputType": "openlaneclient.UpdateRiskInput",
+    "resultPath": ["updateRisk", "risk"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the risk"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "riskKindName", "shorthand": "r", "usage": "risk kind name of the risk"}, "field": "RiskKindName", "kind": "string"},
+    
+      {"flag": {"name": "riskCategoryName", "shorthand": "i", "usage": "risk category name of the risk"}, "field": "RiskCategoryName", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the risk"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the risk"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "riskType", "shorthand": "k", "usage": "risk type of the risk"}, "field": "RiskType", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the risk"}, "field": "Category", "kind": "string"},
+    
+      {"flag": {"name": "impact", "shorthand": "m", "usage": "impact of the risk"}, "field": "Impact", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteRisk",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "risk id to delete"},
+    "resultPath": ["deleteRisk", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

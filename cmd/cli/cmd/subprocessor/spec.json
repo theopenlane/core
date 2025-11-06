@@ -1,0 +1,68 @@
+{
+  "name": "subprocessor",
+  "use": "subprocessor",
+  "short": "the subcommands for working with subprocessors",
+  "list": {
+    "method": "GetAllSubprocessors",
+    "root": "Subprocessors"
+  },
+  "get": {
+    "method": "GetSubprocessorByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subprocessor id to query"},
+    "resultPath": ["subprocessor"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateSubprocessor",
+    "inputType": "openlaneclient.CreateSubprocessorInput",
+    "resultPath": ["createSubprocessor", "subprocessor"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the subprocessor"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the subprocessor", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the subprocessor"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "fileIDs", "shorthand": "f", "usage": "file i ds of the subprocessor"}, "field": "FileIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "trustCenterSubprocessorIDs", "shorthand": "r", "usage": "trust center subprocessor i ds of the subprocessor"}, "field": "TrustCenterSubprocessorIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateSubprocessor",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subprocessor id to update"},
+    "inputType": "openlaneclient.UpdateSubprocessorInput",
+    "resultPath": ["updateSubprocessor", "subprocessor"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the subprocessor"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the subprocessor"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the subprocessor"}, "field": "Description", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteSubprocessor",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "subprocessor id to delete"},
+    "resultPath": ["deleteSubprocessor", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"},
+  
+    {"header": "Description", "path": ["description"]},
+  
+    {"header": "LogoRemoteUrl", "path": ["logoRemoteURL"]},
+  
+    {"header": "LogoLocalFileId", "path": ["logoLocalFileID"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

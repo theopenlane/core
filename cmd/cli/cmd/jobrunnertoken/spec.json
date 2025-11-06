@@ -1,0 +1,80 @@
+{
+  "name": "jobrunnertoken",
+  "use": "jobrunnertoken",
+  "short": "the subcommands for working with jobrunnertokens",
+  "list": {
+    "method": "GetAllJobRunnerTokens",
+    "root": "JobRunnerTokens"
+  },
+  "get": {
+    "method": "GetJobRunnerTokenByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobrunnertoken id to query"},
+    "resultPath": ["jobRunnerToken"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateJobRunnerToken",
+    "inputType": "openlaneclient.CreateJobRunnerTokenInput",
+    "resultPath": ["createJobRunnerToken", "jobRunnerToken"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the jobrunnertoken"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "expiresAt", "shorthand": "e", "usage": "expires at of the jobrunnertoken"}, "field": "ExpiresAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "lastUsedAt", "shorthand": "l", "usage": "last used at of the jobrunnertoken"}, "field": "LastUsedAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "isActive", "shorthand": "i", "usage": "is active of the jobrunnertoken"}, "field": "IsActive", "kind": "bool"},
+    
+      {"flag": {"name": "revokedReason", "shorthand": "r", "usage": "revoked reason of the jobrunnertoken"}, "field": "RevokedReason", "kind": "string"},
+    
+      {"flag": {"name": "revokedBy", "shorthand": "v", "usage": "revoked by of the jobrunnertoken"}, "field": "RevokedBy", "kind": "string"},
+    
+      {"flag": {"name": "revokedAt", "shorthand": "o", "usage": "revoked at of the jobrunnertoken"}, "field": "RevokedAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "jobRunnerIDs", "shorthand": "j", "usage": "job runner i ds of the jobrunnertoken"}, "field": "JobRunnerIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateJobRunnerToken",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobrunnertoken id to update"},
+    "inputType": "openlaneclient.UpdateJobRunnerTokenInput",
+    "resultPath": ["updateJobRunnerToken", "jobRunnerToken"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the jobrunnertoken"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "lastUsedAt", "shorthand": "l", "usage": "last used at of the jobrunnertoken"}, "field": "LastUsedAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "isActive", "shorthand": "i", "usage": "is active of the jobrunnertoken"}, "field": "IsActive", "kind": "bool"},
+    
+      {"flag": {"name": "revokedReason", "shorthand": "r", "usage": "revoked reason of the jobrunnertoken"}, "field": "RevokedReason", "kind": "string"},
+    
+      {"flag": {"name": "revokedBy", "shorthand": "e", "usage": "revoked by of the jobrunnertoken"}, "field": "RevokedBy", "kind": "string"},
+    
+      {"flag": {"name": "revokedAt", "shorthand": "v", "usage": "revoked at of the jobrunnertoken"}, "field": "RevokedAt", "kind": "string", "parser": "dateTime"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteJobRunnerToken",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobrunnertoken id to delete"},
+    "resultPath": ["deleteJobRunnerToken", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "ExpiresAt", "path": ["expiresAt"], "formatter": "timeOrNever"},
+  
+    {"header": "IsActive", "path": ["isActive"]},
+  
+    {"header": "LastUsedAt", "path": ["lastUsedAt"], "formatter": "timeOrNever"},
+  
+    {"header": "RevokedAt", "path": ["revokedAt"]},
+  
+    {"header": "RevokedBy", "path": ["revokedBy"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

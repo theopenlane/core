@@ -10,23 +10,21 @@ import (
 	"github.com/theopenlane/core/cmd/cli/cmd"
 )
 
-var getSettingsCmd = &cobra.Command{
-	Use:   "get-settings",
-	Short: "get trust center settings",
-	Run: func(cmd *cobra.Command, args []string) {
-		err := getSettings(cmd.Context())
-		cobra.CheckErr(err)
-	},
+func newGetSettingsCmd() *cobra.Command {
+	cmd := &cobra.Command{
+		Use:   "get-settings",
+		Short: "get trust center settings",
+		RunE: func(c *cobra.Command, _ []string) error {
+			return getSettings(c.Context())
+		},
+	}
+
+	cmd.Flags().StringP("id", "i", "", "trust center setting id to get")
+	cmd.Flags().StringP("trust-center-id", "c", "", "trust center id to get settings for (alternative to setting id)")
+
+	return cmd
 }
 
-func init() {
-	command.AddCommand(getSettingsCmd)
-
-	getSettingsCmd.Flags().StringP("id", "i", "", "trust center setting id to get")
-	getSettingsCmd.Flags().StringP("trust-center-id", "c", "", "trust center id to get settings for (alternative to setting id)")
-}
-
-// getSettingsValidation validates the required fields for the command
 func getSettingsValidation() (id string, trustCenterID string, err error) {
 	id = cmd.Config.String("id")
 	trustCenterID = cmd.Config.String("trust-center-id")
@@ -38,30 +36,31 @@ func getSettingsValidation() (id string, trustCenterID string, err error) {
 	return id, trustCenterID, nil
 }
 
-// get trust center settings
 func getSettings(ctx context.Context) error {
-	// attempt to setup with token, otherwise fall back to JWT with session
 	client, err := cmd.TokenAuth(ctx, cmd.Config)
 	if err != nil || client == nil {
-		// setup http client
 		client, err = cmd.SetupClientWithAuth(ctx)
-		cobra.CheckErr(err)
+		if err != nil {
+			return err
+		}
 		defer cmd.StoreSessionCookies(client)
 	}
 
 	id, trustCenterID, err := getSettingsValidation()
-	cobra.CheckErr(err)
+	if err != nil {
+		return err
+	}
 
-	// If we have a trust center ID instead of setting ID, get the trust center and extract settings
 	if id == "" && trustCenterID != "" {
 		trustCenter, err := client.GetTrustCenterByID(ctx, trustCenterID)
-		cobra.CheckErr(err)
+		if err != nil {
+			return err
+		}
 
 		if trustCenter.TrustCenter.Setting == nil {
 			return cmd.NewRequiredFieldMissingError("trust center has no settings")
 		}
 
-		// Convert the setting to the expected format for output
 		setting := &struct {
 			TrustCenterSetting *struct {
 				ID            string  `json:"id"`
@@ -93,9 +92,10 @@ func getSettings(ctx context.Context) error {
 		return consoleSettingsOutput(setting)
 	}
 
-	// Get by setting ID
 	o, err := client.GetTrustCenterSettingByID(ctx, id)
-	cobra.CheckErr(err)
+	if err != nil {
+		return err
+	}
 
 	return consoleSettingsOutput(o)
 }

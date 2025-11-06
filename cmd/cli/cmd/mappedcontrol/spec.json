@@ -1,0 +1,73 @@
+{
+  "name": "mapped control",
+  "use": "mappedcontrol",
+  "short": "the subcommands for working with mapped controls",
+  "list": {
+    "method": "GetAllMappedControls",
+    "root": "mappedControls"
+  },
+  "get": {
+    "method": "GetMappedControlByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mapped control id to query"},
+    "resultPath": ["mappedControl"],
+    "listRoot": "mappedControls",
+    "fallbackList": true,
+    "preHook": "mappedControlGet"
+  },
+  "create": {
+    "method": "CreateMappedControl",
+    "inputType": "openlaneclient.CreateMappedControlInput",
+    "resultPath": ["createMappedControl", "mappedControl"],
+    "preHook": "mappedControlCreate",
+    "fields": [
+      {"flag": {"name": "relation", "shorthand": "r", "usage": "description of how the two controls are related"}, "kind": "string"},
+      {"flag": {"name": "confidence", "shorthand": "c", "usage": "percentage (0-100) of confidence in the mapping"}, "kind": "int"},
+      {"flag": {"name": "mapping-type", "shorthand": "m", "usage": "the type of mapping between the two controls"}, "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "the source of the mapping"}, "kind": "string"},
+      {"flag": {"name": "from-control-ids", "usage": "the ids of the controls to map from"}, "kind": "stringSlice"},
+      {"flag": {"name": "to-control-ids", "usage": "the ids of the controls to map to"}, "kind": "stringSlice"},
+      {"flag": {"name": "from-subcontrol-ids", "usage": "the ids of the subcontrols to map from"}, "kind": "stringSlice"},
+      {"flag": {"name": "to-subcontrol-ids", "usage": "the ids of the subcontrols to map to"}, "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateMappedControl",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mapped control id to update"},
+    "inputType": "openlaneclient.UpdateMappedControlInput",
+    "resultPath": ["updateMappedControl", "mappedControl"],
+    "preHook": "mappedControlUpdate",
+    "fields": [
+      {"flag": {"name": "relation", "shorthand": "r", "usage": "description of how the two controls are related"}, "kind": "string"},
+      {"flag": {"name": "confidence", "shorthand": "c", "usage": "percentage (0-100) of confidence in the mapping"}, "kind": "int"},
+      {"flag": {"name": "mapping-type", "shorthand": "m", "usage": "the type of mapping between the two controls"}, "kind": "string"},
+      {"flag": {"name": "source", "shorthand": "s", "usage": "the source of the mapping"}, "kind": "string"},
+      {"flag": {"name": "add-from-control-ids", "usage": "the ids of the controls to map from"}, "kind": "stringSlice"},
+      {"flag": {"name": "add-to-control-ids", "usage": "the ids of the controls to map to"}, "kind": "stringSlice"},
+      {"flag": {"name": "remove-from-control-ids", "usage": "the ids of the controls to remove from the mapping"}, "kind": "stringSlice"},
+      {"flag": {"name": "remove-to-control-ids", "usage": "the ids of the controls to remove from the mapping"}, "kind": "stringSlice"},
+      {"flag": {"name": "add-from-subcontrol-ids", "usage": "the ids of the subcontrols to map from"}, "kind": "stringSlice"},
+      {"flag": {"name": "add-to-subcontrol-ids", "usage": "the ids of the subcontrols to map to"}, "kind": "stringSlice"},
+      {"flag": {"name": "remove-from-subcontrol-ids", "usage": "the ids of the subcontrols to remove from the mapping"}, "kind": "stringSlice"},
+      {"flag": {"name": "remove-to-subcontrol-ids", "usage": "the ids of the subcontrols to remove from the mapping"}, "kind": "stringSlice"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteMappedControl",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "mapped control id to delete"},
+    "resultPath": ["deleteMappedControl", "deletedID"],
+    "resultField": "deletedID",
+    "preHook": "mappedControlDelete"
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "ToControls", "path": ["to"]},
+    {"header": "FromControls", "path": ["from"]},
+    {"header": "Relation", "path": ["relation"]},
+    {"header": "Confidence", "path": ["confidence"]},
+    {"header": "MappingType", "path": ["mappingType"]},
+    {"header": "Source", "path": ["source"]}
+  ],
+  "deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+}

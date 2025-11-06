@@ -1,0 +1,68 @@
+{
+  "name": "narrative",
+  "use": "narrative",
+  "short": "the subcommands for working with narratives",
+  "list": {
+    "method": "GetAllNarratives",
+    "root": "Narratives"
+  },
+  "get": {
+    "method": "GetNarrativeByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "narrative id to query"},
+    "resultPath": ["narrative"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateNarrative",
+    "inputType": "openlaneclient.CreateNarrativeInput",
+    "resultPath": ["createNarrative", "narrative"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the narrative"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the narrative", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the narrative"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "details", "shorthand": "e", "usage": "details of the narrative"}, "field": "Details", "kind": "string"},
+    
+      {"flag": {"name": "blockedGroupIDs", "shorthand": "b", "usage": "blocked group i ds of the narrative"}, "field": "BlockedGroupIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "editorIDs", "shorthand": "i", "usage": "editor i ds of the narrative"}, "field": "EditorIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "viewerIDs", "shorthand": "v", "usage": "viewer i ds of the narrative"}, "field": "ViewerIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "satisfyIDs", "shorthand": "s", "usage": "satisfy i ds of the narrative"}, "field": "SatisfyIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateNarrative",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "narrative id to update"},
+    "inputType": "openlaneclient.UpdateNarrativeInput",
+    "resultPath": ["updateNarrative", "narrative"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the narrative"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the narrative"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "d", "usage": "description of the narrative"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "details", "shorthand": "e", "usage": "details of the narrative"}, "field": "Details", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteNarrative",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "narrative id to delete"},
+    "resultPath": ["deleteNarrative", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Name", "path": ["name"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

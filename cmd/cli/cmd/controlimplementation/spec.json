@@ -1,0 +1,72 @@
+{
+  "name": "controlimplementation",
+  "use": "controlimplementation",
+  "short": "the subcommands for working with controlimplementations",
+  "list": {
+    "method": "GetAllControlImplementations",
+    "root": "ControlImplementations"
+  },
+  "get": {
+    "method": "GetControlImplementationByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlimplementation id to query"},
+    "resultPath": ["controlImplementation"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateControlImplementation",
+    "inputType": "openlaneclient.CreateControlImplementationInput",
+    "resultPath": ["createControlImplementation", "controlImplementation"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the controlimplementation"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the controlimplementation"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "implementationDate", "shorthand": "i", "usage": "implementation date of the controlimplementation"}, "field": "ImplementationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "verified", "shorthand": "v", "usage": "verified of the controlimplementation"}, "field": "Verified", "kind": "bool"},
+    
+      {"flag": {"name": "verificationDate", "shorthand": "e", "usage": "verification date of the controlimplementation"}, "field": "VerificationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "details", "shorthand": "d", "usage": "details of the controlimplementation"}, "field": "Details", "kind": "string"},
+    
+      {"flag": {"name": "blockedGroupIDs", "shorthand": "b", "usage": "blocked group i ds of the controlimplementation"}, "field": "BlockedGroupIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "editorIDs", "shorthand": "o", "usage": "editor i ds of the controlimplementation"}, "field": "EditorIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateControlImplementation",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlimplementation id to update"},
+    "inputType": "openlaneclient.UpdateControlImplementationInput",
+    "resultPath": ["updateControlImplementation", "controlImplementation"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the controlimplementation"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the controlimplementation"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "implementationDate", "shorthand": "i", "usage": "implementation date of the controlimplementation"}, "field": "ImplementationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "verified", "shorthand": "v", "usage": "verified of the controlimplementation"}, "field": "Verified", "kind": "bool"},
+    
+      {"flag": {"name": "verificationDate", "shorthand": "e", "usage": "verification date of the controlimplementation"}, "field": "VerificationDate", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "details", "shorthand": "d", "usage": "details of the controlimplementation"}, "field": "Details", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteControlImplementation",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "controlimplementation id to delete"},
+    "resultPath": ["deleteControlImplementation", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "RefCode", "path": ["refCode"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

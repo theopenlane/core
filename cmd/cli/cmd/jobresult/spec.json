@@ -1,0 +1,68 @@
+{
+  "name": "jobresult",
+  "use": "jobresult",
+  "short": "the subcommands for working with jobresults",
+  "list": {
+    "method": "GetAllJobResults",
+    "root": "JobResults"
+  },
+  "get": {
+    "method": "GetJobResultByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobresult id to query"},
+    "resultPath": ["jobResult"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateJobResult",
+    "inputType": "openlaneclient.CreateJobResultInput",
+    "resultPath": ["createJobResult", "jobResult"],
+    "fields": [
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the jobresult", "required": true}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "finishedAt", "shorthand": "f", "usage": "finished at of the jobresult"}, "field": "FinishedAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "startedAt", "shorthand": "t", "usage": "started at of the jobresult"}, "field": "StartedAt", "kind": "string", "parser": "dateTime"},
+    
+      {"flag": {"name": "log", "shorthand": "l", "usage": "log of the jobresult"}, "field": "Log", "kind": "string"},
+    
+      {"flag": {"name": "scheduledJobID", "shorthand": "c", "usage": "scheduled job id of the jobresult", "required": true}, "field": "ScheduledJobID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateJobResult",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobresult id to update"},
+    "inputType": "openlaneclient.UpdateJobResultInput",
+    "resultPath": ["updateJobResult", "jobResult"],
+    "fields": [
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the jobresult"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "log", "shorthand": "l", "usage": "log of the jobresult"}, "field": "Log", "kind": "string"},
+    
+      {"flag": {"name": "scheduledJobID", "shorthand": "c", "usage": "scheduled job id of the jobresult"}, "field": "ScheduledJobID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteJobResult",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "jobresult id to delete"},
+    "resultPath": ["deleteJobResult", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Status", "path": ["status"]},
+  
+    {"header": "ExitCode", "path": ["exitCode"]},
+  
+    {"header": "FileId", "path": ["fileID"]},
+  
+    {"header": "FinishedAt", "path": ["finishedAt"]},
+  
+    {"header": "ScheduledJobId", "path": ["scheduledJobID"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

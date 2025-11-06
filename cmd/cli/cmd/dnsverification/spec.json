@@ -1,0 +1,84 @@
+{
+  "name": "dnsverification",
+  "use": "dnsverification",
+  "short": "the subcommands for working with dnsverifications",
+  "list": {
+    "method": "GetAllDNSVerifications",
+    "root": "DnsVerifications"
+  },
+  "get": {
+    "method": "GetDNSVerificationByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "dnsverification id to query"},
+    "resultPath": ["dnsVerification"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateDNSVerification",
+    "inputType": "openlaneclient.CreateDNSVerificationInput",
+    "resultPath": ["createDNSVerification", "dnsVerification"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the dnsverification"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "cloudflareHostnameID", "shorthand": "c", "usage": "cloudflare hostname id of the dnsverification", "required": true}, "field": "CloudflareHostnameID", "kind": "string"},
+    
+      {"flag": {"name": "dnsTxtRecord", "shorthand": "d", "usage": "dns txt record of the dnsverification", "required": true}, "field": "DNSTxtRecord", "kind": "string"},
+    
+      {"flag": {"name": "dnsTxtValue", "shorthand": "n", "usage": "dns txt value of the dnsverification", "required": true}, "field": "DNSTxtValue", "kind": "string"},
+    
+      {"flag": {"name": "dnsVerificationStatus", "shorthand": "s", "usage": "dns verification status of the dnsverification"}, "field": "DNSVerificationStatus", "kind": "string"},
+    
+      {"flag": {"name": "dnsVerificationStatusReason", "shorthand": "v", "usage": "dns verification status reason of the dnsverification"}, "field": "DNSVerificationStatusReason", "kind": "string"},
+    
+      {"flag": {"name": "acmeChallengePath", "shorthand": "a", "usage": "acme challenge path of the dnsverification"}, "field": "AcmeChallengePath", "kind": "string"},
+    
+      {"flag": {"name": "expectedAcmeChallengeValue", "shorthand": "e", "usage": "expected acme challenge value of the dnsverification"}, "field": "ExpectedAcmeChallengeValue", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateDNSVerification",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "dnsverification id to update"},
+    "inputType": "openlaneclient.UpdateDNSVerificationInput",
+    "resultPath": ["updateDNSVerification", "dnsVerification"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the dnsverification"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "dnsTxtRecord", "shorthand": "d", "usage": "dns txt record of the dnsverification"}, "field": "DNSTxtRecord", "kind": "string"},
+    
+      {"flag": {"name": "dnsTxtValue", "shorthand": "n", "usage": "dns txt value of the dnsverification"}, "field": "DNSTxtValue", "kind": "string"},
+    
+      {"flag": {"name": "dnsVerificationStatus", "shorthand": "s", "usage": "dns verification status of the dnsverification"}, "field": "DNSVerificationStatus", "kind": "string"},
+    
+      {"flag": {"name": "dnsVerificationStatusReason", "shorthand": "v", "usage": "dns verification status reason of the dnsverification"}, "field": "DNSVerificationStatusReason", "kind": "string"},
+    
+      {"flag": {"name": "acmeChallengePath", "shorthand": "a", "usage": "acme challenge path of the dnsverification"}, "field": "AcmeChallengePath", "kind": "string"},
+    
+      {"flag": {"name": "expectedAcmeChallengeValue", "shorthand": "e", "usage": "expected acme challenge value of the dnsverification"}, "field": "ExpectedAcmeChallengeValue", "kind": "string"},
+    
+      {"flag": {"name": "acmeChallengeStatus", "shorthand": "c", "usage": "acme challenge status of the dnsverification"}, "field": "AcmeChallengeStatus", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteDNSVerification",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "dnsverification id to delete"},
+    "resultPath": ["deleteDNSVerification", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "AcmeChallengePath", "path": ["acmeChallengePath"]},
+  
+    {"header": "AcmeChallengeStatus", "path": ["acmeChallengeStatus"]},
+  
+    {"header": "AcmeChallengeStatusReason", "path": ["acmeChallengeStatusReason"]},
+  
+    {"header": "CloudflareHostnameId", "path": ["cloudflareHostnameID"]},
+  
+    {"header": "DnsTxtRecord", "path": ["dnsTxtRecord"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

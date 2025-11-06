@@ -1,0 +1,84 @@
+{
+  "name": "procedure",
+  "use": "procedure",
+  "short": "the subcommands for working with procedures",
+  "list": {
+    "method": "GetAllProcedures",
+    "root": "Procedures"
+  },
+  "get": {
+    "method": "GetProcedureByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "procedure id to query"},
+    "resultPath": ["procedure"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateProcedure",
+    "inputType": "openlaneclient.CreateProcedureInput",
+    "resultPath": ["createProcedure", "procedure"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the procedure"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the procedure"}, "field": "Revision", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the procedure", "required": true}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the procedure"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "procedureType", "shorthand": "p", "usage": "procedure type of the procedure"}, "field": "ProcedureType", "kind": "string"},
+    
+      {"flag": {"name": "details", "shorthand": "d", "usage": "details of the procedure"}, "field": "Details", "kind": "string"},
+    
+      {"flag": {"name": "approvalRequired", "shorthand": "a", "usage": "approval required of the procedure"}, "field": "ApprovalRequired", "kind": "bool"},
+    
+      {"flag": {"name": "reviewDue", "shorthand": "e", "usage": "review due of the procedure"}, "field": "ReviewDue", "kind": "string", "parser": "dateTime"}
+    ]
+  },
+  "update": {
+    "method": "UpdateProcedure",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "procedure id to update"},
+    "inputType": "openlaneclient.UpdateProcedureInput",
+    "resultPath": ["updateProcedure", "procedure"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the procedure"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the procedure"}, "field": "Revision", "kind": "string"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the procedure"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the procedure"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "procedureType", "shorthand": "p", "usage": "procedure type of the procedure"}, "field": "ProcedureType", "kind": "string"},
+    
+      {"flag": {"name": "details", "shorthand": "d", "usage": "details of the procedure"}, "field": "Details", "kind": "string"},
+    
+      {"flag": {"name": "approvalRequired", "shorthand": "a", "usage": "approval required of the procedure"}, "field": "ApprovalRequired", "kind": "bool"},
+    
+      {"flag": {"name": "reviewDue", "shorthand": "e", "usage": "review due of the procedure"}, "field": "ReviewDue", "kind": "string", "parser": "dateTime"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteProcedure",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "procedure id to delete"},
+    "resultPath": ["deleteProcedure", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "DisplayId", "path": ["displayID"]},
+  
+    {"header": "Name", "path": ["name"]},
+  
+    {"header": "Status", "path": ["status"]},
+  
+    {"header": "ApprovalRequired", "path": ["approvalRequired"]},
+  
+    {"header": "Details", "path": ["details"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

@@ -7,7 +7,6 @@ import (
 	"errors"
 	"fmt"
 	"go/types"
-	"html/template"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -15,6 +14,7 @@ import (
 	"sort"
 	"strings"
 	"sync"
+	"text/template"
 	"unicode"
 
 	"entgo.io/ent/entc"
@@ -437,6 +437,8 @@ func classifyFieldType(t types.Type) (kind string, parser string, optional bool,
 			return "string", "", false, true
 		case types.Bool:
 			return "bool", "", false, true
+		case types.Int, types.Int8, types.Int16, types.Int32, types.Int64:
+			return "int", "", false, true
 		}
 	case *types.Named:
 		pkgPath := ""
@@ -539,6 +541,18 @@ func shouldSkipField(name string, kind string, update bool) bool {
 	}
 
 	if strings.HasSuffix(lower, "ids") && kind != "stringSlice" {
+		return true
+	}
+
+	if strings.Contains(lower, "avatar") || strings.Contains(lower, "remoteurl") {
+		return true
+	}
+
+	if strings.Contains(lower, "personalorg") {
+		return true
+	}
+
+	if strings.HasSuffix(lower, "fileid") {
 		return true
 	}
 

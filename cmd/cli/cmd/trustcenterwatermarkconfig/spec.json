@@ -1,0 +1,70 @@
+{
+  "name": "trustcenterwatermarkconfig",
+  "use": "trustcenterwatermarkconfig",
+  "short": "the subcommands for working with trustcenterwatermarkconfigs",
+  "list": {
+    "method": "GetAllTrustCenterWatermarkConfigs",
+    "root": "TrustCenterWatermarkConfigs"
+  },
+  "get": {
+    "method": "GetTrustCenterWatermarkConfigByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterwatermarkconfig id to query"},
+    "resultPath": ["trustCenterWatermarkConfig"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTrustCenterWatermarkConfig",
+    "inputType": "openlaneclient.CreateTrustCenterWatermarkConfigInput",
+    "resultPath": ["createTrustCenterWatermarkConfig", "trustCenterWatermarkConfig"],
+    "fields": [
+      {"flag": {"name": "trustCenterID", "shorthand": "t", "usage": "trust center id of the trustcenterwatermarkconfig"}, "field": "TrustCenterID", "kind": "string"},
+    
+      {"flag": {"name": "text", "shorthand": "e", "usage": "text of the trustcenterwatermarkconfig"}, "field": "Text", "kind": "string"},
+    
+      {"flag": {"name": "color", "shorthand": "c", "usage": "color of the trustcenterwatermarkconfig"}, "field": "Color", "kind": "string"},
+    
+      {"flag": {"name": "font", "shorthand": "f", "usage": "font of the trustcenterwatermarkconfig"}, "field": "Font", "kind": "string"},
+    
+      {"flag": {"name": "trustCenterIDs", "shorthand": "r", "usage": "trust center i ds of the trustcenterwatermarkconfig"}, "field": "TrustCenterIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateTrustCenterWatermarkConfig",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterwatermarkconfig id to update"},
+    "inputType": "openlaneclient.UpdateTrustCenterWatermarkConfigInput",
+    "resultPath": ["updateTrustCenterWatermarkConfig", "trustCenterWatermarkConfig"],
+    "fields": [
+      {"flag": {"name": "trustCenterID", "shorthand": "t", "usage": "trust center id of the trustcenterwatermarkconfig"}, "field": "TrustCenterID", "kind": "string"},
+    
+      {"flag": {"name": "text", "shorthand": "e", "usage": "text of the trustcenterwatermarkconfig"}, "field": "Text", "kind": "string"},
+    
+      {"flag": {"name": "color", "shorthand": "c", "usage": "color of the trustcenterwatermarkconfig"}, "field": "Color", "kind": "string"},
+    
+      {"flag": {"name": "font", "shorthand": "f", "usage": "font of the trustcenterwatermarkconfig"}, "field": "Font", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteTrustCenterWatermarkConfig",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterwatermarkconfig id to delete"},
+    "resultPath": ["deleteTrustCenterWatermarkConfig", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "TrustCenterId", "path": ["trustCenterID"]},
+  
+    {"header": "PresignedUrl", "path": ["presignedURL"]},
+  
+    {"header": "LogoId", "path": ["logoID"]},
+  
+    {"header": "Text", "path": ["text"]},
+  
+    {"header": "FontSize", "path": ["fontSize"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

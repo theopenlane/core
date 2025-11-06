@@ -6,66 +6,46 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/spf13/cobra"
 	"golang.org/x/oauth2"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
+	cmdpkg "github.com/theopenlane/core/cmd/cli/cmd"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
-var command = &cobra.Command{
-	Use:   "switch",
-	Short: "switch organization contexts",
-	Run: func(cmd *cobra.Command, args []string) {
-		err := switchOrg(cmd.Context())
-		cobra.CheckErr(err)
-	},
-}
-
-func init() {
-	cmd.RootCmd.AddCommand(command)
-
-	command.Flags().StringP("target-org", "t", "", "target organization to switch to")
-}
-
-// validate validates the required fields for the command
-func validate() (*models.SwitchOrganizationRequest, error) {
-	input := &models.SwitchOrganizationRequest{}
-
-	input.TargetOrganizationID = cmd.Config.String("target-org")
-	if input.TargetOrganizationID == "" {
-		return nil, cmd.NewRequiredFieldMissingError("target organization")
+func buildSwitchRequest() (*models.SwitchOrganizationRequest, error) {
+	target := cmdpkg.Config.String("target-org")
+	if target == "" {
+		return nil, cmdpkg.NewRequiredFieldMissingError("target organization")
 	}
 
-	return input, nil
+	return &models.SwitchOrganizationRequest{TargetOrganizationID: target}, nil
 }
 
-// switchOrg switches the organization context
-func switchOrg(ctx context.Context) error {
-	// setup http client
-	client, err := cmd.SetupClientWithAuth(ctx)
-	cobra.CheckErr(err)
+func switchOrganization(ctx context.Context, client *openlaneclient.OpenlaneClient) (*models.SwitchOrganizationReply, error) {
+	if client == nil {
+		return nil, fmt.Errorf("client is required")
+	}
 
-	input, err := validate()
-	cobra.CheckErr(err)
+	input, err := buildSwitchRequest()
+	if err != nil {
+		return nil, err
+	}
 
 	resp, err := client.Switch(ctx, input)
-	cobra.CheckErr(err)
-
-	fmt.Printf("Successfully switched to organization: %s!\n", input.TargetOrganizationID)
-
-	// store auth tokens
-	if err := cmd.StoreToken(&oauth2.Token{
-		AccessToken:  resp.AccessToken,
-		RefreshToken: resp.RefreshToken,
-	}); err != nil {
-		return err
+	if err != nil {
+		return nil, err
 	}
 
-	// store session cookies
-	cmd.StoreSessionCookies(client)
+	token := &oauth2.Token{
+		AccessToken:  resp.AccessToken,
+		RefreshToken: resp.RefreshToken,
+	}
+	if err := cmdpkg.StoreToken(token); err != nil {
+		return nil, err
+	}
 
-	fmt.Println("auth tokens successfully stored in keychain")
+	cmdpkg.StoreSessionCookies(client)
 
-	return nil
+	return resp, nil
 }

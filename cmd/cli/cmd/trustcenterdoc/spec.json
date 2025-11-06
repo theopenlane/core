@@ -1,0 +1,80 @@
+{
+  "name": "trustcenterdoc",
+  "use": "trustcenterdoc",
+  "short": "the subcommands for working with trustcenterdocs",
+  "list": {
+    "method": "GetAllTrustCenterDocs",
+    "root": "TrustCenterDocs"
+  },
+  "get": {
+    "method": "GetTrustCenterDocByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterdoc id to query"},
+    "resultPath": ["trustCenterDoc"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateTrustCenterDoc",
+    "inputType": "openlaneclient.CreateTrustCenterDocInput",
+    "resultPath": ["createTrustCenterDoc", "trustCenterDoc"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the trustcenterdoc"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "title", "shorthand": "i", "usage": "title of the trustcenterdoc", "required": true}, "field": "Title", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the trustcenterdoc", "required": true}, "field": "Category", "kind": "string"},
+    
+      {"flag": {"name": "watermarkingEnabled", "shorthand": "w", "usage": "watermarking enabled of the trustcenterdoc"}, "field": "WatermarkingEnabled", "kind": "bool"},
+    
+      {"flag": {"name": "watermarkStatus", "shorthand": "a", "usage": "watermark status of the trustcenterdoc"}, "field": "WatermarkStatus", "kind": "string"},
+    
+      {"flag": {"name": "visibility", "shorthand": "v", "usage": "visibility of the trustcenterdoc"}, "field": "Visibility", "kind": "string"},
+    
+      {"flag": {"name": "trustCenterID", "shorthand": "r", "usage": "trust center id of the trustcenterdoc"}, "field": "TrustCenterID", "kind": "string"}
+    ]
+  },
+  "update": {
+    "method": "UpdateTrustCenterDoc",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterdoc id to update"},
+    "inputType": "openlaneclient.UpdateTrustCenterDocInput",
+    "resultPath": ["updateTrustCenterDoc", "trustCenterDoc"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the trustcenterdoc"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "title", "shorthand": "i", "usage": "title of the trustcenterdoc"}, "field": "Title", "kind": "string"},
+    
+      {"flag": {"name": "category", "shorthand": "c", "usage": "category of the trustcenterdoc"}, "field": "Category", "kind": "string"},
+    
+      {"flag": {"name": "watermarkingEnabled", "shorthand": "w", "usage": "watermarking enabled of the trustcenterdoc"}, "field": "WatermarkingEnabled", "kind": "bool"},
+    
+      {"flag": {"name": "watermarkStatus", "shorthand": "a", "usage": "watermark status of the trustcenterdoc"}, "field": "WatermarkStatus", "kind": "string"},
+    
+      {"flag": {"name": "visibility", "shorthand": "v", "usage": "visibility of the trustcenterdoc"}, "field": "Visibility", "kind": "string"},
+    
+      {"flag": {"name": "trustCenterID", "shorthand": "r", "usage": "trust center id of the trustcenterdoc"}, "field": "TrustCenterID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteTrustCenterDoc",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "trustcenterdoc id to delete"},
+    "resultPath": ["deleteTrustCenterDoc", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Title", "path": ["title"]},
+  
+    {"header": "Tags", "path": ["tags"], "formatter": "joinedStrings"},
+  
+    {"header": "TrustCenterId", "path": ["trustCenterID"]},
+  
+    {"header": "Category", "path": ["category"]},
+  
+    {"header": "FileId", "path": ["fileID"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

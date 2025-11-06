@@ -1,0 +1,74 @@
+{
+  "name": "entity",
+  "use": "entity",
+  "short": "the subcommands for working with entitys",
+  "list": {
+    "method": "GetAllEntities",
+    "root": "Entities"
+  },
+  "get": {
+    "method": "GetEntityByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entity id to query"},
+    "resultPath": ["entity"],
+    "fallbackList": true
+  },
+  "create": {
+    "method": "CreateEntity",
+    "inputType": "openlaneclient.CreateEntityInput",
+    "resultPath": ["createEntity", "entity"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the entity"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the entity"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "displayName", "shorthand": "d", "usage": "display name of the entity"}, "field": "DisplayName", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "e", "usage": "description of the entity"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "domains", "shorthand": "o", "usage": "domains of the entity"}, "field": "Domains", "kind": "stringSlice"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the entity"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "blockedGroupIDs", "shorthand": "b", "usage": "blocked group i ds of the entity"}, "field": "BlockedGroupIDs", "kind": "stringSlice"},
+    
+      {"flag": {"name": "editorIDs", "shorthand": "i", "usage": "editor i ds of the entity"}, "field": "EditorIDs", "kind": "stringSlice"}
+    ]
+  },
+  "update": {
+    "method": "UpdateEntity",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entity id to update"},
+    "inputType": "openlaneclient.UpdateEntityInput",
+    "resultPath": ["updateEntity", "entity"],
+    "fields": [
+      {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the entity"}, "field": "Tags", "kind": "stringSlice"},
+    
+      {"flag": {"name": "name", "shorthand": "n", "usage": "name of the entity"}, "field": "Name", "kind": "string"},
+    
+      {"flag": {"name": "displayName", "shorthand": "d", "usage": "display name of the entity"}, "field": "DisplayName", "kind": "string"},
+    
+      {"flag": {"name": "description", "shorthand": "e", "usage": "description of the entity"}, "field": "Description", "kind": "string"},
+    
+      {"flag": {"name": "domains", "shorthand": "o", "usage": "domains of the entity"}, "field": "Domains", "kind": "stringSlice"},
+    
+      {"flag": {"name": "status", "shorthand": "s", "usage": "status of the entity"}, "field": "Status", "kind": "string"},
+    
+      {"flag": {"name": "entityTypeID", "shorthand": "i", "usage": "entity type id of the entity"}, "field": "EntityTypeID", "kind": "string"}
+    ]
+  },
+  "delete": {
+    "method": "DeleteEntity",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "entity id to delete"},
+    "resultPath": ["deleteEntity", "deletedID"],
+    "resultField": "deletedID"
+  },
+
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+  
+    {"header": "Text", "path": ["text"]}
+  ]
+  ,"deleteColumns": [
+    {"header": "DeletedID", "path": ["deletedID"]}
+  ]
+
+}

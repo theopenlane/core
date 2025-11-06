@@ -1,4 +1,4 @@
 //go:build cli
 
-// Package jobtemplate is our cobra cli for jobtemplate endpoints
+// Package jobtemplate is our cobra cli for jobTemplate endpoints
 package jobtemplate
