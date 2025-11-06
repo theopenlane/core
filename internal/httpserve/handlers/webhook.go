@@ -72,6 +72,10 @@ var (
 		},
 		[]string{"event_type", "status_code"},
 	)
+
+	errPayloadEmpty = errors.New("payload is empty")
+
+	errMissingSecret = errors.New("webhook secret is missing")
 )
 
 func init() {
@@ -117,7 +121,6 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	log.Info().Msgf("version: %s", webhookReq.APIVersion)
 
-	var errPayloadEmpty = errors.New("payload is empty")
 	if payload == nil {
 		webhookResponseCounter.WithLabelValues("empty_payload", "400").Inc()
 		log.Error().Msg("empty payload received")
@@ -127,7 +130,6 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	webhookSecret := h.Entitlements.Config.GetWebhookSecretForVersion(webhookReq.APIVersion)
 
-	var errMissingSecret = errors.New("webhook secret is missing")
 	if webhookSecret == "" {
 		webhookResponseCounter.WithLabelValues("missing_webhook_secret", "500").Inc()
 		log.Error().Str("api_version", webhookReq.APIVersion).Msg("missing webhook secret for API version")
