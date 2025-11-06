@@ -242,9 +242,11 @@ func TestCreateTaskWorker(t *testing.T) {
 			// Create worker with config
 			worker := &corejobs.CreateTaskWorker{
 				Config: corejobs.TaskWorkerConfig{
-					OpenlaneAPIHost:  "https://api.example.com",
-					OpenlaneAPIToken: "tola_test-token",
-					Enabled:          true,
+					OpenlaneConfig: corejobs.OpenlaneConfig{
+						OpenlaneAPIHost:  "https://api.example.com",
+						OpenlaneAPIToken: "tola_test-token",
+					},
+					Enabled: true,
 				},
 			}
 
@@ -304,9 +306,11 @@ func TestCreateTaskWorker_WithDueDate(t *testing.T) {
 	// Create worker with config
 	worker := &corejobs.CreateTaskWorker{
 		Config: corejobs.TaskWorkerConfig{
-			OpenlaneAPIHost:  "https://api.example.com",
-			OpenlaneAPIToken: "tola_test-token",
-			Enabled:          true,
+			OpenlaneConfig: corejobs.OpenlaneConfig{
+				OpenlaneAPIHost:  "https://api.example.com",
+				OpenlaneAPIToken: "tola_test-token",
+			},
+			Enabled: true,
 		},
 	}
 
@@ -358,18 +362,3 @@ func TestCreateTaskArgs_InsertOpts(t *testing.T) {
 	})
 }
 
-func TestTaskWorkerConfig_GetOpenlaneConfig(t *testing.T) {
-	t.Parallel()
-
-	config := corejobs.TaskWorkerConfig{
-		OpenlaneAPIHost:  "https://api.example.com",
-		OpenlaneAPIToken: "tola_test-token",
-		Enabled:          true,
-	}
-
-	olConfig := config.GetOpenlaneConfig()
-
-	require.NotNil(t, olConfig)
-	require.Equal(t, config.OpenlaneAPIHost, olConfig.OpenlaneAPIHost)
-	require.Equal(t, config.OpenlaneAPIToken, olConfig.OpenlaneAPIToken)
-}

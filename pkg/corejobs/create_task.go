@@ -67,20 +67,10 @@ func (a CreateTaskArgs) InsertOpts() river.InsertOpts {
 
 // TaskWorkerConfig contains configuration for the create task worker
 type TaskWorkerConfig struct {
-	// OpenlaneAPIHost is the host URL for the Openlane API
-	OpenlaneAPIHost string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required,description=the openlane api host"`
-	// OpenlaneAPIToken is the API token for authenticating with the Openlane API
-	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required,description=the openlane api token"`
+	// embed OpenlaneConfig to reuse validation and client creation logic
+	OpenlaneConfig
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required,description=whether the task worker is enabled"`
-}
-
-// GetOpenlaneConfig returns an OpenlaneConfig from the TaskWorkerConfig
-func (c *TaskWorkerConfig) GetOpenlaneConfig() *OpenlaneConfig {
-	return &OpenlaneConfig{
-		OpenlaneAPIHost:  c.OpenlaneAPIHost,
-		OpenlaneAPIToken: c.OpenlaneAPIToken,
-	}
 }
 
 // CreateTaskWorker processes create task jobs
@@ -115,8 +105,7 @@ func (w *CreateTaskWorker) Work(ctx context.Context, job *river.Job[CreateTaskAr
 
 	// Initialize Openlane client if not already set
 	if w.olClient == nil {
-		olConfig := w.Config.GetOpenlaneConfig()
-		cl, err := olConfig.getOpenlaneClient()
+		cl, err := w.Config.OpenlaneConfig.getOpenlaneClient()
 		if err != nil {
 			logger.Error().Err(err).Msg("failed to create openlane client")
 			return err
