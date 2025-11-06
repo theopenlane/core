@@ -24,9 +24,9 @@ const (
 // RateOption defines a distinct rate limiting window and request allowance.
 type RateOption struct {
 	// Requests is the number of requests allowed within the configured window.
-	Requests int64 `json:"requests" koanf:"requests" default:"200"`
+	Requests int64 `json:"requests" koanf:"requests" default:"500" example:"500"`
 	// Window is the duration of the sliding window.
-	Window time.Duration `json:"window" koanf:"window" default:"10s"`
+	Window time.Duration `json:"window" koanf:"window" default:"1m"`
 	// Expiration controls how long counters are retained before eviction.
 	// When unset, Expiration defaults to twice the Window duration.
 	Expiration time.Duration `json:"expiration" koanf:"expiration"`
