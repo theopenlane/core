@@ -87,13 +87,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	req := ctx.Request()
 	res := ctx.Response()
 
-	webhookReq := &models.StripeWebhookRequest{}
-	if err := ctx.Bind(webhookReq); err != nil {
-		webhookResponseCounter.WithLabelValues("query_param_parse_failure", "400").Inc()
-		log.Error().Err(err).Msg("failed to parse query parameters")
-
-		return h.BadRequest(ctx, err, openapi)
-	}
+	webhookReq := &models.StripeWebhookRequest{APIVersion: ctx.QueryParam("api_version")}
 
 	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookDiscardAPIVersion != "" {
 		if webhookReq.APIVersion == h.Entitlements.Config.StripeWebhookDiscardAPIVersion {
