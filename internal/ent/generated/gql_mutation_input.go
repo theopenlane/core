@@ -11191,7 +11191,7 @@ type CreateProgramInput struct {
 	EvidenceIDs          []string
 	NarrativeIDs         []string
 	ActionPlanIDs        []string
-	UserID               *string
+	ProgramOwnerID       *string
 }
 
 // Mutate applies the CreateProgramInput on the ProgramMutation builder.
@@ -11290,8 +11290,8 @@ func (i *CreateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.ActionPlanIDs; len(v) > 0 {
 		m.AddActionPlanIDs(v...)
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.ProgramOwnerID; v != nil {
+		m.SetProgramOwnerID(*v)
 	}
 }
 
@@ -11377,8 +11377,8 @@ type UpdateProgramInput struct {
 	ClearActionPlans          bool
 	AddActionPlanIDs          []string
 	RemoveActionPlanIDs       []string
-	ClearUser                 bool
-	UserID                    *string
+	ClearProgramOwner         bool
+	ProgramOwnerID            *string
 }
 
 // Mutate applies the UpdateProgramInput on the ProgramMutation builder.
@@ -11605,11 +11605,11 @@ func (i *UpdateProgramInput) Mutate(m *ProgramMutation) {
 	if v := i.RemoveActionPlanIDs; len(v) > 0 {
 		m.RemoveActionPlanIDs(v...)
 	}
-	if i.ClearUser {
-		m.ClearUser()
+	if i.ClearProgramOwner {
+		m.ClearProgramOwner()
 	}
-	if v := i.UserID; v != nil {
-		m.SetUserID(*v)
+	if v := i.ProgramOwnerID; v != nil {
+		m.SetProgramOwnerID(*v)
 	}
 }
 
@@ -16351,7 +16351,7 @@ type CreateUserInput struct {
 	AssignerTaskIDs          []string
 	AssigneeTaskIDs          []string
 	ProgramIDs               []string
-	ProgramOwnerID           *string
+	ProgramsOwnedIDs         []string
 	ImpersonationEventIDs    []string
 	TargetedImpersonationIDs []string
 }
@@ -16448,8 +16448,8 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	if v := i.ProgramIDs; len(v) > 0 {
 		m.AddProgramIDs(v...)
 	}
-	if v := i.ProgramOwnerID; v != nil {
-		m.SetProgramOwnerID(*v)
+	if v := i.ProgramsOwnedIDs; len(v) > 0 {
+		m.AddProgramsOwnedIDs(v...)
 	}
 	if v := i.ImpersonationEventIDs; len(v) > 0 {
 		m.AddImpersonationEventIDs(v...)
@@ -16540,8 +16540,9 @@ type UpdateUserInput struct {
 	ClearPrograms                  bool
 	AddProgramIDs                  []string
 	RemoveProgramIDs               []string
-	ClearProgramOwner              bool
-	ProgramOwnerID                 *string
+	ClearProgramsOwned             bool
+	AddProgramsOwnedIDs            []string
+	RemoveProgramsOwnedIDs         []string
 	ClearImpersonationEvents       bool
 	AddImpersonationEventIDs       []string
 	RemoveImpersonationEventIDs    []string
@@ -16771,11 +16772,14 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveProgramIDs; len(v) > 0 {
 		m.RemoveProgramIDs(v...)
 	}
-	if i.ClearProgramOwner {
-		m.ClearProgramOwner()
+	if i.ClearProgramsOwned {
+		m.ClearProgramsOwned()
 	}
-	if v := i.ProgramOwnerID; v != nil {
-		m.SetProgramOwnerID(*v)
+	if v := i.AddProgramsOwnedIDs; len(v) > 0 {
+		m.AddProgramsOwnedIDs(v...)
+	}
+	if v := i.RemoveProgramsOwnedIDs; len(v) > 0 {
+		m.RemoveProgramsOwnedIDs(v...)
 	}
 	if i.ClearImpersonationEvents {
 		m.ClearImpersonationEvents()

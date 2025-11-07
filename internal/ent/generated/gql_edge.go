@@ -7212,10 +7212,10 @@ func (_m *Program) Users(
 	return _m.QueryUsers().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *Program) User(ctx context.Context) (*User, error) {
-	result, err := _m.Edges.UserOrErr()
+func (_m *Program) ProgramOwner(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.ProgramOwnerOrErr()
 	if IsNotLoaded(err) {
-		result, err = _m.QueryUser().Only(ctx)
+		result, err = _m.QueryProgramOwner().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -9819,12 +9819,25 @@ func (_m *User) Programs(
 	return _m.QueryPrograms().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *User) ProgramOwner(ctx context.Context) (*Program, error) {
-	result, err := _m.Edges.ProgramOwnerOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryProgramOwner().Only(ctx)
+func (_m *User) ProgramsOwned(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ProgramOrder, where *ProgramWhereInput,
+) (*ProgramConnection, error) {
+	opts := []ProgramPaginateOption{
+		WithProgramOrder(orderBy),
+		WithProgramFilter(where.Filter),
 	}
-	return result, MaskNotFound(err)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[14][alias]
+	if nodes, err := _m.NamedProgramsOwned(alias); err == nil || hasTotalCount {
+		pager, err := newProgramPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ProgramConnection{Edges: []*ProgramEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryProgramsOwned().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *User) GroupMemberships(

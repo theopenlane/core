@@ -4610,7 +4610,7 @@ var (
 		{Name: "program_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_programs", Type: field.TypeString, Nullable: true},
 		{Name: "review_programs", Type: field.TypeString, Nullable: true},
-		{Name: "program_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "program_owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_programs", Type: field.TypeString, Nullable: true},
 	}
 	// ProgramsTable holds the schema information for the "programs" table.
@@ -4656,7 +4656,7 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "programs_users_program_owner",
+				Symbol:     "programs_users_programs_owned",
 				Columns:    []*schema.Column{ProgramsColumns[29]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,

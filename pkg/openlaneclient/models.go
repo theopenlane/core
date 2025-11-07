@@ -7685,7 +7685,7 @@ type CreateProgramInput struct {
 	EvidenceIDs         []string `json:"evidenceIDs,omitempty"`
 	NarrativeIDs        []string `json:"narrativeIDs,omitempty"`
 	ActionPlanIDs       []string `json:"actionPlanIDs,omitempty"`
-	UserID              *string  `json:"userID,omitempty"`
+	ProgramOwnerID      *string  `json:"programOwnerID,omitempty"`
 }
 
 // CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -8360,7 +8360,7 @@ type CreateUserInput struct {
 	AssignerTaskIDs          []string `json:"assignerTaskIDs,omitempty"`
 	AssigneeTaskIDs          []string `json:"assigneeTaskIDs,omitempty"`
 	ProgramIDs               []string `json:"programIDs,omitempty"`
-	ProgramOwnerID           *string  `json:"programOwnerID,omitempty"`
+	ProgramsOwnedIDs         []string `json:"programsOwnedIDs,omitempty"`
 	ImpersonationEventIDs    []string `json:"impersonationEventIDs,omitempty"`
 	TargetedImpersonationIDs []string `json:"targetedImpersonationIDs,omitempty"`
 }
@@ -26432,7 +26432,7 @@ type Program struct {
 	Narratives        *NarrativeConnection         `json:"narratives"`
 	ActionPlans       *ActionPlanConnection        `json:"actionPlans"`
 	Users             *UserConnection              `json:"users"`
-	User              *User                        `json:"user,omitempty"`
+	ProgramOwner      *User                        `json:"programOwner,omitempty"`
 	Members           *ProgramMembershipConnection `json:"members"`
 }
 
@@ -27554,9 +27554,9 @@ type ProgramWhereInput struct {
 	// users edge predicates
 	HasUsers     *bool             `json:"hasUsers,omitempty"`
 	HasUsersWith []*UserWhereInput `json:"hasUsersWith,omitempty"`
-	// user edge predicates
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
+	// program_owner edge predicates
+	HasProgramOwner     *bool             `json:"hasProgramOwner,omitempty"`
+	HasProgramOwnerWith []*UserWhereInput `json:"hasProgramOwnerWith,omitempty"`
 	// members edge predicates
 	HasMembers     *bool                          `json:"hasMembers,omitempty"`
 	HasMembersWith []*ProgramMembershipWhereInput `json:"hasMembersWith,omitempty"`
@@ -41818,8 +41818,8 @@ type UpdateProgramInput struct {
 	AddActionPlanIDs          []string                     `json:"addActionPlanIDs,omitempty"`
 	RemoveActionPlanIDs       []string                     `json:"removeActionPlanIDs,omitempty"`
 	ClearActionPlans          *bool                        `json:"clearActionPlans,omitempty"`
-	UserID                    *string                      `json:"userID,omitempty"`
-	ClearUser                 *bool                        `json:"clearUser,omitempty"`
+	ProgramOwnerID            *string                      `json:"programOwnerID,omitempty"`
+	ClearProgramOwner         *bool                        `json:"clearProgramOwner,omitempty"`
 	AddProgramMembers         []*AddProgramMembershipInput `json:"addProgramMembers,omitempty"`
 	RemoveProgramMembers      []string                     `json:"removeProgramMembers,omitempty"`
 }
@@ -42894,8 +42894,9 @@ type UpdateUserInput struct {
 	AddProgramIDs                  []string `json:"addProgramIDs,omitempty"`
 	RemoveProgramIDs               []string `json:"removeProgramIDs,omitempty"`
 	ClearPrograms                  *bool    `json:"clearPrograms,omitempty"`
-	ProgramOwnerID                 *string  `json:"programOwnerID,omitempty"`
-	ClearProgramOwner              *bool    `json:"clearProgramOwner,omitempty"`
+	AddProgramsOwnedIDs            []string `json:"addProgramsOwnedIDs,omitempty"`
+	RemoveProgramsOwnedIDs         []string `json:"removeProgramsOwnedIDs,omitempty"`
+	ClearProgramsOwned             *bool    `json:"clearProgramsOwned,omitempty"`
 	AddImpersonationEventIDs       []string `json:"addImpersonationEventIDs,omitempty"`
 	RemoveImpersonationEventIDs    []string `json:"removeImpersonationEventIDs,omitempty"`
 	ClearImpersonationEvents       *bool    `json:"clearImpersonationEvents,omitempty"`
@@ -43147,7 +43148,7 @@ type User struct {
 	AssignerTasks        *TaskConnection                `json:"assignerTasks"`
 	AssigneeTasks        *TaskConnection                `json:"assigneeTasks"`
 	Programs             *ProgramConnection             `json:"programs"`
-	ProgramOwner         *Program                       `json:"programOwner,omitempty"`
+	ProgramsOwned        *ProgramConnection             `json:"programsOwned"`
 	GroupMemberships     *GroupMembershipConnection     `json:"groupMemberships"`
 	OrgMemberships       *OrgMembershipConnection       `json:"orgMemberships"`
 	ProgramMemberships   *ProgramMembershipConnection   `json:"programMemberships"`
@@ -44389,9 +44390,9 @@ type UserWhereInput struct {
 	// programs edge predicates
 	HasPrograms     *bool                `json:"hasPrograms,omitempty"`
 	HasProgramsWith []*ProgramWhereInput `json:"hasProgramsWith,omitempty"`
-	// program_owner edge predicates
-	HasProgramOwner     *bool                `json:"hasProgramOwner,omitempty"`
-	HasProgramOwnerWith []*ProgramWhereInput `json:"hasProgramOwnerWith,omitempty"`
+	// programs_owned edge predicates
+	HasProgramsOwned     *bool                `json:"hasProgramsOwned,omitempty"`
+	HasProgramsOwnedWith []*ProgramWhereInput `json:"hasProgramsOwnedWith,omitempty"`
 	// group_memberships edge predicates
 	HasGroupMemberships     *bool                        `json:"hasGroupMemberships,omitempty"`
 	HasGroupMembershipsWith []*GroupMembershipWhereInput `json:"hasGroupMembershipsWith,omitempty"`

@@ -61,7 +61,7 @@ type ProgramQuery struct {
 	withNarratives             *NarrativeQuery
 	withActionPlans            *ActionPlanQuery
 	withUsers                  *UserQuery
-	withUser                   *UserQuery
+	withProgramOwner           *UserQuery
 	withMembers                *ProgramMembershipQuery
 	withFKs                    bool
 	loadTotal                  []func(context.Context, []*Program) error
@@ -569,8 +569,8 @@ func (_q *ProgramQuery) QueryUsers() *UserQuery {
 	return query
 }
 
-// QueryUser chains the current query on the "user" edge.
-func (_q *ProgramQuery) QueryUser() *UserQuery {
+// QueryProgramOwner chains the current query on the "program_owner" edge.
+func (_q *ProgramQuery) QueryProgramOwner() *UserQuery {
 	query := (&UserClient{config: _q.config}).Query()
 	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
 		if err := _q.prepareQuery(ctx); err != nil {
@@ -583,7 +583,7 @@ func (_q *ProgramQuery) QueryUser() *UserQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(program.Table, program.FieldID, selector),
 			sqlgraph.To(user.Table, user.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, program.UserTable, program.UserColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, program.ProgramOwnerTable, program.ProgramOwnerColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.User
@@ -829,7 +829,7 @@ func (_q *ProgramQuery) Clone() *ProgramQuery {
 		withNarratives:        _q.withNarratives.Clone(),
 		withActionPlans:       _q.withActionPlans.Clone(),
 		withUsers:             _q.withUsers.Clone(),
-		withUser:              _q.withUser.Clone(),
+		withProgramOwner:      _q.withProgramOwner.Clone(),
 		withMembers:           _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -1036,14 +1036,14 @@ func (_q *ProgramQuery) WithUsers(opts ...func(*UserQuery)) *ProgramQuery {
 	return _q
 }
 
-// WithUser tells the query-builder to eager-load the nodes that are connected to
-// the "user" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *ProgramQuery) WithUser(opts ...func(*UserQuery)) *ProgramQuery {
+// WithProgramOwner tells the query-builder to eager-load the nodes that are connected to
+// the "program_owner" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProgramQuery) WithProgramOwner(opts ...func(*UserQuery)) *ProgramQuery {
 	query := (&UserClient{config: _q.config}).Query()
 	for _, opt := range opts {
 		opt(query)
 	}
-	_q.withUser = query
+	_q.withProgramOwner = query
 	return _q
 }
 
@@ -1162,7 +1162,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			_q.withNarratives != nil,
 			_q.withActionPlans != nil,
 			_q.withUsers != nil,
-			_q.withUser != nil,
+			_q.withProgramOwner != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -1318,9 +1318,9 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 			return nil, err
 		}
 	}
-	if query := _q.withUser; query != nil {
-		if err := _q.loadUser(ctx, query, nodes, nil,
-			func(n *Program, e *User) { n.Edges.User = e }); err != nil {
+	if query := _q.withProgramOwner; query != nil {
+		if err := _q.loadProgramOwner(ctx, query, nodes, nil,
+			func(n *Program, e *User) { n.Edges.ProgramOwner = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2446,7 +2446,7 @@ func (_q *ProgramQuery) loadUsers(ctx context.Context, query *UserQuery, nodes [
 	}
 	return nil
 }
-func (_q *ProgramQuery) loadUser(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
+func (_q *ProgramQuery) loadProgramOwner(ctx context.Context, query *UserQuery, nodes []*Program, init func(*Program), assign func(*Program, *User)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Program)
 	for i := range nodes {
@@ -2543,7 +2543,7 @@ func (_q *ProgramQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withProgramKind != nil {
 			_spec.Node.AddColumnOnce(program.FieldProgramKindID)
 		}
-		if _q.withUser != nil {
+		if _q.withProgramOwner != nil {
 			_spec.Node.AddColumnOnce(program.FieldProgramOwnerID)
 		}
 	}

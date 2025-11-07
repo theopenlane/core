@@ -136,8 +136,8 @@ func (ec *executionContext) fieldContext_ProgramBulkCreatePayload_programs(_ con
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
-			case "user":
-				return ec.fieldContext_Program_user(ctx, field)
+			case "programOwner":
+				return ec.fieldContext_Program_programOwner(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}
@@ -284,8 +284,8 @@ func (ec *executionContext) fieldContext_ProgramCreatePayload_program(_ context.
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
-			case "user":
-				return ec.fieldContext_Program_user(ctx, field)
+			case "programOwner":
+				return ec.fieldContext_Program_programOwner(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}
@@ -432,8 +432,8 @@ func (ec *executionContext) fieldContext_ProgramUpdatePayload_program(_ context.
 				return ec.fieldContext_Program_actionPlans(ctx, field)
 			case "users":
 				return ec.fieldContext_Program_users(ctx, field)
-			case "user":
-				return ec.fieldContext_Program_user(ctx, field)
+			case "programOwner":
+				return ec.fieldContext_Program_programOwner(ctx, field)
 			case "members":
 				return ec.fieldContext_Program_members(ctx, field)
 			}

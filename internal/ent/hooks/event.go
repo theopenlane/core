@@ -95,7 +95,7 @@ func WithEventerListeners(topic string, listeners []soiree.Listener) EventerOpts
 		for _, listener := range listeners {
 			_, err := e.Emitter.On(topic, listener)
 			if err != nil {
-				log.Panic().Msg("Failed to add listener")
+				log.Panic().Msg("failed to add listener")
 			}
 		}
 	}
@@ -117,13 +117,13 @@ func NewEventerPool(client interface{}) *Eventer {
 func parseEventID(retVal ent.Value) (*EventID, error) {
 	out, err := json.Marshal(retVal)
 	if err != nil {
-		log.Err(err).Msg("Failed to marshal return value")
+		log.Err(err).Msg("failed to marshal return value")
 		return nil, fmt.Errorf("failed to fetch organization from subscription: %w", err)
 	}
 
 	event := EventID{}
 	if err := json.Unmarshal(out, &event); err != nil {
-		log.Err(err).Msg("Failed to unmarshal return value")
+		log.Err(err).Msg("failed to unmarshal return value")
 		return nil, err
 	}
 
@@ -170,14 +170,14 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				if op == SoftDeleteOne {
 					eventID, err = parseSoftDeleteEventID(mutation)
 					if err != nil {
-						log.Err(err).Msg("Failed to parse soft delete event ID")
+						log.Err(err).Msg("failed to parse soft delete event ID")
 
 						return
 					}
 				} else {
 					eventID, err = parseEventID(retVal)
 					if err != nil {
-						log.Err(err).Msg("Failed to parse event ID")
+						log.Err(err).Msg("failed to parse event ID")
 						return
 					}
 				}
@@ -199,7 +199,8 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					}
 				}
 
-				logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+				logger := log.Logger.With().Logger()
+				logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
 					return c.Str("mutation_id", eventID.ID)
 				})
 
@@ -538,7 +539,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 		WithSetting().
 		Only(allowCtx)
 	if err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization")
 
 		return err
 	}
@@ -557,7 +558,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, orgCustomer, org)
 	if err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization from subscription")
 
 		return nil
 	}
@@ -567,13 +568,13 @@ func handleOrganizationCreated(event soiree.Event) error {
 	logx.FromContext(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
 
 	if err = entMgr.CreateCustomerAndSubscription(allowCtx, orgCustomer); err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to create customer")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to create customer")
 
 		return err
 	}
 
 	if err := updateCustomerOrgSub(allowCtx, orgCustomer, client); err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to map customer to org subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to map customer to org subscription")
 
 		return err
 	}
@@ -672,7 +673,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 
 	orgCust, err := fetchOrganizationCustomerByOrgSettingID(event.Context(), lo.ValueOr(event.Properties(), "ID", "").(string), client)
 	if err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization ID by organization setting ID")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization ID by organization setting ID")
 
 		return err
 	}
@@ -681,7 +682,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 		params := entitlements.GetUpdatedFields(event.Properties(), orgCust)
 		if params != nil {
 			if _, err := entMgr.UpdateCustomer(event.Context(), orgCust.StripeCustomerID, params); err != nil {
-				logx.FromContext(event.Context()).Err(err).Msg("Failed to update customer")
+				logx.FromContext(event.Context()).Err(err).Msg("failed to update customer")
 
 				return err
 			}
@@ -695,7 +696,7 @@ func handleOrganizationSettingsUpdateOne(event soiree.Event) error {
 func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID string, client any) (*entitlements.OrganizationCustomer, error) {
 	orgSetting, err := client.(*entgen.Client).OrganizationSetting.Get(ctx, orgSettingID)
 	if err != nil {
-		logx.FromContext(ctx).Err(err).Msgf("Failed to fetch organization setting ID %s", orgSettingID)
+		logx.FromContext(ctx).Err(err).Msgf("failed to fetch organization setting ID %s", orgSettingID)
 
 		return nil, err
 	}
@@ -705,7 +706,7 @@ func fetchOrganizationCustomerByOrgSettingID(ctx context.Context, orgSettingID s
 		Where(organization.ID(orgSetting.OrganizationID)).
 		Only(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Err(err).Msgf("Failed to fetch organization by organization setting ID %s after 3 attempts", orgSettingID)
+		logx.FromContext(ctx).Err(err).Msgf("failed to fetch organization by organization setting ID %s after 3 attempts", orgSettingID)
 
 		return nil, err
 	}

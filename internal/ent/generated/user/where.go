@@ -2231,12 +2231,12 @@ func HasProgramsWith(preds ...predicate.Program) predicate.User {
 	})
 }
 
-// HasProgramOwner applies the HasEdge predicate on the "program_owner" edge.
-func HasProgramOwner() predicate.User {
+// HasProgramsOwned applies the HasEdge predicate on the "programs_owned" edge.
+func HasProgramsOwned() predicate.User {
 	return predicate.User(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, ProgramOwnerTable, ProgramOwnerColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, ProgramsOwnedTable, ProgramsOwnedColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
@@ -2245,10 +2245,10 @@ func HasProgramOwner() predicate.User {
 	})
 }
 
-// HasProgramOwnerWith applies the HasEdge predicate on the "program_owner" edge with a given conditions (other predicates).
-func HasProgramOwnerWith(preds ...predicate.Program) predicate.User {
+// HasProgramsOwnedWith applies the HasEdge predicate on the "programs_owned" edge with a given conditions (other predicates).
+func HasProgramsOwnedWith(preds ...predicate.Program) predicate.User {
 	return predicate.User(func(s *sql.Selector) {
-		step := newProgramOwnerStep()
+		step := newProgramsOwnedStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Program
 		step.Edge.Schema = schemaConfig.Program
