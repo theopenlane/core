@@ -2734,25 +2734,6 @@ func (c *AssessmentResponseClient) QueryOwner(_m *AssessmentResponse) *Organizat
 	return query
 }
 
-// QueryDocument queries the document edge of a AssessmentResponse.
-func (c *AssessmentResponseClient) QueryDocument(_m *AssessmentResponse) *DocumentDataQuery {
-	query := (&DocumentDataClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
-			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.AssessmentResponse
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryAssessment queries the assessment edge of a AssessmentResponse.
 func (c *AssessmentResponseClient) QueryAssessment(_m *AssessmentResponse) *AssessmentQuery {
 	query := (&AssessmentClient{config: c.config}).Query()
@@ -2765,6 +2746,25 @@ func (c *AssessmentResponseClient) QueryAssessment(_m *AssessmentResponse) *Asse
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDocument queries the document edge of a AssessmentResponse.
+func (c *AssessmentResponseClient) QueryDocument(_m *AssessmentResponse) *DocumentDataQuery {
+	query := (&DocumentDataClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, id),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

@@ -12,28 +12,6 @@ extend type Query {
 
 extend type Mutation{
     """
-    Create a new assessmentResponse
-    """
-    createAssessmentResponse(
-        """
-        values of the assessmentResponse
-        """
-        input: CreateAssessmentResponseInput!
-    ): AssessmentResponseCreatePayload!
-    """
-    Update an existing assessmentResponse
-    """
-    updateAssessmentResponse(
-        """
-        ID of the assessmentResponse
-        """
-        id: ID!
-        """
-        New values for the assessmentResponse
-        """
-        input: UpdateAssessmentResponseInput!
-    ): AssessmentResponseUpdatePayload!
-    """
     Delete an existing assessmentResponse
     """
     deleteAssessmentResponse(
@@ -42,26 +20,6 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentResponseDeletePayload!
-}
-
-"""
-Return response for createAssessmentResponse mutation
-"""
-type AssessmentResponseCreatePayload {
-    """
-    Created assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
-}
-
-"""
-Return response for updateAssessmentResponse mutation
-"""
-type AssessmentResponseUpdatePayload {
-    """
-    Updated assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
 }
 
 """
@@ -74,12 +32,3 @@ type AssessmentResponseDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessmentResponse mutation
-"""
-type AssessmentResponseBulkCreatePayload {
-    """
-    Created assessmentResponses
-    """
-    assessmentResponses: [AssessmentResponse!]
-}

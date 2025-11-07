@@ -2549,21 +2549,6 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 				fieldSeen[assessmentresponse.FieldOwnerID] = struct{}{}
 			}
 
-		case "document":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&DocumentDataClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
-				return err
-			}
-			_q.withDocument = query
-			if _, ok := fieldSeen[assessmentresponse.FieldDocumentDataID]; !ok {
-				selectedFields = append(selectedFields, assessmentresponse.FieldDocumentDataID)
-				fieldSeen[assessmentresponse.FieldDocumentDataID] = struct{}{}
-			}
-
 		case "assessment":
 			var (
 				alias = field.Alias
@@ -2577,6 +2562,21 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[assessmentresponse.FieldAssessmentID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponse.FieldAssessmentID)
 				fieldSeen[assessmentresponse.FieldAssessmentID] = struct{}{}
+			}
+
+		case "document":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			_q.withDocument = query
+			if _, ok := fieldSeen[assessmentresponse.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, assessmentresponse.FieldDocumentDataID)
+				fieldSeen[assessmentresponse.FieldDocumentDataID] = struct{}{}
 			}
 		case "createdAt":
 			if _, ok := fieldSeen[assessmentresponse.FieldCreatedAt]; !ok {

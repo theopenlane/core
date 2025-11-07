@@ -366,18 +366,10 @@ type ComplexityRoot struct {
 		UpdatedBy      func(childComplexity int) int
 	}
 
-	AssessmentResponseBulkCreatePayload struct {
-		AssessmentResponses func(childComplexity int) int
-	}
-
 	AssessmentResponseConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
-	}
-
-	AssessmentResponseCreatePayload struct {
-		AssessmentResponse func(childComplexity int) int
 	}
 
 	AssessmentResponseDeletePayload struct {
@@ -419,10 +411,6 @@ type ComplexityRoot struct {
 	AssessmentResponseHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	AssessmentResponseUpdatePayload struct {
-		AssessmentResponse func(childComplexity int) int
 	}
 
 	AssessmentUpdatePayload struct {
@@ -3061,7 +3049,6 @@ type ComplexityRoot struct {
 		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
 		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
 		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
-		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
 		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
 		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
 		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
@@ -3340,7 +3327,6 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
-		UpdateAssessmentResponse             func(childComplexity int, id string, input generated.UpdateAssessmentResponseInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
 		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
@@ -8375,13 +8361,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentResponse.UpdatedBy(childComplexity), true
 
-	case "AssessmentResponseBulkCreatePayload.assessmentResponses":
-		if e.complexity.AssessmentResponseBulkCreatePayload.AssessmentResponses == nil {
-			break
-		}
-
-		return e.complexity.AssessmentResponseBulkCreatePayload.AssessmentResponses(childComplexity), true
-
 	case "AssessmentResponseConnection.edges":
 		if e.complexity.AssessmentResponseConnection.Edges == nil {
 			break
@@ -8402,13 +8381,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseConnection.TotalCount(childComplexity), true
-
-	case "AssessmentResponseCreatePayload.assessmentResponse":
-		if e.complexity.AssessmentResponseCreatePayload.AssessmentResponse == nil {
-			break
-		}
-
-		return e.complexity.AssessmentResponseCreatePayload.AssessmentResponse(childComplexity), true
 
 	case "AssessmentResponseDeletePayload.deletedID":
 		if e.complexity.AssessmentResponseDeletePayload.DeletedID == nil {
@@ -8591,13 +8563,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseHistoryEdge.Node(childComplexity), true
-
-	case "AssessmentResponseUpdatePayload.assessmentResponse":
-		if e.complexity.AssessmentResponseUpdatePayload.AssessmentResponse == nil {
-			break
-		}
-
-		return e.complexity.AssessmentResponseUpdatePayload.AssessmentResponse(childComplexity), true
 
 	case "AssessmentUpdatePayload.assessment":
 		if e.complexity.AssessmentUpdatePayload.Assessment == nil {
@@ -21390,18 +21355,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateAssessment(childComplexity, args["input"].(generated.CreateAssessmentInput)), true
 
-	case "Mutation.createAssessmentResponse":
-		if e.complexity.Mutation.CreateAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_createAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.CreateAssessmentResponse(childComplexity, args["input"].(generated.CreateAssessmentResponseInput)), true
-
 	case "Mutation.createAsset":
 		if e.complexity.Mutation.CreateAsset == nil {
 			break
@@ -24737,18 +24690,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateAssessment(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentInput)), true
-
-	case "Mutation.updateAssessmentResponse":
-		if e.complexity.Mutation.UpdateAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateAssessmentResponse(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentResponseInput)), true
 
 	case "Mutation.updateAsset":
 		if e.complexity.Mutation.UpdateAsset == nil {
@@ -45130,7 +45071,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateAPITokenInput,
 		ec.unmarshalInputCreateActionPlanInput,
 		ec.unmarshalInputCreateAssessmentInput,
-		ec.unmarshalInputCreateAssessmentResponseInput,
 		ec.unmarshalInputCreateAssetInput,
 		ec.unmarshalInputCreateContactInput,
 		ec.unmarshalInputCreateControlImplementationInput,
@@ -47318,28 +47258,6 @@ type AssessmentDeletePayload {
 
 extend type Mutation{
     """
-    Create a new assessmentResponse
-    """
-    createAssessmentResponse(
-        """
-        values of the assessmentResponse
-        """
-        input: CreateAssessmentResponseInput!
-    ): AssessmentResponseCreatePayload!
-    """
-    Update an existing assessmentResponse
-    """
-    updateAssessmentResponse(
-        """
-        ID of the assessmentResponse
-        """
-        id: ID!
-        """
-        New values for the assessmentResponse
-        """
-        input: UpdateAssessmentResponseInput!
-    ): AssessmentResponseUpdatePayload!
-    """
     Delete an existing assessmentResponse
     """
     deleteAssessmentResponse(
@@ -47348,26 +47266,6 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentResponseDeletePayload!
-}
-
-"""
-Return response for createAssessmentResponse mutation
-"""
-type AssessmentResponseCreatePayload {
-    """
-    Created assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
-}
-
-"""
-Return response for updateAssessmentResponse mutation
-"""
-type AssessmentResponseUpdatePayload {
-    """
-    Updated assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
 }
 
 """
@@ -47380,15 +47278,6 @@ type AssessmentResponseDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessmentResponse mutation
-"""
-type AssessmentResponseBulkCreatePayload {
-    """
-    Created assessmentResponses
-    """
-    assessmentResponses: [AssessmentResponse!]
-}
 `, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
@@ -51630,11 +51519,8 @@ type AssessmentResponse implements Node {
   """
   documentDataID: ID
   owner: Organization
-  """
-  the document containing the user's response data
-  """
-  document: DocumentData
   assessment: Assessment!
+  document: DocumentData
 }
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
@@ -52032,24 +51918,6 @@ input AssessmentResponseHistoryWhereInput {
   dueDateLTE: Time
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
-  """
-  document_data_id field predicates
-  """
-  documentDataID: String
-  documentDataIDNEQ: String
-  documentDataIDIn: [String!]
-  documentDataIDNotIn: [String!]
-  documentDataIDGT: String
-  documentDataIDGTE: String
-  documentDataIDLT: String
-  documentDataIDLTE: String
-  documentDataIDContains: String
-  documentDataIDHasPrefix: String
-  documentDataIDHasSuffix: String
-  documentDataIDIsNil: Boolean
-  documentDataIDNotNil: Boolean
-  documentDataIDEqualFold: String
-  documentDataIDContainsFold: String
 }
 """
 Ordering options for AssessmentResponse connections
@@ -52277,38 +52145,20 @@ input AssessmentResponseWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
-  document_data_id field predicates
-  """
-  documentDataID: ID
-  documentDataIDNEQ: ID
-  documentDataIDIn: [ID!]
-  documentDataIDNotIn: [ID!]
-  documentDataIDGT: ID
-  documentDataIDGTE: ID
-  documentDataIDLT: ID
-  documentDataIDLTE: ID
-  documentDataIDContains: ID
-  documentDataIDHasPrefix: ID
-  documentDataIDHasSuffix: ID
-  documentDataIDIsNil: Boolean
-  documentDataIDNotNil: Boolean
-  documentDataIDEqualFold: ID
-  documentDataIDContainsFold: ID
-  """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  document edge predicates
-  """
-  hasDocument: Boolean
-  hasDocumentWith: [DocumentDataWhereInput!]
-  """
   assessment edge predicates
   """
   hasAssessment: Boolean
   hasAssessmentWith: [AssessmentWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
 }
 """
 AssessmentWhereInput is used for filtering Assessment objects.
@@ -58830,39 +58680,6 @@ input CreateAssessmentInput {
   viewerIDs: [ID!]
   templateID: ID!
   assessmentResponseIDs: [ID!]
-}
-"""
-CreateAssessmentResponseInput is used for create AssessmentResponse object.
-Input was generated by ent.
-"""
-input CreateAssessmentResponseInput {
-  """
-  the email address of the recipient
-  """
-  email: String!
-  """
-  the current status of the assessment for this user
-  """
-  status: AssessmentResponseAssessmentResponseStatus
-  """
-  when the assessment was assigned to the user
-  """
-  assignedAt: Time!
-  """
-  when the user started the assessment
-  """
-  startedAt: Time
-  """
-  when the user completed the assessment
-  """
-  completedAt: Time
-  """
-  when the assessment is due
-  """
-  dueDate: Time
-  ownerID: ID
-  documentID: ID
-  assessmentID: ID!
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -115769,26 +115586,13 @@ Input was generated by ent.
 """
 input UpdateAssessmentResponseInput {
   """
-  the current status of the assessment for this user
-  """
-  status: AssessmentResponseAssessmentResponseStatus
-  """
-  when the user started the assessment
-  """
-  startedAt: Time
-  """
-  when the user completed the assessment
-  """
-  completedAt: Time
-  clearCompletedAt: Boolean
-  """
   when the assessment is due
   """
   dueDate: Time
   clearDueDate: Boolean
+  assessmentID: ID
   documentID: ID
   clearDocument: Boolean
-  assessmentID: ID
 }
 """
 UpdateAssetInput is used for update Asset object.

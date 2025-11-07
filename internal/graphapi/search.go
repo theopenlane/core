@@ -258,11 +258,10 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
 		Where(
 			assessmentresponse.Or(
-				assessmentresponse.ID(query),                         // search equal to ID
-				assessmentresponse.OwnerIDContainsFold(query),        // search by OwnerID
-				assessmentresponse.AssessmentIDContainsFold(query),   // search by AssessmentID
-				assessmentresponse.EmailContainsFold(query),          // search by Email
-				assessmentresponse.DocumentDataIDContainsFold(query), // search by DocumentDataID
+				assessmentresponse.ID(query),                       // search equal to ID
+				assessmentresponse.OwnerIDContainsFold(query),      // search by OwnerID
+				assessmentresponse.AssessmentIDContainsFold(query), // search by AssessmentID
+				assessmentresponse.EmailContainsFold(query),        // search by Email
 			),
 		)
 
