@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
@@ -60,7 +61,7 @@ type Resolver struct {
 	trustCenterCnameTarget   string
 	defaultTrustCenterDomain string
 	// subscription manager for real-time updates
-	subscriptionManager *SubscriptionManager
+	subscriptionManager *graphsubscriptions.Manager
 }
 
 // NewResolver returns a resolver configured with the given ent client
@@ -68,7 +69,7 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
 		db:                  db,
 		uploader:            u,
-		subscriptionManager: NewSubscriptionManager(),
+		subscriptionManager: graphsubscriptions.NewManager(),
 	}
 }
 

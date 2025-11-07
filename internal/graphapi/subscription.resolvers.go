@@ -6,21 +6,23 @@ package graphapi
 
 import (
 	"context"
-	"fmt"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphsubscriptions"
 )
 
 // TaskCreated is the resolver for the taskCreated field.
 func (r *subscriptionResolver) TaskCreated(ctx context.Context, userID string) (<-chan *generated.Task, error) {
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
-		return nil, fmt.Errorf("subscription manager is not initialized")
+		log.Error().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
+		return nil, ErrInternalServerError
 	}
 
 	// Create a buffered channel to send task events
-	taskChan := make(chan *generated.Task, 10)
+	taskChan := make(chan *generated.Task, graphsubscriptions.TaskChannelBufferSize)
 
 	// Subscribe to task creation events for this user
 	r.subscriptionManager.Subscribe(userID, taskChan)
