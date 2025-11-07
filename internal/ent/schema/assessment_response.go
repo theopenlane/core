@@ -72,6 +72,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Comment("the current status of the assessment for this user").
 			Annotations(
 				entgql.OrderField("status"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 
 		field.Time("assigned_at").
@@ -79,6 +80,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Immutable().
 			Annotations(
 				entgql.OrderField("ASSIGNED_AT"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 
 		field.Time("started_at").
@@ -86,12 +88,14 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Default(time.Now()).
 			Annotations(
 				entgql.OrderField("STARTED_AT"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.Time("completed_at").
 			Comment("when the user completed the assessment").
 			Optional().
 			Annotations(
 				entgql.OrderField("COMPLETED_AT"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.Time("due_date").
 			Comment("when the assessment is due").
@@ -100,8 +104,11 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.OrderField("DUE_DATE"),
 			),
 		field.String("document_data_id").
-			Comment("the document containing the user's response data").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
+			Comment("the document containing the user's response data"),
 	}
 }
 
@@ -119,18 +126,21 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 
 func (ar AssessmentResponse) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: ar,
-			edgeSchema: DocumentData{},
-			field:      "document_data_id",
-			comment:    "the document containing the user's response data",
-		}),
-
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: ar,
 			edgeSchema: Assessment{},
 			field:      "assessment_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: DocumentData{},
+			field:      "document_data_id",
+			name:       "document_data",
+			required:   false,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
@@ -151,6 +161,9 @@ func (AssessmentResponse) Policy() ent.Policy {
 func (AssessmentResponse) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entgql.Skip(
+			entgql.SkipMutationCreateInput,
+		),
 	}
 }
 

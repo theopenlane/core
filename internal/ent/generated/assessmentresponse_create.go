@@ -243,6 +243,11 @@ func (_c *AssessmentResponseCreate) SetOwner(v *Organization) *AssessmentRespons
 	return _c.SetOwnerID(v.ID)
 }
 
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_c *AssessmentResponseCreate) SetAssessment(v *Assessment) *AssessmentResponseCreate {
+	return _c.SetAssessmentID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_c *AssessmentResponseCreate) SetDocumentID(id string) *AssessmentResponseCreate {
 	_c.mutation.SetDocumentID(id)
@@ -260,11 +265,6 @@ func (_c *AssessmentResponseCreate) SetNillableDocumentID(id *string) *Assessmen
 // SetDocument sets the "document" edge to the DocumentData entity.
 func (_c *AssessmentResponseCreate) SetDocument(v *DocumentData) *AssessmentResponseCreate {
 	return _c.SetDocumentID(v.ID)
-}
-
-// SetAssessment sets the "assessment" edge to the Assessment entity.
-func (_c *AssessmentResponseCreate) SetAssessment(v *Assessment) *AssessmentResponseCreate {
-	return _c.SetAssessmentID(v.ID)
 }
 
 // Mutation returns the AssessmentResponseMutation object of the builder.
@@ -489,24 +489,6 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.DocumentIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.AssessmentResponse
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.DocumentDataID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.AssessmentIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -523,6 +505,24 @@ func (_c *AssessmentResponseCreate) createSpec() (*AssessmentResponse, *sqlgraph
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.AssessmentID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.DocumentDataID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

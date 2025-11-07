@@ -353,20 +353,20 @@ func (_m *AssessmentResponse) Owner(ctx context.Context) (*Organization, error) 
 	return result, MaskNotFound(err)
 }
 
-func (_m *AssessmentResponse) Document(ctx context.Context) (*DocumentData, error) {
-	result, err := _m.Edges.DocumentOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryDocument().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *AssessmentResponse) Assessment(ctx context.Context) (*Assessment, error) {
 	result, err := _m.Edges.AssessmentOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryAssessment().Only(ctx)
 	}
 	return result, err
+}
+
+func (_m *AssessmentResponse) Document(ctx context.Context) (*DocumentData, error) {
+	result, err := _m.Edges.DocumentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDocument().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (_m *Asset) Owner(ctx context.Context) (*Organization, error) {
