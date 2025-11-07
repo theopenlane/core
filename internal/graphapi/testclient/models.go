@@ -1765,18 +1765,11 @@ type AssessmentResponse struct {
 	// the document containing the user's response data
 	DocumentDataID *string       `json:"documentDataID,omitempty"`
 	Owner          *Organization `json:"owner,omitempty"`
-	// the document containing the user's response data
-	Document   *DocumentData `json:"document,omitempty"`
-	Assessment *Assessment   `json:"assessment"`
+	Assessment     *Assessment   `json:"assessment"`
+	Document       *DocumentData `json:"document,omitempty"`
 }
 
 func (AssessmentResponse) IsNode() {}
-
-// Return response for createBulkAssessmentResponse mutation
-type AssessmentResponseBulkCreatePayload struct {
-	// Created assessmentResponses
-	AssessmentResponses []*AssessmentResponse `json:"assessmentResponses,omitempty"`
-}
 
 // A connection to a list of items.
 type AssessmentResponseConnection struct {
@@ -1786,12 +1779,6 @@ type AssessmentResponseConnection struct {
 	PageInfo *PageInfo `json:"pageInfo"`
 	// Identifies the total count of items in the connection.
 	TotalCount int64 `json:"totalCount"`
-}
-
-// Return response for createAssessmentResponse mutation
-type AssessmentResponseCreatePayload struct {
-	// Created assessmentResponse
-	AssessmentResponse *AssessmentResponse `json:"assessmentResponse"`
 }
 
 // Return response for deleteAssessmentResponse mutation
@@ -2066,22 +2053,6 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
-	// document_data_id field predicates
-	DocumentDataID             *string  `json:"documentDataID,omitempty"`
-	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
-	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
-	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
-	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
-	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
-	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
-	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
-	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
-	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
-	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
-	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
-	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
-	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
-	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 }
 
 // Ordering options for AssessmentResponse connections
@@ -2090,12 +2061,6 @@ type AssessmentResponseOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order AssessmentResponses.
 	Field AssessmentResponseOrderField `json:"field"`
-}
-
-// Return response for updateAssessmentResponse mutation
-type AssessmentResponseUpdatePayload struct {
-	// Updated assessmentResponse
-	AssessmentResponse *AssessmentResponse `json:"assessmentResponse"`
 }
 
 // AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -2267,31 +2232,15 @@ type AssessmentResponseWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
-	// document_data_id field predicates
-	DocumentDataID             *string  `json:"documentDataID,omitempty"`
-	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
-	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
-	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
-	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
-	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
-	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
-	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
-	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
-	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
-	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
-	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
-	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
-	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
-	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// document edge predicates
-	HasDocument     *bool                     `json:"hasDocument,omitempty"`
-	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 	// assessment edge predicates
 	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
 	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 }
 
 // Return response for updateAssessment mutation
@@ -6385,26 +6334,6 @@ type CreateAssessmentInput struct {
 	ViewerIDs             []string `json:"viewerIDs,omitempty"`
 	TemplateID            string   `json:"templateID"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
-}
-
-// CreateAssessmentResponseInput is used for create AssessmentResponse object.
-// Input was generated by ent.
-type CreateAssessmentResponseInput struct {
-	// the email address of the recipient
-	Email string `json:"email"`
-	// the current status of the assessment for this user
-	Status *enums.AssessmentResponseStatus `json:"status,omitempty"`
-	// when the assessment was assigned to the user
-	AssignedAt time.Time `json:"assignedAt"`
-	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
-	// when the user completed the assessment
-	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
-	DueDate      *time.Time `json:"dueDate,omitempty"`
-	OwnerID      *string    `json:"ownerID,omitempty"`
-	DocumentID   *string    `json:"documentID,omitempty"`
-	AssessmentID string     `json:"assessmentID"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -39766,19 +39695,12 @@ type UpdateAssessmentInput struct {
 // UpdateAssessmentResponseInput is used for update AssessmentResponse object.
 // Input was generated by ent.
 type UpdateAssessmentResponseInput struct {
-	// the current status of the assessment for this user
-	Status *enums.AssessmentResponseStatus `json:"status,omitempty"`
-	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
-	// when the user completed the assessment
-	CompletedAt      *time.Time `json:"completedAt,omitempty"`
-	ClearCompletedAt *bool      `json:"clearCompletedAt,omitempty"`
 	// when the assessment is due
 	DueDate       *time.Time `json:"dueDate,omitempty"`
 	ClearDueDate  *bool      `json:"clearDueDate,omitempty"`
+	AssessmentID  *string    `json:"assessmentID,omitempty"`
 	DocumentID    *string    `json:"documentID,omitempty"`
 	ClearDocument *bool      `json:"clearDocument,omitempty"`
-	AssessmentID  *string    `json:"assessmentID,omitempty"`
 }
 
 // UpdateAssetInput is used for update Asset object.

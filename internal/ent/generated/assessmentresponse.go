@@ -63,10 +63,10 @@ type AssessmentResponse struct {
 type AssessmentResponseEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// the document containing the user's response data
-	Document *DocumentData `json:"document,omitempty"`
 	// Assessment holds the value of the assessment edge.
 	Assessment *Assessment `json:"assessment,omitempty"`
+	// Document holds the value of the document edge.
+	Document *DocumentData `json:"document,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
@@ -85,26 +85,26 @@ func (e AssessmentResponseEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// DocumentOrErr returns the Document value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e AssessmentResponseEdges) DocumentOrErr() (*DocumentData, error) {
-	if e.Document != nil {
-		return e.Document, nil
-	} else if e.loadedTypes[1] {
-		return nil, &NotFoundError{label: documentdata.Label}
-	}
-	return nil, &NotLoadedError{edge: "document"}
-}
-
 // AssessmentOrErr returns the Assessment value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AssessmentResponseEdges) AssessmentOrErr() (*Assessment, error) {
 	if e.Assessment != nil {
 		return e.Assessment, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: assessment.Label}
 	}
 	return nil, &NotLoadedError{edge: "assessment"}
+}
+
+// DocumentOrErr returns the Document value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e AssessmentResponseEdges) DocumentOrErr() (*DocumentData, error) {
+	if e.Document != nil {
+		return e.Document, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: documentdata.Label}
+	}
+	return nil, &NotLoadedError{edge: "document"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -253,14 +253,14 @@ func (_m *AssessmentResponse) QueryOwner() *OrganizationQuery {
 	return NewAssessmentResponseClient(_m.config).QueryOwner(_m)
 }
 
-// QueryDocument queries the "document" edge of the AssessmentResponse entity.
-func (_m *AssessmentResponse) QueryDocument() *DocumentDataQuery {
-	return NewAssessmentResponseClient(_m.config).QueryDocument(_m)
-}
-
 // QueryAssessment queries the "assessment" edge of the AssessmentResponse entity.
 func (_m *AssessmentResponse) QueryAssessment() *AssessmentQuery {
 	return NewAssessmentResponseClient(_m.config).QueryAssessment(_m)
+}
+
+// QueryDocument queries the "document" edge of the AssessmentResponse entity.
+func (_m *AssessmentResponse) QueryDocument() *DocumentDataQuery {
+	return NewAssessmentResponseClient(_m.config).QueryDocument(_m)
 }
 
 // Update returns a builder for updating this AssessmentResponse.

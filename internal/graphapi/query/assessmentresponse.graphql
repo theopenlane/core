@@ -1,26 +1,4 @@
 
-mutation CreateAssessmentResponse($input: CreateAssessmentResponseInput!) {
-  createAssessmentResponse(input: $input) {
-    assessmentResponse {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}
-
 mutation DeleteAssessmentResponse($deleteAssessmentResponseId: ID!) {
   deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
     deletedID
@@ -104,27 +82,6 @@ query GetAssessmentResponses($first: Int, $last: Int, $where: AssessmentResponse
         updatedAt
         updatedBy
       }
-    }
-  }
-}
-mutation UpdateAssessmentResponse($updateAssessmentResponseId: ID!, $input: UpdateAssessmentResponseInput!) {
-  updateAssessmentResponse(id: $updateAssessmentResponseId, input: $input) {
-    assessmentResponse {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
     }
   }
 }

@@ -95,7 +95,6 @@ query AdminSearch($query: String!) {
           ownerID
           assessmentID
           email
-          documentDataID
         }
       }
     }

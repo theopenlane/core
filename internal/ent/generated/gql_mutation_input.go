@@ -937,91 +937,31 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 	return c
 }
 
-// CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
-type CreateAssessmentResponseInput struct {
-	Email        string
-	Status       *enums.AssessmentResponseStatus
-	AssignedAt   time.Time
-	StartedAt    *time.Time
-	CompletedAt  *time.Time
-	DueDate      *time.Time
-	OwnerID      *string
-	DocumentID   *string
-	AssessmentID string
-}
-
-// Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
-func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	m.SetEmail(i.Email)
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	m.SetAssignedAt(i.AssignedAt)
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
-	if v := i.DueDate; v != nil {
-		m.SetDueDate(*v)
-	}
-	if v := i.OwnerID; v != nil {
-		m.SetOwnerID(*v)
-	}
-	if v := i.DocumentID; v != nil {
-		m.SetDocumentID(*v)
-	}
-	m.SetAssessmentID(i.AssessmentID)
-}
-
-// SetInput applies the change-set in the CreateAssessmentResponseInput on the AssessmentResponseCreate builder.
-func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *AssessmentResponseCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
 // UpdateAssessmentResponseInput represents a mutation input for updating assessmentresponses.
 type UpdateAssessmentResponseInput struct {
-	Status           *enums.AssessmentResponseStatus
-	StartedAt        *time.Time
-	ClearCompletedAt bool
-	CompletedAt      *time.Time
-	ClearDueDate     bool
-	DueDate          *time.Time
-	ClearDocument    bool
-	DocumentID       *string
-	AssessmentID     *string
+	ClearDueDate  bool
+	DueDate       *time.Time
+	AssessmentID  *string
+	ClearDocument bool
+	DocumentID    *string
 }
 
 // Mutate applies the UpdateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *UpdateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if i.ClearCompletedAt {
-		m.ClearCompletedAt()
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
 	if i.ClearDueDate {
 		m.ClearDueDate()
 	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
+	if v := i.AssessmentID; v != nil {
+		m.SetAssessmentID(*v)
+	}
 	if i.ClearDocument {
 		m.ClearDocument()
 	}
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
-	}
-	if v := i.AssessmentID; v != nil {
-		m.SetAssessmentID(*v)
 	}
 }
 

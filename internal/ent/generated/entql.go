@@ -4749,18 +4749,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"document",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-		},
-		"AssessmentResponse",
-		"DocumentData",
-	)
-	graph.MustAddE(
 		"assessment",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4771,6 +4759,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"AssessmentResponse",
 		"Assessment",
+	)
+	graph.MustAddE(
+		"document",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+		},
+		"AssessmentResponse",
+		"DocumentData",
 	)
 	graph.MustAddE(
 		"owner",
@@ -13344,20 +13344,6 @@ func (f *AssessmentResponseFilter) WhereHasOwnerWith(preds ...predicate.Organiza
 	})))
 }
 
-// WhereHasDocument applies a predicate to check if query has an edge document.
-func (f *AssessmentResponseFilter) WhereHasDocument() {
-	f.Where(entql.HasEdge("document"))
-}
-
-// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
-func (f *AssessmentResponseFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
-	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasAssessment applies a predicate to check if query has an edge assessment.
 func (f *AssessmentResponseFilter) WhereHasAssessment() {
 	f.Where(entql.HasEdge("assessment"))
@@ -13366,6 +13352,20 @@ func (f *AssessmentResponseFilter) WhereHasAssessment() {
 // WhereHasAssessmentWith applies a predicate to check if query has an edge assessment with a given conditions (other predicates).
 func (f *AssessmentResponseFilter) WhereHasAssessmentWith(preds ...predicate.Assessment) {
 	f.Where(entql.HasEdgeWith("assessment", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocument applies a predicate to check if query has an edge document.
+func (f *AssessmentResponseFilter) WhereHasDocument() {
+	f.Where(entql.HasEdge("document"))
+}
+
+// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
+func (f *AssessmentResponseFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
