@@ -9314,6 +9314,27 @@ func (_m *Template) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Template) Assessments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssessmentOrder, where *AssessmentWhereInput,
+) (*AssessmentConnection, error) {
+	opts := []AssessmentPaginateOption{
+		WithAssessmentOrder(orderBy),
+		WithAssessmentFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedAssessments(alias); err == nil || hasTotalCount {
+		pager, err := newAssessmentPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssessmentConnection{Edges: []*AssessmentEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssessments().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *TrustCenter) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {

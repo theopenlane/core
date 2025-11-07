@@ -120,6 +120,16 @@ func (t Template) Edges() []ent.Edge {
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
 		}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Assessment{},
+		}),
+		// uniqueEdgeTo(&edgeDefinition{
+		// 	fromSchema: t,
+		// 	name:       "assessment",
+		// 	t:          Assessment.Type,
+		// }),
 	}
 }
 

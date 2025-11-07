@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -299,6 +300,21 @@ func (_c *TemplateCreate) SetTrustCenter(v *TrustCenter) *TemplateCreate {
 	return _c.SetTrustCenterID(v.ID)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_c *TemplateCreate) AddAssessmentIDs(ids ...string) *TemplateCreate {
+	_c.mutation.AddAssessmentIDs(ids...)
+	return _c
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_c *TemplateCreate) AddAssessments(v ...*Assessment) *TemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_c *TemplateCreate) Mutation() *TemplateMutation {
 	return _c.mutation
@@ -575,6 +591,23 @@ func (_c *TemplateCreate) createSpec() (*Template, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TrustCenterID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

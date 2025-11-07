@@ -2415,7 +2415,7 @@ func (c *AssessmentClient) QueryTemplate(_m *Assessment) *TemplateQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(assessment.Table, assessment.FieldID, id),
 			sqlgraph.To(template.Table, template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, assessment.TemplateTable, assessment.TemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessment.TemplateTable, assessment.TemplateColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Template
@@ -27219,6 +27219,25 @@ func (c *TemplateClient) QueryTrustCenter(_m *Template) *TrustCenterQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssessments queries the assessments edge of a Template.
+func (c *TemplateClient) QueryAssessments(_m *Template) *AssessmentQuery {
+	query := (&AssessmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, id),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.AssessmentsTable, template.AssessmentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

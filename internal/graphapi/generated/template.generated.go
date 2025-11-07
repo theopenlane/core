@@ -94,6 +94,8 @@ func (ec *executionContext) fieldContext_TemplateBulkCreatePayload_templates(_ c
 				return ec.fieldContext_Template_files(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_Template_trustCenter(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Template_assessments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -196,6 +198,8 @@ func (ec *executionContext) fieldContext_TemplateCreatePayload_template(_ contex
 				return ec.fieldContext_Template_files(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_Template_trustCenter(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Template_assessments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},
@@ -298,6 +302,8 @@ func (ec *executionContext) fieldContext_TemplateUpdatePayload_template(_ contex
 				return ec.fieldContext_Template_files(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_Template_trustCenter(ctx, field)
+			case "assessments":
+				return ec.fieldContext_Template_assessments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Template", field.Name)
 		},

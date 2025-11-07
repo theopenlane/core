@@ -4716,7 +4716,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"template",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,
@@ -11179,6 +11179,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Template",
 		"TrustCenter",
+	)
+	graph.MustAddE(
+		"assessments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"Assessment",
 	)
 	graph.MustAddE(
 		"owner",
@@ -35455,6 +35467,20 @@ func (f *TemplateFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *TemplateFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssessments applies a predicate to check if query has an edge assessments.
+func (f *TemplateFilter) WhereHasAssessments() {
+	f.Where(entql.HasEdge("assessments"))
+}
+
+// WhereHasAssessmentsWith applies a predicate to check if query has an edge assessments with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasAssessmentsWith(preds ...predicate.Assessment) {
+	f.Where(entql.HasEdgeWith("assessments", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

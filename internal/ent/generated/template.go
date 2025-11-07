@@ -73,14 +73,17 @@ type TemplateEdges struct {
 	Files []*File `json:"files,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// Assessments holds the value of the assessments edge.
+	Assessments []*Assessment `json:"assessments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
-	namedDocuments map[string][]*DocumentData
-	namedFiles     map[string][]*File
+	namedDocuments   map[string][]*DocumentData
+	namedFiles       map[string][]*File
+	namedAssessments map[string][]*Assessment
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -121,6 +124,15 @@ func (e TemplateEdges) TrustCenterOrErr() (*TrustCenter, error) {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
+}
+
+// AssessmentsOrErr returns the Assessments value or an error if the edge
+// was not loaded in eager-loading.
+func (e TemplateEdges) AssessmentsOrErr() ([]*Assessment, error) {
+	if e.loadedTypes[4] {
+		return e.Assessments, nil
+	}
+	return nil, &NotLoadedError{edge: "assessments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -306,6 +318,11 @@ func (_m *Template) QueryTrustCenter() *TrustCenterQuery {
 	return NewTemplateClient(_m.config).QueryTrustCenter(_m)
 }
 
+// QueryAssessments queries the "assessments" edge of the Template entity.
+func (_m *Template) QueryAssessments() *AssessmentQuery {
+	return NewTemplateClient(_m.config).QueryAssessments(_m)
+}
+
 // Update returns a builder for updating this Template.
 // Note that you need to call Template.Unwrap() before calling this method if this Template
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -435,6 +452,30 @@ func (_m *Template) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedAssessments returns the Assessments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Template) NamedAssessments(name string) ([]*Assessment, error) {
+	if _m.Edges.namedAssessments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssessments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Template) appendNamedAssessments(name string, edges ...*Assessment) {
+	if _m.Edges.namedAssessments == nil {
+		_m.Edges.namedAssessments = make(map[string][]*Assessment)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssessments[name] = []*Assessment{}
+	} else {
+		_m.Edges.namedAssessments[name] = append(_m.Edges.namedAssessments[name], edges...)
 	}
 }
 
