@@ -691,8 +691,14 @@ github.com/theopenlane/gqlgen-plugins v0.11.1 h1:AFAPpXan4S4fUGHc0w+7Yr3PPysxVmq
 github.com/theopenlane/gqlgen-plugins v0.11.1/go.mod h1:0e3IYZ/nKqDiq8DbAd7wVEmeW9swuWageg2r6z1nr2Y=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
+<<<<<<< HEAD
 github.com/theopenlane/iam v0.22.2 h1:UH0anPZhTw5qJfSncY04dGZYhOQjvZcvTlxLBNUwOHc=
 github.com/theopenlane/iam v0.22.2/go.mod h1:bhfYmbswX2PpW40bZ3ZZf8IIKu1gI7aJ7tjdPPn1RBo=
+||||||| parent of 317b2fa4 (add http handler to generate the questionnaire jwt)
+github.com/theopenlane/iam v0.21.0 h1:cWOB7yLC/e18ZIhtDrVLi60Mq3Hy1s1rlJ8Jzn8wrRo=
+github.com/theopenlane/iam v0.21.0/go.mod h1:tHuq7kZIHP8rMfilv5JnbBN4Mk1zS0VCtXSeFx9OxtI=
+=======
+>>>>>>> 317b2fa4 (add http handler to generate the questionnaire jwt)
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
 github.com/theopenlane/riverboat v0.5.0 h1:STC7HsZD6K/fMyrlgn0TchuLZ49DR8wJsjs31yieLfs=
@@ -863,8 +869,16 @@ golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da h1:noIWHXmPHxILtqtCOPIhS
 golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da/go.mod h1:NDW/Ps6MPRej6fsCIbMTohpP40sJ/P/vI1MoTEGwX90=
 gonum.org/v1/gonum v0.16.0 h1:5+ul4Swaf3ESvrOnidPp4GZbzf0mxVQpDCYUQE7OJfk=
 gonum.org/v1/gonum v0.16.0/go.mod h1:fef3am4MQ93R2HHpKnLk4/Tbh/s0+wqD5nfa6Pnwy4E=
+<<<<<<< HEAD
 google.golang.org/api v0.255.0 h1:OaF+IbRwOottVCYV2wZan7KUq7UeNUQn1BcPc4K7lE4=
 google.golang.org/api v0.255.0/go.mod h1:d1/EtvCLdtiWEV4rAEHDHGh2bCnqsWhw+M8y2ECN4a8=
+||||||| parent of 317b2fa4 (add http handler to generate the questionnaire jwt)
+google.golang.org/api v0.253.0 h1:apU86Eq9Q2eQco3NsUYFpVTfy7DwemojL7LmbAj7g/I=
+google.golang.org/api v0.253.0/go.mod h1:PX09ad0r/4du83vZVAaGg7OaeyGnaUmT/CYPNvtLCbw=
+=======
+google.golang.org/api v0.254.0 h1:jl3XrGj7lRjnlUvZAbAdhINTLbsg5dbjmR90+pTQvt4=
+google.golang.org/api v0.254.0/go.mod h1:5BkSURm3D9kAqjGvBNgf0EcbX6Rnrf6UArKkwBzAyqQ=
+>>>>>>> 317b2fa4 (add http handler to generate the questionnaire jwt)
 google.golang.org/genproto v0.0.0-20251022142026-3a174f9686a8 h1:a12a2/BiVRxRWIqBbfqoSK6tgq8cyUgMnEI81QlPge0=
 google.golang.org/genproto v0.0.0-20251022142026-3a174f9686a8/go.mod h1:1Ic78BnpzY8OaTCmzxJDP4qC9INZPbGZl+54RKjtyeI=
 google.golang.org/genproto/googleapis/api v0.0.0-20251022142026-3a174f9686a8 h1:mepRgnBZa07I4TRuomDE4sTIYieg/osKmzIf4USdWS4=

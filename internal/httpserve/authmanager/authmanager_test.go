@@ -2,6 +2,7 @@ package authmanager
 
 import (
 	"context"
+	"strings"
 	"testing"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -33,5 +34,30 @@ func TestSkipOrgValidation(t *testing.T) {
 	ctx = genprivacy.DecisionContext(context.Background(), genprivacy.Allow)
 	if !skipOrgValidation(ctx) {
 		t.Fatalf("expected true when allowed in privacy decision")
+	}
+}
+
+func TestAnonymousPrefixes(t *testing.T) {
+	// Verify that the prefix constants are correct
+	if !strings.HasPrefix(AnonTrustcenterJWTPrefix, "anon_") {
+		t.Errorf("AnonTrustcenterJWTPrefix should start with 'anon_', got: %s", AnonTrustcenterJWTPrefix)
+	}
+	
+	if !strings.HasPrefix(AnonQuestionnaireJWTPrefix, "anon_") {
+		t.Errorf("AnonQuestionnaireJWTPrefix should start with 'anon_', got: %s", AnonQuestionnaireJWTPrefix)
+	}
+	
+	// Verify they are different
+	if AnonTrustcenterJWTPrefix == AnonQuestionnaireJWTPrefix {
+		t.Error("AnonTrustcenterJWTPrefix and AnonQuestionnaireJWTPrefix should be different")
+	}
+	
+	// Verify expected values
+	if AnonTrustcenterJWTPrefix != "anon_trustcenter_" {
+		t.Errorf("Expected AnonTrustcenterJWTPrefix to be 'anon_trustcenter_', got: %s", AnonTrustcenterJWTPrefix)
+	}
+	
+	if AnonQuestionnaireJWTPrefix != "anon_questionnaire_" {
+		t.Errorf("Expected AnonQuestionnaireJWTPrefix to be 'anon_questionnaire_', got: %s", AnonQuestionnaireJWTPrefix)
 	}
 }

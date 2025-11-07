@@ -27,6 +27,9 @@ import (
 
 const (
 	bearerScheme = "Bearer"
+
+	AnonTrustcenterJWTPrefix   = "anon_trustcenter_"
+	AnonQuestionnaireJWTPrefix = "anon_questionnaire_"
 )
 
 // Client holds the necessary clients and configuration for the auth manager
@@ -83,22 +86,8 @@ func (a *Client) GenerateUserAuthSession(ctx context.Context, w http.ResponseWri
 	return a.GenerateUserAuthSessionWithOrg(ctx, w, user, "")
 }
 
-// GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
-func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
-	anonUserID := fmt.Sprintf("anon_%s", uuid.New().String())
-
-	// create new claims for the user
-	newClaims := &tokens.Claims{
-		RegisteredClaims: jwt.RegisteredClaims{
-			Subject: anonUserID,
-		},
-		UserID:        anonUserID,
-		OrgID:         targetOrgID,
-		TrustCenterID: targetTrustCenterID,
-	}
-
-	// create a new token pair for the user
-	access, refresh, err := a.db.TokenManager.CreateTokenPair(newClaims)
+func (a *Client) generateAnonymousSession(ctx context.Context, w http.ResponseWriter, anonUserID string, claims *tokens.Claims) (*models.AuthData, error) {
+	access, refresh, err := a.db.TokenManager.CreateTokenPair(claims)
 	if err != nil {
 		return nil, err
 	}
@@ -114,8 +103,39 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 	}
 
 	auth.TokenType = bearerScheme
-
 	return auth, nil
+}
+
+// GenerateAnonymousTrustCenterSession creates a new auth session for the anonymous trust center user
+func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetTrustCenterID string) (*models.AuthData, error) {
+	anonUserID := fmt.Sprintf("%s%s", AnonTrustcenterJWTPrefix, uuid.New().String())
+
+	claims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:        anonUserID,
+		OrgID:         targetOrgID,
+		TrustCenterID: targetTrustCenterID,
+	}
+
+	return a.generateAnonymousSession(ctx, w, anonUserID, claims)
+}
+
+// GenerateAnonymousQuestionnaireSession creates a new auth session for the anonymous questionnaire user
+func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetAssessmentID string) (*models.AuthData, error) {
+	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, uuid.New().String())
+
+	claims := &tokens.Claims{
+		RegisteredClaims: jwt.RegisteredClaims{
+			Subject: anonUserID,
+		},
+		UserID:       anonUserID,
+		OrgID:        targetOrgID,
+		AssessmentID: targetAssessmentID,
+	}
+
+	return a.generateAnonymousSession(ctx, w, anonUserID, claims)
 }
 
 // GenerateOauthAuthSession creates a new auth session for the oauth user and their default organization id

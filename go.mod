@@ -4,6 +4,8 @@ go 1.25.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
+replace github.com/theopenlane/iam => ../iam
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema
@@ -128,7 +130,13 @@ require (
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
+<<<<<<< HEAD
 	google.golang.org/api v0.255.0 // indirect
+||||||| parent of 317b2fa4 (add http handler to generate the questionnaire jwt)
+	google.golang.org/api v0.253.0 // indirect
+=======
+	google.golang.org/api v0.254.0 // indirect
+>>>>>>> 317b2fa4 (add http handler to generate the questionnaire jwt)
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
