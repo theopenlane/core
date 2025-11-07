@@ -104,8 +104,8 @@ const (
 	EdgeAssigneeTasks = "assignee_tasks"
 	// EdgePrograms holds the string denoting the programs edge name in mutations.
 	EdgePrograms = "programs"
-	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
-	EdgeProgramOwner = "program_owner"
+	// EdgeProgramsOwned holds the string denoting the programs_owned edge name in mutations.
+	EdgeProgramsOwned = "programs_owned"
 	// EdgeImpersonationEvents holds the string denoting the impersonation_events edge name in mutations.
 	EdgeImpersonationEvents = "impersonation_events"
 	// EdgeTargetedImpersonations holds the string denoting the targeted_impersonations edge name in mutations.
@@ -227,13 +227,13 @@ const (
 	// ProgramsInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
 	ProgramsInverseTable = "programs"
-	// ProgramOwnerTable is the table that holds the program_owner relation/edge.
-	ProgramOwnerTable = "programs"
-	// ProgramOwnerInverseTable is the table name for the Program entity.
+	// ProgramsOwnedTable is the table that holds the programs_owned relation/edge.
+	ProgramsOwnedTable = "programs"
+	// ProgramsOwnedInverseTable is the table name for the Program entity.
 	// It exists in this package in order to avoid circular dependency with the "program" package.
-	ProgramOwnerInverseTable = "programs"
-	// ProgramOwnerColumn is the table column denoting the program_owner relation/edge.
-	ProgramOwnerColumn = "program_owner_id"
+	ProgramsOwnedInverseTable = "programs"
+	// ProgramsOwnedColumn is the table column denoting the programs_owned relation/edge.
+	ProgramsOwnedColumn = "program_owner_id"
 	// ImpersonationEventsTable is the table that holds the impersonation_events relation/edge.
 	ImpersonationEventsTable = "impersonation_events"
 	// ImpersonationEventsInverseTable is the table name for the ImpersonationEvent entity.
@@ -762,10 +762,17 @@ func ByPrograms(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByProgramOwnerField orders the results by program_owner field.
-func ByProgramOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByProgramsOwnedCount orders the results by programs_owned count.
+func ByProgramsOwnedCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newProgramOwnerStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborsCount(s, newProgramsOwnedStep(), opts...)
+	}
+}
+
+// ByProgramsOwned orders the results by programs_owned terms.
+func ByProgramsOwned(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newProgramsOwnedStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -957,11 +964,11 @@ func newProgramsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, ProgramsTable, ProgramsPrimaryKey...),
 	)
 }
-func newProgramOwnerStep() *sqlgraph.Step {
+func newProgramsOwnedStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(ProgramOwnerInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, ProgramOwnerTable, ProgramOwnerColumn),
+		sqlgraph.To(ProgramsOwnedInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ProgramsOwnedTable, ProgramsOwnedColumn),
 	)
 }
 func newImpersonationEventsStep() *sqlgraph.Step {
