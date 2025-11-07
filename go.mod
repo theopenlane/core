@@ -4,6 +4,8 @@ go 1.25.3
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
+replace github.com/theopenlane/iam => ../iam
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema
@@ -127,7 +129,7 @@ require (
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
-	google.golang.org/api v0.253.0 // indirect
+	google.golang.org/api v0.254.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 

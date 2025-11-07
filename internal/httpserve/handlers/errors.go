@@ -95,6 +95,8 @@ var (
 	ErrMissingSlugInPath = errors.New("slug is required in the path for default trust center domain")
 	// ErrTrustCenterNotFound is returned when the trust center is not found
 	ErrTrustCenterNotFound = errors.New("trust center not found")
+	// ErrAssessmentNotFound is returned when the assessment is not found
+	ErrAssessmentNotFound = errors.New("assessment not found")
 	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
 	ErrAuthenticationRequired = errors.New("authentication required")
 	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session
