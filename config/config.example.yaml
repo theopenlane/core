@@ -31,8 +31,7 @@ auth:
         issuer: ""
         jwksCacheTTL: 300000000000
         jwksEndpoint: ""
-        keys:
-            default: ""
+        keys: null
         kid: ""
         redis:
             blacklistPrefix: 'token:blacklist:'
@@ -187,11 +186,7 @@ jobQueue:
         Middleware: null
         PeriodicJobs: null
         PollOnly: false
-        Queues:
-            default:
-                FetchCooldown: 0
-                FetchPollInterval: 0
-                MaxWorkers: 0
+        Queues: null
         ReindexerSchedule: null
         ReindexerTimeout: 0
         RescueStuckJobsAfter: 0
@@ -325,15 +320,13 @@ server:
     cacheControl:
         enabled: true
         etagHeaders: null
-        noCacheHeaders:
-            default: ""
+        noCacheHeaders: null
     complexityLimit: 100
     cors:
         allowOrigins: null
         cookieInsecure: false
         enabled: true
-        prefixes:
-            default: []
+        prefixes: null
     csrfProtection:
         cookie: ol.csrf-token
         cookieDomain: ""
@@ -364,8 +357,7 @@ server:
     redirects:
         code: 0
         enabled: true
-        redirects:
-            default: ""
+        redirects: null
     secretManager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
@@ -409,7 +401,6 @@ subscription:
     stripeWebhookSecret: ""
     stripeWebhookSecrets:
         2025-10-29.clover: ""
-        default: ""
     stripeWebhookURL: https://api.theopenlane.io/stripe/webhook
 totp:
     codeLength: 6

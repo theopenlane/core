@@ -290,10 +290,10 @@ apply_helm_config_changes() {
         change_summary+="\n- 🔐 Updated External Secrets templates"
     fi
 
-    # Legacy configmap support (for backward compatibility)
-    if [[ -f "$source_dir/configmap.yaml" ]]; then
+    # ConfigMap that embeds config.yaml for runtime mounting
+    if [[ -f "$source_dir/configmap-config-file.yaml" ]]; then
         if copy_and_track \
-            "$source_dir/configmap.yaml" \
+            "$source_dir/configmap-config-file.yaml" \
             "$chart_dir/templates/core-configmap.yaml" \
             "ConfigMap template" 2>&1; then
             changes_made=true

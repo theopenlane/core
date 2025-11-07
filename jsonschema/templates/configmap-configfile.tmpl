@@ -3,9 +3,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: openlane-config
+  name: openlane-config-file
   namespace: openlane
   labels:
     app: openlane
     component: config
 data:
+  config.yaml: |-

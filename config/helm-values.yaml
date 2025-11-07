@@ -931,14 +931,6 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_10_29_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets-2025-10-29-clover"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-default secret configuration
-    core-subscription-stripewebhooksecrets-default:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecrets.default
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_DEFAULT"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-default"  # @schema type:string
     # -- core-keywatcher-secretmanager secret configuration
     core-keywatcher-secretmanager:
       # -- Enable this external secret

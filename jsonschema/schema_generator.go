@@ -24,20 +24,19 @@ import (
 
 // const values used for the schema generator
 const (
-	tagName            = "koanf"
-	skipper            = "-"
-	defaultTag         = "default"
-	jsonSchemaPath     = "./jsonschema/core.config.json"
-	yamlConfigPath     = "./config/config.example.yaml"
-	envConfigPath      = "./config/.env.example"
-	configMapPath      = "./config/configmap.yaml"
-	pushSecretsDir     = "./config/pushsecrets"      // #nosec G101 - this is a directory path, not a secret
-	externalSecretsDir = "./config/external-secrets" // #nosec G101 - this is a directory path, not a secret
-	helmValuesPath     = "./config/helm-values.yaml"
-	sensitiveTag       = "sensitive"
-	varPrefix          = "CORE"
-	ownerReadWrite     = 0600
-	dirPermission      = 0755
+	tagName                 = "koanf"
+	skipper                 = "-"
+	defaultTag              = "default"
+	jsonSchemaPath          = "./jsonschema/core.config.json"
+	yamlConfigPath          = "./config/config.example.yaml"
+	envConfigPath           = "./config/.env.example"
+	configFileConfigMapPath = "./config/configmap-config-file.yaml"
+	externalSecretsDir      = "./config/external-secrets" // #nosec G101 - this is a directory path, not a secret
+	helmValuesPath          = "./config/helm-values.yaml"
+	sensitiveTag            = "sensitive"
+	varPrefix               = "CORE"
+	ownerReadWrite          = 0600
+	dirPermission           = 0755
 )
 
 // includedPackages is a list of packages to include in the schema generation
@@ -87,10 +86,8 @@ type schemaConfig struct {
 	yamlConfigPath string
 	// envConfigPath is the file path to the environment variable configuration to be generated
 	envConfigPath string
-	// configMapPath is the file path to the kubernetes config map configuration to be generated
-	configMapPath string
-	// pushSecretsDir is the directory for individual PushSecret files
-	pushSecretsDir string
+	// configFileConfigMapPath is the file path to the kubernetes config map that embeds config.yaml
+	configFileConfigMapPath string
 	// externalSecretsDir is the directory for ExternalSecret files for Helm chart
 	externalSecretsDir string
 	// helmValuesPath is the file path to the helm values.yaml to be generated
@@ -103,13 +100,12 @@ type schemaOption func(*schemaConfig)
 // newSchemaConfig creates a schemaConfig with provided options
 func newSchemaConfig(opts ...schemaOption) schemaConfig {
 	c := schemaConfig{
-		jsonSchemaPath:     jsonSchemaPath,
-		yamlConfigPath:     yamlConfigPath,
-		envConfigPath:      envConfigPath,
-		configMapPath:      configMapPath,
-		pushSecretsDir:     pushSecretsDir,
-		externalSecretsDir: externalSecretsDir,
-		helmValuesPath:     helmValuesPath,
+		jsonSchemaPath:          jsonSchemaPath,
+		yamlConfigPath:          yamlConfigPath,
+		envConfigPath:           envConfigPath,
+		configFileConfigMapPath: configFileConfigMapPath,
+		externalSecretsDir:      externalSecretsDir,
+		helmValuesPath:          helmValuesPath,
 	}
 
 	for _, opt := range opts {
@@ -143,18 +139,18 @@ func generateSchema(c schemaConfig, structure interface{}) error {
 	}
 
 	// Process environment variables and sensitive fields
-	envFields, sensitiveFields, err := processEnvironmentVariables()
+	envVars, sensitiveFields, err := processEnvironmentVariables()
 	if err != nil {
 		return err
 	}
 
 	// Generate .env.example file
-	if err := generateEnvironmentFile(c.envConfigPath, envFields.EnvVars); err != nil {
+	if err := generateEnvironmentFile(c.envConfigPath, envVars); err != nil {
 		return err
 	}
 
-	// Generate Kubernetes ConfigMap YAML
-	if err := generateConfigMap(c.configMapPath, envFields.ConfigMap); err != nil {
+	// Generate ConfigMap containing the rendered config.yaml content
+	if err := generateConfigFileConfigMap(c.configFileConfigMapPath); err != nil {
 		return err
 	}
 
@@ -208,14 +204,7 @@ func generateJSONSchema(jsonSchemaPath string, structure interface{}) error {
 // generateYAMLConfig creates the YAML configuration file with default values populated.
 // It also ensures example map entries and initializes special config sections.
 func generateYAMLConfig(yamlConfigPath string) error {
-	yamlConfig := &config.Config{}
-	// Set default values for the config struct
-	defaults.SetDefaults(yamlConfig)
-
-	// Populate example map entries for maps and initialize special config fields
-	populateExampleMapEntries(reflect.ValueOf(yamlConfig).Elem())
-	initializeStripeWebhookSecrets(yamlConfig)
-	initializeRateLimitOptions(yamlConfig)
+	yamlConfig := buildDefaultConfig()
 
 	// Marshal the config struct to YAML
 	yamlSchema, err := yaml.Marshal(yamlConfig)
@@ -231,92 +220,13 @@ func generateYAMLConfig(yamlConfigPath string) error {
 	return nil
 }
 
-// populateExampleMapEntries recursively populates example entries for maps in a struct
-// If an "example" tag is present, it is used to determine the example keys
-func populateExampleMapEntries(v reflect.Value) {
-	if !v.IsValid() || v.Kind() != reflect.Struct {
-		return
-	}
-
-	t := v.Type()
-
-	for i := 0; i < v.NumField(); i++ {
-		field := t.Field(i)
-		fieldValue := v.Field(i)
-
-		// Only process exported fields
-		if !field.IsExported() {
-			continue
-		}
-
-		switch fieldValue.Kind() {
-		case reflect.Map:
-			if !fieldValue.CanSet() {
-				continue
-			}
-
-			mapType := fieldValue.Type()
-			if mapType.Key().Kind() != reflect.String {
-				continue
-			}
-
-			if fieldValue.IsNil() {
-				fieldValue.Set(reflect.MakeMap(mapType))
-			}
-
-			// parse example keys from struct tag
-			exampleKeys := parseExampleKeys(field.Tag.Get("example"))
-
-			// if we already have entries and there is no explicit example tag, leave the map as-is
-			if len(exampleKeys) == 0 && fieldValue.Len() > 0 {
-				continue
-			}
-
-			// If no example keys, use a default key
-			if len(exampleKeys) == 0 {
-				exampleKeys = []string{defaultExampleKey(0)}
-			}
-
-			valueType := mapType.Elem()
-
-			// Add example entries to the map
-			for idx, rawKey := range exampleKeys {
-				key := strings.TrimSpace(rawKey)
-				if key == "" {
-					key = defaultExampleKey(idx)
-				}
-
-				keyValue := reflect.ValueOf(key)
-				if fieldValue.MapIndex(keyValue).IsValid() {
-					continue
-				}
-
-				mapValue := createExampleMapValue(valueType)
-				fieldValue.SetMapIndex(keyValue, mapValue)
-			}
-
-		case reflect.Struct:
-			// recursive stuff into those juicy nested structs
-			populateExampleMapEntries(fieldValue)
-
-		case reflect.Ptr:
-			elemType := fieldValue.Type().Elem()
-			if elemType.Kind() != reflect.Struct {
-				continue
-			}
-
-			if fieldValue.IsNil() && fieldValue.CanSet() && shouldInitializePointer(elemType) {
-				newVal := reflect.New(elemType)
-				defaults.SetDefaults(newVal.Interface())
-				fieldValue.Set(newVal)
-			}
-
-			// recurse into a juicy pointer to struct
-			if !fieldValue.IsNil() {
-				populateExampleMapEntries(fieldValue.Elem())
-			}
-		}
-	}
+// buildDefaultConfig returns a config struct populated with default and example values.
+func buildDefaultConfig() *config.Config {
+	cfg := &config.Config{}
+	defaults.SetDefaults(cfg)
+	initializeStripeWebhookSecrets(cfg)
+	initializeRateLimitOptions(cfg)
+	return cfg
 }
 
 // initializeStripeWebhookSecrets ensures the stripe webhook secrets map includes entries for the current and discard API versions
@@ -365,70 +275,10 @@ func initializeRateLimitOptions(cfg *config.Config) {
 	}
 }
 
-// mapEntry represents a key/value pair in a map for reflection purposes
+// mapEntry represents a key/value pair discovered for map traversal
 type mapEntry struct {
 	Key   string
 	Value reflect.Value
-}
-
-// parseExampleKeys parses the "example" struct tag to extract example keys for map entries
-func parseExampleKeys(exampleTag string) []string {
-	if exampleTag == "" {
-		return nil
-	}
-
-	parts := strings.Split(exampleTag, ",")
-	keys := make([]string, 0, len(parts))
-
-	for _, part := range parts {
-		key := strings.TrimSpace(part)
-		if key != "" {
-			keys = append(keys, key)
-		}
-	}
-
-	return keys
-}
-
-// defaultExampleKey generates a default example key based on the index
-func defaultExampleKey(index int) string {
-	if index == 0 {
-		return "default"
-	}
-
-	return fmt.Sprintf("default%d", index+1)
-}
-
-// createExampleMapValue creates a reflect.Value for a map entry based on the value type
-func createExampleMapValue(valueType reflect.Type) reflect.Value {
-	switch valueType.Kind() {
-	case reflect.Struct:
-		ptr := reflect.New(valueType)
-		defaults.SetDefaults(ptr.Interface())
-		populateExampleMapEntries(ptr.Elem())
-		return ptr.Elem()
-	case reflect.Ptr:
-		elemType := valueType.Elem()
-		ptr := reflect.New(elemType)
-		if elemType.Kind() == reflect.Struct {
-			defaults.SetDefaults(ptr.Interface())
-			populateExampleMapEntries(ptr.Elem())
-		}
-		return ptr
-	case reflect.Slice:
-		return reflect.MakeSlice(valueType, 0, 0)
-	case reflect.Map:
-		return reflect.MakeMap(valueType)
-	default:
-		return reflect.Zero(valueType)
-	}
-}
-
-// shouldInitializePointer determines if a pointer to a struct should be initialized based on its package path
-func shouldInitializePointer(t reflect.Type) bool {
-	pkgPath := t.PkgPath()
-
-	return strings.HasPrefix(pkgPath, "github.com/theopenlane/core/")
 }
 
 // getMapEntriesForPath returns sorted key/value pairs for the map identified by the provided config path
@@ -574,8 +424,8 @@ func sanitizeMapKeyForEnv(mapKey string) string {
 	return sanitized
 }
 
-// appendMapFieldEnvVars processes a map field and appends its entries to the environment variables and config map data
-func appendMapFieldEnvVars(envVars, configMapData *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+// appendMapFieldEnvVars processes a map field and appends its entries to the environment variables
+func appendMapFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
 	mapEntries, err := getMapEntriesForPath(cfg, field.FullPath)
 	if err != nil {
 		return fmt.Errorf("failed to derive map entries for %s: %w", field.FullPath, err)
@@ -588,14 +438,14 @@ func appendMapFieldEnvVars(envVars, configMapData *strings.Builder, cfg *config.
 
 		baseKey := fmt.Sprintf("%s_%s", field.Key, sanitizeMapKeyForEnv(entry.Key))
 		basePath := fmt.Sprintf("%s.%s", field.FullPath, entry.Key)
-		appendMapValueEnvVars(envVars, configMapData, baseKey, basePath, entry.Value, isSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, baseKey, basePath, entry.Value, isSecret, sensitiveFields)
 	}
 
 	return nil
 }
 
-// appendSliceStructFieldEnvVars processes a slice of structs field and appends its entries to the environment variables and config map data
-func appendSliceStructFieldEnvVars(envVars, configMapData *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
+// appendSliceStructFieldEnvVars processes a slice of structs field and appends its entries to the environment variables
+func appendSliceStructFieldEnvVars(envVars *strings.Builder, cfg *config.Config, field envparse.VarInfo, isSecret bool, sensitiveFields *[]SensitiveField) error {
 	values, err := getSliceValuesForPath(cfg, field.FullPath)
 	if err != nil {
 		return fmt.Errorf("failed to derive slice entries for %s: %w", field.FullPath, err)
@@ -604,14 +454,14 @@ func appendSliceStructFieldEnvVars(envVars, configMapData *strings.Builder, cfg 
 	for idx, val := range values {
 		baseKey := fmt.Sprintf("%s_%d", field.Key, idx)
 		basePath := fmt.Sprintf("%s.%d", field.FullPath, idx)
-		appendMapValueEnvVars(envVars, configMapData, baseKey, basePath, val, isSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, baseKey, basePath, val, isSecret, sensitiveFields)
 	}
 
 	return nil
 }
 
 // appendMapValueEnvVars recursively appends environment variable entries for a given reflect.Value
-func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, basePath string, value reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+func appendMapValueEnvVars(envVars *strings.Builder, baseKey, basePath string, value reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
 	if !value.IsValid() {
 		return
 	}
@@ -625,7 +475,7 @@ func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, bas
 
 	switch value.Kind() {
 	case reflect.Struct:
-		appendStructEnvVars(envVars, configMapData, baseKey, basePath, value, parentSecret, sensitiveFields)
+		appendStructEnvVars(envVars, baseKey, basePath, value, parentSecret, sensitiveFields)
 	case reflect.Map:
 		iter := value.MapRange()
 		for iter.Next() {
@@ -636,7 +486,7 @@ func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, bas
 
 			subKey := fmt.Sprintf("%s_%s", baseKey, sanitizeMapKeyForEnv(keyVal.String()))
 			subPath := fmt.Sprintf("%s.%s", basePath, keyVal.String())
-			appendMapValueEnvVars(envVars, configMapData, subKey, subPath, iter.Value(), parentSecret, sensitiveFields)
+			appendMapValueEnvVars(envVars, subKey, subPath, iter.Value(), parentSecret, sensitiveFields)
 		}
 	case reflect.Slice, reflect.Array:
 		if value.Type().Elem().Kind() == reflect.Struct {
@@ -644,7 +494,7 @@ func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, bas
 				sub := value.Index(i)
 				subKey := fmt.Sprintf("%s_%d", baseKey, i)
 				subPath := fmt.Sprintf("%s.%d", basePath, i)
-				appendMapValueEnvVars(envVars, configMapData, subKey, subPath, sub, parentSecret, sensitiveFields)
+				appendMapValueEnvVars(envVars, subKey, subPath, sub, parentSecret, sensitiveFields)
 			}
 		} else {
 			envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", baseKey, sliceToEnvString(value)))
@@ -657,16 +507,11 @@ func appendMapValueEnvVars(envVars, configMapData *strings.Builder, baseKey, bas
 		if parentSecret {
 			appendSensitiveField(sensitiveFields, baseKey, basePath)
 		}
-		if configMapData != nil && !parentSecret {
-			helmRef := buildHelmValueReference(basePath)
-			defaultLiteral := formatHelmDefaultLiteral(value.Interface())
-			configMapData.WriteString(fmt.Sprintf("  %s: {{ default %s %s | quote }}\n", baseKey, defaultLiteral, helmRef))
-		}
 	}
 }
 
-// appendStructEnvVars processes a struct value and appends its fields to the environment variables and config map data
-func appendStructEnvVars(envVars, configMapData *strings.Builder, baseKey, basePath string, val reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
+// appendStructEnvVars processes a struct value and appends its fields to the environment variables
+func appendStructEnvVars(envVars *strings.Builder, baseKey, basePath string, val reflect.Value, parentSecret bool, sensitiveFields *[]SensitiveField) {
 	typeInfo := val.Type()
 	for i := 0; i < val.NumField(); i++ {
 		field := typeInfo.Field(i)
@@ -675,7 +520,7 @@ func appendStructEnvVars(envVars, configMapData *strings.Builder, baseKey, baseP
 		}
 
 		tag := field.Tag.Get(tagName)
-		if tag == "" || tag == "-" {
+		if tag == "" || tag == skipper {
 			continue
 		}
 
@@ -684,7 +529,7 @@ func appendStructEnvVars(envVars, configMapData *strings.Builder, baseKey, baseP
 		subPath := fmt.Sprintf("%s.%s", basePath, tag)
 		fieldSecret := parentSecret || field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(subPath)
 
-		appendMapValueEnvVars(envVars, configMapData, subKey, subPath, subValue, fieldSecret, sensitiveFields)
+		appendMapValueEnvVars(envVars, subKey, subPath, subValue, fieldSecret, sensitiveFields)
 	}
 }
 
@@ -709,21 +554,6 @@ func sliceToEnvString(v reflect.Value) string {
 	}
 
 	return strings.Join(parts, ",")
-}
-
-// isCompletexSlice checks if a reflect.Type is a slice of complex types (structs, maps, interfaces)
-func isComplexSlice(t reflect.Type) bool {
-	if t.Kind() != reflect.Slice && t.Kind() != reflect.Array {
-		return false
-	}
-
-	elem := t.Elem()
-	switch elem.Kind() {
-	case reflect.Struct, reflect.Map, reflect.Interface:
-		return true
-	}
-
-	return false
 }
 
 // buildHelmValueReference constructs a Helm values reference string from a full config path
@@ -810,21 +640,9 @@ func convertValueForYAML(val reflect.Value) any {
 	}
 }
 
-// EnvironmentFields represents the processed environment variable data
-type EnvironmentFields struct {
-	// EnvVars stands for "environment variables" they are used to do stuff
-	EnvVars string
-	// ConfigMap holds the kubernetes config map data to configure the kubernetes... configs
-	ConfigMap string
-}
-
 // processEnvironmentVariables extracts and processes all environment variables from the config
-func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error) {
-	defaultConfig := &config.Config{}
-	defaults.SetDefaults(defaultConfig)
-	populateExampleMapEntries(reflect.ValueOf(defaultConfig).Elem())
-	initializeStripeWebhookSecrets(defaultConfig)
-	initializeRateLimitOptions(defaultConfig)
+func processEnvironmentVariables() (string, []SensitiveField, error) {
+	defaultConfig := buildDefaultConfig()
 
 	cp := envparse.Config{
 		FieldTagName: tagName,
@@ -833,12 +651,10 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 
 	out, err := cp.GatherEnvInfo(varPrefix, defaultConfig)
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to gather environment info: %w", err)
+		return "", nil, fmt.Errorf("failed to gather environment info: %w", err)
 	}
 
 	var envVars strings.Builder
-	var configMapData strings.Builder
-	configMapData.WriteString("\n")
 	var sensitiveFields []SensitiveField
 
 	for _, field := range out {
@@ -852,93 +668,32 @@ func processEnvironmentVariables() (*EnvironmentFields, []SensitiveField, error)
 
 		isComplexCollection := field.Type.Kind() == reflect.Map || (field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.Struct)
 
-		if !isComplexCollection {
+		switch {
+		case !isComplexCollection:
 			// Always add to environment variables
 			envVars.WriteString(fmt.Sprintf("%s=\"%s\"\n", field.Key, defaultVal))
 
-			if !isSecret {
-				// Add to ConfigMap
-				configMapEntry := generateConfigMapEntry(field, defaultVal)
-				configMapData.WriteString(configMapEntry)
-			} else {
+			if isSecret {
 				appendSensitiveField(&sensitiveFields, field.Key, field.FullPath)
 			}
-		} else if isSecret {
+		case isSecret:
 			appendSensitiveField(&sensitiveFields, field.Key, field.FullPath)
 		}
 
 		if field.Type.Kind() == reflect.Map {
-			if err := appendMapFieldEnvVars(&envVars, &configMapData, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
-				return nil, nil, err
+			if err := appendMapFieldEnvVars(&envVars, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
+				return "", nil, err
 			}
 		}
 
 		if field.Type.Kind() == reflect.Slice && field.Type.Elem().Kind() == reflect.Struct {
-			if err := appendSliceStructFieldEnvVars(&envVars, &configMapData, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
-				return nil, nil, err
+			if err := appendSliceStructFieldEnvVars(&envVars, defaultConfig, field, isSecret, &sensitiveFields); err != nil {
+				return "", nil, err
 			}
 		}
 	}
 
-	return &EnvironmentFields{
-		EnvVars:   envVars.String(),
-		ConfigMap: configMapData.String(),
-	}, sensitiveFields, nil
-}
-
-// generateConfigMapEntry creates a ConfigMap entry for a single field
-func generateConfigMapEntry(field envparse.VarInfo, defaultVal string) string {
-	// check if this field has domain inheritance
-	domainTag := field.Tags.Get("domain")
-	domainPrefix := field.Tags.Get("domainPrefix")
-	domainSuffix := field.Tags.Get("domainSuffix")
-
-	kind := field.Type.Kind()
-
-	joinStr := ""
-	switch kind {
-	case reflect.Slice, reflect.Array:
-		if isComplexSlice(field.Type) {
-			return ""
-		}
-		joinStr = " join \",\""
-	case reflect.Map, reflect.Struct:
-		// maps cannot be set as environment variables
-		return ""
-	}
-
-	if domainTag == "inherit" {
-		// Generate Helm template logic for domain inheritance
-		helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
-		return generateDomainHelmTemplate(field.Key, helmPath, domainPrefix, domainSuffix, defaultVal, joinStr)
-	}
-
-	// Standard non-domain field processing
-	// Prefix with openlane.coreConfiguration for Helm chart compatibility
-	helmPath := fmt.Sprintf("openlane.coreConfiguration.%s", strings.TrimPrefix(field.FullPath, "core."))
-
-	if defaultVal == "" {
-		return fmt.Sprintf("  %s: {{%s .Values.%s | quote }}\n", field.Key, joinStr, helmPath)
-	}
-
-	// Format default value based on type
-	formattedDefault := formatDefaultValue(defaultVal, kind)
-	return fmt.Sprintf("  %s: {{%s .Values.%s | quote | default %s }}\n", field.Key, joinStr, helmPath, formattedDefault)
-}
-
-// formatDefaultValue formats a default value based on its type
-func formatDefaultValue(defaultVal string, kind reflect.Kind) string {
-	switch kind {
-	case reflect.String, reflect.Int64, reflect.Int, reflect.Int32:
-		return "\"" + defaultVal + "\""
-	case reflect.Slice:
-		// Remove brackets and add quotes
-		formatted := strings.Replace(defaultVal, "[", "", 1)
-		formatted = strings.Replace(formatted, "]", "", 1)
-		return "\"" + formatted + "\""
-	default:
-		return "\"" + defaultVal + "\""
-	}
+	return envVars.String(), sensitiveFields, nil
 }
 
 // generateEnvironmentFile writes the environment variables to a file
@@ -950,24 +705,330 @@ func generateEnvironmentFile(envConfigPath, envVars string) error {
 	return nil
 }
 
-// generateConfigMap creates the ConfigMap file with header template and data
-func generateConfigMap(configMapPath, configMapData string) error {
-	header, err := os.ReadFile("./jsonschema/templates/configmap.tmpl")
+// generateConfigFileConfigMap creates a ConfigMap that embeds the rendered config.yaml file.
+func generateConfigFileConfigMap(configMapPath string) error {
+	header, err := os.ReadFile("./jsonschema/templates/configmap-configfile.tmpl")
 	if err != nil {
-		return fmt.Errorf("failed to read ConfigMap template: %w", err)
+		return fmt.Errorf("failed to read config file ConfigMap template: %w", err)
 	}
 
-	// append the {{- end }} for the if wrapper
-	configMapData = configMapData + "{{- end }}\n"
+	cfg := buildDefaultConfig()
 
-	header = append(header, []byte(configMapData)...)
-	configMapContent := header
+	var body strings.Builder
+	body.WriteString("\n")
+	if err := writeConfigYAML(&body, reflect.ValueOf(cfg).Elem(), nil, 4); err != nil {
+		return fmt.Errorf("failed to render config.yaml content: %w", err)
+	}
 
-	if err := os.WriteFile(configMapPath, configMapContent, ownerReadWrite); err != nil {
-		return fmt.Errorf("failed to write ConfigMap file: %w", err)
+	configMapData := body.String() + "{{- end }}\n"
+	content := append(header, []byte(configMapData)...)
+
+	if err := os.WriteFile(configMapPath, content, ownerReadWrite); err != nil {
+		return fmt.Errorf("failed to write config file ConfigMap: %w", err)
 	}
 
 	return nil
+}
+
+// writeConfigYAML walks the config struct and emits Helm-templated YAML content.
+func writeConfigYAML(builder *strings.Builder, val reflect.Value, path []string, indent int) error {
+	val = reflect.Indirect(val)
+	if !val.IsValid() || val.Kind() != reflect.Struct {
+		return nil
+	}
+
+	t := val.Type()
+	for i := 0; i < t.NumField(); i++ {
+		field := t.Field(i)
+		if !field.IsExported() {
+			continue
+		}
+
+		key := field.Tag.Get(tagName)
+		if key == "" || key == skipper {
+			continue
+		}
+
+		fullPath := strings.Join(append(path, key), ".")
+		prefixedPath := fmt.Sprintf("core.%s", fullPath)
+		if isFieldSensitive(field, prefixedPath) {
+			continue
+		}
+
+		fieldValue := unwrapValue(val.Field(i))
+		helmRef := buildHelmValueReference(prefixedPath)
+
+		if field.Tag.Get("domain") == "inherit" {
+			builder.WriteString(generateDomainConfigYAML(key, helmRef, field.Tag.Get("domainPrefix"), field.Tag.Get("domainSuffix"), fieldValue, indent))
+			continue
+		}
+
+		switch fieldValue.Kind() {
+		case reflect.Struct:
+			if err := writeStructField(builder, key, fieldValue, appendPath(path, key), indent); err != nil {
+				return err
+			}
+		case reflect.Map:
+			writeMapField(builder, key, helmRef, indent)
+		case reflect.Slice, reflect.Array:
+			writeSliceField(builder, key, helmRef, indent)
+		default:
+			builder.WriteString(formatScalarFieldLine(key, helmRef, fieldValue, indent))
+		}
+	}
+
+	return nil
+}
+
+// writeStructField renders a nested struct block.
+func writeStructField(builder *strings.Builder, key string, value reflect.Value, path []string, indent int) error {
+	var inner strings.Builder
+	if err := writeConfigYAML(&inner, value, path, indent+2); err != nil {
+		return err
+	}
+
+	indentStr := strings.Repeat(" ", indent)
+	if inner.Len() == 0 {
+		builder.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, key))
+		return nil
+	}
+
+	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+	builder.WriteString(inner.String())
+	return nil
+}
+
+// writeSliceField renders slice values using Helm helpers while preserving YAML formatting.
+func writeSliceField(builder *strings.Builder, key, helmRef string, indent int) {
+	indentStr := strings.Repeat(" ", indent)
+	builder.WriteString(fmt.Sprintf("%s{{- $sliceValue := (%s | default (list)) }}\n", indentStr, helmRef))
+	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $sliceValue) 0 }}\n", indentStr))
+	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+	builder.WriteString(fmt.Sprintf("%s{{ toYaml $sliceValue | nindent %d }}\n", indentStr, indent+2))
+	builder.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
+	builder.WriteString(fmt.Sprintf("%s%s: []\n", indentStr, key))
+	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
+}
+
+// writeMapField renders map values using Helm helpers while preserving YAML formatting.
+func writeMapField(builder *strings.Builder, key, helmRef string, indent int) {
+	indentStr := strings.Repeat(" ", indent)
+	builder.WriteString(fmt.Sprintf("%s{{- $mapValue := (%s | default (dict)) }}\n", indentStr, helmRef))
+	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $mapValue) 0 }}\n", indentStr))
+	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+	builder.WriteString(fmt.Sprintf("%s{{ toYaml $mapValue | nindent %d }}\n", indentStr, indent+2))
+	builder.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
+	builder.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, key))
+	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
+}
+
+// formatScalarFieldLine renders a single scalar field with Helm defaults.
+func formatScalarFieldLine(key, helmRef string, value reflect.Value, indent int) string {
+	indentStr := strings.Repeat(" ", indent)
+	defaultLiteral := formatScalarDefaultLiteral(value)
+	if needsQuotes(value) {
+		return fmt.Sprintf("%s%s: {{ default %s %s | quote }}\n", indentStr, key, defaultLiteral, helmRef)
+	}
+
+	return fmt.Sprintf("%s%s: {{ default %s %s }}\n", indentStr, key, defaultLiteral, helmRef)
+}
+
+// formatScalarDefaultLiteral converts a scalar value into a Helm-friendly literal.
+func formatScalarDefaultLiteral(value reflect.Value) string {
+	if !value.IsValid() {
+		return "\"\""
+	}
+
+	switch value.Kind() {
+	case reflect.String:
+		return strconv.Quote(value.String())
+	case reflect.Bool:
+		if value.Bool() {
+			return "true"
+		}
+		return "false"
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
+		if isDurationType(value.Type()) {
+			return strconv.Quote(time.Duration(value.Int()).String())
+		}
+		return fmt.Sprintf("%d", value.Int())
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
+		return fmt.Sprintf("%d", value.Uint())
+	case reflect.Float32, reflect.Float64:
+		return strconv.FormatFloat(value.Float(), 'f', -1, 64)
+	default:
+		return strconv.Quote(fmt.Sprintf("%v", value.Interface()))
+	}
+}
+
+// needsQuotes determines if a scalar field should be quoted in YAML output.
+func needsQuotes(value reflect.Value) bool {
+	if !value.IsValid() {
+		return true
+	}
+
+	if isDurationType(value.Type()) {
+		return true
+	}
+
+	return value.Kind() == reflect.String
+}
+
+// isDurationType checks if the provided type is a time.Duration.
+func isDurationType(t reflect.Type) bool {
+	return t == reflect.TypeOf(time.Duration(0))
+}
+
+// unwrapValue dereferences pointer values and returns the underlying value.
+func unwrapValue(v reflect.Value) reflect.Value {
+	for v.IsValid() && v.Kind() == reflect.Ptr {
+		if v.IsNil() {
+			return reflect.Zero(v.Type().Elem())
+		}
+		v = v.Elem()
+	}
+	return v
+}
+
+// appendPath returns a copy of the path with the additional key appended.
+func appendPath(path []string, key string) []string {
+	newPath := make([]string, len(path)+1)
+	copy(newPath, path)
+	newPath[len(path)] = key
+	return newPath
+}
+
+// isFieldSensitive determines whether a field should be omitted due to sensitivity.
+func isFieldSensitive(field reflect.StructField, fullPath string) bool {
+	return field.Tag.Get(sensitiveTag) == "true" || isExternalSensitiveField(fullPath)
+}
+
+// generateDomainConfigYAML builds conditional YAML for domain-inherited fields.
+func generateDomainConfigYAML(key, helmRef, domainPrefix, domainSuffix string, value reflect.Value, indent int) string {
+	indentStr := strings.Repeat(" ", indent)
+	var template strings.Builder
+
+	if value.Kind() == reflect.Slice || value.Kind() == reflect.Array {
+		template.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
+		template.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+		template.WriteString(fmt.Sprintf("%s{{ toYaml %s | nindent %d }}\n", indentStr, helmRef, indent+2))
+		template.WriteString(fmt.Sprintf("%s{{- else if .Values.domain }}\n", indentStr))
+		template.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+		template.WriteString(buildDomainSliceValues(domainPrefix, domainSuffix, indent+2))
+		template.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
+		template.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
+		template.WriteString(renderStaticYAMLValue(value.Interface(), indent+2, "[]"))
+		template.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
+		return template.String()
+	}
+
+	template.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
+	template.WriteString(fmt.Sprintf("%s%s: {{ %s | quote }}\n", indentStr, key, helmRef))
+	template.WriteString(fmt.Sprintf("%s{{- else if .Values.domain }}\n", indentStr))
+	template.WriteString(fmt.Sprintf("%s%s: %s\n", indentStr, key, buildDomainStringValue(domainPrefix, domainSuffix)))
+	template.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
+	template.WriteString(fmt.Sprintf("%s%s: %s\n", indentStr, key, formatScalarDefaultLiteral(value)))
+	template.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
+	return template.String()
+}
+
+// buildDomainSliceValues renders domain-derived slice entries.
+func buildDomainSliceValues(domainPrefix, domainSuffix string, indent int) string {
+	indentStr := strings.Repeat(" ", indent)
+	prefixes := normalizeDomainPrefixes(domainPrefix)
+	if len(prefixes) == 0 {
+		prefixes = []string{""}
+	}
+
+	var builder strings.Builder
+	for _, prefix := range prefixes {
+		builder.WriteString(indentStr)
+		builder.WriteString("- ")
+		builder.WriteString(fmt.Sprintf("\"%s\"\n", composeDomainValue(prefix, domainSuffix)))
+	}
+
+	return builder.String()
+}
+
+// buildDomainStringValue renders the string value for domain overrides.
+func buildDomainStringValue(domainPrefix, domainSuffix string) string {
+	prefixes := normalizeDomainPrefixes(domainPrefix)
+	prefix := ""
+	if len(prefixes) > 0 {
+		prefix = prefixes[0]
+	}
+
+	return fmt.Sprintf("\"%s\"", composeDomainValue(prefix, domainSuffix))
+}
+
+// normalizeDomainPrefixes splits and trims prefix definitions.
+func normalizeDomainPrefixes(prefix string) []string {
+	if prefix == "" {
+		return nil
+	}
+
+	parts := strings.Split(prefix, ",")
+	result := make([]string, 0, len(parts))
+	for _, part := range parts {
+		if trimmed := strings.TrimSpace(part); trimmed != "" {
+			result = append(result, trimmed)
+		}
+	}
+
+	return result
+}
+
+// composeDomainValue composes the domain-based value using prefix/suffix hints.
+func composeDomainValue(prefix, suffix string) string {
+	var builder strings.Builder
+	if prefix != "" {
+		builder.WriteString(formatDomainPrefix(prefix))
+	} else {
+		builder.WriteString("{{ .Values.domain }}")
+	}
+
+	if suffix != "" {
+		builder.WriteString(suffix)
+	}
+
+	return builder.String()
+}
+
+// formatDomainPrefix formats the domain prefix into a Helm template expression.
+func formatDomainPrefix(prefix string) string {
+	if prefix == "" {
+		return ""
+	}
+
+	if strings.HasSuffix(prefix, "@") {
+		return prefix + "{{ .Values.domain }}"
+	}
+
+	return prefix + ".{{ .Values.domain }}"
+}
+
+// renderStaticYAMLValue renders a static YAML representation for default data.
+func renderStaticYAMLValue(value any, indent int, emptyLiteral string) string {
+	data, err := yaml.Marshal(value)
+	if err != nil {
+		return strings.Repeat(" ", indent) + emptyLiteral + "\n"
+	}
+
+	trimmed := strings.TrimSpace(string(data))
+	if trimmed == "" || trimmed == "null" {
+		return strings.Repeat(" ", indent) + emptyLiteral + "\n"
+	}
+
+	lines := strings.Split(strings.TrimRight(string(data), "\n"), "\n")
+	indentStr := strings.Repeat(" ", indent)
+	var builder strings.Builder
+	for _, line := range lines {
+		builder.WriteString(indentStr)
+		builder.WriteString(line)
+		builder.WriteString("\n")
+	}
+
+	return builder.String()
 }
 
 // generateAndWriteHelmValues generates Helm values and writes them to a file
@@ -1004,10 +1065,6 @@ func generateHelmValues(structure interface{}) (string, error) {
 
 	// Get the defaults for the structure
 	defaults.SetDefaults(structure)
-	structVal := reflect.ValueOf(structure)
-	if structVal.Kind() == reflect.Ptr && !structVal.IsNil() {
-		populateExampleMapEntries(structVal.Elem())
-	}
 	if cfg, ok := structure.(*config.Config); ok {
 		initializeStripeWebhookSecrets(cfg)
 		initializeRateLimitOptions(cfg)
@@ -1157,7 +1214,6 @@ func generateYAMLWithComments(result *strings.Builder, prefix string, v reflect.
 			continue
 		}
 
-		// Get field name from json tag or use field name
 		jsonTag := field.Tag.Get("json")
 		if jsonTag == "" || jsonTag == "-" {
 			continue
@@ -1419,73 +1475,17 @@ func generateSecretName(path string) string {
 	return strings.ToLower(result.String())
 }
 
-// generateSecretFiles creates individual PushSecret and ExternalSecret files
+// generateSecretFiles ensures the ExternalSecret template exists when sensitive fields are present
 func generateSecretFiles(c schemaConfig, fields []SensitiveField) error {
-	// Create directories
-	if err := os.MkdirAll(c.pushSecretsDir, dirPermission); err != nil {
-		return err
+	if len(fields) == 0 {
+		return nil
 	}
+
 	if err := os.MkdirAll(c.externalSecretsDir, dirPermission); err != nil {
 		return err
 	}
 
-	for _, field := range fields {
-		// Generate PushSecret file
-		if err := generatePushSecretFile(c.pushSecretsDir, field); err != nil {
-			return err
-		}
-	}
-
-	// Generate single dynamic ExternalSecret template (only if we have sensitive fields)
-	if len(fields) > 0 {
-		if err := generateExternalSecretsTemplate(c.externalSecretsDir); err != nil {
-			return err
-		}
-	}
-
-	return nil
-}
-
-// generatePushSecretFile creates an individual PushSecret file
-func generatePushSecretFile(dir string, field SensitiveField) error {
-	content := fmt.Sprintf(`---
-apiVersion: v1
-kind: Secret
-metadata:
-  name: %s
-  namespace: openlane-secret-push
-type: Opaque
-data:
-  # Base64 encode your secret value and paste it here
-  # Example: echo -n "your-secret-value" | base64
-  %s: ""
----
-apiVersion: external-secrets.io/v1alpha1
-kind: PushSecret
-metadata:
-  name: %s-push
-  namespace: openlane-secret-push
-spec:
-  refreshInterval: 1h
-  secretStoreRefs:
-    - name: gcp-secretstore
-      kind: ClusterSecretStore
-  updatePolicy: Replace
-  deletionPolicy: Delete
-  selector:
-    secret:
-      name: %s  # References the Secret above
-  data:
-    - match:
-        secretKey: %s  # The key from the Secret above
-        remoteRef:
-          remoteKey: %s  # The destination secret name in GCP Secret Manager
-          property: %s  # The key within the destination secret object (matches secretKey)
-`, field.SecretName, field.Key, field.SecretName, field.SecretName, field.Key, field.SecretName, field.Key)
-
-	filename := fmt.Sprintf("%s.yaml", field.SecretName)
-	filepath := fmt.Sprintf("%s/%s", dir, filename)
-	return os.WriteFile(filepath, []byte(content), ownerReadWrite)
+	return generateExternalSecretsTemplate(c.externalSecretsDir)
 }
 
 // generateExternalSecretsTemplate creates a single dynamic ExternalSecret template for Helm chart
@@ -1525,82 +1525,6 @@ func isExternalSensitiveField(path string) bool {
 	return ok
 }
 
-// generateDomainHelmTemplate creates Helm template logic for domain inheritance fields
-func generateDomainHelmTemplate(envKey, fieldPath, domainPrefix, domainSuffix, defaultVal, joinStr string) string {
-	var template strings.Builder
-
-	// Generate block-level conditional template for proper Helm formatting
-	template.WriteString("{{- if .Values.")
-	template.WriteString(fieldPath)
-	template.WriteString(" }}\n")
-	template.WriteString("  ")
-	template.WriteString(envKey)
-	template.WriteString(fmt.Sprintf(": {{%s .Values.", joinStr))
-	template.WriteString(fieldPath)
-	template.WriteString(" }}\n")
-	template.WriteString("{{- else if .Values.domain }}\n")
-	template.WriteString("  ")
-	template.WriteString(envKey)
-	template.WriteString(": ")
-
-	// Handle domain transformation logic
-	switch {
-	case domainPrefix != "" && domainSuffix != "":
-		template.WriteString("\"")
-		template.WriteString(domainPrefix)
-		template.WriteString(".{{ .Values.domain }}")
-		template.WriteString(domainSuffix)
-		template.WriteString("\"")
-	case domainPrefix != "":
-		// Handle multiple prefixes for slice fields
-		if strings.Contains(domainPrefix, ",") {
-			prefixes := strings.Split(domainPrefix, ",")
-			template.WriteString("\"")
-			for i, prefix := range prefixes {
-				if i > 0 {
-					template.WriteString(",")
-				}
-				template.WriteString(strings.TrimSpace(prefix))
-				template.WriteString(".{{ .Values.domain }}")
-			}
-			template.WriteString("\"")
-		} else {
-			template.WriteString("\"")
-			template.WriteString(domainPrefix)
-			if strings.HasSuffix(domainPrefix, "@") {
-				template.WriteString("{{ .Values.domain }}")
-			} else {
-				template.WriteString(".{{ .Values.domain }}")
-			}
-			template.WriteString("\"")
-		}
-	case domainSuffix != "":
-		template.WriteString("\"{{ .Values.domain }}")
-		template.WriteString(domainSuffix)
-		template.WriteString("\"")
-	default:
-		template.WriteString("\"{{ .Values.domain }}\"")
-	}
-
-	template.WriteString("\n{{- else }}\n")
-	template.WriteString("  ")
-	template.WriteString(envKey)
-	template.WriteString(": ")
-
-	// Fallback to default value
-	if defaultVal != "" {
-		template.WriteString("\"")
-		template.WriteString(defaultVal)
-		template.WriteString("\"")
-	} else {
-		template.WriteString("\"\"")
-	}
-
-	template.WriteString("\n{{- end }}\n")
-
-	return template.String()
-}
-
 // findSensitiveFields recursively finds all sensitive fields in a struct
 func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
 	var fields []SensitiveField
@@ -1619,17 +1543,19 @@ func findSensitiveFields(v reflect.Value, prefix string) []SensitiveField {
 			continue
 		}
 
-		// Get JSON tag for field name
 		jsonTag := field.Tag.Get("json")
 		if jsonTag == "" || jsonTag == "-" {
 			continue
 		}
 
-		// Parse JSON tag
 		parts := strings.Split(jsonTag, ",")
 		fieldName := parts[0]
 		if fieldName == "" {
 			fieldName = strings.ToLower(field.Name)
+		}
+
+		if fieldName == "" {
+			continue
 		}
 
 		// Build current path

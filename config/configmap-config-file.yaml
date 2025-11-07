@@ -1,0 +1,623 @@
+{{- if .Values.openlane.config.create }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openlane-config-file
+  namespace: openlane
+  labels:
+    app: openlane
+    component: config
+data:
+  config.yaml: |-
+
+    domain: {{ default "" .Values.openlane.coreConfiguration.domain | quote }}
+    refreshInterval: {{ default "10m0s" .Values.openlane.coreConfiguration.refreshInterval | quote }}
+    server:
+      dev: {{ default false .Values.openlane.coreConfiguration.server.dev }}
+      listen: {{ default ":17608" .Values.openlane.coreConfiguration.server.listen | quote }}
+      metricsPort: {{ default ":17609" .Values.openlane.coreConfiguration.server.metricsPort | quote }}
+      shutdownGracePeriod: {{ default "10s" .Values.openlane.coreConfiguration.server.shutdownGracePeriod | quote }}
+      readTimeout: {{ default "15s" .Values.openlane.coreConfiguration.server.readTimeout | quote }}
+      writeTimeout: {{ default "15s" .Values.openlane.coreConfiguration.server.writeTimeout | quote }}
+      idleTimeout: {{ default "30s" .Values.openlane.coreConfiguration.server.idleTimeout | quote }}
+      readHeaderTimeout: {{ default "2s" .Values.openlane.coreConfiguration.server.readHeaderTimeout | quote }}
+      tls:
+        config: {}
+        enabled: {{ default false .Values.openlane.coreConfiguration.server.tls.enabled }}
+        certFile: {{ default "server.crt" .Values.openlane.coreConfiguration.server.tls.certFile | quote }}
+        certKey: {{ default "server.key" .Values.openlane.coreConfiguration.server.tls.certKey | quote }}
+        autoCert: {{ default false .Values.openlane.coreConfiguration.server.tls.autoCert }}
+      cors:
+        enabled: {{ default true .Values.openlane.coreConfiguration.server.cors.enabled }}
+        {{- $mapValue := (.Values.openlane.coreConfiguration.server.cors.prefixes | default (dict)) }}
+        {{- if gt (len $mapValue) 0 }}
+        prefixes:
+        {{ toYaml $mapValue | nindent 10 }}
+        {{- else }}
+        prefixes: {}
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
+        allowOrigins:
+        {{ toYaml .Values.openlane.coreConfiguration.server.cors.allowOrigins | nindent 10 }}
+        {{- else if .Values.domain }}
+        allowOrigins:
+          - "https://console.{{ .Values.domain }}"
+          - "https://docs.{{ .Values.domain }}"
+          - "https://www.{{ .Values.domain }}"
+        {{- else }}
+        allowOrigins:
+          []
+        {{- end }}
+        cookieInsecure: {{ default false .Values.openlane.coreConfiguration.server.cors.cookieInsecure }}
+      secure:
+        enabled: {{ default true .Values.openlane.coreConfiguration.server.secure.enabled }}
+        xssprotection: {{ default "1; mode=block" .Values.openlane.coreConfiguration.server.secure.xssprotection | quote }}
+        contenttypenosniff: {{ default "nosniff" .Values.openlane.coreConfiguration.server.secure.contenttypenosniff | quote }}
+        xframeoptions: {{ default "SAMEORIGIN" .Values.openlane.coreConfiguration.server.secure.xframeoptions | quote }}
+        hstspreloadenabled: {{ default false .Values.openlane.coreConfiguration.server.secure.hstspreloadenabled }}
+        hstsmaxage: {{ default 31536000 .Values.openlane.coreConfiguration.server.secure.hstsmaxage }}
+        contentsecuritypolicy: {{ default "default-src 'self'" .Values.openlane.coreConfiguration.server.secure.contentsecuritypolicy | quote }}
+        referrerpolicy: {{ default "same-origin" .Values.openlane.coreConfiguration.server.secure.referrerpolicy | quote }}
+        cspreportonly: {{ default false .Values.openlane.coreConfiguration.server.secure.cspreportonly }}
+      redirects:
+        enabled: {{ default true .Values.openlane.coreConfiguration.server.redirects.enabled }}
+        {{- $mapValue := (.Values.openlane.coreConfiguration.server.redirects.redirects | default (dict)) }}
+        {{- if gt (len $mapValue) 0 }}
+        redirects:
+        {{ toYaml $mapValue | nindent 10 }}
+        {{- else }}
+        redirects: {}
+        {{- end }}
+        code: {{ default 0 .Values.openlane.coreConfiguration.server.redirects.code }}
+      cacheControl:
+        enabled: {{ default true .Values.openlane.coreConfiguration.server.cacheControl.enabled }}
+        {{- $mapValue := (.Values.openlane.coreConfiguration.server.cacheControl.noCacheHeaders | default (dict)) }}
+        {{- if gt (len $mapValue) 0 }}
+        noCacheHeaders:
+        {{ toYaml $mapValue | nindent 10 }}
+        {{- else }}
+        noCacheHeaders: {}
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.server.cacheControl.etagHeaders | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        etagHeaders:
+        {{ toYaml $sliceValue | nindent 10 }}
+        {{- else }}
+        etagHeaders: []
+        {{- end }}
+      mime:
+        enabled: {{ default true .Values.openlane.coreConfiguration.server.mime.enabled }}
+        mimeTypesFile: {{ default "" .Values.openlane.coreConfiguration.server.mime.mimeTypesFile | quote }}
+        defaultContentType: {{ default "application/data" .Values.openlane.coreConfiguration.server.mime.defaultContentType | quote }}
+      graphPool:
+        maxWorkers: {{ default 100 .Values.openlane.coreConfiguration.server.graphPool.maxWorkers }}
+      enableGraphExtensions: {{ default true .Values.openlane.coreConfiguration.server.enableGraphExtensions }}
+      complexityLimit: {{ default 100 .Values.openlane.coreConfiguration.server.complexityLimit }}
+      maxResultLimit: {{ default 100 .Values.openlane.coreConfiguration.server.maxResultLimit }}
+      csrfProtection:
+        enabled: {{ default false .Values.openlane.coreConfiguration.server.csrfProtection.enabled }}
+        header: {{ default "X-CSRF-Token" .Values.openlane.coreConfiguration.server.csrfProtection.header | quote }}
+        cookie: {{ default "ol.csrf-token" .Values.openlane.coreConfiguration.server.csrfProtection.cookie | quote }}
+        secure: {{ default true .Values.openlane.coreConfiguration.server.csrfProtection.secure }}
+        sameSite: {{ default "Lax" .Values.openlane.coreConfiguration.server.csrfProtection.sameSite | quote }}
+        cookieHttpOnly: {{ default false .Values.openlane.coreConfiguration.server.csrfProtection.cookieHttpOnly }}
+        cookieDomain: {{ default "" .Values.openlane.coreConfiguration.server.csrfProtection.cookieDomain | quote }}
+        cookiePath: {{ default "/" .Values.openlane.coreConfiguration.server.csrfProtection.cookiePath | quote }}
+      defaultTrustCenterDomain: {{ default "" .Values.openlane.coreConfiguration.server.defaultTrustCenterDomain | quote }}
+      fieldLevelEncryption:
+        enabled: {{ default false .Values.openlane.coreConfiguration.server.fieldLevelEncryption.enabled }}
+      trustCenterCnameTarget: {{ default "" .Values.openlane.coreConfiguration.server.trustCenterCnameTarget | quote }}
+    entConfig:
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.entConfig.entityTypes | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      entityTypes:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      entityTypes: []
+      {{- end }}
+      summarizer:
+        type: {{ default "lexrank" .Values.openlane.coreConfiguration.entConfig.summarizer.type | quote }}
+        llm:
+          provider: {{ default "none" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.provider | quote }}
+          anthropic:
+            betaHeader: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.betaHeader | quote }}
+            legacyTextCompletion: {{ default false .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.legacyTextCompletion }}
+            baseURL: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.anthropic.baseURL | quote }}
+          cloudflare:
+            accountID: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.accountID | quote }}
+            serverURL: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.cloudflare.serverURL | quote }}
+          openai:
+            url: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.url | quote }}
+            organizationID: {{ default "" .Values.openlane.coreConfiguration.entConfig.summarizer.llm.openai.organizationID | quote }}
+        maximumSentences: {{ default 10 .Values.openlane.coreConfiguration.entConfig.summarizer.maximumSentences }}
+      windmill:
+        enabled: {{ default false .Values.openlane.coreConfiguration.entConfig.windmill.enabled }}
+        baseURL: {{ default "https://app.windmill.dev" .Values.openlane.coreConfiguration.entConfig.windmill.baseURL | quote }}
+        workspace: {{ default "" .Values.openlane.coreConfiguration.entConfig.windmill.workspace | quote }}
+        defaultTimeout: {{ default "30s" .Values.openlane.coreConfiguration.entConfig.windmill.defaultTimeout | quote }}
+        timezone: {{ default "UTC" .Values.openlane.coreConfiguration.entConfig.windmill.timezone | quote }}
+        onFailureScript: {{ default "" .Values.openlane.coreConfiguration.entConfig.windmill.onFailureScript | quote }}
+        onSuccessScript: {{ default "" .Values.openlane.coreConfiguration.entConfig.windmill.onSuccessScript | quote }}
+      maxPoolSize: {{ default 100 .Values.openlane.coreConfiguration.entConfig.maxPoolSize }}
+      modules:
+        enabled: {{ default true .Values.openlane.coreConfiguration.entConfig.modules.enabled }}
+        useSandbox: {{ default false .Values.openlane.coreConfiguration.entConfig.modules.useSandbox }}
+      maxSchemaImportSize: {{ default 262144 .Values.openlane.coreConfiguration.entConfig.maxSchemaImportSize }}
+      emailValidation:
+        enabled: {{ default false .Values.openlane.coreConfiguration.entConfig.emailValidation.enabled }}
+        enableAutoUpdateDisposable: {{ default true .Values.openlane.coreConfiguration.entConfig.emailValidation.enableAutoUpdateDisposable }}
+        enableGravatarCheck: {{ default true .Values.openlane.coreConfiguration.entConfig.emailValidation.enableGravatarCheck }}
+        enableSMTPCheck: {{ default false .Values.openlane.coreConfiguration.entConfig.emailValidation.enableSMTPCheck }}
+        allowedEmailTypes:
+          disposable: {{ default false .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.disposable }}
+          free: {{ default false .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.free }}
+          role: {{ default false .Values.openlane.coreConfiguration.entConfig.emailValidation.allowedEmailTypes.role }}
+      billing:
+        requirePaymentMethod: {{ default false .Values.openlane.coreConfiguration.entConfig.billing.requirePaymentMethod }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.entConfig.billing.bypassEmailDomains | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        bypassEmailDomains:
+        {{ toYaml $sliceValue | nindent 10 }}
+        {{- else }}
+        bypassEmailDomains: []
+        {{- end }}
+    auth:
+      enabled: {{ default true .Values.openlane.coreConfiguration.auth.enabled }}
+      token:
+        kid: {{ default "" .Values.openlane.coreConfiguration.auth.token.kid | quote }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.audience }}
+        audience: {{ .Values.openlane.coreConfiguration.auth.token.audience | quote }}
+        {{- else if .Values.domain }}
+        audience: "https://api.{{ .Values.domain }}"
+        {{- else }}
+        audience: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.refreshAudience }}
+        refreshAudience: {{ .Values.openlane.coreConfiguration.auth.token.refreshAudience | quote }}
+        {{- else if .Values.domain }}
+        refreshAudience: "https://api.{{ .Values.domain }}"
+        {{- else }}
+        refreshAudience: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.issuer }}
+        issuer: {{ .Values.openlane.coreConfiguration.auth.token.issuer | quote }}
+        {{- else if .Values.domain }}
+        issuer: "https://api.{{ .Values.domain }}"
+        {{- else }}
+        issuer: ""
+        {{- end }}
+        accessDuration: {{ default "1h0m0s" .Values.openlane.coreConfiguration.auth.token.accessDuration | quote }}
+        refreshDuration: {{ default "2h0m0s" .Values.openlane.coreConfiguration.auth.token.refreshDuration | quote }}
+        refreshOverlap: {{ default "-15m0s" .Values.openlane.coreConfiguration.auth.token.refreshOverlap | quote }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.jwksEndpoint }}
+        jwksEndpoint: {{ .Values.openlane.coreConfiguration.auth.token.jwksEndpoint | quote }}
+        {{- else if .Values.domain }}
+        jwksEndpoint: "https://api.{{ .Values.domain }}/.well-known/jwks.json"
+        {{- else }}
+        jwksEndpoint: ""
+        {{- end }}
+        {{- $mapValue := (.Values.openlane.coreConfiguration.auth.token.keys | default (dict)) }}
+        {{- if gt (len $mapValue) 0 }}
+        keys:
+        {{ toYaml $mapValue | nindent 10 }}
+        {{- else }}
+        keys: {}
+        {{- end }}
+        generateKeys: {{ default true .Values.openlane.coreConfiguration.auth.token.generateKeys }}
+        jwksCacheTTL: {{ default "5m0s" .Values.openlane.coreConfiguration.auth.token.jwksCacheTTL | quote }}
+        redis:
+          enabled: {{ default false .Values.openlane.coreConfiguration.auth.token.redis.enabled }}
+          config:
+            enabled: {{ default true .Values.openlane.coreConfiguration.auth.token.redis.config.enabled }}
+            address: {{ default "localhost:6379" .Values.openlane.coreConfiguration.auth.token.redis.config.address | quote }}
+            name: {{ default "" .Values.openlane.coreConfiguration.auth.token.redis.config.name | quote }}
+            username: {{ default "" .Values.openlane.coreConfiguration.auth.token.redis.config.username | quote }}
+            password: {{ default "" .Values.openlane.coreConfiguration.auth.token.redis.config.password | quote }}
+            db: {{ default 0 .Values.openlane.coreConfiguration.auth.token.redis.config.db }}
+            dialTimeout: {{ default "5s" .Values.openlane.coreConfiguration.auth.token.redis.config.dialTimeout | quote }}
+            readTimeout: {{ default "0s" .Values.openlane.coreConfiguration.auth.token.redis.config.readTimeout | quote }}
+            writeTimeout: {{ default "0s" .Values.openlane.coreConfiguration.auth.token.redis.config.writeTimeout | quote }}
+            maxRetries: {{ default 3 .Values.openlane.coreConfiguration.auth.token.redis.config.maxRetries }}
+            minIdleConns: {{ default 0 .Values.openlane.coreConfiguration.auth.token.redis.config.minIdleConns }}
+            maxIdleConns: {{ default 0 .Values.openlane.coreConfiguration.auth.token.redis.config.maxIdleConns }}
+            maxActiveConns: {{ default 0 .Values.openlane.coreConfiguration.auth.token.redis.config.maxActiveConns }}
+          blacklistPrefix: {{ default "token:blacklist:" .Values.openlane.coreConfiguration.auth.token.redis.blacklistPrefix | quote }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.supportedProviders | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      supportedProviders:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      supportedProviders: []
+      {{- end }}
+      providers:
+        redirectUrl: {{ default "http://localhost:3001/api/auth/callback/theopenlane" .Values.openlane.coreConfiguration.auth.providers.redirectUrl | quote }}
+        github:
+          clientId: {{ default "" .Values.openlane.coreConfiguration.auth.providers.github.clientId | quote }}
+          {{- if .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint }}
+          clientEndpoint: {{ .Values.openlane.coreConfiguration.auth.providers.github.clientEndpoint | quote }}
+          {{- else if .Values.domain }}
+          clientEndpoint: "https://api.{{ .Values.domain }}"
+          {{- else }}
+          clientEndpoint: ""
+          {{- end }}
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.providers.github.scopes | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          scopes:
+          {{ toYaml $sliceValue | nindent 12 }}
+          {{- else }}
+          scopes: []
+          {{- end }}
+          redirectUrl: {{ default "/v1/github/callback" .Values.openlane.coreConfiguration.auth.providers.github.redirectUrl | quote }}
+        google:
+          clientId: {{ default "" .Values.openlane.coreConfiguration.auth.providers.google.clientId | quote }}
+          {{- if .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint }}
+          clientEndpoint: {{ .Values.openlane.coreConfiguration.auth.providers.google.clientEndpoint | quote }}
+          {{- else if .Values.domain }}
+          clientEndpoint: "https://api.{{ .Values.domain }}"
+          {{- else }}
+          clientEndpoint: ""
+          {{- end }}
+          {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.providers.google.scopes | default (list)) }}
+          {{- if gt (len $sliceValue) 0 }}
+          scopes:
+          {{ toYaml $sliceValue | nindent 12 }}
+          {{- else }}
+          scopes: []
+          {{- end }}
+          redirectUrl: {{ default "/v1/google/callback" .Values.openlane.coreConfiguration.auth.providers.google.redirectUrl | quote }}
+        webauthn:
+          enabled: {{ default true .Values.openlane.coreConfiguration.auth.providers.webauthn.enabled }}
+          displayName: {{ default "" .Values.openlane.coreConfiguration.auth.providers.webauthn.displayName | quote }}
+          {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId }}
+          relyingPartyId: {{ .Values.openlane.coreConfiguration.auth.providers.webauthn.relyingPartyId | quote }}
+          {{- else if .Values.domain }}
+          relyingPartyId: "{{ .Values.domain }}"
+          {{- else }}
+          relyingPartyId: ""
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
+          requestOrigins:
+          {{ toYaml .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins | nindent 12 }}
+          {{- else if .Values.domain }}
+          requestOrigins:
+            - "https://console.{{ .Values.domain }}"
+          {{- else }}
+          requestOrigins:
+            []
+          {{- end }}
+          maxDevices: {{ default 10 .Values.openlane.coreConfiguration.auth.providers.webauthn.maxDevices }}
+          enforceTimeout: {{ default true .Values.openlane.coreConfiguration.auth.providers.webauthn.enforceTimeout }}
+          timeout: {{ default "1m0s" .Values.openlane.coreConfiguration.auth.providers.webauthn.timeout | quote }}
+          debug: {{ default false .Values.openlane.coreConfiguration.auth.providers.webauthn.debug }}
+    authz:
+      enabled: {{ default true .Values.openlane.coreConfiguration.authz.enabled }}
+      storeName: {{ default "openlane" .Values.openlane.coreConfiguration.authz.storeName | quote }}
+      hostUrl: {{ default "https://authz.theopenlane.io" .Values.openlane.coreConfiguration.authz.hostUrl | quote }}
+      storeId: {{ default "" .Values.openlane.coreConfiguration.authz.storeId | quote }}
+      modelId: {{ default "" .Values.openlane.coreConfiguration.authz.modelId | quote }}
+      createNewModel: {{ default false .Values.openlane.coreConfiguration.authz.createNewModel }}
+      modelFile: {{ default "fga/model/model.fga" .Values.openlane.coreConfiguration.authz.modelFile | quote }}
+      credentials:
+        clientId: {{ default "" .Values.openlane.coreConfiguration.authz.credentials.clientId | quote }}
+        audience: {{ default "" .Values.openlane.coreConfiguration.authz.credentials.audience | quote }}
+        issuer: {{ default "" .Values.openlane.coreConfiguration.authz.credentials.issuer | quote }}
+        scopes: {{ default "" .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
+    db:
+      debug: {{ default false .Values.openlane.coreConfiguration.db.debug }}
+      databaseName: {{ default "openlane" .Values.openlane.coreConfiguration.db.databaseName | quote }}
+      driverName: {{ default "pgx" .Values.openlane.coreConfiguration.db.driverName | quote }}
+      multiWrite: {{ default false .Values.openlane.coreConfiguration.db.multiWrite }}
+      cacheTTL: {{ default "1s" .Values.openlane.coreConfiguration.db.cacheTTL | quote }}
+      runMigrations: {{ default true .Values.openlane.coreConfiguration.db.runMigrations }}
+      migrationProvider: {{ default "atlas" .Values.openlane.coreConfiguration.db.migrationProvider | quote }}
+      enableHistory: {{ default false .Values.openlane.coreConfiguration.db.enableHistory }}
+      maxConnections: {{ default 0 .Values.openlane.coreConfiguration.db.maxConnections }}
+      maxIdleConnections: {{ default 0 .Values.openlane.coreConfiguration.db.maxIdleConnections }}
+    jobQueue:
+      runMigrations: {{ default false .Values.openlane.coreConfiguration.jobQueue.runMigrations }}
+      riverConf: {}
+      metrics:
+        enableMetrics: {{ default false .Values.openlane.coreConfiguration.jobQueue.metrics.enableMetrics }}
+        metricsDurationUnit: {{ default "ms" .Values.openlane.coreConfiguration.jobQueue.metrics.metricsDurationUnit | quote }}
+        enableSemanticMetrics: {{ default true .Values.openlane.coreConfiguration.jobQueue.metrics.enableSemanticMetrics }}
+    redis:
+      enabled: {{ default true .Values.openlane.coreConfiguration.redis.enabled }}
+      address: {{ default "localhost:6379" .Values.openlane.coreConfiguration.redis.address | quote }}
+      name: {{ default "" .Values.openlane.coreConfiguration.redis.name | quote }}
+      username: {{ default "" .Values.openlane.coreConfiguration.redis.username | quote }}
+      password: {{ default "" .Values.openlane.coreConfiguration.redis.password | quote }}
+      db: {{ default 0 .Values.openlane.coreConfiguration.redis.db }}
+      dialTimeout: {{ default "5s" .Values.openlane.coreConfiguration.redis.dialTimeout | quote }}
+      readTimeout: {{ default "0s" .Values.openlane.coreConfiguration.redis.readTimeout | quote }}
+      writeTimeout: {{ default "0s" .Values.openlane.coreConfiguration.redis.writeTimeout | quote }}
+      maxRetries: {{ default 3 .Values.openlane.coreConfiguration.redis.maxRetries }}
+      minIdleConns: {{ default 0 .Values.openlane.coreConfiguration.redis.minIdleConns }}
+      maxIdleConns: {{ default 0 .Values.openlane.coreConfiguration.redis.maxIdleConns }}
+      maxActiveConns: {{ default 0 .Values.openlane.coreConfiguration.redis.maxActiveConns }}
+    tracer:
+      enabled: {{ default false .Values.openlane.coreConfiguration.tracer.enabled }}
+      provider: {{ default "stdout" .Values.openlane.coreConfiguration.tracer.provider | quote }}
+      environment: {{ default "development" .Values.openlane.coreConfiguration.tracer.environment | quote }}
+      stdout:
+        pretty: {{ default true .Values.openlane.coreConfiguration.tracer.stdout.pretty }}
+        disableTimestamp: {{ default false .Values.openlane.coreConfiguration.tracer.stdout.disableTimestamp }}
+      otlp:
+        endpoint: {{ default "localhost:4317" .Values.openlane.coreConfiguration.tracer.otlp.endpoint | quote }}
+        insecure: {{ default true .Values.openlane.coreConfiguration.tracer.otlp.insecure }}
+        certificate: {{ default "" .Values.openlane.coreConfiguration.tracer.otlp.certificate | quote }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.tracer.otlp.headers | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        headers:
+        {{ toYaml $sliceValue | nindent 10 }}
+        {{- else }}
+        headers: []
+        {{- end }}
+        compression: {{ default "" .Values.openlane.coreConfiguration.tracer.otlp.compression | quote }}
+        timeout: {{ default "10s" .Values.openlane.coreConfiguration.tracer.otlp.timeout | quote }}
+    email:
+      companyName: {{ default "" .Values.openlane.coreConfiguration.email.companyName | quote }}
+      companyAddress: {{ default "" .Values.openlane.coreConfiguration.email.companyAddress | quote }}
+      corporation: {{ default "" .Values.openlane.coreConfiguration.email.corporation | quote }}
+      year: {{ default 0 .Values.openlane.coreConfiguration.email.year }}
+      {{- if .Values.openlane.coreConfiguration.email.fromEmail }}
+      fromEmail: {{ .Values.openlane.coreConfiguration.email.fromEmail | quote }}
+      {{- else if .Values.domain }}
+      fromEmail: "no-reply@mail.{{ .Values.domain }}"
+      {{- else }}
+      fromEmail: ""
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.email.supportEmail }}
+      supportEmail: {{ .Values.openlane.coreConfiguration.email.supportEmail | quote }}
+      {{- else if .Values.domain }}
+      supportEmail: "support@{{ .Values.domain }}"
+      {{- else }}
+      supportEmail: ""
+      {{- end }}
+      logoURL: {{ default "" .Values.openlane.coreConfiguration.email.logoURL | quote }}
+      urls:
+        {{- if .Values.openlane.coreConfiguration.email.urls.root }}
+        root: {{ .Values.openlane.coreConfiguration.email.urls.root | quote }}
+        {{- else if .Values.domain }}
+        root: "https://www.{{ .Values.domain }}"
+        {{- else }}
+        root: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.product }}
+        product: {{ .Values.openlane.coreConfiguration.email.urls.product | quote }}
+        {{- else if .Values.domain }}
+        product: "https://console.{{ .Values.domain }}"
+        {{- else }}
+        product: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.docs }}
+        docs: {{ .Values.openlane.coreConfiguration.email.urls.docs | quote }}
+        {{- else if .Values.domain }}
+        docs: "https://docs.{{ .Values.domain }}"
+        {{- else }}
+        docs: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.verify }}
+        verify: {{ .Values.openlane.coreConfiguration.email.urls.verify | quote }}
+        {{- else if .Values.domain }}
+        verify: "https://console.{{ .Values.domain }}/verify"
+        {{- else }}
+        verify: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.invite }}
+        invite: {{ .Values.openlane.coreConfiguration.email.urls.invite | quote }}
+        {{- else if .Values.domain }}
+        invite: "https://console.{{ .Values.domain }}/invite"
+        {{- else }}
+        invite: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.reset }}
+        reset: {{ .Values.openlane.coreConfiguration.email.urls.reset | quote }}
+        {{- else if .Values.domain }}
+        reset: "https://console.{{ .Values.domain }}/password-reset"
+        {{- else }}
+        reset: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.verifySubscriber }}
+        verifySubscriber: {{ .Values.openlane.coreConfiguration.email.urls.verifySubscriber | quote }}
+        {{- else if .Values.domain }}
+        verifySubscriber: "https://console.{{ .Values.domain }}/subscriber-verify"
+        {{- else }}
+        verifySubscriber: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.verifyBilling }}
+        verifyBilling: {{ .Values.openlane.coreConfiguration.email.urls.verifyBilling | quote }}
+        {{- else if .Values.domain }}
+        verifyBilling: "https://console.{{ .Values.domain }}/verify-billing"
+        {{- else }}
+        verifyBilling: ""
+        {{- end }}
+      templatesPath: {{ default "" .Values.openlane.coreConfiguration.email.templatesPath | quote }}
+    sessions:
+      {{- if .Values.openlane.coreConfiguration.sessions.domain }}
+      domain: {{ .Values.openlane.coreConfiguration.sessions.domain | quote }}
+      {{- else if .Values.domain }}
+      domain: "{{ .Values.domain }}"
+      {{- else }}
+      domain: ""
+      {{- end }}
+      maxAge: {{ default 3600 .Values.openlane.coreConfiguration.sessions.maxAge }}
+      secure: {{ default true .Values.openlane.coreConfiguration.sessions.secure }}
+      httpOnly: {{ default true .Values.openlane.coreConfiguration.sessions.httpOnly }}
+      sameSite: {{ default "Strict" .Values.openlane.coreConfiguration.sessions.sameSite | quote }}
+    totp:
+      enabled: {{ default true .Values.openlane.coreConfiguration.totp.enabled }}
+      codeLength: {{ default 6 .Values.openlane.coreConfiguration.totp.codeLength }}
+      {{- if .Values.openlane.coreConfiguration.totp.issuer }}
+      issuer: {{ .Values.openlane.coreConfiguration.totp.issuer | quote }}
+      {{- else if .Values.domain }}
+      issuer: "{{ .Values.domain }}"
+      {{- else }}
+      issuer: ""
+      {{- end }}
+      redis: {{ default true .Values.openlane.coreConfiguration.totp.redis }}
+      recoveryCodeCount: {{ default 16 .Values.openlane.coreConfiguration.totp.recoveryCodeCount }}
+      recoveryCodeLength: {{ default 8 .Values.openlane.coreConfiguration.totp.recoveryCodeLength }}
+    ratelimit:
+      enabled: {{ default false .Values.openlane.coreConfiguration.ratelimit.enabled }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimit.options | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      options:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      options: []
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimit.headers | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      headers:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      headers: []
+      {{- end }}
+      forwardedIndexFromBehind: {{ default 0 .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind }}
+      includePath: {{ default false .Values.openlane.coreConfiguration.ratelimit.includePath }}
+      includeMethod: {{ default false .Values.openlane.coreConfiguration.ratelimit.includeMethod }}
+      keyPrefix: {{ default "" .Values.openlane.coreConfiguration.ratelimit.keyPrefix | quote }}
+      denyStatus: {{ default 429 .Values.openlane.coreConfiguration.ratelimit.denyStatus }}
+      denyMessage: {{ default "Too many requests" .Values.openlane.coreConfiguration.ratelimit.denyMessage | quote }}
+      sendRetryAfterHeader: {{ default true .Values.openlane.coreConfiguration.ratelimit.sendRetryAfterHeader }}
+      dryRun: {{ default true .Values.openlane.coreConfiguration.ratelimit.dryRun }}
+    objectStorage:
+      enabled: {{ default true .Values.openlane.coreConfiguration.objectStorage.enabled }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.objectStorage.keys | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      keys:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      keys: []
+      {{- end }}
+      maxSizeMB: {{ default 0 .Values.openlane.coreConfiguration.objectStorage.maxSizeMB }}
+      maxMemoryMB: {{ default 0 .Values.openlane.coreConfiguration.objectStorage.maxMemoryMB }}
+      devMode: {{ default false .Values.openlane.coreConfiguration.objectStorage.devMode }}
+      providers:
+        s3:
+          enabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.s3.enabled }}
+          ensureAvailable: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.s3.ensureAvailable }}
+          region: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.s3.region | quote }}
+          bucket: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.s3.bucket | quote }}
+          endpoint: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.s3.endpoint | quote }}
+          proxyPresignEnabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.s3.proxyPresignEnabled }}
+          baseURL: {{ default "http://localhost:17608/v1/files" .Values.openlane.coreConfiguration.objectStorage.providers.s3.baseURL | quote }}
+          credentials: {}
+        cloudflareR2:
+          enabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.enabled }}
+          ensureAvailable: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.ensureAvailable }}
+          region: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.region | quote }}
+          bucket: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.bucket | quote }}
+          endpoint: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.endpoint | quote }}
+          proxyPresignEnabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.proxyPresignEnabled }}
+          baseURL: {{ default "http://localhost:17608/v1/files" .Values.openlane.coreConfiguration.objectStorage.providers.cloudflareR2.baseURL | quote }}
+          credentials: {}
+        gcs:
+          enabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.gcs.enabled }}
+          ensureAvailable: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.gcs.ensureAvailable }}
+          region: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.gcs.region | quote }}
+          bucket: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.gcs.bucket | quote }}
+          endpoint: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.gcs.endpoint | quote }}
+          proxyPresignEnabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.gcs.proxyPresignEnabled }}
+          baseURL: {{ default "http://localhost:17608/v1/files" .Values.openlane.coreConfiguration.objectStorage.providers.gcs.baseURL | quote }}
+          credentials: {}
+        disk:
+          enabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.disk.enabled }}
+          ensureAvailable: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.disk.ensureAvailable }}
+          region: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.disk.region | quote }}
+          bucket: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.disk.bucket | quote }}
+          endpoint: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.disk.endpoint | quote }}
+          proxyPresignEnabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.disk.proxyPresignEnabled }}
+          baseURL: {{ default "http://localhost:17608/v1/files" .Values.openlane.coreConfiguration.objectStorage.providers.disk.baseURL | quote }}
+          credentials: {}
+        database:
+          enabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.database.enabled }}
+          ensureAvailable: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.database.ensureAvailable }}
+          region: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.database.region | quote }}
+          bucket: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.database.bucket | quote }}
+          endpoint: {{ default "" .Values.openlane.coreConfiguration.objectStorage.providers.database.endpoint | quote }}
+          proxyPresignEnabled: {{ default false .Values.openlane.coreConfiguration.objectStorage.providers.database.proxyPresignEnabled }}
+          baseURL: {{ default "http://localhost:17608/v1/files" .Values.openlane.coreConfiguration.objectStorage.providers.database.baseURL | quote }}
+          credentials: {}
+    subscription:
+      enabled: {{ default false .Values.openlane.coreConfiguration.subscription.enabled }}
+      {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
+      stripeWebhookURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL | quote }}
+      {{- else if .Values.domain }}
+      stripeWebhookURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
+      {{- else }}
+      stripeWebhookURL: "https://api.theopenlane.io/stripe/webhook"
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL }}
+      stripeBillingPortalSuccessURL: {{ .Values.openlane.coreConfiguration.subscription.stripeBillingPortalSuccessURL | quote }}
+      {{- else if .Values.domain }}
+      stripeBillingPortalSuccessURL: "https://console.{{ .Values.domain }}/organization-settings/billing"
+      {{- else }}
+      stripeBillingPortalSuccessURL: "https://console.theopenlane.io/organization-settings/billing"
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL }}
+      stripeCancellationReturnURL: {{ .Values.openlane.coreConfiguration.subscription.stripeCancellationReturnURL | quote }}
+      {{- else if .Values.domain }}
+      stripeCancellationReturnURL: "https://console.{{ .Values.domain }}/organization-settings/billing"
+      {{- else }}
+      stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing"
+      {{- end }}
+      {{- $sliceValue := (.Values.openlane.coreConfiguration.subscription.stripeWebhookEvents | default (list)) }}
+      {{- if gt (len $sliceValue) 0 }}
+      stripeWebhookEvents:
+      {{ toYaml $sliceValue | nindent 8 }}
+      {{- else }}
+      stripeWebhookEvents: []
+      {{- end }}
+      stripeWebhookAPIVersion: {{ default "2025-10-29.clover" .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote }}
+      stripeWebhookDiscardAPIVersion: {{ default "" .Values.openlane.coreConfiguration.subscription.stripeWebhookDiscardAPIVersion | quote }}
+    keywatcher:
+      enabled: {{ default false .Values.openlane.coreConfiguration.keywatcher.enabled }}
+      keyDir: {{ default "./keys" .Values.openlane.coreConfiguration.keywatcher.keyDir | quote }}
+      externalSecretsIntegration: {{ default false .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration }}
+    slack:
+      newSubscriberMessageFile: {{ default "" .Values.openlane.coreConfiguration.slack.newSubscriberMessageFile | quote }}
+      newUserMessageFile: {{ default "" .Values.openlane.coreConfiguration.slack.newUserMessageFile | quote }}
+    integrationOauthProvider:
+      redirectUrl: {{ default "" .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl }}
+      successRedirectUrl: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl | quote }}
+      {{- else if .Values.domain }}
+      successRedirectUrl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
+      {{- else }}
+      successRedirectUrl: ""
+      {{- end }}
+      github:
+        clientId: {{ default "" .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint }}
+        clientEndpoint: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint | quote }}
+        {{- else if .Values.domain }}
+        clientEndpoint: "https://api.{{ .Values.domain }}"
+        {{- else }}
+        clientEndpoint: ""
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        scopes:
+        {{ toYaml $sliceValue | nindent 10 }}
+        {{- else }}
+        scopes: []
+        {{- end }}
+      slack:
+        clientId: {{ default "" .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId | quote }}
+        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
+        clientEndpoint: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint | quote }}
+        {{- else if .Values.domain }}
+        clientEndpoint: "https://api.{{ .Values.domain }}"
+        {{- else }}
+        clientEndpoint: ""
+        {{- end }}
+        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | default (list)) }}
+        {{- if gt (len $sliceValue) 0 }}
+        scopes:
+        {{ toYaml $sliceValue | nindent 10 }}
+        {{- else }}
+        scopes: []
+        {{- end }}
+{{- end }}
