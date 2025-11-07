@@ -253,8 +253,8 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "assessment_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_id", Type: field.TypeString},
 	}
 	// AssessmentsTable holds the schema information for the "assessments" table.
 	AssessmentsTable = &schema.Table{
@@ -263,23 +263,23 @@ var (
 		PrimaryKey: []*schema.Column{AssessmentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "assessments_templates_template",
-				Columns:    []*schema.Column{AssessmentsColumns[11]},
-				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
 				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[12]},
+				Columns:    []*schema.Column{AssessmentsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assessments_templates_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[12]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[12]},
+				Columns: []*schema.Column{AssessmentsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -287,7 +287,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[12]},
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -10625,8 +10625,8 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	AssessmentsTable.ForeignKeys[0].RefTable = TemplatesTable
-	AssessmentsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",
 	}

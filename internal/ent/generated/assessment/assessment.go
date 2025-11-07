@@ -328,7 +328,7 @@ func newTemplateStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+		sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 	)
 }
 func newAssessmentResponsesStep() *sqlgraph.Step {

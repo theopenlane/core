@@ -671,7 +671,7 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,
@@ -685,7 +685,7 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	if nodes := _u.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,
@@ -1436,7 +1436,7 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	if _u.mutation.TemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,
@@ -1450,7 +1450,7 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	if nodes := _u.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,

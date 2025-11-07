@@ -8185,6 +8185,7 @@ type CreateTemplateInput struct {
 	DocumentIDs   []string       `json:"documentIDs,omitempty"`
 	FileIDs       []string       `json:"fileIDs,omitempty"`
 	TrustCenterID *string        `json:"trustCenterID,omitempty"`
+	AssessmentIDs []string       `json:"assessmentIDs,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -35866,6 +35867,7 @@ type Template struct {
 	Documents     *DocumentDataConnection `json:"documents"`
 	Files         *FileConnection         `json:"files"`
 	TrustCenter   *TrustCenter            `json:"trustCenter,omitempty"`
+	Assessments   *AssessmentConnection   `json:"assessments"`
 }
 
 func (Template) IsNode() {}
@@ -36397,6 +36399,9 @@ type TemplateWhereInput struct {
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// assessments edge predicates
+	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
+	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
 }
 
 type TrustCenter struct {
@@ -42743,16 +42748,19 @@ type UpdateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema          map[string]any `json:"uischema,omitempty"`
-	ClearUischema     *bool          `json:"clearUischema,omitempty"`
-	AddDocumentIDs    []string       `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs []string       `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments    *bool          `json:"clearDocuments,omitempty"`
-	AddFileIDs        []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool          `json:"clearFiles,omitempty"`
-	TrustCenterID     *string        `json:"trustCenterID,omitempty"`
-	ClearTrustCenter  *bool          `json:"clearTrustCenter,omitempty"`
+	Uischema            map[string]any `json:"uischema,omitempty"`
+	ClearUischema       *bool          `json:"clearUischema,omitempty"`
+	AddDocumentIDs      []string       `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs   []string       `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments      *bool          `json:"clearDocuments,omitempty"`
+	AddFileIDs          []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs       []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles          *bool          `json:"clearFiles,omitempty"`
+	TrustCenterID       *string        `json:"trustCenterID,omitempty"`
+	ClearTrustCenter    *bool          `json:"clearTrustCenter,omitempty"`
+	AddAssessmentIDs    []string       `json:"addAssessmentIDs,omitempty"`
+	RemoveAssessmentIDs []string       `json:"removeAssessmentIDs,omitempty"`
+	ClearAssessments    *bool          `json:"clearAssessments,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

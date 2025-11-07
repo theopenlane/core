@@ -192,7 +192,7 @@ func (_q *AssessmentQuery) QueryTemplate() *TemplateQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(assessment.Table, assessment.FieldID, selector),
 			sqlgraph.To(template.Table, template.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, assessment.TemplateTable, assessment.TemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, assessment.TemplateTable, assessment.TemplateColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Template

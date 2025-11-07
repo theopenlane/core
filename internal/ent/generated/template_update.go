@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -307,6 +308,21 @@ func (_u *TemplateUpdate) SetTrustCenter(v *TrustCenter) *TemplateUpdate {
 	return _u.SetTrustCenterID(v.ID)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_u *TemplateUpdate) AddAssessmentIDs(ids ...string) *TemplateUpdate {
+	_u.mutation.AddAssessmentIDs(ids...)
+	return _u
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_u *TemplateUpdate) AddAssessments(v ...*Assessment) *TemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdate) Mutation() *TemplateMutation {
 	return _u.mutation
@@ -358,6 +374,27 @@ func (_u *TemplateUpdate) RemoveFiles(v ...*File) *TemplateUpdate {
 func (_u *TemplateUpdate) ClearTrustCenter() *TemplateUpdate {
 	_u.mutation.ClearTrustCenter()
 	return _u
+}
+
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (_u *TemplateUpdate) ClearAssessments() *TemplateUpdate {
+	_u.mutation.ClearAssessments()
+	return _u
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (_u *TemplateUpdate) RemoveAssessmentIDs(ids ...string) *TemplateUpdate {
+	_u.mutation.RemoveAssessmentIDs(ids...)
+	return _u
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (_u *TemplateUpdate) RemoveAssessments(v ...*Assessment) *TemplateUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -645,6 +682,54 @@ func (_u *TemplateUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -945,6 +1030,21 @@ func (_u *TemplateUpdateOne) SetTrustCenter(v *TrustCenter) *TemplateUpdateOne {
 	return _u.SetTrustCenterID(v.ID)
 }
 
+// AddAssessmentIDs adds the "assessments" edge to the Assessment entity by IDs.
+func (_u *TemplateUpdateOne) AddAssessmentIDs(ids ...string) *TemplateUpdateOne {
+	_u.mutation.AddAssessmentIDs(ids...)
+	return _u
+}
+
+// AddAssessments adds the "assessments" edges to the Assessment entity.
+func (_u *TemplateUpdateOne) AddAssessments(v ...*Assessment) *TemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssessmentIDs(ids...)
+}
+
 // Mutation returns the TemplateMutation object of the builder.
 func (_u *TemplateUpdateOne) Mutation() *TemplateMutation {
 	return _u.mutation
@@ -996,6 +1096,27 @@ func (_u *TemplateUpdateOne) RemoveFiles(v ...*File) *TemplateUpdateOne {
 func (_u *TemplateUpdateOne) ClearTrustCenter() *TemplateUpdateOne {
 	_u.mutation.ClearTrustCenter()
 	return _u
+}
+
+// ClearAssessments clears all "assessments" edges to the Assessment entity.
+func (_u *TemplateUpdateOne) ClearAssessments() *TemplateUpdateOne {
+	_u.mutation.ClearAssessments()
+	return _u
+}
+
+// RemoveAssessmentIDs removes the "assessments" edge to Assessment entities by IDs.
+func (_u *TemplateUpdateOne) RemoveAssessmentIDs(ids ...string) *TemplateUpdateOne {
+	_u.mutation.RemoveAssessmentIDs(ids...)
+	return _u
+}
+
+// RemoveAssessments removes "assessments" edges to Assessment entities.
+func (_u *TemplateUpdateOne) RemoveAssessments(v ...*Assessment) *TemplateUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssessmentIDs(ids...)
 }
 
 // Where appends a list predicates to the TemplateUpdate builder.
@@ -1313,6 +1434,54 @@ func (_u *TemplateUpdateOne) sqlSave(ctx context.Context) (_node *Template, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssessmentsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssessmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Assessment
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
