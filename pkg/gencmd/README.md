@@ -1,94 +1,82 @@
 # GenCMD
 
-This package is used to generate the base CRUD operations for a cli command for the `OpenlaneClient`
+`pkg/gencmd` is the scaffolding tool that bootstraps CLI resources for the
+spec-driven factory (`cmd/cli/internal/speccli`). Instead of emitting fully
+wired Cobra commands, the generator now focuses on producing the data and glue
+needed by the runtime factory:
 
-## Usage
+- `spec.json` – declarative command definition (operations, flags, columns).
+- `register.go` – registers the spec with `speccli` and seeds type metadata.
+- `doc.go` – package doc stub to appease `go vet`.
 
-The [Taskfile](Taskfile.yaml) includes two commands:
+Legacy Cobra templates are still available, but new work should prefer the
+spec-driven output.
 
-```
-* cli:generate:                   generates a new cli cmd
-* cli:generate:ro:                generates a new cli cmd with only the read cmds
-```
+## Generating a New Resource
 
-To use the cli directly instead of the `Taskfile`:
+The Taskfile wraps the generator; pass `--spec` (or `-s`) to opt into the new
+flow:
 
-```
-go run pkg/gencmd/generate/main.g generate --help
-generate is the command to generate the stub files for a given cli cmd
-
-Usage:
-   generate [flags]
-
-Flags:
-  -d, --dir string    root directory location to generate the files (default "cmd")
-  -h, --help          help for generate
-  -i, --interactive   interactive prompt, set to false to disable (default true)
-  -n, --name string   name of the command to generate
-      --spec          generate spec-driven command files instead of legacy cobra stubs
-  -r, --read-only     only generate the read only commands, no create, update or delete commands
+```bash
+task cli:generate -- --spec
 ```
 
-### Generate All CRUD Operations
+You can also invoke the generator directly:
 
-1. Run the generate command
-    ```
-    task cli:generate
-    task: [cli:generate] go run gencmd/generate/main.go generate
-    Name of the command (should be the singular version of the object): Contact
-    ----> creating cli cmd for: Contact
-    ----> executing template: create.tmpl
-    ----> executing template: delete.tmpl
-    ----> executing template: doc.tmpl
-    ----> executing template: get.tmpl
-    ----> executing template: root.tmpl
-    ----> executing template: update.tmpl
-    ```
-1. This will create a set of cobra command files:
-    ```
-    ls -l cmd/cli/cmd/contact/
-    total 48
-    -rw-r--r--  1 sarahfunkhouser  staff  1261 Jun 27 13:30 create.go
-    -rw-r--r--  1 sarahfunkhouser  staff  1086 Jun 27 13:30 delete.go
-    -rw-r--r--  1 sarahfunkhouser  staff   102 Jun 27 13:30 doc.go
-    -rw-r--r--  1 sarahfunkhouser  staff  1079 Jun 27 13:30 get.go
-    -rw-r--r--  1 sarahfunkhouser  staff  2570 Jun 27 13:30 root.go
-    -rw-r--r--  1 sarahfunkhouser  staff  1511 Jun 27 13:30 update.go
-    ```
-1. Add the new package to `cmd/cli/main.go`, in this case it would be:
-    ```go
-    	_ "github.com/theopenlane/core/cmd/cli/cmd/contact"
-    ```
-1. Add flags for the `Create` and `Update` commands for input
-1. Add validation to the `createValidation()` and `updateValidation()` functions for the required input
-1. Add fields for the table output in `root.go` in `tableOutput()` function, by default it only includes `ID`.
-    ```go
-    // tableOutput prints the plans in a table format
-    func tableOutput(plans []openlaneclient.Contact) {
-        writer := tables.NewTableWriter(command.OutOrStdout(), "ID", "Name", "Email", "PhoneNumber")
+```bash
+go run pkg/gencmd/generate/main.go generate --spec \
+  --name OrganizationSetting \
+  --dir cmd/cli/cmd
+```
 
-        for _, p := range plans {
-            writer.AddRow(p.ID, p.Name, *p.Email, *p.PhoneNumber)
-        }
+During generation you will be prompted for the resource name (singular). The
+tool will:
 
-        writer.Render()
-    }
-    ```
+1. Inspect GraphQL queries under `internal/graphapi/query` to infer sensible
+   table column defaults (including nested field paths).
+2. Read `pkg/openlaneclient` types to derive create/update flag metadata,
+   required/optional status, and enum parsers.
+3. Emit `spec.json`, `register.go`, and `doc.go` inside
+   `cmd/cli/cmd/<resource>/`.
 
-### Generate Read-Only Operations
+After generation:
 
-A common use-case for some of the resolvers is a `read-only` set of functions, particularly in our `History` schemas. To generate the cmds with **only** the `get` functionality use the `--read-only` flag:
+1. Add any bespoke hooks to `<resource>/hooks.go` (create/update/get/delete).
+   The generator leaves the hook map empty; see existing resources for
+   examples.
+2. If the command exposes additional flags or needs custom behaviour, update
+   the spec by hand – the factory will merge those changes on the next run.
+3. Import the package in `cmd/cli/main.go` if it is not already referenced.
 
-1. Run the read-only generate command
-    ```
-    task cli:generate:ro
-    ```
-1. The resulting commands will just be a `get` command
-    ```
-    task: [cli:generate:ro] go run gencmd/generate/main.go generate --read-only
-    Name of the command (should be the singular version of the object): ContactHistory
-    ----> creating cli cmd for: ContactHistory
-    ----> executing template: doc.tmpl
-    ----> executing template: get.tmpl
-    ----> executing template: root.tmpl
-    ```
+## Read-Only Commands
+
+Use `--read-only` when a resource only supports list/get operations:
+
+```bash
+task cli:generate:ro -- --spec
+```
+
+This produces the same files, but skips mutation metadata.
+
+## Customising Output
+
+- **Columns:** Edit `spec.json` directly or adjust the underlying GraphQL query
+  so the generator picks up the desired fields. Nested selections (e.g.
+  `organization { name }`) are honoured automatically.
+- **Flags:** The generator reads struct field tags from `pkg/openlaneclient`.
+  Add appropriate JSON tags and rerun the generator to refresh `spec.json`.
+- **Hooks:** Use the hook factories in `register.go` to bind to helpers. Hooks
+  return an `OperationOutput`, enabling custom record/JSON rendering while still
+  benefiting from the shared factory wiring.
+- **Overrides:** Each generated package now includes an `overrides.go` stub.
+  Implement the callback registered there to tweak metadata post-load without
+  forking the spec file (e.g. remove columns, adjust defaults).
+
+## Future Improvements
+
+- Generator-managed override stubs for edge cases.
+- Taskfile/`go generate` integration for bulk regeneration.
+- Test coverage for spec inference and flag binding.
+
+Contributions toward these items are welcome; see
+`docs/cli-command-refactor-todo.md` for the broader migration roadmap.

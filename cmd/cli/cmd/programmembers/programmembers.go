@@ -7,6 +7,7 @@ import (
 	"errors"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -28,7 +29,7 @@ func buildCreateMembershipInput() (openlaneclient.CreateProgramMembershipInput, 
 		role = "member"
 	}
 
-	enumRole, err := cmd.GetRoleEnum(role)
+	enumRole, err := speccli.ParseRole(role)
 	if err != nil {
 		return input, err
 	}
@@ -85,7 +86,7 @@ func buildUpdateMembershipInput(ctx context.Context, client *openlaneclient.Open
 		return "", openlaneclient.UpdateProgramMembershipInput{}, cmd.NewRequiredFieldMissingError("role")
 	}
 
-	enumRole, err := cmd.GetRoleEnum(role)
+	enumRole, err := speccli.ParseRole(role)
 	if err != nil {
 		return "", openlaneclient.UpdateProgramMembershipInput{}, err
 	}

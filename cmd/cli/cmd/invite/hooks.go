@@ -8,7 +8,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -56,6 +55,6 @@ func inviteAcceptHook(_ *speccli.PrimarySpec) speccli.PrimaryPreHook {
 			return err
 		}
 
-		return cmd.JSONPrint(payload)
+		return speccli.PrintJSON(payload)
 	}
 }

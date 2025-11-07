@@ -343,12 +343,71 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 		}
 	}
 
-	if opts.Overrides != nil {
-		if override, ok := opts.Overrides[spec.Name]; ok {
+	applied := map[string]struct{}{}
+
+	applyLoaderOverride := func(key string) error {
+		if key == "" || opts.Overrides == nil {
+			return nil
+		}
+
+		norm := normalizeOverrideKey(key)
+		if _, seen := applied[norm]; seen {
+			return nil
+		}
+
+		if override, ok := opts.Overrides[key]; ok {
+			applied[norm] = struct{}{}
 			if err := override(&spec); err != nil {
-				return CommandSpec{}, fmt.Errorf("override %q: %w", spec.Name, err)
+				return fmt.Errorf("override %q: %w", key, err)
+			}
+			return nil
+		}
+
+		for candidate, override := range opts.Overrides {
+			if normalizeOverrideKey(candidate) == norm {
+				applied[norm] = struct{}{}
+				if err := override(&spec); err != nil {
+					return fmt.Errorf("override %q: %w", candidate, err)
+				}
+				return nil
 			}
 		}
+
+		return nil
+	}
+
+	if err := applyLoaderOverride(spec.Name); err != nil {
+		return CommandSpec{}, err
+	}
+	if err := applyLoaderOverride(spec.Use); err != nil {
+		return CommandSpec{}, err
+	}
+
+	applyGlobalOverride := func(key string) error {
+		if key == "" {
+			return nil
+		}
+
+		norm := normalizeOverrideKey(key)
+		if _, seen := applied[norm]; seen {
+			return nil
+		}
+
+		if override, ok := lookupOverride(key); ok {
+			applied[norm] = struct{}{}
+			if err := override(&spec); err != nil {
+				return fmt.Errorf("override %q: %w", key, err)
+			}
+		}
+
+		return nil
+	}
+
+	if err := applyGlobalOverride(spec.Name); err != nil {
+		return CommandSpec{}, err
+	}
+	if err := applyGlobalOverride(spec.Use); err != nil {
+		return CommandSpec{}, err
 	}
 
 	return spec, nil

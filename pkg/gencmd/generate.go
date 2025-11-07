@@ -10,8 +10,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"slices"
-	"sort"
 	"strings"
 	"sync"
 	"text/template"
@@ -52,8 +50,6 @@ type cmd struct {
 	Name string
 	// ListOnly is a flag to indicate if the command is list only
 	ListOnly bool
-	// HistoryCmd is a flag to indicate if the command is for history
-	HistoryCmd bool
 	// SpecDriven indicates we are generating spec files
 	SpecDriven       bool
 	SpecColumns      []specColumn
@@ -61,10 +57,6 @@ type cmd struct {
 	SpecCreateFields []specField
 	SpecUpdateFields []specField
 }
-
-var (
-	mutationTemplates = []string{"create.tmpl", "update.tmpl", "delete.tmpl"}
-)
 
 type specColumn struct {
 	Header    string
@@ -99,37 +91,11 @@ var supportedEnumParsers = map[string]bool{
 }
 
 func templateList(spec bool) ([]string, error) {
-	entries, err := _templates.ReadDir("templates")
-	if err != nil {
-		return nil, err
+	if !spec {
+		return nil, fmt.Errorf("legacy CLI generation has been removed; rerun with --spec")
 	}
 
-	if spec {
-		return []string{"doc.tmpl", "register.tmpl", "spec.json.tmpl"}, nil
-	}
-
-	names := make([]string, 0, len(entries))
-	for _, entry := range entries {
-		name := entry.Name()
-		if specOnlyTemplate(name) {
-			continue
-		}
-
-		names = append(names, name)
-	}
-
-	sort.Strings(names)
-
-	return names, nil
-}
-
-func specOnlyTemplate(name string) bool {
-	switch name {
-	case "register.tmpl", "spec.json.tmpl":
-		return true
-	default:
-		return false
-	}
+	return []string{"doc.tmpl", "register.tmpl", "spec.json.tmpl", "overrides.tmpl"}, nil
 }
 
 func buildSpecColumns(cmdName string) []specColumn {
@@ -146,12 +112,12 @@ func buildSpecColumns(cmdName string) []specColumn {
 	columns := []specColumn{{Header: "ID", Path: []string{"id"}}}
 
 	plural := strings.ToLower(toProperPlural(cmdName))
-	fields := extractNodeFields(string(content), toProperPlural(cmdName))
-	if len(fields) == 0 {
-		fields = extractNodeFields(string(content), plural)
+	fieldPaths := extractNodeFieldPaths(string(content), toProperPlural(cmdName))
+	if len(fieldPaths) == 0 {
+		fieldPaths = extractNodeFieldPaths(string(content), plural)
 	}
 
-	if len(fields) == 0 {
+	if len(fieldPaths) == 0 {
 		return columns
 	}
 
@@ -164,47 +130,62 @@ func buildSpecColumns(cmdName string) []specColumn {
 		"tags":       "joinedStrings",
 	}
 	ignore := map[string]struct{}{
-		"id":        {},
-		"ownerID":   {},
-		"createdAt": {},
-		"createdBy": {},
-		"updatedAt": {},
-		"updatedBy": {},
-		"owner":     {},
-		"edges":     {},
+		"id":         {},
+		"ownerID":    {},
+		"createdAt":  {},
+		"createdBy":  {},
+		"updatedAt":  {},
+		"updatedBy":  {},
+		"owner":      {},
+		"edges":      {},
+		"node":       {},
+		"__typename": {},
 	}
 
-	set := make(map[string]struct{})
-	set["id"] = struct{}{}
+	seen := make(map[string]struct{})
+	seen["id"] = struct{}{}
 
-	addField := func(field string) {
-		if field == "" {
+	addField := func(path []string) {
+		if len(path) == 0 {
 			return
 		}
-		if _, ok := set[field]; ok {
+		key := strings.Join(path, ".")
+		if _, ok := seen[key]; ok {
 			return
 		}
-		if _, skip := ignore[field]; skip {
-			return
+		for _, segment := range path {
+			if _, skip := ignore[segment]; skip {
+				return
+			}
 		}
 
-		header := humanizeHeader(field)
-		formatter := formatterMap[field]
-		columns = append(columns, specColumn{Header: header, Path: []string{field}, Formatter: formatter})
-		set[field] = struct{}{}
+		last := path[len(path)-1]
+		header := humanizePath(path)
+		if header == "" {
+			header = humanizeHeader(last)
+		}
+		formatter := formatterMap[last]
+
+		columns = append(columns, specColumn{Header: header, Path: path, Formatter: formatter})
+		seen[key] = struct{}{}
 	}
 
 	for _, pref := range preferred {
-		if contains(fields, pref) {
-			addField(pref)
+		for _, path := range fieldPaths {
+			if len(path) == 0 {
+				continue
+			}
+			if strings.EqualFold(path[len(path)-1], pref) {
+				addField(path)
+			}
 		}
 	}
 
-	for _, field := range fields {
+	for _, path := range fieldPaths {
 		if len(columns) >= 6 {
 			break
 		}
-		addField(field)
+		addField(path)
 	}
 
 	return columns
@@ -232,58 +213,6 @@ func candidateQueryFiles(cmdName string) []string {
 	return withDirs
 }
 
-func extractNodeFields(content string, plural string) []string {
-	lines := strings.Split(content, "\n")
-	var fields []string
-	inNode := false
-	depth := 0
-
-	for _, rawLine := range lines {
-		line := strings.TrimSpace(rawLine)
-
-		if !inNode {
-			if strings.HasPrefix(strings.ToLower(line), fmt.Sprintf("%s {", strings.ToLower(plural))) {
-				continue
-			}
-
-			if strings.HasPrefix(strings.ToLower(line), "node {") {
-				inNode = true
-				depth = 1
-				continue
-			}
-
-			continue
-		}
-
-		if strings.Contains(line, "{") {
-			depth++
-			continue
-		}
-
-		if strings.Contains(line, "}") {
-			depth--
-			if depth == 0 {
-				break
-			}
-			continue
-		}
-
-		if line == "" || strings.HasPrefix(line, "#") {
-			continue
-		}
-
-		tokens := strings.Fields(line)
-		if len(tokens) == 0 {
-			continue
-		}
-
-		field := strings.TrimSuffix(tokens[0], ",")
-		fields = append(fields, field)
-	}
-
-	return fields
-}
-
 func humanizeHeader(field string) string {
 	parts := camelcase.Split(field)
 	if len(parts) == 0 {
@@ -295,13 +224,98 @@ func humanizeHeader(field string) string {
 	return strings.Join(parts, "")
 }
 
-func contains(list []string, value string) bool {
-	for _, item := range list {
-		if strings.EqualFold(item, value) {
-			return true
-		}
+func humanizePath(path []string) string {
+	if len(path) == 0 {
+		return ""
 	}
-	return false
+
+	parts := make([]string, len(path))
+	for i, segment := range path {
+		parts[i] = humanizeHeader(segment)
+	}
+
+	return strings.Join(parts, " ")
+}
+
+func extractNodeFieldPaths(content string, plural string) [][]string {
+	lines := strings.Split(content, "\n")
+	var paths [][]string
+
+	inNode := false
+	depth := 0
+	stack := []string{}
+
+	for _, rawLine := range lines {
+		line := strings.TrimSpace(rawLine)
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		lower := strings.ToLower(line)
+
+		if !inNode {
+			if strings.HasPrefix(lower, fmt.Sprintf("%s {", strings.ToLower(plural))) {
+				continue
+			}
+			if strings.HasPrefix(lower, "node {") {
+				inNode = true
+				depth = 1
+				stack = stack[:0]
+				continue
+			}
+			continue
+		}
+
+		openCount := strings.Count(line, "{")
+		closeCount := strings.Count(line, "}")
+
+		if openCount > 0 {
+			field := strings.TrimSpace(strings.Split(line, "{")[0])
+			field = strings.TrimSuffix(field, "(")
+			field = strings.TrimSpace(field)
+			field = strings.TrimSuffix(field, ",")
+
+			if field != "" && !strings.HasPrefix(field, "...") {
+				stack = append(stack, field)
+			}
+
+			depth += openCount
+			continue
+		}
+
+		if closeCount > 0 {
+			for i := 0; i < closeCount && len(stack) > 0; i++ {
+				stack = stack[:len(stack)-1]
+			}
+
+			depth -= closeCount
+			if depth <= 0 {
+				inNode = false
+				depth = 0
+			}
+			continue
+		}
+
+		if strings.HasPrefix(line, "...") {
+			continue
+		}
+
+		tokens := strings.Fields(line)
+		if len(tokens) == 0 {
+			continue
+		}
+
+		field := strings.TrimSuffix(tokens[0], ",")
+		if field == "" {
+			continue
+		}
+
+		path := append([]string{}, stack...)
+		path = append(path, field)
+		paths = append(paths, path)
+	}
+
+	return paths
 }
 
 func buildSpecFields(resource string, typeName string, update bool) []specField {
@@ -565,6 +579,10 @@ func shouldSkipField(name string, kind string, update bool) bool {
 
 // Generate generates the cli command files for the given command name
 func Generate(cmdName string, cmdDirName string, readOnly bool, spec bool, force bool) error {
+	if !spec {
+		return fmt.Errorf("legacy CLI generation has been removed; rerun with --spec")
+	}
+
 	// trim any leading/trailing spaces
 	cmdName = strings.Trim(cmdName, " ")
 
@@ -598,10 +616,6 @@ func Generate(cmdName string, cmdDirName string, readOnly bool, spec bool, force
 	}
 
 	for _, templateName := range templateNames {
-		if readOnly && slices.Contains(mutationTemplates, templateName) {
-			continue
-		}
-
 		if err := generateCmdFile(cmdName, cmdDirName, templateName, readOnly, spec, specColumns, specDelete, specCreate, specUpdate, force); err != nil {
 			return err
 		}
@@ -737,13 +751,10 @@ func generateCmdFile(cmdName, cmdDirName, templateName string, readOnly bool, sp
 		return nil
 	}
 
-	isHistory := strings.Contains(cmdName, "History")
-
 	// setup the data required for the template
 	c := cmd{
 		Name:       cmdName,
 		ListOnly:   readOnly, // if read only, set the list only flag
-		HistoryCmd: isHistory,
 		SpecDriven: spec,
 		SpecColumns: func() []specColumn {
 			if spec && len(columns) > 0 {
@@ -860,19 +871,12 @@ func updateMainImports(cmdName string) error {
 		return nil
 	}
 
-	// Insert the import in the right section
-	isHistory := strings.HasSuffix(strings.ToLower(cmdName), "history")
-
-	switch {
-	case isHistory && strings.Contains(fileContent, "// history commands\n"):
-		// Insert after "// history commands" for history commands
-		fileContent = strings.Replace(fileContent, "// history commands\n", "// history commands\n"+newImport+"\n", 1)
-	case !isHistory && strings.Contains(fileContent, "\n\t// history commands"):
-		// Insert before "// history commands" for regular commands
-		fileContent = strings.Replace(fileContent, "\n\t// history commands", newImport+"\n\t// history commands", 1)
-	default:
-		// Fallback: insert before closing import parenthesis
+	// Insert the import before the closing import parenthesis.
+	if strings.Contains(fileContent, "\n)") {
 		fileContent = strings.Replace(fileContent, "\n)", "\n"+newImport+"\n)", 1)
+	} else {
+		// Fallback: append the import block if the structure is unexpected.
+		fileContent += "\nimport (\n" + newImport + "\n)\n"
 	}
 
 	if err := os.WriteFile(mainPath, []byte(fileContent), 0600); err != nil { // nolint:mnd

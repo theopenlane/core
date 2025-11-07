@@ -10,7 +10,7 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
@@ -20,10 +20,20 @@ func buildCreateInvite() (openlaneclient.CreateInviteInput, error) {
 
 	input.Recipient = cmd.Config.String("email")
 	if input.Recipient == "" {
-		return input, cmd.NewRequiredFieldMissingError("email")
+		return input, speccli.RequiredFieldMissing("email")
 	}
 
-	input.Role = enums.ToRole(cmd.Config.String("role"))
+	role := cmd.Config.String("role")
+	if role == "" {
+		role = "member"
+	}
+
+	enumRole, err := speccli.ParseRole(role)
+	if err != nil {
+		return input, err
+	}
+
+	input.Role = enumRole
 
 	return input, nil
 }
@@ -31,7 +41,7 @@ func buildCreateInvite() (openlaneclient.CreateInviteInput, error) {
 func buildDeleteInvite() (string, error) {
 	id := cmd.Config.String("id")
 	if id == "" {
-		return "", cmd.NewRequiredFieldMissingError("id")
+		return "", speccli.RequiredFieldMissing("id")
 	}
 
 	return id, nil
@@ -42,7 +52,7 @@ func buildAcceptInvite() (models.InviteRequest, error) {
 
 	input.Token = cmd.Config.String("token")
 	if input.Token == "" {
-		return input, cmd.NewRequiredFieldMissingError("token")
+		return input, speccli.RequiredFieldMissing("token")
 	}
 
 	return input, nil

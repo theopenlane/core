@@ -1,0 +1,13 @@
+//go:build cli
+
+package {{ .Name | ToLower }}
+
+import "github.com/theopenlane/core/cmd/cli/internal/speccli"
+
+func init() {
+	speccli.RegisterOverride("{{ .Name | ToLower }}", func(spec *speccli.CommandSpec) error {
+		// Customize generated metadata here (e.g. tweak columns or defaults).
+		return nil
+	})
+}
+

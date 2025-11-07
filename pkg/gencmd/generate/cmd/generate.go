@@ -1,18 +1,10 @@
 package cmd
 
 import (
-	"strings"
-
-	"entgo.io/ent/entc"
-	"entgo.io/ent/entc/gen"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/pkg/gencmd"
 	"github.com/theopenlane/core/pkg/gencmd/generate/prompts"
-)
-
-const (
-	relativeSchemaPath = "../../internal/ent/schema"
 )
 
 var generateCmd = &cobra.Command{
@@ -39,15 +31,10 @@ func generateStubFiles() (err error) {
 	interactive := Config.Bool("interactive")
 
 	cmdName := Config.String("name")
-	hasHistory := false
 
 	if interactive {
 		cmdName, err = prompts.Name(cmdName)
 		cobra.CheckErr(err)
-
-		if hasHistorySchema(cmdName) {
-			hasHistory = prompts.GenerateHistory()
-		}
 	}
 
 	dirName := Config.String("dir")
@@ -55,26 +42,5 @@ func generateStubFiles() (err error) {
 	spec := Config.Bool("spec")
 	force := Config.Bool("force")
 
-	err = gencmd.Generate(cmdName, dirName, readOnly, spec, force)
-	cobra.CheckErr(err)
-
-	if !hasHistory {
-		return nil
-	}
-
-	return gencmd.Generate(cmdName+"History", dirName, true, spec, force)
-}
-
-// hasHistorySchemas loads the schema and checks if the history schema exists
-func hasHistorySchema(cmdName string) bool {
-	graph, err := entc.LoadGraph(relativeSchemaPath, &gen.Config{})
-	cobra.CheckErr(err)
-
-	for _, s := range graph.Schemas {
-		if strings.EqualFold(s.Name, cmdName+"history") {
-			return true
-		}
-	}
-
-	return false
+	return gencmd.Generate(cmdName, dirName, readOnly, spec, force)
 }

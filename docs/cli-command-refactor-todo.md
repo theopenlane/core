@@ -21,23 +21,24 @@
 - [x] Implement mutation payload marshalling: convert parsed flag values into the generated GraphQL input structs (pointer handling, optional fields, enum conversion).
 - [x] Centralize list/get output rendering with reusable helpers that honour spec-defined table schemas and seamlessly fall back to JSON.
 - [x] Provide opt-in hooks in the factory for pre-execution request shaping (e.g. building filtered `WhereInput`s) and post-execution formatting needed by outliers.
-- [ ] Add unit tests for flag binding, input marshalling, and output rendering to prevent regressions as specs expand.
+- [x] Add unit tests for flag binding, input marshalling, and output rendering to prevent regressions as specs expand.
 
 ## Phase 3 – Code Generation Updates
 - [x] Extend `pkg/gencmd` so the generator emits spec artifacts instead of full Cobra implementations (e.g. `cmd/cli/specs/<resource>.yaml` or Go definitions), keeping backwards compatibility with current CLI tags.
 - [x] Enhance the generator to introspect the GraphQL schema (via gqlparser or ent metadata) to derive Create/Update input fields, required flags, enums, and list queries automatically.
-- [ ] Allow the generator to seed sensible defaults for table columns by reading query selection sets (e.g. `internal/graphapi/query/<resource>.graphql`) while permitting manual override.
-- [ ] Provide a path for generator-managed overrides (e.g. an adjacent `overrides.go` stub) when automatic metadata is insufficient.
-- [ ] Update `pkg/gencmd/README.md` and Taskfile targets to explain the new workflow, including how to regenerate specs and where to wire custom logic.
+- [x] Allow the generator to seed sensible defaults for table columns by reading query selection sets (e.g. `internal/graphapi/query/<resource>.graphql`) while permitting manual override.
+- [x] Provide a path for generator-managed overrides (e.g. an adjacent `overrides.go` stub) when automatic metadata is insufficient.
+- [x] Update `pkg/gencmd/README.md` and Taskfile targets to explain the new workflow, including how to regenerate specs and where to wire custom logic.
 
-- [ ] Implement a temporary compatibility layer so legacy per-resource packages can coexist while new spec-driven commands roll out incrementally.
+- [x] Implement a temporary compatibility layer so legacy per-resource packages can coexist while new spec-driven commands roll out incrementally.
+  - [x] Not needed—CLI runs exclusively on spec-driven commands, so no layer will be maintained.
 - [x] Convert one representative resource (e.g. `contact`) to the new spec-driven flow to validate end-to-end behavior, feature parity, and developer ergonomics.
 - [x] Convert a read-only/resource variant (e.g. `contacthistory`) to exercise list filtering and non-mutation flows.
 - [x] Convert a mutation-heavy resource (e.g. `program`) to validate enum parsing, duration handling, and delete/list outputs.
 - [x] Convert a token resource (e.g. `personalaccesstokens`) to exercise custom table formatters and duration parsing.
 - [x] Convert a standards/resource (e.g. `standard`) to validate enum parsing, multi-field specs, and generator defaults.
 - [x] Convert high-touch commands (`organization`, `user`, `apitokens`, `organizationsetting`, `login`) to spec-driven flow with the necessary hooks for file uploads and interactive authentication.
-- [ ] Migrate remaining generated resources in manageable batches, deleting obsolete `create/update/delete/get/root.go` files per directory and pruning the imports in `cmd/cli/main.go`.
+- [x] Migrate remaining generated resources in manageable batches, deleting obsolete `create/update/delete/get/root.go` files per directory and pruning the imports in `cmd/cli/main.go`.
   - [x] Migrate `group` to spec-driven flow (spec + hooks + register wiring)
   - [x] Migrate `file` to spec-driven flow
   - [x] Migrate `documentdata` to spec-driven flow
@@ -49,9 +50,17 @@
   - [x] Migrate `groupmembers` and `orgmembers` to spec-driven flow
   - [x] Migrate `programmembers` to spec-driven flow
   - [x] Migrate `template` to spec-driven flow with JSON file parsing helpers
-- [ ] Port shared helpers (`consoleOutput`, enum coercion, validation errors) into the new package and remove duplicate copies from resource folders.
+  - [x] Migrate `subscriber` to spec-driven flow (bulk creation + CSV uploads)
+  - [x] Migrate `invite` to spec-driven flow while retaining `accept` as an auxiliary subcommand
+  - [x] Migrate `trustcenternda` (create/update + submit/send-email extras) to spec-driven flow
+- [x] Port shared helpers (`consoleOutput`, enum coercion, validation errors) into the new package and remove duplicate copies from resource folders.
+  - [x] Centralize role/invite enum coercion in `speccli` and update membership hooks.
+  - [x] Consolidate JSON printing helpers into `speccli` and drop `cmd/output.go`.
+  - [x] Re-export validation error helpers from `speccli` so commands avoid bespoke duplicates.
 - [ ] Ensure history-only commands (read-only) and other variants (bulk, CSV, multi-id) are either spec-supported or called out for manual retention.
-- [ ] Update documentation and internal runbooks referencing the old directory structure or hand-edit expectations.
+  - [x] Remove generator support for history commands to avoid reintroducing them.
+  - [x] Document remaining manual commands (`login`, `register`, `reset`, `invite accept`) as intentional outliers due to bespoke REST flows.
+- [x] Update documentation and internal runbooks referencing the old directory structure or hand-edit expectations.
 
 ## Phase 5 – QA & Rollout
 - [ ] Add regression tests or golden-file snapshots for selected commands using the new factory to guarantee CLI output remains stable.

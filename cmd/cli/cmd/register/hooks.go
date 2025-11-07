@@ -7,7 +7,6 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 )
 
@@ -18,6 +17,6 @@ func registerUserHook(_ *speccli.PrimarySpec) speccli.PrimaryPreHook {
 			return err
 		}
 
-		return cmd.JSONPrint(payload)
+		return speccli.PrintJSON(payload)
 	}
 }

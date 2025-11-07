@@ -1,0 +1,22 @@
+{
+  "name": "integration",
+  "use": "integration",
+  "short": "manage integrations",
+  "list": {
+    "method": "GetAllIntegrations",
+    "root": "integrations"
+  },
+  "get": {
+    "method": "GetIntegrationByID",
+    "idFlag": {"name": "id", "shorthand": "i", "usage": "integration id to query"},
+    "resultPath": ["integration"],
+    "fallbackList": true
+  },
+  "columns": [
+    {"header": "ID", "path": ["id"]},
+    {"header": "Name", "path": ["name"]},
+    {"header": "Description", "path": ["description"]},
+    {"header": "Kind", "path": ["kind"]}
+  ]
+}
+

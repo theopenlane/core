@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	cmdpkg "github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -32,12 +33,7 @@ func attachTrustCenterExtras(parent *cobra.Command) {
 
 func consoleSettingsOutput(out any) error {
 	if strings.EqualFold(cmdpkg.OutputFormat, cmdpkg.JSONOutput) {
-		payload, err := json.Marshal(out)
-		if err != nil {
-			return err
-		}
-
-		return cmdpkg.JSONPrint(payload)
+		return speccli.PrintJSON(out)
 	}
 
 	switch v := out.(type) {

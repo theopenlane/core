@@ -1,3 +1,4 @@
+{{ define "spec_columns" }}
 {{- if .SpecColumns }}
   "columns": [
   {{- range $i, $col := .SpecColumns }}{{ if $i }},
@@ -18,3 +19,4 @@
   {{- end }}
   ]
 {{- end }}
+{{ end }}

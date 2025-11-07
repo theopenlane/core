@@ -408,8 +408,8 @@ func registerFieldFlags(cmd *cobra.Command, fields []FieldSpec) {
 		case ValueStringSlice:
 			defaults := []string{}
 			if field.Flag.Default != "" {
-				raw := strings.Split(field.Flag.Default, ",")
-				for _, item := range raw {
+				raw := strings.SplitSeq(field.Flag.Default, ",")
+				for item := range raw {
 					trimmed := strings.TrimSpace(item)
 					if trimmed != "" {
 						defaults = append(defaults, trimmed)
@@ -473,12 +473,7 @@ func registerFieldFlags(cmd *cobra.Command, fields []FieldSpec) {
 
 func renderOutput(cmd *cobra.Command, out OperationOutput, columns []ColumnSpec) error {
 	if strings.EqualFold(cmdpkg.OutputFormat, cmdpkg.JSONOutput) {
-		payload, err := json.Marshal(out.Raw)
-		if err != nil {
-			return err
-		}
-
-		return cmdpkg.JSONPrint(payload)
+		return PrintJSON(out.Raw)
 	}
 
 	if len(columns) == 0 || len(out.Records) == 0 {

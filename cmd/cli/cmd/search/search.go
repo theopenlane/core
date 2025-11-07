@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -46,11 +47,7 @@ func renderSearchResults(results *openlaneclient.GlobalSearch) error {
 	}
 
 	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
-		payload, err := json.Marshal(fullResult)
-		if err != nil {
-			return err
-		}
-		return cmd.JSONPrint(payload)
+		return speccli.PrintJSON(fullResult)
 	}
 
 	return tableOutput(fullResult)

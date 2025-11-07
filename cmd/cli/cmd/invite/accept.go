@@ -5,7 +5,7 @@ package invite
 import (
 	"github.com/spf13/cobra"
 
-	cmdpkg "github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 )
 
 func newAcceptCommand() *cobra.Command {
@@ -18,7 +18,7 @@ func newAcceptCommand() *cobra.Command {
 				return err
 			}
 
-			return cmdpkg.JSONPrint(payload)
+			return speccli.PrintJSON(payload)
 		},
 	}
 

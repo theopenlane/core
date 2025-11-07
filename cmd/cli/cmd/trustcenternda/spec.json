@@ -8,19 +8,18 @@
     "resultPath": ["createTrustCenterNDA", "template"],
     "preHook": "trustCenterNdaCreate",
     "fields": [
-      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center id for the NDA", "required": true}, "field": "TrustCenterID", "kind": "string"},
+      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center id for the NDA", "required": true}, "kind": "string"},
       {"flag": {"name": "nda-file", "shorthand": "f", "usage": "path to NDA file to upload", "required": true}, "kind": "string"}
     ]
   },
   "update": {
     "method": "UpdateTrustCenterNda",
     "idFlag": {"name": "id", "shorthand": "i", "usage": "trust center NDA id to update"},
-    "inputType": "",
+    "inputType": "openlaneclient.CreateTrustCenterNDAInput",
     "resultPath": ["updateTrustCenterNDA", "template"],
     "preHook": "trustCenterNdaUpdate",
     "fields": [
-      {"flag": {"name": "trust-center-id", "shorthand": "t", "usage": "trust center id for lookup"}, "kind": "string"},
-      {"flag": {"name": "user-id", "usage": "unused"}, "kind": "string", "flag": {"name": "dummy","usage":"", "required": false}}
+      {"flag": {"name": "nda-file", "shorthand": "f", "usage": "path to NDA file to upload"}, "kind": "string"}
     ]
   },
   "columns": [

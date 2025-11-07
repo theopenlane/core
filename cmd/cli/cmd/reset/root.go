@@ -4,11 +4,11 @@ package reset
 
 import (
 	"context"
-	"encoding/json"
 
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -57,8 +57,5 @@ func resetPassword(ctx context.Context) error {
 	reply, err := client.ResetPassword(ctx, input)
 	cobra.CheckErr(err)
 
-	s, err := json.Marshal(reply)
-	cobra.CheckErr(err)
-
-	return cmd.JSONPrint(s)
+	return speccli.PrintJSON(reply)
 }

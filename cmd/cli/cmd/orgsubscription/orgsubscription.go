@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
+	"github.com/theopenlane/core/cmd/cli/internal/speccli"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -29,11 +30,7 @@ func fetchOrgSubscriptions(ctx context.Context, client *openlaneclient.OpenlaneC
 
 func renderOrgSubscriptions(result any) error {
 	if strings.EqualFold(cmd.OutputFormat, cmd.JSONOutput) {
-		payload, err := json.Marshal(result)
-		if err != nil {
-			return err
-		}
-		return cmd.JSONPrint(payload)
+		return speccli.PrintJSON(result)
 	}
 
 	subs, err := collectOrgSubscriptions(result)

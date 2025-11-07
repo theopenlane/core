@@ -15,12 +15,12 @@ import (
 
 func subscriberCreateHook(spec *speccli.CreateSpec) speccli.CreatePreHook {
 	return func(ctx context.Context, _ *cobra.Command, client *openlaneclient.OpenlaneClient) (bool, speccli.OperationOutput, error) {
-		result, err := createSubscribers(ctx, client)
+		result, err := createSubscriber(ctx, client)
 		if err != nil {
 			return true, speccli.OperationOutput{}, err
 		}
 
-		records, recordErr := buildSubscriberRecords(result)
+		records, recordErr := subscriberRecordsFromResult(result)
 		if recordErr != nil {
 			return true, speccli.OperationOutput{}, recordErr
 		}
@@ -59,7 +59,7 @@ func subscriberDeleteHook(spec *speccli.DeleteSpec) speccli.DeletePreHook {
 
 func subscriberGetHook(spec *speccli.GetSpec) speccli.GetPreHook {
 	return func(ctx context.Context, _ *cobra.Command, client *openlaneclient.OpenlaneClient) (bool, speccli.OperationOutput, error) {
-		result, err := getSubscribers(ctx, client)
+		result, err := fetchSubscribers(ctx, client)
 		if err != nil {
 			return true, speccli.OperationOutput{}, err
 		}
@@ -83,30 +83,20 @@ func subscriberGetHook(spec *speccli.GetSpec) speccli.GetPreHook {
 	}
 }
 
-func buildSubscriberRecords(result *openlaneclient.CreateBulkSubscriber) ([]map[string]any, error) {
+func subscriberRecordsFromResult(result any) ([]map[string]any, error) {
 	if result == nil {
 		return []map[string]any{}, nil
 	}
 
-	payload, err := json.Marshal(result.CreateBulkSubscriber.Subscribers)
+	payload, err := json.Marshal(result)
 	if err != nil {
 		return nil, err
 	}
 
-	var subscribers []openlaneclient.Subscriber
-	if err := json.Unmarshal(payload, &subscribers); err != nil {
+	var list []map[string]any
+	if err := json.Unmarshal(payload, &list); err != nil {
 		return nil, err
 	}
 
-	records := make([]map[string]any, len(subscribers))
-	for i, sub := range subscribers {
-		records[i] = map[string]any{
-			"email":        sub.Email,
-			"active":       sub.Active,
-			"unsubscribed": sub.Unsubscribed,
-			"tags":         sub.Tags,
-		}
-	}
-
-	return records, nil
+	return list, nil
 }

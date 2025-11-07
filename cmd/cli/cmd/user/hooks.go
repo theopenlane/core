@@ -11,7 +11,6 @@ import (
 
 	cmdpkg "github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/cmd/cli/internal/speccli"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -110,16 +109,9 @@ func buildUpdateUserInput() (openlaneclient.UpdateUserInput, *graphql.Upload, er
 		return input, nil, nil
 	}
 
-	file, err := storage.NewUploadFile(avatarPath)
+	upload, err := speccli.UploadFromPath(avatarPath)
 	if err != nil {
 		return input, nil, err
-	}
-
-	upload := &graphql.Upload{
-		File:        file.RawFile,
-		Filename:    file.OriginalName,
-		Size:        file.Size,
-		ContentType: file.ContentType,
 	}
 
 	return input, upload, nil
