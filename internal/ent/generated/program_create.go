@@ -628,23 +628,9 @@ func (_c *ProgramCreate) AddUsers(v ...*User) *ProgramCreate {
 	return _c.AddUserIDs(ids...)
 }
 
-// SetUserID sets the "user" edge to the User entity by ID.
-func (_c *ProgramCreate) SetUserID(id string) *ProgramCreate {
-	_c.mutation.SetUserID(id)
-	return _c
-}
-
-// SetNillableUserID sets the "user" edge to the User entity by ID if the given value is not nil.
-func (_c *ProgramCreate) SetNillableUserID(id *string) *ProgramCreate {
-	if id != nil {
-		_c = _c.SetUserID(*id)
-	}
-	return _c
-}
-
-// SetUser sets the "user" edge to the User entity.
-func (_c *ProgramCreate) SetUser(v *User) *ProgramCreate {
-	return _c.SetUserID(v.ID)
+// SetProgramOwner sets the "program_owner" edge to the User entity.
+func (_c *ProgramCreate) SetProgramOwner(v *User) *ProgramCreate {
+	return _c.SetProgramOwnerID(v.ID)
 }
 
 // AddMemberIDs adds the "members" edge to the ProgramMembership entity by IDs.
@@ -1239,12 +1225,12 @@ func (_c *ProgramCreate) createSpec() (*Program, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: true,
-			Table:   program.UserTable,
-			Columns: []string{program.UserColumn},
+			Table:   program.ProgramOwnerTable,
+			Columns: []string{program.ProgramOwnerColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),

@@ -4201,6 +4201,7 @@ type ComplexityRoot struct {
 		ProgramKind          func(childComplexity int) int
 		ProgramKindID        func(childComplexity int) int
 		ProgramKindName      func(childComplexity int) int
+		ProgramOwner         func(childComplexity int) int
 		ProgramOwnerID       func(childComplexity int) int
 		ProgramType          func(childComplexity int) int
 		Risks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
@@ -4211,7 +4212,6 @@ type ComplexityRoot struct {
 		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		UpdatedAt            func(childComplexity int) int
 		UpdatedBy            func(childComplexity int) int
-		User                 func(childComplexity int) int
 		Users                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		Viewers              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
@@ -6477,8 +6477,8 @@ type ComplexityRoot struct {
 		Organizations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
 		PersonalAccessTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
 		ProgramMemberships    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
-		ProgramOwner          func(childComplexity int) int
 		Programs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		ProgramsOwned         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
 		Role                  func(childComplexity int) int
 		ScimActive            func(childComplexity int) int
 		ScimExternalID        func(childComplexity int) int
@@ -29968,6 +29968,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Program.ProgramKindName(childComplexity), true
 
+	case "Program.programOwner":
+		if e.complexity.Program.ProgramOwner == nil {
+			break
+		}
+
+		return e.complexity.Program.ProgramOwner(childComplexity), true
+
 	case "Program.programOwnerID":
 		if e.complexity.Program.ProgramOwnerID == nil {
 			break
@@ -30052,13 +30059,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Program.UpdatedBy(childComplexity), true
-
-	case "Program.user":
-		if e.complexity.Program.User == nil {
-			break
-		}
-
-		return e.complexity.Program.User(childComplexity), true
 
 	case "Program.users":
 		if e.complexity.Program.Users == nil {
@@ -43177,13 +43177,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.ProgramMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramMembershipOrder), args["where"].(*generated.ProgramMembershipWhereInput)), true
 
-	case "User.programOwner":
-		if e.complexity.User.ProgramOwner == nil {
-			break
-		}
-
-		return e.complexity.User.ProgramOwner(childComplexity), true
-
 	case "User.programs":
 		if e.complexity.User.Programs == nil {
 			break
@@ -43195,6 +43188,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.User.Programs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
+
+	case "User.programsOwned":
+		if e.complexity.User.ProgramsOwned == nil {
+			break
+		}
+
+		args, err := ec.field_User_programsOwned_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.User.ProgramsOwned(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ProgramOrder), args["where"].(*generated.ProgramWhereInput)), true
 
 	case "User.role":
 		if e.complexity.User.Role == nil {
@@ -60692,7 +60697,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
-  userID: ID
+  programOwnerID: ID
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -61734,7 +61739,7 @@ input CreateUserInput {
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
-  programOwnerID: ID
+  programsOwnedIDs: [ID!]
   impersonationEventIDs: [ID!]
   targetedImpersonationIDs: [ID!]
 }
@@ -92132,7 +92137,7 @@ type Program implements Node {
     """
     where: UserWhereInput
   ): UserConnection!
-  user: User
+  programOwner: User
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -93604,10 +93609,10 @@ input ProgramWhereInput {
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
   """
-  user edge predicates
+  program_owner edge predicates
   """
-  hasUser: Boolean
-  hasUserWith: [UserWhereInput!]
+  hasProgramOwner: Boolean
+  hasProgramOwnerWith: [UserWhereInput!]
   """
   members edge predicates
   """
@@ -118278,8 +118283,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
-  userID: ID
-  clearUser: Boolean
+  programOwnerID: ID
+  clearProgramOwner: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -119736,8 +119741,9 @@ input UpdateUserInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
-  programOwnerID: ID
-  clearProgramOwner: Boolean
+  addProgramsOwnedIDs: [ID!]
+  removeProgramsOwnedIDs: [ID!]
+  clearProgramsOwned: Boolean
   addImpersonationEventIDs: [ID!]
   removeImpersonationEventIDs: [ID!]
   clearImpersonationEvents: Boolean
@@ -120460,7 +120466,37 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
-  programOwner: Program
+  programsOwned(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -122196,10 +122232,10 @@ input UserWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
-  program_owner edge predicates
+  programs_owned edge predicates
   """
-  hasProgramOwner: Boolean
-  hasProgramOwnerWith: [ProgramWhereInput!]
+  hasProgramsOwned: Boolean
+  hasProgramsOwnedWith: [ProgramWhereInput!]
   """
   group_memberships edge predicates
   """

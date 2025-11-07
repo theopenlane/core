@@ -44,14 +44,14 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				if op == SoftDeleteOne {
 					eventID, err = parseSoftDeleteEventID(ctx, mutation)
 					if err != nil {
-						log.Err(err).Msg("Failed to parse soft delete event ID")
+						log.Err(err).Msg("failed to parse soft delete event ID")
 
 						return
 					}
 				} else {
 					eventID, err = parseEventID(retVal)
 					if err != nil {
-						log.Err(err).Msg("Failed to parse event ID")
+						log.Err(err).Msg("failed to parse event ID")
 						return
 					}
 				}

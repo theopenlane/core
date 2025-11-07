@@ -121,8 +121,8 @@ type ProgramEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Users holds the value of the users edge.
 	Users []*User `json:"users,omitempty"`
-	// User holds the value of the user edge.
-	User *User `json:"user,omitempty"`
+	// ProgramOwner holds the value of the program_owner edge.
+	ProgramOwner *User `json:"program_owner,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*ProgramMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
@@ -316,15 +316,15 @@ func (e ProgramEdges) UsersOrErr() ([]*User, error) {
 	return nil, &NotLoadedError{edge: "users"}
 }
 
-// UserOrErr returns the User value or an error if the edge
+// ProgramOwnerOrErr returns the ProgramOwner value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
-func (e ProgramEdges) UserOrErr() (*User, error) {
-	if e.User != nil {
-		return e.User, nil
+func (e ProgramEdges) ProgramOwnerOrErr() (*User, error) {
+	if e.ProgramOwner != nil {
+		return e.ProgramOwner, nil
 	} else if e.loadedTypes[18] {
 		return nil, &NotFoundError{label: user.Label}
 	}
-	return nil, &NotLoadedError{edge: "user"}
+	return nil, &NotLoadedError{edge: "program_owner"}
 }
 
 // MembersOrErr returns the Members value or an error if the edge
@@ -670,9 +670,9 @@ func (_m *Program) QueryUsers() *UserQuery {
 	return NewProgramClient(_m.config).QueryUsers(_m)
 }
 
-// QueryUser queries the "user" edge of the Program entity.
-func (_m *Program) QueryUser() *UserQuery {
-	return NewProgramClient(_m.config).QueryUser(_m)
+// QueryProgramOwner queries the "program_owner" edge of the Program entity.
+func (_m *Program) QueryProgramOwner() *UserQuery {
+	return NewProgramClient(_m.config).QueryProgramOwner(_m)
 }
 
 // QueryMembers queries the "members" edge of the Program entity.

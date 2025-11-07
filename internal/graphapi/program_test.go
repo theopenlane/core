@@ -257,6 +257,7 @@ func TestMutationCreateProgram(t *testing.T) {
 	// group that the user does not have access to (for testing permissions)
 	anotherGroup := (&GroupBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
+	programIDsToCleanup := []string{}
 	testCases := []struct {
 		name          string
 		request       testclient.CreateProgramInput
@@ -280,6 +281,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				Description:          lo.ToPtr("being the best"),
 				ProgramType:          &enums.ProgramTypeFramework,
 				FrameworkName:        lo.ToPtr("SOC 2"),
+				ProgramOwnerID:       &testUser1.ID,
 				Status:               &enums.ProgramStatusInProgress,
 				StartDate:            &startDate,
 				EndDate:              &endDate,
@@ -299,6 +301,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				Name:              "mitb program",
 				ProcedureIDs:      []string{procedure.ID},
 				InternalPolicyIDs: []string{policy.ID},
+				ProgramOwnerID:    &adminUser.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -310,6 +313,7 @@ func TestMutationCreateProgram(t *testing.T) {
 				EditorIDs:       []string{testUser1.GroupID},
 				BlockedGroupIDs: []string{blockedGroup.ID},
 				ViewerIDs:       []string{viewerGroup.ID},
+				ProgramOwnerID:  &testUser1.ID,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -363,15 +367,6 @@ func TestMutationCreateProgram(t *testing.T) {
 			ctx:           viewOnlyUser.UserCtx,
 		},
 		{
-			name: "user not authorized, no permissions, owner id set to correct org",
-			request: testclient.CreateProgramInput{
-				Name:    "mitb program",
-				OwnerID: &testUser1.OrganizationID,
-			},
-			client: suite.client.api,
-			ctx:    testUser2.UserCtx,
-		},
-		{
 			name: "missing required field",
 			request: testclient.CreateProgramInput{
 				Description: lo.ToPtr("soc2 2024"),
@@ -411,6 +406,8 @@ func TestMutationCreateProgram(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
+
+			programIDsToCleanup = append(programIDsToCleanup, resp.CreateProgram.Program.ID)
 
 			// check required fields
 			assert.Check(t, is.Equal(tc.request.Name, resp.CreateProgram.Program.Name))
@@ -535,13 +532,6 @@ func TestMutationCreateProgram(t *testing.T) {
 					assert.Check(t, is.Equal(viewerGroup.ID, edge.Node.ID))
 				}
 			}
-
-			// cleanup program
-			if tc.ctx == context.Background() {
-				tc.ctx = testUser1.UserCtx
-			}
-
-			(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: resp.CreateProgram.Program.ID}).MustDelete(tc.ctx, t)
 		})
 	}
 
@@ -551,6 +541,9 @@ func TestMutationCreateProgram(t *testing.T) {
 	// cleanup group
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupMember.GroupID, blockedGroup.ID, viewerGroup.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, ID: anotherGroup.ID}).MustDelete(testUser2.UserCtx, t)
+
+	// cleanup programs
+	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, IDs: programIDsToCleanup}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateProgram(t *testing.T) {

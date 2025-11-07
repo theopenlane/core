@@ -128,8 +128,8 @@ func (ec *executionContext) fieldContext_UserBulkCreatePayload_users(_ context.C
 				return ec.fieldContext_User_assigneeTasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_User_programs(ctx, field)
-			case "programOwner":
-				return ec.fieldContext_User_programOwner(ctx, field)
+			case "programsOwned":
+				return ec.fieldContext_User_programsOwned(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":
@@ -243,8 +243,8 @@ func (ec *executionContext) fieldContext_UserCreatePayload_user(_ context.Contex
 				return ec.fieldContext_User_assigneeTasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_User_programs(ctx, field)
-			case "programOwner":
-				return ec.fieldContext_User_programOwner(ctx, field)
+			case "programsOwned":
+				return ec.fieldContext_User_programsOwned(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":
@@ -387,8 +387,8 @@ func (ec *executionContext) fieldContext_UserUpdatePayload_user(_ context.Contex
 				return ec.fieldContext_User_assigneeTasks(ctx, field)
 			case "programs":
 				return ec.fieldContext_User_programs(ctx, field)
-			case "programOwner":
-				return ec.fieldContext_User_programOwner(ctx, field)
+			case "programsOwned":
+				return ec.fieldContext_User_programsOwned(ctx, field)
 			case "groupMemberships":
 				return ec.fieldContext_User_groupMemberships(ctx, field)
 			case "orgMemberships":

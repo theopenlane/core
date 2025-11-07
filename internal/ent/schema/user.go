@@ -275,9 +275,9 @@ func (u User) Edges() []ent.Edge {
 				entgql.MultiOrder(),
 				accessmap.EdgeNoAuthCheck(), // membership edges are handled by the parent
 			),
-		uniqueEdgeTo(&edgeDefinition{
+		edgeToWithPagination(&edgeDefinition{
 			fromSchema: u,
-			name:       "program_owner",
+			name:       "programs_owned",
 			t:          Program.Type,
 		}),
 		defaultEdgeToWithPagination(u, ImpersonationEvent{}),

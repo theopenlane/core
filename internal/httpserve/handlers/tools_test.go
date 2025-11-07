@@ -227,6 +227,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
+	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
+		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
+	}
+	suite.h.Entitlements.Config.StripeWebhookSecrets[stripe.APIVersion] = webhookSecret
 
 	// use shared OTP manager
 	suite.h.OTPManager = suite.sharedOTPManager

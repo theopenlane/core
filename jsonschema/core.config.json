@@ -562,7 +562,11 @@
         },
         "stripeWebhookSecret": {
           "type": "string",
-          "description": "StripeWebhookSecret is the secret for the stripe service"
+          "description": "StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)"
+        },
+        "stripeWebhookSecrets": {
+          "$ref": "#/$defs/map[string]string",
+          "description": "StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback"
         },
         "stripeWebhookURL": {
           "type": "string",
@@ -579,6 +583,14 @@
         "stripeWebhookEvents": {
           "$ref": "#/$defs/[]string",
           "description": "StripeWebhookEvents is the list of events to register when creating a webhook endpoint"
+        },
+        "stripeWebhookAPIVersion": {
+          "type": "string",
+          "description": "StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler"
+        },
+        "stripeWebhookDiscardAPIVersion": {
+          "type": "string",
+          "description": "StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration"
         }
       },
       "additionalProperties": false,

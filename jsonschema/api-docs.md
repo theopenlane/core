@@ -127,7 +127,9 @@ Config contains the configuration for the core server
             }
         }
     },
-    "subscription": {},
+    "subscription": {
+        "stripeWebhookSecrets": {}
+    },
     "keywatcher": {},
     "slack": {},
     "integrationOauthProvider": {
@@ -1613,13 +1615,33 @@ ProviderCredentials contains credentials for a storage provider
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled determines if the entitlements service is enabled<br/>||
 |**privateStripeKey**|`string`|PrivateStripeKey is the key for the stripe service<br/>||
-|**stripeWebhookSecret**|`string`|StripeWebhookSecret is the secret for the stripe service<br/>||
+|**stripeWebhookSecret**|`string`|StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)<br/>||
+|[**stripeWebhookSecrets**](#subscriptionstripewebhooksecrets)|`object`|||
 |**stripeWebhookURL**|`string`|StripeWebhookURL is the URL for the stripe webhook<br/>||
 |**stripeBillingPortalSuccessURL**|`string`|StripeBillingPortalSuccessURL<br/>||
 |**stripeCancellationReturnURL**|`string`|StripeCancellationReturnURL is the URL for the stripe cancellation return<br/>||
 |[**stripeWebhookEvents**](#subscriptionstripewebhookevents)|`string[]`|||
+|**stripeWebhookAPIVersion**|`string`|StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler<br/>||
+|**stripeWebhookDiscardAPIVersion**|`string`|StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration<br/>||
 
 **Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "stripeWebhookSecrets": {}
+}
+```
+
+<a name="subscriptionstripewebhooksecrets"></a>
+### subscription\.stripeWebhookSecrets: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**Additional Properties**|`string`|||
+
 <a name="subscriptionstripewebhookevents"></a>
 ### subscription\.stripeWebhookEvents: array
 
