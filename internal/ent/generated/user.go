@@ -11,7 +11,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/pkg/enums"
@@ -116,8 +115,8 @@ type UserEdges struct {
 	AssigneeTasks []*Task `json:"assignee_tasks,omitempty"`
 	// Programs holds the value of the programs edge.
 	Programs []*Program `json:"programs,omitempty"`
-	// ProgramOwner holds the value of the program_owner edge.
-	ProgramOwner *Program `json:"program_owner,omitempty"`
+	// ProgramsOwned holds the value of the programs_owned edge.
+	ProgramsOwned []*Program `json:"programs_owned,omitempty"`
 	// ImpersonationEvents holds the value of the impersonation_events edge.
 	ImpersonationEvents []*ImpersonationEvent `json:"impersonation_events,omitempty"`
 	// TargetedImpersonations holds the value of the targeted_impersonations edge.
@@ -149,6 +148,7 @@ type UserEdges struct {
 	namedAssignerTasks           map[string][]*Task
 	namedAssigneeTasks           map[string][]*Task
 	namedPrograms                map[string][]*Program
+	namedProgramsOwned           map[string][]*Program
 	namedImpersonationEvents     map[string][]*ImpersonationEvent
 	namedTargetedImpersonations  map[string][]*ImpersonationEvent
 	namedGroupMemberships        map[string][]*GroupMembership
@@ -313,15 +313,13 @@ func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
 	return nil, &NotLoadedError{edge: "programs"}
 }
 
-// ProgramOwnerOrErr returns the ProgramOwner value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e UserEdges) ProgramOwnerOrErr() (*Program, error) {
-	if e.ProgramOwner != nil {
-		return e.ProgramOwner, nil
-	} else if e.loadedTypes[17] {
-		return nil, &NotFoundError{label: program.Label}
+// ProgramsOwnedOrErr returns the ProgramsOwned value or an error if the edge
+// was not loaded in eager-loading.
+func (e UserEdges) ProgramsOwnedOrErr() ([]*Program, error) {
+	if e.loadedTypes[17] {
+		return e.ProgramsOwned, nil
 	}
-	return nil, &NotLoadedError{edge: "program_owner"}
+	return nil, &NotLoadedError{edge: "programs_owned"}
 }
 
 // ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
@@ -668,9 +666,9 @@ func (_m *User) QueryPrograms() *ProgramQuery {
 	return NewUserClient(_m.config).QueryPrograms(_m)
 }
 
-// QueryProgramOwner queries the "program_owner" edge of the User entity.
-func (_m *User) QueryProgramOwner() *ProgramQuery {
-	return NewUserClient(_m.config).QueryProgramOwner(_m)
+// QueryProgramsOwned queries the "programs_owned" edge of the User entity.
+func (_m *User) QueryProgramsOwned() *ProgramQuery {
+	return NewUserClient(_m.config).QueryProgramsOwned(_m)
 }
 
 // QueryImpersonationEvents queries the "impersonation_events" edge of the User entity.
@@ -1174,6 +1172,30 @@ func (_m *User) appendNamedPrograms(name string, edges ...*Program) {
 		_m.Edges.namedPrograms[name] = []*Program{}
 	} else {
 		_m.Edges.namedPrograms[name] = append(_m.Edges.namedPrograms[name], edges...)
+	}
+}
+
+// NamedProgramsOwned returns the ProgramsOwned named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *User) NamedProgramsOwned(name string) ([]*Program, error) {
+	if _m.Edges.namedProgramsOwned == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedProgramsOwned[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *User) appendNamedProgramsOwned(name string, edges ...*Program) {
+	if _m.Edges.namedProgramsOwned == nil {
+		_m.Edges.namedProgramsOwned = make(map[string][]*Program)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedProgramsOwned[name] = []*Program{}
+	} else {
+		_m.Edges.namedProgramsOwned[name] = append(_m.Edges.namedProgramsOwned[name], edges...)
 	}
 }
 

@@ -11909,7 +11909,7 @@ input CreateProgramInput {
   evidenceIDs: [ID!]
   narrativeIDs: [ID!]
   actionPlanIDs: [ID!]
-  userID: ID
+  programOwnerID: ID
 }
 """
 CreateProgramMembershipInput is used for create ProgramMembership object.
@@ -12951,7 +12951,7 @@ input CreateUserInput {
   assignerTaskIDs: [ID!]
   assigneeTaskIDs: [ID!]
   programIDs: [ID!]
-  programOwnerID: ID
+  programsOwnedIDs: [ID!]
   impersonationEventIDs: [ID!]
   targetedImpersonationIDs: [ID!]
 }
@@ -43349,7 +43349,7 @@ type Program implements Node {
     """
     where: UserWhereInput
   ): UserConnection!
-  user: User
+  programOwner: User
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -44821,10 +44821,10 @@ input ProgramWhereInput {
   hasUsers: Boolean
   hasUsersWith: [UserWhereInput!]
   """
-  user edge predicates
+  program_owner edge predicates
   """
-  hasUser: Boolean
-  hasUserWith: [UserWhereInput!]
+  hasProgramOwner: Boolean
+  hasProgramOwnerWith: [UserWhereInput!]
   """
   members edge predicates
   """
@@ -69495,8 +69495,8 @@ input UpdateProgramInput {
   addActionPlanIDs: [ID!]
   removeActionPlanIDs: [ID!]
   clearActionPlans: Boolean
-  userID: ID
-  clearUser: Boolean
+  programOwnerID: ID
+  clearProgramOwner: Boolean
 }
 """
 UpdateProgramMembershipInput is used for update ProgramMembership object.
@@ -70953,8 +70953,9 @@ input UpdateUserInput {
   addProgramIDs: [ID!]
   removeProgramIDs: [ID!]
   clearPrograms: Boolean
-  programOwnerID: ID
-  clearProgramOwner: Boolean
+  addProgramsOwnedIDs: [ID!]
+  removeProgramsOwnedIDs: [ID!]
+  clearProgramsOwned: Boolean
   addImpersonationEventIDs: [ID!]
   removeImpersonationEventIDs: [ID!]
   clearImpersonationEvents: Boolean
@@ -71677,7 +71678,37 @@ type User implements Node {
     """
     where: ProgramWhereInput
   ): ProgramConnection!
-  programOwner: Program
+  programsOwned(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Programs returned from the connection.
+    """
+    orderBy: [ProgramOrder!]
+
+    """
+    Filtering options for Programs returned from the connection.
+    """
+    where: ProgramWhereInput
+  ): ProgramConnection!
   groupMemberships(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -73413,10 +73444,10 @@ input UserWhereInput {
   hasPrograms: Boolean
   hasProgramsWith: [ProgramWhereInput!]
   """
-  program_owner edge predicates
+  programs_owned edge predicates
   """
-  hasProgramOwner: Boolean
-  hasProgramOwnerWith: [ProgramWhereInput!]
+  hasProgramsOwned: Boolean
+  hasProgramsOwnedWith: [ProgramWhereInput!]
   """
   group_memberships edge predicates
   """

@@ -179,12 +179,12 @@ func (p Program) Edges() []ent.Edge {
 				entgql.MultiOrder(),
 			).
 			Through("members", ProgramMembership.Type),
-
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: p,
-			edgeSchema: User{},
-			ref:        "program_owner",
+			name:       "program_owner",
+			t:          User.Type,
 			field:      "program_owner_id",
+			ref:        "programs_owned",
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},

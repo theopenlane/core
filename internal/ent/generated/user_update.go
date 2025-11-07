@@ -723,23 +723,19 @@ func (_u *UserUpdate) AddPrograms(v ...*Program) *UserUpdate {
 	return _u.AddProgramIDs(ids...)
 }
 
-// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
-func (_u *UserUpdate) SetProgramOwnerID(id string) *UserUpdate {
-	_u.mutation.SetProgramOwnerID(id)
+// AddProgramsOwnedIDs adds the "programs_owned" edge to the Program entity by IDs.
+func (_u *UserUpdate) AddProgramsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddProgramsOwnedIDs(ids...)
 	return _u
 }
 
-// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
-func (_u *UserUpdate) SetNillableProgramOwnerID(id *string) *UserUpdate {
-	if id != nil {
-		_u = _u.SetProgramOwnerID(*id)
+// AddProgramsOwned adds the "programs_owned" edges to the Program entity.
+func (_u *UserUpdate) AddProgramsOwned(v ...*Program) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _u
-}
-
-// SetProgramOwner sets the "program_owner" edge to the Program entity.
-func (_u *UserUpdate) SetProgramOwner(v *Program) *UserUpdate {
-	return _u.SetProgramOwnerID(v.ID)
+	return _u.AddProgramsOwnedIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -1149,10 +1145,25 @@ func (_u *UserUpdate) RemovePrograms(v ...*Program) *UserUpdate {
 	return _u.RemoveProgramIDs(ids...)
 }
 
-// ClearProgramOwner clears the "program_owner" edge to the Program entity.
-func (_u *UserUpdate) ClearProgramOwner() *UserUpdate {
-	_u.mutation.ClearProgramOwner()
+// ClearProgramsOwned clears all "programs_owned" edges to the Program entity.
+func (_u *UserUpdate) ClearProgramsOwned() *UserUpdate {
+	_u.mutation.ClearProgramsOwned()
 	return _u
+}
+
+// RemoveProgramsOwnedIDs removes the "programs_owned" edge to Program entities by IDs.
+func (_u *UserUpdate) RemoveProgramsOwnedIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveProgramsOwnedIDs(ids...)
+	return _u
+}
+
+// RemoveProgramsOwned removes "programs_owned" edges to Program entities.
+func (_u *UserUpdate) RemoveProgramsOwned(v ...*Program) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProgramsOwnedIDs(ids...)
 }
 
 // ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
@@ -2361,12 +2372,12 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ProgramOwnerCleared() {
+	if _u.mutation.ProgramsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.ProgramOwnerTable,
-			Columns: []string{user.ProgramOwnerColumn},
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -2375,12 +2386,29 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedProgramsOwnedIDs(); len(nodes) > 0 && !_u.mutation.ProgramsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.ProgramOwnerTable,
-			Columns: []string{user.ProgramOwnerColumn},
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -3327,23 +3355,19 @@ func (_u *UserUpdateOne) AddPrograms(v ...*Program) *UserUpdateOne {
 	return _u.AddProgramIDs(ids...)
 }
 
-// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
-func (_u *UserUpdateOne) SetProgramOwnerID(id string) *UserUpdateOne {
-	_u.mutation.SetProgramOwnerID(id)
+// AddProgramsOwnedIDs adds the "programs_owned" edge to the Program entity by IDs.
+func (_u *UserUpdateOne) AddProgramsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddProgramsOwnedIDs(ids...)
 	return _u
 }
 
-// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
-func (_u *UserUpdateOne) SetNillableProgramOwnerID(id *string) *UserUpdateOne {
-	if id != nil {
-		_u = _u.SetProgramOwnerID(*id)
+// AddProgramsOwned adds the "programs_owned" edges to the Program entity.
+func (_u *UserUpdateOne) AddProgramsOwned(v ...*Program) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _u
-}
-
-// SetProgramOwner sets the "program_owner" edge to the Program entity.
-func (_u *UserUpdateOne) SetProgramOwner(v *Program) *UserUpdateOne {
-	return _u.SetProgramOwnerID(v.ID)
+	return _u.AddProgramsOwnedIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -3753,10 +3777,25 @@ func (_u *UserUpdateOne) RemovePrograms(v ...*Program) *UserUpdateOne {
 	return _u.RemoveProgramIDs(ids...)
 }
 
-// ClearProgramOwner clears the "program_owner" edge to the Program entity.
-func (_u *UserUpdateOne) ClearProgramOwner() *UserUpdateOne {
-	_u.mutation.ClearProgramOwner()
+// ClearProgramsOwned clears all "programs_owned" edges to the Program entity.
+func (_u *UserUpdateOne) ClearProgramsOwned() *UserUpdateOne {
+	_u.mutation.ClearProgramsOwned()
 	return _u
+}
+
+// RemoveProgramsOwnedIDs removes the "programs_owned" edge to Program entities by IDs.
+func (_u *UserUpdateOne) RemoveProgramsOwnedIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveProgramsOwnedIDs(ids...)
+	return _u
+}
+
+// RemoveProgramsOwned removes "programs_owned" edges to Program entities.
+func (_u *UserUpdateOne) RemoveProgramsOwned(v ...*Program) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveProgramsOwnedIDs(ids...)
 }
 
 // ClearImpersonationEvents clears all "impersonation_events" edges to the ImpersonationEvent entity.
@@ -4995,12 +5034,12 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
-	if _u.mutation.ProgramOwnerCleared() {
+	if _u.mutation.ProgramsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.ProgramOwnerTable,
-			Columns: []string{user.ProgramOwnerColumn},
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
@@ -5009,12 +5048,29 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 		edge.Schema = _u.schemaConfig.Program
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := _u.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+	if nodes := _u.mutation.RemovedProgramsOwnedIDs(); len(nodes) > 0 && !_u.mutation.ProgramsOwnedCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.ProgramOwnerTable,
-			Columns: []string{user.ProgramOwnerColumn},
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Program
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ProgramsOwnedIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),

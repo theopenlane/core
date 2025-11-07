@@ -104,8 +104,8 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgeUsers holds the string denoting the users edge name in mutations.
 	EdgeUsers = "users"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
+	// EdgeProgramOwner holds the string denoting the program_owner edge name in mutations.
+	EdgeProgramOwner = "program_owner"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the program in the database.
@@ -208,13 +208,13 @@ const (
 	// UsersInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
 	UsersInverseTable = "users"
-	// UserTable is the table that holds the user relation/edge.
-	UserTable = "programs"
-	// UserInverseTable is the table name for the User entity.
+	// ProgramOwnerTable is the table that holds the program_owner relation/edge.
+	ProgramOwnerTable = "programs"
+	// ProgramOwnerInverseTable is the table name for the User entity.
 	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
-	// UserColumn is the table column denoting the user relation/edge.
-	UserColumn = "program_owner_id"
+	ProgramOwnerInverseTable = "users"
+	// ProgramOwnerColumn is the table column denoting the program_owner relation/edge.
+	ProgramOwnerColumn = "program_owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "program_memberships"
 	// MembersInverseTable is the table name for the ProgramMembership entity.
@@ -749,10 +749,10 @@ func ByUsers(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByUserField orders the results by user field.
-func ByUserField(field string, opts ...sql.OrderTermOption) OrderOption {
+// ByProgramOwnerField orders the results by program_owner field.
+func ByProgramOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), sql.OrderByField(field, opts...))
+		sqlgraph.OrderByNeighborTerms(s, newProgramOwnerStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -895,11 +895,11 @@ func newUsersStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, true, UsersTable, UsersPrimaryKey...),
 	)
 }
-func newUserStep() *sqlgraph.Step {
+func newProgramOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, UserTable, UserColumn),
+		sqlgraph.To(ProgramOwnerInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, ProgramOwnerTable, ProgramOwnerColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

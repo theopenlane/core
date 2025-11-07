@@ -641,23 +641,19 @@ func (_c *UserCreate) AddPrograms(v ...*Program) *UserCreate {
 	return _c.AddProgramIDs(ids...)
 }
 
-// SetProgramOwnerID sets the "program_owner" edge to the Program entity by ID.
-func (_c *UserCreate) SetProgramOwnerID(id string) *UserCreate {
-	_c.mutation.SetProgramOwnerID(id)
+// AddProgramsOwnedIDs adds the "programs_owned" edge to the Program entity by IDs.
+func (_c *UserCreate) AddProgramsOwnedIDs(ids ...string) *UserCreate {
+	_c.mutation.AddProgramsOwnedIDs(ids...)
 	return _c
 }
 
-// SetNillableProgramOwnerID sets the "program_owner" edge to the Program entity by ID if the given value is not nil.
-func (_c *UserCreate) SetNillableProgramOwnerID(id *string) *UserCreate {
-	if id != nil {
-		_c = _c.SetProgramOwnerID(*id)
+// AddProgramsOwned adds the "programs_owned" edges to the Program entity.
+func (_c *UserCreate) AddProgramsOwned(v ...*Program) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
 	}
-	return _c
-}
-
-// SetProgramOwner sets the "program_owner" edge to the Program entity.
-func (_c *UserCreate) SetProgramOwner(v *Program) *UserCreate {
-	return _c.SetProgramOwnerID(v.ID)
+	return _c.AddProgramsOwnedIDs(ids...)
 }
 
 // AddImpersonationEventIDs adds the "impersonation_events" edge to the ImpersonationEvent entity by IDs.
@@ -1328,12 +1324,12 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.ProgramOwnerIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.ProgramsOwnedIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   user.ProgramOwnerTable,
-			Columns: []string{user.ProgramOwnerColumn},
+			Table:   user.ProgramsOwnedTable,
+			Columns: []string{user.ProgramsOwnedColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(program.FieldID, field.TypeString),
