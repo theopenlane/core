@@ -21,7 +21,7 @@ var DefaultIDGenerator = func() string {
 
 // DefaultPanicHandler handles panics by printing the panic value
 var DefaultPanicHandler = func(p any) {
-	log.Error().Msgf("Panic occurred processing event: %v", p)
+	log.Error().Msgf("panic occurred processing event: %v", p)
 }
 
 // WithErrorHandler sets a custom error handler for an Soiree
