@@ -135,6 +135,15 @@ func (t TrustCenter) Edges() []ent.Edge {
 			edgeSchema:    Template{},
 			cascadeDelete: "TrustCenter",
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: t,
+			name:       "posts",
+			t:          Note.Type,
+			comment:    "posts for the trust center feed",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 	}
 }
 

@@ -94,6 +94,7 @@ query GetAllTrustCenters {
     }
   }
 }
+
 query GetTrustCenterByID($trustCenterId: ID!) {
   trustCenter(id: $trustCenterId) {
     createdAt
@@ -182,6 +183,7 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
     }
   }
 }
+
 mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
   updateTrustCenter(id: $updateTrustCenterId, input: $input) {
     trustCenter {
@@ -218,6 +220,13 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
         foregroundColor
         backgroundColor
         accentColor
+      }
+      posts {
+        edges {
+          node {
+            text
+          }
+        }
       }
     }
   }

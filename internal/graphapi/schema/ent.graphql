@@ -11452,6 +11452,7 @@ input CreateNoteInput {
   procedureID: ID
   riskID: ID
   internalPolicyID: ID
+  trustCenterID: ID
   fileIDs: [ID!]
 }
 """
@@ -12757,6 +12758,7 @@ input CreateTrustCenterInput {
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
   templateIDs: [ID!]
+  postIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -34808,6 +34810,7 @@ type Note implements Node {
   procedure: Procedure
   risk: Risk
   internalPolicy: InternalPolicy
+  trustCenter: TrustCenter
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -35309,6 +35312,11 @@ input NoteWhereInput {
   """
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
   """
   files edge predicates
   """
@@ -62518,6 +62526,37 @@ type TrustCenter implements Node {
     """
     where: TemplateWhereInput
   ): TemplateConnection!
+  posts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -66368,6 +66407,11 @@ input TrustCenterWhereInput {
   """
   hasTemplates: Boolean
   hasTemplatesWith: [TemplateWhereInput!]
+  """
+  posts edge predicates
+  """
+  hasPosts: Boolean
+  hasPostsWith: [NoteWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -68798,6 +68842,8 @@ input UpdateNoteInput {
   clearRisk: Boolean
   internalPolicyID: ID
   clearInternalPolicy: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -70689,6 +70735,9 @@ input UpdateTrustCenterInput {
   addTemplateIDs: [ID!]
   removeTemplateIDs: [ID!]
   clearTemplates: Boolean
+  addPostIDs: [ID!]
+  removePostIDs: [ID!]
+  clearPosts: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.

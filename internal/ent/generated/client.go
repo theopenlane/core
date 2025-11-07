@@ -16071,6 +16071,25 @@ func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
 	return query
 }
 
+// QueryTrustCenter queries the trust_center edge of a Note.
+func (c *NoteClient) QueryTrustCenter(_m *Note) *TrustCenterQuery {
+	query := (&TrustCenterClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.TrustCenterTable, note.TrustCenterColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryFiles queries the files edge of a Note.
 func (c *NoteClient) QueryFiles(_m *Note) *FileQuery {
 	query := (&FileClient{config: c.config}).Query()
@@ -27422,6 +27441,25 @@ func (c *TrustCenterClient) QueryTemplates(_m *TrustCenter) *TemplateQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Template
 		step.Edge.Schema = schemaConfig.Template
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPosts queries the posts edge of a TrustCenter.
+func (c *TrustCenterClient) QueryPosts(_m *TrustCenter) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.PostsTable, trustcenter.PostsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

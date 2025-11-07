@@ -538,7 +538,7 @@ func handleOrganizationCreated(event soiree.Event) error {
 		WithSetting().
 		Only(allowCtx)
 	if err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization")
 
 		return err
 	}
@@ -557,23 +557,23 @@ func handleOrganizationCreated(event soiree.Event) error {
 
 	orgCustomer, err = updateOrgCustomerWithSubscription(allowCtx, orgSubs, orgCustomer, org)
 	if err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to fetch organization from subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to fetch organization from subscription")
 
 		return nil
 	}
 
 	orgCustomer = catalog.PopulatePricesForOrganizationCustomer(orgCustomer, client.EntConfig.Modules.UseSandbox)
 
-	logx.FromContext(event.Context()).Debug().Msgf("Prices attached to organization customer: %+v", orgCustomer.Prices)
+	logx.FromContext(event.Context()).Debug().Msgf("prices attached to organization customer: %+v", orgCustomer.Prices)
 
 	if err = entMgr.CreateCustomerAndSubscription(allowCtx, orgCustomer); err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to create customer")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to create customer")
 
 		return err
 	}
 
 	if err := updateCustomerOrgSub(allowCtx, orgCustomer, client); err != nil {
-		logx.FromContext(event.Context()).Err(err).Msg("Failed to map customer to org subscription")
+		logx.FromContext(event.Context()).Err(err).Msg("failed to map customer to org subscription")
 
 		return err
 	}

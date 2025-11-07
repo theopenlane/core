@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
@@ -171,6 +172,30 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 
 	return &model.InternalPolicyUpdatePayload{
 		InternalPolicy: objectRes,
+	}, nil
+}
+
+// UpdateTrustCenterPost is the resolver for the updateTrustCenterPost field.
+func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.HasPostsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+	}
+
+	return &model.TrustCenterUpdatePayload{
+		TrustCenter: objectRes,
 	}, nil
 }
 
@@ -421,6 +446,44 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 
 // DeleteComment is the resolver for the deleteComment field.
 func (r *updateTaskInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateTaskInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddPost is the resolver for the addPost field.
+func (r *updateTrustCenterInputResolver) AddPost(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.TrustCenterID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.TrustCenterID == nil {
+		return newNotFoundError("trust center")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeletePost is the resolver for the deletePost field.
+func (r *updateTrustCenterInputResolver) DeletePost(ctx context.Context, obj *generated.UpdateTrustCenterInput, data *string) error {
 	if data == nil {
 		return nil
 	}

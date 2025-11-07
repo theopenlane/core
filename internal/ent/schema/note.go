@@ -96,6 +96,11 @@ func (n Note) Edges() []ent.Edge {
 			edgeSchema: InternalPolicy{},
 			ref:        "comments",
 		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: TrustCenter{},
+			ref:        "posts",
+		}),
 		defaultEdgeToWithPagination(n, File{}),
 	}
 }

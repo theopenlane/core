@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 )
 
 // NoteCreate is the builder for creating a Note entity.
@@ -269,6 +270,25 @@ func (_c *NoteCreate) SetNillableInternalPolicyID(id *string) *NoteCreate {
 // SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
 func (_c *NoteCreate) SetInternalPolicy(v *InternalPolicy) *NoteCreate {
 	return _c.SetInternalPolicyID(v.ID)
+}
+
+// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
+func (_c *NoteCreate) SetTrustCenterID(id string) *NoteCreate {
+	_c.mutation.SetTrustCenterID(id)
+	return _c
+}
+
+// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableTrustCenterID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetTrustCenterID(*id)
+	}
+	return _c
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_c *NoteCreate) SetTrustCenter(v *TrustCenter) *NoteCreate {
+	return _c.SetTrustCenterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -562,6 +582,24 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.internal_policy_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.trust_center_posts = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {

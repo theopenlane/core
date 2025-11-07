@@ -8715,6 +8715,7 @@ type CreateNoteInput struct {
 	ProcedureID      *string
 	RiskID           *string
 	InternalPolicyID *string
+	TrustCenterID    *string
 	FileIDs          []string
 }
 
@@ -8742,6 +8743,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
 	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
@@ -8768,6 +8772,8 @@ type UpdateNoteInput struct {
 	RiskID              *string
 	ClearInternalPolicy bool
 	InternalPolicyID    *string
+	ClearTrustCenter    bool
+	TrustCenterID       *string
 	ClearFiles          bool
 	AddFileIDs          []string
 	RemoveFileIDs       []string
@@ -8813,6 +8819,12 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()
@@ -15514,6 +15526,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterDocIDs          []string
 	TrustCenterComplianceIDs   []string
 	TemplateIDs                []string
+	PostIDs                    []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -15544,6 +15557,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.TemplateIDs; len(v) > 0 {
 		m.AddTemplateIDs(v...)
+	}
+	if v := i.PostIDs; len(v) > 0 {
+		m.AddPostIDs(v...)
 	}
 }
 
@@ -15578,6 +15594,9 @@ type UpdateTrustCenterInput struct {
 	ClearTemplates                   bool
 	AddTemplateIDs                   []string
 	RemoveTemplateIDs                []string
+	ClearPosts                       bool
+	AddPostIDs                       []string
+	RemovePostIDs                    []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -15650,6 +15669,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemoveTemplateIDs; len(v) > 0 {
 		m.RemoveTemplateIDs(v...)
+	}
+	if i.ClearPosts {
+		m.ClearPosts()
+	}
+	if v := i.AddPostIDs; len(v) > 0 {
+		m.AddPostIDs(v...)
+	}
+	if v := i.RemovePostIDs; len(v) > 0 {
+		m.RemovePostIDs(v...)
 	}
 }
 

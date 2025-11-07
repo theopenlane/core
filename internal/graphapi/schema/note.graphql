@@ -40,6 +40,17 @@ extend input UpdateProcedureInput {
     deleteComment: ID
 }
 
+extend input UpdateTrustCenterInput {
+    """
+    adds a post for the trust center feed
+    """
+    addPost: CreateNoteInput
+    """
+    delete a post from the trust center feed
+    """
+    deletePost: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -143,6 +154,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): InternalPolicyUpdatePayload!
+     """
+    Update an existing trust center post
+    """
+    updateTrustCenterPost(
+        """
+        ID of the update
+        """
+        id: ID!
+        """
+        New values for the post
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the post
+        """
+        noteFiles: [Upload!]
+    ): TrustCenterUpdatePayload!
     """
     Delete an existing note
     """
