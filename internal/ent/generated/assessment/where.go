@@ -934,7 +934,7 @@ func HasTemplate() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Template

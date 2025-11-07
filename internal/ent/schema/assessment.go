@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -70,11 +71,14 @@ func (a Assessment) Mixin() []ent.Mixin {
 
 func (a Assessment) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}
@@ -83,7 +87,7 @@ func (a Assessment) Edges() []ent.Edge {
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+			// policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

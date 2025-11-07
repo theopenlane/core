@@ -15350,6 +15350,7 @@ type CreateTemplateInput struct {
 	DocumentIDs      []string
 	FileIDs          []string
 	TrustCenterID    *string
+	AssessmentIDs    []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -15391,6 +15392,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -15425,6 +15429,9 @@ type UpdateTemplateInput struct {
 	RemoveFileIDs         []string
 	ClearTrustCenter      bool
 	TrustCenterID         *string
+	ClearAssessments      bool
+	AddAssessmentIDs      []string
+	RemoveAssessmentIDs   []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -15500,6 +15507,15 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
 	}
 }
 

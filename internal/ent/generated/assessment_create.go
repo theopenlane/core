@@ -499,7 +499,7 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,

@@ -5897,6 +5897,7 @@ type ComplexityRoot struct {
 	}
 
 	Template struct {
+		Assessments      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
@@ -40612,6 +40613,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskUpdatePayload.Task(childComplexity), true
 
+	case "Template.assessments":
+		if e.complexity.Template.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_Template_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+
 	case "Template.createdAt":
 		if e.complexity.Template.CreatedAt == nil {
 			break
@@ -61578,6 +61591,7 @@ input CreateTemplateInput {
   documentIDs: [ID!]
   fileIDs: [ID!]
   trustCenterID: ID
+  assessmentIDs: [ID!]
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -110579,6 +110593,37 @@ type Template implements Node {
     where: FileWhereInput
   ): FileConnection!
   trustCenter: TrustCenter
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
 }
 """
 A connection to a list of items.
@@ -111262,6 +111307,11 @@ input TemplateWhereInput {
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
 }
 """
 The builtin Time type
@@ -119627,6 +119677,9 @@ input UpdateTemplateInput {
   clearFiles: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  addAssessmentIDs: [ID!]
+  removeAssessmentIDs: [ID!]
+  clearAssessments: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
