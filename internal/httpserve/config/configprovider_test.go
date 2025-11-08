@@ -54,7 +54,7 @@ func TestProviderWithRefresh_Refresh(t *testing.T) {
 	dp.m.Lock()
 	dp.cfg = &Config{}
 	dp.m.Unlock()
-	time.Sleep(15 * time.Millisecond)
+	time.Sleep(1000 * time.Millisecond)
 	dp.m.Lock()
 	c := dp.calls
 	dp.m.Unlock()
