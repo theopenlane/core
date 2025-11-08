@@ -189,6 +189,15 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		},
 	}
 
+	if cust.Prices == nil && r.db != nil && r.db.EntConfig != nil {
+		// Mutations that create orgs no longer populate prices inline; seed the defaults here so
+		// the reconciler mirrors the legacy PopulatePricesForOrganizationCustomer behavior.
+		modules := &r.db.EntConfig.Modules
+		useSandbox := modules.UseSandbox
+
+		cust.Prices = internalentitlements.TrialMonthlyPrices(useSandbox)
+	}
+
 	// Set metadata for personal organizations
 	if org.PersonalOrg {
 		cust.Metadata = map[string]string{
@@ -203,12 +212,11 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 	}
 
 	// make sure the customer id is set on the org
-	if org.StripeCustomerID == nil && cust.StripeCustomerID != "" {
-		err := r.db.Organization.UpdateOneID(cust.OrganizationID).
+	if cust.StripeCustomerID != "" && (org.StripeCustomerID == nil || *org.StripeCustomerID != cust.StripeCustomerID) {
+		if err := r.db.Organization.UpdateOneID(cust.OrganizationID).
 			SetStripeCustomerID(cust.StripeCustomerID).
-			Exec(internalCtx)
-		if err != nil {
-			return err
+			Exec(internalCtx); err != nil {
+			return fmt.Errorf("update organization stripe customer id: %w", err)
 		}
 	}
 
@@ -244,7 +252,11 @@ func (r *Reconciler) createSubscription(ctx context.Context, cust *entitlements.
 		return ErrMultipleCustomers
 	}
 
-	cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+	if len(cust.Prices) == 0 && r.db != nil && r.db.EntConfig != nil {
+		// Ensure a deterministic subscription payload even when Stripe did not return prices.
+		// This keeps the reconciler idempotent across retries.
+		cust.Prices = internalentitlements.TrialMonthlyPrices(r.db.EntConfig.Modules.UseSandbox)
+	}
 	if len(cust.Prices) == 0 {
 		return ErrMissingPrice
 	}

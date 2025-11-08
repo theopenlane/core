@@ -8,7 +8,7 @@ import (
 
 // mockListener simulates a listener function for testing.
 func mockListener(id string, shouldError bool) Listener {
-	return func(e Event) error {
+	return func(_ *EventContext) error {
 		if shouldError {
 			return errors.New("listener error " + id) // nolint: err113
 		}
