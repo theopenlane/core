@@ -244,6 +244,16 @@ func (m *EventPool) EnsureTopic(topicName string) *Topic {
 	return topic.(*Topic)
 }
 
+// InterestedIn reports whether any listeners are registered for the given topic.
+func (m *EventPool) InterestedIn(topicName string) bool {
+	topic, err := m.GetTopic(topicName)
+	if err != nil {
+		return false
+	}
+
+	return topic.HasListeners()
+}
+
 // SetErrorHandler sets the error handler for the event pool
 func (m *EventPool) SetErrorHandler(handler func(Event, error) error) {
 	if handler != nil {
@@ -300,6 +310,22 @@ func (m *EventPool) SetRetry(retries int, factory func() backoff.BackOff) {
 	}
 }
 
+// RegisterListeners registers all provided listener bindings on the pool and returns the generated listener IDs
+func (m *EventPool) RegisterListeners(bindings ...ListenerBinding) ([]string, error) {
+	ids := make([]string, 0, len(bindings))
+
+	for _, binding := range bindings {
+		id, err := binding.registerWith(m)
+		if err != nil {
+			return ids, err
+		}
+
+		ids = append(ids, id)
+	}
+
+	return ids, nil
+}
+
 // triggerWithRetry executes topic listeners with retry and persistence
 func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 	topic.mu.RLock()
@@ -313,7 +339,7 @@ func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 			continue
 		}
 
-		if err := m.runListenerWithRetry(event, id, item.listener); err != nil {
+		if err := m.runListenerWithRetry(event, id, item); err != nil {
 			errs = append(errs, err)
 		}
 
@@ -325,8 +351,8 @@ func (m *EventPool) triggerWithRetry(topic *Topic, event Event) []error {
 	return errs
 }
 
-// runListenerWithRetry executes a listener with retry logic and persistence
-func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listener) error {
+// runListenerWithRetry executes a listener with retry logic and persistence.
+func (m *EventPool) runListenerWithRetry(event Event, id string, item *listenerItem) error {
 	retries := m.maxRetries
 	if retries <= 0 {
 		retries = 1
@@ -337,9 +363,11 @@ func (m *EventPool) runListenerWithRetry(event Event, id string, listener Listen
 	var lastErr error
 
 	for i := 0; i < retries; i++ {
-		lastErr = listener(event)
+		ctx := newEventContext(event)
+
+		lastErr = item.call(ctx)
 		if m.store != nil {
-			_ = m.store.SaveHandlerResult(event, id, lastErr)
+			_ = m.store.SaveHandlerResult(ctx.Event(), id, lastErr)
 		}
 
 		if lastErr == nil {
