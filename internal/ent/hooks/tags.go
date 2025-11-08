@@ -56,7 +56,12 @@ func HookTags() ent.Hook {
 					if err := mut.Client().TagDefinition.Create().
 						SetInput(input).
 						Exec(ctx); err != nil {
-						log.Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
+						if !generated.IsConstraintError(err) {
+							log.Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
+						}
+
+						// else, another process created it, so we can ignore the error
+						log.Debug().Str("tag", tag).Msg("tag definition already exists, skipping creation")
 					}
 				} else if err != nil {
 					log.Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
