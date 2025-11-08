@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/template"
@@ -42,6 +43,7 @@ type TrustCenterQuery struct {
 	withTrustCenterDocs               *TrustCenterDocQuery
 	withTrustCenterCompliances        *TrustCenterComplianceQuery
 	withTemplates                     *TemplateQuery
+	withPosts                         *NoteQuery
 	withFKs                           bool
 	loadTotal                         []func(context.Context, []*TrustCenter) error
 	modifiers                         []func(*sql.Selector)
@@ -49,6 +51,7 @@ type TrustCenterQuery struct {
 	withNamedTrustCenterDocs          map[string]*TrustCenterDocQuery
 	withNamedTrustCenterCompliances   map[string]*TrustCenterComplianceQuery
 	withNamedTemplates                map[string]*TemplateQuery
+	withNamedPosts                    map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -285,6 +288,31 @@ func (_q *TrustCenterQuery) QueryTemplates() *TemplateQuery {
 	return query
 }
 
+// QueryPosts chains the current query on the "posts" edge.
+func (_q *TrustCenterQuery) QueryPosts() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, trustcenter.PostsTable, trustcenter.PostsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first TrustCenter entity from the query.
 // Returns a *NotFoundError when no TrustCenter was found.
 func (_q *TrustCenterQuery) First(ctx context.Context) (*TrustCenter, error) {
@@ -485,6 +513,7 @@ func (_q *TrustCenterQuery) Clone() *TrustCenterQuery {
 		withTrustCenterDocs:          _q.withTrustCenterDocs.Clone(),
 		withTrustCenterCompliances:   _q.withTrustCenterCompliances.Clone(),
 		withTemplates:                _q.withTemplates.Clone(),
+		withPosts:                    _q.withPosts.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -580,6 +609,17 @@ func (_q *TrustCenterQuery) WithTemplates(opts ...func(*TemplateQuery)) *TrustCe
 	return _q
 }
 
+// WithPosts tells the query-builder to eager-load the nodes that are connected to
+// the "posts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithPosts(opts ...func(*NoteQuery)) *TrustCenterQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPosts = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -665,7 +705,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*TrustCenter{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
 			_q.withCustomDomain != nil,
 			_q.withSetting != nil,
@@ -674,6 +714,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withTrustCenterDocs != nil,
 			_q.withTrustCenterCompliances != nil,
 			_q.withTemplates != nil,
+			_q.withPosts != nil,
 		}
 	)
 	if _q.withWatermarkConfig != nil {
@@ -761,6 +802,13 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withPosts; query != nil {
+		if err := _q.loadPosts(ctx, query, nodes,
+			func(n *TrustCenter) { n.Edges.Posts = []*Note{} },
+			func(n *TrustCenter, e *Note) { n.Edges.Posts = append(n.Edges.Posts, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedTrustCenterSubprocessors {
 		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterSubprocessors(name) },
@@ -786,6 +834,13 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		if err := _q.loadTemplates(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTemplates(name) },
 			func(n *TrustCenter, e *Template) { n.appendNamedTemplates(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedPosts {
+		if err := _q.loadPosts(ctx, query, nodes,
+			func(n *TrustCenter) { n.appendNamedPosts(name) },
+			func(n *TrustCenter, e *Note) { n.appendNamedPosts(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1034,6 +1089,37 @@ func (_q *TrustCenterQuery) loadTemplates(ctx context.Context, query *TemplateQu
 	}
 	return nil
 }
+func (_q *TrustCenterQuery) loadPosts(ctx context.Context, query *NoteQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*TrustCenter)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(trustcenter.PostsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.trust_center_posts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "trust_center_posts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_posts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *TrustCenterQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1192,6 +1278,20 @@ func (_q *TrustCenterQuery) WithNamedTemplates(name string, opts ...func(*Templa
 		_q.withNamedTemplates = make(map[string]*TemplateQuery)
 	}
 	_q.withNamedTemplates[name] = query
+	return _q
+}
+
+// WithNamedPosts tells the query-builder to eager-load the nodes that are connected to the "posts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithNamedPosts(name string, opts ...func(*NoteQuery)) *TrustCenterQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedPosts == nil {
+		_q.withNamedPosts = make(map[string]*NoteQuery)
+	}
+	_q.withNamedPosts[name] = query
 	return _q
 }
 
