@@ -123,6 +123,8 @@ type Server struct {
 	GraphPool PondPool `json:"graphPool" koanf:"graphPool"`
 	// EnableGraphExtensions enables the graph extensions for the graph resolvers
 	EnableGraphExtensions bool `json:"enableGraphExtensions" koanf:"enableGraphExtensions" default:"true"`
+	// EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse
+	EnableGraphSubscriptions bool `json:"enableGraphSubscriptions" koanf:"enableGraphSubscriptions" default:"false"`
 	// ComplexityLimit sets the maximum complexity allowed for a query
 	ComplexityLimit int `json:"complexityLimit" koanf:"complexityLimit" default:"100"`
 	// MaxResultLimit sets the maximum number of results allowed for a query

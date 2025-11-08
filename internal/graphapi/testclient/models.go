@@ -34624,6 +34624,9 @@ type SubscriberWhereInput struct {
 	HasEventsWith []*EventWhereInput `json:"hasEventsWith,omitempty"`
 }
 
+type Subscription struct {
+}
+
 type TFASetting struct {
 	ID        string     `json:"id"`
 	CreatedAt *time.Time `json:"createdAt,omitempty"`

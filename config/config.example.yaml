@@ -346,6 +346,7 @@ server:
     defaultTrustCenterDomain: ""
     dev: false
     enableGraphExtensions: true
+    enableGraphSubscriptions: false
     fieldLevelEncryption:
         enabled: false
         keyset: ""

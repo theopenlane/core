@@ -225,6 +225,10 @@
           "type": "boolean",
           "description": "EnableGraphExtensions enables the graph extensions for the graph resolvers"
         },
+        "enableGraphSubscriptions": {
+          "type": "boolean",
+          "description": "EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse"
+        },
         "complexityLimit": {
           "type": "integer",
           "description": "ComplexityLimit sets the maximum complexity allowed for a query"

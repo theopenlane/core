@@ -51,6 +51,7 @@ data:
   CORE_SERVER_MIME_DEFAULTCONTENTTYPE: {{ .Values.openlane.coreConfiguration.server.mime.defaultContentType | quote | default "application/data" }}
   CORE_SERVER_GRAPHPOOL_MAXWORKERS: {{ .Values.openlane.coreConfiguration.server.graphPool.maxWorkers | quote | default "100" }}
   CORE_SERVER_ENABLEGRAPHEXTENSIONS: {{ .Values.openlane.coreConfiguration.server.enableGraphExtensions | quote | default "true" }}
+  CORE_SERVER_ENABLEGRAPHSUBSCRIPTIONS: {{ .Values.openlane.coreConfiguration.server.enableGraphSubscriptions | quote | default "false" }}
   CORE_SERVER_COMPLEXITYLIMIT: {{ .Values.openlane.coreConfiguration.server.complexityLimit | quote | default "100" }}
   CORE_SERVER_MAXRESULTLIMIT: {{ .Values.openlane.coreConfiguration.server.maxResultLimit | quote | default "100" }}
   CORE_SERVER_CSRFPROTECTION_ENABLED: {{ .Values.openlane.coreConfiguration.server.csrfProtection.enabled | quote | default "false" }}

@@ -1,7 +1,7 @@
 // package main is the entry point
 package main
 
-import (
+import ( 
 	"github.com/theopenlane/core/cmd"
 	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
 )

@@ -70313,6 +70313,12 @@ input SubscriberWhereInput {
 	hasEvents: Boolean
 	hasEventsWith: [EventWhereInput!]
 }
+type Subscription {
+	"""
+	Subscribe to task creation events for the authenticated user
+	"""
+	taskCreated: Task!
+}
 type TFASetting implements Node {
 	id: ID!
 	createdAt: Time
