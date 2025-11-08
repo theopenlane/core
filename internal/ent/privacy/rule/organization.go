@@ -245,7 +245,7 @@ func HasOrgMutationAccess() privacy.OrganizationMutationRuleFunc {
 		}
 
 		// deny if it was a mutation is not allowed
-		logx.FromContext(ctx).Error().Str("relation", relation).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", user.OrganizationID).Msg("request denied by access for user in organization")
+		logx.FromContext(ctx).Info().Str("relation", relation).Str("subject_id", user.SubjectID).Str("email", user.SubjectEmail).Str("organization_id", user.OrganizationID).Msg("request denied by access for user in organization")
 
 		return generated.ErrPermissionDenied
 	})
