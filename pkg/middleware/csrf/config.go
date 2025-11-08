@@ -73,6 +73,7 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 
 // csrfSkipperFunc is the function that determines if the csrf token check should be skipped
 // due to the request being a PAT or API Token auth request
+// or a graphql read-only query request
 var csrfSkipperFunc = func(c echo.Context) bool {
 	ac := auth.GetAuthTypeFromEchoContext(c)
 
