@@ -294,7 +294,7 @@ apply_helm_config_changes() {
     if [[ -f "$source_dir/configmap-config-file.yaml" ]]; then
         if copy_and_track \
             "$source_dir/configmap-config-file.yaml" \
-            "$chart_dir/templates/core-configmap.yaml" \
+            "$chart_dir/templates/core-configmap-file.yaml" \
             "ConfigMap template" 2>&1; then
             changes_made=true
             change_summary+="\n- ✅ Updated ConfigMap template"

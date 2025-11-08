@@ -395,12 +395,12 @@ subscription:
     privateStripeKey: ""
     stripeBillingPortalSuccessURL: https://console.theopenlane.io/organization-settings/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
-    stripeWebhookAPIVersion: 2025-10-29.clover
+    stripeWebhookAPIVersion: 2025_10_29_CLOVER
     stripeWebhookDiscardAPIVersion: ""
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
     stripeWebhookSecrets:
-        2025-10-29.clover: ""
+        2025_10_29_CLOVER: ""
     stripeWebhookURL: https://api.theopenlane.io/stripe/webhook
 totp:
     codeLength: 6

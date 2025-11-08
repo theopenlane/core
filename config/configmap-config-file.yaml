@@ -570,7 +570,7 @@ data:
       {{- else }}
       stripeWebhookEvents: []
       {{- end }}
-      stripeWebhookAPIVersion: {{ default "2025-10-29.clover" .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote }}
+      stripeWebhookAPIVersion: {{ default "2025_10_29_CLOVER" .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote }}
       stripeWebhookDiscardAPIVersion: {{ default "" .Values.openlane.coreConfiguration.subscription.stripeWebhookDiscardAPIVersion | quote }}
     keywatcher:
       enabled: {{ default false .Values.openlane.coreConfiguration.keywatcher.enabled }}
