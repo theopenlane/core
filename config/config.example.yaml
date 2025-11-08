@@ -374,7 +374,6 @@ server:
         autoCert: false
         certFile: server.crt
         certKey: server.key
-        config: null
         enabled: false
     trustCenterCnameTarget: ""
     writeTimeout: 15000000000
