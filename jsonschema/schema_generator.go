@@ -765,7 +765,7 @@ func writeConfigYAML(builder *strings.Builder, val reflect.Value, path []string,
 
 		switch fieldValue.Kind() {
 		case reflect.Struct:
-			if err := writeStructField(builder, key, fieldValue, appendPath(path, key), indent); err != nil {
+			if err := writeStructField(builder, key, helmRef, fieldValue, appendPath(path, key), indent); err != nil {
 				return err
 			}
 		case reflect.Map:
@@ -780,8 +780,8 @@ func writeConfigYAML(builder *strings.Builder, val reflect.Value, path []string,
 	return nil
 }
 
-// writeStructField renders a nested struct block.
-func writeStructField(builder *strings.Builder, key string, value reflect.Value, path []string, indent int) error {
+// writeStructField renders a nested struct block guarded by Helm conditionals.
+func writeStructField(builder *strings.Builder, key, helmRef string, value reflect.Value, path []string, indent int) error {
 	var inner strings.Builder
 	if err := writeConfigYAML(&inner, value, path, indent+2); err != nil {
 		return err
@@ -789,12 +789,13 @@ func writeStructField(builder *strings.Builder, key string, value reflect.Value,
 
 	indentStr := strings.Repeat(" ", indent)
 	if inner.Len() == 0 {
-		builder.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, key))
 		return nil
 	}
 
+	builder.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
 	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
 	builder.WriteString(inner.String())
+	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 	return nil
 }
 
@@ -805,8 +806,6 @@ func writeSliceField(builder *strings.Builder, key, helmRef string, indent int) 
 	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $sliceValue) 0 }}\n", indentStr))
 	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
 	builder.WriteString(fmt.Sprintf("%s{{ toYaml $sliceValue | nindent %d }}\n", indentStr, indent+2))
-	builder.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
-	builder.WriteString(fmt.Sprintf("%s%s: []\n", indentStr, key))
 	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 }
 
@@ -817,20 +816,21 @@ func writeMapField(builder *strings.Builder, key, helmRef string, indent int) {
 	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $mapValue) 0 }}\n", indentStr))
 	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
 	builder.WriteString(fmt.Sprintf("%s{{ toYaml $mapValue | nindent %d }}\n", indentStr, indent+2))
-	builder.WriteString(fmt.Sprintf("%s{{- else }}\n", indentStr))
-	builder.WriteString(fmt.Sprintf("%s%s: {}\n", indentStr, key))
 	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 }
 
 // formatScalarFieldLine renders a single scalar field with Helm defaults.
 func formatScalarFieldLine(key, helmRef string, value reflect.Value, indent int) string {
 	indentStr := strings.Repeat(" ", indent)
-	defaultLiteral := formatScalarDefaultLiteral(value)
+	var builder strings.Builder
+	builder.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
 	if needsQuotes(value) {
-		return fmt.Sprintf("%s%s: {{ default %s %s | quote }}\n", indentStr, key, defaultLiteral, helmRef)
+		builder.WriteString(fmt.Sprintf("%s%s: {{ %s | quote }}\n", indentStr, key, helmRef))
+	} else {
+		builder.WriteString(fmt.Sprintf("%s%s: {{ %s }}\n", indentStr, key, helmRef))
 	}
-
-	return fmt.Sprintf("%s%s: {{ default %s %s }}\n", indentStr, key, defaultLiteral, helmRef)
+	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
+	return builder.String()
 }
 
 // formatScalarDefaultLiteral converts a scalar value into a Helm-friendly literal.
