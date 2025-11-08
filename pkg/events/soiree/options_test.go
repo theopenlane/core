@@ -8,6 +8,28 @@ import (
 	"github.com/cenkalti/backoff/v5"
 )
 
+func defaultTopic() TypedTopic[Event] {
+	return NewTypedTopic(
+		"testTopic",
+		func(e Event) Event { return e },
+		func(e Event) (Event, error) { return e, nil },
+	)
+}
+
+func subscribeDefaultTopic(pool *EventPool, listener TypedListener[Event], opts ...ListenerOption) (string, error) {
+	return BindListener(defaultTopic(), listener, opts...).Register(pool)
+}
+
+func emitDefaultTopicSync(pool *EventPool, payload any) []error {
+	topic := defaultTopic()
+	return pool.EmitSync(topic.Name(), NewBaseEvent(topic.Name(), payload))
+}
+
+func emitDefaultTopicAsync(pool *EventPool, payload any) <-chan error {
+	topic := defaultTopic()
+	return pool.Emit(topic.Name(), NewBaseEvent(topic.Name(), payload))
+}
+
 const errorMessage = "On() failed with error: %v"
 
 // TestWithErrorHandler tests that the custom error handler is called on error
@@ -33,17 +55,16 @@ func TestWithErrorHandler(t *testing.T) {
 	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
 
 	// Define a listener that returns the custom error
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
 
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
 	// Emit the event synchronously to trigger the error
-	soiree.EmitSync("testTopic", NewBaseEvent("testTopic", "testPayload"))
+	emitDefaultTopicSync(soiree, "testPayload")
 
 	// Check if the custom error handler was called
 	if !handlerCalled {
@@ -77,18 +98,17 @@ func TestWithErrorHandlerAsync(t *testing.T) {
 	soiree := NewEventPool(WithErrorHandler(customErrorHandler))
 
 	// Define a listener that returns the custom error
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return customError
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("Error occurred: %v", err)
 	}
 
 	// Emit the event asynchronously to trigger the error
-	errChan := soiree.Emit("testTopic", NewBaseEvent("testTopic", "testPayload"))
+	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
 	// Wait for all errors to be processed
 	for err := range errChan {
@@ -122,13 +142,12 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
 
 	// Define a listener that panics
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf("errorMessage: %v", err)
 	}
 
@@ -141,7 +160,7 @@ func TestWithPanicHandlerSync(t *testing.T) {
 	}()
 
 	// Emit the event synchronously to trigger the panic
-	soiree.EmitSync("testTopic", "testPayload")
+	emitDefaultTopicSync(soiree, "testPayload")
 
 	// Verify that the custom panic handler was invoked
 	if !panicHandlerInvoked {
@@ -169,18 +188,17 @@ func TestWithPanicHandlerAsync(t *testing.T) {
 	soiree := NewEventPool(WithPanicHandler(customPanicHandler))
 
 	// Define a listener that panics
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		panic("test panic")
 	}
 
 	// Subscribe the listener to a topic
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
+	if _, err := subscribeDefaultTopic(soiree, listener); err != nil {
 		t.Fatalf(errorMessage, err)
 	}
 
 	// Emit the event asynchronously to trigger the panic
-	errChan := soiree.Emit("testTopic", "testPayload")
+	errChan := emitDefaultTopicAsync(soiree, "testPayload")
 
 	// Wait for all events to be processed (which includes recovering from panic)
 	for range errChan {
@@ -210,12 +228,12 @@ func TestWithIDGenerator(t *testing.T) {
 	soiree := NewEventPool(WithIDGenerator(customIDGenerator))
 
 	// Define a no-op listener
-	listener := func(e Event) error {
+	listener := func(_ *EventContext, e Event) error {
 		return nil
 	}
 
 	// Subscribe the listener to a topic and capture the returned ID
-	returnedID, err := soiree.On("testTopic", listener)
+	returnedID, err := subscribeDefaultTopic(soiree, listener)
 	if err != nil {
 		t.Fatalf(errorMessage, err)
 	}

@@ -5,166 +5,131 @@ import (
 	"testing"
 )
 
+func emitEvent(pool *EventPool, event Event) {
+	for err := range pool.Emit(event.Topic(), event) {
+		if err != nil {
+			panic(err)
+		}
+	}
+}
+
 // TestPriorityOrdering checks if the Soiree calls listeners in the correct order of their priorities
 func TestPriorityOrdering(t *testing.T) {
-	em := NewEventPool()
+	pool := NewEventPool()
 
-	var mu sync.Mutex // Mutex to protect access to callOrder slice
+	var (
+		mu        sync.Mutex
+		callOrder []Priority
+		wg        sync.WaitGroup
+	)
 
 	event := NewTestEvent("test_priority_topic", "test_payload")
 
-	callOrder := make([]Priority, 0)
+	subscribe := func(priority Priority) {
+		wg.Add(1)
 
-	var wg sync.WaitGroup // WaitGroup to wait for listeners to finish
+		_, err := BindListener(typedEventTopic(event.Topic()), func(_ *EventContext, e Event) error {
+			defer wg.Done()
 
-	// Helper function to subscribe to the soiree with synchronization
-	subscribeWithPriority := func(priority Priority) {
-		wg.Add(1) // Increment the WaitGroup counter
-
-		_, err := em.On(event.Topic(), func(e Event) error {
-			defer wg.Done() // Decrement the counter when the function completes
-			mu.Lock()       // Lock the mutex to safely append to callOrder
+			mu.Lock()
 			callOrder = append(callOrder, priority)
-			mu.Unlock() // Unlock the mutex after appending
+			mu.Unlock()
 
 			return nil
-		}, WithPriority(priority))
+		}, WithPriority(priority)).Register(pool)
 		if err != nil {
-			t.Fatalf("On() failed with error: %v", err)
+			t.Fatalf("failed to register listener: %v", err)
 		}
 	}
 
-	// Set up listeners with different priorities.
-	subscribeWithPriority(High)
-	subscribeWithPriority(Low)
-	subscribeWithPriority(Normal)
-	subscribeWithPriority(Lowest)
-	subscribeWithPriority(Highest)
+	// Set up listeners with different priorities
+	subscribe(High)
+	subscribe(Low)
+	subscribe(Normal)
+	subscribe(Lowest)
+	subscribe(Highest)
 
-	// Emit an event to the topic
-	em.Emit(event.Topic(), event)
+	emitEvent(pool, event)
+	wg.Wait()
 
-	wg.Wait() // Wait for all listeners to process the event
-
-	// Verify the call order of listeners matches the expected priority order
 	expectedOrder := []Priority{Highest, High, Normal, Low, Lowest}
 
-	mu.Lock() // Lock the mutex to safely read callOrder
-
+	mu.Lock()
 	defer mu.Unlock()
 
 	if len(callOrder) != len(expectedOrder) {
-		t.Fatalf("Expected call order length to be %d, got %d", len(expectedOrder), len(callOrder))
+		t.Fatalf("call order length %d, expected %d", len(callOrder), len(expectedOrder))
 	}
 
 	for i, priority := range expectedOrder {
 		if callOrder[i] != priority {
-			t.Errorf("Expected priority %v at index %d, got %v", priority, i, callOrder[i])
+			t.Errorf("expected priority %v at index %d, got %v", priority, i, callOrder[i])
 		}
 	}
 }
 
 // TestEmitSyncWithAbort tests the synchronous EmitSync method with a listener that aborts the event
 func TestEmitSyncWithAbort(t *testing.T) {
-	soiree := NewEventPool()
+	pool := NewEventPool()
+	topic := "testTopic"
 
-	// Create three listeners with different priorities
-	highPriorityListener := func(e Event) error {
-		// This listener has the lowest priority and should be called first
-		return nil
-	}
-
-	abortingListener := func(e Event) error {
-		// This listener aborts the event processing
+	highPriorityListener := func(_ *EventContext, e Event) error { return nil }
+	abortingListener := func(_ *EventContext, e Event) error {
 		e.SetAborted(true)
-
+		return nil
+	}
+	lowPriorityListener := func(_ *EventContext, e Event) error {
+		t.Error("low priority listener should not be invoked after abort")
 		return nil
 	}
 
-	lowPriorityListener := func(e Event) error {
-		t.Error("The low priority listener should not be called after the event is aborted")
-
-		return nil
+	if _, err := BindListener(typedEventTopic(topic), lowPriorityListener, WithPriority(Low)).Register(pool); err != nil {
+		t.Fatalf("register low priority listener: %v", err)
+	}
+	if _, err := BindListener(typedEventTopic(topic), abortingListener, WithPriority(Normal)).Register(pool); err != nil {
+		t.Fatalf("register aborting listener: %v", err)
+	}
+	if _, err := BindListener(typedEventTopic(topic), highPriorityListener, WithPriority(High)).Register(pool); err != nil {
+		t.Fatalf("register high priority listener: %v", err)
 	}
 
-	// Subscribe the listeners to the "testTopic"
-	_, err := soiree.On("testTopic", lowPriorityListener, WithPriority(Low))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	_, err = soiree.On("testTopic", abortingListener, WithPriority(Normal))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	_, err = soiree.On("testTopic", highPriorityListener, WithPriority(High))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	// Emit the event synchronously
-	soiree.EmitSync("testTopic", "testPayload")
+	pool.EmitSync(topic, NewBaseEvent(topic, "testPayload"))
 }
 
 // TestEmitWithAbort tests the asynchronous Emit method with a listener that aborts the event
 func TestEmitWithAbort(t *testing.T) {
-	soiree := NewEventPool()
+	pool := NewEventPool()
+	topic := "testTopic"
 
-	// Create three listeners with different priorities
-	highPriorityListener := func(e Event) error {
-		// This listener has the highest priority and should be called first
-		return nil
-	}
-
-	abortingListener := func(e Event) error {
-		// This listener aborts the event processing
+	highPriorityListener := func(_ *EventContext, e Event) error { return nil }
+	abortingListener := func(_ *EventContext, e Event) error {
 		e.SetAborted(true)
 		return nil
 	}
 
-	lowPriorityListenerCalled := false
-	lowPriorityListener := func(e Event) error {
-		// This flag should remain false if the event processing is correctly aborted
+	var lowPriorityListenerCalled bool
+	lowPriorityListener := func(_ *EventContext, e Event) error {
 		lowPriorityListenerCalled = true
 		return nil
 	}
 
-	// Subscribe the listeners to the "testTopic"
-	_, err := soiree.On("testTopic", lowPriorityListener, WithPriority(Low))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
+	if _, err := BindListener(typedEventTopic(topic), lowPriorityListener, WithPriority(Low)).Register(pool); err != nil {
+		t.Fatalf("register low priority listener: %v", err)
+	}
+	if _, err := BindListener(typedEventTopic(topic), abortingListener, WithPriority(Normal)).Register(pool); err != nil {
+		t.Fatalf("register aborting listener: %v", err)
+	}
+	if _, err := BindListener(typedEventTopic(topic), highPriorityListener, WithPriority(High)).Register(pool); err != nil {
+		t.Fatalf("register high priority listener: %v", err)
 	}
 
-	_, err = soiree.On("testTopic", abortingListener, WithPriority(Normal))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	_, err = soiree.On("testTopic", highPriorityListener, WithPriority(High))
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	// Emit the event asynchronously
-	errChan := soiree.Emit("testTopic", "testPayload")
-
-	// Wait for all errors to be collected
-	var emitErrors []error
-
-	for err := range errChan {
+	for err := range pool.Emit(topic, NewBaseEvent(topic, "testPayload")) {
 		if err != nil {
-			emitErrors = append(emitErrors, err)
+			t.Fatalf("unexpected emit error: %v", err)
 		}
 	}
 
-	// Check that the low priority listener was not called
 	if lowPriorityListenerCalled {
-		t.Error("The low priority listener should not have been called")
-	}
-
-	// Check that there were no errors during emission
-	if len(emitErrors) != 0 {
-		t.Errorf("Emit() resulted in errors: %v", emitErrors)
+		t.Error("low priority listener should not have been called")
 	}
 }

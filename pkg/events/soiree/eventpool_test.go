@@ -7,70 +7,53 @@ import (
 	"time"
 )
 
-// TestNewEventPool tests the creation of a new EventPool
-func TestNewEventPool(t *testing.T) {
-	soiree := NewEventPool()
-	if soiree == nil {
+func mustOnTopic(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
+	id, err := BindListener(typedEventTopic(topic), listener, opts...).Register(pool)
+	if err != nil {
+		panic(err)
+	}
+
+	return id
+}
+
+func emitTopicWithPayload(pool *EventPool, topic string, payload any) <-chan error {
+	return pool.Emit(topic, Event(NewBaseEvent(topic, payload)))
+}
+
+func emitExistingEvent(pool *EventPool, event Event) <-chan error {
+	return pool.Emit(event.Topic(), event)
+}
+
+func TestEventPoolBasics(t *testing.T) {
+	pool := NewEventPool()
+	if pool == nil {
 		t.Fatal("NewEventPool() should not return nil")
 	}
-}
 
-// TestOnOff tests subscribing to and unsubscribing from a topic
-func TestOnOff(t *testing.T) {
-	soiree := NewEventPool()
+	topic := "testTopic"
+	listener := func(_ *EventContext, e Event) error { return nil }
 
-	listener := func(e Event) error {
-		return nil
-	}
-
-	// On to a topic
-	id, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
+	id := mustOnTopic(pool, topic, listener)
 	if id == "" {
-		t.Fatal("Onrned an empty ID")
+		t.Fatal("expected listener id")
 	}
 
-	// Now unsubscribe and ensure the listener is removed
-	if err := soiree.Off("testTopic", id); err != nil {
+	if err := pool.Off(topic, id); err != nil {
 		t.Fatalf("Off() failed with error: %v", err)
 	}
-}
 
-// TestEmitAsyncSuccess tests the asynchronous Emit method for successful event handling
-func TestEmitAsyncSuccess(t *testing.T) {
-	soiree := NewEventPool()
-
-	// Create a listener that does not return an error
-	listener := func(e Event) error {
-		// Simulate some work.
-		time.Sleep(10 * time.Millisecond)
-		return nil
+	// EnsureTopic should always return the same instance.
+	created := pool.EnsureTopic("newTopic")
+	if created == nil {
+		t.Fatal("EnsureTopic() should not return nil")
 	}
 
-	// Subscribe the listener to the "testTopic"
-	_, err := soiree.On("testTopic", listener)
+	retrieved, err := pool.GetTopic("newTopic")
 	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
+		t.Fatalf("GetTopic() failed with error: %v", err)
 	}
-
-	// Emit the event asynchronously
-	errChan := soiree.Emit("testTopic", "testPayload")
-
-	// Collect errors from the error channel
-	var emitErrors []error
-
-	for err := range errChan {
-		if err != nil {
-			emitErrors = append(emitErrors, err)
-		}
-	}
-
-	// Check that there were no errors during emission
-	if len(emitErrors) != 0 {
-		t.Errorf("Emit() resulted in errors: %v", emitErrors)
+	if created != retrieved {
+		t.Fatal("EnsureTopic() should return the same topic instance")
 	}
 }
 
@@ -84,135 +67,51 @@ func NewTestEvent(topic string, payload any) *TestEvent {
 	}
 }
 
-// TestEmitAsyncFailure tests the asynchronous Emit method for event handling that returns an error
-func TestEmitAsyncFailure(t *testing.T) {
-	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "test payload")
+func TestEmitSync(t *testing.T) {
+	pool := NewEventPool()
+	topic := "testTopic"
+	event := NewTestEvent(topic, "testPayload")
 
-	// Create a listener that returns an error
-	listener := func(e Event) error {
-		// Simulate some work
-		time.Sleep(10 * time.Millisecond)
-
-		return errors.New("listener error") // nolint: err113
+	cases := []struct {
+		name      string
+		listener  func(*EventContext, Event) error
+		expectErr bool
+	}{
+		{
+			name: "success",
+			listener: func(_ *EventContext, e Event) error {
+				return nil
+			},
+			expectErr: false,
+		},
+		{
+			name: "failure",
+			listener: func(_ *EventContext, e Event) error {
+				return errors.New("listener error") // nolint: err113
+			},
+			expectErr: true,
+		},
 	}
 
-	// Subscribe the listener to the "testTopic"
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	for _, tc := range cases {
+		tc := tc
+		t.Run(tc.name, func(t *testing.T) {
+			pool.topics.Range(func(key, value any) bool {
+				pool.topics.Delete(key)
+				return true
+			})
 
-	// Emit the event asynchronously
-	errChan := soiree.Emit(event.Topic(), event)
+			mustOnTopic(pool, topic, tc.listener)
+			errs := pool.EmitSync(event.Topic(), Event(event))
 
-	// Collect errors from the error channel
-	var emitErrors []error
+			if tc.expectErr && len(errs) == 0 {
+				t.Fatal("expected emit sync to return errors")
+			}
 
-	for err := range errChan {
-		if err != nil {
-			emitErrors = append(emitErrors, err)
-		}
-	}
-
-	// Check that the errors slice is not empty, indicating that an error was returned by the listener
-	if len(emitErrors) == 0 {
-		t.Error("Emit() should have resulted in errors, but none were returned")
-	}
-}
-
-// TestEmitSyncSuccess tests emitting to a topic
-func TestEmitSyncSuccess(t *testing.T) {
-	soiree := NewEventPool()
-	received := make(chan string, 1) // Buffered channel to receive one message
-	event := NewTestEvent("testTopic", "testPayload")
-
-	// Prepare the listener
-	listener := createTestListener(received)
-
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	soiree.Emit(event.Topic(), event)
-
-	// Wait for the listener to handle the event or timeout after a specific duration
-	select {
-	case topic := <-received:
-		if topic != "testTopic" {
-			t.Fatalf("Expected to receive event on 'testTopic', got '%v'", topic)
-		}
-
-	case <-time.After(5 * time.Second):
-		t.Fatal("Test timed out waiting for the event to be received")
-	}
-}
-
-// TestEmitSyncFailure tests the synchronous EmitSync method for event handling that returns an error
-func TestEmitSyncFailure(t *testing.T) {
-	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "testPayload")
-
-	// Create a listener that returns an error
-	listener := func(e Event) error {
-		return errors.New("listener error") // nolint: err113
-	}
-
-	_, err := soiree.On("testTopic", listener)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	// Emit the event synchronously and collect errors
-	errors := soiree.EmitSync(event.Topic(), event)
-
-	// Check that the errors juicy slice is not empty
-	if len(errors) == 0 {
-		t.Error("EmitSync() should have resulted in errors, but none were returned")
-	}
-}
-
-// TestGetTopic tests getting a topic
-func TestGetTopic(t *testing.T) {
-	soiree := NewEventPool()
-	event := NewTestEvent("testTopic", "testPayload")
-
-	// Creating a topic by subscribing to it
-	_, err := soiree.On("testTopic", func(e Event) error { return nil })
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
-
-	topic, err := soiree.GetTopic(event.Topic())
-
-	if err != nil {
-		t.Fatalf("GetTopic() failed with error: %v", err)
-	}
-
-	if topic == nil {
-		t.Fatal("GetTopic() returned nil")
-	}
-}
-
-// TestEnsureTopic tests getting or creating a topic
-func TestEnsureTopic(t *testing.T) {
-	soiree := NewEventPool()
-
-	// Get or create a new topic
-	topic := soiree.EnsureTopic("newTopic")
-	if topic == nil {
-		t.Fatal("EnsureTopic() should not return nil")
-	}
-
-	// Try to retrieve the same topic and check if it's the same instance
-	sameTopic, err := soiree.GetTopic("newTopic")
-	if err != nil {
-		t.Fatalf("GetTopic() failed with error: %v", err)
-	}
-
-	if sameTopic != topic {
-		t.Fatal("EnsureTopic() did not return the same instance of the topic")
+			if !tc.expectErr && len(errs) > 0 {
+				t.Fatalf("unexpected errors: %v", errs)
+			}
+		})
 	}
 }
 
@@ -238,15 +137,15 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 	for _, topic := range topics {
 		event := NewTestEvent(topic, "testPayload")
 		topicName := topic
-		_, err := soiree.On(event.Topic(), func(e Event) error {
+		_, err := BindListener(typedEventTopic(event.Topic()), func(ctx *EventContext, e Event) error {
 			// Record the event in the receivedEvents map
-			eventPayload := e.Payload().(string)
-			t.Logf("Listener received event on topic: %s with payload: %s", topicName, eventPayload)
-			payloadEvents, _ := receivedEvents.LoadOrStore(eventPayload, new(sync.Map))
+			eventKey := e.Topic()
+			t.Logf("Listener received event on topic: %s with payload: %s", topicName, eventKey)
+			payloadEvents, _ := receivedEvents.LoadOrStore(eventKey, new(sync.Map))
 			payloadEvents.(*sync.Map).Store(topicName, struct{}{})
 
 			return nil
-		})
+		}).Register(soiree)
 
 		if err != nil {
 			t.Fatalf("Failed to subscribe to topic %s: %s", topic, err)
@@ -257,7 +156,7 @@ func TestWildcardSubscriptionAndEmitting(t *testing.T) {
 	for eventKey := range expectedMatches {
 		event := NewTestEvent(eventKey, eventKey)
 		t.Logf("Emitting event: %s", eventKey)
-		soiree.Emit(event.Topic(), event) // Use the eventKey as the payload for identification
+		emitExistingEvent(soiree, event) // Use the eventKey as the payload for identification
 	}
 
 	// Allow some time for the events to be processed asynchronously
@@ -291,21 +190,14 @@ func TestEventPoolClose(t *testing.T) {
 
 	// Set up topics and listeners
 	topic1 := "topic1"
-	listener1 := func(e Event) error { return nil }
-
-	_, err := soiree.On(topic1, listener1)
-
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	listener1 := func(_ *EventContext, e Event) error { return nil }
+	mustOnTopic(soiree, topic1, listener1)
 
 	topic2 := "topic2"
-	listener2 := func(e Event) error { return nil }
+	listener2 := func(_ *EventContext, e Event) error { return nil }
+	mustOnTopic(soiree, topic2, listener2)
 
-	_, err = soiree.On(topic2, listener2)
-	if err != nil {
-		t.Fatalf("On() failed with error: %v", err)
-	}
+	var err error
 
 	// Use a Pool
 	pool := NewPondPool(WithMaxWorkers(10))
@@ -333,7 +225,7 @@ func TestEventPoolClose(t *testing.T) {
 	}
 
 	// Verify that no new events can be emitted
-	errChan := soiree.Emit(topic1, "payload")
+	errChan := emitTopicWithPayload(soiree, topic1, "payload")
 	select {
 	case err := <-errChan:
 		if err == nil {
@@ -354,8 +246,8 @@ func contains(slice []string, item string) bool {
 	return false
 }
 
-func createTestListener(received chan<- string) func(Event) error {
-	return func(e Event) error {
+func createTestListener(received chan<- string) TypedListener[Event] {
+	return func(_ *EventContext, e Event) error {
 		// Send the topic to the received channel
 		received <- e.Topic()
 		return nil
