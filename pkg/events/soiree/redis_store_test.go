@@ -13,10 +13,21 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
+func mustRegisterListener(t *testing.T, pool *EventPool, topic TypedTopic[Event], listener TypedListener[Event], opts ...ListenerOption) string {
+	t.Helper()
+
+	id, err := BindListener(topic, listener, opts...).Register(pool)
+	if err != nil {
+		t.Fatalf("failed to register listener: %v", err)
+	}
+
+	return id
+}
+
 func newTestRedis(t *testing.T) *redis.Client {
 	mr, err := miniredis.Run()
 	if err != nil {
-		t.Fatalf("failed to start miniredis: %v", err)
+		t.Skipf("skipping redis-backed tests: %v", err)
 	}
 
 	t.Cleanup(mr.Close)
@@ -28,17 +39,15 @@ func TestRedisEventPersistence(t *testing.T) {
 	client := newTestRedis(t)
 	store := NewRedisStore(client)
 	soiree := NewEventPool(WithEventStore(store))
+	topic := typedEventTopic("topic")
 
 	done := make(chan struct{}, 1)
-	_, err := soiree.On("topic", func(e Event) error {
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
 		done <- struct{}{}
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
 
-	soiree.Emit("topic", "data")
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	select {
 	case <-done:
@@ -70,18 +79,16 @@ func TestRedisRetryWithBackoff(t *testing.T) {
 	)
 
 	attempts := 0
-	_, err := soiree.On("topic", func(e Event) error {
+	topic := typedEventTopic("topic")
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error {
 		attempts++
 		if attempts < 2 {
 			return errors.New("fail")
 		}
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
 
-	soiree.Emit("topic", "data")
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	time.Sleep(100 * time.Millisecond)
 
@@ -98,13 +105,11 @@ func TestRedisMetrics(t *testing.T) {
 	metrics := newRedisMetrics(reg)
 	store := NewRedisStoreWithMetrics(client, metrics)
 	soiree := NewEventPool(WithEventStore(store))
+	topic := typedEventTopic("topic")
 
-	_, err := soiree.On("topic", func(e Event) error { return nil })
-	if err != nil {
-		t.Fatalf("On() error: %v", err)
-	}
+	mustRegisterListener(t, soiree, topic, func(_ *EventContext, e Event) error { return nil })
 
-	soiree.Emit("topic", "data")
+	soiree.Emit(topic.Name(), NewBaseEvent(topic.Name(), "data"))
 
 	time.Sleep(100 * time.Millisecond)
 

@@ -1,168 +1,16 @@
 # Soiree
 
-Soiree, a fancy event affair, or, event - is a library indendied to simplify
-event management inside a golang codebase but more generically is a 2-tier
-channel system, one for queuing jobs and another to control how many workers
-operate on that job queue concurrently. The goal is a dead-simple interface for
-event subscription and handling, using [pond](https://github.com/alitto/pond)
-for performance management, goroutine pooling, and wrapping an event management
-interface with thread-safe interactions.
+Soiree is an event coordination toolkit that wraps listener registration, execution order, retries, and persistence behind a small API. It is built around an `EventPool` that manages topics and listeners, optionally fans work out to a worker pool, and surfaces rich context to handlers through `EventContext`.
 
-## Overview
+The package underpins our ent mutation hooks, but it is intentionally framework‑agnostic and can be embedded anywhere ordinary Go code needs structured asynchronous notifications.
 
-Functionally, Soiree is intended to provide:
+## Key Concepts
 
-- **In-Memory management**: Host and manage events internally without external
-  dependencies or libraries
-- **Listener prioritization**: Controls for invocation order
-- **Concurrent Processing**: Utilize pooled goroutines for handling events in
-  parallel and re-releasing resources, with thread safety
-- **Configurable Subscriptions**: Leverages basic pattern matching for event
-  subscriptions
-- **General Re-use**: Configure with custom handlers for errors, IDs, and panics
-  panics
-- **Redis persistence**: Optionally persist and process events using Redis
-
-### But why?
-
-In modern software architectures, microservices vs. monoliths is a false
-dichotomy; the optimum is usually somewhere in the middle. We're pretty
-intentionally sticking with a "monolith" in the sense we are producing a single
-docker image from this codebase, but the often overlooked aspect of these
-architectures is the context under which the service is started, and run. If you
-assume that the connectivity from your client is created in a homogeneous
-fashion, ex:
-
-```
-┌──────────────┐        .───────.         ┌─────────────────┐
-│              │       ╱         ╲        │                 │
-│    Client    │──────▶   proxy   ────────▶     Service     │
-│              │       `.       ,'        │                 │
-└──────────────┘         `─────'          └─────────────────┘
-```
-
-Then all instances of the service will be required to perform things like
-authorizations validation, session issuance, etc. The validity of these actions
-is managed with external state machines, such as Redis.
-
-```
-                                                                   ┌────────────────┐
-┌──────────────┐        .───────.         ┌─────────────────┐      │                │
-│              │       ╱         ╲        │                 │      │     Redis,     │
-│    Client    │──────▶   proxy   ────────▶    Service      ├─────▶│   PostgreSQL   │
-│              │       `.       ,'        │                 │      │                │
-└──────────────┘         `─────'          └─────────────────┘      └────────────────┘
-```
-
-We do this because we want to be able to run many instances of the service, for
-things such as canary, rollouts, etc.
-
-```
-                                          ┌─────────────────┐
-                                          │                 │
-                                     ┌───▶│    Service      ├──┐
-                                     │    │                 │  │
-                                     │    └─────────────────┘  │
-                                     │                         │   ┌────────────────┐
-┌──────────────┐        .───────.    │    ┌─────────────────┐  │   │                │
-│              │       ╱         ╲   │    │                 │  │   │     Redis,     │
-│    Client    │──────▶   proxy   ───┼────▶    Service      ├──┴┬─▶▶   PostgreSQL   │
-│              │       `.       ,'   │    │                 │   │  │                │
-└──────────────┘         `─────'     │    └─────────────────┘   │  └────────────────┘
-                                     │                          │
-                                     │    ┌─────────────────┐   │
-                                     │    │                 │   │
-                                     └───▶│    Service      │───┘
-                                          │                 │
-                                          └─────────────────┘
-```
-
-Now, where things start to get more fun is when you layer in the desire to
-perform I/O operations either managed by us, or externally (e.g. S3), as well as
-connect to external data stores (e.g. Turso).
-
-```
-                                             ┌──────────────┐
-                                             │              │
-                                             │      S3      │
-                                             │              │           ┌───────────────┐
-                                             └───────▲──────┘    ┌─────▶│ Outbound HTTP │
-                                                     │           │      │(e.g. webhooks)│
-                                                     │           │      └───────────────┘
-                                                     │           │
-                                                   ┌─┘           │
-                                                   │             │
-                   ┌ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┼ ─ ─ ─ ─ ─ ─ ┼ ─ ─ ─ ┬─────────────┐
-                                                   │             │       │ Stuff under │
-                   │                               │             │       │ our control │
-                                          ┌────────┴────────┬────┘       └─────────────┘
-                   │                      │                 │                          │
-                                     ┌───▶│    Service      ├──┐
-                   │                 │    │                 │  │                       │
-                                     │    └─────────────────┘  │
-                   │                 │                         │   ┌────────────────┐  │
-┌──────────────┐        .───────.    │    ┌─────────────────┐  │   │                │
-│              │   │   ╱         ╲   │    │                 │  │   │     Redis,     │  │
-│    Client    │──────▶   proxy   ───┼────▶    Service      ├──┴┬─▶▶   PostgreSQL   │
-│              │   │   `.       ,'   │    │                 │   │  │                │  │
-└──────────────┘         `─────'     │    └─────────────────┘   │  └────────────────┘
-                   │                 │                          │                      │
-                                     │    ┌─────────────────┐   │
-                   │                 │    │                 │   │                      │
-                                     └───▶│    Service      │───┘
-                   │                      │                 │                          │
-                                          └────────┬────────┴─────────────┐
-                   │                               │                      │            │
-                    ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─│─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┼ ─ ─ ─ ─ ─ ─
-                                                   │                      │
-                                                   └─────┐                │
-                                                         │                │
-                                                         │                │               ┌──────────────┐
-                                                         │                │               │ Other future │
-                                                         ▼                └──────────────▶│  ridiculous  │
-                                                     ┌───────────┐                        │    ideas     │
-                                                     │   Rando   │                        └──────────────┘
-                                                     └───────────┘
-```
-
-Given we need to be able to perform all kinds of workload actions such as
-writing a file to a bucket, committing a SQL transaction, sending an http
-request, we need bounded patterns and degrees of resource control. Which is to
-say, we need to control resource contention in our runtime as we don't want
-someone's regular HTTP request to be blocked by the fact someone else requested
-a bulk upload to S3. This means creating rough groupings of workload `types` and
-bounding them so that you can monitor and control the behaviors and lumpiness of
-the variances with the workload types.
-
-Check out
-[this blog](http://marcio.io/2015/07/handling-1-million-requests-per-minute-with-golang/)
-(there are many on this topic) for some real world examples on how systems with
-these "lumpy" workload types can become easily bottlenecked with volume. Since
-we are intending to open the flood gates around event ingestion from other
-sources (similar to how Posthog, Segment, etc., work) we need to anticipate a
-very high load of unstructured data which needs to be written efficiently to a
-myriad of external sources, as well as bulk routines which may be long running
-such as file imports, uploads, exports, etc.
-
-## How many goroutines can / should I have?
-
-A single go-routine currently uses a minimum stack size of 2KB. It is likely
-that your actual code will also allocate some additional memory on the heap (for
-e.g. JSON serialization or similar) for each goroutine. This would mean 1M
-go-routines could easily require 2-4 GB or RAM (should be ok for an average
-environment)
-
-Most OS will limit the number of open connections in various ways. For TCP/IP
-there is usually a limit of open ports per interface. This is about 28K on many
-modern systems. There is usually an additional limit per process (e.g. ulimit
-for number of open file-descriptors) which will by default be around 1000. So
-without changing the OS configuration you will have a maximum of 1000 concurrent
-connections on Linux.
-
-So depending on the system you should probably not create more than 1000
-goroutines, because they might start failing with “maximum num of file
-descriptors reached” or even drop packets. If you increase the limits you are
-still bound by the 28K connections from a single IP address.
+- **EventPool** – runtime broker that owns topics, manages listener registration, and executes handlers (optionally via a goroutine pool).
+- **Topics** – logical channels identified by string names; priorities determine listener execution order within a topic.
+- **Listeners** – functions that consume an `*EventContext`; they may inspect payloads, mutate properties, abort delivery, or access the originating client.
+- **Stores & Retries** – optional pluggable persistence and retry policies (e.g., Redis queue with exponential backoff).
+- **Typed Topics** – helpers that wrap/unwrap strongly typed payloads so handlers work with domain objects instead of raw `any`.
 
 ## Quick Start
 
@@ -171,320 +19,201 @@ package main
 
 import (
 	"fmt"
+
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
 
 func main() {
-	e := soiree.NewEventPool()
-	e.On("user.created", func(evt soiree.Event) error {
-		fmt.Println("Event received:", evt.Topic())
+	pool := soiree.NewEventPool()
+	const topic = "user.created"
+
+	_, err := pool.On(topic, func(ctx *soiree.EventContext) error {
+		name, _ := ctx.PropertyString("name")
+		fmt.Printf("welcome %s (payload: %v)\n", name, ctx.Payload())
 		return nil
 	})
-	e.Emit("user.created", "Matty Ice")
+	if err != nil {
+		panic(err)
+	}
+
+	event := soiree.NewBaseEvent(topic, map[string]string{"email": "user@example.com"})
+	event.Properties().Set("name", "Ada Lovelace")
+
+	for err := range pool.Emit(topic, event) {
+		if err != nil {
+			fmt.Printf("listener error: %v\n", err)
+		}
+	}
 }
 ```
 
-## Configuration
+## Typed Topics
 
-Your Soiree can come with a few options if you wish:
+The `topics_typed.go` helpers let you bind strongly typed payloads while still benefiting from pooled execution:
 
 ```go
-e := soiree.NewEventPool(
-	soiree.WithErrorHandler(customErrorHandler),
-	soiree.WithIDGenerator(customIDGenerator),
+userTopic := soiree.NewTypedTopic(
+	"user.created",
+	func(payload UserEvent) soiree.Event { return soiree.NewBaseEvent("user.created", payload) },
+	func(evt soiree.Event) (UserEvent, error) {
+		payload, ok := evt.Payload().(UserEvent)
+		if !ok {
+			return UserEvent{}, fmt.Errorf("unexpected payload %T", evt.Payload())
+		}
+		return payload, nil
+	},
 )
-```
 
-## Subscribing to events using basic pattern matching
-
-Per guidance of many pubsubs such as Kafka, operating a multi-tenant cluster
-typically requires you to define user spaces for each tenant. For the purpose of
-this section, "user spaces" are a collection of topics, which are grouped
-together under the management of a single entity or user.
-
-In Kafka and many other pubsub systems, the main unit of data is the `topic`.
-Users can create and name each topic. They can also delete them, but it is not
-possible to rename a topic directly. Instead, to rename a topic, the user must
-create a new topic, move the messages from the original topic to the new, and
-then delete the original. With this in mind, it is recommended to define logical
-spaces, based on an hierarchical topic naming structure. This setup can then be
-combined with security features, such as prefixed ACLs, to isolate different
-spaces and tenants, while also minimizing the administrative overhead for
-securing the data in the cluster.
-
-These logical user spaces can be grouped in different ways, by team or
-organizational unit: here, the `organization` is the main aggregator.
-
-Example topic naming structure:
-
-<org_id>.<user_id>.<object>.<event-name> (e.g., ULID.ULID.user.login, or
-"ULID.ULID.organization.created") By organization or product: their credentials
-will be different for each organization, so all the controls and settings will
-always be organization related which is a good high level topic for performing a
-broad set of actions, but you can also be more granular.
-
-Example topic naming structure:
-
-<organization>.<product>.<event-name> (e.g., "openlane.invoices.received")
-Certain information should normally not be put in a topic name, such as
-information that is likely to change over time (e.g., the name of the intended
-consumer) or that is a technical detail or metadata that is available elsewhere
-(e.g., the topic's partition count and other configuration settings).
-
-### Kafka specifics
-
-To enforce a topic naming structure in Kafka, several options are available:
-
-Use prefix ACLs (cf. KIP-290) to enforce a common prefix for topic names. For
-example, team A may only be permitted to create topics whose names start with
-payments.teamA.. Define a custom CreateTopicPolicy (cf. KIP-108 and the setting
-create.topic.policy.class.name) to enforce strict naming patterns. These
-policies provide the most flexibility and can cover complex patterns and rules
-to match an organization's needs. Disable topic creation for normal users by
-denying it with an ACL, and then rely on an external process to create topics on
-behalf of users (e.g., scripting or your favorite automation toolkit). It may
-also be useful to disable the Kafka feature to auto-create topics on demand by
-setting auto.create.topics.enable=false in the broker configuration. Note that
-you should not rely solely on this option.
-
-### Soiree topic matching
-
-- `*` - Matches a single segment
-- `**` - Matches multiple segments
-
-### Example:
-
-```go
-e := soiree.NewEventPool()
-e.On("user.*", userEventListener)
-e.On("invoice.**", orderEventListener)
-e.On("**.completed", completionEventListener)
-```
-
-or:
-
-```go
-e := soiree.NewEventPool()
-e.On("user.*", func(evt soiree.Event) error {
-	fmt.Printf("Event: %s, Payload: %+v\n", evt.Topic(), evt.Payload())
+binding := soiree.BindListener(userTopic, func(ctx *soiree.EventContext, payload UserEvent) error {
+	ctx.SetProperty("user_id", payload.ID)
 	return nil
 })
-e.Emit("user.signup", "Funky Sarah")
+
+pool := soiree.NewEventPool()
+if _, err := pool.RegisterListeners(binding); err != nil {
+	panic(err)
+}
 ```
 
-## Aborting Event Propagation
+## EventContext Cheat Sheet
 
-Stop event propagation using `SetAborted`:
+| Method | Purpose |
+| --- | --- |
+| `Context()` | Returns the request context associated with the event. |
+| `Payload()` / `PayloadAs[T]` | Access the raw or typed payload. |
+| `Properties()` / `PropertyString` | Inspect or mutate ad‑hoc metadata shared across listeners. |
+| `Client()` / `ClientAs[T]` | Retrieve the client attached to the event (e.g., an ent client). |
+| `Abort()` / `Event().SetAborted(true)` | Stop further listener execution for the current event. |
+
+## Configuration Options
+
+Use functional options with `NewEventPool` to customise behavior:
+
+| Option | Description |
+| --- | --- |
+| `WithPool` | Run listeners on a shared goroutine pool (default is per‑listener goroutines). Use `soiree.NewPondPool` for a preconfigured [pond](https://github.com/alitto/pond) worker pool. |
+| `WithErrorHandler` | Override how handler errors are processed before they reach the caller. |
+| `WithPanicHandler` | Centralise panic recovery logic. |
+| `WithIDGenerator` | Supply custom listener IDs (e.g., UUIDs). |
+| `WithEventStore` / `WithRedisStore` | Persist events and handler outcomes; enables queue replay. |
+| `WithRetry` | Configure retry attempts and backoff policy for failing listeners. |
+| `WithErrChanBufferSize` | Resize the buffered error channel returned by `Emit`. |
+| `WithClient` | Attach an arbitrary client object that is then available to listeners. |
+
+For pool tuning guidance review the pond documentation: <https://github.com/alitto/pond>.
+
+## Lifecycle Flow
+
+```mermaid
+sequenceDiagram
+    participant Producer
+    participant EventPool
+    participant Topic as Topic Registry
+    participant ListenerA
+    participant ListenerB
+
+    Producer->>EventPool: Emit(topic, payload)
+    EventPool->>Topic: EnsureTopic + enqueue
+    Topic->>ListenerA: Execute (priority order)
+    ListenerA-->>EventPool: Error / nil
+    EventPool-->>Producer: Forward to error channel
+    Topic->>ListenerB: Execute unless aborted
+    ListenerB-->>EventPool: Ack
+    EventPool-->>Producer: Close error channel
+```
+
+## ent Integration
+
+`internal/ent/hooks` wires Soiree into ent mutations via the `Eventer`. The hook:
+
+1. Determines whether any listeners are registered for the entity’s topic (including dynamic registrations on the pool).
+1. Marshals the mutation payload (operation, entity ID, and ent client) into a strongly typed event.
+1. Emits after commit (or immediately for non‑transactional operations).
+
+If you add listeners directly to the pool (e.g., in tests or feature toggles), they are still honored because the hook checks the live pool state before deciding to emit.
+
+### Adding a new ent mutation listener
+
+**Define the handler**
+
+Implement a `hooks.MutationHandler` in `internal/ent/hooks`. Handlers receive a `*soiree.EventContext` and `*hooks.MutationPayload`; they can access the ent client via `payload.Client` or `soiree.ClientAs`.
+
+**Register the listener**
+
+Use `eventer.AddMutationListener(<entity>, handler, opts...)`, typically in `registerDefaultMutationListeners` or wherever the feature is initialised. Supply priorities/pre-hooks/post-hooks as needed.
+
+**Ensure emission**
+
+The ent hook emits automatically once the listener is registered. If you need a new topic name, rely on the entity’s schema type (e.g., `entgen.TypeOrganization`) so `mutationTopic` produces a consistent topic.
+
+**Test the flow**
+
+- Unit tests: construct an `Eventer` with `NewEventer(WithEventerEmitter(soiree.NewEventPool()))`, register your listener, and invoke the handler with a fake mutation payload.
+- Integration tests: exercise the ent mutation (GraphQL or REST) and assert on side effects, inspecting events via captured mocks or the listener itself.
+
+#### Practical example
 
 ```go
-e := soiree.NewEventPool()
-e.On("invoice.processed", func(evt soiree.Event) error {
-	if /* condition fails */ false {
-		evt.SetAborted(true)
+// internal/ent/hooks/listeners_billing.go
+func handleOrganizationBillingUpdate(ctx *soiree.EventContext, payload *hooks.MutationPayload) error {
+	if payload.Operation != ent.OpUpdateOne.String() {
+		return nil
 	}
-	return nil
-}, soiree.WithPriority(soiree.High))
-e.On("invoice.processed", func(evt soiree.Event) error {
-	// This will not run if the event is aborted
-	return nil
-}, soiree.WithPriority(soiree.Low))
-e.Emit("invoice.processed", "Order data")
+
+	inv, ok := newEntitlementInvocation(ctx, payload, orgAllowContext)
+	if !ok {
+		return nil
+	}
+
+	return inv.reconcile()
+}
+
+// internal/ent/hooks/eventer.go
+func registerDefaultMutationListeners(e *Eventer) {
+	// existing listeners…
+	e.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationBillingUpdate)
+}
 ```
+
+Unit test pattern:
+
+```go
+func TestHandleOrganizationBillingUpdate(t *testing.T) {
+	pool := soiree.NewEventPool()
+	eventer := NewEventer(WithEventerEmitter(pool))
+	eventer.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationBillingUpdate)
+
+	payload := &hooks.MutationPayload{
+		Operation: ent.OpUpdateOne.String(),
+		EntityID:  "org-setting-id",
+		Client:    fakeEntClient(t), // supply test double
+	}
+
+	ctx := context.Background()
+	event := soiree.NewBaseEvent(entgen.TypeOrganizationSetting, payload)
+	event.SetContext(ctx)
+
+	errs := pool.EmitSync(event.Topic(), event)
+	require.Empty(t, errs)
+	// assert on fakeEntClient interactions…
+}
+```
+
+End-to-end tests can exercise the actual ent mutation (GraphQL/REST) and assert on downstream effects (e.g., Stripe updates) once the listener runs.
 
 ## Examples
 
-### Concurrency
+Each example is guarded by `//go:build examples`. Run one with:
 
-Delegate concurrency management to a goroutine pool using the `WithPool` option:
-
-```go
-package main
-
-import (
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/alitto/pond/v2"
-)
-
-func main() {
-	// Initialize a goroutine pool
-	pool := soiree.NewPondPool(10, 1000) // 10 workers, queue size 1000
-
-	// Start your soiree and invite your friends (add your pool :))
-	e := soiree.NewEventPool(soiree.WithPool(pool))
-
-	// Your soiree is now ready to handle whatever events (or in general, processing) using the pool
-}
+```
+go run -tags examples ./pkg/events/soiree/examples/<name>
 ```
 
-### Error Handling
+- `error-handling` – custom error handler demonstrating centralised logging.
+- `metrics` – attaches a pond worker pool, exposes Prometheus metrics, and drives concurrent emits.
+- `ordering` – prioritised listeners and event abortion.
+- `panics` – custom panic handler that keeps the producer alive.
+- `redis` – Redis-backed queue with retry policy.
+- `uniqueID` – overrides listener ID generation.
 
-Change your error handling depending on your needs by passing in a custom error
-handler:
-
-```go
-package main
-
-import (
-	"log"
-	"github.com/theopenlane/core/pkg/events/soiree"
-)
-
-func main() {
-	// Define a custom error handler that logs the event and the error
-	customErrorHandler := func(event soiree.Event, err error) error {
-		log.Printf("Error encountered during event '%s': %v, with payload: %v", event.Topic(), err, event.Payload())
-		return nil  // Returning nil to indicate that the error has been swallowed
-	}
-
-	// Apply the custom error handler to the soiree
-	e := soiree.NewEventPool(soiree.WithErrorHandler(customErrorHandler))
-
-	// Your soiree will now log errors encountered during event handling
-}
-```
-
-### Prioritizing Listeners
-
-Control the invocation order of event listeners by prescribing priorities:
-
-```go
-package main
-
-import (
-	"fmt"
-	"github.com/theopenlane/core/pkg/events/soiree"
-)
-
-func main() {
-	// Set up the swanky soiree
-	e := soiree.NewEventPool()
-
-	// Define listeners with varying priorities
-	normalPriorityListener := func(e soiree.Event) error {
-		fmt.Println("Normal priority: Received", e.Topic())
-		return nil
-	}
-
-	highPriorityListener := func(e soiree.Event) error {
-		fmt.Println("High priority: Received", e.Topic())
-		return nil
-	}
-
-	// Subscribe listeners with specified priorities
-	e.On("user.created", normalPriorityListener) // Default is normal priority
-	e.On("user.created", highPriorityListener, soiree.WithPriority(soiree.High))
-
-	// Emit an event and observe the order of listener notification
-	e.Emit("user.created", "User signup event")
-}
-```
-
-Listeners with higher priority are notified first when an event occurs - _NOTE_
-while the listeners may be _notified_ first, there's no guarantees beyond the
-notification, meaning, if the Listener which receives the high priority event
-has a long-running action, and the lower priority listener has a quick action,
-which one finishes first depends on the action(s) themselves. If you need
-_blocking_ logic (not ideal), use synchronous event handlers.
-
-### Generating Unique IDs
-
-Implement custom ID generation for listener tracking:
-
-```go
-package main
-
-import (
-	"github.com/google/uuid"
-	"github.com/theopenlane/core/pkg/events/soiree"
-)
-
-func main() {
-	// Custom ID generator using UUID v4
-	uuidGenerator := func() string {
-		return uuid.NewString()
-	}
-
-	// Initialize the soiree with the UUID generator
-	e := soiree.NewEventPool(soiree.WithIDGenerator(uuidGenerator))
-
-	// Listeners will now be registered with a UUID
-}
-```
-
-Listeners are now identified by a UUID vs. the standard ULID generated by
-Openlane. You can also create listeners with a similar naming convention as the
-topic so you can identify them more easily. Generally speaking, though:
-listeners are acting on the events immediately. This is an in-memory
-implementation so the most appropriate use of the goroutine pools are either
-writing to a persistent store immediately when the event occurs to perform other
-future actions if required, handling an event immediately based on a criteria
-(e.g. webhooks, outbound http methods) or other idempotent actions.
-
-### Handling Panics
-
-Safeguard the overall runtime from unexpected panics during event handling by
-using a panic handler:
-
-```go
-package main
-
-import (
-	"log"
-	"github.com/theopenlane/core/pkg/events/soiree"
-)
-
-func main() {
-	// Define a panic handler that logs the occurrence
-	logPanicHandler := func(p any) {
-		log.Printf("Panic recovered: %v", p)
-		// Insert additional logic for panic recovery here
-	}
-
-	// Equip the soiree with the panic handler
-	e := soiree.NewEventPool(soiree.WithPanicHandler(logPanicHandler))
-
-	// Your soiree is now more resilient to panics!
-}
-```
-
-This handler ensures that panics are logged and managed without creating a
-service interruption.
-
-### Persisting Events in Redis
-
-Soiree can optionally store events and listener results in Redis. This enables
-shared persistence across service instances and supports asynchronous processing
-when used with an `EventQueue` implementation like `RedisStore`.
-
-```go
-package main
-
-import (
-        "github.com/cenkalti/backoff/v5"
-        "github.com/redis/go-redis/v9"
-        "github.com/theopenlane/core/pkg/events/soiree"
-        "time"
-)
-
-func main() {
-        client := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
-
-        e := soiree.NewEventPool(
-                soiree.WithRedisStore(client),
-                soiree.WithRetry(3, func() backoff.BackOff {
-                        return backoff.NewConstantBackOff(500 * time.Millisecond)
-                }),
-        )
-
-        e.On("task.created", func(evt soiree.Event) error {
-                // process the event
-                return nil
-        })
-
-        // Events will be persisted to Redis and retried if the listener fails
-        e.Emit("task.created", "payload")
-}
-```
-
-When a `RedisStore` is provided, the event pool consumes events from the Redis
-queue and retries failed listeners using the configured backoff policy.
+Simpler duplicates have been removed; the remaining samples cover the full API surface area.
