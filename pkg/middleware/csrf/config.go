@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/theopenlane/core/pkg/middleware/graphapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware"
 	"github.com/theopenlane/iam/auth"
@@ -43,15 +44,6 @@ func NewConfig() *Config {
 	}
 }
 
-// csrfSkipperFunc is the function that determines if the csrf token check should be skipped
-// due to the request being a PAT or API Token auth request
-var csrfSkipperFunc = func(c echo.Context) bool {
-	ac := auth.GetAuthTypeFromEchoContext(c)
-
-	// only skip CSRF checks for API Token or PAT authentication
-	return ac == auth.APITokenAuthentication || ac == auth.PATAuthentication
-}
-
 // Middleware creates the CSRF middleware from the provided config.
 func Middleware(conf *Config) echo.MiddlewareFunc {
 	if conf == nil {
@@ -77,6 +69,20 @@ func Middleware(conf *Config) echo.MiddlewareFunc {
 	}
 
 	return middleware.CSRFWithConfig(csrfConf)
+}
+
+// csrfSkipperFunc is the function that determines if the csrf token check should be skipped
+// due to the request being a PAT or API Token auth request
+// or a graphql read-only query request
+var csrfSkipperFunc = func(c echo.Context) bool {
+	ac := auth.GetAuthTypeFromEchoContext(c)
+
+	// only skip CSRF checks for API Token or PAT authentication
+	if ac == auth.APITokenAuthentication || ac == auth.PATAuthentication {
+		return true
+	}
+
+	return graphapi.CheckGraphReadRequest(c)
 }
 
 func parseSameSite(val string) http.SameSite {
