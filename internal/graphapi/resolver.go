@@ -72,8 +72,11 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	}
 }
 // WithSubscriptions enables graphql subscriptions to the server using websockets or sse
-  func (r Resolver) WithSubscriptions(cname string) *Resolver {
-      r.subscriptionManager = graphsubscriptions.NewManager()
+   func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
+      if enabled {
+          r.subscriptionManager = graphsubscriptions.NewManager()
+      }
+      
       return &r
   }
 
