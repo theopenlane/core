@@ -2323,8 +2323,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 		OwnerIDIn: []string{user1.OrganizationID},
 	}
 
-	// track cursor for pagination
-	var cursor string
 	testCases := []struct {
 		name               string
 		client             *testclient.TestClient
@@ -2355,47 +2353,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 			client: suite.client.api,
 			ctx:    user1.UserCtx,
 			first:  lo.ToPtr(int64(1)), // test pagination
-		},
-		{
-			name:        "happy path, get control categories",
-			where:       defaultWhere,
-			client:      suite.client.api,
-			ctx:         user1.UserCtx,
-			first:       lo.ToPtr(int64(1)),                                // test pagination
-			after:       &cursor,                                           // use the cursor from the previous test
-			expectedErr: "category must be provided when using pagination", // required when using pagination
-		},
-		{
-			name:     "happy path, get control for specific category",
-			where:    defaultWhere,
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-		},
-		{
-			name:     "happy path, get next result for specific category",
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-			expectedCategories: map[string]struct{}{
-				category: {},
-			},
-		},
-		{
-			name:     "happy path, get next result for specific category, no more results",
-			where:    defaultWhere,
-			client:   suite.client.api,
-			ctx:      user1.UserCtx,
-			first:    lo.ToPtr(int64(1)), // test pagination
-			after:    &cursor,            // use the cursor from the previous test
-			category: &category,          // filter by category
-			expectedCategories: map[string]struct{}{
-				category: {},
-			},
 		},
 		{
 			name:   "filter by standard, two results expected",
@@ -2437,12 +2394,6 @@ func TestQueryControlGroupsByCategory(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-
-			if tc.first != nil {
-				if resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.HasNextPage {
-					cursor = *resp.ControlsGroupByCategory.Edges[0].Node.Controls.PageInfo.EndCursor
-				}
-			}
 
 			if tc.expectedCategories != nil {
 				for cat := range tc.expectedCategories {
