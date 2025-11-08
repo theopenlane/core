@@ -74,10 +74,6 @@ func (suite *HandlerTestSuite) TestWebhookReceiverHandler() {
 		suite.h.Entitlements.Config.StripeWebhookSecrets[version] = webhookSecret
 	}
 
-	suite.db.Organization.UpdateOneID(testUser1.OrganizationID).
-		SetStripeCustomerID("cus_test_customer").
-		ExecX(allowCtx)
-
 	suite.db.OrgSubscription.Create().
 		SetStripeSubscriptionStatus("active").
 		SetStripeSubscriptionID("PENDING_UPDATE").

@@ -23,7 +23,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
@@ -282,16 +281,6 @@ func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID stri
 
 // handleSubscriptionPaused handles subscription updated events for paused subscriptions
 func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscription) (err error) {
-	if err := h.isOrgValid(ctx, s); err != nil {
-		if errors.Is(err, ErrSubscriberNotFound) {
-			log.Warn().Str("subscription_id", s.ID).Msg("organization not found for subscription, skipping processing")
-			return nil
-		}
-
-		log.Error().Err(err).Msg("error while validating organization for pausing stripe subscription")
-		return err
-	}
-
 	ownerID, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		return
@@ -313,44 +302,8 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 	return h.invalidatePersonalAccessTokens(ctx, *ownerID)
 }
 
-func (h *Handler) isOrgValid(ctx context.Context, s *stripe.Subscription) error {
-
-	if s.Customer == nil {
-		log.Error().Msg("subscription has no customer, cannot proceed")
-
-		return ErrSubscriberNotFound
-	}
-
-	allowCtx := rule.WithInternalContext(ctx)
-
-	exists, err := transaction.FromContext(ctx).Organization.Query().
-		Where(organization.StripeCustomerID(s.Customer.ID)).
-		Exist(allowCtx)
-
-	if err != nil {
-		log.Error().Err(err).Msg("error while fetching organization for pausing stripe subscription")
-		return err
-	}
-
-	if exists {
-		return nil
-	}
-
-	return ErrSubscriberNotFound
-}
-
 // handleSubscriptionUpdated handles subscription updated events
 func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
-	if err := h.isOrgValid(ctx, s); err != nil {
-		if errors.Is(err, ErrSubscriberNotFound) {
-			log.Warn().Str("subscription_id", s.ID).Msg("organization not found for subscription, skipping processing")
-			return nil
-		}
-
-		log.Error().Err(err).Msg("error while validating organization for subscription update")
-		return err
-	}
-
 	_, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to sync org subscription with stripe")
@@ -451,6 +404,9 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 	// getOrgSubscription exhausts all possible routes to find the org so this is fine
 	if ent.IsNotFound(err) {
+		// no org subscription found, nothing to sync
+		log.Info().Str("subscription_id", subscription.ID).Msg("no org subscription found to sync with stripe subscription")
+
 		return nil, nil
 	}
 
