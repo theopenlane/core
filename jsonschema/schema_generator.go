@@ -805,7 +805,7 @@ func writeSliceField(builder *strings.Builder, key, helmRef string, indent int) 
 	builder.WriteString(fmt.Sprintf("%s{{- $sliceValue := (%s | default (list)) }}\n", indentStr, helmRef))
 	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $sliceValue) 0 }}\n", indentStr))
 	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
-	builder.WriteString(fmt.Sprintf("%s{{ toYaml $sliceValue | nindent %d }}\n", indentStr, indent+2))
+	builder.WriteString(fmt.Sprintf("%s{{- toYaml $sliceValue | nindent %d }}\n", indentStr, indent+2))
 	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 }
 
@@ -815,7 +815,7 @@ func writeMapField(builder *strings.Builder, key, helmRef string, indent int) {
 	builder.WriteString(fmt.Sprintf("%s{{- $mapValue := (%s | default (dict)) }}\n", indentStr, helmRef))
 	builder.WriteString(fmt.Sprintf("%s{{- if gt (len $mapValue) 0 }}\n", indentStr))
 	builder.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
-	builder.WriteString(fmt.Sprintf("%s{{ toYaml $mapValue | nindent %d }}\n", indentStr, indent+2))
+	builder.WriteString(fmt.Sprintf("%s{{- toYaml $mapValue | nindent %d }}\n", indentStr, indent+2))
 	builder.WriteString(fmt.Sprintf("%s{{- end }}\n", indentStr))
 }
 
@@ -911,7 +911,7 @@ func generateDomainConfigYAML(key, helmRef, domainPrefix, domainSuffix string, v
 	if value.Kind() == reflect.Slice || value.Kind() == reflect.Array {
 		template.WriteString(fmt.Sprintf("%s{{- if %s }}\n", indentStr, helmRef))
 		template.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
-		template.WriteString(fmt.Sprintf("%s{{ toYaml %s | nindent %d }}\n", indentStr, helmRef, indent+2))
+		template.WriteString(fmt.Sprintf("%s{{- toYaml %s | nindent %d }}\n", indentStr, helmRef, indent+2))
 		template.WriteString(fmt.Sprintf("%s{{- else if .Values.domain }}\n", indentStr))
 		template.WriteString(fmt.Sprintf("%s%s:\n", indentStr, key))
 		template.WriteString(buildDomainSliceValues(domainPrefix, domainSuffix, indent+2))

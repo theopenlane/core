@@ -66,11 +66,11 @@ data:
         {{- $mapValue := (.Values.openlane.coreConfiguration.server.cors.prefixes | default (dict)) }}
         {{- if gt (len $mapValue) 0 }}
         prefixes:
-        {{ toYaml $mapValue | nindent 10 }}
+        {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.cors.allowOrigins }}
         allowOrigins:
-        {{ toYaml .Values.openlane.coreConfiguration.server.cors.allowOrigins | nindent 10 }}
+        {{- toYaml .Values.openlane.coreConfiguration.server.cors.allowOrigins | nindent 10 }}
         {{- else if .Values.domain }}
         allowOrigins:
           - "https://console.{{ .Values.domain }}"
@@ -122,7 +122,7 @@ data:
         {{- $mapValue := (.Values.openlane.coreConfiguration.server.redirects.redirects | default (dict)) }}
         {{- if gt (len $mapValue) 0 }}
         redirects:
-        {{ toYaml $mapValue | nindent 10 }}
+        {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.server.redirects.code }}
         code: {{ .Values.openlane.coreConfiguration.server.redirects.code }}
@@ -136,12 +136,12 @@ data:
         {{- $mapValue := (.Values.openlane.coreConfiguration.server.cacheControl.noCacheHeaders | default (dict)) }}
         {{- if gt (len $mapValue) 0 }}
         noCacheHeaders:
-        {{ toYaml $mapValue | nindent 10 }}
+        {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
         {{- $sliceValue := (.Values.openlane.coreConfiguration.server.cacheControl.etagHeaders | default (list)) }}
         {{- if gt (len $sliceValue) 0 }}
         etagHeaders:
-        {{ toYaml $sliceValue | nindent 10 }}
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.mime }}
@@ -216,7 +216,7 @@ data:
       {{- $sliceValue := (.Values.openlane.coreConfiguration.entConfig.entityTypes | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       entityTypes:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.entConfig.summarizer }}
       summarizer:
@@ -337,7 +337,7 @@ data:
         {{- $sliceValue := (.Values.openlane.coreConfiguration.entConfig.billing.bypassEmailDomains | default (list)) }}
         {{- if gt (len $sliceValue) 0 }}
         bypassEmailDomains:
-        {{ toYaml $sliceValue | nindent 10 }}
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
     {{- end }}
@@ -391,7 +391,7 @@ data:
         {{- $mapValue := (.Values.openlane.coreConfiguration.auth.token.keys | default (dict)) }}
         {{- if gt (len $mapValue) 0 }}
         keys:
-        {{ toYaml $mapValue | nindent 10 }}
+        {{- toYaml $mapValue | nindent 10 }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.auth.token.generateKeys }}
         generateKeys: {{ .Values.openlane.coreConfiguration.auth.token.generateKeys }}
@@ -454,7 +454,7 @@ data:
       {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.supportedProviders | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       supportedProviders:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.auth.providers }}
       providers:
@@ -476,7 +476,7 @@ data:
           {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.providers.github.scopes | default (list)) }}
           {{- if gt (len $sliceValue) 0 }}
           scopes:
-          {{ toYaml $sliceValue | nindent 12 }}
+          {{- toYaml $sliceValue | nindent 12 }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.providers.github.redirectUrl }}
           redirectUrl: {{ .Values.openlane.coreConfiguration.auth.providers.github.redirectUrl | quote }}
@@ -497,7 +497,7 @@ data:
           {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.providers.google.scopes | default (list)) }}
           {{- if gt (len $sliceValue) 0 }}
           scopes:
-          {{ toYaml $sliceValue | nindent 12 }}
+          {{- toYaml $sliceValue | nindent 12 }}
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.providers.google.redirectUrl }}
           redirectUrl: {{ .Values.openlane.coreConfiguration.auth.providers.google.redirectUrl | quote }}
@@ -520,7 +520,7 @@ data:
           {{- end }}
           {{- if .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins }}
           requestOrigins:
-          {{ toYaml .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins | nindent 12 }}
+          {{- toYaml .Values.openlane.coreConfiguration.auth.providers.webauthn.requestOrigins | nindent 12 }}
           {{- else if .Values.domain }}
           requestOrigins:
             - "https://console.{{ .Values.domain }}"
@@ -709,7 +709,7 @@ data:
         {{- $sliceValue := (.Values.openlane.coreConfiguration.tracer.otlp.headers | default (list)) }}
         {{- if gt (len $sliceValue) 0 }}
         headers:
-        {{ toYaml $sliceValue | nindent 10 }}
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
         {{- if .Values.openlane.coreConfiguration.tracer.otlp.compression }}
         compression: {{ .Values.openlane.coreConfiguration.tracer.otlp.compression | quote }}
@@ -868,12 +868,12 @@ data:
       {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimit.options | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       options:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.ratelimit.headers | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       headers:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind }}
       forwardedIndexFromBehind: {{ .Values.openlane.coreConfiguration.ratelimit.forwardedIndexFromBehind }}
@@ -908,7 +908,7 @@ data:
       {{- $sliceValue := (.Values.openlane.coreConfiguration.objectStorage.keys | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       keys:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.objectStorage.maxSizeMB }}
       maxSizeMB: {{ .Values.openlane.coreConfiguration.objectStorage.maxSizeMB }}
@@ -1072,7 +1072,7 @@ data:
       {{- $sliceValue := (.Values.openlane.coreConfiguration.subscription.stripeWebhookEvents | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
       stripeWebhookEvents:
-      {{ toYaml $sliceValue | nindent 8 }}
+      {{- toYaml $sliceValue | nindent 8 }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion }}
       stripeWebhookAPIVersion: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookAPIVersion | quote }}
@@ -1129,7 +1129,7 @@ data:
         {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | default (list)) }}
         {{- if gt (len $sliceValue) 0 }}
         scopes:
-        {{ toYaml $sliceValue | nindent 10 }}
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack }}
@@ -1147,7 +1147,7 @@ data:
         {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | default (list)) }}
         {{- if gt (len $sliceValue) 0 }}
         scopes:
-        {{ toYaml $sliceValue | nindent 10 }}
+        {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
     {{- end }}
