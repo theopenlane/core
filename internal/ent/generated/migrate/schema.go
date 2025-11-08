@@ -3689,6 +3689,7 @@ var (
 		{Name: "risk_comments", Type: field.TypeString, Nullable: true},
 		{Name: "subcontrol_comments", Type: field.TypeString, Nullable: true},
 		{Name: "task_comments", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_posts", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_comments", Type: field.TypeString, Nullable: true},
 	}
 	// NotesTable holds the schema information for the "notes" table.
@@ -3770,8 +3771,14 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_vulnerabilities_comments",
+				Symbol:     "notes_trust_centers_posts",
 				Columns:    []*schema.Column{NotesColumns[21]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_vulnerabilities_comments",
+				Columns:    []*schema.Column{NotesColumns[22]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -10785,7 +10792,8 @@ func init() {
 	NotesTable.ForeignKeys[9].RefTable = RisksTable
 	NotesTable.ForeignKeys[10].RefTable = SubcontrolsTable
 	NotesTable.ForeignKeys[11].RefTable = TasksTable
-	NotesTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[12].RefTable = TrustCentersTable
+	NotesTable.ForeignKeys[13].RefTable = VulnerabilitiesTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}

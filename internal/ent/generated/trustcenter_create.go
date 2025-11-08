@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
@@ -279,6 +280,21 @@ func (_c *TrustCenterCreate) AddTemplates(v ...*Template) *TrustCenterCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddTemplateIDs(ids...)
+}
+
+// AddPostIDs adds the "posts" edge to the Note entity by IDs.
+func (_c *TrustCenterCreate) AddPostIDs(ids ...string) *TrustCenterCreate {
+	_c.mutation.AddPostIDs(ids...)
+	return _c
+}
+
+// AddPosts adds the "posts" edges to the Note entity.
+func (_c *TrustCenterCreate) AddPosts(v ...*Note) *TrustCenterCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddPostIDs(ids...)
 }
 
 // Mutation returns the TrustCenterMutation object of the builder.
@@ -555,6 +571,23 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Template
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PostsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.PostsTable,
+			Columns: []string{trustcenter.PostsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(note.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

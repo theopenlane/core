@@ -165,6 +165,7 @@ Server settings for the echo server
 |[**mime**](#servermime)|`object`|Config defines the config for Mime middleware<br/>|no|
 |[**graphPool**](#servergraphpool)|`object`|PondPool contains the settings for the goroutine pool<br/>|no|
 |**enableGraphExtensions**|`boolean`|EnableGraphExtensions enables the graph extensions for the graph resolvers<br/>|no|
+|**enableGraphSubscriptions**|`boolean`|EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse<br/>|no|
 |**complexityLimit**|`integer`|ComplexityLimit sets the maximum complexity allowed for a query<br/>|no|
 |**maxResultLimit**|`integer`|MaxResultLimit sets the maximum number of results allowed for a query<br/>|no|
 |[**csrfProtection**](#servercsrfprotection)|`object`|Config defines configuration for the CSRF middleware wrapper.<br/>|no|

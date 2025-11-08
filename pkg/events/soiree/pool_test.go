@@ -11,23 +11,32 @@ import (
 	"github.com/alitto/pond/v2"
 )
 
+func mustSubscribe(pool *EventPool, topic string, listener TypedListener[Event], opts ...ListenerOption) string {
+	id, err := BindListener(typedEventTopic(topic), listener, opts...).Register(pool)
+	if err != nil {
+		panic(err)
+	}
+
+	return id
+}
+
+func emitPayload(pool *EventPool, topic string, payload any) <-chan error {
+	return pool.Emit(topic, Event(NewBaseEvent(topic, payload)))
+}
+
 func TestEmitEventWithPool(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(10))))
 
 	var processedEvents int32
 
-	listenerID, err := soiree.On("testEvent", func(event Event) error {
+	listenerID := mustSubscribe(soiree, "testEvent", func(_ *EventContext, event Event) error {
 		atomic.AddInt32(&processedEvents, 1)
 		time.Sleep(10 * time.Millisecond) // Simulating work
 
 		return nil
 	})
 
-	if err != nil {
-		t.Fatalf("Error adding listener: %v", err)
-	}
-
-	errChan := soiree.Emit("testEvent", nil)
+	errChan := emitPayload(soiree, "testEvent", nil)
 
 	// Collect all errors from the channel
 	var errors []error
@@ -75,7 +84,7 @@ func TestEmitMultipleEventsWithPool(t *testing.T) {
 	var processingError error
 
 	// Add an event listener to handle "testEvent" and increment the processedEvents count
-	_, err := soiree.On("testEvent", func(event Event) error {
+	mustSubscribe(soiree, "testEvent", func(_ *EventContext, event Event) error {
 		// Simulate some processing
 		time.Sleep(100 * time.Millisecond)
 
@@ -84,15 +93,12 @@ func TestEmitMultipleEventsWithPool(t *testing.T) {
 
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("Error adding listener: %v", err)
-	}
 
 	// Emit multiple events concurrently
 	for i := 0; i < numConcurrentEvents; i++ {
 		go func() {
 			// Emit an event using the soiree
-			errChan := soiree.Emit("testEvent", nil)
+			errChan := emitPayload(soiree, "testEvent", nil)
 
 			// Wait for the event to be processed
 			for err := range errChan {
@@ -119,22 +125,16 @@ func TestMultipleListenersOnSameTopic(t *testing.T) {
 
 	var count1, count2 int32
 
-	_, err := soiree.On("topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count1, 1)
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("Error adding listener 1: %v", err)
-	}
-	_, err = soiree.On("topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count2, 1)
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("Error adding listener 2: %v", err)
-	}
 
-	errChan := soiree.Emit("topic", nil)
+	errChan := emitPayload(soiree, "topic", nil)
 	for err := range errChan {
 		if err != nil {
 			t.Fatalf("Listener error: %v", err)
@@ -152,19 +152,16 @@ func TestRemoveListener(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(2))))
 
 	var count int32
-	listenerID, err := soiree.On("topic", func(e Event) error {
+	listenerID := mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		atomic.AddInt32(&count, 1)
 		return nil
 	})
-	if err != nil {
-		t.Fatalf("Error adding listener: %v", err)
-	}
 
 	if err := soiree.Off("topic", listenerID); err != nil {
 		t.Fatalf("Error removing listener: %v", err)
 	}
 
-	errChan := soiree.Emit("topic", nil)
+	errChan := emitPayload(soiree, "topic", nil)
 	for err := range errChan {
 		if err != nil {
 			t.Fatalf("Listener error: %v", err)
@@ -180,7 +177,7 @@ func TestRemoveListener(t *testing.T) {
 
 func TestEmitNoListeners(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(2))))
-	errChan := soiree.Emit("noListeners", nil)
+	errChan := emitPayload(soiree, "noListeners", nil)
 	for err := range errChan {
 		if err != nil {
 			t.Fatalf("Unexpected error: %v", err)
@@ -192,14 +189,11 @@ func TestListenerErrorReporting(t *testing.T) {
 	soiree := NewEventPool(WithPool(NewPondPool(WithMaxWorkers(2))))
 
 	someErr := errors.New("listener error")
-	_, err := soiree.On("topic", func(e Event) error {
+	mustSubscribe(soiree, "topic", func(_ *EventContext, e Event) error {
 		return someErr
 	})
-	if err != nil {
-		t.Fatalf("Error adding listener: %v", err)
-	}
 
-	errChan := soiree.Emit("topic", nil)
+	errChan := emitPayload(soiree, "topic", nil)
 	var gotErr error
 	for err := range errChan {
 		if err != nil {
@@ -215,26 +209,38 @@ func TestPondPool_SuccessfulTasks(t *testing.T) {
 	pool := NewPondPool(WithMaxWorkers(2))
 	defer pool.Release()
 
-	var called int32
+	const expected = 2
+	var wg sync.WaitGroup
+	wg.Add(expected)
 
-	// Submit two tasks that complete successfully
-	pool.Submit(func() {
-		atomic.AddInt32(&called, 1)
-	})
-	pool.Submit(func() {
-		atomic.AddInt32(&called, 1)
-	})
-
-	// Wait for tasks to finish
-	for atomic.LoadInt32(&called) < 2 {
-		time.Sleep(5 * time.Millisecond)
+	for i := 0; i < expected; i++ {
+		pool.Submit(func() {
+			defer wg.Done()
+		})
 	}
 
-	// The implementation currently returns WaitingTasks as SuccessfulTasks,
-	// so we check that the method returns an int and does not panic.
-	got := pool.SuccessfulTasks()
-	if got < 0 {
-		t.Errorf("SuccessfulTasks should not be negative, got %d", got)
+	done := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(done)
+	}()
+
+	select {
+	case <-done:
+	case <-time.After(2 * time.Second):
+		t.Fatal("tasks did not complete in time")
+	}
+
+	deadline := time.Now().Add(2 * time.Second)
+	for time.Now().Before(deadline) {
+		if pool.SuccessfulTasks() == expected {
+			break
+		}
+		time.Sleep(10 * time.Millisecond)
+	}
+
+	if got := pool.SuccessfulTasks(); got != expected {
+		t.Fatalf("SuccessfulTasks() = %d, want %d", got, expected)
 	}
 }
 func TestWithName_SetsName(t *testing.T) {
@@ -353,17 +359,35 @@ func TestPondPool_SubmitMultipleAndWait_TasksRunConcurrently(t *testing.T) {
 
 type fakePondPool struct {
 	pond.Pool
-	waitingTasks uint64
+	waitingTasks    uint64
+	submittedTasks  uint64
+	successfulTasks uint64
+	failedTasks     uint64
+	completedTasks  uint64
 }
 
-// Implement WaitingTasks for the fake pool
 func (f *fakePondPool) WaitingTasks() uint64 {
 	return f.waitingTasks
 }
 
-func TestPondPool_SubmittedTasks_ReturnsWaitingTasks(t *testing.T) {
-	// Mock pond.Pool with a custom WaitingTasks method
-	var fakePool = &fakePondPool{waitingTasks: 42}
+func (f *fakePondPool) SubmittedTasks() uint64 {
+	return f.submittedTasks
+}
+
+func (f *fakePondPool) SuccessfulTasks() uint64 {
+	return f.successfulTasks
+}
+
+func (f *fakePondPool) FailedTasks() uint64 {
+	return f.failedTasks
+}
+
+func (f *fakePondPool) CompletedTasks() uint64 {
+	return f.completedTasks
+}
+
+func TestPondPool_SubmittedTasks_DelegatesToPool(t *testing.T) {
+	var fakePool = &fakePondPool{submittedTasks: 42}
 
 	// Patch PondPool to use our fake pool
 	pool := &PondPool{pool: fakePool}
@@ -375,40 +399,11 @@ func TestPondPool_SubmittedTasks_ReturnsWaitingTasks(t *testing.T) {
 }
 
 func TestPondPool_SubmittedTasks_Overflow(t *testing.T) {
-	type fakePondPool struct {
-		pond.Pool
-	}
-	fakePool := &fakePondPool{}
+	fakePool := &fakePondPool{submittedTasks: uint64(math.MaxInt) + 10}
 	pool := &PondPool{pool: fakePool}
 
-	// Patch WaitingTasks to return a value greater than math.MaxInt
-	orig := pool.pool
-	defer func() { pool.pool = orig }()
-	pool.pool = struct {
-		pond.Pool
-	}{
-		pond.Pool(nil),
-	}
-	// Use a closure to override WaitingTasks
-	type pondPoolWithWaitingTasks interface {
-		WaitingTasks() uint64
-	}
-	pool.pool = struct {
-		pond.Pool
-	}{
-		pond.Pool(nil),
-	}
-	// Use reflect to set the method if needed, or just check logic
-	// Since we can't easily override methods, just check the logic directly
-	submittedTasks := uint64(math.MaxInt) + 1
-	maxInt := uint64(math.MaxInt)
-	var want int
-	if submittedTasks > maxInt {
-		want = math.MaxInt
-	} else {
-		want = int(submittedTasks)
-	}
-	if want != math.MaxInt {
-		t.Errorf("Expected want to be math.MaxInt, got %d", want)
+	got := pool.SubmittedTasks()
+	if got != math.MaxInt {
+		t.Errorf("SubmittedTasks() = %d, want %d", got, math.MaxInt)
 	}
 }

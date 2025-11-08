@@ -7944,6 +7944,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"InternalPolicy",
 	)
 	graph.MustAddE(
+		"trust_center",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+		},
+		"Note",
+		"TrustCenter",
+	)
+	graph.MustAddE(
 		"files",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -11194,6 +11206,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenter",
 		"Template",
+	)
+	graph.MustAddE(
+		"posts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   trustcenter.PostsTable,
+			Columns: []string{trustcenter.PostsColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"Note",
 	)
 	graph.MustAddE(
 		"trust_center",
@@ -25188,6 +25212,20 @@ func (f *NoteFilter) WhereHasInternalPolicyWith(preds ...predicate.InternalPolic
 	})))
 }
 
+// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
+func (f *NoteFilter) WhereHasTrustCenter() {
+	f.Where(entql.HasEdge("trust_center"))
+}
+
+// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
+func (f *NoteFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
+	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasFiles applies a predicate to check if query has an edge files.
 func (f *NoteFilter) WhereHasFiles() {
 	f.Where(entql.HasEdge("files"))
@@ -35526,6 +35564,20 @@ func (f *TrustCenterFilter) WhereHasTemplates() {
 // WhereHasTemplatesWith applies a predicate to check if query has an edge templates with a given conditions (other predicates).
 func (f *TrustCenterFilter) WhereHasTemplatesWith(preds ...predicate.Template) {
 	f.Where(entql.HasEdgeWith("templates", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPosts applies a predicate to check if query has an edge posts.
+func (f *TrustCenterFilter) WhereHasPosts() {
+	f.Where(entql.HasEdge("posts"))
+}
+
+// WhereHasPostsWith applies a predicate to check if query has an edge posts with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasPostsWith(preds ...predicate.Note) {
+	f.Where(entql.HasEdgeWith("posts", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

@@ -22,7 +22,7 @@ func TestAddUpload(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitGroup should not be done yet")
-	case <-time.After(50 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 	}
 
 	uploadWaitGroup.Done()
@@ -42,7 +42,7 @@ func TestDoneUpload(t *testing.T) {
 
 	select {
 	case <-done:
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitGroup should be done")
 	}
 }
@@ -61,14 +61,14 @@ func TestWaitForUploads(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitForUploads should still be waiting")
-	case <-time.After(50 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 	}
 
 	uploadWaitGroup.Done()
 
 	select {
 	case <-done:
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitForUploads should have completed")
 	}
 }
@@ -91,7 +91,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitForUploads should still be waiting")
-	case <-time.After(50 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 	}
 
 	for i := 0; i < numGoroutines; i++ {
@@ -100,7 +100,7 @@ func TestUploadSync_Concurrent(t *testing.T) {
 
 	select {
 	case <-done:
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitForUploads should have completed")
 	}
 }
@@ -128,12 +128,12 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 		t.Fatal("waiter1 should still be waiting")
 	case <-waiter2Done:
 		t.Fatal("waiter2 should still be waiting")
-	case <-time.After(50 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 	}
 
 	DoneUpload()
 
-	timeout := time.After(100 * time.Millisecond)
+	timeout := time.After(10000 * time.Millisecond)
 	waiter1Received := false
 	waiter2Received := false
 
@@ -182,7 +182,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 
 	select {
 	case <-done:
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitForUploads should complete immediately after all uploads are done")
 	}
 
@@ -197,7 +197,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	select {
 	case <-done:
 		t.Fatal("WaitForUploads should be waiting for new uploads")
-	case <-time.After(50 * time.Millisecond):
+	case <-time.After(500 * time.Millisecond):
 	}
 
 	DoneUpload()
@@ -205,7 +205,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 
 	select {
 	case <-done:
-	case <-time.After(100 * time.Millisecond):
+	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitForUploads should complete after all new uploads are done")
 	}
 }

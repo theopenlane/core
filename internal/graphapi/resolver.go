@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/events/soiree"
 )
@@ -59,15 +60,25 @@ type Resolver struct {
 	// mappable domain that trust center records will resolve to
 	trustCenterCnameTarget   string
 	defaultTrustCenterDomain string
+	// subscription manager for real-time updates
+	subscriptionManager *graphsubscriptions.Manager
 }
 
 // NewResolver returns a resolver configured with the given ent client
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
-		db:       db,
-		uploader: u,
+		db:                  db,
+		uploader:            u,
 	}
 }
+// WithSubscriptions enables graphql subscriptions to the server using websockets or sse
+   func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
+      if enabled {
+          r.subscriptionManager = graphsubscriptions.NewManager()
+      }
+      
+      return &r
+  }
 
 func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	r.trustCenterCnameTarget = cname
@@ -134,6 +145,11 @@ func (r *Resolver) Handler() *Handler {
 			},
 		},
 	})
+	if r.subscriptionManager != nil {
+		srv.AddTransport(transport.SSE{
+			KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
+		})
+	}
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
@@ -189,6 +205,7 @@ func (r *Resolver) Handler() *Handler {
 
 	return h
 }
+
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query

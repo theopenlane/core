@@ -20,7 +20,7 @@ import (
 )
 
 // testHandler implements server.handler and exposes a simple POST endpoint
-// used to validate CSRF behaviour
+// used to validate CSRF behavior
 type testHandler struct{}
 
 func (testHandler) Routes(g *echo.Group) {

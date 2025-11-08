@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -238,6 +239,25 @@ func (_u *NoteUpdate) SetInternalPolicy(v *InternalPolicy) *NoteUpdate {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
+func (_u *NoteUpdate) SetTrustCenterID(id string) *NoteUpdate {
+	_u.mutation.SetTrustCenterID(id)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableTrustCenterID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetTrustCenterID(*id)
+	}
+	return _u
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *NoteUpdate) SetTrustCenter(v *TrustCenter) *NoteUpdate {
+	return _u.SetTrustCenterID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdate) AddFileIDs(ids ...string) *NoteUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -291,6 +311,12 @@ func (_u *NoteUpdate) ClearRisk() *NoteUpdate {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdate) ClearInternalPolicy() *NoteUpdate {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *NoteUpdate) ClearTrustCenter() *NoteUpdate {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -604,6 +630,37 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -876,6 +933,25 @@ func (_u *NoteUpdateOne) SetInternalPolicy(v *InternalPolicy) *NoteUpdateOne {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
+func (_u *NoteUpdateOne) SetTrustCenterID(id string) *NoteUpdateOne {
+	_u.mutation.SetTrustCenterID(id)
+	return _u
+}
+
+// SetNillableTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableTrustCenterID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetTrustCenterID(*id)
+	}
+	return _u
+}
+
+// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
+func (_u *NoteUpdateOne) SetTrustCenter(v *TrustCenter) *NoteUpdateOne {
+	return _u.SetTrustCenterID(v.ID)
+}
+
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *NoteUpdateOne) AddFileIDs(ids ...string) *NoteUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -929,6 +1005,12 @@ func (_u *NoteUpdateOne) ClearRisk() *NoteUpdateOne {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdateOne) ClearInternalPolicy() *NoteUpdateOne {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
+func (_u *NoteUpdateOne) ClearTrustCenter() *NoteUpdateOne {
+	_u.mutation.ClearTrustCenter()
 	return _u
 }
 
@@ -1264,6 +1346,37 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.TrustCenterTable,
+			Columns: []string{note.TrustCenterColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

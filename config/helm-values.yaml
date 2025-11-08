@@ -100,6 +100,8 @@ coreConfiguration:
       maxWorkers: 100  # @schema type:integer; default:100
     # -- EnableGraphExtensions enables the graph extensions for the graph resolvers
     enableGraphExtensions: true  # @schema type:boolean; default:true
+    # -- EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse
+    enableGraphSubscriptions: false  # @schema type:boolean; default:false
     # -- ComplexityLimit sets the maximum complexity allowed for a query
     complexityLimit: 100  # @schema type:integer; default:100
     # -- MaxResultLimit sets the maximum number of results allowed for a query

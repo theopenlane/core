@@ -1,3 +1,5 @@
+
+
 package serveropts
 
 import (
@@ -254,7 +256,8 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			WithComplexityLimitConfig(s.Config.Settings.Server.ComplexityLimit).
 			WithMaxResultLimit(s.Config.Settings.Server.MaxResultLimit).
 			WithTrustCenterCnameTarget(s.Config.Settings.Server.TrustCenterCnameTarget).
-			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain)
+			WithTrustCenterDefaultDomain(s.Config.Settings.Server.DefaultTrustCenterDomain).
+			WithSubscriptions(s.Config.Settings.Server.EnableGraphSubscriptions)
 
 		// add pool to the resolver to manage the number of goroutines
 		r.WithPool(

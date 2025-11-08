@@ -40,6 +40,7 @@ type ResolverRoot interface {
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
+	Subscription() SubscriptionResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
@@ -3408,6 +3409,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
 		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
 		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
+		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
@@ -3518,6 +3520,7 @@ type ComplexityRoot struct {
 		Subcontrol     func(childComplexity int) int
 		Task           func(childComplexity int) int
 		Text           func(childComplexity int) int
+		TrustCenter    func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
 	}
@@ -5695,6 +5698,10 @@ type ComplexityRoot struct {
 		Subscriber func(childComplexity int) int
 	}
 
+	Subscription struct {
+		TaskCreated func(childComplexity int) int
+	}
+
 	TFASetting struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -5986,6 +5993,7 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		Posts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -25547,6 +25555,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateTrustCenterNda(childComplexity, args["id"].(string), args["templateFiles"].([]*graphql.Upload)), true
 
+	case "Mutation.updateTrustCenterPost":
+		if e.complexity.Mutation.UpdateTrustCenterPost == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterPost_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterPost(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
 			break
@@ -26134,6 +26154,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.Text(childComplexity), true
+
+	case "Note.trustCenter":
+		if e.complexity.Note.TrustCenter == nil {
+			break
+		}
+
+		return e.complexity.Note.TrustCenter(childComplexity), true
 
 	case "Note.updatedAt":
 		if e.complexity.Note.UpdatedAt == nil {
@@ -39660,6 +39687,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubscriberUpdatePayload.Subscriber(childComplexity), true
 
+	case "Subscription.taskCreated":
+		if e.complexity.Subscription.TaskCreated == nil {
+			break
+		}
+
+		return e.complexity.Subscription.TaskCreated(childComplexity), true
+
 	case "TFASetting.createdAt":
 		if e.complexity.TFASetting.CreatedAt == nil {
 			break
@@ -41024,6 +41058,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenter.OwnerID(childComplexity), true
+
+	case "TrustCenter.posts":
+		if e.complexity.TrustCenter.Posts == nil {
+			break
+		}
+
+		args, err := ec.field_TrustCenter_posts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.TrustCenter.Posts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "TrustCenter.setting":
 		if e.complexity.TrustCenter.Setting == nil {
@@ -45405,6 +45451,23 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
 			data := ec._Mutation(ctx, opCtx.Operation.SelectionSet)
 			var buf bytes.Buffer
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
+	case ast.Subscription:
+		next := ec._Subscription(ctx, opCtx.Operation.SelectionSet)
+
+		var buf bytes.Buffer
+		return func(ctx context.Context) *graphql.Response {
+			buf.Reset()
+			data := next(ctx)
+
+			if data == nil {
+				return nil
+			}
 			data.MarshalGQL(&buf)
 
 			return &graphql.Response{
@@ -60240,6 +60303,7 @@ input CreateNoteInput {
   procedureID: ID
   riskID: ID
   internalPolicyID: ID
+  trustCenterID: ID
   fileIDs: [ID!]
 }
 """
@@ -61545,6 +61609,7 @@ input CreateTrustCenterInput {
   trustCenterDocIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
   templateIDs: [ID!]
+  postIDs: [ID!]
 }
 """
 CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
@@ -83596,6 +83661,7 @@ type Note implements Node {
   procedure: Procedure
   risk: Risk
   internalPolicy: InternalPolicy
+  trustCenter: TrustCenter
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -84097,6 +84163,11 @@ input NoteWhereInput {
   """
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  trust_center edge predicates
+  """
+  hasTrustCenter: Boolean
+  hasTrustCenterWith: [TrustCenterWhereInput!]
   """
   files edge predicates
   """
@@ -111306,6 +111377,37 @@ type TrustCenter implements Node {
     """
     where: TemplateWhereInput
   ): TemplateConnection!
+  posts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 type TrustCenterCompliance implements Node {
   id: ID!
@@ -115156,6 +115258,11 @@ input TrustCenterWhereInput {
   """
   hasTemplates: Boolean
   hasTemplatesWith: [TemplateWhereInput!]
+  """
+  posts edge predicates
+  """
+  hasPosts: Boolean
+  hasPostsWith: [NoteWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -117586,6 +117693,8 @@ input UpdateNoteInput {
   clearRisk: Boolean
   internalPolicyID: ID
   clearInternalPolicy: Boolean
+  trustCenterID: ID
+  clearTrustCenter: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -119477,6 +119586,9 @@ input UpdateTrustCenterInput {
   addTemplateIDs: [ID!]
   removeTemplateIDs: [ID!]
   clearTemplates: Boolean
+  addPostIDs: [ID!]
+  removePostIDs: [ID!]
+  clearPosts: Boolean
 }
 """
 UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
@@ -127298,6 +127410,17 @@ extend input UpdateProcedureInput {
     deleteComment: ID
 }
 
+extend input UpdateTrustCenterInput {
+    """
+    adds a post for the trust center feed
+    """
+    addPost: CreateNoteInput
+    """
+    delete a post from the trust center feed
+    """
+    deletePost: ID
+}
+
 extend type Mutation{
     """
     Update an existing task comment
@@ -127401,6 +127524,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): InternalPolicyUpdatePayload!
+     """
+    Update an existing trust center post
+    """
+    updateTrustCenterPost(
+        """
+        ID of the update
+        """
+        id: ID!
+        """
+        New values for the post
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the post
+        """
+        noteFiles: [Upload!]
+    ): TrustCenterUpdatePayload!
     """
     Delete an existing note
     """
@@ -131193,6 +131333,13 @@ type SubscriberBulkCreatePayload {
     subscribers: [Subscriber!]
 }
 
+`, BuiltIn: false},
+	{Name: "../schema/subscription.graphql", Input: `type Subscription {
+  """
+  Subscribe to task creation events for the authenticated user
+  """
+  taskCreated: Task!
+}
 `, BuiltIn: false},
 	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {
     """
