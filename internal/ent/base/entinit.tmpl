@@ -64,7 +64,7 @@ func ({{ $name }}) Fields() []ent.Field {
 func ({{ $firstChar }} {{ $name }}) Mixin() []ent.Mixin {
 	// getDefaultMixins returns the default mixins for all entities
 	// see mixingConfig{} for more configuration options
-	return getDefaultMixins()
+	return getDefaultMixins({{ $firstChar }})
 }
 
 // Edges of the {{ $name }}

@@ -191,5 +191,6 @@ func (Standard) Modules() []models.OrgModule {
 		models.CatalogPolicyManagementAddon,
 		models.CatalogRiskManagementAddon,
 		models.CatalogEntityManagementModule,
+		models.CatalogTrustCenterModule,
 	}
 }
