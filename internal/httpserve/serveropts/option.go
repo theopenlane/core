@@ -1,3 +1,5 @@
+
+
 package serveropts
 
 import (
@@ -261,6 +263,11 @@ func WithGraphRoute(srv *server.Server, c *ent.Client) ServerOption {
 			s.Config.Settings.Server.GraphPool.MaxWorkers,
 			true, // include metrics collectors
 		)
+
+		// enable subscriptions if configured
+		if s.Config.Settings.Server.EnableGraphSubscriptions {
+			r = r.WithSubscriptions(s.Config.Settings.Server.TrustCenterCnameTarget)
+		}
 
 		handler := r.Handler()
 

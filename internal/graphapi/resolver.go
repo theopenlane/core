@@ -69,9 +69,13 @@ func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
 		db:                  db,
 		uploader:            u,
-		subscriptionManager: graphsubscriptions.NewManager(),
 	}
 }
+// WithSubscriptions enables graphql subscriptions to the server using websockets or sse
+  func (r Resolver) WithSubscriptions(cname string) *Resolver {
+      r.subscriptionManager = graphsubscriptions.NewManager()
+      return &r
+  }
 
 func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	r.trustCenterCnameTarget = cname
@@ -138,6 +142,11 @@ func (r *Resolver) Handler() *Handler {
 			},
 		},
 	})
+	if r.subscriptionManager != nil {
+		srv.AddTransport(transport.SSE{
+			KeepAlivePingInterval: 10 * time.Second, //nolint:mnd
+		})
+	}
 	srv.AddTransport(transport.Options{})
 	srv.AddTransport(transport.GET{})
 	srv.AddTransport(transport.POST{})
@@ -193,6 +202,7 @@ func (r *Resolver) Handler() *Handler {
 
 	return h
 }
+
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query

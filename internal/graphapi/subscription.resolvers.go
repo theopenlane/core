@@ -11,10 +11,17 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
+	"github.com/theopenlane/iam/auth"
 )
 
 // TaskCreated is the resolver for the taskCreated field.
-func (r *subscriptionResolver) TaskCreated(ctx context.Context, userID string) (<-chan *generated.Task, error) {
+func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generated.Task, error) {
+	userID, err := auth.GetSubjectIDFromContext(ctx)
+	if err != nil {
+		log.Error().Err(err).Msg("unable to get subject ID from context")
+		return nil, newPermissionDeniedError()
+	}
+
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
 		log.Error().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")

@@ -5696,6 +5696,10 @@ type ComplexityRoot struct {
 		Subscriber func(childComplexity int) int
 	}
 
+	Subscription struct {
+		TaskCreated func(childComplexity int) int
+	}
+
 	TFASetting struct {
 		CreatedAt   func(childComplexity int) int
 		CreatedBy   func(childComplexity int) int
@@ -39661,6 +39665,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubscriberUpdatePayload.Subscriber(childComplexity), true
 
+	case "Subscription.taskCreated":
+		if e.complexity.Subscription.TaskCreated == nil {
+			break
+		}
+
+		return e.complexity.Subscription.TaskCreated(childComplexity), true
+
 	case "TFASetting.createdAt":
 		if e.complexity.TFASetting.CreatedAt == nil {
 			break
@@ -45406,6 +45417,23 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 			ctx = graphql.WithUnmarshalerMap(ctx, inputUnmarshalMap)
 			data := ec._Mutation(ctx, opCtx.Operation.SelectionSet)
 			var buf bytes.Buffer
+			data.MarshalGQL(&buf)
+
+			return &graphql.Response{
+				Data: buf.Bytes(),
+			}
+		}
+	case ast.Subscription:
+		next := ec._Subscription(ctx, opCtx.Operation.SelectionSet)
+
+		var buf bytes.Buffer
+		return func(ctx context.Context) *graphql.Response {
+			buf.Reset()
+			data := next(ctx)
+
+			if data == nil {
+				return nil
+			}
 			data.MarshalGQL(&buf)
 
 			return &graphql.Response{
@@ -131194,6 +131222,13 @@ type SubscriberBulkCreatePayload {
     subscribers: [Subscriber!]
 }
 
+`, BuiltIn: false},
+	{Name: "../schema/subscription.graphql", Input: `type Subscription {
+  """
+  Subscribe to task creation events for the authenticated user
+  """
+  taskCreated: Task!
+}
 `, BuiltIn: false},
 	{Name: "../schema/tagdefinition.graphql", Input: `extend type Query {
     """
