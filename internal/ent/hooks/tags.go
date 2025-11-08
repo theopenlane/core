@@ -56,7 +56,7 @@ func HookTags() ent.Hook {
 					if err := mut.Client().TagDefinition.Create().
 						SetInput(input).
 						Exec(ctx); err != nil {
-						return nil, err
+						log.Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
 					}
 				} else if err != nil {
 					log.Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
