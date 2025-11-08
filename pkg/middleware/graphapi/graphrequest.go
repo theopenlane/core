@@ -7,7 +7,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 )
 
@@ -59,12 +58,7 @@ func CheckGraphReadRequest(c echo.Context) bool {
 		return false
 	}
 
-	if detectGraphQLOperationType(queryStr) {
-		logx.FromContext(c.Request().Context()).Warn().Str("query", queryStr).Msg("detected read-only GraphQL query operation")
-
-		return true
-	}
-	return false
+	return detectGraphQLOperationType(queryStr)
 }
 
 // detectGraphQLOperationType inspects the GraphQL query string to determine the operation type
