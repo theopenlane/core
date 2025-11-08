@@ -30,8 +30,8 @@ steps:
         cancel_on_build_failing: true
         if_changed:
           - go.{mod,sum}
-          - internal/**
-          - pkg/**
+          - internal/ent/**
+          - internal/graphapi/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -68,7 +68,8 @@ steps:
         key: "draft_pr_automation"
         depends_on: "generate_config"
         if: build.pull_request.id != null
-        if_changed: "{config/**}"
+        if_changed:
+          - config/**
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -92,7 +93,8 @@ steps:
         key: "link_pr_automation"
         depends_on: "draft_pr_automation"
         if: build.pull_request.id != null
-        if_changed: "{config/**}"
+        if_changed:
+          - config/**
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -114,7 +116,8 @@ steps:
         key: "helm_automation"
         depends_on: "generate_config"
         if: build.branch == "main"
-        if_changed: "{config/**}"
+        if_changed:
+          - config/**
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -138,7 +141,8 @@ steps:
         key: "post_merge_automation"
         depends_on: "helm_automation"
         if: build.branch == "main"
-        if_changed: "{config/**}"
+        if_changed:
+          - config/**
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -162,7 +166,8 @@ steps:
         key: "cleanup_draft_prs"
         depends_on: "post_merge_automation"
         if: build.branch == "main"
-        if_changed: "{config/**}"
+        if_changed:
+          - config/**
         plugins:
           - cluster-secrets#v1.0.0:
               variables:
@@ -293,7 +298,8 @@ steps:
                 - "TEST_DB_HOST=172.17.0.1" # docker host ip on linux
         artifact_paths: ["coverage-no-graph.out", "junit-no-graph.xml"]
       - label: ":auth0: fga model test"
-        if_changed: "{fga/**}"
+        if_changed:
+          - "fga/**"
         agents:
           queue: $SMALL_RUNNER_QUEUE
           size: $RUNNER_SMALL
