@@ -147,7 +147,7 @@ tasks:
     cmds:
       - go generate pkg/catalog/generate.go
       - go generate pkg/corejobs/internal/generate.go
-      - go generate internal/httpserve/specs/generate.go
+      - go generate internal/httpserve/specs/generate/generate.go
 
   # Buildkite automation tasks
   buildkite:draft-pr:
@@ -620,4 +620,4 @@ tasks:
   generate:openapi:
     desc: Generate OpenAPI spec file
     cmds:
-      - go run ./internal/httpserve/specs/cmd/generate/main.go
+      - go run ./internal/httpserve/specs/generate/main.go

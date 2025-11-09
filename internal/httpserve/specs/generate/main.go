@@ -13,11 +13,10 @@ import (
 )
 
 const (
-	specDir        = "internal/httpserve/specs"
 	jsonFilename   = "openlane.openapi.json"
 	yamlFilename   = "openlane.openapi.yaml"
-	jsonOutputPath = specDir + "/" + jsonFilename
-	yamlOutputPath = specDir + "/" + yamlFilename
+	jsonOutputPath = "../" + jsonFilename
+	yamlOutputPath = "../" + yamlFilename
 
 	specFilePerm fs.FileMode = 0o600
 )
