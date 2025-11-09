@@ -443,6 +443,7 @@ steps:
               environment:
                 - CGO_ENABLED=0
                 - GOOS=linux
+                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
               command: ["task", "go:build:ci"]
       - label: ":terminal: build cli"
         key: "gobuild-cli"
@@ -455,6 +456,49 @@ steps:
           - "**.go"
           - go.{mod,sum}
           - cmd/cli/**
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - GOOS=darwin
+                - GOARCH=arm64
+                - GOFLAGS="-buildvcs=false -gcflags=all=-l"
+              command: ["task", "go:build-cli:ci"]
+      - label: ":golang: build release"
+        key: "gobuild-server-release"
+        if: build.tag != null
+        cancel_on_build_failing: true
+        artifact_paths: "bin/${APP_NAME}"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+        plugins:
+          - docker#v5.13.0:
+              image: "ghcr.io/theopenlane/build-image:latest"
+              always_pull: true
+              propagate-environment: true
+              volumes:
+                - $GOCACHE:$GOCACHE
+                - $GOMODCACHE:$GOMODCACHE
+                - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+              environment:
+                - CGO_ENABLED=0
+                - GOOS=linux
+              command: ["task", "go:build:ci"]
+      - label: ":terminal: build cli release"
+        if: build.tag != null
+        key: "gobuild-cli-release"
+        agents:
+          queue: $LARGE_RUNNER_QUEUE
+          size: $RUNNER_LARGE
+        cancel_on_build_failing: true
+        artifact_paths: "bin/openlane-cli"
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"
@@ -536,9 +580,6 @@ steps:
                 - "BUILDKITE_AGENT_ACCESS_TOKEN"
   - group: ":docker: Image Build"
     depends_on: "go-builds"
-    if_changed:
-      - "**.go"
-      - go.{mod,sum}
     key: "image-build"
     steps:
       - label: ":docker: docker pr build"
@@ -548,6 +589,9 @@ steps:
           size: $RUNNER_LARGE
         cancel_on_build_failing: true
         if: build.branch != "main" && build.tag == null
+        if_changed:
+          - "**.go"
+          - go.{mod,sum}
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
@@ -592,7 +636,7 @@ steps:
               download:
                 - from: "bin/${APP_NAME}"
                   to: "${APP_NAME}"
-              step: "gobuild-server"
+              step: "gobuild-server-release"
           - cluster-secrets#v1.0.0:
               variables:
                 SECRET_GHCR_PUBLISH_TOKEN: SECRET_GHCR_PUBLISH_TOKEN
