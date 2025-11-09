@@ -232,7 +232,15 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 			return err
 		}
 
-		return h.handleSubscriptionPaused(c, subscription)
+		err = h.handleSubscriptionPaused(c, subscription)
+		if ent.IsNotFound(err) {
+			// if org subscription not found, just log and move on
+			log.Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for paused/deleted subscription, skipping further processing")
+
+			return nil
+		}
+
+		return err
 	default:
 		log.Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
 
