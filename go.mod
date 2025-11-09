@@ -102,7 +102,7 @@ require (
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.5.0
+	github.com/urfave/cli/v3 v3.6.0
 	github.com/vektah/gqlparser/v2 v2.5.31
 	github.com/windmill-labs/windmill-go-client v1.574.0
 	github.com/xeipuuv/gojsonschema v1.2.0
