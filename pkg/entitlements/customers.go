@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v83"
 )
 
@@ -230,11 +231,13 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 			return nil
 		}
 
-		params := &stripe.SubscriptionScheduleUpdateParams{
-			EndBehavior: stripe.String(string(stripe.SubscriptionScheduleEndBehaviorCancel)),
-		}
-
-		_, err := sc.Client.V1SubscriptionSchedules.Update(ctx, sub.Schedule.ID, params)
+		// when an organization is deleted, the subscription should be cancelled immediately, instead of at period end
+		_, err := sc.Client.V1Subscriptions.Cancel(ctx, sub.ID,
+			&stripe.SubscriptionCancelParams{
+				CancellationDetails: &stripe.SubscriptionCancelCancellationDetailsParams{
+					Comment: lo.ToPtr("system: organization was deleted - cancelling subscription"),
+				},
+			})
 		if err != nil {
 			return err
 		}

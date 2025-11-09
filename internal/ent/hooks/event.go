@@ -24,6 +24,11 @@ import (
 func EmitEventHook(e *Eventer) ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
+			// if this is a soft delete, skip emitting events, it will be handled by the duplicate update mutation that is triggered
+			// otherwise, you'll get double events for soft deletes
+			if entx.CheckIsSoftDelete(ctx) {
+				return next.Mutate(ctx, mutation)
+			}
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
@@ -44,20 +49,21 @@ func EmitEventHook(e *Eventer) ent.Hook {
 				if op == SoftDeleteOne {
 					eventID, err = parseSoftDeleteEventID(ctx, mutation)
 					if err != nil {
-						log.Err(err).Msg("failed to parse soft delete event ID")
+						logx.FromContext(ctx).Info().Err(err).Msg("failed to parse event ID for soft delete, skipping event emission")
 
 						return
 					}
 				} else {
 					eventID, err = parseEventID(retVal)
 					if err != nil {
-						log.Err(err).Msg("failed to parse event ID")
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to parse event ID, skipping event emission")
+
 						return
 					}
 				}
 
 				if eventID == nil || eventID.ID == "" {
-					log.Err(ErrUnableToDetermineEventID).Msg("Event ID is nil or empty, cannot emit event")
+					logx.FromContext(ctx).Error().Err(err).Msg("Event ID is nil or empty, cannot emit event")
 					return
 				}
 
@@ -131,13 +137,13 @@ type EventID struct {
 func parseEventID(retVal ent.Value) (*EventID, error) {
 	out, err := json.Marshal(retVal)
 	if err != nil {
-		log.Err(err).Msg("Failed to marshal return value")
+		log.Error().Err(err).Msg("Failed to marshal return value")
 		return nil, fmt.Errorf("failed to fetch organization from subscription: %w", err)
 	}
 
 	event := EventID{}
 	if err := json.Unmarshal(out, &event); err != nil {
-		log.Err(err).Msg("Failed to unmarshal return value")
+		log.Error().Err(err).Msg("Failed to unmarshal return value")
 		return nil, err
 	}
 
@@ -165,12 +171,6 @@ func parseSoftDeleteEventID(ctx context.Context, mutation ent.Mutation) (*EventI
 
 // getOperation determines the operation type from the context and mutation
 func getOperation(ctx context.Context, mutation ent.Mutation) string {
-	// determine if this is a soft delete operation
-	// this isn't in the context when we reach here, but incase it is in the future, we check
-	if entx.CheckIsSoftDelete(ctx) {
-		return SoftDeleteOne
-	}
-
 	// check the graphql operation context for the operation name
 	if graphql.HasOperationContext(ctx) {
 		opCtx := graphql.GetOperationContext(ctx)
