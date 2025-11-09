@@ -217,7 +217,7 @@ func (sc *StripeClient) DeleteCustomer(ctx context.Context, id string) error {
 // this is used when an organization is deleted - we retain the customer record and keep a referenced to the deactivated subscription
 // we do not delete the customer record in stripe for record / references
 // we also do not delete the subscription record in stripe for record / references
-// a cancelled active subscription will set to cancel at period end, a trialing subscription will be set to end immediately
+// this will cancel the subscription immediately, because the organization is being deleted and should not retain access
 func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Context, customerID string) error {
 	customer, err := sc.GetCustomerByStripeID(ctx, customerID)
 	if err != nil {
