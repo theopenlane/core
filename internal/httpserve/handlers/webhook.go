@@ -13,6 +13,7 @@ import (
 	"github.com/stripe/stripe-go/v83"
 	"github.com/stripe/stripe-go/v83/webhook"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
@@ -372,9 +373,6 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 						if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
 							orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
 								Where(orgsubscription.OwnerID(orgID), orgsubscription.DeletedAtIsNil()).Only(allowCtx)
-							if err == nil {
-								return orgSubscription, nil
-							}
 						}
 					}
 				}
@@ -393,11 +391,30 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 				}
 			}
 
-			// if we got here we could not find the org subscription, so just log and return the error
-			log.Warn().Str("subscription_id", subscription.ID).Msg("org subscription not found and no metadata to fallback on")
+			// if we got here we could not find the org subscription
+			// first check to see if the org was deleted already
+			allowCtx = entx.SkipSoftDelete(ctx)
+			if orgSubID := entitlements.GetOrganizationSubscriptionIDFromMetadata(subscription.Metadata); orgSubID != "" {
+				orgSubscription, _ = transaction.FromContext(ctx).OrgSubscription.Query().
+					Where(orgsubscription.ID(orgSubID)).Only(allowCtx)
+				if orgSubscription == nil {
+					// fallback to organization_id
+					if orgID := entitlements.GetOrganizationIDFromMetadata(subscription.Metadata); orgID != "" {
+						orgSubscription, err = transaction.FromContext(ctx).OrgSubscription.Query().
+							Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
+					}
+				}
+			}
+
+			if orgSubscription == nil {
+				log.Warn().Str("subscription_id", subscription.ID).Msg("org subscription never existed in system")
+			} else {
+				log.Info().Str("subscription_id", subscription.ID).Msg("org subscription found but was already deleted")
+			}
+
 		}
 
-		log.Error().Err(err).Msg("failed to find org subscription")
+		log.Warn().Err(err).Msg("failed to find org subscription")
 
 		return nil, err
 	}
