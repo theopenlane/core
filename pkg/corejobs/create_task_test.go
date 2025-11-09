@@ -361,4 +361,3 @@ func TestCreateTaskArgs_InsertOpts(t *testing.T) {
 		require.Equal(t, scheduledTime, opts.ScheduledAt)
 	})
 }
-

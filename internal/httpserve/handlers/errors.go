@@ -203,7 +203,7 @@ func (h *Handler) InternalServerError(ctx echo.Context, err error, openapi ...*O
 			openapi[0].Operation.AddResponse(http.StatusInternalServerError, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -232,7 +232,7 @@ func (h *Handler) Unauthorized(ctx echo.Context, err error, openapi ...*OpenAPIC
 			openapi[0].Operation.AddResponse(http.StatusUnauthorized, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -261,7 +261,7 @@ func (h *Handler) NotFound(ctx echo.Context, err error, openapi ...*OpenAPIConte
 			openapi[0].Operation.AddResponse(http.StatusNotFound, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -290,7 +290,7 @@ func (h *Handler) BadRequest(ctx echo.Context, err error, openapi ...*OpenAPICon
 			openapi[0].Operation.AddResponse(http.StatusBadRequest, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -319,7 +319,7 @@ func (h *Handler) BadRequestWithCode(ctx echo.Context, err error, code rout.Erro
 			openapi[0].Operation.AddResponse(http.StatusBadRequest, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -348,7 +348,7 @@ func (h *Handler) InvalidInput(ctx echo.Context, err error, openapi ...*OpenAPIC
 			openapi[0].Operation.AddResponse(http.StatusBadRequest, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -377,7 +377,7 @@ func (h *Handler) Conflict(ctx echo.Context, err string, code rout.ErrorCode, op
 			openapi[0].Operation.AddResponse(http.StatusConflict, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -406,7 +406,7 @@ func (h *Handler) TooManyRequests(ctx echo.Context, err error, openapi ...*OpenA
 			openapi[0].Operation.AddResponse(http.StatusTooManyRequests, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -439,7 +439,7 @@ func (h *Handler) Success(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 			openapi[0].Operation.AddResponse(http.StatusOK, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(exampleObject))}
 		}
 	}
 
@@ -468,7 +468,7 @@ func (h *Handler) Created(ctx echo.Context, rep any, openapi ...*OpenAPIContext)
 			openapi[0].Operation.AddResponse(http.StatusCreated, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(exampleObject))}
 		}
 	}
 
@@ -490,7 +490,7 @@ func (h *Handler) SuccessBlob(ctx echo.Context, rep any, openapi ...*OpenAPICont
 			openapi[0].Operation.AddResponse(http.StatusOK, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(rep)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(rep))}
 		}
 	}
 
@@ -522,7 +522,7 @@ func (h *Handler) Forbidden(ctx echo.Context, err error, openapi ...*OpenAPICont
 			openapi[0].Operation.AddResponse(http.StatusForbidden, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(errorResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["error"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(errorResponse))}
 		}
 	}
 
@@ -557,7 +557,7 @@ func (h *Handler) Redirect(ctx echo.Context, location string, openapi ...*OpenAP
 			openapi[0].Operation.AddResponse(http.StatusFound, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["redirect"] = &openapi3.ExampleRef{Value: openapi3.NewExample(redirectResponse)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["redirect"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(redirectResponse))}
 		}
 	}
 

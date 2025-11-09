@@ -77,7 +77,7 @@ func (h *Handler) AddRequestBody(name string, body interface{}, op *openapi3.Ope
 	op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
 	request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+	request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(body))}
 }
 
 // AddQueryParameter is used to add a query parameter definition to the OpenAPI schema (e.g ?name=value)
@@ -102,7 +102,7 @@ func (h *Handler) AddResponse(name string, description string, body interface{},
 	op.AddResponse(status, response)
 
 	response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(body)}
+	response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(body))}
 }
 
 // bearerSecurity is used to add a bearer security definition to the OpenAPI schema
