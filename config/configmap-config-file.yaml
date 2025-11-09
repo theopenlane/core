@@ -165,6 +165,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.enableGraphExtensions }}
       enableGraphExtensions: {{ .Values.openlane.coreConfiguration.server.enableGraphExtensions }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.server.enableGraphSubscriptions }}
+      enableGraphSubscriptions: {{ .Values.openlane.coreConfiguration.server.enableGraphSubscriptions }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.server.complexityLimit }}
       complexityLimit: {{ .Values.openlane.coreConfiguration.server.complexityLimit }}
       {{- end }}
