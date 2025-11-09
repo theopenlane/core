@@ -3371,7 +3371,7 @@ type ComplexityRoot struct {
 		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
 		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
 		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput) int
+		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
 		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
 		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
@@ -3384,7 +3384,7 @@ type ComplexityRoot struct {
 		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
 		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
 		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput) int
+		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
 		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
 		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
@@ -25109,7 +25109,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput)), true
+		return e.complexity.Mutation.UpdateInternalPolicy(childComplexity, args["id"].(string), args["input"].(generated.UpdateInternalPolicyInput), args["internalPolicyFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateInternalPolicyComment":
 		if e.complexity.Mutation.UpdateInternalPolicyComment == nil {
@@ -25265,7 +25265,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput)), true
+		return e.complexity.Mutation.UpdateProcedure(childComplexity, args["id"].(string), args["input"].(generated.UpdateProcedureInput), args["procedureFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateProcedureComment":
 		if e.complexity.Mutation.UpdateProcedureComment == nil {
@@ -126367,6 +126367,10 @@ extend type Mutation{
         New values for the internalPolicy
         """
         input: UpdateInternalPolicyInput!
+        """
+		file containing values of the internalPolicy
+		"""
+		internalPolicyFile: Upload
     ): InternalPolicyUpdatePayload!
     """
     Delete an existing internalPolicy
@@ -128164,6 +128168,10 @@ extend type Mutation{
         New values for the procedure
         """
         input: UpdateProcedureInput!
+        """
+		file containing values of the procedure
+		"""
+		procedureFile: Upload
     ): ProcedureUpdatePayload!
     """
     Delete an existing procedure

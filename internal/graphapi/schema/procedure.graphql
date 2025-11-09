@@ -78,6 +78,10 @@ extend type Mutation{
         New values for the procedure
         """
         input: UpdateProcedureInput!
+        """
+		file containing values of the procedure
+		"""
+		procedureFile: Upload
     ): ProcedureUpdatePayload!
     """
     Delete an existing procedure

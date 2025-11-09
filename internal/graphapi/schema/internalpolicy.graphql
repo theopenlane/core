@@ -78,6 +78,10 @@ extend type Mutation{
         New values for the internalPolicy
         """
         input: UpdateInternalPolicyInput!
+        """
+		file containing values of the internalPolicy
+		"""
+		internalPolicyFile: Upload
     ): InternalPolicyUpdatePayload!
     """
     Delete an existing internalPolicy
