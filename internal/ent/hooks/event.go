@@ -29,6 +29,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 			if entx.CheckIsSoftDelete(ctx) {
 				return next.Mutate(ctx, mutation)
 			}
+
 			retVal, err := next.Mutate(ctx, mutation)
 			if err != nil {
 				return nil, err
