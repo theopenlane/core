@@ -95,7 +95,10 @@ mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
 }
 
 mutation CreateUploadInternalPolicy($internalPolicyFile: Upload!, $ownerID: ID) {
-  createUploadInternalPolicy(internalPolicyFile: $internalPolicyFile, ownerID: $ownerID) {
+  createUploadInternalPolicy(
+    internalPolicyFile: $internalPolicyFile
+    ownerID: $ownerID
+  ) {
     internalPolicy {
       approvalRequired
       approverID
@@ -246,6 +249,42 @@ query GetInternalPolicyByID($internalPolicyId: ID!) {
 
 mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
   updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation UpdateInternalPolicyWithFile($updateInternalPolicyId: ID!, $internalPolicyFile: Upload!, $input: UpdateInternalPolicyInput!) {
+  updateInternalPolicy(
+    id: $updateInternalPolicyId
+    internalPolicyFile: $internalPolicyFile
+    input: $input
+  ) {
     internalPolicy {
       approvalRequired
       approverID

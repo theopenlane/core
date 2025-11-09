@@ -108,7 +108,8 @@ func HookImportDocument() ent.Hook {
 				}
 
 				// Parse the uploaded file and write values into the mutation
-				if err := importFileToSchema(ctx, mut); err != nil {
+				isUpdate := mut.Op() != ent.OpCreate
+				if err := importFileToSchema(ctx, mut, isUpdate); err != nil {
 					return nil, err
 				}
 			}
@@ -125,7 +126,8 @@ func mutationToFileKey(m importSchemaMutation) string {
 
 // importFileToSchema is a helper that reads an uploaded file from context, downloads it from storage, parses it,
 // sanitizes the content and sets the document name, fileID and details on the mutation
-func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error {
+// if updateOnly is true, it will only update the details if a file is uploaded, and no other fields are modified
+func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, updateOnly bool) error {
 	key := mutationToFileKey(m)
 
 	file, _ := objects.FilesFromContextWithKey(ctx, key)
@@ -158,7 +160,10 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T) error 
 
 	p := bluemonday.UGCPolicy()
 
-	m.SetName(filenameToTitle(file[0].OriginalName))
+	if !updateOnly {
+		m.SetName(filenameToTitle(file[0].OriginalName))
+	}
+
 	m.SetFileID(file[0].ID)
 
 	var detailsStr string

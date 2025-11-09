@@ -163,7 +163,7 @@ type MutationResolver interface {
 	CreateBulkInternalPolicy(ctx context.Context, input []*generated.CreateInternalPolicyInput) (*model.InternalPolicyBulkCreatePayload, error)
 	CreateBulkCSVInternalPolicy(ctx context.Context, input graphql.Upload) (*model.InternalPolicyBulkCreatePayload, error)
 	UpdateBulkInternalPolicy(ctx context.Context, ids []string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyBulkUpdatePayload, error)
-	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput) (*model.InternalPolicyUpdatePayload, error)
+	UpdateInternalPolicy(ctx context.Context, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) (*model.InternalPolicyUpdatePayload, error)
 	DeleteInternalPolicy(ctx context.Context, id string) (*model.InternalPolicyDeletePayload, error)
 	DeleteBulkInternalPolicy(ctx context.Context, ids []string) (*model.InternalPolicyBulkDeletePayload, error)
 	CreateInvite(ctx context.Context, input generated.CreateInviteInput) (*model.InviteCreatePayload, error)
@@ -240,7 +240,7 @@ type MutationResolver interface {
 	CreateBulkProcedure(ctx context.Context, input []*generated.CreateProcedureInput) (*model.ProcedureBulkCreatePayload, error)
 	CreateBulkCSVProcedure(ctx context.Context, input graphql.Upload) (*model.ProcedureBulkCreatePayload, error)
 	UpdateBulkProcedure(ctx context.Context, ids []string, input generated.UpdateProcedureInput) (*model.ProcedureBulkUpdatePayload, error)
-	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput) (*model.ProcedureUpdatePayload, error)
+	UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) (*model.ProcedureUpdatePayload, error)
 	DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error)
 	DeleteBulkProcedure(ctx context.Context, ids []string) (*model.ProcedureBulkDeletePayload, error)
 	CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error)
@@ -4156,6 +4156,11 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "internalPolicyFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["internalPolicyFile"] = arg2
 	return args, nil
 }
 
@@ -4379,6 +4384,11 @@ func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Cont
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "procedureFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["procedureFile"] = arg2
 	return args, nil
 }
 
@@ -12127,7 +12137,7 @@ func (ec *executionContext) _Mutation_updateInternalPolicy(ctx context.Context, 
 		ec.fieldContext_Mutation_updateInternalPolicy,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput))
+			return ec.resolvers.Mutation().UpdateInternalPolicy(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateInternalPolicyInput), fc.Args["internalPolicyFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNInternalPolicyUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐInternalPolicyUpdatePayload,
@@ -15596,7 +15606,7 @@ func (ec *executionContext) _Mutation_updateProcedure(ctx context.Context, field
 		ec.fieldContext_Mutation_updateProcedure,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput))
+			return ec.resolvers.Mutation().UpdateProcedure(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateProcedureInput), fc.Args["procedureFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNProcedureUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐProcedureUpdatePayload,

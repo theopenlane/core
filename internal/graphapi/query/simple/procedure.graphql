@@ -274,3 +274,35 @@ mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!)
     }
   }
 }
+mutation UpdateProcedureWithFile($updateProcedureId: ID!, $procedureFile: Upload!, $input: UpdateProcedureInput!) {
+  updateProcedure(id: $updateProcedureId, procedureFile: $procedureFile, input: $input) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+

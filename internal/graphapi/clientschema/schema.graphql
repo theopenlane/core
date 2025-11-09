@@ -37347,6 +37347,11 @@ type Mutation {
 		New values for the internalPolicy
 		"""
 		input: UpdateInternalPolicyInput!
+
+		"""
+		file containing values of the internalPolicy
+		"""
+		internalPolicyFile: Upload
 	): InternalPolicyUpdatePayload!
 	"""
 	Delete an existing internalPolicy
@@ -38200,6 +38205,11 @@ type Mutation {
 		New values for the procedure
 		"""
 		input: UpdateProcedureInput!
+
+		"""
+		file containing values of the procedure
+		"""
+		procedureFile: Upload
 	): ProcedureUpdatePayload!
 	"""
 	Delete an existing procedure
