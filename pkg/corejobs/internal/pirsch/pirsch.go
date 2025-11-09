@@ -25,6 +25,10 @@ var (
 	ErrCreateDomainFailed = errors.New("create domain failed")
 	// ErrDeleteDomainFailed is returned when deleting a domain fails
 	ErrDeleteDomainFailed = errors.New("delete domain failed")
+	// ErrUpdateHostnameFailed is returned when updating hostname fails
+	ErrUpdateHostnameFailed = errors.New("update hostname failed")
+	// ErrUpdateSubdomainFailed is returned when updating subdomain fails
+	ErrUpdateSubdomainFailed = errors.New("update subdomain failed")
 )
 
 // Client interface for interacting with the Pirsch API
@@ -33,6 +37,8 @@ type Client interface {
 	GetDomain(ctx context.Context, domainID string) (*Domain, error)
 	CreateDomain(ctx context.Context, req CreateDomainRequest) (*Domain, error)
 	DeleteDomain(ctx context.Context, domainID string) error
+	UpdateHostname(ctx context.Context, domainID, hostname string) error
+	UpdateSubdomain(ctx context.Context, domainID, subdomain string) error
 }
 
 const (
@@ -176,6 +182,18 @@ type CreateDomainRequest struct {
 	DisplayName                 string  `json:"display_name,omitempty"`
 	TrafficSpikeThreshold       int     `json:"traffic_spike_threshold"`
 	TrafficWarningThresholdDays int     `json:"traffic_warning_threshold_days"`
+}
+
+// UpdateHostnameRequest represents the request to update a domain's hostname
+type UpdateHostnameRequest struct {
+	DomainID string `json:"domain_id"`
+	Hostname string `json:"hostname"`
+}
+
+// UpdateSubdomainRequest represents the request to update a domain's subdomain
+type UpdateSubdomainRequest struct {
+	DomainID  string `json:"domain_id"`
+	Subdomain string `json:"subdomain"`
 }
 
 // authenticate obtains an access token
@@ -395,6 +413,48 @@ func (c *client) DeleteDomain(ctx context.Context, domainID string) error {
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
 		body, _ := io.ReadAll(resp.Body)
 		return fmt.Errorf("%w: status %d: %s", ErrDeleteDomainFailed, resp.StatusCode, string(body))
+	}
+
+	return nil
+}
+
+// UpdateHostname updates a domain's hostname
+func (c *client) UpdateHostname(ctx context.Context, domainID, hostname string) error {
+	req := UpdateHostnameRequest{
+		DomainID: domainID,
+		Hostname: hostname,
+	}
+
+	resp, err := c.doRequest(ctx, http.MethodPost, "/domain/hostname", req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("%w: status %d: %s", ErrUpdateHostnameFailed, resp.StatusCode, string(body))
+	}
+
+	return nil
+}
+
+// UpdateSubdomain updates a domain's subdomain
+func (c *client) UpdateSubdomain(ctx context.Context, domainID, subdomain string) error {
+	req := UpdateSubdomainRequest{
+		DomainID:  domainID,
+		Subdomain: subdomain,
+	}
+
+	resp, err := c.doRequest(ctx, http.MethodPost, "/domain/subdomain", req)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode != http.StatusOK {
+		body, _ := io.ReadAll(resp.Body)
+		return fmt.Errorf("%w: status %d: %s", ErrUpdateSubdomainFailed, resp.StatusCode, string(body))
 	}
 
 	return nil

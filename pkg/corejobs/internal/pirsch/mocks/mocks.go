@@ -298,3 +298,129 @@ func (_c *MockClient_ListDomains_Call) RunAndReturn(run func(ctx context.Context
 	_c.Call.Return(run)
 	return _c
 }
+
+// UpdateHostname provides a mock function for the type MockClient
+func (_mock *MockClient) UpdateHostname(ctx context.Context, domainID string, hostname string) error {
+	ret := _mock.Called(ctx, domainID, hostname)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateHostname")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, domainID, hostname)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockClient_UpdateHostname_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateHostname'
+type MockClient_UpdateHostname_Call struct {
+	*mock.Call
+}
+
+// UpdateHostname is a helper method to define mock.On call
+//   - ctx context.Context
+//   - domainID string
+//   - hostname string
+func (_e *MockClient_Expecter) UpdateHostname(ctx interface{}, domainID interface{}, hostname interface{}) *MockClient_UpdateHostname_Call {
+	return &MockClient_UpdateHostname_Call{Call: _e.mock.On("UpdateHostname", ctx, domainID, hostname)}
+}
+
+func (_c *MockClient_UpdateHostname_Call) Run(run func(ctx context.Context, domainID string, hostname string)) *MockClient_UpdateHostname_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockClient_UpdateHostname_Call) Return(err error) *MockClient_UpdateHostname_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockClient_UpdateHostname_Call) RunAndReturn(run func(ctx context.Context, domainID string, hostname string) error) *MockClient_UpdateHostname_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateSubdomain provides a mock function for the type MockClient
+func (_mock *MockClient) UpdateSubdomain(ctx context.Context, domainID string, subdomain string) error {
+	ret := _mock.Called(ctx, domainID, subdomain)
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateSubdomain")
+	}
+
+	var r0 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, string) error); ok {
+		r0 = returnFunc(ctx, domainID, subdomain)
+	} else {
+		r0 = ret.Error(0)
+	}
+	return r0
+}
+
+// MockClient_UpdateSubdomain_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateSubdomain'
+type MockClient_UpdateSubdomain_Call struct {
+	*mock.Call
+}
+
+// UpdateSubdomain is a helper method to define mock.On call
+//   - ctx context.Context
+//   - domainID string
+//   - subdomain string
+func (_e *MockClient_Expecter) UpdateSubdomain(ctx interface{}, domainID interface{}, subdomain interface{}) *MockClient_UpdateSubdomain_Call {
+	return &MockClient_UpdateSubdomain_Call{Call: _e.mock.On("UpdateSubdomain", ctx, domainID, subdomain)}
+}
+
+func (_c *MockClient_UpdateSubdomain_Call) Run(run func(ctx context.Context, domainID string, subdomain string)) *MockClient_UpdateSubdomain_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 string
+		if args[2] != nil {
+			arg2 = args[2].(string)
+		}
+		run(
+			arg0,
+			arg1,
+			arg2,
+		)
+	})
+	return _c
+}
+
+func (_c *MockClient_UpdateSubdomain_Call) Return(err error) *MockClient_UpdateSubdomain_Call {
+	_c.Call.Return(err)
+	return _c
+}
+
+func (_c *MockClient_UpdateSubdomain_Call) RunAndReturn(run func(ctx context.Context, domainID string, subdomain string) error) *MockClient_UpdateSubdomain_Call {
+	_c.Call.Return(run)
+	return _c
+}
