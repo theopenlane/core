@@ -1169,6 +1169,8 @@ query AdminSearch($query: String!) {
           ownerID
           slug
           customDomainID
+          pirschDomainID
+          pirschIdentificationCode
         }
       }
     }
