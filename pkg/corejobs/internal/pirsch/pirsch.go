@@ -2,7 +2,9 @@ package pirsch
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"math"
@@ -10,15 +12,37 @@ import (
 	"time"
 )
 
-type PirschClient interface {
-	ListDomains(search string) ([]Domain, error)
-	GetDomain(domainID string) (*Domain, error)
-	CreateDomain(req CreateDomainRequest) (*Domain, error)
-	DeleteDomain(domainID string) error
+var (
+	// ErrAuthFailed is returned when authentication fails
+	ErrAuthFailed = errors.New("authentication failed")
+	// ErrRetryableStatus is returned when a retryable status code is received
+	ErrRetryableStatus = errors.New("retryable status code received")
+	// ErrListDomainsFailed is returned when listing domains fails
+	ErrListDomainsFailed = errors.New("list domains failed")
+	// ErrGetDomainFailed is returned when getting a domain fails
+	ErrGetDomainFailed = errors.New("get domain failed")
+	// ErrCreateDomainFailed is returned when creating a domain fails
+	ErrCreateDomainFailed = errors.New("create domain failed")
+	// ErrDeleteDomainFailed is returned when deleting a domain fails
+	ErrDeleteDomainFailed = errors.New("delete domain failed")
+)
+
+// Client interface for interacting with the Pirsch API
+type Client interface {
+	ListDomains(ctx context.Context, search string) ([]Domain, error)
+	GetDomain(ctx context.Context, domainID string) (*Domain, error)
+	CreateDomain(ctx context.Context, req CreateDomainRequest) (*Domain, error)
+	DeleteDomain(ctx context.Context, domainID string) error
 }
 
 const (
 	baseURL = "https://api.pirsch.io/api/v1"
+
+	// Default retry and timeout configuration
+	defaultMaxRetries      = 3
+	defaultMaxDelaySeconds = 30
+	defaultTimeoutSeconds  = 10
+	exponentialBackoffBase = 2
 )
 
 // BackoffStrategy defines the backoff calculation method
@@ -42,16 +66,16 @@ type RetryConfig struct {
 // DefaultRetryConfig returns sensible defaults for retry configuration
 func DefaultRetryConfig() RetryConfig {
 	return RetryConfig{
-		MaxRetries:      3,
+		MaxRetries:      defaultMaxRetries,
 		InitialDelay:    1 * time.Second,
-		MaxDelay:        30 * time.Second,
+		MaxDelay:        defaultMaxDelaySeconds * time.Second,
 		BackoffStrategy: BackoffStrategyExponential,
 		RetryableStatus: []int{429, 500, 502, 503, 504},
 	}
 }
 
-// Client handles API requests to Pirsch
-type Client struct {
+// client handles API requests to Pirsch
+type client struct {
 	httpClient   *http.Client
 	clientID     string
 	clientSecret string
@@ -60,34 +84,34 @@ type Client struct {
 	retryConfig  RetryConfig
 }
 
-// ClientOption is a function that configures a Client
-type ClientOption func(*Client)
+// ClientOption is a function that configures a client
+type ClientOption func(*client)
 
 // WithTimeout sets the HTTP client timeout
 func WithTimeout(timeout time.Duration) ClientOption {
-	return func(c *Client) {
+	return func(c *client) {
 		c.httpClient.Timeout = timeout
 	}
 }
 
 // WithRetryConfig sets the retry configuration
 func WithRetryConfig(config RetryConfig) ClientOption {
-	return func(c *Client) {
+	return func(c *client) {
 		c.retryConfig = config
 	}
 }
 
 // WithHTTPClient sets a custom HTTP client
 func WithHTTPClient(httpClient *http.Client) ClientOption {
-	return func(c *Client) {
+	return func(c *client) {
 		c.httpClient = httpClient
 	}
 }
 
 // NewClient creates a new Pirsch API client with optional configuration
-func NewClient(clientID, clientSecret string, opts ...ClientOption) *Client {
-	c := &Client{
-		httpClient:   &http.Client{Timeout: 10 * time.Second},
+func NewClient(clientID, clientSecret string, opts ...ClientOption) Client {
+	c := &client{
+		httpClient:   &http.Client{Timeout: defaultTimeoutSeconds * time.Second},
 		clientID:     clientID,
 		clientSecret: clientSecret,
 		retryConfig:  DefaultRetryConfig(),
@@ -155,7 +179,7 @@ type CreateDomainRequest struct {
 }
 
 // authenticate obtains an access token
-func (c *Client) authenticate() error {
+func (c *client) authenticate(ctx context.Context) error {
 	if time.Now().Before(c.expiresAt) {
 		return nil // Token still valid
 	}
@@ -170,11 +194,13 @@ func (c *Client) authenticate() error {
 		return fmt.Errorf("failed to marshal auth request: %w", err)
 	}
 
-	resp, err := c.httpClient.Post(
-		fmt.Sprintf("%s/token", baseURL),
-		"application/json",
-		bytes.NewBuffer(data),
-	)
+	req, err := http.NewRequestWithContext(ctx, http.MethodPost, fmt.Sprintf("%s/token", baseURL), bytes.NewBuffer(data))
+	if err != nil {
+		return fmt.Errorf("failed to create auth request: %w", err)
+	}
+	req.Header.Set("Content-Type", "application/json")
+
+	resp, err := c.httpClient.Do(req)
 	if err != nil {
 		return fmt.Errorf("failed to authenticate: %w", err)
 	}
@@ -182,7 +208,7 @@ func (c *Client) authenticate() error {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("authentication failed with status %d: %s", resp.StatusCode, string(body))
+		return fmt.Errorf("%w: status %d: %s", ErrAuthFailed, resp.StatusCode, string(body))
 	}
 
 	var tokenResp TokenResponse
@@ -197,18 +223,18 @@ func (c *Client) authenticate() error {
 }
 
 // calculateBackoff calculates the delay for a given retry attempt
-func (c *Client) calculateBackoff(attempt int) time.Duration {
+func (c *client) calculateBackoff(attempt int) time.Duration {
 	var delay time.Duration
 
 	switch c.retryConfig.BackoffStrategy {
 	case BackoffStrategyExponential:
-		delay = c.retryConfig.InitialDelay * time.Duration(math.Pow(2, float64(attempt)))
+		delay = c.retryConfig.InitialDelay * time.Duration(math.Pow(exponentialBackoffBase, float64(attempt)))
 	case BackoffStrategyLinear:
 		delay = c.retryConfig.InitialDelay * time.Duration(attempt+1)
 	case BackoffStrategyFixed:
 		delay = c.retryConfig.InitialDelay
 	default:
-		delay = c.retryConfig.InitialDelay * time.Duration(math.Pow(2, float64(attempt)))
+		delay = c.retryConfig.InitialDelay * time.Duration(math.Pow(exponentialBackoffBase, float64(attempt)))
 	}
 
 	if delay > c.retryConfig.MaxDelay {
@@ -219,7 +245,7 @@ func (c *Client) calculateBackoff(attempt int) time.Duration {
 }
 
 // isRetryable checks if an HTTP status code should trigger a retry
-func (c *Client) isRetryable(statusCode int) bool {
+func (c *client) isRetryable(statusCode int) bool {
 	for _, code := range c.retryConfig.RetryableStatus {
 		if code == statusCode {
 			return true
@@ -229,8 +255,8 @@ func (c *Client) isRetryable(statusCode int) bool {
 }
 
 // doRequest performs an authenticated HTTP request with retry logic
-func (c *Client) doRequest(method, endpoint string, body interface{}) (*http.Response, error) {
-	if err := c.authenticate(); err != nil {
+func (c *client) doRequest(ctx context.Context, method, endpoint string, body interface{}) (*http.Response, error) {
+	if err := c.authenticate(ctx); err != nil {
 		return nil, err
 	}
 
@@ -252,7 +278,7 @@ func (c *Client) doRequest(method, endpoint string, body interface{}) (*http.Res
 			reqBody = bytes.NewBuffer(data)
 		}
 
-		req, err := http.NewRequest(method, fmt.Sprintf("%s%s", baseURL, endpoint), reqBody)
+		req, err := http.NewRequestWithContext(ctx, method, fmt.Sprintf("%s%s", baseURL, endpoint), reqBody)
 		if err != nil {
 			return nil, fmt.Errorf("failed to create request: %w", err)
 		}
@@ -270,13 +296,13 @@ func (c *Client) doRequest(method, endpoint string, body interface{}) (*http.Res
 		if c.isRetryable(resp.StatusCode) {
 			body, _ := io.ReadAll(resp.Body)
 			resp.Body.Close()
-			lastErr = fmt.Errorf("retryable status %d (attempt %d/%d): %s",
-				resp.StatusCode, attempt+1, c.retryConfig.MaxRetries+1, string(body))
+			lastErr = fmt.Errorf("%w: status %d (attempt %d/%d): %s",
+				ErrRetryableStatus, resp.StatusCode, attempt+1, c.retryConfig.MaxRetries+1, string(body))
 
 			// Re-authenticate if we got a 401
 			if resp.StatusCode == http.StatusUnauthorized {
 				c.expiresAt = time.Time{} // Force re-authentication
-				if err := c.authenticate(); err != nil {
+				if err := c.authenticate(ctx); err != nil {
 					return nil, fmt.Errorf("re-authentication failed: %w", err)
 				}
 			}
@@ -291,13 +317,13 @@ func (c *Client) doRequest(method, endpoint string, body interface{}) (*http.Res
 }
 
 // ListDomains lists all domains (for user clients)
-func (c *Client) ListDomains(search string) ([]Domain, error) {
+func (c *client) ListDomains(ctx context.Context, search string) ([]Domain, error) {
 	endpoint := "/domain"
 	if search != "" {
 		endpoint = fmt.Sprintf("%s?search=%s", endpoint, search)
 	}
 
-	resp, err := c.doRequest(http.MethodGet, endpoint, nil)
+	resp, err := c.doRequest(ctx, http.MethodGet, endpoint, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -305,7 +331,7 @@ func (c *Client) ListDomains(search string) ([]Domain, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("list domains failed with status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("%w: status %d: %s", ErrListDomainsFailed, resp.StatusCode, string(body))
 	}
 
 	var domains []Domain
@@ -317,8 +343,8 @@ func (c *Client) ListDomains(search string) ([]Domain, error) {
 }
 
 // GetDomain retrieves a specific domain by ID
-func (c *Client) GetDomain(domainID string) (*Domain, error) {
-	resp, err := c.doRequest(http.MethodGet, fmt.Sprintf("/domain?id=%s", domainID), nil)
+func (c *client) GetDomain(ctx context.Context, domainID string) (*Domain, error) {
+	resp, err := c.doRequest(ctx, http.MethodGet, fmt.Sprintf("/domain?id=%s", domainID), nil)
 	if err != nil {
 		return nil, err
 	}
@@ -326,7 +352,7 @@ func (c *Client) GetDomain(domainID string) (*Domain, error) {
 
 	if resp.StatusCode != http.StatusOK {
 		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("get domain failed with status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("%w: status %d: %s", ErrGetDomainFailed, resp.StatusCode, string(body))
 	}
 
 	var domain Domain
@@ -338,8 +364,8 @@ func (c *Client) GetDomain(domainID string) (*Domain, error) {
 }
 
 // CreateDomain creates a new domain
-func (c *Client) CreateDomain(req CreateDomainRequest) (*Domain, error) {
-	resp, err := c.doRequest(http.MethodPost, "/domain", req)
+func (c *client) CreateDomain(ctx context.Context, req CreateDomainRequest) (*Domain, error) {
+	resp, err := c.doRequest(ctx, http.MethodPost, "/domain", req)
 	if err != nil {
 		return nil, err
 	}
@@ -347,7 +373,7 @@ func (c *Client) CreateDomain(req CreateDomainRequest) (*Domain, error) {
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusCreated {
 		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("create domain failed with status %d: %s", resp.StatusCode, string(body))
+		return nil, fmt.Errorf("%w: status %d: %s", ErrCreateDomainFailed, resp.StatusCode, string(body))
 	}
 
 	var domain Domain
@@ -359,8 +385,8 @@ func (c *Client) CreateDomain(req CreateDomainRequest) (*Domain, error) {
 }
 
 // DeleteDomain deletes a domain by ID
-func (c *Client) DeleteDomain(domainID string) error {
-	resp, err := c.doRequest(http.MethodDelete, fmt.Sprintf("/domain?id=%s", domainID), nil)
+func (c *client) DeleteDomain(ctx context.Context, domainID string) error {
+	resp, err := c.doRequest(ctx, http.MethodDelete, fmt.Sprintf("/domain?id=%s", domainID), nil)
 	if err != nil {
 		return err
 	}
@@ -368,7 +394,7 @@ func (c *Client) DeleteDomain(domainID string) error {
 
 	if resp.StatusCode != http.StatusOK && resp.StatusCode != http.StatusNoContent {
 		body, _ := io.ReadAll(resp.Body)
-		return fmt.Errorf("delete domain failed with status %d: %s", resp.StatusCode, string(body))
+		return fmt.Errorf("%w: status %d: %s", ErrDeleteDomainFailed, resp.StatusCode, string(body))
 	}
 
 	return nil

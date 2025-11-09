@@ -277,7 +277,7 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
-			pirschMock := pirschmocks.NewMockPirschClient(t)
+			pirschMock := pirschmocks.NewMockClient(t)
 			olMock := olmocks.NewMockOpenlaneGraphClient(t)
 
 			if tc.expectedGetTrustCenterByID {
@@ -289,7 +289,7 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 			}
 
 			if tc.expectedCreateDomainRequest != nil {
-				pirschMock.EXPECT().CreateDomain(*tc.expectedCreateDomainRequest).Return(tc.createDomainResponse, tc.createDomainError)
+				pirschMock.EXPECT().CreateDomain(mock.Anything, *tc.expectedCreateDomainRequest).Return(tc.createDomainResponse, tc.createDomainError)
 			}
 
 			if tc.expectedUpdateTrustCenterInput != nil {
@@ -299,7 +299,7 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 			}
 
 			if tc.expectedDeleteDomain {
-				pirschMock.EXPECT().DeleteDomain(pirschDomainID).Return(tc.deleteDomainError)
+				pirschMock.EXPECT().DeleteDomain(mock.Anything, pirschDomainID).Return(tc.deleteDomainError)
 			}
 
 			worker := &corejobs.CreatePirschDomainWorker{

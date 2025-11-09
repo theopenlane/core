@@ -13,6 +13,13 @@ import (
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
+const (
+	// hostnamePartCount is the expected number of parts when splitting a hostname (subdomain + domain)
+	hostnamePartCount = 2
+	// defaultActiveVisitorsSeconds is the default time window for active visitors tracking in Pirsch
+	defaultActiveVisitorsSeconds = 300
+)
+
 var (
 	// ErrTrustCenterNoCustomDomain is returned when a trust center does not have an associated custom domain
 	ErrTrustCenterNoCustomDomain = errors.New("trust center does not have a custom domain")
@@ -35,13 +42,13 @@ type CreatePirschDomainWorker struct {
 
 	Config PirschDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for pirsch domain creation"`
 
-	pirschClient pirsch.PirschClient
+	pirschClient pirsch.Client
 	olClient     olclient.OpenlaneClient
 }
 
 // WithPirschClient sets the Pirsch client for the worker
 // and returns the worker for method chaining
-func (w *CreatePirschDomainWorker) WithPirschClient(cl pirsch.PirschClient) *CreatePirschDomainWorker {
+func (w *CreatePirschDomainWorker) WithPirschClient(cl pirsch.Client) *CreatePirschDomainWorker {
 	w.pirschClient = cl
 	return w
 }
@@ -102,8 +109,8 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 
 	// Parse the hostname to extract subdomain and base hostname
 	// e.g., "trust.example.com" -> subdomain: "trust", hostname: "example.com"
-	parts := strings.SplitN(customDomainHostname, ".", 2)
-	if len(parts) != 2 {
+	parts := strings.SplitN(customDomainHostname, ".", hostnamePartCount)
+	if len(parts) != hostnamePartCount {
 		log.Error().
 			Str("hostname", customDomainHostname).
 			Msg("invalid hostname format")
@@ -128,14 +135,14 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 		Msg("parsed domain information")
 
 	// Create the domain in Pirsch
-	domain, err := w.pirschClient.CreateDomain(pirsch.CreateDomainRequest{
+	domain, err := w.pirschClient.CreateDomain(ctx, pirsch.CreateDomainRequest{
 		Hostname:                    hostname,
 		Subdomain:                   subdomain,
 		Timezone:                    "UTC",
 		DisplayName:                 displayName,
 		Public:                      false,
 		GroupByTitle:                false,
-		ActiveVisitorsSeconds:       300,
+		ActiveVisitorsSeconds:       defaultActiveVisitorsSeconds,
 		DisableScripts:              false,
 		TrafficSpikeThreshold:       0,
 		TrafficWarningThresholdDays: 0,
@@ -165,7 +172,7 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 			Msg("failed to update trust center with pirsch domain information, attempting cleanup")
 
 		// Attempt to delete the pirsch domain to clean up
-		if deleteErr := w.pirschClient.DeleteDomain(domain.ID); deleteErr != nil {
+		if deleteErr := w.pirschClient.DeleteDomain(ctx, domain.ID); deleteErr != nil {
 			log.Error().
 				Err(deleteErr).
 				Str("pirsch_domain_id", domain.ID).
