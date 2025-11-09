@@ -5,8 +5,11 @@ import (
 	"testing"
 
 	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	rivermocks "github.com/theopenlane/riverboat/pkg/riverqueue/mocks"
 
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/corejobs/internal/pirsch"
@@ -40,8 +43,8 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 		createDomainError              error
 		expectedUpdateTrustCenterInput *openlaneclient.UpdateTrustCenterInput
 		updateTrustCenterError         error
-		expectedDeleteDomain           bool
-		deleteDomainError              error
+		expectedInsertDeleteJob        *corejobs.DeletePirschDomainArgs
+		insertDeleteJobError           error
 		expectedError                  string
 	}{
 		{
@@ -222,8 +225,10 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 				PirschIdentificationCode: &pirschIdentificationCode,
 			},
 			updateTrustCenterError: ErrTest,
-			expectedDeleteDomain:   true,
-			expectedError:          "test error",
+			expectedInsertDeleteJob: &corejobs.DeletePirschDomainArgs{
+				PirschDomainID: pirschDomainID,
+			},
+			expectedError: "test error",
 		},
 		{
 			name:                       "trust center update fails - cleanup also fails",
@@ -268,9 +273,11 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 				PirschIdentificationCode: &pirschIdentificationCode,
 			},
 			updateTrustCenterError: ErrTest,
-			expectedDeleteDomain:   true,
-			deleteDomainError:      ErrTest,
-			expectedError:          "test error",
+			expectedInsertDeleteJob: &corejobs.DeletePirschDomainArgs{
+				PirschDomainID: pirschDomainID,
+			},
+			insertDeleteJobError: ErrTest,
+			expectedError:        "test error",
 		},
 	}
 
@@ -279,6 +286,7 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 			ctx := context.Background()
 			pirschMock := pirschmocks.NewMockClient(t)
 			olMock := olmocks.NewMockOpenlaneGraphClient(t)
+			riverMock := rivermocks.NewMockJobClient(t)
 
 			if tc.expectedGetTrustCenterByID {
 				olMock.EXPECT().GetTrustCenterByID(mock.Anything, tc.trustCenterID).Return(tc.trustCenterResponse, tc.trustCenterError)
@@ -298,8 +306,8 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 				}, tc.updateTrustCenterError)
 			}
 
-			if tc.expectedDeleteDomain {
-				pirschMock.EXPECT().DeleteDomain(mock.Anything, pirschDomainID).Return(tc.deleteDomainError)
+			if tc.expectedInsertDeleteJob != nil {
+				riverMock.EXPECT().Insert(mock.Anything, *tc.expectedInsertDeleteJob, mock.Anything).Return(&rivertype.JobInsertResult{}, tc.insertDeleteJobError)
 			}
 
 			worker := &corejobs.CreatePirschDomainWorker{
@@ -311,6 +319,7 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 
 			worker.WithPirschClient(pirschMock)
 			worker.WithOpenlaneClient(olMock)
+			worker.WithRiverClient(riverMock)
 
 			err := worker.Work(ctx, &river.Job[corejobs.CreatePirschDomainArgs]{Args: corejobs.CreatePirschDomainArgs{
 				TrustCenterID: tc.trustCenterID,
@@ -339,8 +348,8 @@ func TestCreatePirschDomainWorker(t *testing.T) {
 				olMock.AssertNotCalled(t, "UpdateTrustCenter")
 			}
 
-			if !tc.expectedDeleteDomain {
-				pirschMock.AssertNotCalled(t, "DeleteDomain")
+			if tc.expectedInsertDeleteJob == nil {
+				riverMock.AssertNotCalled(t, "Insert")
 			}
 		})
 	}

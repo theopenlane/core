@@ -8,6 +8,8 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
+
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/corejobs/internal/pirsch"
 	"github.com/theopenlane/core/pkg/openlaneclient"
@@ -44,6 +46,7 @@ type CreatePirschDomainWorker struct {
 
 	pirschClient pirsch.Client
 	olClient     olclient.OpenlaneClient
+	riverClient  riverqueue.JobClient
 }
 
 // WithPirschClient sets the Pirsch client for the worker
@@ -57,6 +60,13 @@ func (w *CreatePirschDomainWorker) WithPirschClient(cl pirsch.Client) *CreatePir
 // and returns the worker for method chaining
 func (w *CreatePirschDomainWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *CreatePirschDomainWorker {
 	w.olClient = cl
+	return w
+}
+
+// WithRiverClient sets the River client for the worker
+// and returns the worker for method chaining
+func (w *CreatePirschDomainWorker) WithRiverClient(cl riverqueue.JobClient) *CreatePirschDomainWorker {
+	w.riverClient = cl
 	return w
 }
 
@@ -80,6 +90,15 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 
 	if w.pirschClient == nil {
 		w.pirschClient = pirsch.NewClient(w.Config.PirschClientID, w.Config.PirschClientSecret)
+	}
+
+	if w.riverClient == nil {
+		riverClient, err := riverqueue.New(ctx, riverqueue.WithConnectionURI(w.Config.DatabaseHost))
+		if err != nil {
+			return err
+		}
+
+		w.riverClient = riverClient
 	}
 
 	// Get the trust center
@@ -171,16 +190,19 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 			Str("pirsch_domain_id", domain.ID).
 			Msg("failed to update trust center with pirsch domain information, attempting cleanup")
 
-		// Attempt to delete the pirsch domain to clean up
-		if deleteErr := w.pirschClient.DeleteDomain(ctx, domain.ID); deleteErr != nil {
+		// Insert a delete job to reliably clean up the pirsch domain
+		_, insertErr := w.riverClient.Insert(ctx, DeletePirschDomainArgs{
+			PirschDomainID: domain.ID,
+		}, nil)
+		if insertErr != nil {
 			log.Error().
-				Err(deleteErr).
+				Err(insertErr).
 				Str("pirsch_domain_id", domain.ID).
-				Msg("failed to delete pirsch domain during cleanup")
+				Msg("failed to insert delete_pirsch_domain job for cleanup")
 		} else {
 			log.Info().
 				Str("pirsch_domain_id", domain.ID).
-				Msg("successfully deleted pirsch domain during cleanup")
+				Msg("successfully inserted delete_pirsch_domain job for cleanup")
 		}
 
 		return err
