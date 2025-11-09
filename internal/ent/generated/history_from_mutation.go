@@ -14002,6 +14002,14 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetCustomDomainID(customDomainID)
 	}
 
+	if pirschDomainID, exists := m.PirschDomainID(); exists {
+		create = create.SetPirschDomainID(pirschDomainID)
+	}
+
+	if pirschIdentificationCode, exists := m.PirschIdentificationCode(); exists {
+		create = create.SetPirschIdentificationCode(pirschIdentificationCode)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -14093,6 +14101,18 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetCustomDomainID(trustcenter.CustomDomainID)
 		}
 
+		if pirschDomainID, exists := m.PirschDomainID(); exists {
+			create = create.SetPirschDomainID(pirschDomainID)
+		} else {
+			create = create.SetPirschDomainID(trustcenter.PirschDomainID)
+		}
+
+		if pirschIdentificationCode, exists := m.PirschIdentificationCode(); exists {
+			create = create.SetPirschIdentificationCode(pirschIdentificationCode)
+		} else {
+			create = create.SetPirschIdentificationCode(trustcenter.PirschIdentificationCode)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -14138,6 +14158,8 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetOwnerID(trustcenter.OwnerID).
 			SetSlug(trustcenter.Slug).
 			SetCustomDomainID(trustcenter.CustomDomainID).
+			SetPirschDomainID(trustcenter.PirschDomainID).
+			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).
 			Save(ctx)
 		if err != nil {
 			return err

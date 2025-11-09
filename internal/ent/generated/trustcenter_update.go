@@ -191,6 +191,46 @@ func (_u *TrustCenterUpdate) ClearCustomDomainID() *TrustCenterUpdate {
 	return _u
 }
 
+// SetPirschDomainID sets the "pirsch_domain_id" field.
+func (_u *TrustCenterUpdate) SetPirschDomainID(v string) *TrustCenterUpdate {
+	_u.mutation.SetPirschDomainID(v)
+	return _u
+}
+
+// SetNillablePirschDomainID sets the "pirsch_domain_id" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePirschDomainID(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPirschDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPirschDomainID clears the value of the "pirsch_domain_id" field.
+func (_u *TrustCenterUpdate) ClearPirschDomainID() *TrustCenterUpdate {
+	_u.mutation.ClearPirschDomainID()
+	return _u
+}
+
+// SetPirschIdentificationCode sets the "pirsch_identification_code" field.
+func (_u *TrustCenterUpdate) SetPirschIdentificationCode(v string) *TrustCenterUpdate {
+	_u.mutation.SetPirschIdentificationCode(v)
+	return _u
+}
+
+// SetNillablePirschIdentificationCode sets the "pirsch_identification_code" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePirschIdentificationCode(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPirschIdentificationCode(*v)
+	}
+	return _u
+}
+
+// ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
+func (_u *TrustCenterUpdate) ClearPirschIdentificationCode() *TrustCenterUpdate {
+	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -564,6 +604,18 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschDomainID(); ok {
+		_spec.SetField(trustcenter.FieldPirschDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PirschDomainIDCleared() {
+		_spec.ClearField(trustcenter.FieldPirschDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschIdentificationCode(); ok {
+		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
+	}
+	if _u.mutation.PirschIdentificationCodeCleared() {
+		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1103,6 +1155,46 @@ func (_u *TrustCenterUpdateOne) ClearCustomDomainID() *TrustCenterUpdateOne {
 	return _u
 }
 
+// SetPirschDomainID sets the "pirsch_domain_id" field.
+func (_u *TrustCenterUpdateOne) SetPirschDomainID(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetPirschDomainID(v)
+	return _u
+}
+
+// SetNillablePirschDomainID sets the "pirsch_domain_id" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePirschDomainID(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPirschDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPirschDomainID clears the value of the "pirsch_domain_id" field.
+func (_u *TrustCenterUpdateOne) ClearPirschDomainID() *TrustCenterUpdateOne {
+	_u.mutation.ClearPirschDomainID()
+	return _u
+}
+
+// SetPirschIdentificationCode sets the "pirsch_identification_code" field.
+func (_u *TrustCenterUpdateOne) SetPirschIdentificationCode(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetPirschIdentificationCode(v)
+	return _u
+}
+
+// SetNillablePirschIdentificationCode sets the "pirsch_identification_code" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePirschIdentificationCode(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPirschIdentificationCode(*v)
+	}
+	return _u
+}
+
+// ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
+func (_u *TrustCenterUpdateOne) ClearPirschIdentificationCode() *TrustCenterUpdateOne {
+	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1506,6 +1598,18 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.SlugCleared() {
 		_spec.ClearField(trustcenter.FieldSlug, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschDomainID(); ok {
+		_spec.SetField(trustcenter.FieldPirschDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PirschDomainIDCleared() {
+		_spec.ClearField(trustcenter.FieldPirschDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschIdentificationCode(); ok {
+		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
+	}
+	if _u.mutation.PirschIdentificationCodeCleared() {
+		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

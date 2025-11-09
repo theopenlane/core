@@ -187,6 +187,34 @@ func (_c *TrustCenterHistoryCreate) SetNillableCustomDomainID(v *string) *TrustC
 	return _c
 }
 
+// SetPirschDomainID sets the "pirsch_domain_id" field.
+func (_c *TrustCenterHistoryCreate) SetPirschDomainID(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetPirschDomainID(v)
+	return _c
+}
+
+// SetNillablePirschDomainID sets the "pirsch_domain_id" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillablePirschDomainID(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetPirschDomainID(*v)
+	}
+	return _c
+}
+
+// SetPirschIdentificationCode sets the "pirsch_identification_code" field.
+func (_c *TrustCenterHistoryCreate) SetPirschIdentificationCode(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetPirschIdentificationCode(v)
+	return _c
+}
+
+// SetNillablePirschIdentificationCode sets the "pirsch_identification_code" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillablePirschIdentificationCode(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetPirschIdentificationCode(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterHistoryCreate) SetID(v string) *TrustCenterHistoryCreate {
 	_c.mutation.SetID(v)
@@ -373,6 +401,14 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
 		_node.CustomDomainID = value
+	}
+	if value, ok := _c.mutation.PirschDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
+		_node.PirschDomainID = value
+	}
+	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString, value)
+		_node.PirschIdentificationCode = value
 	}
 	return _node, _spec
 }

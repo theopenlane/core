@@ -6373,6 +6373,8 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Nullable: true, Size: 160},
+		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_watermark_config", Type: field.TypeString, Nullable: true},
@@ -6385,19 +6387,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_centers_organizations_trust_centers",
-				Columns:    []*schema.Column{TrustCentersColumns[9]},
+				Columns:    []*schema.Column{TrustCentersColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_custom_domains_custom_domain",
-				Columns:    []*schema.Column{TrustCentersColumns[10]},
+				Columns:    []*schema.Column{TrustCentersColumns[12]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
-				Columns:    []*schema.Column{TrustCentersColumns[11]},
+				Columns:    []*schema.Column{TrustCentersColumns[13]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6406,7 +6408,7 @@ var (
 			{
 				Name:    "trustcenter_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[9]},
+				Columns: []*schema.Column{TrustCentersColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6589,6 +6591,8 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterHistoryTable holds the schema information for the "trust_center_history" table.
 	TrustCenterHistoryTable = &schema.Table{

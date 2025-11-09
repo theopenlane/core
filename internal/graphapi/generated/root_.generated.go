@@ -5993,6 +5993,8 @@ type ComplexityRoot struct {
 		ID                       func(childComplexity int) int
 		Owner                    func(childComplexity int) int
 		OwnerID                  func(childComplexity int) int
+		PirschDomainID           func(childComplexity int) int
+		PirschIdentificationCode func(childComplexity int) int
 		Posts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
@@ -6181,18 +6183,20 @@ type ComplexityRoot struct {
 	}
 
 	TrustCenterHistory struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		CustomDomainID func(childComplexity int) int
-		HistoryTime    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Operation      func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		Ref            func(childComplexity int) int
-		Slug           func(childComplexity int) int
-		Tags           func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		CreatedAt                func(childComplexity int) int
+		CreatedBy                func(childComplexity int) int
+		CustomDomainID           func(childComplexity int) int
+		HistoryTime              func(childComplexity int) int
+		ID                       func(childComplexity int) int
+		Operation                func(childComplexity int) int
+		OwnerID                  func(childComplexity int) int
+		PirschDomainID           func(childComplexity int) int
+		PirschIdentificationCode func(childComplexity int) int
+		Ref                      func(childComplexity int) int
+		Slug                     func(childComplexity int) int
+		Tags                     func(childComplexity int) int
+		UpdatedAt                func(childComplexity int) int
+		UpdatedBy                func(childComplexity int) int
 	}
 
 	TrustCenterHistoryConnection struct {
@@ -41059,6 +41063,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.OwnerID(childComplexity), true
 
+	case "TrustCenter.pirschDomainID":
+		if e.complexity.TrustCenter.PirschDomainID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PirschDomainID(childComplexity), true
+
+	case "TrustCenter.pirschIdentificationCode":
+		if e.complexity.TrustCenter.PirschIdentificationCode == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PirschIdentificationCode(childComplexity), true
+
 	case "TrustCenter.posts":
 		if e.complexity.TrustCenter.Posts == nil {
 			break
@@ -41860,6 +41878,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterHistory.OwnerID(childComplexity), true
+
+	case "TrustCenterHistory.pirschDomainID":
+		if e.complexity.TrustCenterHistory.PirschDomainID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.PirschDomainID(childComplexity), true
+
+	case "TrustCenterHistory.pirschIdentificationCode":
+		if e.complexity.TrustCenterHistory.PirschIdentificationCode == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.PirschIdentificationCode(childComplexity), true
 
 	case "TrustCenterHistory.ref":
 		if e.complexity.TrustCenterHistory.Ref == nil {
@@ -61601,6 +61633,14 @@ input CreateTrustCenterInput {
   tags associated with the object
   """
   tags: [String!]
+  """
+  Pirsch domain ID
+  """
+  pirschDomainID: String
+  """
+  Pirsch ID code
+  """
+  pirschIdentificationCode: String
   ownerID: ID
   customDomainID: ID
   settingID: ID
@@ -111249,6 +111289,14 @@ type TrustCenter implements Node {
   custom domain id for the trust center
   """
   customDomainID: ID
+  """
+  Pirsch domain ID
+  """
+  pirschDomainID: String
+  """
+  Pirsch ID code
+  """
+  pirschIdentificationCode: String
   owner: Organization
   customDomain: CustomDomain
   setting: TrustCenterSetting
@@ -112578,6 +112626,14 @@ type TrustCenterHistory implements Node {
   custom domain id for the trust center
   """
   customDomainID: String
+  """
+  Pirsch domain ID
+  """
+  pirschDomainID: String
+  """
+  Pirsch ID code
+  """
+  pirschIdentificationCode: String
 }
 """
 A connection to a list of items.
@@ -112811,6 +112867,42 @@ input TrustCenterHistoryWhereInput {
   customDomainIDNotNil: Boolean
   customDomainIDEqualFold: String
   customDomainIDContainsFold: String
+  """
+  pirsch_domain_id field predicates
+  """
+  pirschDomainID: String
+  pirschDomainIDNEQ: String
+  pirschDomainIDIn: [String!]
+  pirschDomainIDNotIn: [String!]
+  pirschDomainIDGT: String
+  pirschDomainIDGTE: String
+  pirschDomainIDLT: String
+  pirschDomainIDLTE: String
+  pirschDomainIDContains: String
+  pirschDomainIDHasPrefix: String
+  pirschDomainIDHasSuffix: String
+  pirschDomainIDIsNil: Boolean
+  pirschDomainIDNotNil: Boolean
+  pirschDomainIDEqualFold: String
+  pirschDomainIDContainsFold: String
+  """
+  pirsch_identification_code field predicates
+  """
+  pirschIdentificationCode: String
+  pirschIdentificationCodeNEQ: String
+  pirschIdentificationCodeIn: [String!]
+  pirschIdentificationCodeNotIn: [String!]
+  pirschIdentificationCodeGT: String
+  pirschIdentificationCodeGTE: String
+  pirschIdentificationCodeLT: String
+  pirschIdentificationCodeLTE: String
+  pirschIdentificationCodeContains: String
+  pirschIdentificationCodeHasPrefix: String
+  pirschIdentificationCodeHasSuffix: String
+  pirschIdentificationCodeIsNil: Boolean
+  pirschIdentificationCodeNotNil: Boolean
+  pirschIdentificationCodeEqualFold: String
+  pirschIdentificationCodeContainsFold: String
 }
 """
 Ordering options for TrustCenter connections
@@ -115218,6 +115310,42 @@ input TrustCenterWhereInput {
   customDomainIDNotNil: Boolean
   customDomainIDEqualFold: ID
   customDomainIDContainsFold: ID
+  """
+  pirsch_domain_id field predicates
+  """
+  pirschDomainID: String
+  pirschDomainIDNEQ: String
+  pirschDomainIDIn: [String!]
+  pirschDomainIDNotIn: [String!]
+  pirschDomainIDGT: String
+  pirschDomainIDGTE: String
+  pirschDomainIDLT: String
+  pirschDomainIDLTE: String
+  pirschDomainIDContains: String
+  pirschDomainIDHasPrefix: String
+  pirschDomainIDHasSuffix: String
+  pirschDomainIDIsNil: Boolean
+  pirschDomainIDNotNil: Boolean
+  pirschDomainIDEqualFold: String
+  pirschDomainIDContainsFold: String
+  """
+  pirsch_identification_code field predicates
+  """
+  pirschIdentificationCode: String
+  pirschIdentificationCodeNEQ: String
+  pirschIdentificationCodeIn: [String!]
+  pirschIdentificationCodeNotIn: [String!]
+  pirschIdentificationCodeGT: String
+  pirschIdentificationCodeGTE: String
+  pirschIdentificationCodeLT: String
+  pirschIdentificationCodeLTE: String
+  pirschIdentificationCodeContains: String
+  pirschIdentificationCodeHasPrefix: String
+  pirschIdentificationCodeHasSuffix: String
+  pirschIdentificationCodeIsNil: Boolean
+  pirschIdentificationCodeNotNil: Boolean
+  pirschIdentificationCodeEqualFold: String
+  pirschIdentificationCodeContainsFold: String
   """
   owner edge predicates
   """
@@ -119566,6 +119694,16 @@ input UpdateTrustCenterInput {
   tags: [String!]
   appendTags: [String!]
   clearTags: Boolean
+  """
+  Pirsch domain ID
+  """
+  pirschDomainID: String
+  clearPirschDomainID: Boolean
+  """
+  Pirsch ID code
+  """
+  pirschIdentificationCode: String
+  clearPirschIdentificationCode: Boolean
   ownerID: ID
   clearOwner: Boolean
   customDomainID: ID
