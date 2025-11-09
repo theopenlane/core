@@ -2324,9 +2324,11 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				trustcenter.OwnerIDContainsFold(query),        // search by OwnerID
-				trustcenter.SlugContainsFold(query),           // search by Slug
-				trustcenter.CustomDomainIDContainsFold(query), // search by CustomDomainID
+				trustcenter.OwnerIDContainsFold(query),                  // search by OwnerID
+				trustcenter.SlugContainsFold(query),                     // search by Slug
+				trustcenter.CustomDomainIDContainsFold(query),           // search by CustomDomainID
+				trustcenter.PirschDomainIDContainsFold(query),           // search by PirschDomainID
+				trustcenter.PirschIdentificationCodeContainsFold(query), // search by PirschIdentificationCode
 			),
 		)
 

@@ -42,6 +42,10 @@ type TrustCenter struct {
 	Slug string `json:"slug,omitempty"`
 	// custom domain id for the trust center
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
+	// Pirsch domain ID
+	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
+	// Pirsch ID code
+	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
 	Edges                         TrustCenterEdges `json:"edges"`
@@ -178,7 +182,7 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenter.FieldTags:
 			values[i] = new([]byte)
-		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID:
+		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode:
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -266,6 +270,18 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field custom_domain_id", values[i])
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
+			}
+		case trustcenter.FieldPirschDomainID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pirsch_domain_id", values[i])
+			} else if value.Valid {
+				_m.PirschDomainID = value.String
+			}
+		case trustcenter.FieldPirschIdentificationCode:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field pirsch_identification_code", values[i])
+			} else if value.Valid {
+				_m.PirschIdentificationCode = value.String
 			}
 		case trustcenter.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -384,6 +400,12 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("custom_domain_id=")
 	builder.WriteString(_m.CustomDomainID)
+	builder.WriteString(", ")
+	builder.WriteString("pirsch_domain_id=")
+	builder.WriteString(_m.PirschDomainID)
+	builder.WriteString(", ")
+	builder.WriteString("pirsch_identification_code=")
+	builder.WriteString(_m.PirschIdentificationCode)
 	builder.WriteByte(')')
 	return builder.String()
 }

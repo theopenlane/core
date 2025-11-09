@@ -64,6 +64,12 @@ func (TrustCenter) Fields() []ent.Field {
 		field.String("custom_domain_id").
 			Comment("custom domain id for the trust center").
 			Optional(),
+		field.String("pirsch_domain_id").
+			Comment("Pirsch domain ID").
+			Optional(),
+		field.String("pirsch_identification_code").
+			Comment("Pirsch ID code").
+			Optional(),
 	}
 }
 

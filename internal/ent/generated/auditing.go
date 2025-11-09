@@ -4161,6 +4161,12 @@ func (_m *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
 	if !reflect.DeepEqual(_m.CustomDomainID, new.CustomDomainID) {
 		changes = append(changes, NewChange(trustcenterhistory.FieldCustomDomainID, _m.CustomDomainID, new.CustomDomainID))
 	}
+	if !reflect.DeepEqual(_m.PirschDomainID, new.PirschDomainID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldPirschDomainID, _m.PirschDomainID, new.PirschDomainID))
+	}
+	if !reflect.DeepEqual(_m.PirschIdentificationCode, new.PirschIdentificationCode) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldPirschIdentificationCode, _m.PirschIdentificationCode, new.PirschIdentificationCode))
+	}
 	return changes
 }
 
