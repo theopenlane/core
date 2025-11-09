@@ -41,7 +41,7 @@ require (
 	github.com/getkin/kin-openapi v0.133.0
 	github.com/go-jose/go-jose/v4 v4.1.3
 	github.com/go-viper/mapstructure/v2 v2.4.0
-	github.com/go-webauthn/webauthn v0.14.0
+	github.com/go-webauthn/webauthn v0.15.0
 	github.com/gocarina/gocsv v0.0.0-20240520201108-78e41c74b4b1
 	github.com/goccy/go-yaml v1.18.0
 	github.com/golang-jwt/jwt/v5 v5.3.0
@@ -264,7 +264,7 @@ require (
 	github.com/go-openapi/jsonpointer v0.22.1 // indirect
 	github.com/go-openapi/swag/jsonname v0.25.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
-	github.com/go-webauthn/x v0.1.25 // indirect
+	github.com/go-webauthn/x v0.1.26 // indirect
 	github.com/goccy/go-json v0.10.5 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
@@ -304,7 +304,6 @@ require (
 	github.com/mitchellh/copystructure v1.2.0 // indirect
 	github.com/mitchellh/go-wordwrap v1.0.1 // indirect
 	github.com/mitchellh/hashstructure v1.1.0 // indirect
-	github.com/mitchellh/mapstructure v1.5.0 // indirect
 	github.com/mitchellh/reflectwalk v1.0.2 // indirect
 	github.com/mohae/deepcopy v0.0.0-20170929034955-c48cc78d4826 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
