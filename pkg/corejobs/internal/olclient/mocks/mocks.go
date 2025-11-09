@@ -48293,6 +48293,101 @@ func (_c *MockOpenlaneGraphClient_UpdateInternalPolicy_Call) RunAndReturn(run fu
 	return _c
 }
 
+// UpdateInternalPolicyWithFile provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateInternalPolicyWithFile(ctx context.Context, updateInternalPolicyID string, internalPolicyFile graphql.Upload, input openlaneclient.UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateInternalPolicyWithFile, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateInternalPolicyID, internalPolicyFile, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateInternalPolicyID, internalPolicyFile, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateInternalPolicyWithFile")
+	}
+
+	var r0 *openlaneclient.UpdateInternalPolicyWithFile
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateInternalPolicyInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateInternalPolicyWithFile, error)); ok {
+		return returnFunc(ctx, updateInternalPolicyID, internalPolicyFile, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateInternalPolicyInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateInternalPolicyWithFile); ok {
+		r0 = returnFunc(ctx, updateInternalPolicyID, internalPolicyFile, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateInternalPolicyWithFile)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateInternalPolicyInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateInternalPolicyID, internalPolicyFile, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateInternalPolicyWithFile'
+type MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call struct {
+	*mock.Call
+}
+
+// UpdateInternalPolicyWithFile is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateInternalPolicyID string
+//   - internalPolicyFile graphql.Upload
+//   - input openlaneclient.UpdateInternalPolicyInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateInternalPolicyWithFile(ctx interface{}, updateInternalPolicyID interface{}, internalPolicyFile interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call {
+	return &MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call{Call: _e.mock.On("UpdateInternalPolicyWithFile",
+		append([]interface{}{ctx, updateInternalPolicyID, internalPolicyFile, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call) Run(run func(ctx context.Context, updateInternalPolicyID string, internalPolicyFile graphql.Upload, input openlaneclient.UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(graphql.Upload)
+		}
+		var arg3 openlaneclient.UpdateInternalPolicyInput
+		if args[3] != nil {
+			arg3 = args[3].(openlaneclient.UpdateInternalPolicyInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call) Return(updateInternalPolicyWithFile *openlaneclient.UpdateInternalPolicyWithFile, err error) *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call {
+	_c.Call.Return(updateInternalPolicyWithFile, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call) RunAndReturn(run func(ctx context.Context, updateInternalPolicyID string, internalPolicyFile graphql.Upload, input openlaneclient.UpdateInternalPolicyInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateInternalPolicyWithFile, error)) *MockOpenlaneGraphClient_UpdateInternalPolicyWithFile_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateInvite provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateInvite(ctx context.Context, updateInviteID string, input openlaneclient.UpdateInviteInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateInvite, error) {
 	var tmpRet mock.Arguments
@@ -49369,6 +49464,101 @@ func (_c *MockOpenlaneGraphClient_UpdateProcedure_Call) Return(updateProcedure *
 }
 
 func (_c *MockOpenlaneGraphClient_UpdateProcedure_Call) RunAndReturn(run func(ctx context.Context, updateProcedureID string, input openlaneclient.UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateProcedure, error)) *MockOpenlaneGraphClient_UpdateProcedure_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// UpdateProcedureWithFile provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateProcedureWithFile(ctx context.Context, updateProcedureID string, procedureFile graphql.Upload, input openlaneclient.UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateProcedureWithFile, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateProcedureID, procedureFile, input, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateProcedureID, procedureFile, input)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateProcedureWithFile")
+	}
+
+	var r0 *openlaneclient.UpdateProcedureWithFile
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateProcedureInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateProcedureWithFile, error)); ok {
+		return returnFunc(ctx, updateProcedureID, procedureFile, input, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateProcedureInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateProcedureWithFile); ok {
+		r0 = returnFunc(ctx, updateProcedureID, procedureFile, input, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateProcedureWithFile)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, graphql.Upload, openlaneclient.UpdateProcedureInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateProcedureID, procedureFile, input, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateProcedureWithFile_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateProcedureWithFile'
+type MockOpenlaneGraphClient_UpdateProcedureWithFile_Call struct {
+	*mock.Call
+}
+
+// UpdateProcedureWithFile is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateProcedureID string
+//   - procedureFile graphql.Upload
+//   - input openlaneclient.UpdateProcedureInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateProcedureWithFile(ctx interface{}, updateProcedureID interface{}, procedureFile interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call {
+	return &MockOpenlaneGraphClient_UpdateProcedureWithFile_Call{Call: _e.mock.On("UpdateProcedureWithFile",
+		append([]interface{}{ctx, updateProcedureID, procedureFile, input}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call) Run(run func(ctx context.Context, updateProcedureID string, procedureFile graphql.Upload, input openlaneclient.UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(graphql.Upload)
+		}
+		var arg3 openlaneclient.UpdateProcedureInput
+		if args[3] != nil {
+			arg3 = args[3].(openlaneclient.UpdateProcedureInput)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call) Return(updateProcedureWithFile *openlaneclient.UpdateProcedureWithFile, err error) *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call {
+	_c.Call.Return(updateProcedureWithFile, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call) RunAndReturn(run func(ctx context.Context, updateProcedureID string, procedureFile graphql.Upload, input openlaneclient.UpdateProcedureInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateProcedureWithFile, error)) *MockOpenlaneGraphClient_UpdateProcedureWithFile_Call {
 	_c.Call.Return(run)
 	return _c
 }
