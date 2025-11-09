@@ -43,6 +43,10 @@ const (
 	FieldSlug = "slug"
 	// FieldCustomDomainID holds the string denoting the custom_domain_id field in the database.
 	FieldCustomDomainID = "custom_domain_id"
+	// FieldPirschDomainID holds the string denoting the pirsch_domain_id field in the database.
+	FieldPirschDomainID = "pirsch_domain_id"
+	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
+	FieldPirschIdentificationCode = "pirsch_identification_code"
 	// Table holds the table name of the trustcenterhistory in the database.
 	Table = "trust_center_history"
 )
@@ -63,6 +67,8 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldSlug,
 	FieldCustomDomainID,
+	FieldPirschDomainID,
+	FieldPirschIdentificationCode,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -174,6 +180,16 @@ func BySlug(opts ...sql.OrderTermOption) OrderOption {
 // ByCustomDomainID orders the results by the custom_domain_id field.
 func ByCustomDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCustomDomainID, opts...).ToFunc()
+}
+
+// ByPirschDomainID orders the results by the pirsch_domain_id field.
+func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPirschDomainID, opts...).ToFunc()
+}
+
+// ByPirschIdentificationCode orders the results by the pirsch_identification_code field.
+func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
 }
 
 var (

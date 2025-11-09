@@ -112,6 +112,16 @@ func CustomDomainID(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldCustomDomainID, v))
 }
 
+// PirschDomainID applies equality check predicate on the "pirsch_domain_id" field. It's identical to PirschDomainIDEQ.
+func PirschDomainID(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschDomainID, v))
+}
+
+// PirschIdentificationCode applies equality check predicate on the "pirsch_identification_code" field. It's identical to PirschIdentificationCodeEQ.
+func PirschIdentificationCode(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschIdentificationCode, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldCreatedAt, v))
@@ -720,6 +730,156 @@ func CustomDomainIDEqualFold(v string) predicate.TrustCenter {
 // CustomDomainIDContainsFold applies the ContainsFold predicate on the "custom_domain_id" field.
 func CustomDomainIDContainsFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldContainsFold(FieldCustomDomainID, v))
+}
+
+// PirschDomainIDEQ applies the EQ predicate on the "pirsch_domain_id" field.
+func PirschDomainIDEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDNEQ applies the NEQ predicate on the "pirsch_domain_id" field.
+func PirschDomainIDNEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNEQ(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDIn applies the In predicate on the "pirsch_domain_id" field.
+func PirschDomainIDIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIn(FieldPirschDomainID, vs...))
+}
+
+// PirschDomainIDNotIn applies the NotIn predicate on the "pirsch_domain_id" field.
+func PirschDomainIDNotIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotIn(FieldPirschDomainID, vs...))
+}
+
+// PirschDomainIDGT applies the GT predicate on the "pirsch_domain_id" field.
+func PirschDomainIDGT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGT(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDGTE applies the GTE predicate on the "pirsch_domain_id" field.
+func PirschDomainIDGTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGTE(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDLT applies the LT predicate on the "pirsch_domain_id" field.
+func PirschDomainIDLT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLT(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDLTE applies the LTE predicate on the "pirsch_domain_id" field.
+func PirschDomainIDLTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLTE(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDContains applies the Contains predicate on the "pirsch_domain_id" field.
+func PirschDomainIDContains(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContains(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDHasPrefix applies the HasPrefix predicate on the "pirsch_domain_id" field.
+func PirschDomainIDHasPrefix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasPrefix(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDHasSuffix applies the HasSuffix predicate on the "pirsch_domain_id" field.
+func PirschDomainIDHasSuffix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasSuffix(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDIsNil applies the IsNil predicate on the "pirsch_domain_id" field.
+func PirschDomainIDIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldPirschDomainID))
+}
+
+// PirschDomainIDNotNil applies the NotNil predicate on the "pirsch_domain_id" field.
+func PirschDomainIDNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldPirschDomainID))
+}
+
+// PirschDomainIDEqualFold applies the EqualFold predicate on the "pirsch_domain_id" field.
+func PirschDomainIDEqualFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEqualFold(FieldPirschDomainID, v))
+}
+
+// PirschDomainIDContainsFold applies the ContainsFold predicate on the "pirsch_domain_id" field.
+func PirschDomainIDContainsFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContainsFold(FieldPirschDomainID, v))
+}
+
+// PirschIdentificationCodeEQ applies the EQ predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeNEQ applies the NEQ predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeNEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNEQ(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeIn applies the In predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIn(FieldPirschIdentificationCode, vs...))
+}
+
+// PirschIdentificationCodeNotIn applies the NotIn predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeNotIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotIn(FieldPirschIdentificationCode, vs...))
+}
+
+// PirschIdentificationCodeGT applies the GT predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeGT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGT(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeGTE applies the GTE predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeGTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGTE(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeLT applies the LT predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeLT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLT(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeLTE applies the LTE predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeLTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLTE(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeContains applies the Contains predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeContains(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContains(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeHasPrefix applies the HasPrefix predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeHasPrefix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasPrefix(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeHasSuffix applies the HasSuffix predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeHasSuffix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasSuffix(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeIsNil applies the IsNil predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldPirschIdentificationCode))
+}
+
+// PirschIdentificationCodeNotNil applies the NotNil predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldPirschIdentificationCode))
+}
+
+// PirschIdentificationCodeEqualFold applies the EqualFold predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeEqualFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEqualFold(FieldPirschIdentificationCode, v))
+}
+
+// PirschIdentificationCodeContainsFold applies the ContainsFold predicate on the "pirsch_identification_code" field.
+func PirschIdentificationCodeContainsFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContainsFold(FieldPirschIdentificationCode, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

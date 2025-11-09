@@ -57006,6 +57006,16 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, trustcenter.FieldCustomDomainID)
 				fieldSeen[trustcenter.FieldCustomDomainID] = struct{}{}
 			}
+		case "pirschDomainID":
+			if _, ok := fieldSeen[trustcenter.FieldPirschDomainID]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPirschDomainID)
+				fieldSeen[trustcenter.FieldPirschDomainID] = struct{}{}
+			}
+		case "pirschIdentificationCode":
+			if _, ok := fieldSeen[trustcenter.FieldPirschIdentificationCode]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPirschIdentificationCode)
+				fieldSeen[trustcenter.FieldPirschIdentificationCode] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -57803,6 +57813,16 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcenterhistory.FieldCustomDomainID]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldCustomDomainID)
 				fieldSeen[trustcenterhistory.FieldCustomDomainID] = struct{}{}
+			}
+		case "pirschDomainID":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPirschDomainID]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschDomainID)
+				fieldSeen[trustcenterhistory.FieldPirschDomainID] = struct{}{}
+			}
+		case "pirschIdentificationCode":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPirschIdentificationCode]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschIdentificationCode)
+				fieldSeen[trustcenterhistory.FieldPirschIdentificationCode] = struct{}{}
 			}
 		case "id":
 		case "__typename":

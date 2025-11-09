@@ -15518,6 +15518,8 @@ func (c *TemplateUpdateOne) SetInput(i UpdateTemplateInput) *TemplateUpdateOne {
 // CreateTrustCenterInput represents a mutation input for creating trustcenters.
 type CreateTrustCenterInput struct {
 	Tags                       []string
+	PirschDomainID             *string
+	PirschIdentificationCode   *string
 	OwnerID                    *string
 	CustomDomainID             *string
 	SettingID                  *string
@@ -15533,6 +15535,12 @@ type CreateTrustCenterInput struct {
 func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.Tags; v != nil {
 		m.SetTags(v)
+	}
+	if v := i.PirschDomainID; v != nil {
+		m.SetPirschDomainID(*v)
+	}
+	if v := i.PirschIdentificationCode; v != nil {
+		m.SetPirschIdentificationCode(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -15574,6 +15582,10 @@ type UpdateTrustCenterInput struct {
 	ClearTags                        bool
 	Tags                             []string
 	AppendTags                       []string
+	ClearPirschDomainID              bool
+	PirschDomainID                   *string
+	ClearPirschIdentificationCode    bool
+	PirschIdentificationCode         *string
 	ClearOwner                       bool
 	OwnerID                          *string
 	ClearCustomDomain                bool
@@ -15609,6 +15621,18 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if i.AppendTags != nil {
 		m.AppendTags(i.Tags)
+	}
+	if i.ClearPirschDomainID {
+		m.ClearPirschDomainID()
+	}
+	if v := i.PirschDomainID; v != nil {
+		m.SetPirschDomainID(*v)
+	}
+	if i.ClearPirschIdentificationCode {
+		m.ClearPirschIdentificationCode()
+	}
+	if v := i.PirschIdentificationCode; v != nil {
+		m.SetPirschIdentificationCode(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

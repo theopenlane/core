@@ -3846,16 +3846,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenter",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenter.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcenter.FieldCreatedAt},
-			trustcenter.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcenter.FieldUpdatedAt},
-			trustcenter.FieldCreatedBy:      {Type: field.TypeString, Column: trustcenter.FieldCreatedBy},
-			trustcenter.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcenter.FieldUpdatedBy},
-			trustcenter.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcenter.FieldDeletedAt},
-			trustcenter.FieldDeletedBy:      {Type: field.TypeString, Column: trustcenter.FieldDeletedBy},
-			trustcenter.FieldTags:           {Type: field.TypeJSON, Column: trustcenter.FieldTags},
-			trustcenter.FieldOwnerID:        {Type: field.TypeString, Column: trustcenter.FieldOwnerID},
-			trustcenter.FieldSlug:           {Type: field.TypeString, Column: trustcenter.FieldSlug},
-			trustcenter.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
+			trustcenter.FieldCreatedAt:                {Type: field.TypeTime, Column: trustcenter.FieldCreatedAt},
+			trustcenter.FieldUpdatedAt:                {Type: field.TypeTime, Column: trustcenter.FieldUpdatedAt},
+			trustcenter.FieldCreatedBy:                {Type: field.TypeString, Column: trustcenter.FieldCreatedBy},
+			trustcenter.FieldUpdatedBy:                {Type: field.TypeString, Column: trustcenter.FieldUpdatedBy},
+			trustcenter.FieldDeletedAt:                {Type: field.TypeTime, Column: trustcenter.FieldDeletedAt},
+			trustcenter.FieldDeletedBy:                {Type: field.TypeString, Column: trustcenter.FieldDeletedBy},
+			trustcenter.FieldTags:                     {Type: field.TypeJSON, Column: trustcenter.FieldTags},
+			trustcenter.FieldOwnerID:                  {Type: field.TypeString, Column: trustcenter.FieldOwnerID},
+			trustcenter.FieldSlug:                     {Type: field.TypeString, Column: trustcenter.FieldSlug},
+			trustcenter.FieldCustomDomainID:           {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
+			trustcenter.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenter.FieldPirschDomainID},
+			trustcenter.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenter.FieldPirschIdentificationCode},
 		},
 	}
 	graph.Nodes[113] = &sqlgraph.Node{
@@ -3975,19 +3977,21 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "TrustCenterHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			trustcenterhistory.FieldHistoryTime:    {Type: field.TypeTime, Column: trustcenterhistory.FieldHistoryTime},
-			trustcenterhistory.FieldRef:            {Type: field.TypeString, Column: trustcenterhistory.FieldRef},
-			trustcenterhistory.FieldOperation:      {Type: field.TypeEnum, Column: trustcenterhistory.FieldOperation},
-			trustcenterhistory.FieldCreatedAt:      {Type: field.TypeTime, Column: trustcenterhistory.FieldCreatedAt},
-			trustcenterhistory.FieldUpdatedAt:      {Type: field.TypeTime, Column: trustcenterhistory.FieldUpdatedAt},
-			trustcenterhistory.FieldCreatedBy:      {Type: field.TypeString, Column: trustcenterhistory.FieldCreatedBy},
-			trustcenterhistory.FieldUpdatedBy:      {Type: field.TypeString, Column: trustcenterhistory.FieldUpdatedBy},
-			trustcenterhistory.FieldDeletedAt:      {Type: field.TypeTime, Column: trustcenterhistory.FieldDeletedAt},
-			trustcenterhistory.FieldDeletedBy:      {Type: field.TypeString, Column: trustcenterhistory.FieldDeletedBy},
-			trustcenterhistory.FieldTags:           {Type: field.TypeJSON, Column: trustcenterhistory.FieldTags},
-			trustcenterhistory.FieldOwnerID:        {Type: field.TypeString, Column: trustcenterhistory.FieldOwnerID},
-			trustcenterhistory.FieldSlug:           {Type: field.TypeString, Column: trustcenterhistory.FieldSlug},
-			trustcenterhistory.FieldCustomDomainID: {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
+			trustcenterhistory.FieldHistoryTime:              {Type: field.TypeTime, Column: trustcenterhistory.FieldHistoryTime},
+			trustcenterhistory.FieldRef:                      {Type: field.TypeString, Column: trustcenterhistory.FieldRef},
+			trustcenterhistory.FieldOperation:                {Type: field.TypeEnum, Column: trustcenterhistory.FieldOperation},
+			trustcenterhistory.FieldCreatedAt:                {Type: field.TypeTime, Column: trustcenterhistory.FieldCreatedAt},
+			trustcenterhistory.FieldUpdatedAt:                {Type: field.TypeTime, Column: trustcenterhistory.FieldUpdatedAt},
+			trustcenterhistory.FieldCreatedBy:                {Type: field.TypeString, Column: trustcenterhistory.FieldCreatedBy},
+			trustcenterhistory.FieldUpdatedBy:                {Type: field.TypeString, Column: trustcenterhistory.FieldUpdatedBy},
+			trustcenterhistory.FieldDeletedAt:                {Type: field.TypeTime, Column: trustcenterhistory.FieldDeletedAt},
+			trustcenterhistory.FieldDeletedBy:                {Type: field.TypeString, Column: trustcenterhistory.FieldDeletedBy},
+			trustcenterhistory.FieldTags:                     {Type: field.TypeJSON, Column: trustcenterhistory.FieldTags},
+			trustcenterhistory.FieldOwnerID:                  {Type: field.TypeString, Column: trustcenterhistory.FieldOwnerID},
+			trustcenterhistory.FieldSlug:                     {Type: field.TypeString, Column: trustcenterhistory.FieldSlug},
+			trustcenterhistory.FieldCustomDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
+			trustcenterhistory.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldPirschDomainID},
+			trustcenterhistory.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenterhistory.FieldPirschIdentificationCode},
 		},
 	}
 	graph.Nodes[118] = &sqlgraph.Node{
@@ -35458,6 +35462,16 @@ func (f *TrustCenterFilter) WhereCustomDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldCustomDomainID))
 }
 
+// WherePirschDomainID applies the entql string predicate on the pirsch_domain_id field.
+func (f *TrustCenterFilter) WherePirschDomainID(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPirschDomainID))
+}
+
+// WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
+func (f *TrustCenterFilter) WherePirschIdentificationCode(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPirschIdentificationCode))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *TrustCenterFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -36187,6 +36201,16 @@ func (f *TrustCenterHistoryFilter) WhereSlug(p entql.StringP) {
 // WhereCustomDomainID applies the entql string predicate on the custom_domain_id field.
 func (f *TrustCenterHistoryFilter) WhereCustomDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldCustomDomainID))
+}
+
+// WherePirschDomainID applies the entql string predicate on the pirsch_domain_id field.
+func (f *TrustCenterHistoryFilter) WherePirschDomainID(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldPirschDomainID))
+}
+
+// WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
+func (f *TrustCenterHistoryFilter) WherePirschIdentificationCode(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldPirschIdentificationCode))
 }
 
 // addPredicate implements the predicateAdder interface.

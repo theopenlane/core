@@ -182,6 +182,46 @@ func (_u *TrustCenterHistoryUpdate) ClearCustomDomainID() *TrustCenterHistoryUpd
 	return _u
 }
 
+// SetPirschDomainID sets the "pirsch_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) SetPirschDomainID(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPirschDomainID(v)
+	return _u
+}
+
+// SetNillablePirschDomainID sets the "pirsch_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePirschDomainID(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPirschDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPirschDomainID clears the value of the "pirsch_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) ClearPirschDomainID() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPirschDomainID()
+	return _u
+}
+
+// SetPirschIdentificationCode sets the "pirsch_identification_code" field.
+func (_u *TrustCenterHistoryUpdate) SetPirschIdentificationCode(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPirschIdentificationCode(v)
+	return _u
+}
+
+// SetNillablePirschIdentificationCode sets the "pirsch_identification_code" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePirschIdentificationCode(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPirschIdentificationCode(*v)
+	}
+	return _u
+}
+
+// ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
+func (_u *TrustCenterHistoryUpdate) ClearPirschIdentificationCode() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
 func (_u *TrustCenterHistoryUpdate) Mutation() *TrustCenterHistoryMutation {
 	return _u.mutation
@@ -305,6 +345,18 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PirschDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschIdentificationCode(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString, value)
+	}
+	if _u.mutation.PirschIdentificationCodeCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -480,6 +532,46 @@ func (_u *TrustCenterHistoryUpdateOne) ClearCustomDomainID() *TrustCenterHistory
 	return _u
 }
 
+// SetPirschDomainID sets the "pirsch_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPirschDomainID(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPirschDomainID(v)
+	return _u
+}
+
+// SetNillablePirschDomainID sets the "pirsch_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePirschDomainID(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPirschDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPirschDomainID clears the value of the "pirsch_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPirschDomainID() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPirschDomainID()
+	return _u
+}
+
+// SetPirschIdentificationCode sets the "pirsch_identification_code" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPirschIdentificationCode(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPirschIdentificationCode(v)
+	return _u
+}
+
+// SetNillablePirschIdentificationCode sets the "pirsch_identification_code" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePirschIdentificationCode(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPirschIdentificationCode(*v)
+	}
+	return _u
+}
+
+// ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPirschIdentificationCode() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
 // Mutation returns the TrustCenterHistoryMutation object of the builder.
 func (_u *TrustCenterHistoryUpdateOne) Mutation() *TrustCenterHistoryMutation {
 	return _u.mutation
@@ -633,6 +725,18 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PirschDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PirschIdentificationCode(); ok {
+		_spec.SetField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString, value)
+	}
+	if _u.mutation.PirschIdentificationCodeCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
