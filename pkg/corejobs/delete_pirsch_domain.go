@@ -24,12 +24,12 @@ type DeletePirschDomainWorker struct {
 
 	Config PirschDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for pirsch domain deletion"`
 
-	pirschClient pirsch.PirschClient
+	pirschClient pirsch.Client
 }
 
 // WithPirschClient sets the Pirsch client for the worker
 // and returns the worker for method chaining
-func (w *DeletePirschDomainWorker) WithPirschClient(cl pirsch.PirschClient) *DeletePirschDomainWorker {
+func (w *DeletePirschDomainWorker) WithPirschClient(cl pirsch.Client) *DeletePirschDomainWorker {
 	w.pirschClient = cl
 	return w
 }
@@ -50,7 +50,7 @@ func (w *DeletePirschDomainWorker) Work(ctx context.Context, job *river.Job[Dele
 	}
 
 	// Delete the domain from Pirsch
-	if err := w.pirschClient.DeleteDomain(job.Args.PirschDomainID); err != nil {
+	if err := w.pirschClient.DeleteDomain(ctx, job.Args.PirschDomainID); err != nil {
 		log.Error().
 			Err(err).
 			Str("pirsch_domain_id", job.Args.PirschDomainID).

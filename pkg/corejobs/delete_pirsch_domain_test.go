@@ -5,6 +5,7 @@ import (
 	"testing"
 
 	"github.com/riverqueue/river"
+	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/pkg/corejobs"
@@ -46,10 +47,10 @@ func TestDeletePirschDomainWorker(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
 			ctx := context.Background()
-			pirschMock := pirschmocks.NewMockPirschClient(t)
+			pirschMock := pirschmocks.NewMockClient(t)
 
 			if tc.expectDeleteCall {
-				pirschMock.EXPECT().DeleteDomain(tc.pirschDomainID).Return(tc.deleteDomainError)
+				pirschMock.EXPECT().DeleteDomain(mock.Anything, tc.pirschDomainID).Return(tc.deleteDomainError)
 			}
 
 			worker := &corejobs.DeletePirschDomainWorker{
