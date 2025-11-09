@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/rs/zerolog/log"
+	"github.com/samber/lo"
 	"github.com/stripe/stripe-go/v83"
 )
 
@@ -216,7 +217,7 @@ func (sc *StripeClient) DeleteCustomer(ctx context.Context, id string) error {
 // this is used when an organization is deleted - we retain the customer record and keep a referenced to the deactivated subscription
 // we do not delete the customer record in stripe for record / references
 // we also do not delete the subscription record in stripe for record / references
-// a cancelled active subscription will set to cancel at period end, a trialing subscription will be set to end immediately
+// this will cancel the subscription immediately, because the organization is being deleted and should not retain access
 func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Context, customerID string) error {
 	customer, err := sc.GetCustomerByStripeID(ctx, customerID)
 	if err != nil {
@@ -230,11 +231,13 @@ func (sc *StripeClient) FindAndDeactivateCustomerSubscription(ctx context.Contex
 			return nil
 		}
 
-		params := &stripe.SubscriptionScheduleUpdateParams{
-			EndBehavior: stripe.String(string(stripe.SubscriptionScheduleEndBehaviorCancel)),
-		}
-
-		_, err := sc.Client.V1SubscriptionSchedules.Update(ctx, sub.Schedule.ID, params)
+		// when an organization is deleted, the subscription should be cancelled immediately, instead of at period end
+		_, err := sc.Client.V1Subscriptions.Cancel(ctx, sub.ID,
+			&stripe.SubscriptionCancelParams{
+				CancellationDetails: &stripe.SubscriptionCancelCancellationDetailsParams{
+					Comment: lo.ToPtr("system: organization was deleted - cancelling subscription"),
+				},
+			})
 		if err != nil {
 			return err
 		}
