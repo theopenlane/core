@@ -3,7 +3,6 @@
 package internalpolicy
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"os"
@@ -65,14 +64,18 @@ func syncValidation() (id string, detailsFile *graphql.Upload, document *storage
 			id = document.Frontmatter.OpenlaneID
 		}
 	}
-	// Convert document.Data to io.ReadSeeker
-	switch v := document.Data.(type) {
-	case []byte:
-		detailsFile.File = bytes.NewReader(v)
-	case string:
-		detailsFile.File = strings.NewReader(v)
-	default:
-		detailsFile.File = strings.NewReader("")
+
+	// re-read to the original file as the raw file was already read during parsing
+	file, err = storage.NewUploadFile(detailsFileLoc)
+	if err != nil {
+		return id, nil, nil, err
+	}
+
+	detailsFile = &graphql.Upload{
+		File:        file.RawFile,
+		Filename:    file.OriginalName,
+		Size:        file.Size,
+		ContentType: file.ContentType,
 	}
 
 	return id, detailsFile, document, nil
@@ -109,6 +112,7 @@ func sync(ctx context.Context) error {
 
 		document.Frontmatter.OpenlaneID = o.CreateUploadInternalPolicy.InternalPolicy.ID
 		document.Frontmatter.Title = o.CreateUploadInternalPolicy.InternalPolicy.Name
+		document.Frontmatter.Status = o.CreateUploadInternalPolicy.InternalPolicy.Status.String()
 
 		fmt.Println("→ updating document with frontmatter")
 
@@ -125,6 +129,7 @@ func sync(ctx context.Context) error {
 	cobra.CheckErr(err)
 
 	document.Frontmatter.Title = o.UpdateInternalPolicy.InternalPolicy.Name
+	document.Frontmatter.Status = o.UpdateInternalPolicy.InternalPolicy.Status.String()
 
 	fmt.Println("→ updating document with frontmatter")
 

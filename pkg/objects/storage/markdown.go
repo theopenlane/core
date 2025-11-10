@@ -14,6 +14,8 @@ type Frontmatter struct {
 
 	// Title of the document
 	Title string `yaml:"title"`
+	// Status of the document
+	Status string `yaml:"status"`
 }
 
 // ParseFrontmatter extracts YAML frontmatter and returns (metadata, content, error)

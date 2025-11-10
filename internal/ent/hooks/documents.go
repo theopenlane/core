@@ -39,6 +39,7 @@ type importSchemaMutation interface {
 
 	SetName(string)
 	SetDetails(string)
+	SetStatus(enums.DocumentStatus)
 	SetFileID(string)
 	FileID() (string, bool)
 	SetURL(string)
@@ -171,6 +172,12 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 		// If frontmatter is present, see if title is set and use it as the document name
 		if parsedContent.Frontmatter.Title != "" {
 			m.SetName(parsedContent.Frontmatter.Title)
+		}
+
+		if parsedContent.Frontmatter.Status != "" {
+			status := enums.ToDocumentStatus(parsedContent.Frontmatter.Status)
+
+			m.SetStatus(*status)
 		}
 	}
 
