@@ -67,18 +67,19 @@ type Resolver struct {
 // NewResolver returns a resolver configured with the given ent client
 func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
 	return &Resolver{
-		db:                  db,
-		uploader:            u,
+		db:       db,
+		uploader: u,
 	}
 }
+
 // WithSubscriptions enables graphql subscriptions to the server using websockets or sse
-   func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
-      if enabled {
-          r.subscriptionManager = graphsubscriptions.NewManager()
-      }
-      
-      return &r
-  }
+func (r Resolver) WithSubscriptions(enabled bool) *Resolver {
+	if enabled {
+		r.subscriptionManager = graphsubscriptions.NewManager()
+	}
+
+	return &r
+}
 
 func (r Resolver) WithTrustCenterCnameTarget(cname string) *Resolver {
 	r.trustCenterCnameTarget = cname
@@ -205,7 +206,6 @@ func (r *Resolver) Handler() *Handler {
 
 	return h
 }
-
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {
 	// prevent complex queries except the introspection query
