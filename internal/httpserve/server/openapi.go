@@ -6,16 +6,19 @@ import (
 	"go/doc"
 	"go/parser"
 	"go/token"
-	"os"
+	"maps"
 	"path/filepath"
 	"reflect"
 	"runtime"
+	"sort"
 	"strings"
 	"sync"
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
+
+	"github.com/theopenlane/core/internal/httpserve/specs"
 )
 
 // NewOpenAPISpec creates a new OpenAPI 3.1.0 specification based on the configured go interfaces and the operation types appended within the individual handlers
@@ -124,26 +127,15 @@ var (
 
 // mergeSCIMSpec loads the SCIM OpenAPI specification and merges it into the main spec
 func mergeSCIMSpec(mainSpec *openapi3.T) error {
-	// Find the specs directory relative to this file
-	_, filename, _, ok := runtime.Caller(0)
-	if !ok {
-		return ErrFailedToGetFilePath
-	}
-
-	// Navigate from server -> httpserve to get to specs directory
-	httpserveDir := filepath.Dir(filepath.Dir(filename))
-	scimSpecPath := filepath.Join(httpserveDir, "specs", "scim.yaml")
-
-	// Check if SCIM spec file exists
-	if _, err := os.Stat(scimSpecPath); os.IsNotExist(err) {
-		return fmt.Errorf("%w: %s", ErrSCIMSpecNotFound, scimSpecPath)
+	if len(specs.SCIMSpec) == 0 {
+		return fmt.Errorf("%w: embedded SCIM spec is empty", ErrSCIMSpecNotFound)
 	}
 
 	// Load SCIM spec
 	loader := openapi3.NewLoader()
 	loader.IsExternalRefsAllowed = true
 
-	scimSpec, err := loader.LoadFromFile(scimSpecPath)
+	scimSpec, err := loader.LoadFromData(specs.SCIMSpec)
 	if err != nil {
 		return fmt.Errorf("failed to load SCIM spec: %w", err)
 	}
@@ -153,7 +145,7 @@ func mergeSCIMSpec(mainSpec *openapi3.T) error {
 		return fmt.Errorf("SCIM spec validation failed: %w", err)
 	}
 
-	log.Info().Str("path", scimSpecPath).Msg("loaded SCIM OpenAPI spec")
+	log.Info().Msg("loaded embedded SCIM OpenAPI spec")
 
 	// Merge all spec components
 	mergePaths(mainSpec, scimSpec)
@@ -213,9 +205,7 @@ func mergeSchemas(mainSpec, sourceSpec *openapi3.T) {
 		mainSpec.Components.Schemas = make(openapi3.Schemas)
 	}
 
-	for name, schema := range sourceSpec.Components.Schemas {
-		mainSpec.Components.Schemas[name] = schema
-	}
+	maps.Copy(mainSpec.Components.Schemas, sourceSpec.Components.Schemas)
 }
 
 // mergeResponses merges response definitions
@@ -228,9 +218,7 @@ func mergeResponses(mainSpec, sourceSpec *openapi3.T) {
 		mainSpec.Components.Responses = make(openapi3.ResponseBodies)
 	}
 
-	for name, response := range sourceSpec.Components.Responses {
-		mainSpec.Components.Responses[name] = response
-	}
+	maps.Copy(mainSpec.Components.Responses, sourceSpec.Components.Responses)
 }
 
 // mergeParameters merges parameter definitions
@@ -243,9 +231,7 @@ func mergeParameters(mainSpec, sourceSpec *openapi3.T) {
 		mainSpec.Components.Parameters = make(openapi3.ParametersMap)
 	}
 
-	for name, param := range sourceSpec.Components.Parameters {
-		mainSpec.Components.Parameters[name] = param
-	}
+	maps.Copy(mainSpec.Components.Parameters, sourceSpec.Components.Parameters)
 }
 
 // mergeRequestBodies merges request body definitions
@@ -258,9 +244,7 @@ func mergeRequestBodies(mainSpec, sourceSpec *openapi3.T) {
 		mainSpec.Components.RequestBodies = make(openapi3.RequestBodies)
 	}
 
-	for name, reqBody := range sourceSpec.Components.RequestBodies {
-		mainSpec.Components.RequestBodies[name] = reqBody
-	}
+	maps.Copy(mainSpec.Components.RequestBodies, sourceSpec.Components.RequestBodies)
 }
 
 // mergeSecuritySchemes merges security scheme definitions without overriding existing ones
@@ -291,9 +275,7 @@ func mergeExamples(mainSpec, sourceSpec *openapi3.T) {
 		mainSpec.Components.Examples = make(openapi3.Examples)
 	}
 
-	for name, example := range sourceSpec.Components.Examples {
-		mainSpec.Components.Examples[name] = example
-	}
+	maps.Copy(mainSpec.Components.Examples, sourceSpec.Components.Examples)
 }
 
 // mergeTags merges tag definitions from source spec into main spec
@@ -557,13 +539,13 @@ func extractOpenAPITypeDescriptions() map[string]string {
 	return descriptions
 }
 
-// GenerateTagsFromOperations collects all unique tags from operations and generates tag definitions using operation descriptions
-func GenerateTagsFromOperations(spec *openapi3.T) {
+// generateTagsFromOperations collects all unique tags from operations and generates tag definitions using operation descriptions
+func generateTagsFromOperations(spec *openapi3.T) *openapi3.T {
 	if spec == nil || spec.Paths == nil {
-		return
+		return nil
 	}
 
-	tagDescriptions := make(map[string]string)
+	tagDescriptions := make(map[string][]string)
 
 	for _, pathItem := range spec.Paths.Map() {
 		if pathItem == nil {
@@ -576,24 +558,42 @@ func GenerateTagsFromOperations(spec *openapi3.T) {
 			}
 
 			for _, tag := range op.Tags {
-				if _, exists := tagDescriptions[tag]; !exists {
-					if op.Summary != "" {
-						tagDescriptions[tag] = op.Summary
-					} else if op.Description != "" {
-						tagDescriptions[tag] = op.Description
-					}
+				desc := op.Summary
+				if desc == "" {
+					desc = op.Description
+				}
+
+				if desc != "" {
+					tagDescriptions[tag] = append(tagDescriptions[tag], desc)
 				}
 			}
 		}
 	}
 
+	tagNames := make([]string, 0, len(tagDescriptions))
+	for tagName := range tagDescriptions {
+		tagNames = append(tagNames, tagName)
+	}
+
+	sort.Strings(tagNames)
+
 	tags := make(openapi3.Tags, 0, len(tagDescriptions))
-	for tagName, desc := range tagDescriptions {
+	for _, tagName := range tagNames {
+		descriptions := tagDescriptions[tagName]
+		sort.Strings(descriptions)
+
+		description := ""
+		if len(descriptions) > 0 {
+			description = descriptions[0]
+		}
+
 		tags = append(tags, &openapi3.Tag{
 			Name:        tagName,
-			Description: desc,
+			Description: description,
 		})
 	}
 
 	spec.Tags = tags
+
+	return spec
 }

@@ -135,14 +135,19 @@ tasks:
       - pkg/catalog/**/*.go
       - pkg/corejobs/internal/**/*.go
       - .mockery.yml
+      - internal/httpserve/**/*.go
+      - pkg/openapi/*.go
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
       - pkg/corejobs/internal/cloudflare/mocks/mocks.go
+      - internal/httpserve/specs/openlane.openapi.json
+      - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
       - go generate pkg/corejobs/internal/generate.go
+      - go generate internal/httpserve/specs/generate/generate.go
 
   # Buildkite automation tasks
   buildkite:draft-pr:
@@ -611,3 +616,8 @@ tasks:
         else
           echo "✅ config/.config.yaml already exists"
         fi
+
+  generate:openapi:
+    desc: Generate OpenAPI spec file
+    cmds:
+      - go run ./internal/httpserve/specs/generate/main.go
