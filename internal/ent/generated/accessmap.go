@@ -1223,6 +1223,15 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
+}, "notification": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
 }, "onboarding": {"organization": {
 	ObjectType:      "organization",
 	SkipEditCheck:   true,
@@ -1428,6 +1437,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "org_subscriptions": {
 	ObjectType:      "org_subscription",
 	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "notifications": {
+	ObjectType:      "notification",
+	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "org_products": {
 	ObjectType:      "org_product",
@@ -2450,6 +2463,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "subcontrols": {
 	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "notifications": {
+	ObjectType:      "notification",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "assigner_tasks": {

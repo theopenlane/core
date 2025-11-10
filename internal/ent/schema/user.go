@@ -259,6 +259,14 @@ func (u User) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(u, Subcontrol{}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: u,
+			edgeSchema: Notification{},
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: u,
 			name:       "assigner_tasks",
 			t:          Task.Type,
 		}),

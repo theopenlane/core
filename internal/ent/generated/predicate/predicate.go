@@ -210,6 +210,9 @@ type Note func(*sql.Selector)
 // NoteHistory is the predicate function for notehistory builders.
 type NoteHistory func(*sql.Selector)
 
+// Notification is the predicate function for notification builders.
+type Notification func(*sql.Selector)
+
 // Onboarding is the predicate function for onboarding builders.
 type Onboarding func(*sql.Selector)
 

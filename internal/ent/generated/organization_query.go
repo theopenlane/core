@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -115,6 +116,7 @@ type OrganizationQuery struct {
 	withIntegrations                       *IntegrationQuery
 	withDocuments                          *DocumentDataQuery
 	withOrgSubscriptions                   *OrgSubscriptionQuery
+	withNotifications                      *NotificationQuery
 	withOrgProducts                        *OrgProductQuery
 	withOrgPrices                          *OrgPriceQuery
 	withOrgModules                         *OrgModuleQuery
@@ -191,6 +193,7 @@ type OrganizationQuery struct {
 	withNamedIntegrations                  map[string]*IntegrationQuery
 	withNamedDocuments                     map[string]*DocumentDataQuery
 	withNamedOrgSubscriptions              map[string]*OrgSubscriptionQuery
+	withNamedNotifications                 map[string]*NotificationQuery
 	withNamedOrgProducts                   map[string]*OrgProductQuery
 	withNamedOrgPrices                     map[string]*OrgPriceQuery
 	withNamedOrgModules                    map[string]*OrgModuleQuery
@@ -994,6 +997,31 @@ func (_q *OrganizationQuery) QueryOrgSubscriptions() *OrgSubscriptionQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.OrgSubscription
 		step.Edge.Schema = schemaConfig.OrgSubscription
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotifications chains the current query on the "notifications" edge.
+func (_q *OrganizationQuery) QueryNotifications() *NotificationQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationsTable, organization.NotificationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -2421,6 +2449,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withIntegrations:                  _q.withIntegrations.Clone(),
 		withDocuments:                     _q.withDocuments.Clone(),
 		withOrgSubscriptions:              _q.withOrgSubscriptions.Clone(),
+		withNotifications:                 _q.withNotifications.Clone(),
 		withOrgProducts:                   _q.withOrgProducts.Clone(),
 		withOrgPrices:                     _q.withOrgPrices.Clone(),
 		withOrgModules:                    _q.withOrgModules.Clone(),
@@ -2792,6 +2821,17 @@ func (_q *OrganizationQuery) WithOrgSubscriptions(opts ...func(*OrgSubscriptionQ
 		opt(query)
 	}
 	_q.withOrgSubscriptions = query
+	return _q
+}
+
+// WithNotifications tells the query-builder to eager-load the nodes that are connected to
+// the "notifications" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNotifications(opts ...func(*NotificationQuery)) *OrganizationQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotifications = query
 	return _q
 }
 
@@ -3407,7 +3447,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [77]bool{
+		loadedTypes = [78]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3437,6 +3477,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withIntegrations != nil,
 			_q.withDocuments != nil,
 			_q.withOrgSubscriptions != nil,
+			_q.withNotifications != nil,
 			_q.withOrgProducts != nil,
 			_q.withOrgPrices != nil,
 			_q.withOrgModules != nil,
@@ -3721,6 +3762,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Organization, e *OrgSubscription) {
 				n.Edges.OrgSubscriptions = append(n.Edges.OrgSubscriptions, e)
 			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNotifications; query != nil {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *Organization) { n.Edges.Notifications = []*Notification{} },
+			func(n *Organization, e *Notification) { n.Edges.Notifications = append(n.Edges.Notifications, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -4257,6 +4305,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadOrgSubscriptions(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedOrgSubscriptions(name) },
 			func(n *Organization, e *OrgSubscription) { n.appendNamedOrgSubscriptions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotifications {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedNotifications(name) },
+			func(n *Organization, e *Notification) { n.appendNamedNotifications(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5605,6 +5660,36 @@ func (_q *OrganizationQuery) loadOrgSubscriptions(ctx context.Context, query *Or
 	}
 	query.Where(predicate.OrgSubscription(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.OrgSubscriptionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadNotifications(ctx context.Context, query *NotificationQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Notification)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notification.FieldOwnerID)
+	}
+	query.Where(predicate.Notification(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.NotificationsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -7548,6 +7633,20 @@ func (_q *OrganizationQuery) WithNamedOrgSubscriptions(name string, opts ...func
 		_q.withNamedOrgSubscriptions = make(map[string]*OrgSubscriptionQuery)
 	}
 	_q.withNamedOrgSubscriptions[name] = query
+	return _q
+}
+
+// WithNamedNotifications tells the query-builder to eager-load the nodes that are connected to the "notifications"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedNotifications(name string, opts ...func(*NotificationQuery)) *OrganizationQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotifications == nil {
+		_q.withNamedNotifications = make(map[string]*NotificationQuery)
+	}
+	_q.withNamedNotifications[name] = query
 	return _q
 }
 

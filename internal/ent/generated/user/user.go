@@ -98,6 +98,8 @@ const (
 	EdgeActionPlans = "action_plans"
 	// EdgeSubcontrols holds the string denoting the subcontrols edge name in mutations.
 	EdgeSubcontrols = "subcontrols"
+	// EdgeNotifications holds the string denoting the notifications edge name in mutations.
+	EdgeNotifications = "notifications"
 	// EdgeAssignerTasks holds the string denoting the assigner_tasks edge name in mutations.
 	EdgeAssignerTasks = "assigner_tasks"
 	// EdgeAssigneeTasks holds the string denoting the assignee_tasks edge name in mutations.
@@ -208,6 +210,13 @@ const (
 	SubcontrolsInverseTable = "subcontrols"
 	// SubcontrolsColumn is the table column denoting the subcontrols relation/edge.
 	SubcontrolsColumn = "user_subcontrols"
+	// NotificationsTable is the table that holds the notifications relation/edge.
+	NotificationsTable = "notifications"
+	// NotificationsInverseTable is the table name for the Notification entity.
+	// It exists in this package in order to avoid circular dependency with the "notification" package.
+	NotificationsInverseTable = "notifications"
+	// NotificationsColumn is the table column denoting the notifications relation/edge.
+	NotificationsColumn = "user_id"
 	// AssignerTasksTable is the table that holds the assigner_tasks relation/edge.
 	AssignerTasksTable = "tasks"
 	// AssignerTasksInverseTable is the table name for the Task entity.
@@ -720,6 +729,20 @@ func BySubcontrols(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByNotificationsCount orders the results by notifications count.
+func ByNotificationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationsStep(), opts...)
+	}
+}
+
+// ByNotifications orders the results by notifications terms.
+func ByNotifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByAssignerTasksCount orders the results by assigner_tasks count.
 func ByAssignerTasksCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -941,6 +964,13 @@ func newSubcontrolsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubcontrolsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubcontrolsTable, SubcontrolsColumn),
+	)
+}
+func newNotificationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
 	)
 }
 func newAssignerTasksStep() *sqlgraph.Step {

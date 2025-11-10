@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -678,6 +679,21 @@ func (_u *UserUpdate) AddSubcontrols(v ...*Subcontrol) *UserUpdate {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddNotificationIDs adds the "notifications" edge to the Notification entity by IDs.
+func (_u *UserUpdate) AddNotificationIDs(ids ...string) *UserUpdate {
+	_u.mutation.AddNotificationIDs(ids...)
+	return _u
+}
+
+// AddNotifications adds the "notifications" edges to the Notification entity.
+func (_u *UserUpdate) AddNotifications(v ...*Notification) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationIDs(ids...)
+}
+
 // AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
 func (_u *UserUpdate) AddAssignerTaskIDs(ids ...string) *UserUpdate {
 	_u.mutation.AddAssignerTaskIDs(ids...)
@@ -1080,6 +1096,27 @@ func (_u *UserUpdate) RemoveSubcontrols(v ...*Subcontrol) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearNotifications clears all "notifications" edges to the Notification entity.
+func (_u *UserUpdate) ClearNotifications() *UserUpdate {
+	_u.mutation.ClearNotifications()
+	return _u
+}
+
+// RemoveNotificationIDs removes the "notifications" edge to Notification entities by IDs.
+func (_u *UserUpdate) RemoveNotificationIDs(ids ...string) *UserUpdate {
+	_u.mutation.RemoveNotificationIDs(ids...)
+	return _u
+}
+
+// RemoveNotifications removes "notifications" edges to Notification entities.
+func (_u *UserUpdate) RemoveNotifications(v ...*Notification) *UserUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationIDs(ids...)
 }
 
 // ClearAssignerTasks clears all "assigner_tasks" edges to the Task entity.
@@ -2207,6 +2244,54 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.NotificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.AssignerTasksCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -3310,6 +3395,21 @@ func (_u *UserUpdateOne) AddSubcontrols(v ...*Subcontrol) *UserUpdateOne {
 	return _u.AddSubcontrolIDs(ids...)
 }
 
+// AddNotificationIDs adds the "notifications" edge to the Notification entity by IDs.
+func (_u *UserUpdateOne) AddNotificationIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.AddNotificationIDs(ids...)
+	return _u
+}
+
+// AddNotifications adds the "notifications" edges to the Notification entity.
+func (_u *UserUpdateOne) AddNotifications(v ...*Notification) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddNotificationIDs(ids...)
+}
+
 // AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
 func (_u *UserUpdateOne) AddAssignerTaskIDs(ids ...string) *UserUpdateOne {
 	_u.mutation.AddAssignerTaskIDs(ids...)
@@ -3712,6 +3812,27 @@ func (_u *UserUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearNotifications clears all "notifications" edges to the Notification entity.
+func (_u *UserUpdateOne) ClearNotifications() *UserUpdateOne {
+	_u.mutation.ClearNotifications()
+	return _u
+}
+
+// RemoveNotificationIDs removes the "notifications" edge to Notification entities by IDs.
+func (_u *UserUpdateOne) RemoveNotificationIDs(ids ...string) *UserUpdateOne {
+	_u.mutation.RemoveNotificationIDs(ids...)
+	return _u
+}
+
+// RemoveNotifications removes "notifications" edges to Notification entities.
+func (_u *UserUpdateOne) RemoveNotifications(v ...*Notification) *UserUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveNotificationIDs(ids...)
 }
 
 // ClearAssignerTasks clears all "assigner_tasks" edges to the Task entity.
@@ -4864,6 +4985,54 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.NotificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedNotificationsIDs(); len(nodes) > 0 && !_u.mutation.NotificationsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.NotificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

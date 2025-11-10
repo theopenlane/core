@@ -144,6 +144,7 @@ type SchemaConfig struct {
 	NarrativeHistory                   string // NarrativeHistory table.
 	Note                               string // Note table.
 	NoteHistory                        string // NoteHistory table.
+	Notification                       string // Notification table.
 	Onboarding                         string // Onboarding table.
 	OrgMembership                      string // OrgMembership table.
 	OrgMembershipEvents                string // OrgMembership-events->Event table.

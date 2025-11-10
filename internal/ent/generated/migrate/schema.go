@@ -3828,6 +3828,61 @@ var (
 			},
 		},
 	}
+	// NotificationsColumns holds the columns for the "notifications" table.
+	NotificationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "title", Type: field.TypeString, Size: 256},
+		{Name: "body", Type: field.TypeString, Size: 2000},
+		{Name: "data", Type: field.TypeJSON, Nullable: true},
+		{Name: "notification_type", Type: field.TypeEnum, Enums: []string{"ORGANIZATION", "USER"}},
+		{Name: "object_type", Type: field.TypeString},
+		{Name: "read_at", Type: field.TypeTime, Nullable: true},
+		{Name: "channels", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_id", Type: field.TypeString, Nullable: true},
+	}
+	// NotificationsTable holds the schema information for the "notifications" table.
+	NotificationsTable = &schema.Table{
+		Name:       "notifications",
+		Columns:    NotificationsColumns,
+		PrimaryKey: []*schema.Column{NotificationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "notifications_organizations_notifications",
+				Columns:    []*schema.Column{NotificationsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notifications_users_notifications",
+				Columns:    []*schema.Column{NotificationsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "notification_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "notification_user_id_read_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[16], NotificationsColumns[13], NotificationsColumns[15]},
+			},
+		},
+	}
 	// OnboardingsColumns holds the columns for the "onboardings" table.
 	OnboardingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -10378,6 +10433,7 @@ var (
 		NarrativeHistoryTable,
 		NotesTable,
 		NoteHistoryTable,
+		NotificationsTable,
 		OnboardingsTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
@@ -10801,6 +10857,8 @@ func init() {
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
+	NotificationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	NotificationsTable.ForeignKeys[1].RefTable = UsersTable
 	OnboardingsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable

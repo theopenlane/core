@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -594,6 +595,21 @@ func (_c *UserCreate) AddSubcontrols(v ...*Subcontrol) *UserCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddSubcontrolIDs(ids...)
+}
+
+// AddNotificationIDs adds the "notifications" edge to the Notification entity by IDs.
+func (_c *UserCreate) AddNotificationIDs(ids ...string) *UserCreate {
+	_c.mutation.AddNotificationIDs(ids...)
+	return _c
+}
+
+// AddNotifications adds the "notifications" edges to the Notification entity.
+func (_c *UserCreate) AddNotifications(v ...*Notification) *UserCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddNotificationIDs(ids...)
 }
 
 // AddAssignerTaskIDs adds the "assigner_tasks" edge to the Task entity by IDs.
@@ -1261,6 +1277,23 @@ func (_c *UserCreate) createSpec() (*User, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.Subcontrol
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.NotificationsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   user.NotificationsTable,
+			Columns: []string{user.NotificationsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(notification.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Notification
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

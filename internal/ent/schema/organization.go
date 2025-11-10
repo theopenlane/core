@@ -233,6 +233,14 @@ func (o Organization) Edges() []ent.Edge {
 			),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:         o,
+			edgeSchema:         Notification{},
+			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
 			edgeSchema:         OrgProduct{},
 			cascadeDeleteOwner: true,
 			annotations: []schema.Annotation{

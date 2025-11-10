@@ -1958,6 +1958,35 @@ func HasOrgSubscriptionsWith(preds ...predicate.OrgSubscription) predicate.Organ
 	})
 }
 
+// HasNotifications applies the HasEdge predicate on the "notifications" edge.
+func HasNotifications() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasNotificationsWith applies the HasEdge predicate on the "notifications" edge with a given conditions (other predicates).
+func HasNotificationsWith(preds ...predicate.Notification) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newNotificationsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasOrgProducts applies the HasEdge predicate on the "org_products" edge.
 func HasOrgProducts() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

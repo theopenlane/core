@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -59,6 +60,7 @@ type UserQuery struct {
 	withEvents                       *EventQuery
 	withActionPlans                  *ActionPlanQuery
 	withSubcontrols                  *SubcontrolQuery
+	withNotifications                *NotificationQuery
 	withAssignerTasks                *TaskQuery
 	withAssigneeTasks                *TaskQuery
 	withPrograms                     *ProgramQuery
@@ -82,6 +84,7 @@ type UserQuery struct {
 	withNamedEvents                  map[string]*EventQuery
 	withNamedActionPlans             map[string]*ActionPlanQuery
 	withNamedSubcontrols             map[string]*SubcontrolQuery
+	withNamedNotifications           map[string]*NotificationQuery
 	withNamedAssignerTasks           map[string]*TaskQuery
 	withNamedAssigneeTasks           map[string]*TaskQuery
 	withNamedPrograms                map[string]*ProgramQuery
@@ -471,6 +474,31 @@ func (_q *UserQuery) QuerySubcontrols() *SubcontrolQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.Subcontrol
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryNotifications chains the current query on the "notifications" edge.
+func (_q *UserQuery) QueryNotifications() *NotificationQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.NotificationsTable, user.NotificationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -908,6 +936,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withEvents:                  _q.withEvents.Clone(),
 		withActionPlans:             _q.withActionPlans.Clone(),
 		withSubcontrols:             _q.withSubcontrols.Clone(),
+		withNotifications:           _q.withNotifications.Clone(),
 		withAssignerTasks:           _q.withAssignerTasks.Clone(),
 		withAssigneeTasks:           _q.withAssigneeTasks.Clone(),
 		withPrograms:                _q.withPrograms.Clone(),
@@ -1075,6 +1104,17 @@ func (_q *UserQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *UserQuery 
 		opt(query)
 	}
 	_q.withSubcontrols = query
+	return _q
+}
+
+// WithNotifications tells the query-builder to eager-load the nodes that are connected to
+// the "notifications" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNotifications(opts ...func(*NotificationQuery)) *UserQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotifications = query
 	return _q
 }
 
@@ -1261,7 +1301,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1276,6 +1316,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withEvents != nil,
 			_q.withActionPlans != nil,
 			_q.withSubcontrols != nil,
+			_q.withNotifications != nil,
 			_q.withAssignerTasks != nil,
 			_q.withAssigneeTasks != nil,
 			_q.withPrograms != nil,
@@ -1411,6 +1452,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *User) { n.Edges.Subcontrols = []*Subcontrol{} },
 			func(n *User, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withNotifications; query != nil {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *User) { n.Edges.Notifications = []*Notification{} },
+			func(n *User, e *Notification) { n.Edges.Notifications = append(n.Edges.Notifications, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1564,6 +1612,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *User) { n.appendNamedSubcontrols(name) },
 			func(n *User, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotifications {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *User) { n.appendNamedNotifications(name) },
+			func(n *User, e *Notification) { n.appendNamedNotifications(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2188,6 +2243,39 @@ func (_q *UserQuery) loadSubcontrols(ctx context.Context, query *SubcontrolQuery
 	}
 	return nil
 }
+func (_q *UserQuery) loadNotifications(ctx context.Context, query *NotificationQuery, nodes []*User, init func(*User), assign func(*User, *Notification)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notification.FieldUserID)
+	}
+	query.Where(predicate.Notification(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.NotificationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "user_id" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *UserQuery) loadAssignerTasks(ctx context.Context, query *TaskQuery, nodes []*User, init func(*User), assign func(*User, *Task)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2762,6 +2850,20 @@ func (_q *UserQuery) WithNamedSubcontrols(name string, opts ...func(*SubcontrolQ
 		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
+// WithNamedNotifications tells the query-builder to eager-load the nodes that are connected to the "notifications"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedNotifications(name string, opts ...func(*NotificationQuery)) *UserQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotifications == nil {
+		_q.withNamedNotifications = make(map[string]*NotificationQuery)
+	}
+	_q.withNamedNotifications[name] = query
 	return _q
 }
 

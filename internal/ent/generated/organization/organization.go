@@ -107,6 +107,8 @@ const (
 	EdgeDocuments = "documents"
 	// EdgeOrgSubscriptions holds the string denoting the org_subscriptions edge name in mutations.
 	EdgeOrgSubscriptions = "org_subscriptions"
+	// EdgeNotifications holds the string denoting the notifications edge name in mutations.
+	EdgeNotifications = "notifications"
 	// EdgeOrgProducts holds the string denoting the org_products edge name in mutations.
 	EdgeOrgProducts = "org_products"
 	// EdgeOrgPrices holds the string denoting the org_prices edge name in mutations.
@@ -394,6 +396,13 @@ const (
 	OrgSubscriptionsInverseTable = "org_subscriptions"
 	// OrgSubscriptionsColumn is the table column denoting the org_subscriptions relation/edge.
 	OrgSubscriptionsColumn = "owner_id"
+	// NotificationsTable is the table that holds the notifications relation/edge.
+	NotificationsTable = "notifications"
+	// NotificationsInverseTable is the table name for the Notification entity.
+	// It exists in this package in order to avoid circular dependency with the "notification" package.
+	NotificationsInverseTable = "notifications"
+	// NotificationsColumn is the table column denoting the notifications relation/edge.
+	NotificationsColumn = "owner_id"
 	// OrgProductsTable is the table that holds the org_products relation/edge.
 	OrgProductsTable = "org_products"
 	// OrgProductsInverseTable is the table name for the OrgProduct entity.
@@ -1289,6 +1298,20 @@ func ByOrgSubscriptions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption 
 	}
 }
 
+// ByNotificationsCount orders the results by notifications count.
+func ByNotificationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationsStep(), opts...)
+	}
+}
+
+// ByNotifications orders the results by notifications terms.
+func ByNotifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByOrgProductsCount orders the results by org_products count.
 func ByOrgProductsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2161,6 +2184,13 @@ func newOrgSubscriptionsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OrgSubscriptionsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, OrgSubscriptionsTable, OrgSubscriptionsColumn),
+	)
+}
+func newNotificationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
 	)
 }
 func newOrgProductsStep() *sqlgraph.Step {
