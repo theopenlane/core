@@ -33,7 +33,6 @@ coreConfiguration:
     readHeaderTimeout: "2s"  # @schema type:integer; default:2s
     # -- TLS contains the tls configuration settings
     tls:
-      config: ""
       # -- Enabled turns on TLS settings for the server
       enabled: false  # @schema type:boolean; default:false
       # -- CertFile location for the TLS server
@@ -551,7 +550,7 @@ coreConfiguration:
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripeWebhookEvents: []
     # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-    stripeWebhookAPIVersion: "2025-10-29.clover"  # @schema type:string; default:2025-10-29.clover
+    stripeWebhookAPIVersion: "2025_10_29_CLOVER"  # @schema type:string; default:2025_10_29_CLOVER
     # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
     stripeWebhookDiscardAPIVersion: ""  # @schema type:string
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
@@ -925,22 +924,14 @@ externalSecrets:
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-2025-10-29-clover secret configuration
-    core-subscription-stripewebhooksecrets-2025-10-29-clover:
+    # -- core-subscription-stripewebhooksecrets-2025_10_29_clover secret configuration
+    core-subscription-stripewebhooksecrets-2025_10_29_clover:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecrets.2025-10-29.clover
+      # -- Environment variable key for subscription.stripeWebhookSecrets.2025_10_29_CLOVER
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_10_29_CLOVER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-2025-10-29-clover"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-default secret configuration
-    core-subscription-stripewebhooksecrets-default:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecrets.default
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_DEFAULT"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-default"  # @schema type:string
+      remoteKey: "core-subscription-stripewebhooksecrets-2025_10_29_clover"  # @schema type:string
     # -- core-keywatcher-secretmanager secret configuration
     core-keywatcher-secretmanager:
       # -- Enable this external secret

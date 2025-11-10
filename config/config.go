@@ -169,7 +169,7 @@ type Auth struct {
 // TLS settings for the server for secure connections
 type TLS struct {
 	// Config contains the tls.Config settings
-	Config *tls.Config `json:"config" koanf:"config" jsonschema:"-"`
+	Config *tls.Config `json:"-" koanf:"-" jsonschema:"-"`
 	// Enabled turns on TLS settings for the server
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// CertFile location for the TLS server

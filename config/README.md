@@ -9,7 +9,7 @@ The configuration system provides automated generation of Helm values and secret
 1. **Auto-generating Helm-compatible values** from Go struct definitions
 2. **Separating sensitive values** for secure secret management
 3. **Creating External Secrets resources** for automated secret injection
-4. **Providing manual secret management** through PushSecret resources
+4. **Integrating with Kubernetes External Secrets** so sensitive data stays in GCP Secret Manager
 5. **Automating pull request creation** when configuration changes
 6. **Sending Slack notifications** for team awareness and approval workflows
 
@@ -19,14 +19,9 @@ The configuration system provides automated generation of Helm values and secret
 
 - **`helm-values.yaml`** - Complete Helm values with comments, schema annotations, and External Secrets configuration (sensitive fields are excluded and managed via External Secrets)
 - **`config.example.yaml`** - Example configuration file showing all available options
+- **`configmap-config-file.yaml`** - Helm template that embeds a rendered `config.yaml` for pods to mount directly (preferred for Kubernetes deployments)
 
 ### Secret Management Resources
-
-- **`pushsecrets/`** - Individual PushSecret files for manual secret management
-  - Each sensitive field gets its own file (e.g., `core-objectstorage-accesskey.yaml`)
-  - Contains both Kubernetes Secret and PushSecret resources
-  - Used for manually pushing secrets to GCP Secret Manager
-  - **Individual files provide better management** - secrets can be managed independently with their own lifecycle
 
 - **`external-secrets/`** - Helm templates for automated secret injection
   - `external-secrets.yaml` - Dynamic template that creates ExternalSecrets based on values configuration
@@ -78,13 +73,8 @@ The Helm chart uses this configuration to dynamically create ExternalSecret reso
 
 ### For DevOps/Infrastructure Teams
 
-1. **Push Secrets to GCP Secret Manager**:
-   ```bash
-   # Edit the secret value in the PushSecret file
-   kubectl apply -f config/pushsecrets/core-objectstorage-accesskey.yaml
-   ```
-
-2. **Deploy Application**: The Helm chart automatically creates ExternalSecrets that pull the secrets from GCP Secret Manager
+1. **Ensure secrets exist in GCP Secret Manager** using your preferred workflow (Terraform, manual entry, etc.).
+2. **Deploy the application**: the Helm chart automatically creates ExternalSecrets that pull those secrets into the cluster.
 
 ### For Development Teams
 
@@ -191,15 +181,14 @@ secretName:
 1. **Separation of Concerns**: Sensitive values are never stored in plain text in the Helm chart
 2. **Secret Store Integration**: All secrets are managed through GCP Secret Manager
 3. **Individual Secret Control**: Each secret can be enabled/disabled independently
-4. **Secure Namespacing**: PushSecrets use dedicated `openlane-secret-push` namespace
+4. **Secure Namespacing**: ExternalSecrets target the `openlane` namespace while sourcing values from GCP Secret Manager
 
 ## Troubleshooting
 
 ### Common Issues
 
 1. **Missing Secrets**: Check that fields are tagged with `sensitive:"true"`
-2. **Failed PushSecret**: Ensure GCP Secret Manager permissions are configured
-3. **ExternalSecret Not Working**: Verify ClusterSecretStore `gcp-secretstore` exists
+2. **ExternalSecret Not Working**: Verify ClusterSecretStore `gcp-secretstore` exists and that the target secret name matches the configured `remoteKey`
 4. **Schema Validation**: Check that schema annotations match field types
 
 ### Regenerating Configuration
@@ -240,8 +229,7 @@ The openlane-infra Helm chart must include:
 
 3. The field will appear in:
    - `externalSecrets.secrets` in `helm-values.yaml`
-   - Individual PushSecret file in `pushsecrets/`
-   - Dynamic ExternalSecret template
+   - The dynamic ExternalSecret template used by the Helm chart
 
 ### Modifying Secret Configuration
 
@@ -322,21 +310,22 @@ type Config struct {
 When you add fields with `domain:"inherit"` tags, the schema generator automatically creates:
 
 1. **Go Runtime Logic**: The `applyDomain()` function processes these fields at startup
-2. **Helm Templates**: Conditional logic in configmap.yaml for Kubernetes deployments
+2. **Helm Templates**: Conditional logic in `configmap-config-file.yaml` for Kubernetes deployments
 3. **Values Documentation**: Proper comments and schema annotations in helm-values.yaml
 
 #### Example Generated Helm Template
 
-For a field with domain inheritance:
+For a field with domain inheritance, the rendered `config.yaml` block looks like:
 ```yaml
-CORE_SUBSCRIPTION_STRIPEWEBHOOKURL:
-{{- if .Values.core.subscription.stripeWebhookURL }}
-  {{ .Values.core.subscription.stripeWebhookURL }}
-{{- else if .Values.domain }}
-  "https://api.{{ .Values.domain }}/v1/stripe/webhook"
-{{- else }}
-  "https://api.theopenlane.io/v1/stripe/webhook"
-{{- end }}
+subscription:
+  enabled: {{ default false .Values.openlane.coreConfiguration.subscription.enabled }}
+  {{- if .Values.openlane.coreConfiguration.subscription.stripeWebhookURL }}
+  stripeWebhookURL: {{ .Values.openlane.coreConfiguration.subscription.stripeWebhookURL | quote }}
+  {{- else if .Values.domain }}
+  stripeWebhookURL: "https://api.{{ .Values.domain }}/v1/stripe/webhook"
+  {{- else }}
+  stripeWebhookURL: "https://api.theopenlane.io/stripe/webhook"
+  {{- end }}
 ```
 
 #### Configuration Precedence
@@ -711,9 +700,8 @@ The system triggers draft PR creation for changes to:
 **Direct Configuration Files:**
 
 - `config/helm-values.yaml`
-- `config/configmap.yaml`
+- `config/configmap-config-file.yaml`
 - `config/external-secrets/`
-- `config/pushsecrets/`
 
 **Configuration Source Files:**
 

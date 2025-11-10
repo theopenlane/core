@@ -31,8 +31,7 @@ auth:
         issuer: ""
         jwksCacheTTL: 300000000000
         jwksEndpoint: ""
-        keys:
-            default: ""
+        keys: null
         kid: ""
         redis:
             blacklistPrefix: 'token:blacklist:'
@@ -187,11 +186,7 @@ jobQueue:
         Middleware: null
         PeriodicJobs: null
         PollOnly: false
-        Queues:
-            default:
-                FetchCooldown: 0
-                FetchPollInterval: 0
-                MaxWorkers: 0
+        Queues: null
         ReindexerSchedule: null
         ReindexerTimeout: 0
         RescueStuckJobsAfter: 0
@@ -325,15 +320,13 @@ server:
     cacheControl:
         enabled: true
         etagHeaders: null
-        noCacheHeaders:
-            default: ""
+        noCacheHeaders: null
     complexityLimit: 100
     cors:
         allowOrigins: null
         cookieInsecure: false
         enabled: true
-        prefixes:
-            default: []
+        prefixes: null
     csrfProtection:
         cookie: ol.csrf-token
         cookieDomain: ""
@@ -365,8 +358,7 @@ server:
     redirects:
         code: 0
         enabled: true
-        redirects:
-            default: ""
+        redirects: null
     secretManager: ""
     secure:
         contentsecuritypolicy: default-src 'self'
@@ -383,7 +375,6 @@ server:
         autoCert: false
         certFile: server.crt
         certKey: server.key
-        config: null
         enabled: false
     trustCenterCnameTarget: ""
     writeTimeout: 15000000000
@@ -404,13 +395,12 @@ subscription:
     privateStripeKey: ""
     stripeBillingPortalSuccessURL: https://console.theopenlane.io/organization-settings/billing
     stripeCancellationReturnURL: https://console.theopenlane.io/organization-settings/billing
-    stripeWebhookAPIVersion: 2025-10-29.clover
+    stripeWebhookAPIVersion: 2025_10_29_CLOVER
     stripeWebhookDiscardAPIVersion: ""
     stripeWebhookEvents: null
     stripeWebhookSecret: ""
     stripeWebhookSecrets:
-        2025-10-29.clover: ""
-        default: ""
+        2025_10_29_CLOVER: ""
     stripeWebhookURL: https://api.theopenlane.io/stripe/webhook
 totp:
     codeLength: 6
