@@ -20,8 +20,7 @@ func TestParseFrontmatter(t *testing.T) {
 			name:  "valid frontmatter with content",
 			input: "---\ntitle: Test Title\nopenlane_id: 01K9P6G47035WRQ6967THJRFYA\n---\n\n# Main Content\n\nThis is the body.",
 			expectedFM: &storage.Frontmatter{
-				Title:      "Test Title",
-				OpenlaneID: "01K9P6G47035WRQ6967THJRFYA",
+				Title: "Test Title",
 			},
 			expectedBody:  "# Main Content\n\nThis is the body.",
 			expectedError: false,
@@ -44,8 +43,7 @@ func TestParseFrontmatter(t *testing.T) {
 			name:  "empty frontmatter",
 			input: "---\n---\n\nContent after empty frontmatter",
 			expectedFM: &storage.Frontmatter{
-				Title:      "",
-				OpenlaneID: "",
+				Title: "",
 			},
 			expectedBody:  "Content after empty frontmatter",
 			expectedError: false,
@@ -54,18 +52,16 @@ func TestParseFrontmatter(t *testing.T) {
 			name:  "frontmatter with only title",
 			input: "---\ntitle: Only Title\n---\n\nBody content",
 			expectedFM: &storage.Frontmatter{
-				Title:      "Only Title",
-				OpenlaneID: "",
+				Title: "Only Title",
 			},
 			expectedBody:  "Body content",
 			expectedError: false,
 		},
 		{
-			name:  "frontmatter with only openlane_id",
+			name:  "frontmatter with extra fields",
 			input: "---\nopenlane_id: 01K9P6G47035WRQ6967THJRFYA\n---\n\nBody content",
 			expectedFM: &storage.Frontmatter{
-				Title:      "",
-				OpenlaneID: "01K9P6G47035WRQ6967THJRFYA",
+				Title: "",
 			},
 			expectedBody:  "Body content",
 			expectedError: false,
@@ -81,8 +77,7 @@ func TestParseFrontmatter(t *testing.T) {
 			name:  "frontmatter with extra whitespace",
 			input: "---\n  title: Spaced Title  \n  openlane_id: spaced-id  \n---\n\n  Body with spaces  \n",
 			expectedFM: &storage.Frontmatter{
-				Title:      "Spaced Title",
-				OpenlaneID: "spaced-id",
+				Title: "Spaced Title",
 			},
 			expectedBody:  "Body with spaces",
 			expectedError: false,
@@ -98,8 +93,7 @@ func TestParseFrontmatter(t *testing.T) {
 			name:  "empty body after frontmatter",
 			input: "---\ntitle: Test\n---\n",
 			expectedFM: &storage.Frontmatter{
-				Title:      "Test",
-				OpenlaneID: "",
+				Title: "Test",
 			},
 			expectedBody:  "",
 			expectedError: false,
@@ -122,7 +116,6 @@ func TestParseFrontmatter(t *testing.T) {
 			} else {
 				require.NotNil(t, fm)
 				assert.Equal(t, tt.expectedFM.Title, fm.Title)
-				assert.Equal(t, tt.expectedFM.OpenlaneID, fm.OpenlaneID)
 			}
 
 			assert.Equal(t, tt.expectedBody, string(body))
