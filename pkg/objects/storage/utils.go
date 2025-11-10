@@ -40,8 +40,16 @@ func DetectContentType(reader io.ReadSeeker) (string, error) {
 	return mimeType.String(), nil
 }
 
+// ParsedDocument represents a document parsed with its frontmatter and data
+type ParsedDocument struct {
+	// Frontmatter contains metadata extracted from the document, only for markdown files
+	Frontmatter *Frontmatter
+	// Data contains the parsed content of the document
+	Data any
+}
+
 // ParseDocument parses a document based on its MIME type
-func ParseDocument(reader io.Reader, mimeType string) (any, error) {
+func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 	data, err := io.ReadAll(reader)
 	if err != nil {
 		return nil, err
@@ -53,26 +61,36 @@ func ParseDocument(reader io.Reader, mimeType string) (any, error) {
 		if err := json.Unmarshal(data, &result); err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrJSONParseFailed, err)
 		}
-		return result, nil
-
+		return &ParsedDocument{Data: result}, nil
 	case strings.Contains(mimeType, "yaml") || strings.Contains(mimeType, "yml"):
 		var result any
 		if err := yaml.Unmarshal(data, &result); err != nil {
 			return nil, fmt.Errorf("%w: %w", ErrYAMLParseFailed, err)
 		}
-		return result, nil
-
-	case strings.Contains(mimeType, "text/plain"):
-		return string(data), nil
+		return &ParsedDocument{Data: result}, nil
 	case strings.Contains(mimeType, "application/vnd.openxmlformats-officedocument.wordprocessingml.document"):
 		text, err := parseDocx(data)
 		if err != nil {
 			return nil, err
 		}
 
-		return text, nil
+		return &ParsedDocument{Data: text}, nil
+	case strings.Contains(mimeType, "text/plain"):
+		fm, body, err := ParseFrontmatter(data)
+		if err != nil {
+			return nil, err
+		}
+
+		return &ParsedDocument{Frontmatter: fm, Data: string(body)}, nil
+	case strings.Contains(mimeType, "text/markdown"), strings.Contains(mimeType, "text/x-markdown"):
+		fm, body, err := ParseFrontmatter(data)
+		if err != nil {
+			return nil, err
+		}
+
+		return &ParsedDocument{Frontmatter: fm, Data: body}, nil
 	default:
-		return data, nil
+		return &ParsedDocument{Data: data}, nil
 	}
 }
 
