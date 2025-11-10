@@ -26,8 +26,14 @@ func ParseFrontmatter(input []byte) (*Frontmatter, []byte, error) {
 		return nil, input, nil
 	}
 
-	parts := strings.SplitN(content, "---", 3)
-	if len(parts) < 3 {
+	// split into maximum 3 part by the `---` delimiter
+	// first part is empty (before first ---)
+	// second part is the frontmatter
+	// third part is the content
+	numParts := 3
+
+	parts := strings.SplitN(content, "---", numParts)
+	if len(parts) < numParts {
 		return nil, input, nil
 	}
 
