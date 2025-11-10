@@ -204,7 +204,7 @@ func TestParseDocument(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				if tt.validate != nil {
-					tt.validate(t, result)
+					tt.validate(t, result.Data)
 				}
 			}
 		})
@@ -227,7 +227,7 @@ func TestParseDocument_ComplexStructures(t *testing.T) {
 		result, err := ParseDocument(strings.NewReader(data), "application/json")
 		require.NoError(t, err)
 
-		m, ok := result.(map[string]any)
+		m, ok := result.Data.(map[string]any)
 		require.True(t, ok)
 
 		user, ok := m["user"].(map[string]any)
@@ -252,7 +252,7 @@ user:
 		result, err := ParseDocument(strings.NewReader(data), "application/yaml")
 		require.NoError(t, err)
 
-		m, ok := result.(map[string]any)
+		m, ok := result.Data.(map[string]any)
 		require.True(t, ok)
 
 		user, ok := m["user"].(map[string]any)
