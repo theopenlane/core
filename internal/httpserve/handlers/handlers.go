@@ -22,6 +22,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
@@ -110,6 +111,14 @@ type Handler struct {
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
+	// IntegrationRegistry contains the declarative provider runtimes for third-party integrations
+	IntegrationRegistry keystore.Registry
+	// IntegrationCredentialSchemas holds precomputed JSON schemas keyed by provider.
+	IntegrationCredentialSchemas map[string]map[string]any
+	// IntegrationStore handles persistence for integration metadata and secrets
+	IntegrationStore *keystore.Store
+	// IntegrationBroker exchanges credentials for provider access tokens.
+	IntegrationBroker *keystore.Broker
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

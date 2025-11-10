@@ -791,49 +791,18 @@
     },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
-        "redirecturl": {
+        "successRedirectUrl": {
           "type": "string",
-          "description": "RedirectURL is the base URL for integration OAuth callbacks"
+          "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration."
         },
-        "successredirecturl": {
+        "providerSpecPath": {
           "type": "string",
-          "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration"
-        },
-        "github": {
-          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
-          "description": "Github contains the configuration settings for GitHub integrations"
-        },
-        "slack": {
-          "$ref": "#/$defs/handlers.IntegrationProviderConfig",
-          "description": "Slack contains the configuration settings for Slack integrations"
+          "description": "ProviderSpecPath is the path to the declarative provider spec configuration file."
         }
       },
       "additionalProperties": false,
       "type": "object",
-      "description": "IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations"
-    },
-    "handlers.IntegrationProviderConfig": {
-      "properties": {
-        "clientid": {
-          "type": "string",
-          "description": "ClientID is the OAuth2 client ID"
-        },
-        "clientsecret": {
-          "type": "string",
-          "description": "ClientSecret is the OAuth2 client secret"
-        },
-        "clientendpoint": {
-          "type": "string",
-          "description": "ClientEndpoint is the base URL for the OAuth endpoints"
-        },
-        "scopes": {
-          "$ref": "#/$defs/[]string",
-          "description": "Scopes are the OAuth2 scopes to request"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "IntegrationProviderConfig contains OAuth configuration for a specific integration provider"
+      "description": "IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations."
     },
     "handlers.OauthProviderConfig": {
       "properties": {

@@ -1,0 +1,98 @@
+{
+  "name": "gcp_scc",
+  "displayName": "Google Cloud SCC",
+  "category": "cloud",
+  "authType": "workload_identity",
+  "active": true,
+  "logoUrl": "https://ssl.gstatic.com/images/branding/product/2x/google_cloud_64dp.png",
+  "docsUrl": "https://cloud.google.com/security-command-center/docs",
+  "workloadIdentity": {
+    "scopes": [
+      "https://www.googleapis.com/auth/cloud-platform"
+    ],
+    "tokenLifetime": "3600s",
+    "subjectTokenType": "urn:ietf:params:oauth:token-type:id_token"
+  },
+  "persistence": {
+    "storeRefreshToken": false
+  },
+  "labels": {
+    "vendor": "google",
+    "product": "security-command-center"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "projectId",
+      "workloadIdentityProvider",
+      "audience",
+      "serviceAccountEmail",
+      "organizationId"
+    ],
+    "properties": {
+      "projectId": {
+        "type": "string",
+        "title": "GCP Project ID",
+        "description": "Project that owns the Security Command Center resources."
+      },
+      "workloadIdentityProvider": {
+        "type": "string",
+        "title": "Workload Identity Provider",
+        "description": "Fully-qualified provider resource (e.g. projects/123/locations/global/workloadIdentityPools/pool/providers/provider)."
+      },
+      "audience": {
+        "type": "string",
+        "title": "STS Audience",
+        "description": "Audience used when exchanging the subject token with Google STS."
+      },
+      "serviceAccountEmail": {
+        "type": "string",
+        "title": "Target Service Account",
+        "description": "Service account email to impersonate for SCC calls."
+      },
+      "organizationId": {
+        "type": "string",
+        "title": "Organization ID",
+        "description": "GCP organization to scope SCC queries."
+      },
+      "sourceId": {
+        "type": "string",
+        "title": "SCC Source ID",
+        "description": "Optional SCC source identifier (e.g. organizations/123/sources/456) to scope findings."
+      },
+      "scopes": {
+        "type": "array",
+        "title": "Additional OAuth Scopes",
+        "description": "Optional extra OAuth scopes requested when impersonating the target service account.",
+        "items": {
+          "type": "string"
+        },
+        "default": [
+          "https://www.googleapis.com/auth/cloud-platform"
+        ]
+      },
+      "tokenLifetime": {
+        "type": "string",
+        "title": "Access Token Lifetime",
+        "description": "Optional access token lifetime (Go duration, e.g. 3600s).",
+        "default": "3600s"
+      },
+      "audienceHint": {
+        "type": "string",
+        "title": "Audience Override",
+        "description": "Optional audience override if multiple STS exchanges are supported."
+      },
+      "workloadPoolProject": {
+        "type": "string",
+        "title": "Workload Identity Project",
+        "description": "Optional project that owns the workload identity pool when different from projectId."
+      },
+      "findingFilter": {
+        "type": "string",
+        "title": "Findings Filter",
+        "description": "Optional CEL filter applied when querying SCC findings."
+      }
+    }
+  }
+}

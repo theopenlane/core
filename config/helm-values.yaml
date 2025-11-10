@@ -578,27 +578,11 @@ coreConfiguration:
     # -- NewUserMessageFile is the path to the template used for new user notifications
     newusermessagefile: ""  # @schema type:string
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
-  integrationoauthprovider:
-    # -- RedirectURL is the base URL for integration OAuth callbacks
-    redirecturl: ""  # @schema type:string
-    # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration
-    successredirecturl: ""  # @schema type:string
-    # -- Github contains the configuration settings for GitHub integrations
-    github:
-      # -- ClientID is the OAuth2 client ID
-      clientid: ""  # @schema type:string
-      # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientendpoint: ""  # @schema type:string
-      # -- Scopes are the OAuth2 scopes to request
-      scopes: []
-    # -- Slack contains the configuration settings for Slack integrations
-    slack:
-      # -- ClientID is the OAuth2 client ID
-      clientid: ""  # @schema type:string
-      # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientendpoint: ""  # @schema type:string
-      # -- Scopes are the OAuth2 scopes to request
-      scopes: []
+  integrationOauthProvider:
+    # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
+    successRedirectUrl: ""  # @schema type:string
+    # -- ProviderSpecPath is the path to the declarative provider spec configuration file.
+    providerSpecPath: "internal/keystore/config/providers"  # @schema type:string; default:internal/keystore/config/providers
 
 # -- External Secrets configuration
 externalSecrets:
@@ -950,19 +934,3 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
-    # -- core-integrationoauthprovider-github-clientsecret secret configuration
-    core-integrationoauthprovider-github-clientsecret:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationoauthprovider.github.clientsecret
-      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrationoauthprovider-github-clientsecret"  # @schema type:string
-    # -- core-integrationoauthprovider-slack-clientsecret secret configuration
-    core-integrationoauthprovider-slack-clientsecret:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationoauthprovider.slack.clientsecret
-      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrationoauthprovider-slack-clientsecret"  # @schema type:string

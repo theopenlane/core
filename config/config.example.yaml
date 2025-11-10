@@ -157,21 +157,11 @@ entconfig:
         timezone: UTC
         token: ""
         workspace: ""
-integrationoauthprovider:
-    github:
-        clientendpoint: ""
-        clientid: ""
-        clientsecret: ""
-        scopes: null
-    redirecturl: ""
-    slack:
-        clientendpoint: ""
-        clientid: ""
-        clientsecret: ""
-        scopes: null
-    successredirecturl: ""
-jobqueue:
-    connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+integrationOauthProvider:
+    providerSpecPath: internal/keystore/config/providers
+    successRedirectUrl: ""
+jobQueue:
+    connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:
         enablemetrics: false
         enablesemanticmetrics: true

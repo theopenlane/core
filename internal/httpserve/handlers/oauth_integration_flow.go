@@ -3,17 +3,16 @@ package handlers
 import (
 	"context"
 	"crypto/rand"
+	"crypto/sha256"
 	"encoding/base64"
-	"errors"
 	"fmt"
 	"net/http"
-	"strconv"
+	"sort"
 	"strings"
-	"time"
 
-	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
+	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/contextx"
@@ -23,37 +22,61 @@ import (
 	"github.com/theopenlane/iam/sessions"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
-	integrationschema "github.com/theopenlane/core/internal/ent/generated/integration"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
-
-var errSlackAPI = errors.New("slack API error")
-
-// OAuth error helpers
-func wrapAPIError(provider string, err error) error {
-	return fmt.Errorf("failed to call %s API: %w", provider, err)
-}
-
-func wrapIntegrationError(operation string, err error) error {
-	return fmt.Errorf("failed to %s integration: %w", operation, err)
-}
-
-func wrapSecretError(operation, secretType string, err error) error {
-	return fmt.Errorf("failed to %s %s: %w", operation, secretType, err)
-}
-
-func wrapTokenError(operation, provider string, err error) error {
-	return fmt.Errorf("failed to %s token for %s: %w", operation, provider, err)
-}
 
 var (
 	oauthStateCookieName  = "oauth_state"
 	oauthOrgIDCookieName  = "oauth_org_id"
 	oauthUserIDCookieName = "oauth_user_id"
+	oauthPkceCookieName   = "oauth_pkce"
 )
+
+func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, values map[string]string) {
+	writer := ctx.Response().Writer
+	for name, value := range values {
+		if value == "" {
+			continue
+		}
+		sessions.SetCookie(writer, value, name, cfg)
+	}
+
+	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
+		sessions.SetCookie(writer, accessCookie.Value, auth.AccessTokenCookie, cfg)
+	}
+
+	if refreshCookie, err := sessions.GetCookie(ctx.Request(), auth.RefreshTokenCookie); err == nil {
+		sessions.SetCookie(writer, refreshCookie.Value, auth.RefreshTokenCookie, cfg)
+	}
+}
+
+func (h *Handler) clearOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig) {
+	writer := ctx.Response().Writer
+	for _, name := range []string{
+		oauthStateCookieName,
+		oauthOrgIDCookieName,
+		oauthUserIDCookieName,
+		oauthPkceCookieName,
+	} {
+		sessions.RemoveCookie(writer, name, cfg)
+	}
+}
+
+func (h *Handler) lookupOAuthProvider(provider string) (*keystore.ProviderRuntime, error) {
+	rt, ok := h.IntegrationRegistry[provider]
+	if !ok || rt == nil {
+		return nil, ErrInvalidProvider
+	}
+	if rt.Spec.AuthType != keystore.AuthTypeOAuth2 && rt.Spec.AuthType != keystore.AuthTypeOIDC {
+		return nil, ErrUnsupportedAuthType
+	}
+	if rt.OAuthConfig == nil {
+		return nil, ErrUnsupportedAuthType
+	}
+	return rt, nil
+}
 
 // StartOAuthFlow initiates the OAuth flow for a third-party integration
 func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) error {
@@ -63,7 +86,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 	}
 
 	userCtx := ctx.Request().Context()
-	respWrite := ctx.Response().Writer
 
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
@@ -73,29 +95,14 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 	// Get user's current organization
 	orgID := user.OrganizationID
 
-	// Validate provider
-	providers := h.getIntegrationProviders()
-
-	provider, exists := providers[strings.ToLower(in.Provider)]
-	if !exists {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
+	// Validate provider via declarative registry
+	rt, lookupErr := h.lookupOAuthProvider(in.Provider)
+	if lookupErr != nil {
+		return h.BadRequest(ctx, lookupErr, openapi)
 	}
 
 	// Set up cookie config that will work in either prod, test, or development mode
 	cfg := h.getOauthCookieConfig()
-
-	// Set the org ID and user ID as cookies for the OAuth flow
-	sessions.SetCookie(respWrite, orgID, oauthOrgIDCookieName, cfg)
-	sessions.SetCookie(respWrite, user.SubjectID, oauthUserIDCookieName, cfg)
-
-	// Re-set existing auth cookies with SameSiteNone for OAuth compatibility
-	if accessCookie, err := sessions.GetCookie(ctx.Request(), auth.AccessTokenCookie); err == nil {
-		sessions.SetCookie(respWrite, accessCookie.Value, auth.AccessTokenCookie, cfg)
-	}
-
-	if refreshCookie, err := sessions.GetCookie(ctx.Request(), auth.RefreshTokenCookie); err == nil {
-		sessions.SetCookie(respWrite, refreshCookie.Value, auth.RefreshTokenCookie, cfg)
-	}
 
 	// Generate state parameter for security
 	state, err := h.generateOAuthState(orgID, in.Provider)
@@ -105,23 +112,41 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	// Set the state as a cookie for validation in callback
-	sessions.SetCookie(respWrite, state, oauthStateCookieName, cfg)
-
 	// Build OAuth authorization URL
-	config := provider.Config
+	authConfig := *rt.OAuthConfig
+	authConfig.Scopes = append([]string{}, authConfig.Scopes...)
 	if len(in.Scopes) > 0 {
 		// Add additional scopes if requested
-		config = &oauth2.Config{
-			ClientID:     config.ClientID,
-			ClientSecret: config.ClientSecret,
-			RedirectURL:  config.RedirectURL,
-			Endpoint:     config.Endpoint,
-			Scopes:       append(config.Scopes, in.Scopes...),
+		authConfig.Scopes = append(authConfig.Scopes, in.Scopes...)
+	}
+
+	authOpts := []oauth2.AuthCodeOption{oauth2.AccessTypeOffline}
+	cookieValues := map[string]string{
+		oauthOrgIDCookieName:  orgID,
+		oauthUserIDCookieName: user.SubjectID,
+		oauthStateCookieName:  state,
+	}
+	if rt.Spec.OAuth != nil {
+		for key, value := range rt.Spec.OAuth.AuthParams {
+			authOpts = append(authOpts, oauth2.SetAuthURLParam(key, value))
+		}
+		if rt.Spec.OAuth.UsePKCE {
+			verifier, err := generatePKCEVerifier()
+			if err != nil {
+				return h.InternalServerError(ctx, err, openapi)
+			}
+			challenge := generatePKCEChallenge(verifier)
+			authOpts = append(authOpts,
+				oauth2.SetAuthURLParam("code_challenge", challenge),
+				oauth2.SetAuthURLParam("code_challenge_method", "S256"),
+			)
+			cookieValues[oauthPkceCookieName] = verifier
 		}
 	}
 
-	authURL := config.AuthCodeURL(state, oauth2.AccessTypeOffline)
+	h.setOAuthCookies(ctx, cfg, cookieValues)
+
+	authURL := authConfig.AuthCodeURL(state, authOpts...)
 
 	out := models.OAuthFlowResponse{
 		Reply:   rout.Reply{Success: true},
@@ -177,10 +202,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// Get the user from database to set authenticated context
-	respWrite := ctx.Response().Writer
-
-	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-
+	reqCtx := ctx.Request().Context()
 	// Validate state and extract provider from state
 	_, provider, err := h.validateOAuthState(in.State)
 	if err != nil {
@@ -192,16 +214,38 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Set the provider from the state (GitHub doesn't send provider in callback)
 	in.Provider = provider
 
-	// Get provider configuration
-	providers := h.getIntegrationProviders()
+	// Get provider runtime from registry
+	rt, lookupErr := h.lookupOAuthProvider(provider)
+	if lookupErr != nil {
+		return h.BadRequest(ctx, lookupErr, openapi)
+	}
 
-	providerConfig, exists := providers[provider]
-	if !exists {
-		return h.BadRequest(ctx, ErrInvalidProvider, openapi)
+	var pkceVerifier string
+	if rt.Spec.OAuth != nil && rt.Spec.OAuth.UsePKCE {
+		pkceCookie, err := sessions.GetCookie(ctx.Request(), oauthPkceCookieName)
+		if err != nil {
+			log.Error().Err(err).Msg("failed to get oauth_pkce cookie")
+			return h.BadRequest(ctx, ErrInvalidState, openapi)
+		}
+		pkceVerifier = pkceCookie.Value
+		if pkceVerifier == "" {
+			log.Error().Msg("pkce verifier cookie empty")
+			return h.BadRequest(ctx, ErrInvalidState, openapi)
+		}
 	}
 
 	// Exchange code for token
-	oauthToken, err := providerConfig.Config.Exchange(reqCtx, in.Code)
+	tokenOpts := []oauth2.AuthCodeOption{}
+	if rt.Spec.OAuth != nil {
+		for key, value := range rt.Spec.OAuth.TokenParams {
+			tokenOpts = append(tokenOpts, oauth2.SetAuthURLParam(key, value))
+		}
+	}
+	if pkceVerifier != "" {
+		tokenOpts = append(tokenOpts, oauth2.SetAuthURLParam("code_verifier", pkceVerifier))
+	}
+
+	oauthToken, err := rt.OAuthConfig.Exchange(reqCtx, in.Code, tokenOpts...)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
 
@@ -209,7 +253,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// Validate token and get user info
-	userInfo, err := providerConfig.Validate(reqCtx, oauthToken)
+	userInfo, err := rt.Validator.Validate(reqCtx, oauthToken.AccessToken, rt)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
 
@@ -217,17 +261,15 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	// Store integration and tokens (use authenticated context)
-	_, err = h.storeIntegrationTokens(systemCtx, orgID, provider, userInfo, oauthToken)
-	if err != nil {
-		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
+	if _, _, err := h.persistIntegrationTokens(reqCtx, orgID, provider, rt, userInfo, oauthToken); err != nil {
+		log.Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Clean up the OAuth cookies after successful completion (like SSO handler)
-	sessions.RemoveCookie(respWrite, oauthStateCookieName, sessions.CookieConfig{Path: "/"})
-	sessions.RemoveCookie(respWrite, oauthOrgIDCookieName, sessions.CookieConfig{Path: "/"})
-	sessions.RemoveCookie(respWrite, oauthUserIDCookieName, sessions.CookieConfig{Path: "/"})
+	cfg := h.getOauthCookieConfig()
+	h.clearOAuthCookies(ctx, cfg)
 
 	// Redirect to configured success URL with integration details
 	helper := NewIntegrationHelper(provider, "")
@@ -254,6 +296,20 @@ func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 
+func generatePKCEVerifier() (string, error) {
+	const verifierBytes = 32
+	b := make([]byte, verifierBytes)
+	if _, err := rand.Read(b); err != nil {
+		return "", err
+	}
+	return base64.RawURLEncoding.EncodeToString(b), nil
+}
+
+func generatePKCEChallenge(verifier string) string {
+	sum := sha256.Sum256([]byte(verifier))
+	return base64.RawURLEncoding.EncodeToString(sum[:])
+}
+
 // validateOAuthState validates state parameter and extracts org ID and provider
 func (h *Handler) validateOAuthState(state string) (orgID, provider string, err error) {
 	// Decode base64
@@ -273,367 +329,164 @@ func (h *Handler) validateOAuthState(state string) (orgID, provider string, err 
 	return parts[0], parts[1], nil
 }
 
-// storeIntegrationTokens creates/updates integration and stores OAuth tokens securely
-func (h *Handler) storeIntegrationTokens(ctx context.Context, orgID, provider string, userInfo *IntegrationUserInfo, oauthToken *oauth2.Token) (*ent.Integration, error) {
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	systemCtx = contextx.With(systemCtx, auth.OrgSubscriptionContextKey{})
-
-	// Check if integration already exists for this org/provider
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).First(systemCtx)
-
-	if !ent.IsNotFound(err) && err != nil {
-		return nil, err
+func (h *Handler) persistIntegrationTokens(ctx context.Context, orgID, provider string, rt *keystore.ProviderRuntime, userInfo *keystore.IntegrationUserInfo, oauthToken *oauth2.Token) (*ent.Integration, []string, error) {
+	if h.IntegrationStore == nil {
+		return nil, nil, errIntegrationStoreNotConfigured
 	}
 
-	helperWithUser := NewIntegrationHelper(provider, userInfo.Username)
-	integrationName := helperWithUser.Name()
+	ctxWithOrg := contextx.With(ctx, auth.OrgSubscriptionContextKey{})
 
-	if ent.IsNotFound(err) {
-		// Create new integration
-		integration, err = h.DBClient.Integration.Create().SetOwnerID(orgID).SetName(integrationName).SetDescription(helperWithUser.Description()).SetKind(provider).Save(systemCtx)
-		if err != nil {
-			logx.FromContext(systemCtx).Error().Msgf("failed to create integration for org %s and provider %s: %v", orgID, provider, err)
+	scopes := grantScopes(rt, oauthToken)
 
-			return nil, wrapIntegrationError("create", err)
-		}
-	} else {
-		// Update existing integration
-		integration, err = integration.Update().SetName(integrationName).SetDescription(helperWithUser.Description()).Save(systemCtx)
-		if err != nil {
-			logx.FromContext(systemCtx).Error().Msgf("failed to update integration for org %s and provider %s: %v", orgID, provider, err)
-
-			return nil, wrapIntegrationError("update", err)
-		}
+	payload := keystore.OAuthTokens{
+		OrgID:             orgID,
+		Provider:          provider,
+		StoreRefreshToken: true,
+		AccessToken:       oauthToken.AccessToken,
+		RefreshToken:      oauthToken.RefreshToken,
+		Scopes:            scopes,
 	}
 
-	// Store access token
-	if err := h.storeSecretForIntegration(systemCtx, integration, "access_token", oauthToken.AccessToken); err != nil {
-		return nil, wrapSecretError("store", "access token", err)
+	if userInfo != nil {
+		payload.Username = userInfo.Username
+		payload.UserID = userInfo.ID
+		payload.Email = userInfo.Email
 	}
 
-	// Store refresh token if available
-	if oauthToken.RefreshToken != "" {
-		if err := h.storeSecretForIntegration(systemCtx, integration, "refresh_token", oauthToken.RefreshToken); err != nil {
-			return nil, wrapSecretError("store", "refresh token", err)
-		}
+	if rt != nil && rt.Spec.Persistence != nil {
+		payload.StoreRefreshToken = rt.Spec.Persistence.StoreRefreshToken
 	}
 
-	// Store token expiry if available
 	if !oauthToken.Expiry.IsZero() {
-		if err := h.storeSecretForIntegration(systemCtx, integration, "expires_at", oauthToken.Expiry.Format(time.RFC3339)); err != nil {
-			return nil, wrapSecretError("store", "token expiry", err)
+		expiry := oauthToken.Expiry
+		payload.ExpiresAt = &expiry
+	}
+
+	if userInfo != nil {
+		payload.Attributes = map[string]string{}
+		if userInfo.ID != "" {
+			payload.Attributes[keystore.ProviderUserIDField] = userInfo.ID
+		}
+		if userInfo.Username != "" {
+			payload.Attributes[keystore.ProviderUsernameField] = userInfo.Username
+		}
+		if userInfo.Email != "" {
+			payload.Attributes[keystore.ProviderEmailField] = userInfo.Email
 		}
 	}
 
-	// Store additional provider-specific metadata
-	metadata := map[string]string{
-		"provider_user_id":  userInfo.ID,
-		"provider_username": userInfo.Username,
-	}
-	if userInfo.Email != "" {
-		metadata["provider_email"] = userInfo.Email
+	integration, err := h.IntegrationStore.UpsertOAuthTokens(ctxWithOrg, payload)
+	if err != nil {
+		return nil, nil, wrapIntegrationError("persist", err)
 	}
 
-	for key, value := range metadata {
-		if err := h.storeSecretForIntegration(systemCtx, integration, key, value); err != nil {
-			return nil, wrapSecretError("store", fmt.Sprintf("metadata %s", key), err)
-		}
-	}
-
-	return integration, nil
+	return integration, scopes, nil
 }
 
-// storeSecretForIntegration creates or updates a hush secret for an integration
-func (h *Handler) storeSecretForIntegration(ctx context.Context, integration *ent.Integration, name, value string) error {
-	helper := NewIntegrationHelper(integration.Kind, "")
-	secretName := helper.SecretName(name)
-	description := helper.SecretDescription(name)
-
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	// Check if secret already exists
-	existing, err := h.DBClient.Hush.Query().Where(hushschema.And(hushschema.OwnerID(integration.OwnerID),
-		hushschema.HasIntegrationsWith(integrationschema.ID(integration.ID)),
-		hushschema.SecretName(secretName))).
-		Only(systemCtx)
-
-	if err != nil && !ent.IsNotFound(err) {
-		return err
-	}
-
-	if ent.IsNotFound(err) {
-		// Create new secret
-		if err := h.DBClient.Hush.Create().SetOwnerID(integration.OwnerID).
-			SetName(helper.SecretDisplayName(integration.Name, name)).
-			SetDescription(description).
-			SetKind(oauthTokenKind).
-			SetSecretName(secretName).
-			SetSecretValue(value).
-			AddIntegrations(integration).
-			Exec(systemCtx); err != nil {
-			return err
+func grantScopes(rt *keystore.ProviderRuntime, token *oauth2.Token) []string {
+	values := make(map[string]string)
+	add := func(list []string) {
+		for _, scope := range list {
+			trimmed := strings.TrimSpace(scope)
+			if trimmed == "" {
+				continue
+			}
+			values[strings.ToLower(trimmed)] = trimmed
 		}
-
+	}
+	add(extractTokenScopes(token))
+	if rt != nil {
+		if rt.OAuthConfig != nil {
+			add(rt.OAuthConfig.Scopes)
+		}
+		if rt.Spec.OAuth != nil {
+			add(rt.Spec.OAuth.Scopes)
+		}
+	}
+	if len(values) == 0 {
 		return nil
 	}
-
-	// Secret value is immutable, so delete and recreate
-	err = h.DBClient.Hush.DeleteOne(existing).Exec(systemCtx)
-	if err != nil {
-		return wrapSecretError("delete", "existing secret", err)
+	out := make([]string, 0, len(values))
+	for _, scope := range values {
+		out = append(out, scope)
 	}
-
-	// Create new secret with updated value
-	if err := h.DBClient.Hush.Create().
-		SetOwnerID(integration.OwnerID).
-		SetName(helper.SecretDisplayName(integration.Name, name)).
-		SetDescription(description).
-		SetKind(oauthTokenKind).
-		SetSecretName(secretName).
-		SetSecretValue(value).
-		AddIntegrations(integration).
-		Exec(systemCtx); err != nil {
-		return err
-	}
-
-	return nil
+	sort.Strings(out)
+	return out
 }
 
-// validateGithubIntegrationToken validates GitHub token and returns user info
-func (h *Handler) validateGithubIntegrationToken(ctx context.Context, token *oauth2.Token) (*IntegrationUserInfo, error) {
-	// For integration tokens, we'll need to make a direct API call to GitHub
-	// since the github provider's UserFromContext expects a specific flow
-	helper := NewIntegrationHelper("github", "")
-	headerName, headerValue := helper.AuthHeader(token.AccessToken)
-
-	// Use httpsling to make the API call
-	var githubUser GitHubUser
-
-	resp, err := httpsling.ReceiveWithContext(ctx, &githubUser,
-		httpsling.Get("https://api.github.com/user"),
-		httpsling.Header(headerName, headerValue),
-		httpsling.Header("Accept", "application/vnd.github.v3+json"),
-		httpsling.ExpectCode(http.StatusOK),
-	)
-	if err != nil {
-		return nil, wrapAPIError("GitHub", err)
+func extractTokenScopes(token *oauth2.Token) []string {
+	if token == nil {
+		return nil
 	}
-
-	defer resp.Body.Close()
-
-	// Convert GitHub user to IntegrationUserInfo
-	userInfo := &IntegrationUserInfo{
-		ID:       strconv.Itoa(githubUser.ID),
-		Username: githubUser.Login,
-		Email:    githubUser.Email,
-	}
-
-	// GitHub's primary email might not be public, so we need to fetch it separately if empty
-	if userInfo.Email == "" {
-		if email, err := h.getGithubUserEmail(ctx, token.AccessToken); err == nil {
-			userInfo.Email = email
+	var scopes []string
+	for _, key := range []string{"scope", "scopes"} {
+		if raw := token.Extra(key); raw != nil {
+			scopes = append(scopes, normalizeScopeValue(raw)...)
 		}
 	}
-
-	return userInfo, nil
+	return scopes
 }
 
-// getGithubUserEmail fetches user's email from GitHub emails API
-func (h *Handler) getGithubUserEmail(ctx context.Context, accessToken string) (string, error) {
-	helper := NewIntegrationHelper("github", "")
-	headerName, headerValue := helper.AuthHeader(accessToken)
-
-	// Use httpsling to make the API call
-	var emails []GitHubEmail
-
-	resp, err := httpsling.ReceiveWithContext(ctx, &emails,
-		httpsling.Get("https://api.github.com/user/emails"),
-		httpsling.Header(headerName, headerValue),
-		httpsling.Header("Accept", "application/vnd.github.v3+json"),
-		httpsling.ExpectCode(http.StatusOK),
-	)
-	if err != nil {
-		return "", wrapAPIError("GitHub emails", err)
-	}
-
-	defer resp.Body.Close()
-
-	// Find the primary verified email
-	for _, email := range emails {
-		if email.Primary && email.Verified {
-			return email.Email, nil
+func normalizeScopeValue(raw any) []string {
+	switch v := raw.(type) {
+	case string:
+		return strings.Fields(v)
+	case []string:
+		return v
+	case []any:
+		out := make([]string, 0, len(v))
+		for _, item := range v {
+			out = append(out, fmt.Sprint(item))
 		}
-	}
-
-	// If no primary verified email, find any verified email
-	for _, email := range emails {
-		if email.Verified {
-			return email.Email, nil
+		return out
+	default:
+		if raw == nil {
+			return nil
 		}
+		return strings.Fields(fmt.Sprint(raw))
 	}
-
-	// If no verified emails, return the first one
-	if len(emails) > 0 {
-		return emails[0].Email, nil
-	}
-
-	return "", ErrIntegrationNotFound
-}
-
-// validateSlackIntegrationToken validates Slack token and returns user info
-func (h *Handler) validateSlackIntegrationToken(ctx context.Context, token *oauth2.Token) (*IntegrationUserInfo, error) {
-	helper := NewIntegrationHelper("slack", "")
-	headerName, headerValue := helper.AuthHeader(token.AccessToken)
-
-	// Use httpsling to make the API call
-	var slackResp SlackUser
-
-	resp, err := httpsling.ReceiveWithContext(ctx, &slackResp,
-		httpsling.Get("https://slack.com/api/users.identity"),
-		httpsling.Header(headerName, headerValue),
-		httpsling.Header("Content-Type", "application/x-www-form-urlencoded"),
-		httpsling.ExpectCode(http.StatusOK),
-	)
-	if err != nil {
-		return nil, wrapAPIError("Slack", err)
-	}
-
-	defer resp.Body.Close()
-
-	// Check if the response is successful
-	if !slackResp.OK {
-		return nil, fmt.Errorf("%w: %s", errSlackAPI, slackResp.Error)
-	}
-
-	// Convert Slack user to IntegrationUserInfo
-	userInfo := &IntegrationUserInfo{
-		ID:       slackResp.User.ID,
-		Username: slackResp.User.Name,
-		Email:    slackResp.User.Profile.Email,
-	}
-
-	// Use display name if username is empty
-	if userInfo.Username == "" && slackResp.User.Profile.DisplayName != "" {
-		userInfo.Username = slackResp.User.Profile.DisplayName
-	}
-
-	return userInfo, nil
 }
 
 // retrieveIntegrationToken gets stored OAuth token for a provider
 func (h *Handler) retrieveIntegrationToken(ctx context.Context, orgID, provider string) (*models.IntegrationToken, error) {
-	// Get integration with associated secrets in a single query
-	integration, err := h.DBClient.Integration.Query().
-		Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).
-		WithSecrets().
-		Only(ctx)
+	if h.IntegrationStore == nil {
+		return nil, errIntegrationStoreNotConfigured
+	}
+
+	bundle, err := h.IntegrationStore.LoadTokens(ctx, orgID, provider)
 	if err != nil {
 		return nil, err
 	}
 
-	// Build token data from the loaded secrets
-	tokenData := &models.IntegrationToken{
-		Provider: provider,
-	}
-
-	for _, secret := range integration.Edges.Secrets {
-		if secret.SecretName == "" || secret.SecretValue == "" {
-			continue
-		}
-
-		switch secret.SecretName {
-		case provider + secretNameSeparator + accessTokenField:
-			tokenData.AccessToken = secret.SecretValue
-		case provider + secretNameSeparator + refreshTokenField:
-			tokenData.RefreshToken = secret.SecretValue
-		case provider + secretNameSeparator + expiresAtField:
-			if expiresAt, err := time.Parse(time.RFC3339, secret.SecretValue); err == nil {
-				tokenData.ExpiresAt = &expiresAt
-			}
-		case provider + secretNameSeparator + providerUserIDField:
-			tokenData.ProviderUserID = secret.SecretValue
-		case provider + secretNameSeparator + providerUsernameField:
-			tokenData.ProviderUsername = secret.SecretValue
-		case provider + secretNameSeparator + providerEmailField:
-			tokenData.ProviderEmail = secret.SecretValue
-		}
-	}
-
-	if tokenData.AccessToken == "" {
+	if bundle.AccessToken == "" {
 		return nil, wrapTokenError("find access", provider, ErrIntegrationNotFound)
 	}
 
-	return tokenData, nil
+	return &models.IntegrationToken{
+		Provider:         provider,
+		AccessToken:      bundle.AccessToken,
+		RefreshToken:     bundle.RefreshToken,
+		ExpiresAt:        bundle.ExpiresAt,
+		ProviderUserID:   bundle.ProviderUserID,
+		ProviderUsername: bundle.ProviderUsername,
+		ProviderEmail:    bundle.ProviderEmail,
+	}, nil
 }
 
 // RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available
 func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider string) (*models.IntegrationToken, error) {
-	// Get current token data
-	tokenData, err := h.retrieveIntegrationToken(ctx, orgID, provider)
-	if err != nil {
+	if _, err := h.lookupOAuthProvider(provider); err != nil {
 		return nil, err
 	}
 
-	if tokenData.RefreshToken == "" {
-		return nil, wrapTokenError("find refresh", provider, ErrIntegrationNotFound)
+	if h.IntegrationBroker == nil {
+		return nil, wrapTokenError("refresh", provider, errIntegrationBrokerNotConfigured)
 	}
 
-	// Get provider configuration
-	providers := h.getIntegrationProviders()
-
-	providerConfig, exists := providers[provider]
-	if !exists {
-		return nil, ErrInvalidProvider
-	}
-
-	// Create token source for refresh
-	token := &oauth2.Token{
-		AccessToken:  tokenData.AccessToken,
-		RefreshToken: tokenData.RefreshToken,
-	}
-	if tokenData.ExpiresAt != nil {
-		token.Expiry = *tokenData.ExpiresAt
-	}
-
-	// Use token source to get a fresh token
-	tokenSource := providerConfig.Config.TokenSource(ctx, token)
-
-	freshToken, err := tokenSource.Token()
-	if err != nil {
+	if _, err := h.IntegrationBroker.MintOAuthToken(ctx, orgID, provider); err != nil {
 		return nil, wrapTokenError("refresh", provider, err)
 	}
 
-	// Validate fresh token
-	_, err = providerConfig.Validate(ctx, freshToken)
-	if err != nil {
-		return nil, wrapTokenError("validate refreshed", provider, err)
-	}
-
-	// Update stored tokens
-	integration, err := h.DBClient.Integration.Query().Where(integrationschema.And(integrationschema.OwnerID(orgID), integrationschema.Kind(provider))).First(ctx)
-	if err != nil {
-		return nil, err
-	}
-
-	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-
-	// Update tokens
-	if err := h.storeSecretForIntegration(systemCtx, integration, "access_token", freshToken.AccessToken); err != nil {
-		return nil, err
-	}
-
-	if freshToken.RefreshToken != "" && freshToken.RefreshToken != tokenData.RefreshToken {
-		if err := h.storeSecretForIntegration(systemCtx, integration, "refresh_token", freshToken.RefreshToken); err != nil {
-			return nil, err
-		}
-	}
-
-	if !freshToken.Expiry.IsZero() {
-		if err := h.storeSecretForIntegration(systemCtx, integration, "expires_at", freshToken.Expiry.Format(time.RFC3339)); err != nil {
-			return nil, err
-		}
-	}
-
-	// Return updated token data
 	return h.retrieveIntegrationToken(ctx, orgID, provider)
 }
 

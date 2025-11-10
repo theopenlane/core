@@ -595,6 +595,8 @@ func RegisterRoutes(router *Router) error {
 		registerIntegrationOAuthStartHandler,
 		registerIntegrationOAuthCallbackHandler,
 		registerRefreshIntegrationTokenHandler,
+		registerIntegrationProvidersHandler,
+		registerIntegrationConfigHandler,
 		registerSwitchRoute,
 		registerLivenessHandler,
 		registerSecurityTxtHandler,

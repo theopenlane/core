@@ -1,0 +1,60 @@
+{
+  "name": "azure_security_center",
+  "displayName": "Microsoft Defender for Cloud",
+  "category": "compliance",
+  "authType": "apikey",
+  "active": true,
+  "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",
+  "docsUrl": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/",
+  "labels": {
+    "vendor": "microsoft",
+    "product": "defender-for-cloud"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "tenantId",
+      "clientId",
+      "clientSecret",
+      "subscriptionId"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Defender for Cloud deployment."
+      },
+      "tenantId": {
+        "type": "string",
+        "title": "Tenant ID",
+        "description": "Azure AD tenant ID that owns the Defender for Cloud resources."
+      },
+      "clientId": {
+        "type": "string",
+        "title": "Client ID",
+        "description": "Application (client) ID of the service principal used for API calls."
+      },
+      "clientSecret": {
+        "type": "string",
+        "title": "Client Secret",
+        "description": "Client secret associated with the service principal."
+      },
+      "subscriptionId": {
+        "type": "string",
+        "title": "Subscription ID",
+        "description": "Azure subscription that hosts Defender for Cloud."
+      },
+      "resourceGroup": {
+        "type": "string",
+        "title": "Resource Group",
+        "description": "Optional resource group for more granular scoping."
+      },
+      "workspaceId": {
+        "type": "string",
+        "title": "Log Analytics Workspace ID",
+        "description": "Optional workspace ID when querying Defender alerts via Log Analytics."
+      }
+    }
+  }
+}

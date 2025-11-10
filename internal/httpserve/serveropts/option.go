@@ -8,6 +8,7 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
+	"maps"
 	"net/http"
 	"os"
 	"strings"
@@ -35,6 +36,8 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/keystore"
+	integrationconfig "github.com/theopenlane/core/internal/keystore/config"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -190,6 +193,37 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
+		if s.Config.Handler.IntegrationRegistry == nil {
+			s.Config.Handler.IntegrationRegistry = make(keystore.Registry)
+		}
+
+		if specPath := s.Config.Settings.IntegrationOauthProvider.ProviderSpecPath; specPath != "" {
+			specs, err := keystore.LoadProviderSpecs(specPath)
+			if err != nil {
+				log.Panic().Err(err).Str("path", specPath).Msg("failed to load integration provider specs")
+			}
+
+			registry, err := keystore.BuildRegistry(specs)
+			if err != nil {
+				log.Panic().Err(err).Msg("failed to build integration provider registry")
+			}
+
+			maps.Copy(s.Config.Handler.IntegrationRegistry, registry)
+
+			if len(s.Config.Handler.IntegrationRegistry) == 0 {
+				log.Panic().Msg("integration provider registry is empty; ensure provider specs are configured")
+			}
+		}
+
+		if len(s.Config.Handler.IntegrationRegistry) == 0 {
+			log.Panic().Msg("integration provider registry is not configured")
+		}
+
+		if schemas, err := integrationconfig.LoadEmbeddedSchemas(); err != nil {
+			log.Panic().Err(err).Msg("failed to load embedded integration schemas")
+		} else {
+			s.Config.Handler.IntegrationCredentialSchemas = schemas
+		}
 
 		// add auth middleware
 		opts := []authmw.Option{

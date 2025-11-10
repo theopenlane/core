@@ -1,0 +1,31 @@
+{
+  "name": "oidc_generic",
+  "displayName": "Generic OIDC",
+  "category": "sso",
+  "authType": "oidc",
+  "active": true,
+  "logoUrl": "https://static-00.iconduck.com/assets.00/openid-icon-512x512-5t0u9s21.png",
+  "docsUrl": "https://openid.net/specs/openid-connect-core-1_0.html",
+  "oauth": {
+    "clientId": "${OIDC_CLIENT_ID}",
+    "clientSecret": "${OIDC_CLIENT_SECRET}",
+    "scopes": [
+      "openid",
+      "profile",
+      "email",
+      "offline_access"
+    ],
+    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+  },
+  "userInfo": {
+    "url": "https://openidconnect.googleapis.com/v1/userinfo",
+    "method": "GET",
+    "authStyle": "Bearer",
+    "idPath": "sub",
+    "emailPath": "email",
+    "loginPath": "name"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  }
+}

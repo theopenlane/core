@@ -414,7 +414,6 @@ data:
   CORE_KEYWATCHER_EXTERNALSECRETSINTEGRATION: {{ .Values.openlane.coreConfiguration.keywatcher.externalSecretsIntegration | quote | default "false" }}
   CORE_SLACK_NEWSUBSCRIBERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newSubscriberMessageFile | quote }}
   CORE_SLACK_NEWUSERMESSAGEFILE: {{ .Values.openlane.coreConfiguration.slack.newUserMessageFile | quote }}
-  CORE_INTEGRATIONOAUTHPROVIDER_REDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl | quote }}
 {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl }}
   CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl }}
 {{- else if .Values.domain }}
@@ -422,22 +421,5 @@ data:
 {{- else }}
   CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: ""
 {{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId | quote }}
-{{- if .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint }}
-{{- else if .Values.domain }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTENDPOINT: ""
-{{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_SCOPES: {{ join "," .Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | quote }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTID: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId | quote }}
-{{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
-{{- else if .Values.domain }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: "https://api.{{ .Values.domain }}"
-{{- else }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTENDPOINT: ""
-{{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_SLACK_SCOPES: {{ join "," .Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | quote }}
+  CORE_INTEGRATIONOAUTHPROVIDER_PROVIDERSPECPATH: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath | quote | default "internal/keystore/config/providers" }}
 {{- end }}
