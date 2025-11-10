@@ -1,0 +1,34 @@
+{
+  "name": "github",
+  "displayName": "GitHub",
+  "category": "code",
+  "authType": "oauth2",
+  "active": true,
+  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-github/latest/icon.svg",
+  "docsUrl": "https://docs.github.com/en/apps/oauth-apps/building-oauth-apps/authorizing-oauth-apps",
+  "oauth": {
+    "clientId": "${GITHUB_CLIENT_ID}",
+    "clientSecret": "${GITHUB_CLIENT_SECRET}",
+    "authUrl": "https://github.com/login/oauth/authorize",
+    "tokenUrl": "https://github.com/login/oauth/access_token",
+    "scopes": [
+      "read:user",
+      "user:email",
+      "repo",
+      "admin:repo_hook"
+    ],
+    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+  },
+  "userInfo": {
+    "url": "https://api.github.com/user",
+    "method": "GET",
+    "authStyle": "token",
+    "idPath": "id",
+    "emailPath": "email",
+    "loginPath": "login",
+    "secondaryEmailUrl": "https://api.github.com/user/emails"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  }
+}

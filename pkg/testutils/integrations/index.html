@@ -1,937 +1,805 @@
 <!doctype html>
-<!--
-OAuth Integration Testing Interface
-
-SECURITY NOTE: This HTML file contains NO OAuth credentials.
-It works by making GraphQL API calls to the local server (localhost:17608) which
-handles OAuth using your existing GitHub OAuth app configuration.
-
-Prerequisites:
-1. Update your existing GitHub OAuth App (used for social login) to include:
-   - http://localhost:17608/v1/github/callback              (existing)
-   - http://localhost:17608/v1/integrations/oauth/callback  (add this)
-2. Your existing config.yaml already has the OAuth credentials
-3. Start server with: task run-dev
-4. Access via: http://localhost:17608/pkg/testutils/integrations/index.html
-
-Notes:
-- Uses GraphQL queries and mutations for integration management
-- OAuth flow still uses REST endpoints (start, callback, refresh)
-- Integration status, token retrieval, deletion, and listing now use GraphQL
-
-DO NOT serve this file locally (file://) - it requires server API access.
--->
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>OAuth Integration Testing</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous" />
+    <title>Integration Test Console</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.12.3/dist/css/bootstrap5.min.css"
+    />
     <style>
+      .providers-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 1.5rem;
+        width: 100%;
+      }
+      body {
+        background: #f4f5f7;
+      }
       .integration-card {
         border: 1px solid #dee2e6;
-        border-radius: 8px;
-        padding: 20px;
-        margin-bottom: 20px;
-        background: #f8f9fa;
+        border-radius: 10px;
+        background: #fff;
+        padding: 24px;
+        box-shadow: 0 2px 6px rgba(15, 23, 42, 0.08);
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+        height: 100%;
+      }
+      .provider-header {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      .provider-info {
+        flex: 1;
+        min-width: 0;
+      }
+      .provider-meta {
+        display: flex;
+        flex-direction: column;
+        gap: 0.35rem;
+        align-items: flex-end;
+        justify-content: center;
+      }
+      .provider-logo {
+        width: 52px;
+        height: 52px;
+        border-radius: 12px;
+        background: #f1f5f9;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px;
+        flex-shrink: 0;
+      }
+      .provider-logo img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+      }
+      .provider-info h3 {
+        margin-bottom: 0.15rem;
+      }
+      .provider-actions {
+        margin-top: auto;
+      }
+      .provider-actions .btn {
+        width: 100%;
+      }
+      .provider-body {
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
       }
       .status-badge {
         display: inline-block;
-        padding: 4px 8px;
-        border-radius: 4px;
-        font-size: 0.875rem;
-        font-weight: bold;
+        padding: 4px 10px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
       }
-      .status-connected { background: #d4edda; color: #155724; }
-      .status-expired { background: #fff3cd; color: #856404; }
-      .status-invalid { background: #f8d7da; color: #721c24; }
-      .status-disconnected { background: #e2e3e5; color: #6c757d; }
-      .token-display {
-        background: #f1f3f4;
-        border: 1px solid #dadce0;
-        border-radius: 4px;
-        padding: 10px;
-        font-family: monospace;
-        font-size: 0.875rem;
-        max-height: 200px;
+      .docs-link {
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px 10px;
+      }
+      .config-modal {
+        position: fixed;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.4);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 1050;
+        padding: 1rem;
+      }
+      .config-modal.show {
+        display: flex;
+      }
+      .config-modal__dialog {
+        background: #fff;
+        border-radius: 12px;
+        max-width: 640px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        max-height: 90vh;
+        box-shadow: 0 20px 40px rgba(15, 23, 42, 0.2);
+      }
+      .config-modal__header,
+      .config-modal__footer {
+        padding: 1rem 1.5rem;
+        border-bottom: 1px solid #e2e8f0;
+      }
+      .config-modal__footer {
+        border-top: 1px solid #e2e8f0;
+        border-bottom: none;
+        display: flex;
+        justify-content: flex-end;
+        gap: 0.75rem;
+      }
+      .config-modal__body {
+        padding: 1.5rem;
         overflow-y: auto;
-        word-break: break-all;
+      }
+      .config-modal__close {
+        border: none;
+        background: none;
+        font-size: 1.25rem;
+      }
+      .status-connected {
+        background: #d1f1e0;
+        color: #0f5132;
+      }
+      .status-configured {
+        background: #d7e8ff;
+        color: #0b3d91;
+      }
+      .status-expired {
+        background: #fff3cd;
+        color: #664d03;
+      }
+      .status-invalid {
+        background: #f8d7da;
+        color: #842029;
+      }
+      .status-disconnected {
+        background: #e2e3e5;
+        color: #495057;
       }
       .log-entry {
-        padding: 8px;
+        padding: 8px 12px;
         margin: 4px 0;
-        border-radius: 4px;
-        font-family: monospace;
-        font-size: 0.875rem;
+        border-radius: 8px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Courier New", monospace;
+        font-size: 0.85rem;
       }
-      .log-success { background: #d4edda; color: #155724; }
-      .log-error { background: #f8d7da; color: #721c24; }
-      .log-info { background: #d1ecf1; color: #0c5460; }
+      .log-success {
+        background: #d1f1e0;
+        color: #0f5132;
+      }
+      .log-error {
+        background: #f8d7da;
+        color: #842029;
+      }
+      .log-info {
+        background: #d7e8ff;
+        color: #0b3d91;
+      }
     </style>
   </head>
   <body>
-    <div class="container mt-4">
+    <div class="container my-4">
       <div class="row">
         <div class="col-12">
-          <h1 class="mb-4 text-center">OAuth Integration Testing</h1>
-
-          <!-- Authentication Status -->
-          <div class="alert alert-info" id="authStatus">
-            <strong>Authentication Status:</strong> <span id="authStatusText">Checking...</span>
+          <h1 class="text-center mb-3">Integration Test Console</h1>
+          <p class="text-center text-muted mb-4">
+            Drive the declarative integration pipeline end-to-end against a running Openlane instance.
+          </p>
+          <div class="alert alert-info d-flex justify-content-between align-items-center" id="authStatus">
+            <div>
+              <strong>Authentication Status:</strong>
+              <span id="authStatusText">Checking...</span>
+            </div>
+            <button class="btn btn-sm btn-outline-light d-none" id="loginButton">Login with Seeded User</button>
           </div>
 
-          <!-- Integration Management -->
-          <div class="row">
-            <div class="col-md-6">
-              <!-- GitHub Integration -->
-              <div class="integration-card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3>GitHub Integration</h3>
-                  <span class="status-badge" id="githubStatus">Disconnected</span>
-                </div>
-                <div class="mb-3">
-                  <label for="githubScopes" class="form-label">Additional Scopes (optional):</label>
-                  <input type="text" class="form-control" id="githubScopes"
-                         placeholder="e.g., public_repo,gist" />
-                  <small class="form-text text-muted">
-                    Default scopes: read:user, user:email, repo
-                  </small>
-                </div>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-dark" id="connectGithub">
-                    <i class="fab fa-github"></i> Connect GitHub
-                  </button>
-                  <button class="btn btn-outline-secondary" id="checkGithubStatus" disabled>
-                    Check Status
-                  </button>
-                  <button class="btn btn-outline-success" id="getGithubToken" disabled>
-                    Get Token
-                  </button>
-                  <button class="btn btn-outline-warning" id="refreshGithubToken" disabled>
-                    Refresh Token
-                  </button>
-                  <button class="btn btn-outline-danger" id="disconnectGithub" disabled>
-                    Disconnect
-                  </button>
-                </div>
-                <div class="mt-3">
-                  <h6>Token Information:</h6>
-                  <div class="token-display" id="githubTokenDisplay">No token available</div>
-                </div>
-                <div class="mt-3">
-                  <h6>Test GitHub API:</h6>
-                  <button class="btn btn-sm btn-primary" id="testGithubAPI" disabled>
-                    Test /user API Call
-                  </button>
-                  <div class="mt-2">
-                    <small id="githubAPIResult" class="text-muted"></small>
-                  </div>
-                </div>
-              </div>
-            </div>
+          <div id="callbackNotice"></div>
 
-            <div class="col-md-6">
-              <!-- Slack Integration -->
-              <div class="integration-card">
-                <div class="d-flex justify-content-between align-items-center mb-3">
-                  <h3>Slack Integration</h3>
-                  <span class="status-badge" id="slackStatus">Disconnected</span>
-                </div>
-                <div class="mb-3">
-                  <label for="slackScopes" class="form-label">Additional Scopes (optional):</label>
-                  <input type="text" class="form-control" id="slackScopes"
-                         placeholder="e.g., files:write,pins:read" />
-                  <small class="form-text text-muted">
-                    Default scopes: channels:read, chat:write, users:read
-                  </small>
-                </div>
-                <div class="d-grid gap-2">
-                  <button class="btn btn-success" id="connectSlack">
-                    <i class="fab fa-slack"></i> Connect Slack
-                  </button>
-                  <button class="btn btn-outline-secondary" id="checkSlackStatus" disabled>
-                    Check Status
-                  </button>
-                  <button class="btn btn-outline-success" id="getSlackToken" disabled>
-                    Get Token
-                  </button>
-                  <button class="btn btn-outline-warning" id="refreshSlackToken" disabled>
-                    Refresh Token
-                  </button>
-                  <button class="btn btn-outline-danger" id="disconnectSlack" disabled>
-                    Disconnect
-                  </button>
-                </div>
-                <div class="mt-3">
-                  <h6>Token Information:</h6>
-                  <div class="token-display" id="slackTokenDisplay">No token available</div>
-                </div>
-                <div class="mt-3">
-                  <h6>Test Slack API:</h6>
-                  <button class="btn btn-sm btn-primary" id="testSlackAPI" disabled>
-                    Test /auth.test API Call
-                  </button>
-                  <div class="mt-2">
-                    <small id="slackAPIResult" class="text-muted"></small>
-                  </div>
-                </div>
-              </div>
+          <section class="mt-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-3">Available Providers</h2>
+              <button class="btn btn-outline-primary btn-sm" id="refreshProviders">Refresh Providers</button>
             </div>
-          </div>
+            <div id="providersContainer" class="providers-grid">
+              <div class="text-center text-muted" id="providersPlaceholder">Loading provider metadata...</div>
+            </div>
+          </section>
 
-          <!-- Integration List -->
-          <div class="mt-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3>All Integrations</h3>
-              <button class="btn btn-outline-primary" id="refreshIntegrations">
-                Refresh List
-              </button>
+          <section class="mt-5">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-3">Configured Integrations</h2>
+              <button class="btn btn-outline-secondary btn-sm" id="refreshIntegrations">Refresh List</button>
             </div>
-            <div id="integrationsList">
-              <div class="text-center text-muted">Loading integrations...</div>
+            <div id="integrationsList" class="mb-4">
+              <div class="text-center text-muted">No data loaded yet</div>
             </div>
-          </div>
+          </section>
 
-          <!-- Activity Log -->
-          <div class="mt-4">
-            <div class="d-flex justify-content-between align-items-center mb-3">
-              <h3>Activity Log</h3>
-              <button class="btn btn-outline-secondary btn-sm" id="clearLog">
-                Clear Log
-              </button>
+          <section class="mt-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-3">Activity Log</h2>
+              <button class="btn btn-outline-secondary btn-sm" id="clearLog">Clear Log</button>
             </div>
-            <div id="activityLog" style="max-height: 300px; overflow-y: auto;">
-              <!-- Log entries will be added here -->
-            </div>
-          </div>
+            <div
+              id="activityLog"
+              style="max-height: 320px; overflow-y: auto; background: #fff; border-radius: 8px; border: 1px solid #e2e8f0; padding: 12px;"
+            ></div>
+          </section>
         </div>
       </div>
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.12.3/dist/jsoneditor.min.js"></script>
+    <div class="config-modal" id="configModal" aria-hidden="true">
+      <div class="config-modal__dialog">
+        <div class="config-modal__header d-flex justify-content-between align-items-center">
+          <div>
+            <h5 class="mb-0" id="configModalTitle">Configure Provider</h5>
+            <small class="text-muted" id="configModalSubtitle"></small>
+          </div>
+          <button class="config-modal__close" id="configModalClose" aria-label="Close">&times;</button>
+        </div>
+        <div class="config-modal__body">
+          <div id="configEditorContainer"></div>
+        </div>
+        <div class="config-modal__footer">
+          <button class="btn btn-outline-secondary" id="configModalCancel">Cancel</button>
+          <button class="btn btn-primary" id="configModalSubmit">Submit Configuration</button>
+        </div>
+      </div>
+    </div>
     <script>
       const apiBase = "http://localhost:17608";
       let authToken = null;
       let userInfo = null;
+      const providerMetadata = new Map();
+      let activeConfigProvider = null;
+      let configModalEditor = null;
+      const integrationSecretsQuery = `
+        query ($kind: String!) {
+          integrations(where: { kind: $kind }) {
+            edges {
+              node {
+                id
+                secrets {
+                  edges {
+                    node {
+                      id
+                      secretName
+                      description
+                      kind
+                      expiresAt
+                      lastUsedAt
+                      credentialSet
+                      metadata
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      `;
 
-      // Utility functions
-      function log(message, type = 'info') {
-        const logContainer = document.getElementById('activityLog');
-        const entry = document.createElement('div');
+      const providerDomId = (name) => name.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+      function renderSchemaSummary(schema) {
+        if (!schema?.properties) {
+          return '<p class="text-muted small mb-0">Credential schema not available.</p>';
+        }
+        const required = new Set(schema.required || []);
+        const items = Object.entries(schema.properties).map(([key, prop]) => {
+          const title = prop.title || key;
+          const desc = prop.description || "Required by the integration";
+          const requiredMark = required.has(key) ? '<span class="text-danger ms-1">*</span>' : "";
+          return `<li><strong>${title}</strong>${requiredMark}<div class="text-muted">${desc}</div></li>`;
+        });
+        return `<ul class="list-unstyled small mb-0">${items.join("")}</ul>`;
+      }
+
+      function openConfigModal(providerName) {
+        const provider = providerMetadata.get(providerName);
+        if (!provider?.credentialsSchema) {
+          log(`Provider ${providerName} does not expose a credential schema`, "error");
+          return;
+        }
+        activeConfigProvider = providerName;
+        const modal = document.getElementById("configModal");
+        document.getElementById("configModalTitle").textContent = `Configure ${provider.displayName || provider.name}`;
+        document.getElementById("configModalSubtitle").textContent =
+          provider.labels?.vendor ? `Vendor: ${provider.labels.vendor}` : "";
+        const container = document.getElementById("configEditorContainer");
+        container.innerHTML = "";
+        if (configModalEditor) {
+          configModalEditor.destroy();
+          configModalEditor = null;
+        }
+        configModalEditor = new JSONEditor(container, {
+          schema: provider.credentialsSchema,
+          theme: "bootstrap5",
+          disable_collapse: true,
+          disable_properties: true,
+          prompt_before_delete: false,
+        });
+        modal.classList.add("show");
+      }
+
+      function closeConfigModal() {
+        const modal = document.getElementById("configModal");
+        modal.classList.remove("show");
+        if (configModalEditor) {
+          configModalEditor.destroy();
+          configModalEditor = null;
+        }
+        activeConfigProvider = null;
+      }
+
+      async function submitConfiguration() {
+        if (!activeConfigProvider || !configModalEditor) {
+          log("No provider selected for configuration", "error");
+          return;
+        }
+        try {
+          const payload = { payload: configModalEditor.getValue() };
+          log(`Submitting configuration for ${activeConfigProvider}`, "info");
+          const response = await makeRequest(`/v1/integrations/${activeConfigProvider}/config`, {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) throw new Error(await response.text());
+          log(`Configuration saved for ${activeConfigProvider}`, "success");
+          closeConfigModal();
+          await handleStatus(activeConfigProvider);
+          await loadIntegrations();
+        } catch (err) {
+          log(`Failed to save configuration: ${err.message}`, "error");
+        }
+      }
+
+      function log(message, type = "info") {
+        const container = document.getElementById("activityLog");
+        const entry = document.createElement("div");
         entry.className = `log-entry log-${type}`;
         entry.textContent = `[${new Date().toLocaleTimeString()}] ${message}`;
-        logContainer.appendChild(entry);
-        logContainer.scrollTop = logContainer.scrollHeight;
+        container.appendChild(entry);
+        container.scrollTop = container.scrollHeight;
       }
 
       function getCSRFToken() {
-        const cookieName = 'ol.csrf-token';
-        const cookies = document.cookie.split(';');
-        for (let cookie of cookies) {
-          const [name, value] = cookie.trim().split('=');
-          if (name === cookieName) {
-            return decodeURIComponent(value);
-          }
-        }
-        return null;
+        const cookieName = "ol.csrf-token";
+        return document.cookie
+          .split(";")
+          .map((c) => c.trim().split("="))
+          .find(([name]) => name === cookieName)?.[1] || null;
       }
 
-      function updateStatus(provider, status, tokenValid = false, tokenExpired = false) {
-        const statusElement = document.getElementById(`${provider}Status`);
-        const buttons = {
-          connect: document.getElementById(`connect${provider.charAt(0).toUpperCase() + provider.slice(1)}`),
-          check: document.getElementById(`check${provider.charAt(0).toUpperCase() + provider.slice(1)}Status`),
-          getToken: document.getElementById(`get${provider.charAt(0).toUpperCase() + provider.slice(1)}Token`),
-          refresh: document.getElementById(`refresh${provider.charAt(0).toUpperCase() + provider.slice(1)}Token`),
-          disconnect: document.getElementById(`disconnect${provider.charAt(0).toUpperCase() + provider.slice(1)}`),
-          testAPI: document.getElementById(`test${provider.charAt(0).toUpperCase() + provider.slice(1)}API`)
-        };
-
-        // Update status badge
-        statusElement.className = 'status-badge';
-        if (status === 'connected') {
-          statusElement.className += ' status-connected';
-          statusElement.textContent = 'Connected';
-        } else if (status === 'expired') {
-          statusElement.className += ' status-expired';
-          statusElement.textContent = 'Token Expired';
-        } else if (status === 'invalid') {
-          statusElement.className += ' status-invalid';
-          statusElement.textContent = 'Invalid Token';
-        } else {
-          statusElement.className += ' status-disconnected';
-          statusElement.textContent = 'Disconnected';
-        }
-
-        // Update button states
-        const connected = status === 'connected' && tokenValid && !tokenExpired;
-        buttons.connect.disabled = connected;
-        buttons.check.disabled = false;
-        buttons.getToken.disabled = !connected;
-        buttons.refresh.disabled = !connected;
-        buttons.disconnect.disabled = status === 'disconnected';
-        buttons.testAPI.disabled = !connected;
-      }
-
-      function displayToken(provider, tokenData) {
-        const display = document.getElementById(`${provider}TokenDisplay`);
-        if (tokenData) {
-          const formatted = {
-            provider: tokenData.provider,
-            hasAccessToken: !!tokenData.accessToken,
-            accessTokenPreview: tokenData.accessToken ? tokenData.accessToken.substring(0, 20) + '...' : null,
-            hasRefreshToken: !!tokenData.refreshToken,
-            expiresAt: tokenData.expiresAt,
-            providerUserId: tokenData.providerUserId,
-            providerUsername: tokenData.providerUsername,
-            providerEmail: tokenData.providerEmail
-          };
-          display.textContent = JSON.stringify(formatted, null, 2);
-        } else {
-          display.textContent = 'No token available';
-        }
-      }
-
-      async function makeAuthenticatedRequest(url, options = {}) {
-        const headers = {
-          'Content-Type': 'application/json',
-          ...options.headers
-        };
-
+      async function makeRequest(path, options = {}) {
+        const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+        const method = (options.method || "GET").toUpperCase();
         if (authToken) {
-          headers['Authorization'] = `Bearer ${authToken}`;
+          headers["Authorization"] = `Bearer ${authToken}`;
         }
-
-        // Add CSRF token for non-GET requests (but not for login)
-        const method = options.method || 'GET';
-        if (method !== 'GET' && !url.includes('/login')) {
-          const csrfToken = getCSRFToken();
-          if (csrfToken) {
-            headers['X-CSRF-Token'] = csrfToken;
+        if (method !== "GET" && !path.includes("/login")) {
+          const csrf = getCSRFToken();
+          if (csrf) {
+            headers["X-CSRF-Token"] = csrf;
           }
         }
-
-        return fetch(url, {
+        return fetch(`${apiBase}${path}`, {
           ...options,
+          method,
           headers,
-          credentials: 'include'
+          credentials: "include",
         });
       }
 
-      // Initialize CSRF token - not needed for this flow
-      async function initCSRF() {
-        // CSRF tokens are automatically handled by the login flow
-        // No need to explicitly initialize
-        log('CSRF handling ready', 'info');
-      }
-
-      // Login with test credentials
-      async function loginWithTestCredentials() {
+      async function loginWithSeedUser() {
         try {
-          log('Attempting login with test credentials...', 'info');
-
-          const loginRequest = {
-            username: 'mitb@theopenlane.io',
-            password: 'mattisthebest1234'
-          };
-
+          log("Attempting login with seeded user", "info");
           const response = await fetch(`${apiBase}/v1/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            credentials: 'include',
-            body: JSON.stringify(loginRequest)
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+              username: "mitb@theopenlane.io",
+              password: "mattisthebest1234",
+            }),
           });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.success && data.access_token) {
-              authToken = data.access_token;
-              log('Login successful!', 'success');
-              return true;
-            } else {
-              log('Login failed: Invalid response format', 'error');
-              return false;
-            }
-          } else {
-            const errorText = await response.text();
-            log(`Login failed: ${errorText}`, 'error');
+          if (!response.ok) {
+            log(`Login failed: ${await response.text()}`, "error");
             return false;
           }
-        } catch (error) {
-          log(`Login error: ${error.message}`, 'error');
+          const data = await response.json();
+          if (data.success && data.access_token) {
+            authToken = data.access_token;
+            log("Login successful", "success");
+            return true;
+          }
+          log("Unexpected login response format", "error");
+          return false;
+        } catch (err) {
+          log(`Login error: ${err.message}`, "error");
           return false;
         }
       }
 
-      // Authentication functions
-      async function checkAuthStatus() {
+      async function ensureAuthenticated() {
         try {
-          // Check for session token in URL params first
           const params = new URLSearchParams(window.location.search);
-          const sessionToken = params.get('session');
+          const sessionToken = params.get("session");
           if (sessionToken) {
             authToken = sessionToken;
-            log('Found session token in URL', 'success');
+            log("Adopted session token from query param", "info");
           }
 
-          // If no token, try to login with test credentials
           if (!authToken) {
-            const loginSuccess = await loginWithTestCredentials();
-            if (!loginSuccess) {
-              document.getElementById('authStatusText').innerHTML =
-                'Authentication failed. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Try Login</button>';
-              document.getElementById('authStatus').className = 'alert alert-warning';
+            const loggedIn = await loginWithSeedUser();
+            if (!loggedIn) {
+              document.getElementById("authStatus").className =
+                "alert alert-warning d-flex justify-content-between align-items-center";
+              document.getElementById("authStatusText").innerHTML =
+                'Authentication required. <button class="btn btn-sm btn-primary ms-2" onclick="loginWithSeedUser().then(ok => ok && initialize())">Login</button>';
+              document.getElementById("loginButton").classList.remove("d-none");
               return false;
             }
           }
 
-          // Test the token by making a GraphQL request
-          if (authToken) {
-            const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
-              method: 'POST',
-              body: JSON.stringify({
-                query: '{ self { id displayName email organizations { edges { node { id displayName } } } } }'
-              })
-            });
-
-            if (response.ok) {
-              const data = await response.json();
-              if (data.data && data.data.self) {
-                userInfo = data.data.self;
-                document.getElementById('authStatusText').innerHTML =
-                  `Authenticated as <strong>${userInfo.displayName}</strong> (${userInfo.email})`;
-                document.getElementById('authStatus').className = 'alert alert-success';
-                log(`Authenticated as ${userInfo.displayName}`, 'success');
-                return true;
-              }
-            }
-          }
-
-          document.getElementById('authStatusText').innerHTML =
-            'Not authenticated. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Login</button>';
-          document.getElementById('authStatus').className = 'alert alert-warning';
-          log('Not authenticated', 'error');
-          return false;
-        } catch (error) {
-          log(`Auth check failed: ${error.message}`, 'error');
-          document.getElementById('authStatusText').innerHTML =
-            'Authentication failed. <button onclick="loginWithTestCredentials()" class="btn btn-sm btn-primary">Retry Login</button>';
-          document.getElementById('authStatus').className = 'alert alert-danger';
-          return false;
-        }
-      }
-
-      // Integration functions
-      async function startOAuthFlow(provider) {
-        try {
-          const scopes = document.getElementById(`${provider}Scopes`).value;
-          const requestBody = { provider };
-          if (scopes) {
-            requestBody.scopes = scopes.split(',').map(s => s.trim()).filter(s => s);
-          }
-
-          log(`Starting ${provider} OAuth flow...`, 'info');
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/oauth/start`, {
-            method: 'POST',
-            body: JSON.stringify(requestBody)
+          const response = await makeRequest("/query", {
+            method: "POST",
+            body: JSON.stringify({ query: "{ self { id displayName email } }" }),
           });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.requiresLogin) {
-              log(`Authentication required for ${provider} OAuth`, 'info');
-              log(`Redirecting to login: ${data.authUrl}`, 'info');
-              window.location.href = data.authUrl;
-            } else {
-              log(`Got OAuth URL for ${provider}`, 'success');
-              window.location.href = data.authUrl;
-            }
-          } else {
-            const error = await response.text();
-            log(`Failed to start ${provider} OAuth: ${error}`, 'error');
-          }
-        } catch (error) {
-          log(`Error starting ${provider} OAuth: ${error.message}`, 'error');
-        }
-      }
-
-      async function checkIntegrationStatus(provider) {
-        try {
-          log(`Checking ${provider} status...`, 'info');
-
-          const query = `
-            query GetIntegrationByKind($kind: String!) {
-              integrations(where: { kind: $kind }) {
-                edges {
-                  node {
-                    id
-                    kind
-                    name
-                    description
-                    secrets {
-                      edges {
-                        node {
-                          id
-                          secretName
-                          secretValue
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          `;
-
-          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
-            method: 'POST',
-            body: JSON.stringify({
-              query: query,
-              variables: { kind: provider }
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.data && data.data.integrations.edges.length > 0) {
-              const integration = data.data.integrations.edges[0].node;
-              const hasAccessToken = integration.secrets.edges.some(s =>
-                s.node.secretName.includes('_access_token') && s.node.secretValue
-              );
-
-              // Check if token might be expired by looking for expires_at
-              const expiresAtSecret = integration.secrets.edges.find(s =>
-                s.node.secretName.includes('_expires_at')
-              );
-              let tokenExpired = false;
-              if (expiresAtSecret && expiresAtSecret.node.secretValue) {
-                const expiresAt = new Date(expiresAtSecret.node.secretValue);
-                tokenExpired = expiresAt < new Date();
-              }
-
-              const status = hasAccessToken ? (tokenExpired ? 'expired' : 'connected') : 'invalid';
-              log(`${provider} status: ${status}`, 'success');
-              updateStatus(provider, status, hasAccessToken, tokenExpired);
-              return { status, tokenValid: hasAccessToken, tokenExpired };
-            } else {
-              log(`${provider} status: disconnected`, 'success');
-              updateStatus(provider, 'disconnected', false, false);
-              return { status: 'disconnected', tokenValid: false, tokenExpired: false };
-            }
-          } else {
-            log(`Failed to check ${provider} status`, 'error');
-            updateStatus(provider, 'disconnected');
-          }
-        } catch (error) {
-          log(`Error checking ${provider} status: ${error.message}`, 'error');
-          updateStatus(provider, 'disconnected');
-        }
-      }
-
-      async function getIntegrationToken(provider) {
-        try {
-          log(`Getting ${provider} token...`, 'info');
-
-          const query = `
-            query GetIntegrationByKind($kind: String!) {
-              integrations(where: { kind: $kind }) {
-                edges {
-                  node {
-                    id
-                    kind
-                    name
-                    secrets {
-                      edges {
-                        node {
-                          id
-                          secretName
-                          secretValue
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          `;
-
-          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
-            method: 'POST',
-            body: JSON.stringify({
-              query: query,
-              variables: { kind: provider }
-            })
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.data && data.data.integrations.edges.length > 0) {
-              const integration = data.data.integrations.edges[0].node;
-              const secrets = integration.secrets.edges.map(e => e.node);
-
-              // Build token data from secrets
-              const tokenData = { provider };
-
-              for (const secret of secrets) {
-                if (secret.secretName.includes('_access_token')) {
-                  tokenData.accessToken = secret.secretValue;
-                } else if (secret.secretName.includes('_refresh_token')) {
-                  tokenData.refreshToken = secret.secretValue;
-                } else if (secret.secretName.includes('_expires_at')) {
-                  tokenData.expiresAt = secret.secretValue;
-                } else if (secret.secretName.includes('_provider_user_id')) {
-                  tokenData.providerUserId = secret.secretValue;
-                } else if (secret.secretName.includes('_provider_username')) {
-                  tokenData.providerUsername = secret.secretValue;
-                } else if (secret.secretName.includes('_provider_email')) {
-                  tokenData.providerEmail = secret.secretValue;
-                }
-              }
-
-              log(`Retrieved ${provider} token`, 'success');
-              displayToken(provider, tokenData);
-              return tokenData;
-            } else {
-              log(`No ${provider} integration found`, 'error');
-              displayToken(provider, null);
-              return null;
-            }
-          } else {
-            log(`Failed to get ${provider} token`, 'error');
-            displayToken(provider, null);
-          }
-        } catch (error) {
-          log(`Error getting ${provider} token: ${error.message}`, 'error');
-          displayToken(provider, null);
-        }
-      }
-
-      async function refreshIntegrationToken(provider) {
-        try {
-          log(`Refreshing ${provider} token...`, 'info');
-          const response = await makeAuthenticatedRequest(`${apiBase}/v1/integrations/${provider}/refresh`, {
-            method: 'POST'
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            log(`Refreshed ${provider} token`, 'success');
-            displayToken(provider, data.token);
-            await checkIntegrationStatus(provider);
-          } else {
-            log(`Failed to refresh ${provider} token`, 'error');
-          }
-        } catch (error) {
-          log(`Error refreshing ${provider} token: ${error.message}`, 'error');
-        }
-      }
-
-      async function disconnectIntegration(provider) {
-        try {
-          // First get the integration to find its ID
-          log(`Finding ${provider} integration to disconnect...`, 'info');
-
-          const query = `
-            query GetIntegrationByKind($kind: String!) {
-              integrations(where: { kind: $kind }) {
-                edges {
-                  node {
-                    id
-                    kind
-                    name
-                  }
-                }
-              }
-            }
-          `;
-
-          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
-            method: 'POST',
-            body: JSON.stringify({
-              query: query,
-              variables: { kind: provider }
-            })
-          });
-
           if (!response.ok) {
-            log(`Failed to find ${provider} integration`, 'error');
-            return;
+            log(`Auth check failed: HTTP ${response.status}`, "error");
+            return false;
           }
-
           const data = await response.json();
-          if (!data.data || data.data.integrations.edges.length === 0) {
-            log(`No ${provider} integration found to disconnect`, 'error');
+          if (!data?.data?.self) {
+            log("Auth check failed: no self payload", "error");
+            return false;
+          }
+          userInfo = data.data.self;
+          document.getElementById("authStatus").className =
+            "alert alert-success d-flex justify-content-between align-items-center";
+          document.getElementById("authStatusText").innerHTML =
+            `Authenticated as <strong>${userInfo.displayName}</strong> (${userInfo.email})`;
+          document.getElementById("loginButton").classList.add("d-none");
+          log(`Authenticated as ${userInfo.displayName}`, "success");
+          return true;
+        } catch (err) {
+          log(`Auth check error: ${err.message}`, "error");
+          return false;
+        }
+      }
+
+      function updateProviderStatus(provider, status, tokenValid = false, tokenExpired = false) {
+        const badge = document.getElementById(`${providerDomId(provider)}-status`);
+        if (!badge) return;
+        badge.className = "status-badge";
+        switch (status) {
+          case "connected":
+            badge.classList.add(tokenExpired ? "status-expired" : "status-connected");
+            badge.textContent = tokenExpired ? "Token Expired" : "Connected";
+            break;
+          case "configured":
+            badge.classList.add("status-configured");
+            badge.textContent = "Configured";
+            break;
+          case "invalid":
+            badge.classList.add("status-invalid");
+            badge.textContent = "Invalid";
+            break;
+          default:
+            badge.classList.add("status-disconnected");
+            badge.textContent = "Disconnected";
+        }
+      }
+
+      async function fetchProviders() {
+        try {
+          log("Fetching provider library", "info");
+          const response = await makeRequest("/v1/integrations/providers");
+          if (!response.ok) throw new Error(await response.text());
+          const data = await response.json();
+          log(`Loaded ${data.providers?.length || 0} providers`, "success");
+          return data.providers || [];
+        } catch (err) {
+          log(`Failed to load providers: ${err.message}`, "error");
+          return [];
+        }
+      }
+
+      function renderProviders(providers) {
+        const container = document.getElementById("providersContainer");
+        container.innerHTML = "";
+        if (providers.length === 0) {
+          container.innerHTML = '<div class="text-center text-muted">No providers registered</div>';
+          return;
+        }
+
+        providerMetadata.clear();
+        providerMetadata.clear();
+        providers
+          .slice()
+          .sort((a, b) => (a.displayName || a.name).localeCompare(b.displayName || b.name))
+          .forEach((provider) => {
+            if (provider?.active === false) {
+              return;
+            }
+            providerMetadata.set(provider.name, provider);
+            const name = provider.name || provider.displayName;
+            const id = providerDomId(name);
+            const card = document.createElement("div");
+            card.className = "integration-card";
+            const initials = (provider.displayName || provider.name || "??").slice(0, 2).toUpperCase();
+            const logo = provider.logoUrl
+              ? `<div class="provider-logo"><img src="${provider.logoUrl}" alt="${provider.displayName || provider.name} logo" loading="lazy" onerror="this.onerror=null;this.remove();this.parentElement.textContent='${initials}';" /></div>`
+              : `<div class="provider-logo text-uppercase fw-bold">${initials}</div>`;
+            const vendorLabel = provider.labels?.vendor || provider.category || "Integration";
+            const docsLink = provider.docsUrl
+              ? `<a class="btn btn-sm btn-outline-secondary docs-link" href="${provider.docsUrl}" target="_blank" rel="noopener noreferrer">Docs ↗</a>`
+              : "";
+            card.innerHTML = `
+              <div class="provider-header">
+                ${logo}
+                <div class="provider-info">
+                  <h3 class="mb-1">${provider.displayName || provider.name}</h3>
+                  <small class="text-muted text-uppercase">${vendorLabel}</small>
+                </div>
+                <div class="provider-meta text-end">
+                  ${docsLink || ""}
+                  <span class="status-badge status-disconnected" id="${id}-status">Disconnected</span>
+                </div>
+              </div>
+              <div class="provider-body">
+                <small class="text-muted mb-0">Authentication: ${(provider.authType || "unknown").toUpperCase()}</small>
+              </div>
+              <div class="provider-actions d-grid gap-2" id="${id}-actions"></div>
+            `;
+
+            container.appendChild(card);
+
+            const actions = card.querySelector(`#${id}-actions`);
+            const addButton = (label, style, handler) => {
+              const btn = document.createElement("button");
+              btn.type = "button";
+              btn.className = `btn btn-${style}`;
+              btn.textContent = label;
+              btn.addEventListener("click", handler);
+              actions.appendChild(btn);
+              return btn;
+            };
+
+            if (provider.credentialsSchema) {
+              addButton("Submit Configuration", "primary", () => openConfigModal(provider.name));
+            }
+
+            if (provider.authType === "oauth2" || provider.authType === "oidc") {
+              addButton("Start OAuth Flow", "dark", () => handleOAuth(provider.name));
+              addButton("Refresh Token", "outline-warning", () => handleRefresh(provider.name));
+            }
+
+            addButton("Check Status", "outline-secondary", () => handleStatus(provider.name));
+            addButton("Disconnect Integration", "outline-danger", () => handleDisconnect(provider.name));
+          });
+      }
+
+      async function handleOAuth(provider) {
+        const meta = providerMetadata.get(provider);
+        if (meta?.oauth?.authUrl && meta?.oauth?.clientId && meta?.oauth?.redirectUri) {
+          const params = new URLSearchParams({
+            client_id: meta.oauth.clientId,
+            response_type: "code",
+            redirect_uri: meta.oauth.redirectUri,
+            scope: (meta.oauth.scopes || []).join(" "),
+            state: btoa(JSON.stringify({ provider, ts: Date.now() })),
+          });
+          if (meta.oauth.authParams) {
+            Object.entries(meta.oauth.authParams).forEach(([key, value]) => params.set(key, value));
+          }
+          const authorizeUrl = `${meta.oauth.authUrl}?${params.toString()}`;
+          log(`Redirecting to ${meta.displayName || provider} OAuth flow`, "info");
+          window.location.href = authorizeUrl;
+          return;
+        }
+        try {
+          const payload = { provider };
+          log(`Starting OAuth flow for ${provider}`, "info");
+          const response = await makeRequest("/v1/integrations/oauth/start", {
+            method: "POST",
+            body: JSON.stringify(payload),
+          });
+          if (!response.ok) throw new Error(await response.text());
+          const data = await response.json();
+          if (!data.authUrl) throw new Error("Provider did not return an authUrl");
+          window.location.href = data.authUrl;
+        } catch (err) {
+          log(`OAuth start failed: ${err.message}`, "error");
+        }
+      }
+
+      async function handleStatus(provider) {
+        try {
+          log(`Checking status for ${provider}`, "info");
+          const response = await makeRequest("/query", {
+            method: "POST",
+            body: JSON.stringify({ query: integrationSecretsQuery, variables: { kind: provider } }),
+          });
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const payload = await response.json();
+          const integration = payload?.data?.integrations?.edges?.[0]?.node;
+          if (!integration) {
+            updateProviderStatus(provider, "disconnected");
             return;
           }
+          const secrets = integration.secrets?.edges?.map((edge) => edge.node) || [];
+          const tokenMatchers = [/access_token/i, /api_token/i, /token/i];
+          const primarySecret =
+            tokenMatchers
+              .map((regex) => secrets.find((secret) => regex.test(secret?.secretName || "")))
+              .find(Boolean) || null;
+          const expirationSource =
+            primarySecret?.expiresAt ||
+            primarySecret?.metadata?.expiresAt ||
+            secrets.find((secret) => (secret?.secretName || "").includes("_expires_at"))?.metadata?.expiresAt ||
+            null;
+          const expired = expirationSource ? new Date(expirationSource) < new Date() : false;
+          const status = primarySecret ? (expired ? "expired" : "connected") : secrets.length ? "configured" : "disconnected";
+          updateProviderStatus(provider, status, Boolean(primarySecret), expired);
+        } catch (err) {
+          log(`Status check failed: ${err.message}`, "error");
+          updateProviderStatus(provider, "disconnected");
+        }
+      }
 
-          const integrationId = data.data.integrations.edges[0].node.id;
+      async function handleRefresh(provider) {
+        try {
+          const response = await makeRequest(`/v1/integrations/${provider}/refresh`, {
+            method: "POST",
+          });
+          if (!response.ok) throw new Error(await response.text());
+          log(`Trigger refresh succeeded for ${provider}`, "success");
+          await handleStatus(provider);
+        } catch (err) {
+          log(`Refresh failed: ${err.message}`, "error");
+        }
+      }
 
-          log(`Disconnecting ${provider} integration...`, 'info');
-
-          const deleteMutation = `
-            mutation DeleteIntegration($deleteIntegrationId: ID!) {
-              deleteIntegration(id: $deleteIntegrationId) {
-                deletedID
-              }
-            }
-          `;
-
-          const deleteResponse = await makeAuthenticatedRequest(`${apiBase}/query`, {
-            method: 'POST',
+      async function handleDisconnect(provider) {
+        try {
+          const lookup = await makeRequest("/query", {
+            method: "POST",
             body: JSON.stringify({
-              query: deleteMutation,
-              variables: { deleteIntegrationId: integrationId }
-            })
+              query: "query ($kind: String!) { integrations(where: { kind: $kind }) { edges { node { id } } } }",
+              variables: { kind: provider },
+            }),
           });
-
-          if (deleteResponse.ok) {
-            const deleteData = await deleteResponse.json();
-            if (deleteData.data && deleteData.data.deleteIntegration) {
-              log(`Disconnected ${provider} integration`, 'success');
-              updateStatus(provider, 'disconnected');
-              displayToken(provider, null);
-              await loadIntegrationsList();
-            } else {
-              log(`Failed to disconnect ${provider} integration: ${JSON.stringify(deleteData.errors)}`, 'error');
-            }
-          } else {
-            log(`Failed to disconnect ${provider} integration`, 'error');
+          if (!lookup.ok) throw new Error(`lookup failed: HTTP ${lookup.status}`);
+          const data = await lookup.json();
+          const id = data?.data?.integrations?.edges?.[0]?.node?.id;
+          if (!id) {
+            log(`No integration to delete for ${provider}`, "info");
+            updateProviderStatus(provider, "disconnected");
+            return;
           }
-        } catch (error) {
-          log(`Error disconnecting ${provider}: ${error.message}`, 'error');
+          const response = await makeRequest("/query", {
+            method: "POST",
+            body: JSON.stringify({
+              query: "mutation ($id: ID!) { deleteIntegration(id: $id) { deletedID } }",
+              variables: { id },
+            }),
+          });
+          if (!response.ok) throw new Error(`delete failed: HTTP ${response.status}`);
+          log(`Integration deleted for ${provider}`, "success");
+          updateProviderStatus(provider, "disconnected");
+          await loadIntegrations();
+        } catch (err) {
+          log(`Disconnect failed: ${err.message}`, "error");
         }
       }
 
-      async function listIntegrations() {
+      async function loadIntegrations() {
+        log("Loading configured integrations", "info");
         try {
-          const query = `
-            query GetAllIntegrations {
-              integrations {
-                edges {
-                  node {
-                    id
-                    kind
-                    name
-                    description
-                    createdAt
-                    updatedAt
-                  }
-                }
-              }
-            }
-          `;
-
-          const response = await makeAuthenticatedRequest(`${apiBase}/query`, {
-            method: 'POST',
-            body: JSON.stringify({ query })
+          const container = document.getElementById("integrationsList");
+          const response = await makeRequest("/query", {
+            method: "POST",
+            body: JSON.stringify({ query: "{ integrations { edges { node { id name kind description updatedAt } } } }" }),
           });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.data && data.data.integrations) {
-              return data.data.integrations.edges.map(edge => edge.node);
-            }
-          }
-          return [];
-        } catch (error) {
-          log(`Error listing integrations: ${error.message}`, 'error');
-          return [];
-        }
-      }
-
-      async function loadIntegrationsList() {
-        try {
-          const integrations = await listIntegrations();
-          const container = document.getElementById('integrationsList');
-
-          if (integrations.length === 0) {
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          const data = await response.json();
+          const items = data?.data?.integrations?.edges || [];
+          if (items.length === 0) {
             container.innerHTML = '<div class="text-center text-muted">No integrations configured</div>';
             return;
           }
-
-          container.innerHTML = integrations.map(integration => `
-            <div class="card mb-2">
-              <div class="card-body">
-                <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h6 class="card-title mb-1">${integration.name}</h6>
-                    <small class="text-muted">Provider: ${integration.kind}</small>
+          container.innerHTML = items
+            .map(({ node }) => `
+              <div class="card mb-2">
+                <div class="card-body">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h6 class="card-title mb-1">${node.name}</h6>
+                      <small class="text-muted">Provider: ${node.kind}</small>
+                    </div>
+                    <small class="text-muted">ID: ${node.id}</small>
                   </div>
-                  <div>
-                    <small class="text-muted">ID: ${integration.id}</small>
-                  </div>
+                  <p class="card-text mt-2 mb-1">${node.description || "No description"}</p>
+                  <small class="text-muted">Updated ${new Date(node.updatedAt).toLocaleString()}</small>
                 </div>
-                <p class="card-text mt-2">${integration.description || 'No description'}</p>
               </div>
-            </div>
-          `).join('');
-
-          log(`Loaded ${integrations.length} integration(s)`, 'info');
-        } catch (error) {
-          log(`Error loading integrations list: ${error.message}`, 'error');
+            `)
+            .join("");
+        } catch (err) {
+          log(`Failed to load integrations: ${err.message}`, "error");
         }
       }
 
-      // API testing functions
-      async function testGitHubAPI() {
-        try {
-          const token = await getIntegrationToken('github');
-          if (!token || !token.accessToken) {
-            document.getElementById('githubAPIResult').textContent = 'No token available';
-            return;
-          }
+      function handleOAuthCallback() {
+        const params = new URLSearchParams(window.location.search);
+        const provider = params.get("provider");
+        const status = params.get("status");
+        const message = params.get("message");
+        if (!provider || !status) return;
+        const container = document.getElementById("callbackNotice");
+        container.innerHTML = `
+          <div class="alert ${status === "success" ? "alert-success" : "alert-danger"} alert-dismissible fade show">
+            <strong>${status === "success" ? "Integration Connected" : "Integration Error"}:</strong>
+            ${decodeURIComponent(message || provider)}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+          </div>
+        `;
+      }
 
-          log('Testing GitHub API...', 'info');
-          const response = await fetch('https://api.github.com/user', {
-            headers: {
-              'Authorization': `token ${token.accessToken}`,
-              'Accept': 'application/vnd.github.v3+json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            document.getElementById('githubAPIResult').innerHTML =
-              `✅ Success: ${data.login} (${data.name})`;
-            log('GitHub API test successful', 'success');
-          } else {
-            document.getElementById('githubAPIResult').innerHTML =
-              `❌ Failed: ${response.status} ${response.statusText}`;
-            log('GitHub API test failed', 'error');
-          }
-        } catch (error) {
-          document.getElementById('githubAPIResult').innerHTML = `❌ Error: ${error.message}`;
-          log(`GitHub API test error: ${error.message}`, 'error');
+      async function loadProvidersAndStatus() {
+        const providers = await fetchProviders();
+        renderProviders(providers);
+        for (const provider of providers) {
+          await handleStatus(provider.name);
         }
       }
 
-      async function testSlackAPI() {
-        try {
-          const token = await getIntegrationToken('slack');
-          if (!token || !token.accessToken) {
-            document.getElementById('slackAPIResult').textContent = 'No token available';
-            return;
-          }
-
-          log('Testing Slack API...', 'info');
-          const response = await fetch('https://slack.com/api/auth.test', {
-            headers: {
-              'Authorization': `Bearer ${token.accessToken}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (response.ok) {
-            const data = await response.json();
-            if (data.ok) {
-              document.getElementById('slackAPIResult').innerHTML =
-                `✅ Success: ${data.user} in ${data.team}`;
-              log('Slack API test successful', 'success');
-            } else {
-              document.getElementById('slackAPIResult').innerHTML =
-                `❌ Slack Error: ${data.error}`;
-              log('Slack API test failed', 'error');
-            }
-          } else {
-            document.getElementById('slackAPIResult').innerHTML =
-              `❌ Failed: ${response.status} ${response.statusText}`;
-            log('Slack API test failed', 'error');
-          }
-        } catch (error) {
-          document.getElementById('slackAPIResult').innerHTML = `❌ Error: ${error.message}`;
-          log(`Slack API test error: ${error.message}`, 'error');
+      async function initialize() {
+        log("Initializing integration console", "info");
+        handleOAuthCallback();
+        const authed = await ensureAuthenticated();
+        if (!authed) {
+          log("Authentication required before continuing", "error");
+          return;
         }
+        await loadProvidersAndStatus();
+        await loadIntegrations();
+        log("Initialization complete", "success");
       }
 
-      // Event listeners
-      document.getElementById('connectGithub').addEventListener('click', () => startOAuthFlow('github'));
-      document.getElementById('connectSlack').addEventListener('click', () => startOAuthFlow('slack'));
-
-      document.getElementById('checkGithubStatus').addEventListener('click', () => checkIntegrationStatus('github'));
-      document.getElementById('checkSlackStatus').addEventListener('click', () => checkIntegrationStatus('slack'));
-
-      document.getElementById('getGithubToken').addEventListener('click', () => getIntegrationToken('github'));
-      document.getElementById('getSlackToken').addEventListener('click', () => getIntegrationToken('slack'));
-
-      document.getElementById('refreshGithubToken').addEventListener('click', () => refreshIntegrationToken('github'));
-      document.getElementById('refreshSlackToken').addEventListener('click', () => refreshIntegrationToken('slack'));
-
-      document.getElementById('disconnectGithub').addEventListener('click', () => disconnectIntegration('github'));
-      document.getElementById('disconnectSlack').addEventListener('click', () => disconnectIntegration('slack'));
-
-      document.getElementById('testGithubAPI').addEventListener('click', testGitHubAPI);
-      document.getElementById('testSlackAPI').addEventListener('click', testSlackAPI);
-
-      document.getElementById('refreshIntegrations').addEventListener('click', loadIntegrationsList);
-      document.getElementById('clearLog').addEventListener('click', () => {
-        document.getElementById('activityLog').innerHTML = '';
+      document.addEventListener("DOMContentLoaded", () => {
+        initialize();
+        document.getElementById("loginButton").addEventListener("click", () => {
+          loginWithSeedUser().then((ok) => ok && initialize());
+        });
+        document.getElementById("refreshProviders").addEventListener("click", loadProvidersAndStatus);
+        document.getElementById("refreshIntegrations").addEventListener("click", loadIntegrations);
+        document.getElementById("clearLog").addEventListener("click", () => {
+          document.getElementById("activityLog").innerHTML = "";
+        });
+        document.getElementById("configModalClose").addEventListener("click", closeConfigModal);
+        document.getElementById("configModalCancel").addEventListener("click", closeConfigModal);
+        document.getElementById("configModalSubmit").addEventListener("click", submitConfiguration);
+        document.getElementById("configModal").addEventListener("click", (event) => {
+          if (event.target.id === "configModal") {
+            closeConfigModal();
+          }
+        });
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape") {
+            closeConfigModal();
+          }
+        });
       });
 
-      // Initialize
-      async function initialize() {
-        log('Initializing OAuth Integration Testing Interface', 'info');
-
-        // Initialize CSRF token first
-        await initCSRF();
-
-        const isAuthenticated = await checkAuthStatus();
-        if (isAuthenticated) {
-          // Check status of both providers
-          await Promise.all([
-            checkIntegrationStatus('github'),
-            checkIntegrationStatus('slack')
-          ]);
-
-          // Load integrations list
-          await loadIntegrationsList();
-        }
-
-        log('Initialization complete', 'success');
-      }
-
-      // Make login function globally accessible for button clicks
-      window.loginWithTestCredentials = loginWithTestCredentials;
-
-      // Start initialization when page loads
-      document.addEventListener('DOMContentLoaded', initialize);
-
-      // Handle OAuth callback
-      const params = new URLSearchParams(window.location.search);
-      if (params.get('session')) {
-        log('OAuth callback detected, refreshing status...', 'info');
-        // Give a small delay for the backend to process the callback
-        setTimeout(initialize, 1000);
-      }
-
-      // Handle OAuth success callback
-      if (params.get('provider') && params.get('status') === 'success') {
-        const provider = params.get('provider');
-        const message = params.get('message') || `Successfully connected ${provider} integration`;
-
-        // Show success message
-        const successAlert = document.createElement('div');
-        successAlert.className = 'alert alert-success alert-dismissible fade show';
-        successAlert.innerHTML = `
-          <strong>Success!</strong> ${decodeURIComponent(message)}
-          <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        `;
-
-        const container = document.querySelector('.container');
-        container.insertBefore(successAlert, container.firstChild);
-
-        log(`OAuth success: ${message}`, 'success');
-
-        // Clean up URL parameters
-        const cleanUrl = window.location.origin + window.location.pathname;
-        window.history.replaceState({}, document.title, cleanUrl);
-
-        // Refresh the status after a short delay
-        setTimeout(async () => {
-          await checkIntegrationStatus(provider);
-          await loadIntegrationsList();
-        }, 1000);
-      }
+      window.loginWithSeedUser = loginWithSeedUser;
     </script>
   </body>
 </html>

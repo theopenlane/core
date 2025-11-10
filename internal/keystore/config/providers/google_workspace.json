@@ -1,0 +1,88 @@
+{
+  "name": "google_workspace",
+  "displayName": "Google Workspace",
+  "category": "identity",
+  "authType": "oauth2",
+  "active": true,
+  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-google-directory/latest/icon.svg",
+  "docsUrl": "https://developers.google.com/admin-sdk/directory",
+  "oauth": {
+    "clientId": "${GOOGLE_WORKSPACE_CLIENT_ID}",
+    "clientSecret": "${GOOGLE_WORKSPACE_CLIENT_SECRET}",
+    "authUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+    "tokenUrl": "https://oauth2.googleapis.com/token",
+    "scopes": [
+      "https://www.googleapis.com/auth/admin.directory.user.readonly",
+      "https://www.googleapis.com/auth/admin.directory.group.readonly",
+      "https://www.googleapis.com/auth/apps.groups.migration"
+    ],
+    "authParams": {
+      "access_type": "offline",
+      "prompt": "consent"
+    },
+    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+  },
+  "userInfo": {
+    "url": "https://openidconnect.googleapis.com/v1/userinfo",
+    "method": "GET",
+    "authStyle": "Bearer",
+    "idPath": "sub",
+    "emailPath": "email",
+    "loginPath": "name"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  },
+  "labels": {
+    "vendor": "google",
+    "product": "workspace"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Workspace tenant."
+      },
+      "adminEmail": {
+        "type": "string",
+        "title": "Admin Email",
+        "description": "Workspace administrator to impersonate when performing directory sync."
+      },
+      "customerId": {
+        "type": "string",
+        "title": "Workspace Customer ID",
+        "description": "Optional customer ID used to scope Admin SDK queries."
+      },
+      "subjectUser": {
+        "type": "string",
+        "title": "Subject User",
+        "description": "Optional subject user for domain-wide delegation scenarios."
+      },
+      "organizationalUnitPath": {
+        "type": "string",
+        "title": "Organizational Unit Path",
+        "description": "Restrict sync operations to a specific OU path."
+      },
+      "includeSuspendedUsers": {
+        "type": "boolean",
+        "title": "Include Suspended Users",
+        "description": "Toggle to include suspended accounts in compliance exports.",
+        "default": false
+      },
+      "syncInterval": {
+        "type": "string",
+        "title": "Sync Interval",
+        "description": "Optional duration string that hints how frequently users should be synchronized."
+      },
+      "enableGroupSync": {
+        "type": "boolean",
+        "title": "Sync Groups",
+        "description": "Enable group synchronization in addition to users.",
+        "default": true
+      }
+    }
+  }
+}
