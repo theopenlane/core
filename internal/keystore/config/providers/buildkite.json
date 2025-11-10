@@ -1,0 +1,57 @@
+{
+  "name": "buildkite",
+  "displayName": "Buildkite",
+  "category": "ci",
+  "authType": "apikey",
+  "active": true,
+  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-buildkite/latest/icon.svg",
+  "docsUrl": "https://buildkite.com/docs/apis/rest-api",
+  "apiKey": {
+    "keyLabel": "API Token",
+    "headerName": "Authorization"
+  },
+  "labels": {
+    "vendor": "buildkite",
+    "product": "pipelines"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "apiToken",
+      "organizationSlug"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Buildkite organization."
+      },
+      "apiToken": {
+        "type": "string",
+        "title": "API Token",
+        "description": "Buildkite API token with read access to pipelines, teams, and build metadata."
+      },
+      "organizationSlug": {
+        "type": "string",
+        "title": "Organization Slug",
+        "description": "Buildkite organization slug (e.g. openlane)."
+      },
+      "teamSlug": {
+        "type": "string",
+        "title": "Team Slug",
+        "description": "Optional team slug used to scope which pipelines are synchronized."
+      },
+      "pipelineSlug": {
+        "type": "string",
+        "title": "Pipeline Slug",
+        "description": "Optional pipeline slug when limiting sync to a single pipeline."
+      },
+      "syncInterval": {
+        "type": "string",
+        "title": "Sync Interval",
+        "description": "Optional duration string indicating how frequently Buildkite metadata should be refreshed."
+      }
+    }
+  }
+}

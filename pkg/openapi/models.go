@@ -1,6 +1,7 @@
 package openapi
 
 import (
+	"encoding/json"
 	"errors"
 	"mime/multipart"
 	"net/mail"
@@ -10,9 +11,12 @@ import (
 	"time"
 
 	"github.com/go-webauthn/webauthn/protocol"
+	"github.com/invopop/jsonschema"
+	"github.com/samber/lo"
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/catalog"
 	"github.com/theopenlane/core/pkg/catalog/gencatalog"
 	"github.com/theopenlane/core/pkg/enums"
@@ -2262,4 +2266,165 @@ var ExampleProductCatalogRequest = ProductCatalogRequest{
 var ExampleProductCatalogReply = ProductCatalogReply{
 	Reply:   rout.Reply{Success: true},
 	Catalog: gencatalog.DefaultSandboxCatalog,
+}
+
+// IntegrationConfigRequest represents arbitrary credential configuration submitted for a provider.
+type IntegrationConfigRequest struct {
+	ServiceAccountEmail      string         `json:"serviceAccountEmail,omitempty"`
+	Audience                 string         `json:"audience,omitempty"`
+	ProjectID                string         `json:"projectId,omitempty"`
+	OrganizationID           string         `json:"organizationId,omitempty"`
+	WorkloadIdentityProvider string         `json:"workloadIdentityProvider,omitempty"`
+	FindingFilter            string         `json:"findingFilter,omitempty"`
+	Additional               map[string]any `json:"-"`
+}
+
+// ExampleIntegrationConfigRequest is an example configuration payload for OpenAPI documentation.
+var ExampleIntegrationConfigRequest = IntegrationConfigRequest{
+	ServiceAccountEmail:      "scc-runner@example.iam.gserviceaccount.com",
+	Audience:                 "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	ProjectID:                "sample-project",
+	OrganizationID:           "1234567890",
+	WorkloadIdentityProvider: "projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+}
+
+// UnmarshalJSON captures known fields and preserves additional properties.
+func (r *IntegrationConfigRequest) UnmarshalJSON(data []byte) error {
+	type Alias IntegrationConfigRequest
+	var alias Alias
+	if err := json.Unmarshal(data, &alias); err != nil {
+		return err
+	}
+	*r = IntegrationConfigRequest(alias)
+
+	var raw map[string]any
+	if err := json.Unmarshal(data, &raw); err != nil {
+		return err
+	}
+	known := map[string]struct{}{
+		"serviceAccountEmail":      {},
+		"audience":                 {},
+		"projectId":                {},
+		"organizationId":           {},
+		"workloadIdentityProvider": {},
+		"findingFilter":            {},
+	}
+	r.Additional = make(map[string]any)
+	for key, value := range raw {
+		if _, ok := known[key]; ok {
+			continue
+		}
+		r.Additional[key] = value
+	}
+
+	return nil
+}
+
+// ToMap flattens the request into a map for schema validation and keystore.
+func (r IntegrationConfigRequest) ToMap() map[string]any {
+	base := map[string]any{
+		"serviceAccountEmail":      r.ServiceAccountEmail,
+		"audience":                 r.Audience,
+		"projectId":                r.ProjectID,
+		"organizationId":           r.OrganizationID,
+		"workloadIdentityProvider": r.WorkloadIdentityProvider,
+		"findingFilter":            r.FindingFilter,
+	}
+
+	nonEmpty := lo.PickBy(base, func(_ string, value any) bool {
+		if str, ok := value.(string); ok {
+			return strings.TrimSpace(str) != ""
+		}
+		return value != nil
+	})
+
+	additional := lo.PickBy(r.Additional, func(_ string, value any) bool {
+		if str, ok := value.(string); ok {
+			return strings.TrimSpace(str) != ""
+		}
+		return value != nil
+	})
+
+	if len(additional) == 0 {
+		return nonEmpty
+	}
+
+	return lo.Assign(nonEmpty, additional)
+}
+
+// IntegrationConfigParams captures path parameters for the integration config endpoint.
+type IntegrationConfigParams struct {
+	Provider string `param:"provider" description:"Integration provider identifier" example:"gcp_scc"`
+}
+
+// ExampleIntegrationConfigParams is an example of the path parameters for integration configuration.
+var ExampleIntegrationConfigParams = IntegrationConfigParams{
+	Provider: "gcp_scc",
+}
+
+// IntegrationConfigPayload wraps path parameters with the request payload.
+type IntegrationConfigPayload struct {
+	IntegrationConfigParams
+	Body IntegrationConfigRequest `json:"payload"`
+}
+
+// IntegrationProviderMetadata describes the data required for rendering integration forms.
+type IntegrationProviderMetadata struct {
+	Name              string                         `json:"name"`
+	DisplayName       string                         `json:"displayName"`
+	Category          string                         `json:"category"`
+	AuthType          keystore.AuthType              `json:"authType"`
+	Active            bool                           `json:"active"`
+	LogoURL           string                         `json:"logoUrl,omitempty"`
+	DocsURL           string                         `json:"docsUrl,omitempty"`
+	OAuth             *IntegrationOAuthMetadata      `json:"oauth,omitempty"`
+	WorkloadIdentity  *keystore.WorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
+	GitHubApp         *keystore.GitHubAppSpec        `json:"githubApp,omitempty"`
+	Persistence       *keystore.PersistenceSpec      `json:"persistence,omitempty"`
+	CredentialsSchema map[string]any                 `json:"credentialsSchema,omitempty"`
+	Labels            map[string]string              `json:"labels,omitempty"`
+}
+
+// ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
+var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
+	IntegrationConfigParams: IntegrationConfigParams{Provider: "gcp_scc"},
+	Body: IntegrationConfigRequest{
+		ServiceAccountEmail:      "scc-runner@example.iam.gserviceaccount.com",
+		Audience:                 "//iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+		ProjectID:                "sample-project",
+		OrganizationID:           "1234567890",
+		WorkloadIdentityProvider: "projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+	},
+}
+
+// IntegrationOAuthMetadata captures OAuth-specific metadata for integrations.
+type IntegrationOAuthMetadata struct {
+	AuthURL     string            `json:"authUrl,omitempty"`
+	TokenURL    string            `json:"tokenUrl,omitempty"`
+	RedirectURI string            `json:"redirectUri,omitempty"`
+	Scopes      []string          `json:"scopes,omitempty"`
+	UsePKCE     bool              `json:"usePkce,omitempty"`
+	AuthParams  map[string]string `json:"authParams,omitempty"`
+	TokenParams map[string]string `json:"tokenParams,omitempty"`
+}
+
+// IntegrationProvidersResponse is returned by the provider metadata endpoint.
+type IntegrationProvidersResponse struct {
+	rout.Reply
+	Schema    *jsonschema.Schema            `json:"schema"`
+	Providers []IntegrationProviderMetadata `json:"providers"`
+}
+
+// IntegrationConfigResponse is returned after persisting provider configuration.
+type IntegrationConfigResponse struct {
+	rout.Reply
+	Provider string `json:"provider"`
+}
+
+// ExampleResponse returns an example IntegrationConfigResponse for OpenAPI documentation.
+func (r *IntegrationConfigResponse) ExampleResponse() any {
+	return IntegrationConfigResponse{
+		Reply:    rout.Reply{Success: true},
+		Provider: "gcp_scc",
+	}
 }

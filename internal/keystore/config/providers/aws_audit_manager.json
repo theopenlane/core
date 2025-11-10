@@ -1,0 +1,105 @@
+{
+  "name": "aws_audit_manager",
+  "displayName": "AWS Audit & Compliance",
+  "category": "compliance",
+  "authType": "aws_sts",
+  "active": true,
+  "logoUrl": "https://static-00.iconduck.com/assets.00/aws-icon-2048x2048-uqgz6h3o.png",
+  "docsUrl": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
+  "awsSts": {
+    "sessionName": "openlane-audit",
+    "duration": "3600s",
+    "region": "us-east-1"
+  },
+  "labels": {
+    "vendor": "aws",
+    "service": "audit-manager"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "roleArn",
+      "region"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this AWS integration."
+      },
+      "roleArn": {
+        "type": "string",
+        "title": "IAM Role ARN",
+        "description": "Role assumed to query Audit Manager and Systems Manager data."
+      },
+      "externalId": {
+        "type": "string",
+        "title": "External ID",
+        "description": "Optional external ID required by the delegated role."
+      },
+      "region": {
+        "type": "string",
+        "title": "Default Region",
+        "description": "AWS region used for audit and compliance queries.",
+        "default": "us-east-1"
+      },
+      "sessionDuration": {
+        "type": "string",
+        "title": "Session Duration",
+        "description": "Optional session duration (Go duration string, e.g. 1h30m)."
+      },
+      "sessionName": {
+        "type": "string",
+        "title": "Session Name",
+        "description": "Optional session name override for STS AssumeRoleWithWebIdentity calls."
+      },
+      "accessKeyId": {
+        "type": "string",
+        "title": "Access Key ID",
+        "description": "Optional static credentials if role assumption is not available."
+      },
+      "secretAccessKey": {
+        "type": "string",
+        "title": "Secret Access Key",
+        "description": "Optional static credentials if role assumption is not available."
+      },
+      "sessionToken": {
+        "type": "string",
+        "title": "Session Token",
+        "description": "Optional session token paired with the static credentials."
+      },
+      "auditManagerAssessmentId": {
+        "type": "string",
+        "title": "Audit Manager Assessment ID",
+        "description": "Optional assessment identifier to scope evidence pulls."
+      },
+      "systemsManagerDocument": {
+        "type": "string",
+        "title": "Systems Manager Document",
+        "description": "Optional SSM document used when triggering compliance scans."
+      },
+      "configAggregatorName": {
+        "type": "string",
+        "title": "AWS Config Aggregator",
+        "description": "Aggregator name that should be queried for compliance status."
+      },
+      "controlTowerRegions": {
+        "type": "array",
+        "title": "Regions to Inspect",
+        "description": "Optional list of AWS regions that should be included when evaluating compliance.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "tags": {
+        "type": "object",
+        "title": "Default Tags",
+        "description": "Optional key/value map added to generated integrations for traceability.",
+        "additionalProperties": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}
