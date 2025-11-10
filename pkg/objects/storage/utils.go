@@ -75,7 +75,14 @@ func ParseDocument(reader io.Reader, mimeType string) (*ParsedDocument, error) {
 		}
 
 		return &ParsedDocument{Data: text}, nil
-	case strings.Contains(mimeType, "text/markdown"), strings.Contains(mimeType, "text/x-markdown"), strings.Contains(mimeType, "text/plain"):
+	case strings.Contains(mimeType, "text/plain"):
+		fm, body, err := ParseFrontmatter(data)
+		if err != nil {
+			return nil, err
+		}
+
+		return &ParsedDocument{Frontmatter: fm, Data: string(body)}, nil
+	case strings.Contains(mimeType, "text/markdown"), strings.Contains(mimeType, "text/x-markdown"):
 		fm, body, err := ParseFrontmatter(data)
 		if err != nil {
 			return nil, err

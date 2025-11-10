@@ -9,6 +9,10 @@ import (
 // Frontmatter represents the front matter metadata in a markdown file
 // only Title is supported for now, but will be extended in the future
 type Frontmatter struct {
+	// OpenlaneID is the unique identifier for the document in Openlane platform, used for syncing
+	OpenlaneID string `yaml:"openlane_id"`
+
+	// Title of the document
 	Title string `yaml:"title"`
 }
 

@@ -3,6 +3,7 @@ package storage
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -165,7 +166,7 @@ func TestParseDocument(t *testing.T) {
 			expectType: "string",
 			validate: func(t *testing.T, result any) {
 				str, ok := result.(string)
-				require.True(t, ok)
+				require.True(t, ok, fmt.Sprintf("expected string, got %T", result))
 				assert.Equal(t, "hello world", str)
 			},
 		},
@@ -464,13 +465,13 @@ func TestParseDocument_EmptyContent(t *testing.T) {
 				require.Error(t, err)
 			} else if strings.Contains(tt.mimeType, "yaml") {
 				require.NoError(t, err)
-				assert.Nil(t, result)
+				assert.Nil(t, result.Data)
 			} else if strings.Contains(tt.mimeType, "text") {
 				require.NoError(t, err)
-				assert.Equal(t, "", result)
+				assert.Equal(t, "", result.Data)
 			} else {
 				require.NoError(t, err)
-				assert.Equal(t, []byte{}, result)
+				assert.Equal(t, []byte{}, result.Data)
 			}
 		})
 	}
