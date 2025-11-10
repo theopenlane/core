@@ -57,6 +57,8 @@ func consoleOutput(e any) error {
 		e = v.CreateUploadInternalPolicy.InternalPolicy
 	case *openlaneclient.UpdateInternalPolicy:
 		e = v.UpdateInternalPolicy.InternalPolicy
+	case *openlaneclient.UpdateInternalPolicyWithFile:
+		e = v.UpdateInternalPolicy.InternalPolicy
 	case *openlaneclient.DeleteInternalPolicy:
 		deletedTableOutput(v)
 		return nil
