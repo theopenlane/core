@@ -16,7 +16,7 @@ require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
 	entgo.io/contrib v0.7.0
-	entgo.io/ent v0.14.6-0.20251106044941-a777c08cdda4
+	entgo.io/ent v0.14.6-0.20251110171208-cf1482ecb7fc
 	github.com/99designs/gqlgen v0.17.81
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
