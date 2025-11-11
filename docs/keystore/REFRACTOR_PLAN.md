@@ -2,7 +2,7 @@
 
 Path: `docs/keystore/REFRACTOR_PLAN.md`
 Owner: Codex (GPT-5)
-Last updated: 2025-02-15 (rev. 4)
+Last updated: 2025-11-10 (rev. 5)
 
 ---
 
@@ -152,7 +152,7 @@ type AuthSession interface {
 - [ ] Use `samber/lo` for config defaults/merges and `contextx` for request scoping.
 - [x] Add `registry.Loader` that ingests JSON schemas, validates via gojsonschema, and instantiates providers.
 - [x] Ensure declarative schema metadata (form fields, docs links) remains accessible to HTTP handlers.
-- [ ] Replace bespoke `${VAR}` interpolation helpers with koanf-backed loading so JSON specs keep env overrides without duplicating logic.
+- [x] Replace bespoke `${VAR}` interpolation helpers with koanf-backed loading so JSON specs keep env overrides without duplicating logic (FS loader now leans on koanf + decode hooks, `interpolate.go` deleted).
 - [ ] Introduce `internal/integrations/helpers` for reusable helper functions (copying tokens/claims, redaction, metadata transforms) so HTTP handlers, brokers, and other packages can share implementations instead of duplicating logic.
 - [ ] Create `internal/integrations/testutils` exposing reusable setup/teardown suites that provision integrations, hush secrets, and Ent fixtures so most tests can run with real types/structs rather than mocks (mocks are acceptable only where dependencies are impractical to reproduce).
 
@@ -237,10 +237,13 @@ type AuthSession interface {
 - Use this document as the canonical tracking file; update the table as tasks complete.
 - Consider adding checkboxes per task once implementation begins.
 - When coding starts, cross-link PRs and migration scripts here for quick reference.
+- **Progress 2025-11-10**:
+  - Koanf now handles `${VAR}` expansion inside provider specs; the bespoke interpolation helpers and tests were removed, and loader coverage was extended to nested schema/default maps.
 - **Immediate next steps**:
-  - Swap `internal/integrations/config` over to koanf-based interpolation so embedded JSON specs expand `${VAR}` without the custom helper file.
-  - Remove `interpolate.go` and any dead tests once koanf loading is wired, keeping the same error semantics (`ErrEnvVarNotDefined`, unsupported schema versions, etc.).
-  - Re-run handler tests to confirm the new loader keeps OAuth flows functional.
+  - ✅ Swap `internal/integrations/config` over to koanf-based interpolation so embedded JSON specs expand `${VAR}` without the custom helper file.
+  - ✅ Remove `interpolate.go` and any dead tests once koanf loading is wired, keeping the same error semantics (`ErrEnvVarNotDefined`, unsupported schema versions, etc.).
+  - ☐ Re-run handler tests to confirm the new loader keeps OAuth flows functional.
+  - ☐ Follow up on a real koanf provider (raw bytes or `fs.Provider`) plus watchers so we stop double-decoding JSON and can support YAML/provider reloads.
 - **Declarative compatibility**: `internal/httpserve/handlers` should import `internal/keymaker` for activation flows. Handlers continue to reference provider JSON schemas for validation; they are not aware of storage details.
 - **eddy integration**: `integrations/keystore` exposes client pools built with `github.com/theopenlane/core/pkg/eddy` (or equivalent) so reconciler/event-bus code can fetch typed clients safely.
 - **Error/style guidance**: use sentinel errors from `integrations/errors.go`, `samber/lo` + `samber/mo` for functional helpers, `contextx` for request scoping, and `httpsling` sparingly (prefer published SDKs + Zitadel RP). Functional options + fluent APIs should configure builders/providers.
