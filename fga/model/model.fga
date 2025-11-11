@@ -119,6 +119,13 @@ type organization
     define group_manager: [service]
     define can_manage_groups: owner or group_manager
 
+    # trust center access
+    define trust_center_doc_creator: [group#member]
+    define can_create_trust_center_doc: can_edit or trust_center_doc_creator
+
+    define trust_center_subprocessor_creator: [group#member]
+    define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
+
     # additional relations
     define user_in_context: [user]
 
