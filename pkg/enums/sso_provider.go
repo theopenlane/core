@@ -14,6 +14,8 @@ var (
 	SSOProviderGoogleWorkspace SSOProvider = "GOOGLE_WORKSPACE"
 	SSOProviderSlack           SSOProvider = "SLACK"
 	SSOProviderGithub          SSOProvider = "GITHUB"
+	SSOProviderEntraID         SSOProvider = "MICROSOFT_ENTRA_ID"
+	SSOProviderGenericOIDC     SSOProvider = "GENERIC_OIDC"
 	SSOProviderNone            SSOProvider = "NONE"
 	SSOProviderInvalid         SSOProvider = "INVALID"
 )
