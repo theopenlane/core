@@ -3,6 +3,7 @@ package storage
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -165,7 +166,7 @@ func TestParseDocument(t *testing.T) {
 			expectType: "string",
 			validate: func(t *testing.T, result any) {
 				str, ok := result.(string)
-				require.True(t, ok)
+				require.True(t, ok, fmt.Sprintf("expected string, got %T", result))
 				assert.Equal(t, "hello world", str)
 			},
 		},
@@ -204,7 +205,7 @@ func TestParseDocument(t *testing.T) {
 			} else {
 				require.NoError(t, err)
 				if tt.validate != nil {
-					tt.validate(t, result)
+					tt.validate(t, result.Data)
 				}
 			}
 		})
@@ -227,7 +228,7 @@ func TestParseDocument_ComplexStructures(t *testing.T) {
 		result, err := ParseDocument(strings.NewReader(data), "application/json")
 		require.NoError(t, err)
 
-		m, ok := result.(map[string]any)
+		m, ok := result.Data.(map[string]any)
 		require.True(t, ok)
 
 		user, ok := m["user"].(map[string]any)
@@ -252,7 +253,7 @@ user:
 		result, err := ParseDocument(strings.NewReader(data), "application/yaml")
 		require.NoError(t, err)
 
-		m, ok := result.(map[string]any)
+		m, ok := result.Data.(map[string]any)
 		require.True(t, ok)
 
 		user, ok := m["user"].(map[string]any)
@@ -464,13 +465,13 @@ func TestParseDocument_EmptyContent(t *testing.T) {
 				require.Error(t, err)
 			} else if strings.Contains(tt.mimeType, "yaml") {
 				require.NoError(t, err)
-				assert.Nil(t, result)
+				assert.Nil(t, result.Data)
 			} else if strings.Contains(tt.mimeType, "text") {
 				require.NoError(t, err)
-				assert.Equal(t, "", result)
+				assert.Equal(t, "", result.Data)
 			} else {
 				require.NoError(t, err)
-				assert.Equal(t, []byte{}, result)
+				assert.Equal(t, []byte{}, result.Data)
 			}
 		})
 	}
