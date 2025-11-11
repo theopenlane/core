@@ -100,6 +100,12 @@ type AssessmentDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
+// Return response for createAssessmentResponse mutation
+type AssessmentResponseCreatePayload struct {
+	// Created assessmentResponse
+	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
+}
+
 // Return response for deleteAssessmentResponse mutation
 type AssessmentResponseDeletePayload struct {
 	// Deleted assessmentResponse ID

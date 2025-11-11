@@ -13,10 +13,8 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -87,7 +85,7 @@ func (a Assessment) Edges() []ent.Edge {
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			// policy.CheckCreateAccess(),
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)
@@ -111,7 +109,7 @@ func (Assessment) Indexes() []ent.Index {
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.Assessment](),
+		// interceptors.FilterQueryResults[generated.Assessment](),
 	}
 }
 

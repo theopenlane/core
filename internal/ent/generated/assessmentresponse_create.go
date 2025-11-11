@@ -168,6 +168,14 @@ func (_c *AssessmentResponseCreate) SetAssignedAt(v time.Time) *AssessmentRespon
 	return _c
 }
 
+// SetNillableAssignedAt sets the "assigned_at" field if the given value is not nil.
+func (_c *AssessmentResponseCreate) SetNillableAssignedAt(v *time.Time) *AssessmentResponseCreate {
+	if v != nil {
+		_c.SetAssignedAt(*v)
+	}
+	return _c
+}
+
 // SetStartedAt sets the "started_at" field.
 func (_c *AssessmentResponseCreate) SetStartedAt(v time.Time) *AssessmentResponseCreate {
 	_c.mutation.SetStartedAt(v)
@@ -325,6 +333,13 @@ func (_c *AssessmentResponseCreate) defaults() error {
 	if _, ok := _c.mutation.Status(); !ok {
 		v := assessmentresponse.DefaultStatus
 		_c.mutation.SetStatus(v)
+	}
+	if _, ok := _c.mutation.AssignedAt(); !ok {
+		if assessmentresponse.DefaultAssignedAt == nil {
+			return fmt.Errorf("generated: uninitialized assessmentresponse.DefaultAssignedAt (forgotten import generated/runtime?)")
+		}
+		v := assessmentresponse.DefaultAssignedAt()
+		_c.mutation.SetAssignedAt(v)
 	}
 	if _, ok := _c.mutation.StartedAt(); !ok {
 		v := assessmentresponse.DefaultStartedAt

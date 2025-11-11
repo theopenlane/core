@@ -7,10 +7,31 @@ package graphapi
 import (
 	"context"
 
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/utils/rout"
 )
+
+// CreateAssessmentResponse is the resolver for the createAssessmentResponse field.
+func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error) {
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
+		log.Error().Err(err).Msg("failed to set organization in auth context")
+
+		return nil, rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	res, err := withTransactionalMutation(ctx).AssessmentResponse.Create().SetInput(input).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessmentresponse"})
+	}
+
+	return &model.AssessmentResponseCreatePayload{
+		AssessmentResponse: res,
+	}, nil
+}
 
 // DeleteAssessmentResponse is the resolver for the deleteAssessmentResponse field.
 func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {

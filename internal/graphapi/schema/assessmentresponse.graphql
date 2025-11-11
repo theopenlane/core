@@ -12,6 +12,15 @@ extend type Query {
 
 extend type Mutation{
     """
+    Create a new assessmentResponse
+    """
+    createAssessmentResponse(
+        """
+        values of the assessmentResponse
+        """
+        input: CreateAssessmentResponseInput!
+    ): AssessmentResponseCreatePayload!
+    """
     Delete an existing assessmentResponse
     """
     deleteAssessmentResponse(
@@ -20,6 +29,16 @@ extend type Mutation{
         """
         id: ID!
     ): AssessmentResponseDeletePayload!
+}
+
+"""
+Return response for createAssessmentResponse mutation
+"""
+type AssessmentResponseCreatePayload {
+    """
+    Created assessmentResponse
+    """
+    assessmentResponse: AssessmentResponse!
 }
 
 """

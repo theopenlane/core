@@ -113,6 +113,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
+	// DefaultAssignedAt holds the default value on creation for the "assigned_at" field.
+	DefaultAssignedAt func() time.Time
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
 	DefaultStartedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
