@@ -36838,6 +36838,14 @@ type TrustCenterDocBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkTrustCenterDoc mutation
+type TrustCenterDocBulkUpdatePayload struct {
+	// Updated trust center docs
+	TrustCenterDocs []*TrustCenterDoc `json:"trustCenterDocs,omitempty"`
+	// IDs of the updated trust center docs
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type TrustCenterDocConnection struct {
 	// A list of edges.

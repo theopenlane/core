@@ -3351,6 +3351,7 @@ type ComplexityRoot struct {
 		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
 		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
+		UpdateBulkTrustCenterDoc             func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
 		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
@@ -6117,6 +6118,11 @@ type ComplexityRoot struct {
 
 	TrustCenterDocBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	TrustCenterDocBulkUpdatePayload struct {
+		TrustCenterDocs func(childComplexity int) int
+		UpdatedIDs      func(childComplexity int) int
 	}
 
 	TrustCenterDocConnection struct {
@@ -24863,6 +24869,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkTask(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTaskInput)), true
 
+	case "Mutation.updateBulkTrustCenterDoc":
+		if e.complexity.Mutation.UpdateBulkTrustCenterDoc == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTrustCenterDoc_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTrustCenterDoc(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
 			break
@@ -41598,6 +41616,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "TrustCenterDocBulkUpdatePayload.trustCenterDocs":
+		if e.complexity.TrustCenterDocBulkUpdatePayload.TrustCenterDocs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocBulkUpdatePayload.TrustCenterDocs(childComplexity), true
+
+	case "TrustCenterDocBulkUpdatePayload.updatedIDs":
+		if e.complexity.TrustCenterDocBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "TrustCenterDocConnection.edges":
 		if e.complexity.TrustCenterDocConnection.Edges == nil {
@@ -132190,6 +132222,19 @@ extend type Mutation{
         trustCenterDocFile: Upload
         watermarkedTrustCenterDocFile: Upload
     ): TrustCenterDocUpdatePayload!
+        """
+    Update multiple existing trust center docs
+    """
+    updateBulkTrustCenterDoc(
+        """
+        IDs of the trust center docs to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trust center docs with
+        """
+        input: UpdateTrustCenterDocInput!
+    ): TrustCenterDocBulkUpdatePayload!
     """
     Delete an existing trustCenterDoc
     """
@@ -132258,6 +132303,20 @@ type TrustCenterDocBulkDeletePayload {
     Deleted trustCenterDoc IDs
     """
     deletedIDs: [ID!]!
+}
+
+"""
+Return response for updateBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkUpdatePayload {
+    """
+    Updated trust center docs
+    """
+    trustCenterDocs: [TrustCenterDoc!]
+    """
+    IDs of the updated trust center docs
+    """
+    updatedIDs: [ID!]
 }`, BuiltIn: false},
 	{Name: "../schema/trustcenterdomain.graphql", Input: `extend type Mutation{
     """

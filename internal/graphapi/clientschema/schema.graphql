@@ -39257,6 +39257,20 @@ type Mutation {
 		input: UpdateTrustCenterDocInput!
 	trustCenterDocFile: Upload, watermarkedTrustCenterDocFile: Upload): TrustCenterDocUpdatePayload!
 	"""
+	Update multiple existing trust center docs
+	"""
+	updateBulkTrustCenterDoc(
+		"""
+		IDs of the trust center docs to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the trust center docs with
+		"""
+		input: UpdateTrustCenterDocInput!
+	): TrustCenterDocBulkUpdatePayload!
+	"""
 	Delete an existing trustCenterDoc
 	"""
 	deleteTrustCenterDoc(
@@ -73931,6 +73945,19 @@ type TrustCenterDocBulkDeletePayload {
 	Deleted trustCenterDoc IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkTrustCenterDoc mutation
+"""
+type TrustCenterDocBulkUpdatePayload {
+	"""
+	Updated trust center docs
+	"""
+	trustCenterDocs: [TrustCenterDoc!]
+	"""
+	IDs of the updated trust center docs
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
