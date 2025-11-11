@@ -8,9 +8,9 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"maps"
 	"net/http"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/redis/go-redis/v9"
@@ -36,8 +36,9 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/keystore"
-	integrationconfig "github.com/theopenlane/core/internal/keystore/config"
+	"github.com/theopenlane/core/internal/integrations/bootstrap"
+	integrationsconfig "github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -193,37 +194,14 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
-		if s.Config.Handler.IntegrationRegistry == nil {
-			s.Config.Handler.IntegrationRegistry = make(keystore.Registry)
+		registry, err := loadProviderRegistry(s.Config.Settings.IntegrationOauthProvider.ProviderSpecPath)
+		if err != nil {
+			log.Panic().Err(err).Msg("failed to build integration provider registry")
 		}
-
-		if specPath := s.Config.Settings.IntegrationOauthProvider.ProviderSpecPath; specPath != "" {
-			specs, err := keystore.LoadProviderSpecs(specPath)
-			if err != nil {
-				log.Panic().Err(err).Str("path", specPath).Msg("failed to load integration provider specs")
-			}
-
-			registry, err := keystore.BuildRegistry(specs)
-			if err != nil {
-				log.Panic().Err(err).Msg("failed to build integration provider registry")
-			}
-
-			maps.Copy(s.Config.Handler.IntegrationRegistry, registry)
-
-			if len(s.Config.Handler.IntegrationRegistry) == 0 {
-				log.Panic().Msg("integration provider registry is empty; ensure provider specs are configured")
-			}
-		}
-
-		if len(s.Config.Handler.IntegrationRegistry) == 0 {
+		if registry == nil {
 			log.Panic().Msg("integration provider registry is not configured")
 		}
-
-		if schemas, err := integrationconfig.LoadEmbeddedSchemas(); err != nil {
-			log.Panic().Err(err).Msg("failed to load embedded integration schemas")
-		} else {
-			s.Config.Handler.IntegrationCredentialSchemas = schemas
-		}
+		s.Config.Handler.IntegrationRegistry = registry
 
 		// add auth middleware
 		opts := []authmw.Option{
@@ -276,6 +254,30 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 			s.Config.Handler.AddReadinessCheck("redis", cache.Healthcheck(r))
 		}
 	})
+}
+
+func loadProviderRegistry(specPath string) (*registry.Registry, error) {
+	ctx := context.Background()
+	if strings.TrimSpace(specPath) == "" {
+		return bootstrap.LoadDefaultRegistry(ctx)
+	}
+
+	loader, err := buildFSLoader(specPath)
+	if err != nil {
+		return nil, err
+	}
+
+	return bootstrap.LoadRegistry(ctx, loader)
+}
+
+func buildFSLoader(path string) (*integrationsconfig.FSLoader, error) {
+	clean := filepath.Clean(path)
+	if filepath.IsAbs(clean) {
+		root := strings.TrimPrefix(clean, "/")
+		return integrationsconfig.NewFSLoader(os.DirFS("/"), root), nil
+	}
+
+	return integrationsconfig.NewFSLoader(os.DirFS("."), clean), nil
 }
 
 // WithGraphRoute adds the graph handler to the server

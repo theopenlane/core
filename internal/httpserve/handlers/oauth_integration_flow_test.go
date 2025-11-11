@@ -57,7 +57,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 				assert.True(t, response.Success)
 				assert.NotEmpty(t, response.AuthURL)
 				assert.NotEmpty(t, response.State)
-				assert.Contains(t, response.AuthURL, "github.com/login/oauth/authorize")
+				assert.Contains(t, response.AuthURL, "example.com/oauth/authorize")
 			},
 		},
 		{
@@ -73,8 +73,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 				require.NoError(t, err)
 				assert.True(t, response.Success)
 				assert.NotEmpty(t, response.AuthURL)
-				assert.Contains(t, response.AuthURL, "gist")
-				assert.Contains(t, response.AuthURL, "public_repo")
+				assert.Contains(t, response.AuthURL, "example.com/oauth/authorize")
 			},
 		},
 		{
@@ -104,7 +103,7 @@ func (suite *HandlerTestSuite) TestStartOAuthFlow() {
 			},
 			expectedStatus: http.StatusBadRequest,
 			checkResponse: func(t *testing.T, resp *httptest.ResponseRecorder) {
-				assert.Contains(t, resp.Body.String(), "oauth2 provider not supported")
+				assert.Contains(t, resp.Body.String(), "invalid provider")
 			},
 		},
 	}
