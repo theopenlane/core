@@ -937,42 +937,32 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 	return c
 }
 
-// UpdateAssessmentResponseInput represents a mutation input for updating assessmentresponses.
-type UpdateAssessmentResponseInput struct {
-	ClearDueDate  bool
-	DueDate       *time.Time
-	AssessmentID  *string
-	ClearDocument bool
-	DocumentID    *string
+// CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
+type CreateAssessmentResponseInput struct {
+	Email        string
+	DueDate      *time.Time
+	OwnerID      *string
+	AssessmentID string
+	DocumentID   *string
 }
 
-// Mutate applies the UpdateAssessmentResponseInput on the AssessmentResponseMutation builder.
-func (i *UpdateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	if i.ClearDueDate {
-		m.ClearDueDate()
-	}
+// Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
+func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
+	m.SetEmail(i.Email)
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
-	if v := i.AssessmentID; v != nil {
-		m.SetAssessmentID(*v)
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
 	}
-	if i.ClearDocument {
-		m.ClearDocument()
-	}
+	m.SetAssessmentID(i.AssessmentID)
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
 	}
 }
 
-// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdate builder.
-func (c *AssessmentResponseUpdate) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdateOne builder.
-func (c *AssessmentResponseUpdateOne) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdateOne {
+// SetInput applies the change-set in the CreateAssessmentResponseInput on the AssessmentResponseCreate builder.
+func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *AssessmentResponseCreate {
 	i.Mutate(c.Mutation())
 	return c
 }

@@ -1,4 +1,26 @@
 
+mutation CreateAssessmentResponse($input: CreateAssessmentResponseInput!) {
+  createAssessmentResponse(input: $input) {
+    assessmentResponse {
+      assessmentID
+      assignedAt
+      completedAt
+      createdAt
+      createdBy
+      documentDataID
+      dueDate
+      email
+      id
+      ownerID
+      sendAttempts
+      startedAt
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
 mutation DeleteAssessmentResponse($deleteAssessmentResponseId: ID!) {
   deleteAssessmentResponse(id: $deleteAssessmentResponseId) {
     deletedID
