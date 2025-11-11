@@ -649,6 +649,20 @@ func (ec *executionContext) marshalNTrustCenterDocBulkDeletePayload2ᚖgithubᚗ
 	return ec._TrustCenterDocBulkDeletePayload(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterDocBulkUpdatePayload) graphql.Marshaler {
+	return ec._TrustCenterDocBulkUpdatePayload(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkUpdatePayload) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+		return graphql.Null
+	}
+	return ec._TrustCenterDocBulkUpdatePayload(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalNTrustCenterDocCreatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload(ctx context.Context, sel ast.SelectionSet, v model.TrustCenterDocCreatePayload) graphql.Marshaler {
 	return ec._TrustCenterDocCreatePayload(ctx, sel, &v)
 }

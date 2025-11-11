@@ -344,7 +344,7 @@ type MutationResolver interface {
 	CreateBulkTrustCenterDoc(ctx context.Context, input []*generated.CreateTrustCenterDocInput) (*model.TrustCenterDocBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterDoc(ctx context.Context, input graphql.Upload) (*model.TrustCenterDocBulkCreatePayload, error)
 	UpdateTrustCenterDoc(ctx context.Context, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) (*model.TrustCenterDocUpdatePayload, error)
-	UpdateBulkTrustCenterDoc(ctx context.Context, ids []string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocUpdatePayload, error)
+	UpdateBulkTrustCenterDoc(ctx context.Context, ids []string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocBulkUpdatePayload, error)
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
 	DeleteBulkTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
@@ -20322,7 +20322,7 @@ func (ec *executionContext) _Mutation_updateBulkTrustCenterDoc(ctx context.Conte
 			return ec.resolvers.Mutation().UpdateBulkTrustCenterDoc(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterDocInput))
 		},
 		nil,
-		ec.marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload,
+		ec.marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload,
 		true,
 		true,
 	)
@@ -20336,10 +20336,12 @@ func (ec *executionContext) fieldContext_Mutation_updateBulkTrustCenterDoc(ctx c
 		IsResolver: true,
 		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
 			switch field.Name {
-			case "trustCenterDoc":
-				return ec.fieldContext_TrustCenterDocUpdatePayload_trustCenterDoc(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_TrustCenterDocBulkUpdatePayload_updatedIDs(ctx, field)
 			}
-			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocUpdatePayload", field.Name)
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterDocBulkUpdatePayload", field.Name)
 		},
 	}
 	defer func() {

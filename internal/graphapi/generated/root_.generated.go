@@ -132234,7 +132234,7 @@ extend type Mutation{
         values to update the trust center docs with
         """
         input: UpdateTrustCenterDocInput!
-    ): TrustCenterDocUpdatePayload!
+    ): TrustCenterDocBulkUpdatePayload!
     """
     Delete an existing trustCenterDoc
     """
