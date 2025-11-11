@@ -83,6 +83,7 @@ type organization
     # control implementation and objectives can also be created by users outside the control creator access
     define control_implementation_creator: [group#member]
     define can_create_control_implementation: can_edit or control_creator or control_implementation_creator
+
     define control_objective_creator: [group#member]
     define can_create_control_objective: can_edit or control_creator or control_objective_creator
 
@@ -116,9 +117,6 @@ type organization
     define evidence_creator: [group#member]
     define can_create_evidence: can_edit or evidence_creator
 
-    define group_manager: [service]
-    define can_manage_groups: owner or group_manager
-
     # trust center access
     define trust_center_doc_creator: [group#member]
     define can_create_trust_center_doc: can_edit or trust_center_doc_creator
@@ -127,6 +125,9 @@ type organization
     define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
 
     # additional relations
+    define group_manager: [service]
+    define can_manage_groups: owner or group_manager
+
     define user_in_context: [user]
 
 # groups are a subset of an organization that can be used to define more fine-grained access to objects
