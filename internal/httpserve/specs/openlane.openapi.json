@@ -4530,7 +4530,11 @@
             "description": ""
           }
         },
-        "security": [],
+        "security": [
+          {
+            "basic": []
+          }
+        ],
         "summary": "Create anonymous JWT token for trust center access",
         "tags": [
           "trustcenter",

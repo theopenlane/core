@@ -72,6 +72,15 @@ func (r *mutationResolver) UpdateTrustCenterDoc(ctx context.Context, id string, 
 	}, nil
 }
 
+// UpdateBulkTrustCenterDoc is the resolver for the updateBulkTrustCenterDoc field.
+func (r *mutationResolver) UpdateBulkTrustCenterDoc(ctx context.Context, ids []string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateTrustCenterDoc(ctx, ids, input)
+}
+
 // DeleteTrustCenterDoc is the resolver for the deleteTrustCenterDoc field.
 func (r *mutationResolver) DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
