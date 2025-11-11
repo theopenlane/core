@@ -5,6 +5,7 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
+	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
@@ -12,50 +13,51 @@ import (
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers.
 func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) error {
-	result := make([]openapi.IntegrationProviderMetadata, 0, len(h.IntegrationRegistry))
-	for name, rt := range h.IntegrationRegistry {
-		sp := rt.Spec
-		meta := openapi.IntegrationProviderMetadata{
-			Name:             sp.Name,
-			DisplayName:      sp.DisplayName,
-			Category:         sp.Category,
-			AuthType:         sp.AuthType,
-			Active:           sp.Active,
-			LogoURL:          sp.LogoURL,
-			DocsURL:          sp.DocsURL,
-			Persistence:      sp.Persistence,
-			WorkloadIdentity: sp.WorkloadIdentity,
-			GitHubApp:        sp.GitHubApp,
-			Labels:           sp.Labels,
+	if h.IntegrationRegistry == nil {
+		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, nil)
+	}
+
+	catalog := h.IntegrationRegistry.ProviderMetadataCatalog()
+	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
+	for providerType, meta := range catalog {
+		spec, ok := h.IntegrationRegistry.Config(providerType)
+		if !ok {
+			continue
 		}
 
-		if h.IntegrationCredentialSchemas != nil {
-			if schema, ok := h.IntegrationCredentialSchemas[strings.ToLower(meta.Name)]; ok {
-				meta.CredentialsSchema = schema
+		entry := openapi.IntegrationProviderMetadata{
+			Name:             defaultProviderName(providerType, spec.Name),
+			DisplayName:      meta.DisplayName,
+			Category:         meta.Category,
+			AuthType:         keystore.AuthType(meta.Auth),
+			Active:           spec.Active,
+			LogoURL:          meta.LogoURL,
+			DocsURL:          meta.DocsURL,
+			Persistence:      spec.Persistence,
+			WorkloadIdentity: spec.WorkloadIdentity,
+			GitHubApp:        spec.GitHubApp,
+			Labels:           spec.Labels,
+			CredentialsSchema: func() map[string]any {
+				if len(meta.Schema) > 0 {
+					return meta.Schema
+				}
+				return spec.CredentialsSchema
+			}(),
+		}
+
+		if spec.OAuth != nil && (spec.AuthType == types.AuthKindOAuth2 || spec.AuthType == types.AuthKindOIDC) {
+			entry.OAuth = &openapi.IntegrationOAuthMetadata{
+				AuthURL:     spec.OAuth.AuthURL,
+				TokenURL:    spec.OAuth.TokenURL,
+				RedirectURI: spec.OAuth.RedirectURI,
+				Scopes:      append([]string{}, spec.OAuth.Scopes...),
+				UsePKCE:     spec.OAuth.UsePKCE,
+				AuthParams:  spec.OAuth.AuthParams,
+				TokenParams: spec.OAuth.TokenParams,
 			}
 		}
-		if meta.CredentialsSchema == nil && len(sp.CredentialsSchema) > 0 {
-			meta.CredentialsSchema = sp.CredentialsSchema
-		}
 
-		if sp.OAuth != nil && (sp.AuthType == keystore.AuthTypeOAuth2 || sp.AuthType == keystore.AuthTypeOIDC) {
-			meta.OAuth = &openapi.IntegrationOAuthMetadata{
-				AuthURL:     sp.OAuth.AuthURL,
-				TokenURL:    sp.OAuth.TokenURL,
-				RedirectURI: sp.OAuth.RedirectURI,
-				Scopes:      append([]string{}, sp.OAuth.Scopes...),
-				UsePKCE:     sp.OAuth.UsePKCE,
-				AuthParams:  sp.OAuth.AuthParams,
-				TokenParams: sp.OAuth.TokenParams,
-			}
-		}
-
-		// Ensure provider name is the registry key if omitted.
-		if meta.Name == "" {
-			meta.Name = strings.ToLower(name)
-		}
-
-		result = append(result, meta)
+		result = append(result, entry)
 	}
 
 	resp := openapi.IntegrationProvidersResponse{
@@ -65,4 +67,14 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 	}
 
 	return h.Success(ctx, resp)
+}
+
+func defaultProviderName(provider types.ProviderType, fallback string) string {
+	if strings.TrimSpace(fallback) != "" {
+		return fallback
+	}
+	if provider == types.ProviderUnknown {
+		return ""
+	}
+	return strings.ToLower(string(provider))
 }

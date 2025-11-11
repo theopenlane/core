@@ -3,6 +3,8 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -12,6 +14,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v83"
+	"golang.org/x/oauth2"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -33,6 +36,12 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
@@ -230,6 +239,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
+	suite.configureIntegrationRuntime(ctx)
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
 		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
 	}
@@ -355,6 +365,113 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	}
 
 	return h
+}
+
+func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
+	store := keystore.NewStore(suite.db)
+	suite.h.IntegrationStore = store
+
+	providerType := types.ProviderType("github")
+	spec := config.ProviderSpec{
+		Name:        "github",
+		DisplayName: "GitHub",
+		Category:    "code",
+		AuthType:    types.AuthKindOAuth2,
+		Active:      true,
+		OAuth: &config.OAuthSpec{
+			ClientID:     "test-client",
+			ClientSecret: "test-secret",
+			AuthURL:      "https://example.com/oauth/authorize",
+			TokenURL:     "https://example.com/oauth/token",
+			Scopes:       []string{"repo"},
+			RedirectURI:  "https://example.com/oauth/callback",
+		},
+	}
+
+	builder := providers.BuilderFunc{
+		ProviderType: providerType,
+		BuildFunc: func(context.Context, config.ProviderSpec) (providers.Provider, error) {
+			return &testOAuthProvider{provider: providerType}, nil
+		},
+	}
+
+	reg, err := registry.New(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
+	require.NoError(suite.T(), err)
+
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	require.NoError(suite.T(), err)
+
+	suite.h.IntegrationRegistry = reg
+	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
+	suite.h.KeymakerService = svc
+}
+
+type testOAuthProvider struct {
+	provider types.ProviderType
+}
+
+func (p *testOAuthProvider) Type() types.ProviderType {
+	return p.provider
+}
+
+func (p *testOAuthProvider) Capabilities() types.ProviderCapabilities {
+	return types.ProviderCapabilities{
+		SupportsRefreshTokens: true,
+	}
+}
+
+func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
+	state := strings.TrimSpace(input.State)
+	if state == "" {
+		state = "state"
+	}
+	authURL := fmt.Sprintf("https://example.com/oauth/authorize?state=%s", state)
+	return &testAuthSession{
+		provider: p.provider,
+		state:    state,
+		authURL:  authURL,
+	}, nil
+}
+
+func (p *testOAuthProvider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	token := &oauth2.Token{
+		AccessToken:  "minted-access-token",
+		RefreshToken: "minted-refresh-token",
+		Expiry:       time.Now().Add(time.Hour),
+	}
+	return types.NewCredentialBuilder(subject.Provider).
+		With(types.WithOAuthToken(token)).
+		Build()
+}
+
+type testAuthSession struct {
+	provider types.ProviderType
+	state    string
+	authURL  string
+}
+
+func (s *testAuthSession) ProviderType() types.ProviderType {
+	return s.provider
+}
+
+func (s *testAuthSession) State() string {
+	return s.state
+}
+
+func (s *testAuthSession) AuthURL() string {
+	return s.authURL
+}
+
+func (s *testAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
+	token := &oauth2.Token{
+		AccessToken:  "test-access-token",
+		RefreshToken: "test-refresh-token",
+		Expiry:       time.Now().Add(time.Hour),
+	}
+	return types.NewCredentialBuilder(s.provider).
+		With(types.WithOAuthToken(token)).
+		Build()
 }
 
 // mockStripeClient creates a new stripe client with mock backend

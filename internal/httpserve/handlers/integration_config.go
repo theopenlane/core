@@ -12,14 +12,15 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
-	"github.com/theopenlane/core/internal/keystore"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/core/internal/integrations/types"
+	credentialmodels "github.com/theopenlane/core/pkg/models"
+	openapi "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 
 // ConfigureIntegrationProvider stores non-OAuth credentials/configuration for a provider.
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
-	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, models.ExampleIntegrationConfigPayload, models.IntegrationConfigResponse{}, openapiCtx.Registry)
+	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationConfigPayload, openapi.IntegrationConfigResponse{}, openapiCtx.Registry)
 	if err != nil {
 		return h.InvalidInput(ctx, err, openapiCtx)
 	}
@@ -36,12 +37,21 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.Unauthorized(ctx, err, openapiCtx)
 	}
 
-	rt, ok := h.IntegrationRegistry[providerKey]
-	if !ok || rt == nil {
+	if h.IntegrationRegistry == nil {
+		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
+	}
+
+	providerType := types.ProviderTypeFromString(providerKey)
+	if providerType == types.ProviderUnknown {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
 
-	if len(rt.Spec.CredentialsSchema) == 0 {
+	spec, ok := h.IntegrationRegistry.Config(providerType)
+	if !ok {
+		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
+	}
+
+	if len(spec.CredentialsSchema) == 0 {
 		return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
 	}
 
@@ -50,7 +60,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 	}
 
-	schemaLoader := gojsonschema.NewGoLoader(rt.Spec.CredentialsSchema)
+	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
 	documentLoader := gojsonschema.NewGoLoader(attrs)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {
@@ -62,66 +72,36 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, nil, openapiCtx)
 	}
 
-	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerKey, attrs); err != nil {
+	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
-	out := models.IntegrationConfigResponse{
+	out := openapi.IntegrationConfigResponse{
 		Reply:    rout.Reply{Success: true},
-		Provider: providerKey,
+		Provider: string(providerType),
 	}
 
 	return h.Success(ctx, out)
 }
 
-func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID, provider string, data map[string]any) error {
+func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
 	if h.IntegrationStore == nil {
 		return errIntegrationStoreNotConfigured
 	}
 
-	alias := strings.TrimSpace(fmt.Sprint(data["alias"]))
-	if alias == "" {
-		if sa, ok := data["serviceAccountEmail"]; ok {
-			alias = strings.TrimSpace(fmt.Sprint(sa))
-		}
+	payload, err := types.NewCredentialBuilder(provider).
+		With(
+			types.WithCredentialKind(types.CredentialKindMetadata),
+			types.WithCredentialSet(credentialmodels.CredentialSet{
+				ProviderData: cloneProviderData(data),
+			}),
+		).
+		Build()
+	if err != nil {
+		return err
 	}
 
-	helper := keystore.NewHelper(provider, alias)
-	integrationName := helper.Name()
-	description := helper.Description()
-
-	secrets := make([]keystore.SecretRecord, 0, len(data))
-	for key, value := range data {
-		if value == nil {
-			continue
-		}
-		stringValue := stringifyValue(value)
-		if stringValue == "" {
-			continue
-		}
-		record := keystore.SecretRecord{
-			Name:        helper.SecretName(key),
-			DisplayName: helper.SecretDisplayName(integrationName, key),
-			Description: helper.SecretDescription(key),
-			Kind:        keystore.MetadataKind,
-			Value:       stringValue,
-		}
-		secrets = append(secrets, record)
-	}
-
-	if len(secrets) == 0 {
-		return rout.MissingField("req")
-	}
-
-	req := keystore.SaveRequest{
-		OrgID:                  orgID,
-		Provider:               provider,
-		IntegrationName:        integrationName,
-		IntegrationDescription: description,
-		Secrets:                secrets,
-	}
-
-	_, err := h.IntegrationStore.UpsertIntegration(ctx, req)
+	_, err = h.IntegrationStore.SaveCredential(ctx, orgID, payload)
 	return err
 }
 
@@ -138,4 +118,15 @@ func stringifyValue(value any) string {
 		}
 		return string(b)
 	}
+}
+
+func cloneProviderData(data map[string]any) map[string]any {
+	if len(data) == 0 {
+		return nil
+	}
+	cloned := make(map[string]any, len(data))
+	for key, value := range data {
+		cloned[key] = stringifyValue(value)
+	}
+	return cloned
 }
