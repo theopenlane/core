@@ -38,6 +38,15 @@ func TestFSLoader_LoadInterpolatesEnv(t *testing.T) {
 				},
 				"labels": {
 					"tier": "${GITHUB_TIER}"
+				},
+				"credentialsSchema": {
+					"type": "object",
+					"properties": {
+						"workspace": {
+							"type": "string",
+							"title": "${GITHUB_SCHEMA_TITLE}"
+						}
+					}
 				}
 			}`),
 		},
@@ -52,6 +61,7 @@ func TestFSLoader_LoadInterpolatesEnv(t *testing.T) {
 		"GITHUB_NESTED":        "nested",
 		"GITHUB_LABEL":         "oss",
 		"GITHUB_TIER":          "gold",
+		"GITHUB_SCHEMA_TITLE":  "Org workspace",
 	}
 
 	loader := NewFSLoader(fsys, "providers")
@@ -98,6 +108,23 @@ func TestFSLoader_LoadInterpolatesEnv(t *testing.T) {
 
 	if spec.Labels["tier"] != "gold" {
 		t.Fatalf("expected label interpolation, got %q", spec.Labels["tier"])
+	}
+
+	defaultLabels, ok := spec.Defaults["labels"].([]interface{})
+	if !ok || len(defaultLabels) != 1 || defaultLabels[0] != "oss" {
+		t.Fatalf("expected defaults interpolation, got %#v", spec.Defaults["labels"])
+	}
+
+	props, ok := spec.CredentialsSchema["properties"].(map[string]any)
+	if !ok {
+		t.Fatalf("expected credentials schema properties map, got %#v", spec.CredentialsSchema["properties"])
+	}
+	workspace, ok := props["workspace"].(map[string]any)
+	if !ok {
+		t.Fatalf("expected workspace schema map, got %#v", props["workspace"])
+	}
+	if workspace["title"] != "Org workspace" {
+		t.Fatalf("expected credentials schema interpolation, got %#v", workspace["title"])
 	}
 }
 

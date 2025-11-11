@@ -108,19 +108,17 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		return types.CredentialPayload{}, ErrOrgIDRequired
 	}
 
-	integrationRecord, err := s.db.Integration.Query().
-		Where(
-			integration.And(
-				integration.OwnerIDEQ(orgID),
-				integration.KindEQ(string(provider)),
-			),
-		).
-		WithSecrets().
-		Only(ctx)
+	integrationRecord, err := s.db.Integration.Query().Where(
+		integration.And(
+			integration.OwnerIDEQ(orgID),
+			integration.KindEQ(string(provider)),
+		),
+	).WithSecrets().Only(ctx)
 	if err != nil {
 		if ent.IsNotFound(err) {
 			return types.CredentialPayload{}, ErrCredentialNotFound
 		}
+
 		return types.CredentialPayload{}, err
 	}
 
@@ -130,7 +128,9 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 		if secret.SecretName != secretName {
 			continue
 		}
+
 		envelope := secret.CredentialSet
+
 		return credentialSetToPayload(provider, envelope)
 	}
 
