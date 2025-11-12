@@ -88356,6 +88356,8 @@ enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenla
   GOOGLE_WORKSPACE
   SLACK
   GITHUB
+  MICROSOFT_ENTRA_ID
+  GENERIC_OIDC
   NONE
 }
 """
@@ -88814,6 +88816,8 @@ enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core
   GOOGLE_WORKSPACE
   SLACK
   GITHUB
+  MICROSOFT_ENTRA_ID
+  GENERIC_OIDC
   NONE
 }
 """
