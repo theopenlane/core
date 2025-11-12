@@ -45,6 +45,8 @@ type Assessment struct {
 	TemplateID string `json:"template_id,omitempty"`
 	// the id of the group that owns the assessment
 	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration int64 `json:"response_due_duration,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssessmentQuery when eager-loading is set.
 	Edges        AssessmentEdges `json:"edges"`
@@ -142,6 +144,8 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case assessment.FieldTags:
 			values[i] = new([]byte)
+		case assessment.FieldResponseDueDuration:
+			values[i] = new(sql.NullInt64)
 		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID, assessment.FieldAssessmentOwnerID:
 			values[i] = new(sql.NullString)
 		case assessment.FieldCreatedAt, assessment.FieldUpdatedAt, assessment.FieldDeletedAt:
@@ -240,6 +244,12 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
 			} else if value.Valid {
 				_m.AssessmentOwnerID = value.String
+			}
+		case assessment.FieldResponseDueDuration:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field response_due_duration", values[i])
+			} else if value.Valid {
+				_m.ResponseDueDuration = value.Int64
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -342,6 +352,9 @@ func (_m *Assessment) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("assessment_owner_id=")
 	builder.WriteString(_m.AssessmentOwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("response_due_duration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResponseDueDuration))
 	builder.WriteByte(')')
 	return builder.String()
 }

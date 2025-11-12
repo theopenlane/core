@@ -74,6 +74,8 @@ func (ec *executionContext) fieldContext_AssessmentCreatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_templateID(ctx, field)
 			case "assessmentOwnerID":
 				return ec.fieldContext_Assessment_assessmentOwnerID(ctx, field)
+			case "responseDueDuration":
+				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
 			case "blockedGroups":
@@ -168,6 +170,8 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_templateID(ctx, field)
 			case "assessmentOwnerID":
 				return ec.fieldContext_Assessment_assessmentOwnerID(ctx, field)
+			case "responseDueDuration":
+				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
 			case "blockedGroups":

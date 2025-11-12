@@ -789,6 +789,7 @@ type CreateAssessmentInput struct {
 	Name                  string
 	AssessmentType        *enums.AssessmentType
 	AssessmentOwnerID     *string
+	ResponseDueDuration   *int64
 	OwnerID               *string
 	BlockedGroupIDs       []string
 	EditorIDs             []string
@@ -808,6 +809,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.AssessmentOwnerID; v != nil {
 		m.SetAssessmentOwnerID(*v)
+	}
+	if v := i.ResponseDueDuration; v != nil {
+		m.SetResponseDueDuration(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -841,6 +845,7 @@ type UpdateAssessmentInput struct {
 	Name                        *string
 	ClearAssessmentOwnerID      bool
 	AssessmentOwnerID           *string
+	ResponseDueDuration         *int64
 	ClearOwner                  bool
 	OwnerID                     *string
 	ClearBlockedGroups          bool
@@ -877,6 +882,9 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.AssessmentOwnerID; v != nil {
 		m.SetAssessmentOwnerID(*v)
+	}
+	if v := i.ResponseDueDuration; v != nil {
+		m.SetResponseDueDuration(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

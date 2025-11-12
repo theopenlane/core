@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"fmt"
+	"time"
 
 	"entgo.io/ent"
 	"github.com/golang-jwt/jwt/v5"
@@ -32,6 +33,10 @@ func HookCreateAssessmentResponse() ent.Hook {
 			if !ok || !emailExists {
 				m.ClearDocumentDataID()
 				return next.Mutate(ctx, m)
+			}
+
+			if err := validateAndSetDueDate(ctx, m); err != nil {
+				return nil, err
 			}
 
 			existingResponse, err := m.Client().AssessmentResponse.Query().
@@ -143,4 +148,38 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 	}, nil)
 
 	return err
+}
+
+// validateAndSetDueDate validates the due_date field and sets it based on the assessment's response_due_duration if not provided
+func validateAndSetDueDate(ctx context.Context, m *generated.AssessmentResponseMutation) error {
+	dueDate, dueDateExists := m.DueDate()
+
+	// if due_date is provided, validate it's not in the past
+	if dueDateExists {
+		if dueDate.Before(time.Now()) {
+			return ErrPastTimeNotAllowed
+		}
+		return nil
+	}
+
+	// if due_date is not provided, calculate it from the assessment's response_due_duration
+	assessmentID, ok := m.AssessmentID()
+	if !ok {
+		return nil
+	}
+
+	assessmentData, err := m.Client().Assessment.Query().
+		Where(assessment.ID(assessmentID)).
+		Select(assessment.FieldResponseDueDuration).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
+	duration := time.Duration(assessmentData.ResponseDueDuration) * time.Second
+	calculatedDueDate := time.Now().Add(duration)
+
+	m.SetDueDate(calculatedDueDate)
+
+	return nil
 }

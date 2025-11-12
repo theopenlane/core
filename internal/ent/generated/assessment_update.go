@@ -194,6 +194,27 @@ func (_u *AssessmentUpdate) ClearAssessmentOwnerID() *AssessmentUpdate {
 	return _u
 }
 
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_u *AssessmentUpdate) SetResponseDueDuration(v int64) *AssessmentUpdate {
+	_u.mutation.ResetResponseDueDuration()
+	_u.mutation.SetResponseDueDuration(v)
+	return _u
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_u *AssessmentUpdate) SetNillableResponseDueDuration(v *int64) *AssessmentUpdate {
+	if v != nil {
+		_u.SetResponseDueDuration(*v)
+	}
+	return _u
+}
+
+// AddResponseDueDuration adds value to the "response_due_duration" field.
+func (_u *AssessmentUpdate) AddResponseDueDuration(v int64) *AssessmentUpdate {
+	_u.mutation.AddResponseDueDuration(v)
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentUpdate) SetOwner(v *Organization) *AssessmentUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -492,6 +513,12 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if _u.mutation.AssessmentOwnerIDCleared() {
 		_spec.ClearField(assessment.FieldAssessmentOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
+		_spec.AddField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -929,6 +956,27 @@ func (_u *AssessmentUpdateOne) ClearAssessmentOwnerID() *AssessmentUpdateOne {
 	return _u
 }
 
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_u *AssessmentUpdateOne) SetResponseDueDuration(v int64) *AssessmentUpdateOne {
+	_u.mutation.ResetResponseDueDuration()
+	_u.mutation.SetResponseDueDuration(v)
+	return _u
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_u *AssessmentUpdateOne) SetNillableResponseDueDuration(v *int64) *AssessmentUpdateOne {
+	if v != nil {
+		_u.SetResponseDueDuration(*v)
+	}
+	return _u
+}
+
+// AddResponseDueDuration adds value to the "response_due_duration" field.
+func (_u *AssessmentUpdateOne) AddResponseDueDuration(v int64) *AssessmentUpdateOne {
+	_u.mutation.AddResponseDueDuration(v)
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentUpdateOne) SetOwner(v *Organization) *AssessmentUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1257,6 +1305,12 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if _u.mutation.AssessmentOwnerIDCleared() {
 		_spec.ClearField(assessment.FieldAssessmentOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
+		_spec.AddField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
