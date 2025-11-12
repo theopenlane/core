@@ -30348,6 +30348,7 @@ InviteRole is enum for the field role
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
   ADMIN
   MEMBER
+  OWNER
 }
 """
 InviteWhereInput is used for filtering Invite objects.

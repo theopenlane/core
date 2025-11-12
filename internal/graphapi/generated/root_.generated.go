@@ -74456,7 +74456,6 @@ enum GroupMembershipHistoryOrderField {
 GroupMembershipHistoryRole is enum for the field role
 """
 enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
 }
@@ -74644,7 +74643,6 @@ enum GroupMembershipOrderField {
 GroupMembershipRole is enum for the field role
 """
 enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
 }
@@ -79263,9 +79261,9 @@ enum InviteOrderField {
 InviteRole is enum for the field role
 """
 enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
+  OWNER
 }
 """
 InviteWhereInput is used for filtering Invite objects.
@@ -84497,9 +84495,9 @@ enum OrgMembershipHistoryOrderField {
 OrgMembershipHistoryRole is enum for the field role
 """
 enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
+  OWNER
 }
 """
 OrgMembershipHistoryWhereInput is used for filtering OrgMembershipHistory objects.
@@ -84685,9 +84683,9 @@ enum OrgMembershipOrderField {
 OrgMembershipRole is enum for the field role
 """
 enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
+  OWNER
 }
 """
 OrgMembershipWhereInput is used for filtering OrgMembership objects.
@@ -93008,7 +93006,6 @@ enum ProgramMembershipHistoryOrderField {
 ProgramMembershipHistoryRole is enum for the field role
 """
 enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
 }
@@ -93196,7 +93193,6 @@ enum ProgramMembershipOrderField {
 ProgramMembershipRole is enum for the field role
 """
 enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
 }
@@ -121074,7 +121070,6 @@ enum UserHistoryOrderField {
 UserHistoryRole is enum for the field role
 """
 enum UserHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
   USER
@@ -121494,7 +121489,6 @@ enum UserOrderField {
 UserRole is enum for the field role
 """
 enum UserRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
-  OWNER
   ADMIN
   MEMBER
   USER
