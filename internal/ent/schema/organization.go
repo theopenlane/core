@@ -471,6 +471,14 @@ func (o Organization) Edges() []ent.Edge {
 			edgeSchema:         Vulnerability{},
 			cascadeDeleteOwner: true,
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema:         o,
+			edgeSchema:         Notification{},
+			cascadeDeleteOwner: true,
+			annotations: []schema.Annotation{
+				entgql.Skip(entgql.SkipAll),
+			},
+		}),
 	}
 }
 
