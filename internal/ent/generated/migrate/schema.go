@@ -253,6 +253,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "assessment_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString},
 	}
@@ -264,13 +265,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[11]},
+				Columns:    []*schema.Column{AssessmentsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessments_templates_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[12]},
+				Columns:    []*schema.Column{AssessmentsColumns[13]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -279,7 +280,7 @@ var (
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -287,7 +288,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -312,6 +313,7 @@ var (
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "template_id", Type: field.TypeString},
 		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
 	AssessmentHistoryTable = &schema.Table{

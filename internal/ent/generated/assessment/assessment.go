@@ -42,6 +42,8 @@ const (
 	FieldTemplateID = "template_id"
 	// FieldAssessmentOwnerID holds the string denoting the assessment_owner_id field in the database.
 	FieldAssessmentOwnerID = "assessment_owner_id"
+	// FieldResponseDueDuration holds the string denoting the response_due_duration field in the database.
+	FieldResponseDueDuration = "response_due_duration"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeBlockedGroups holds the string denoting the blocked_groups edge name in mutations.
@@ -115,6 +117,7 @@ var Columns = []string{
 	FieldAssessmentType,
 	FieldTemplateID,
 	FieldAssessmentOwnerID,
+	FieldResponseDueDuration,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -148,6 +151,8 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
+	// DefaultResponseDueDuration holds the default value on creation for the "response_due_duration" field.
+	DefaultResponseDueDuration int64
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -225,6 +230,11 @@ func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
 // ByAssessmentOwnerID orders the results by the assessment_owner_id field.
 func ByAssessmentOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldAssessmentOwnerID, opts...).ToFunc()
+}
+
+// ByResponseDueDuration orders the results by the response_due_duration field.
+func ByResponseDueDuration(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponseDueDuration, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

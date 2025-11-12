@@ -527,6 +527,10 @@ func init() {
 	assessmentDescName := assessmentFields[0].Descriptor()
 	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	assessment.NameValidator = assessmentDescName.Validators[0].(func(string) error)
+	// assessmentDescResponseDueDuration is the schema descriptor for response_due_duration field.
+	assessmentDescResponseDueDuration := assessmentFields[4].Descriptor()
+	// assessment.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
+	assessment.DefaultResponseDueDuration = assessmentDescResponseDueDuration.Default.(int64)
 	// assessmentDescID is the schema descriptor for id field.
 	assessmentDescID := assessmentMixinFields3[0].Descriptor()
 	// assessment.DefaultID holds the default value on creation for the id field.
@@ -562,6 +566,10 @@ func init() {
 	assessmenthistoryDescTags := assessmenthistoryFields[10].Descriptor()
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
 	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
+	// assessmenthistoryDescResponseDueDuration is the schema descriptor for response_due_duration field.
+	assessmenthistoryDescResponseDueDuration := assessmenthistoryFields[16].Descriptor()
+	// assessmenthistory.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
+	assessmenthistory.DefaultResponseDueDuration = assessmenthistoryDescResponseDueDuration.Default.(int64)
 	// assessmenthistoryDescID is the schema descriptor for id field.
 	assessmenthistoryDescID := assessmenthistoryFields[9].Descriptor()
 	// assessmenthistory.DefaultID holds the default value on creation for the id field.

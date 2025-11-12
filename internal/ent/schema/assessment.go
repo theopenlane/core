@@ -28,6 +28,8 @@ type Assessment struct {
 
 const SchemaAssessment = "assessment"
 
+const DefaultResponseDueDuration = 604800
+
 func (Assessment) Name() string       { return SchemaAssessment }
 func (Assessment) GetType() any       { return Assessment.Type }
 func (Assessment) PluralName() string { return pluralize.NewClient().Plural(SchemaAssessment) }
@@ -55,6 +57,12 @@ func (Assessment) Fields() []ent.Field {
 			Optional().
 			Unique().
 			Comment("the id of the group that owns the assessment"),
+		field.Int64("response_due_duration").
+			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
+			Default(DefaultResponseDueDuration).
+			Annotations(
+				entgql.OrderField("response_due_duration"),
+			),
 	}
 }
 

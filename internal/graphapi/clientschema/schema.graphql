@@ -2317,6 +2317,10 @@ type Assessment implements Node {
 	the id of the group that owns the assessment
 	"""
 	assessmentOwnerID: String
+	"""
+	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	"""
+	responseDueDuration: Int!
 	owner: Organization
 	blockedGroups(
 		"""
@@ -2529,6 +2533,10 @@ type AssessmentHistory implements Node {
 	the id of the group that owns the assessment
 	"""
 	assessmentOwnerID: String
+	"""
+	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	"""
+	responseDueDuration: Int!
 }
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
@@ -2597,6 +2605,7 @@ enum AssessmentHistoryOrderField {
 	updated_at
 	name
 	assessment_type
+	response_due_duration
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -2792,6 +2801,17 @@ input AssessmentHistoryWhereInput {
 	assessmentOwnerIDNotNil: Boolean
 	assessmentOwnerIDEqualFold: String
 	assessmentOwnerIDContainsFold: String
+	"""
+	response_due_duration field predicates
+	"""
+	responseDueDuration: Int
+	responseDueDurationNEQ: Int
+	responseDueDurationIn: [Int!]
+	responseDueDurationNotIn: [Int!]
+	responseDueDurationGT: Int
+	responseDueDurationGTE: Int
+	responseDueDurationLT: Int
+	responseDueDurationLTE: Int
 }
 """
 The `AssessmentMethod` scalar type represents methods that can be used during the audit to assess the control implementation
@@ -2822,6 +2842,7 @@ enum AssessmentOrderField {
 	updated_at
 	name
 	assessment_type
+	response_due_duration
 }
 type AssessmentResponse implements Node {
 	id: ID!
@@ -3700,6 +3721,17 @@ input AssessmentWhereInput {
 	assessmentOwnerIDNotNil: Boolean
 	assessmentOwnerIDEqualFold: String
 	assessmentOwnerIDContainsFold: String
+	"""
+	response_due_duration field predicates
+	"""
+	responseDueDuration: Int
+	responseDueDurationNEQ: Int
+	responseDueDurationIn: [Int!]
+	responseDueDurationNotIn: [Int!]
+	responseDueDurationGT: Int
+	responseDueDurationGTE: Int
+	responseDueDurationLT: Int
+	responseDueDurationLTE: Int
 	"""
 	owner edge predicates
 	"""
@@ -10549,6 +10581,10 @@ input CreateAssessmentInput {
 	the id of the group that owns the assessment
 	"""
 	assessmentOwnerID: String
+	"""
+	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	"""
+	responseDueDuration: Int
 	ownerID: ID
 	blockedGroupIDs: [ID!]
 	editorIDs: [ID!]
@@ -77784,6 +77820,10 @@ input UpdateAssessmentInput {
 	"""
 	assessmentOwnerID: String
 	clearAssessmentOwnerID: Boolean
+	"""
+	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	"""
+	responseDueDuration: Int
 	ownerID: ID
 	clearOwner: Boolean
 	addBlockedGroupIDs: [ID!]

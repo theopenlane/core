@@ -1988,6 +1988,20 @@ var (
 			}
 		},
 	}
+	// AssessmentOrderFieldResponseDueDuration orders Assessment by response_due_duration.
+	AssessmentOrderFieldResponseDueDuration = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.ResponseDueDuration, nil
+		},
+		column: assessment.FieldResponseDueDuration,
+		toTerm: assessment.ByResponseDueDuration,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResponseDueDuration,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2002,6 +2016,8 @@ func (f AssessmentOrderField) String() string {
 		str = "name"
 	case AssessmentOrderFieldAssessmentType.column:
 		str = "assessment_type"
+	case AssessmentOrderFieldResponseDueDuration.column:
+		str = "response_due_duration"
 	}
 	return str
 }
@@ -2026,6 +2042,8 @@ func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentOrderFieldName
 	case "assessment_type":
 		*f = *AssessmentOrderFieldAssessmentType
+	case "response_due_duration":
+		*f = *AssessmentOrderFieldResponseDueDuration
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentOrderField", str)
 	}
@@ -2352,6 +2370,20 @@ var (
 			}
 		},
 	}
+	// AssessmentHistoryOrderFieldResponseDueDuration orders AssessmentHistory by response_due_duration.
+	AssessmentHistoryOrderFieldResponseDueDuration = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.ResponseDueDuration, nil
+		},
+		column: assessmenthistory.FieldResponseDueDuration,
+		toTerm: assessmenthistory.ByResponseDueDuration,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResponseDueDuration,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2368,6 +2400,8 @@ func (f AssessmentHistoryOrderField) String() string {
 		str = "name"
 	case AssessmentHistoryOrderFieldAssessmentType.column:
 		str = "assessment_type"
+	case AssessmentHistoryOrderFieldResponseDueDuration.column:
+		str = "response_due_duration"
 	}
 	return str
 }
@@ -2394,6 +2428,8 @@ func (f *AssessmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentHistoryOrderFieldName
 	case "assessment_type":
 		*f = *AssessmentHistoryOrderFieldAssessmentType
+	case "response_due_duration":
+		*f = *AssessmentHistoryOrderFieldResponseDueDuration
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentHistoryOrderField", str)
 	}

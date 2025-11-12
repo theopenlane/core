@@ -2294,6 +2294,11 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, assessment.FieldAssessmentOwnerID)
 				fieldSeen[assessment.FieldAssessmentOwnerID] = struct{}{}
 			}
+		case "responseDueDuration":
+			if _, ok := fieldSeen[assessment.FieldResponseDueDuration]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldResponseDueDuration)
+				fieldSeen[assessment.FieldResponseDueDuration] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -2448,6 +2453,11 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[assessmenthistory.FieldAssessmentOwnerID]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldAssessmentOwnerID)
 				fieldSeen[assessmenthistory.FieldAssessmentOwnerID] = struct{}{}
+			}
+		case "responseDueDuration":
+			if _, ok := fieldSeen[assessmenthistory.FieldResponseDueDuration]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldResponseDueDuration)
+				fieldSeen[assessmenthistory.FieldResponseDueDuration] = struct{}{}
 			}
 		case "id":
 		case "__typename":
