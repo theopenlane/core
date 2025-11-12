@@ -18,19 +18,12 @@
     "resultPath": ["createInternalPolicy", "internalPolicy"],
     "fields": [
       {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the internalpolicy"}, "field": "Tags", "kind": "stringSlice"},
-    
       {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the internalpolicy"}, "field": "Revision", "kind": "string"},
-    
       {"flag": {"name": "name", "shorthand": "n", "usage": "name of the internalpolicy", "required": true}, "field": "Name", "kind": "string"},
-    
       {"flag": {"name": "status", "shorthand": "s", "usage": "status of the internalpolicy"}, "field": "Status", "kind": "string"},
-    
       {"flag": {"name": "policyType", "shorthand": "p", "usage": "policy type of the internalpolicy"}, "field": "PolicyType", "kind": "string"},
-    
       {"flag": {"name": "details", "shorthand": "d", "usage": "details of the internalpolicy"}, "field": "Details", "kind": "string"},
-    
       {"flag": {"name": "approvalRequired", "shorthand": "a", "usage": "approval required of the internalpolicy"}, "field": "ApprovalRequired", "kind": "bool"},
-    
       {"flag": {"name": "reviewDue", "shorthand": "e", "usage": "review due of the internalpolicy"}, "field": "ReviewDue", "kind": "string", "parser": "dateTime"}
     ]
   },
@@ -41,19 +34,12 @@
     "resultPath": ["updateInternalPolicy", "internalPolicy"],
     "fields": [
       {"flag": {"name": "tags", "shorthand": "t", "usage": "tags of the internalpolicy"}, "field": "Tags", "kind": "stringSlice"},
-    
       {"flag": {"name": "revision", "shorthand": "r", "usage": "revision of the internalpolicy"}, "field": "Revision", "kind": "string"},
-    
       {"flag": {"name": "name", "shorthand": "n", "usage": "name of the internalpolicy"}, "field": "Name", "kind": "string"},
-    
       {"flag": {"name": "status", "shorthand": "s", "usage": "status of the internalpolicy"}, "field": "Status", "kind": "string"},
-    
       {"flag": {"name": "policyType", "shorthand": "p", "usage": "policy type of the internalpolicy"}, "field": "PolicyType", "kind": "string"},
-    
       {"flag": {"name": "details", "shorthand": "d", "usage": "details of the internalpolicy"}, "field": "Details", "kind": "string"},
-    
       {"flag": {"name": "approvalRequired", "shorthand": "a", "usage": "approval required of the internalpolicy"}, "field": "ApprovalRequired", "kind": "bool"},
-    
       {"flag": {"name": "reviewDue", "shorthand": "e", "usage": "review due of the internalpolicy"}, "field": "ReviewDue", "kind": "string", "parser": "dateTime"}
     ]
   },
@@ -66,7 +52,7 @@
 
   "columns": [
     {"header": "ID", "path": ["id"]},
-  
+
     {"header": "RefCode", "path": ["refCode"]}
   ]
   ,"deleteColumns": [

@@ -60,7 +60,15 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go generate ./...
+      - task: generate:cli:specs
       - task: tidy
+ 
+  generate:cli:specs:
+    desc: Rebuild all spec-driven CLI command definitions from the latest schema/client
+    env:
+      GOFLAGS: "{{.GO_INLINE_FLAG}}"
+    cmds:
+      - go run ./pkg/gencmd/generate --spec --dir cmd/cli/cmd --force --interactive=false --all
 
   generate:
     desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
@@ -68,6 +76,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go-generate-fast ./...
+      - task: generate:cli:specs
       - task: tidy
 
   regenerate:
@@ -77,6 +86,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
       - go-generate-fast ./...
+      - task: generate:cli:specs
       - task: tidy
 
   generate:checksums:
@@ -87,6 +97,7 @@ tasks:
       - task: generate:ent:smart
       - task: generate:graphql:smart
       - task: generate:others:smart
+      - task: generate:cli:specs
       - task: tidy
 
   generate:ent:smart:

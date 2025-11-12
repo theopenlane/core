@@ -33,7 +33,7 @@ func buildCreateInvite() (openlaneclient.CreateInviteInput, error) {
 		return input, err
 	}
 
-	input.Role = enumRole
+	input.Role = &enumRole
 
 	return input, nil
 }

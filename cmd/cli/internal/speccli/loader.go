@@ -10,19 +10,30 @@ import (
 	"reflect"
 	"sort"
 	"strings"
+
+	"github.com/samber/lo"
 )
 
 // LoaderOptions controls how specs are resolved from an embedded filesystem.
 type LoaderOptions struct {
-	Pattern      string
+	// Pattern determines which files are considered specs.
+	Pattern string
+	// TypeResolver resolves type strings (e.g. openlaneclient inputs) to reflect types.
 	TypeResolver TypeResolver
-	Parsers      map[string]ValueParser
-	Overrides    map[string]SpecOverride
-	CreateHooks  map[string]CreateHookFactory
-	UpdateHooks  map[string]UpdateHookFactory
-	GetHooks     map[string]GetHookFactory
+	// Parsers maps parser names to implementations.
+	Parsers map[string]ValueParser
+	// Overrides are spec mutations applied after loading.
+	Overrides map[string]SpecOverride
+	// CreateHooks enumerates available Create hooks keyed by name.
+	CreateHooks map[string]CreateHookFactory
+	// UpdateHooks enumerates available Update hooks keyed by name.
+	UpdateHooks map[string]UpdateHookFactory
+	// GetHooks enumerates available Get hooks keyed by name.
+	GetHooks map[string]GetHookFactory
+	// PrimaryHooks enumerates available Primary hooks keyed by name.
 	PrimaryHooks map[string]PrimaryHookFactory
-	DeleteHooks  map[string]DeleteHookFactory
+	// DeleteHooks enumerates available Delete hooks keyed by name.
+	DeleteHooks map[string]DeleteHookFactory
 }
 
 // SpecOverride mutates a spec after it has been loaded.
@@ -116,6 +127,7 @@ func RegisterFromFS(fsys fs.FS, opts LoaderOptions) error {
 	return nil
 }
 
+// fileCommandSpec mirrors the JSON structure stored on disk for a command.
 type fileCommandSpec struct {
 	Name    string   `json:"name"`
 	Use     string   `json:"use"`
@@ -132,6 +144,7 @@ type fileCommandSpec struct {
 	Primary       *filePrimarySpec `json:"primary"`
 }
 
+// fileListSpec is the on-disk representation of ListSpec.
 type fileListSpec struct {
 	Method       string         `json:"method"`
 	Root         string         `json:"root"`
@@ -139,11 +152,13 @@ type fileListSpec struct {
 	Where        *fileWhereSpec `json:"where"`
 }
 
+// fileWhereSpec stores where configuration in JSON.
 type fileWhereSpec struct {
 	Type   string          `json:"type"`
 	Fields []fileFieldSpec `json:"fields"`
 }
 
+// fileGetSpec stores get configuration in JSON.
 type fileGetSpec struct {
 	Method       string          `json:"method"`
 	IDFlag       FlagSpec        `json:"idFlag"`
@@ -155,6 +170,7 @@ type fileGetSpec struct {
 	PreHook      string          `json:"preHook"`
 }
 
+// fileCreateSpec stores create configuration in JSON.
 type fileCreateSpec struct {
 	Method     string          `json:"method"`
 	InputType  string          `json:"inputType"`
@@ -163,6 +179,7 @@ type fileCreateSpec struct {
 	PreHook    string          `json:"preHook"`
 }
 
+// fileUpdateSpec stores update configuration in JSON.
 type fileUpdateSpec struct {
 	Method     string          `json:"method"`
 	IDFlag     FlagSpec        `json:"idFlag"`
@@ -172,6 +189,7 @@ type fileUpdateSpec struct {
 	PreHook    string          `json:"preHook"`
 }
 
+// fileDeleteSpec stores delete configuration in JSON.
 type fileDeleteSpec struct {
 	Method      string   `json:"method"`
 	IDFlag      FlagSpec `json:"idFlag"`
@@ -180,6 +198,7 @@ type fileDeleteSpec struct {
 	PreHook     string   `json:"preHook"`
 }
 
+// fileFieldSpec stores FieldSpec metadata in JSON.
 type fileFieldSpec struct {
 	Flag       FlagSpec `json:"flag"`
 	Kind       string   `json:"kind"`
@@ -187,17 +206,20 @@ type fileFieldSpec struct {
 	ParserName string   `json:"parser"`
 }
 
+// fileColumnSpec stores ColumnSpec metadata in JSON.
 type fileColumnSpec struct {
 	Header    string   `json:"header"`
 	Path      []string `json:"path"`
 	Formatter string   `json:"formatter"`
 }
 
+// filePrimarySpec stores primary command configuration in JSON.
 type filePrimarySpec struct {
 	Fields  []fileFieldSpec `json:"fields"`
 	PreHook string          `json:"preHook"`
 }
 
+// decodeSpec parses a single spec file into a hydrated CommandSpec.
 func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 	var fileSpec fileCommandSpec
 
@@ -206,12 +228,24 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 	}
 
 	spec := CommandSpec{
-		Name:          fileSpec.Name,
-		Use:           fileSpec.Use,
-		Short:         fileSpec.Short,
-		Aliases:       fileSpec.Aliases,
-		Columns:       make([]ColumnSpec, len(fileSpec.Columns)),
-		DeleteColumns: make([]ColumnSpec, len(fileSpec.DeleteColumns)),
+		Name:    fileSpec.Name,
+		Use:     fileSpec.Use,
+		Short:   fileSpec.Short,
+		Aliases: fileSpec.Aliases,
+		Columns: lo.Map(fileSpec.Columns, func(column fileColumnSpec, _ int) ColumnSpec {
+			return ColumnSpec{
+				Header: column.Header,
+				Path:   column.Path,
+				Format: column.Formatter,
+			}
+		}),
+		DeleteColumns: lo.Map(fileSpec.DeleteColumns, func(column fileColumnSpec, _ int) ColumnSpec {
+			return ColumnSpec{
+				Header: column.Header,
+				Path:   column.Path,
+				Format: column.Formatter,
+			}
+		}),
 	}
 
 	if fileSpec.List != nil {
@@ -327,22 +361,6 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 		spec.Primary = primary
 	}
 
-	for i, column := range fileSpec.Columns {
-		spec.Columns[i] = ColumnSpec{
-			Header: column.Header,
-			Path:   column.Path,
-			Format: column.Formatter,
-		}
-	}
-
-	for i, column := range fileSpec.DeleteColumns {
-		spec.DeleteColumns[i] = ColumnSpec{
-			Header: column.Header,
-			Path:   column.Path,
-			Format: column.Formatter,
-		}
-	}
-
 	applied := map[string]struct{}{}
 
 	applyLoaderOverride := func(key string) error {
@@ -413,6 +431,7 @@ func decodeSpec(r io.Reader, opts LoaderOptions) (CommandSpec, error) {
 	return spec, nil
 }
 
+// hydrateListSpec converts the file representation of a list spec into runtime metadata.
 func hydrateListSpec(in fileListSpec, opts LoaderOptions) (*ListSpec, error) {
 	spec := &ListSpec{
 		Method:       in.Method,
@@ -432,6 +451,7 @@ func hydrateListSpec(in fileListSpec, opts LoaderOptions) (*ListSpec, error) {
 	return spec, nil
 }
 
+// hydrateWhereSpec converts the file representation of where filters into runtime metadata.
 func hydrateWhereSpec(in fileWhereSpec, opts LoaderOptions) (*WhereSpec, error) {
 	if in.Type == "" {
 		return nil, fmt.Errorf("where type must be provided when filters are defined")
@@ -453,6 +473,7 @@ func hydrateWhereSpec(in fileWhereSpec, opts LoaderOptions) (*WhereSpec, error) 
 	}, nil
 }
 
+// hydrateMutationSpec converts file create specs into runtime create metadata.
 func hydrateMutationSpec(in fileCreateSpec, opts LoaderOptions) (CreateSpec, error) {
 	inputType, err := resolveType(opts.TypeResolver, in.InputType)
 	if err != nil {
@@ -482,6 +503,7 @@ func hydrateMutationSpec(in fileCreateSpec, opts LoaderOptions) (CreateSpec, err
 	return spec, nil
 }
 
+// hydrateUpdateSpec converts file update specs into runtime update metadata.
 func hydrateUpdateSpec(in fileUpdateSpec, opts LoaderOptions) (UpdateSpec, error) {
 	inputType, err := resolveType(opts.TypeResolver, in.InputType)
 	if err != nil {
@@ -512,6 +534,7 @@ func hydrateUpdateSpec(in fileUpdateSpec, opts LoaderOptions) (UpdateSpec, error
 	return spec, nil
 }
 
+// convertFields normalizes field specs from disk into FieldSpec structs.
 func convertFields(in []fileFieldSpec, parsers map[string]ValueParser) ([]FieldSpec, error) {
 	fields := make([]FieldSpec, len(in))
 
@@ -540,6 +563,7 @@ func convertFields(in []fileFieldSpec, parsers map[string]ValueParser) ([]FieldS
 	return fields, nil
 }
 
+// parseValueKind maps string representations to ValueKind enums.
 func parseValueKind(kind string) (ValueKind, error) {
 	switch strings.ToLower(strings.TrimSpace(kind)) {
 	case "", "string":
@@ -557,6 +581,7 @@ func parseValueKind(kind string) (ValueKind, error) {
 	}
 }
 
+// resolveType resolves a named type using the configured resolver.
 func resolveType(resolver TypeResolver, name string) (reflect.Type, error) {
 	if name == "" {
 		return nil, fmt.Errorf("missing type reference")

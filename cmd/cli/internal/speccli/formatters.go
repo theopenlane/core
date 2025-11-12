@@ -7,6 +7,8 @@ import (
 	"fmt"
 	"strings"
 	"time"
+
+	"github.com/samber/lo"
 )
 
 type columnFormatter func(any) (any, error)
@@ -17,6 +19,7 @@ var columnFormatters = map[string]columnFormatter{
 	"joinedStrings": formatJoinedStrings,
 }
 
+// formatTimeOrNever returns RFC3339 strings for times and "never" for empty values.
 func formatTimeOrNever(input any) (any, error) {
 	if input == nil {
 		return "never", nil
@@ -45,6 +48,7 @@ func formatTimeOrNever(input any) (any, error) {
 	}
 }
 
+// formatEdgeNames extracts `node.name` from each edge and joins them.
 func formatEdgeNames(input any) (any, error) {
 	if input == nil {
 		return "", nil
@@ -55,27 +59,27 @@ func formatEdgeNames(input any) (any, error) {
 		return nil, errors.New("edgeNames formatter expects []any")
 	}
 
-	names := make([]string, 0, len(edges))
-	for _, edge := range edges {
-		if edgeMap, ok := edge.(map[string]any); ok {
-			if node, ok := edgeMap["node"].(map[string]any); ok {
-				if name, ok := node["name"].(string); ok {
-					names = append(names, name)
-				}
-			}
-		}
+	nodes, err := edgeNodesFromEdges(edges)
+	if err != nil {
+		return nil, err
 	}
+
+	names := lo.FilterMap(nodes, func(node map[string]any, _ int) (string, bool) {
+		name, ok := node["name"].(string)
+		return name, ok
+	})
 
 	return strings.Join(names, ", "), nil
 }
 
+// formatJoinedStrings stringifies slices and joins them with ", ".
 func formatJoinedStrings(input any) (any, error) {
 	switch v := input.(type) {
 	case []any:
-		strs := make([]string, len(v))
-		for i, item := range v {
-			strs[i] = fmt.Sprint(item)
-		}
+		strs := lo.Map(v, func(item any, _ int) string {
+			return fmt.Sprint(item)
+		})
+
 		return strings.Join(strs, ", "), nil
 	case []string:
 		return strings.Join(v, ", "), nil

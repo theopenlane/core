@@ -22,6 +22,7 @@ func DefaultParsers() map[string]ValueParser {
 	}
 }
 
+// parseProgramStatus converts CLI input into an enums.ProgramStatus.
 func parseProgramStatus(input any) (any, error) {
 	value, ok := input.(string)
 	if !ok {
@@ -41,6 +42,7 @@ func parseProgramStatus(input any) (any, error) {
 	return *status, nil
 }
 
+// parseDurationFromNow interprets durations as offsets from now.
 func parseDurationFromNow(input any) (any, error) {
 	duration, ok := input.(time.Duration)
 	if !ok {
@@ -55,6 +57,7 @@ func parseDurationFromNow(input any) (any, error) {
 	return t, nil
 }
 
+// parseTaskStatus converts CLI input into an enums.TaskStatus.
 func parseTaskStatus(input any) (any, error) {
 	value, ok := input.(string)
 	if !ok {
@@ -74,6 +77,7 @@ func parseTaskStatus(input any) (any, error) {
 	return *status, nil
 }
 
+// parseStandardStatus converts CLI input into an enums.StandardStatus.
 func parseStandardStatus(input any) (any, error) {
 	value, ok := input.(string)
 	if !ok {
@@ -93,6 +97,7 @@ func parseStandardStatus(input any) (any, error) {
 	return *status, nil
 }
 
+// parseDateTime parses a user-provided string into the platform DateTime type.
 func parseDateTime(input any) (any, error) {
 	value, ok := input.(string)
 	if !ok {

@@ -37,6 +37,7 @@ func PrintJSON(value any) error {
 	}
 }
 
+// printJSONBytes pretty prints raw JSON bytes using the shared formatter.
 func printJSONBytes(data []byte) error {
 	if len(data) == 0 {
 		fmt.Println("{}")

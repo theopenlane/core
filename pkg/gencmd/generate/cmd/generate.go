@@ -1,6 +1,8 @@
 package cmd
 
 import (
+	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/pkg/gencmd"
@@ -25,14 +27,20 @@ func init() {
 	generateCmd.Flags().BoolP("interactive", "i", true, "interactive prompt, set to false to disable")
 	generateCmd.Flags().Bool("spec", false, "generate spec-driven command files instead of legacy cobra stubs")
 	generateCmd.Flags().BoolP("force", "f", false, "force overwrite of existing files")
+	generateCmd.Flags().Bool("all", false, "regenerate every existing spec.json under the provided directory")
 }
 
 func generateStubFiles() (err error) {
 	interactive := Config.Bool("interactive")
+	all := Config.Bool("all")
 
 	cmdName := Config.String("name")
 
-	if interactive {
+	if all && cmdName != "" {
+		return fmt.Errorf("--all cannot be combined with --name")
+	}
+
+	if interactive && !all {
 		cmdName, err = prompts.Name(cmdName)
 		cobra.CheckErr(err)
 	}
@@ -41,6 +49,10 @@ func generateStubFiles() (err error) {
 	readOnly := Config.Bool("read-only")
 	spec := Config.Bool("spec")
 	force := Config.Bool("force")
+
+	if all {
+		return gencmd.GenerateAllSpecs(dirName, spec, force)
+	}
 
 	return gencmd.Generate(cmdName, dirName, readOnly, spec, force)
 }

@@ -28,6 +28,7 @@ func RegisterOverride(name string, override SpecOverride) {
 	overrideRegistry[key] = override
 }
 
+// lookupOverride returns the override registered under the normalized key.
 func lookupOverride(name string) (SpecOverride, bool) {
 	key := normalizeOverrideKey(name)
 
@@ -38,6 +39,7 @@ func lookupOverride(name string) (SpecOverride, bool) {
 	return override, ok
 }
 
+// normalizeOverrideKey standardizes override identifiers for case-insensitive lookups.
 func normalizeOverrideKey(name string) string {
 	return strings.TrimSpace(strings.ToLower(name))
 }

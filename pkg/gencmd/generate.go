@@ -598,20 +598,26 @@ func Generate(cmdName string, cmdDirName string, readOnly bool, spec bool, force
 		return err
 	}
 
-	var specColumns []specColumn
-	var specDelete []specColumn
-	var specCreate []specField
-	var specUpdate []specField
+	var (
+		specColumns []specColumn
+		specDelete  []specColumn
+		specCreate  []specField
+		specUpdate  []specField
+	)
 
 	if spec {
 		specColumns = buildSpecColumns(cmdName)
 		typeName := toProperCamelCase(cmdName)
-		specCreate = buildSpecFields(cmdName, fmt.Sprintf("Create%sInput", typeName), false)
 		if !readOnly {
+			specCreate = buildSpecFields(cmdName, fmt.Sprintf("Create%sInput", typeName), false)
 			specDelete = []specColumn{
 				{Header: "DeletedID", Path: []string{"deletedID"}},
 			}
 			specUpdate = buildSpecFields(cmdName, fmt.Sprintf("Update%sInput", typeName), true)
+		} else {
+			specCreate = nil
+			specUpdate = nil
+			specDelete = nil
 		}
 	}
 
@@ -625,6 +631,61 @@ func Generate(cmdName string, cmdDirName string, readOnly bool, spec bool, force
 	if err := updateMainImports(cmdName); err != nil {
 		// Log the error but don't fail the generation
 		fmt.Printf("Warning: Could not update main.go imports: %v\n", err)
+	}
+
+	return nil
+}
+
+// existingSpecMeta captures the subset of spec.json metadata we need when
+// regenerating commands in bulk.
+type existingSpecMeta struct {
+	// Name is the resource name stored in spec.json.
+	Name string `json:"name"`
+	// Create is non-nil when the command supports create mutations.
+	Create *json.RawMessage `json:"create"`
+	// Update is non-nil when the command supports update mutations.
+	Update *json.RawMessage `json:"update"`
+}
+
+// GenerateAllSpecs walks every command directory under cmdDirName and regenerates their specs.
+func GenerateAllSpecs(cmdDirName string, spec bool, force bool) error {
+	if !spec {
+		return fmt.Errorf("--all is only supported for spec-driven commands")
+	}
+
+	dirEntries, err := os.ReadDir(cmdDirName)
+	if err != nil {
+		return err
+	}
+
+	for _, entry := range dirEntries {
+		if !entry.IsDir() {
+			continue
+		}
+
+		specPath := filepath.Join(cmdDirName, entry.Name(), "spec.json")
+		data, err := os.ReadFile(specPath)
+		if err != nil {
+			continue
+		}
+
+		var meta existingSpecMeta
+		if err := json.Unmarshal(data, &meta); err != nil {
+			return fmt.Errorf("parse %s: %w", specPath, err)
+		}
+
+		name := strings.TrimSpace(meta.Name)
+		if name == "" {
+			name = entry.Name()
+		}
+
+		// If neither create nor update sections exist we treat the command as
+		// read-only so the generator skips mutation scaffolding.
+		readOnly := meta.Create == nil && meta.Update == nil
+
+		if err := Generate(name, cmdDirName, readOnly, spec, force); err != nil {
+			return fmt.Errorf("regenerate %s: %w", name, err)
+		}
 	}
 
 	return nil
