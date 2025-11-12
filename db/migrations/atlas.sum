@@ -1,10 +1,16 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 h1:4mbV/pGgZariYdpnuXELTERepu5VgyMIGQgTHDDZB8M=
 ||||||| parent of e1d3404b (1:m templates -> assessments)
 h1:jMjo8j3iz84J1za32cr1cvCJWzqAMn38kXz/548SMng=
 =======
 h1:F9BVdDA79oQ/c8izASVlflIfbr9MxWpD4jU8a4Rmc0s=
 >>>>>>> e1d3404b (1:m templates -> assessments)
+||||||| parent of 1a1e6ddf (allow api key not just jwt and send emails)
+h1:F9BVdDA79oQ/c8izASVlflIfbr9MxWpD4jU8a4Rmc0s=
+=======
+h1:pt13LsquCE1vYnF2EXwTsjM5iuPqTZ/T/R/aj938vJA=
+>>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -97,5 +103,12 @@ h1:F9BVdDA79oQ/c8izASVlflIfbr9MxWpD4jU8a4Rmc0s=
 20251107154428_trust_center_posts.sql h1:vaWtAwpYpd2ExQG7SWxQo5BdQDii1OOjo7GN+YvwGXU=
 20251109163937_trust_center_analytics_schema.sql h1:dDa97t6uczL1q8+1JXcoc8kOqtxV7XlfhPXlGy6y6Yc=
 20251112061030_internal-notifications.sql h1:LI4D1FDHM/8o4iETKRh1uLsosnH3QYM4xaFlpvR/S/c=
+<<<<<<< HEAD
 20251117155926_notifications-schema.sql h1:aAJGW+dXylSUk5lokXaE71zdAV7py/NwHU13LG31DEs=
 >>>>>>> e1d3404b (1:m templates -> assessments)
+||||||| parent of 1a1e6ddf (allow api key not just jwt and send emails)
+20251117155926_notifications-schema.sql h1:aAJGW+dXylSUk5lokXaE71zdAV7py/NwHU13LG31DEs=
+=======
+20251112144403_fixes.sql h1:TWDgNTFRW62P9cAMwAHEiwp95YF1NqfeGUa7U3Ut/VQ=
+20251117155926_notifications-schema.sql h1:tindSroHuUFOJUnJ0cm4NObQNuexfOKZxi+jDBaZ/Nk=
+>>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)

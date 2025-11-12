@@ -492,6 +492,28 @@
         },
         "type": "object"
       },
+      "CreateQuestionnaireAnonymousJWTResponse": {
+        "properties": {
+          "access_token": {
+            "description": "The access token to be used for authentication",
+            "type": "string"
+          },
+          "refresh_token": {
+            "description": "The refresh token to be used to refresh the access token after it expires",
+            "type": "string"
+          },
+          "session": {
+            "description": "The short-lived session token required for authentication",
+            "type": "string"
+          },
+          "token_type": {
+            "description": "The type of token being returned",
+            "example": "bearer",
+            "type": "string"
+          }
+        },
+        "type": "object"
+      },
       "CreateTrustCenterAnonymousJWTResponse": {
         "properties": {
           "access_token": {
@@ -3597,6 +3619,40 @@
         "summary": "GraphQL Endpoint",
         "tags": [
           "graphql"
+        ]
+      }
+    },
+    "/questionnaire/auth/anonymous": {
+      "post": {
+        "description": "Create anonymous JWT token for questionnaire access",
+        "operationId": "QuestionnaireAnonymousJWT",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "value": {
+                      "access_token": ""
+                    }
+                  }
+                },
+                "schema": {
+                  "$ref": "#/components/schemas/CreateQuestionnaireAnonymousJWTResponse"
+                }
+              }
+            },
+            "description": "Success"
+          },
+          "default": {
+            "description": ""
+          }
+        },
+        "security": [],
+        "summary": "Create anonymous JWT token for questionnaire access",
+        "tags": [
+          "questionnaire",
+          "authentication"
         ]
       }
     },
@@ -6932,6 +6988,10 @@
     {
       "description": "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned",
       "name": "password-reset"
+    },
+    {
+      "description": "Create anonymous JWT token for questionnaire access",
+      "name": "questionnaire"
     },
     {
       "description": "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.",
