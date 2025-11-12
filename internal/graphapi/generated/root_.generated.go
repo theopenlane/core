@@ -290,6 +290,7 @@ type ComplexityRoot struct {
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		ResponseDueDuration func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Template            func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
@@ -318,20 +319,21 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentOwnerID func(childComplexity int) int
-		AssessmentType    func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		TemplateID        func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		AssessmentOwnerID   func(childComplexity int) int
+		AssessmentType      func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Name                func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		ResponseDueDuration func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		TemplateID          func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
 	}
 
 	AssessmentHistoryConnection struct {
@@ -8011,6 +8013,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.OwnerID(childComplexity), true
 
+	case "Assessment.responseDueDuration":
+		if e.complexity.Assessment.ResponseDueDuration == nil {
+			break
+		}
+
+		return e.complexity.Assessment.ResponseDueDuration(childComplexity), true
+
 	case "Assessment.tags":
 		if e.complexity.Assessment.Tags == nil {
 			break
@@ -8176,6 +8185,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentHistory.Ref(childComplexity), true
+
+	case "AssessmentHistory.responseDueDuration":
+		if e.complexity.AssessmentHistory.ResponseDueDuration == nil {
+			break
+		}
+
+		return e.complexity.AssessmentHistory.ResponseDueDuration(childComplexity), true
 
 	case "AssessmentHistory.tags":
 		if e.complexity.AssessmentHistory.Tags == nil {
@@ -51035,6 +51051,10 @@ type Assessment implements Node {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int!
   owner: Organization
   blockedGroups(
     """
@@ -51229,6 +51249,10 @@ type AssessmentHistory implements Node {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int!
 }
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
@@ -51297,6 +51321,7 @@ enum AssessmentHistoryOrderField {
   updated_at
   name
   assessment_type
+  response_due_duration
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -51492,6 +51517,17 @@ input AssessmentHistoryWhereInput {
   assessmentOwnerIDNotNil: Boolean
   assessmentOwnerIDEqualFold: String
   assessmentOwnerIDContainsFold: String
+  """
+  response_due_duration field predicates
+  """
+  responseDueDuration: Int
+  responseDueDurationNEQ: Int
+  responseDueDurationIn: [Int!]
+  responseDueDurationNotIn: [Int!]
+  responseDueDurationGT: Int
+  responseDueDurationGTE: Int
+  responseDueDurationLT: Int
+  responseDueDurationLTE: Int
 }
 """
 Ordering options for Assessment connections
@@ -51514,6 +51550,7 @@ enum AssessmentOrderField {
   updated_at
   name
   assessment_type
+  response_due_duration
 }
 type AssessmentResponse implements Node {
   id: ID!
@@ -52365,6 +52402,17 @@ input AssessmentWhereInput {
   assessmentOwnerIDNotNil: Boolean
   assessmentOwnerIDEqualFold: String
   assessmentOwnerIDContainsFold: String
+  """
+  response_due_duration field predicates
+  """
+  responseDueDuration: Int
+  responseDueDurationNEQ: Int
+  responseDueDurationIn: [Int!]
+  responseDueDurationNotIn: [Int!]
+  responseDueDurationGT: Int
+  responseDueDurationGTE: Int
+  responseDueDurationLT: Int
+  responseDueDurationLTE: Int
   """
   owner edge predicates
   """
@@ -58721,6 +58769,10 @@ input CreateAssessmentInput {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -115628,6 +115680,10 @@ input UpdateAssessmentInput {
   """
   assessmentOwnerID: String
   clearAssessmentOwnerID: Boolean
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]

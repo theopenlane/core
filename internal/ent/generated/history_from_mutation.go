@@ -656,6 +656,10 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetAssessmentOwnerID(assessmentOwnerID)
 	}
 
+	if responseDueDuration, exists := m.ResponseDueDuration(); exists {
+		create = create.SetResponseDueDuration(responseDueDuration)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -759,6 +763,12 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetAssessmentOwnerID(assessment.AssessmentOwnerID)
 		}
 
+		if responseDueDuration, exists := m.ResponseDueDuration(); exists {
+			create = create.SetResponseDueDuration(responseDueDuration)
+		} else {
+			create = create.SetResponseDueDuration(assessment.ResponseDueDuration)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -806,6 +816,7 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetAssessmentType(assessment.AssessmentType).
 			SetTemplateID(assessment.TemplateID).
 			SetAssessmentOwnerID(assessment.AssessmentOwnerID).
+			SetResponseDueDuration(assessment.ResponseDueDuration).
 			Save(ctx)
 		if err != nil {
 			return err

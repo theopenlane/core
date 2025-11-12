@@ -50,7 +50,9 @@ type AssessmentHistory struct {
 	TemplateID string `json:"template_id,omitempty"`
 	// the id of the group that owns the assessment
 	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
-	selectValues      sql.SelectValues
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration int64 `json:"response_due_duration,omitempty"`
+	selectValues        sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -62,6 +64,8 @@ func (*AssessmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessmenthistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case assessmenthistory.FieldResponseDueDuration:
+			values[i] = new(sql.NullInt64)
 		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID, assessmenthistory.FieldAssessmentOwnerID:
 			values[i] = new(sql.NullString)
 		case assessmenthistory.FieldHistoryTime, assessmenthistory.FieldCreatedAt, assessmenthistory.FieldUpdatedAt, assessmenthistory.FieldDeletedAt:
@@ -179,6 +183,12 @@ func (_m *AssessmentHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.AssessmentOwnerID = value.String
 			}
+		case assessmenthistory.FieldResponseDueDuration:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field response_due_duration", values[i])
+			} else if value.Valid {
+				_m.ResponseDueDuration = value.Int64
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -259,6 +269,9 @@ func (_m *AssessmentHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("assessment_owner_id=")
 	builder.WriteString(_m.AssessmentOwnerID)
+	builder.WriteString(", ")
+	builder.WriteString("response_due_duration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResponseDueDuration))
 	builder.WriteByte(')')
 	return builder.String()
 }
