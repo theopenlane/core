@@ -6,6 +6,8 @@ replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-gener
 
 replace github.com/theopenlane/iam => ../iam
 
+replace github.com/theopenlane/emailtemplates => ../emailtemplates
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema
