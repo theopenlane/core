@@ -51570,6 +51570,7 @@ AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
 enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
+  SENT
   COMPLETED
   OVERDUE
 }
@@ -51658,6 +51659,7 @@ AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
 enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
+  SENT
   COMPLETED
   OVERDUE
 }

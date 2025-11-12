@@ -627,7 +627,7 @@ type assessment_response
     define can_edit: [user] or response_owner or editor
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [organization]
+    define parent: [user, service, organization, assessment]
     # the user who filled out the assessment response - only they can view/edit their own response
     define response_owner: [user]
     # org admins and owners can view all responses for oversight/management
