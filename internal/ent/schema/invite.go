@@ -88,11 +88,6 @@ func (Invite) Fields() []ent.Field {
 			Default(string(enums.InvitationSent)),
 		field.Enum("role").
 			GoType(enums.Role("")).
-			Values(
-				string(enums.RoleOwner),
-				string(enums.RoleAdmin),
-				string(enums.RoleMember),
-			).
 			Default(string(enums.RoleMember)),
 		field.Int("send_attempts").
 			Comment("the number of attempts made to perform email send of the invitation, maximum of 5").

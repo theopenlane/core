@@ -2590,7 +2590,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 		{Name: "group_membership_org_membership", Type: field.TypeString, Nullable: true},
@@ -2638,7 +2638,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "group_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -3104,7 +3104,7 @@ var (
 		{Name: "expires", Type: field.TypeTime, Nullable: true},
 		{Name: "recipient", Type: field.TypeString},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"INVITATION_SENT", "APPROVAL_REQUIRED", "INVITATION_ACCEPTED", "INVITATION_EXPIRED"}, Default: "INVITATION_SENT"},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
 		{Name: "secret", Type: field.TypeBytes},
@@ -3828,6 +3828,64 @@ var (
 			},
 		},
 	}
+	// NotificationsColumns holds the columns for the "notifications" table.
+	NotificationsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "notification_type", Type: field.TypeEnum, Enums: []string{"ORGANIZATION", "USER"}},
+		{Name: "object_type", Type: field.TypeString},
+		{Name: "title", Type: field.TypeString},
+		{Name: "body", Type: field.TypeString, Size: 2147483647},
+		{Name: "data", Type: field.TypeJSON, Nullable: true},
+		{Name: "read_at", Type: field.TypeTime, Nullable: true},
+		{Name: "channels", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "user_id", Type: field.TypeString},
+	}
+	// NotificationsTable holds the schema information for the "notifications" table.
+	NotificationsTable = &schema.Table{
+		Name:       "notifications",
+		Columns:    NotificationsColumns,
+		PrimaryKey: []*schema.Column{NotificationsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "notifications_organizations_notifications",
+				Columns:    []*schema.Column{NotificationsColumns[15]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notifications_users_notifications",
+				Columns:    []*schema.Column{NotificationsColumns[16]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "notification_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "notification_user_id_read_at_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{NotificationsColumns[16], NotificationsColumns[13], NotificationsColumns[15]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
 	// OnboardingsColumns holds the columns for the "onboardings" table.
 	OnboardingsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -3861,7 +3919,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -3902,7 +3960,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER", "OWNER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "organization_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -4743,7 +4801,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 		{Name: "program_membership_org_membership", Type: field.TypeString, Nullable: true},
@@ -4791,7 +4849,7 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "role", Type: field.TypeEnum, Enums: []string{"ADMIN", "MEMBER"}, Default: "MEMBER"},
+		{Name: "role", Type: field.TypeEnum, Enums: []string{"OWNER", "ADMIN", "MEMBER"}, Default: "MEMBER"},
 		{Name: "program_id", Type: field.TypeString},
 		{Name: "user_id", Type: field.TypeString},
 	}
@@ -6897,7 +6955,7 @@ var (
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Unique: true, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
-		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"OWNER", "ADMIN", "MEMBER", "USER"}, Default: "USER"},
 		{Name: "scim_external_id", Type: field.TypeString, Nullable: true},
 		{Name: "scim_username", Type: field.TypeString, Nullable: true},
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
@@ -6955,7 +7013,7 @@ var (
 		{Name: "password", Type: field.TypeString, Nullable: true},
 		{Name: "sub", Type: field.TypeString, Nullable: true},
 		{Name: "auth_provider", Type: field.TypeEnum, Enums: []string{"CREDENTIALS", "GOOGLE", "GITHUB", "WEBAUTHN", "OIDC"}, Default: "CREDENTIALS"},
-		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"ADMIN", "MEMBER", "USER"}, Default: "USER"},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"OWNER", "ADMIN", "MEMBER", "USER"}, Default: "USER"},
 		{Name: "scim_external_id", Type: field.TypeString, Nullable: true},
 		{Name: "scim_username", Type: field.TypeString, Nullable: true},
 		{Name: "scim_active", Type: field.TypeBool, Nullable: true, Default: true},
@@ -10378,6 +10436,7 @@ var (
 		NarrativeHistoryTable,
 		NotesTable,
 		NoteHistoryTable,
+		NotificationsTable,
 		OnboardingsTable,
 		OrgMembershipsTable,
 		OrgMembershipHistoryTable,
@@ -10801,6 +10860,8 @@ func init() {
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
+	NotificationsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	NotificationsTable.ForeignKeys[1].RefTable = UsersTable
 	OnboardingsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	OrgMembershipsTable.ForeignKeys[1].RefTable = UsersTable

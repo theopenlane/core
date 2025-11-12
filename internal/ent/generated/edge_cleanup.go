@@ -43,6 +43,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/mappedcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/narrative"
 	"github.com/theopenlane/core/internal/ent/generated/note"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -519,6 +520,12 @@ func NoteHistoryEdgeCleanup(ctx context.Context, id string) error {
 	return nil
 }
 
+func NotificationEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup notification edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
 func OnboardingEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup onboarding edge")), entfga.DeleteTuplesFirstKey{})
 
@@ -976,6 +983,13 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", notificationCount).Msg("deleting notification")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
@@ -1372,6 +1386,13 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 	if exists, err := FromContext(ctx).Webauthn.Query().Where((webauthn.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if webauthnCount, err := FromContext(ctx).Webauthn.Delete().Where(webauthn.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
 			log.Debug().Err(err).Int("count", webauthnCount).Msg("deleting webauthn")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
+		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
+			log.Debug().Err(err).Int("count", notificationCount).Msg("deleting notification")
 			return err
 		}
 	}

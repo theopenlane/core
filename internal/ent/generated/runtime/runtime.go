@@ -74,6 +74,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -4631,6 +4632,85 @@ func init() {
 	notehistoryDescID := notehistoryFields[9].Descriptor()
 	// notehistory.DefaultID holds the default value on creation for the id field.
 	notehistory.DefaultID = notehistoryDescID.Default.(func() string)
+	notificationMixin := schema.Notification{}.Mixin()
+	notification.Policy = privacy.NewPolicies(schema.Notification{})
+	notification.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := notification.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	notificationMixinHooks0 := notificationMixin[0].Hooks()
+	notificationMixinHooks1 := notificationMixin[1].Hooks()
+	notificationMixinHooks2 := notificationMixin[2].Hooks()
+	notificationMixinHooks4 := notificationMixin[4].Hooks()
+	notificationMixinHooks5 := notificationMixin[5].Hooks()
+
+	notification.Hooks[1] = notificationMixinHooks0[0]
+
+	notification.Hooks[2] = notificationMixinHooks1[0]
+
+	notification.Hooks[3] = notificationMixinHooks2[0]
+
+	notification.Hooks[4] = notificationMixinHooks4[0]
+
+	notification.Hooks[5] = notificationMixinHooks5[0]
+	notificationMixinInters1 := notificationMixin[1].Interceptors()
+	notificationMixinInters2 := notificationMixin[2].Interceptors()
+	notificationMixinInters5 := notificationMixin[5].Interceptors()
+	notification.Interceptors[0] = notificationMixinInters1[0]
+	notification.Interceptors[1] = notificationMixinInters2[0]
+	notification.Interceptors[2] = notificationMixinInters5[0]
+	notificationMixinFields0 := notificationMixin[0].Fields()
+	_ = notificationMixinFields0
+	notificationMixinFields3 := notificationMixin[3].Fields()
+	_ = notificationMixinFields3
+	notificationMixinFields4 := notificationMixin[4].Fields()
+	_ = notificationMixinFields4
+	notificationMixinFields5 := notificationMixin[5].Fields()
+	_ = notificationMixinFields5
+	notificationFields := schema.Notification{}.Fields()
+	_ = notificationFields
+	// notificationDescCreatedAt is the schema descriptor for created_at field.
+	notificationDescCreatedAt := notificationMixinFields0[0].Descriptor()
+	// notification.DefaultCreatedAt holds the default value on creation for the created_at field.
+	notification.DefaultCreatedAt = notificationDescCreatedAt.Default.(func() time.Time)
+	// notificationDescUpdatedAt is the schema descriptor for updated_at field.
+	notificationDescUpdatedAt := notificationMixinFields0[1].Descriptor()
+	// notification.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	notification.DefaultUpdatedAt = notificationDescUpdatedAt.Default.(func() time.Time)
+	// notification.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	notification.UpdateDefaultUpdatedAt = notificationDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// notificationDescTags is the schema descriptor for tags field.
+	notificationDescTags := notificationMixinFields4[0].Descriptor()
+	// notification.DefaultTags holds the default value on creation for the tags field.
+	notification.DefaultTags = notificationDescTags.Default.([]string)
+	// notificationDescOwnerID is the schema descriptor for owner_id field.
+	notificationDescOwnerID := notificationMixinFields5[0].Descriptor()
+	// notification.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	notification.OwnerIDValidator = notificationDescOwnerID.Validators[0].(func(string) error)
+	// notificationDescUserID is the schema descriptor for user_id field.
+	notificationDescUserID := notificationFields[0].Descriptor()
+	// notification.UserIDValidator is a validator for the "user_id" field. It is called by the builders before save.
+	notification.UserIDValidator = notificationDescUserID.Validators[0].(func(string) error)
+	// notificationDescObjectType is the schema descriptor for object_type field.
+	notificationDescObjectType := notificationFields[2].Descriptor()
+	// notification.ObjectTypeValidator is a validator for the "object_type" field. It is called by the builders before save.
+	notification.ObjectTypeValidator = notificationDescObjectType.Validators[0].(func(string) error)
+	// notificationDescTitle is the schema descriptor for title field.
+	notificationDescTitle := notificationFields[3].Descriptor()
+	// notification.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	notification.TitleValidator = notificationDescTitle.Validators[0].(func(string) error)
+	// notificationDescBody is the schema descriptor for body field.
+	notificationDescBody := notificationFields[4].Descriptor()
+	// notification.BodyValidator is a validator for the "body" field. It is called by the builders before save.
+	notification.BodyValidator = notificationDescBody.Validators[0].(func(string) error)
+	// notificationDescID is the schema descriptor for id field.
+	notificationDescID := notificationMixinFields3[0].Descriptor()
+	// notification.DefaultID holds the default value on creation for the id field.
+	notification.DefaultID = notificationDescID.Default.(func() string)
 	onboardingMixin := schema.Onboarding{}.Mixin()
 	onboarding.Policy = privacy.NewPolicies(schema.Onboarding{})
 	onboarding.Hooks[0] = func(next ent.Mutator) ent.Mutator {

@@ -42,6 +42,7 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"MappedControl":              {models.CatalogComplianceModule},
 	"Narrative":                  {models.CatalogComplianceModule, models.CatalogPolicyManagementAddon},
 	"Note":                       {models.CatalogBaseModule},
+	"Notification":               {models.CatalogBaseModule},
 	"Onboarding":                 {models.CatalogBaseModule},
 	"OrganizationSetting":        {models.CatalogBaseModule},
 	"OrgMembership":              {models.CatalogBaseModule},
