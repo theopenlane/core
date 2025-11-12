@@ -8,6 +8,7 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -102,6 +103,14 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 		return err
 	}
 
+	assessmentData, err := m.Client().Assessment.Query().
+		Where(assessment.ID(assessmentID)).
+		Select(assessment.FieldName).
+		Only(ctx)
+	if err != nil {
+		return err
+	}
+
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonQuestionnaireJWTPrefix, uuid.New().String())
 
 	newClaims := &tokens.Claims{
@@ -122,9 +131,8 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 	email, err := m.Emailer.NewQuestionnaireAuthEmail(emailtemplates.Recipient{
 		Email: emailAddress,
 	}, accessToken, emailtemplates.QuestionnaireAuthData{
-		CompanyName:      org.DisplayName,
-		AssessmentName:   assessmentID,
-		QuestionnaireURL: assessmentID,
+		CompanyName:    org.DisplayName,
+		AssessmentName: assessmentData.Name,
 	})
 	if err != nil {
 		return err
