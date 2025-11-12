@@ -229,6 +229,11 @@ func (_u *AssessmentResponseUpdate) ClearDocumentDataID() *AssessmentResponseUpd
 	return _u
 }
 
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_u *AssessmentResponseUpdate) SetAssessment(v *Assessment) *AssessmentResponseUpdate {
+	return _u.SetAssessmentID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdate) SetDocumentID(id string) *AssessmentResponseUpdate {
 	_u.mutation.SetDocumentID(id)
@@ -248,25 +253,20 @@ func (_u *AssessmentResponseUpdate) SetDocument(v *DocumentData) *AssessmentResp
 	return _u.SetDocumentID(v.ID)
 }
 
-// SetAssessment sets the "assessment" edge to the Assessment entity.
-func (_u *AssessmentResponseUpdate) SetAssessment(v *Assessment) *AssessmentResponseUpdate {
-	return _u.SetAssessmentID(v.ID)
-}
-
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdate) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
 }
 
-// ClearDocument clears the "document" edge to the DocumentData entity.
-func (_u *AssessmentResponseUpdate) ClearDocument() *AssessmentResponseUpdate {
-	_u.mutation.ClearDocument()
-	return _u
-}
-
 // ClearAssessment clears the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdate) ClearAssessment() *AssessmentResponseUpdate {
 	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (_u *AssessmentResponseUpdate) ClearDocument() *AssessmentResponseUpdate {
+	_u.mutation.ClearDocument()
 	return _u
 }
 
@@ -402,37 +402,6 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
 	}
-	if _u.mutation.DocumentCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.AssessmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -456,6 +425,37 @@ func (_u *AssessmentResponseUpdate) sqlSave(ctx context.Context) (_node int, err
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse
@@ -683,6 +683,11 @@ func (_u *AssessmentResponseUpdateOne) ClearDocumentDataID() *AssessmentResponse
 	return _u
 }
 
+// SetAssessment sets the "assessment" edge to the Assessment entity.
+func (_u *AssessmentResponseUpdateOne) SetAssessment(v *Assessment) *AssessmentResponseUpdateOne {
+	return _u.SetAssessmentID(v.ID)
+}
+
 // SetDocumentID sets the "document" edge to the DocumentData entity by ID.
 func (_u *AssessmentResponseUpdateOne) SetDocumentID(id string) *AssessmentResponseUpdateOne {
 	_u.mutation.SetDocumentID(id)
@@ -702,25 +707,20 @@ func (_u *AssessmentResponseUpdateOne) SetDocument(v *DocumentData) *AssessmentR
 	return _u.SetDocumentID(v.ID)
 }
 
-// SetAssessment sets the "assessment" edge to the Assessment entity.
-func (_u *AssessmentResponseUpdateOne) SetAssessment(v *Assessment) *AssessmentResponseUpdateOne {
-	return _u.SetAssessmentID(v.ID)
-}
-
 // Mutation returns the AssessmentResponseMutation object of the builder.
 func (_u *AssessmentResponseUpdateOne) Mutation() *AssessmentResponseMutation {
 	return _u.mutation
 }
 
-// ClearDocument clears the "document" edge to the DocumentData entity.
-func (_u *AssessmentResponseUpdateOne) ClearDocument() *AssessmentResponseUpdateOne {
-	_u.mutation.ClearDocument()
-	return _u
-}
-
 // ClearAssessment clears the "assessment" edge to the Assessment entity.
 func (_u *AssessmentResponseUpdateOne) ClearAssessment() *AssessmentResponseUpdateOne {
 	_u.mutation.ClearAssessment()
+	return _u
+}
+
+// ClearDocument clears the "document" edge to the DocumentData entity.
+func (_u *AssessmentResponseUpdateOne) ClearDocument() *AssessmentResponseUpdateOne {
+	_u.mutation.ClearDocument()
 	return _u
 }
 
@@ -886,37 +886,6 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 	if _u.mutation.DueDateCleared() {
 		_spec.ClearField(assessmentresponse.FieldDueDate, field.TypeTime)
 	}
-	if _u.mutation.DocumentCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.AssessmentResponse
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.AssessmentCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -940,6 +909,37 @@ func (_u *AssessmentResponseUpdateOne) sqlSave(ctx context.Context) (_node *Asse
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(assessment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DocumentCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.AssessmentResponse
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DocumentIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.AssessmentResponse

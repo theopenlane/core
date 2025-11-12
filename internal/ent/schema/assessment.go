@@ -10,12 +10,11 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -28,6 +27,8 @@ type Assessment struct {
 }
 
 const SchemaAssessment = "assessment"
+
+const DefaultResponseDueDuration = 604800
 
 func (Assessment) Name() string       { return SchemaAssessment }
 func (Assessment) GetType() any       { return Assessment.Type }
@@ -56,6 +57,12 @@ func (Assessment) Fields() []ent.Field {
 			Optional().
 			Unique().
 			Comment("the id of the group that owns the assessment"),
+		field.Int64("response_due_duration").
+			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
+			Default(DefaultResponseDueDuration).
+			Annotations(
+				entgql.OrderField("response_due_duration"),
+			),
 	}
 }
 
@@ -70,11 +77,14 @@ func (a Assessment) Mixin() []ent.Mixin {
 
 func (a Assessment) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}
@@ -107,7 +117,7 @@ func (Assessment) Indexes() []ent.Index {
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.Assessment](),
+		// interceptors.FilterQueryResults[generated.Assessment](),
 	}
 }
 

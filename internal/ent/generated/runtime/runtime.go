@@ -491,11 +491,9 @@ func init() {
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters2 := assessmentMixin[2].Interceptors()
 	assessmentMixinInters6 := assessmentMixin[6].Interceptors()
-	assessmentInters := schema.Assessment{}.Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
 	assessment.Interceptors[1] = assessmentMixinInters2[0]
 	assessment.Interceptors[2] = assessmentMixinInters6[0]
-	assessment.Interceptors[3] = assessmentInters[0]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields3 := assessmentMixin[3].Fields()
@@ -528,6 +526,10 @@ func init() {
 	assessmentDescName := assessmentFields[0].Descriptor()
 	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	assessment.NameValidator = assessmentDescName.Validators[0].(func(string) error)
+	// assessmentDescResponseDueDuration is the schema descriptor for response_due_duration field.
+	assessmentDescResponseDueDuration := assessmentFields[4].Descriptor()
+	// assessment.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
+	assessment.DefaultResponseDueDuration = assessmentDescResponseDueDuration.Default.(int64)
 	// assessmentDescID is the schema descriptor for id field.
 	assessmentDescID := assessmentMixinFields3[0].Descriptor()
 	// assessment.DefaultID holds the default value on creation for the id field.
@@ -563,6 +565,10 @@ func init() {
 	assessmenthistoryDescTags := assessmenthistoryFields[10].Descriptor()
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
 	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
+	// assessmenthistoryDescResponseDueDuration is the schema descriptor for response_due_duration field.
+	assessmenthistoryDescResponseDueDuration := assessmenthistoryFields[16].Descriptor()
+	// assessmenthistory.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
+	assessmenthistory.DefaultResponseDueDuration = assessmenthistoryDescResponseDueDuration.Default.(int64)
 	// assessmenthistoryDescID is the schema descriptor for id field.
 	assessmenthistoryDescID := assessmenthistoryFields[9].Descriptor()
 	// assessmenthistory.DefaultID holds the default value on creation for the id field.
@@ -581,6 +587,7 @@ func init() {
 	assessmentresponseMixinHooks1 := assessmentresponseMixin[1].Hooks()
 	assessmentresponseMixinHooks2 := assessmentresponseMixin[2].Hooks()
 	assessmentresponseMixinHooks5 := assessmentresponseMixin[5].Hooks()
+	assessmentresponseHooks := schema.AssessmentResponse{}.Hooks()
 
 	assessmentresponse.Hooks[1] = assessmentresponseMixinHooks0[0]
 
@@ -591,6 +598,8 @@ func init() {
 	assessmentresponse.Hooks[4] = assessmentresponseMixinHooks5[0]
 
 	assessmentresponse.Hooks[5] = assessmentresponseMixinHooks5[1]
+
+	assessmentresponse.Hooks[6] = assessmentresponseHooks[0]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
@@ -634,6 +643,10 @@ func init() {
 	assessmentresponseDescSendAttempts := assessmentresponseFields[2].Descriptor()
 	// assessmentresponse.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponse.DefaultSendAttempts = assessmentresponseDescSendAttempts.Default.(int)
+	// assessmentresponseDescAssignedAt is the schema descriptor for assigned_at field.
+	assessmentresponseDescAssignedAt := assessmentresponseFields[4].Descriptor()
+	// assessmentresponse.DefaultAssignedAt holds the default value on creation for the assigned_at field.
+	assessmentresponse.DefaultAssignedAt = assessmentresponseDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponseDescStartedAt := assessmentresponseFields[5].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
@@ -673,6 +686,10 @@ func init() {
 	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[13].Descriptor()
 	// assessmentresponsehistory.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponsehistory.DefaultSendAttempts = assessmentresponsehistoryDescSendAttempts.Default.(int)
+	// assessmentresponsehistoryDescAssignedAt is the schema descriptor for assigned_at field.
+	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[15].Descriptor()
+	// assessmentresponsehistory.DefaultAssignedAt holds the default value on creation for the assigned_at field.
+	assessmentresponsehistory.DefaultAssignedAt = assessmentresponsehistoryDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[16].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.

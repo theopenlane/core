@@ -35,7 +35,6 @@ type MutationResolver interface {
 	UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error)
 	DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error)
 	CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error)
-	UpdateAssessmentResponse(ctx context.Context, id string, input generated.UpdateAssessmentResponseInput) (*model.AssessmentResponseUpdatePayload, error)
 	DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error)
 	CreateAsset(ctx context.Context, input generated.CreateAssetInput) (*model.AssetCreatePayload, error)
 	CreateBulkAsset(ctx context.Context, input []*generated.CreateAssetInput) (*model.AssetBulkCreatePayload, error)
@@ -3596,22 +3595,6 @@ func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Con
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_updateAssessmentResponse_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
-	var err error
-	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
-	if err != nil {
-		return nil, err
-	}
-	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssessmentResponseInput)
-	if err != nil {
-		return nil, err
-	}
-	args["input"] = arg1
-	return args, nil
-}
-
 func (ec *executionContext) field_Mutation_updateAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -6372,51 +6355,6 @@ func (ec *executionContext) fieldContext_Mutation_createAssessmentResponse(ctx c
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_createAssessmentResponse_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
-		ec.Error(ctx, err)
-		return fc, err
-	}
-	return fc, nil
-}
-
-func (ec *executionContext) _Mutation_updateAssessmentResponse(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_Mutation_updateAssessmentResponse,
-		func(ctx context.Context) (any, error) {
-			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateAssessmentResponse(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateAssessmentResponseInput))
-		},
-		nil,
-		ec.marshalNAssessmentResponseUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseUpdatePayload,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_Mutation_updateAssessmentResponse(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "Mutation",
-		Field:      field,
-		IsMethod:   true,
-		IsResolver: true,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "assessmentResponse":
-				return ec.fieldContext_AssessmentResponseUpdatePayload_assessmentResponse(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponseUpdatePayload", field.Name)
-		},
-	}
-	defer func() {
-		if r := recover(); r != nil {
-			err = ec.Recover(ctx, r)
-			ec.Error(ctx, err)
-		}
-	}()
-	ctx = graphql.WithFieldContext(ctx, fc)
-	if fc.Args, err = ec.field_Mutation_updateAssessmentResponse_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -22219,13 +22157,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "createAssessmentResponse":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_createAssessmentResponse(ctx, field)
-			})
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		case "updateAssessmentResponse":
-			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
-				return ec._Mutation_updateAssessmentResponse(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

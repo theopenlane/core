@@ -1988,6 +1988,20 @@ var (
 			}
 		},
 	}
+	// AssessmentOrderFieldResponseDueDuration orders Assessment by response_due_duration.
+	AssessmentOrderFieldResponseDueDuration = &AssessmentOrderField{
+		Value: func(_m *Assessment) (ent.Value, error) {
+			return _m.ResponseDueDuration, nil
+		},
+		column: assessment.FieldResponseDueDuration,
+		toTerm: assessment.ByResponseDueDuration,
+		toCursor: func(_m *Assessment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResponseDueDuration,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2002,6 +2016,8 @@ func (f AssessmentOrderField) String() string {
 		str = "name"
 	case AssessmentOrderFieldAssessmentType.column:
 		str = "assessment_type"
+	case AssessmentOrderFieldResponseDueDuration.column:
+		str = "response_due_duration"
 	}
 	return str
 }
@@ -2026,6 +2042,8 @@ func (f *AssessmentOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentOrderFieldName
 	case "assessment_type":
 		*f = *AssessmentOrderFieldAssessmentType
+	case "response_due_duration":
+		*f = *AssessmentOrderFieldResponseDueDuration
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentOrderField", str)
 	}
@@ -2352,6 +2370,20 @@ var (
 			}
 		},
 	}
+	// AssessmentHistoryOrderFieldResponseDueDuration orders AssessmentHistory by response_due_duration.
+	AssessmentHistoryOrderFieldResponseDueDuration = &AssessmentHistoryOrderField{
+		Value: func(_m *AssessmentHistory) (ent.Value, error) {
+			return _m.ResponseDueDuration, nil
+		},
+		column: assessmenthistory.FieldResponseDueDuration,
+		toTerm: assessmenthistory.ByResponseDueDuration,
+		toCursor: func(_m *AssessmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ResponseDueDuration,
+			}
+		},
+	}
 )
 
 // String implement fmt.Stringer interface.
@@ -2368,6 +2400,8 @@ func (f AssessmentHistoryOrderField) String() string {
 		str = "name"
 	case AssessmentHistoryOrderFieldAssessmentType.column:
 		str = "assessment_type"
+	case AssessmentHistoryOrderFieldResponseDueDuration.column:
+		str = "response_due_duration"
 	}
 	return str
 }
@@ -2394,6 +2428,8 @@ func (f *AssessmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentHistoryOrderFieldName
 	case "assessment_type":
 		*f = *AssessmentHistoryOrderFieldAssessmentType
+	case "response_due_duration":
+		*f = *AssessmentHistoryOrderFieldResponseDueDuration
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentHistoryOrderField", str)
 	}
@@ -2717,6 +2753,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseOrderFieldEmail orders AssessmentResponse by email.
+	AssessmentResponseOrderFieldEmail = &AssessmentResponseOrderField{
+		Value: func(_m *AssessmentResponse) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: assessmentresponse.FieldEmail,
+		toTerm: assessmentresponse.ByEmail,
+		toCursor: func(_m *AssessmentResponse) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
 	// AssessmentResponseOrderFieldSendAttempts orders AssessmentResponse by send_attempts.
 	AssessmentResponseOrderFieldSendAttempts = &AssessmentResponseOrderField{
 		Value: func(_m *AssessmentResponse) (ent.Value, error) {
@@ -2811,18 +2861,20 @@ func (f AssessmentResponseOrderField) String() string {
 		str = "created_at"
 	case AssessmentResponseOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentResponseOrderFieldEmail.column:
+		str = "email"
 	case AssessmentResponseOrderFieldSendAttempts.column:
 		str = "send_attempts"
 	case AssessmentResponseOrderFieldStatus.column:
 		str = "status"
 	case AssessmentResponseOrderFieldAssignedAt.column:
-		str = "ASSIGNED_AT"
+		str = "assigned_at"
 	case AssessmentResponseOrderFieldStartedAt.column:
-		str = "STARTED_AT"
+		str = "started_at"
 	case AssessmentResponseOrderFieldCompletedAt.column:
-		str = "COMPLETED_AT"
+		str = "completed_at"
 	case AssessmentResponseOrderFieldDueDate.column:
-		str = "DUE_DATE"
+		str = "due_date"
 	}
 	return str
 }
@@ -2843,17 +2895,19 @@ func (f *AssessmentResponseOrderField) UnmarshalGQL(v interface{}) error {
 		*f = *AssessmentResponseOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentResponseOrderFieldUpdatedAt
+	case "email":
+		*f = *AssessmentResponseOrderFieldEmail
 	case "send_attempts":
 		*f = *AssessmentResponseOrderFieldSendAttempts
 	case "status":
 		*f = *AssessmentResponseOrderFieldStatus
-	case "ASSIGNED_AT":
+	case "assigned_at":
 		*f = *AssessmentResponseOrderFieldAssignedAt
-	case "STARTED_AT":
+	case "started_at":
 		*f = *AssessmentResponseOrderFieldStartedAt
-	case "COMPLETED_AT":
+	case "completed_at":
 		*f = *AssessmentResponseOrderFieldCompletedAt
-	case "DUE_DATE":
+	case "due_date":
 		*f = *AssessmentResponseOrderFieldDueDate
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentResponseOrderField", str)
@@ -3153,6 +3207,20 @@ var (
 			}
 		},
 	}
+	// AssessmentResponseHistoryOrderFieldEmail orders AssessmentResponseHistory by email.
+	AssessmentResponseHistoryOrderFieldEmail = &AssessmentResponseHistoryOrderField{
+		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
+			return _m.Email, nil
+		},
+		column: assessmentresponsehistory.FieldEmail,
+		toTerm: assessmentresponsehistory.ByEmail,
+		toCursor: func(_m *AssessmentResponseHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
 	// AssessmentResponseHistoryOrderFieldSendAttempts orders AssessmentResponseHistory by send_attempts.
 	AssessmentResponseHistoryOrderFieldSendAttempts = &AssessmentResponseHistoryOrderField{
 		Value: func(_m *AssessmentResponseHistory) (ent.Value, error) {
@@ -3249,18 +3317,20 @@ func (f AssessmentResponseHistoryOrderField) String() string {
 		str = "created_at"
 	case AssessmentResponseHistoryOrderFieldUpdatedAt.column:
 		str = "updated_at"
+	case AssessmentResponseHistoryOrderFieldEmail.column:
+		str = "email"
 	case AssessmentResponseHistoryOrderFieldSendAttempts.column:
 		str = "send_attempts"
 	case AssessmentResponseHistoryOrderFieldStatus.column:
 		str = "status"
 	case AssessmentResponseHistoryOrderFieldAssignedAt.column:
-		str = "ASSIGNED_AT"
+		str = "assigned_at"
 	case AssessmentResponseHistoryOrderFieldStartedAt.column:
-		str = "STARTED_AT"
+		str = "started_at"
 	case AssessmentResponseHistoryOrderFieldCompletedAt.column:
-		str = "COMPLETED_AT"
+		str = "completed_at"
 	case AssessmentResponseHistoryOrderFieldDueDate.column:
-		str = "DUE_DATE"
+		str = "due_date"
 	}
 	return str
 }
@@ -3283,17 +3353,19 @@ func (f *AssessmentResponseHistoryOrderField) UnmarshalGQL(v interface{}) error 
 		*f = *AssessmentResponseHistoryOrderFieldCreatedAt
 	case "updated_at":
 		*f = *AssessmentResponseHistoryOrderFieldUpdatedAt
+	case "email":
+		*f = *AssessmentResponseHistoryOrderFieldEmail
 	case "send_attempts":
 		*f = *AssessmentResponseHistoryOrderFieldSendAttempts
 	case "status":
 		*f = *AssessmentResponseHistoryOrderFieldStatus
-	case "ASSIGNED_AT":
+	case "assigned_at":
 		*f = *AssessmentResponseHistoryOrderFieldAssignedAt
-	case "STARTED_AT":
+	case "started_at":
 		*f = *AssessmentResponseHistoryOrderFieldStartedAt
-	case "COMPLETED_AT":
+	case "completed_at":
 		*f = *AssessmentResponseHistoryOrderFieldCompletedAt
-	case "DUE_DATE":
+	case "due_date":
 		*f = *AssessmentResponseHistoryOrderFieldDueDate
 	default:
 		return fmt.Errorf("%s is not a valid AssessmentResponseHistoryOrderField", str)

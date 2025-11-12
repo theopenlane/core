@@ -200,6 +200,20 @@ func (_c *AssessmentHistoryCreate) SetNillableAssessmentOwnerID(v *string) *Asse
 	return _c
 }
 
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_c *AssessmentHistoryCreate) SetResponseDueDuration(v int64) *AssessmentHistoryCreate {
+	_c.mutation.SetResponseDueDuration(v)
+	return _c
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableResponseDueDuration(v *int64) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetResponseDueDuration(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *AssessmentHistoryCreate) SetID(v string) *AssessmentHistoryCreate {
 	_c.mutation.SetID(v)
@@ -280,6 +294,10 @@ func (_c *AssessmentHistoryCreate) defaults() error {
 		v := assessmenthistory.DefaultAssessmentType
 		_c.mutation.SetAssessmentType(v)
 	}
+	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
+		v := assessmenthistory.DefaultResponseDueDuration
+		_c.mutation.SetResponseDueDuration(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assessmenthistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assessmenthistory.DefaultID (forgotten import generated/runtime?)")
@@ -316,6 +334,9 @@ func (_c *AssessmentHistoryCreate) check() error {
 	}
 	if _, ok := _c.mutation.TemplateID(); !ok {
 		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "AssessmentHistory.template_id"`)}
+	}
+	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
+		return &ValidationError{Name: "response_due_duration", err: errors.New(`generated: missing required field "AssessmentHistory.response_due_duration"`)}
 	}
 	return nil
 }
@@ -412,6 +433,10 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 	if value, ok := _c.mutation.AssessmentOwnerID(); ok {
 		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
 		_node.AssessmentOwnerID = value
+	}
+	if value, ok := _c.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
+		_node.ResponseDueDuration = value
 	}
 	return _node, _spec
 }

@@ -113,6 +113,8 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
+	// DefaultAssignedAt holds the default value on creation for the "assigned_at" field.
+	DefaultAssignedAt func() time.Time
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
 	DefaultStartedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
@@ -129,12 +131,12 @@ func OperationValidator(o history.OpType) error {
 	}
 }
 
-const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
+const DefaultStatus enums.AssessmentResponseStatus = "SENT"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "COMPLETED", "OVERDUE":
+	case "NOT_STARTED", "SENT", "COMPLETED", "OVERDUE":
 		return nil
 	default:
 		return fmt.Errorf("assessmentresponsehistory: invalid enum value for status field: %q", s)

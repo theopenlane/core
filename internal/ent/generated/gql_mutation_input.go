@@ -789,6 +789,7 @@ type CreateAssessmentInput struct {
 	Name                  string
 	AssessmentType        *enums.AssessmentType
 	AssessmentOwnerID     *string
+	ResponseDueDuration   *int64
 	OwnerID               *string
 	BlockedGroupIDs       []string
 	EditorIDs             []string
@@ -808,6 +809,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.AssessmentOwnerID; v != nil {
 		m.SetAssessmentOwnerID(*v)
+	}
+	if v := i.ResponseDueDuration; v != nil {
+		m.SetResponseDueDuration(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -841,6 +845,7 @@ type UpdateAssessmentInput struct {
 	Name                        *string
 	ClearAssessmentOwnerID      bool
 	AssessmentOwnerID           *string
+	ResponseDueDuration         *int64
 	ClearOwner                  bool
 	OwnerID                     *string
 	ClearBlockedGroups          bool
@@ -877,6 +882,9 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.AssessmentOwnerID; v != nil {
 		m.SetAssessmentOwnerID(*v)
+	}
+	if v := i.ResponseDueDuration; v != nil {
+		m.SetResponseDueDuration(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -940,99 +948,29 @@ func (c *AssessmentUpdateOne) SetInput(i UpdateAssessmentInput) *AssessmentUpdat
 // CreateAssessmentResponseInput represents a mutation input for creating assessmentresponses.
 type CreateAssessmentResponseInput struct {
 	Email        string
-	Status       *enums.AssessmentResponseStatus
-	AssignedAt   time.Time
-	StartedAt    *time.Time
-	CompletedAt  *time.Time
 	DueDate      *time.Time
 	OwnerID      *string
-	DocumentID   *string
 	AssessmentID string
+	DocumentID   *string
 }
 
 // Mutate applies the CreateAssessmentResponseInput on the AssessmentResponseMutation builder.
 func (i *CreateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
 	m.SetEmail(i.Email)
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	m.SetAssignedAt(i.AssignedAt)
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
 	if v := i.DueDate; v != nil {
 		m.SetDueDate(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
+	m.SetAssessmentID(i.AssessmentID)
 	if v := i.DocumentID; v != nil {
 		m.SetDocumentID(*v)
 	}
-	m.SetAssessmentID(i.AssessmentID)
 }
 
 // SetInput applies the change-set in the CreateAssessmentResponseInput on the AssessmentResponseCreate builder.
 func (c *AssessmentResponseCreate) SetInput(i CreateAssessmentResponseInput) *AssessmentResponseCreate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// UpdateAssessmentResponseInput represents a mutation input for updating assessmentresponses.
-type UpdateAssessmentResponseInput struct {
-	Status           *enums.AssessmentResponseStatus
-	StartedAt        *time.Time
-	ClearCompletedAt bool
-	CompletedAt      *time.Time
-	ClearDueDate     bool
-	DueDate          *time.Time
-	ClearDocument    bool
-	DocumentID       *string
-	AssessmentID     *string
-}
-
-// Mutate applies the UpdateAssessmentResponseInput on the AssessmentResponseMutation builder.
-func (i *UpdateAssessmentResponseInput) Mutate(m *AssessmentResponseMutation) {
-	if v := i.Status; v != nil {
-		m.SetStatus(*v)
-	}
-	if v := i.StartedAt; v != nil {
-		m.SetStartedAt(*v)
-	}
-	if i.ClearCompletedAt {
-		m.ClearCompletedAt()
-	}
-	if v := i.CompletedAt; v != nil {
-		m.SetCompletedAt(*v)
-	}
-	if i.ClearDueDate {
-		m.ClearDueDate()
-	}
-	if v := i.DueDate; v != nil {
-		m.SetDueDate(*v)
-	}
-	if i.ClearDocument {
-		m.ClearDocument()
-	}
-	if v := i.DocumentID; v != nil {
-		m.SetDocumentID(*v)
-	}
-	if v := i.AssessmentID; v != nil {
-		m.SetAssessmentID(*v)
-	}
-}
-
-// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdate builder.
-func (c *AssessmentResponseUpdate) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdate {
-	i.Mutate(c.Mutation())
-	return c
-}
-
-// SetInput applies the change-set in the UpdateAssessmentResponseInput on the AssessmentResponseUpdateOne builder.
-func (c *AssessmentResponseUpdateOne) SetInput(i UpdateAssessmentResponseInput) *AssessmentResponseUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -15350,6 +15288,7 @@ type CreateTemplateInput struct {
 	DocumentIDs      []string
 	FileIDs          []string
 	TrustCenterID    *string
+	AssessmentIDs    []string
 }
 
 // Mutate applies the CreateTemplateInput on the TemplateMutation builder.
@@ -15391,6 +15330,9 @@ func (i *CreateTemplateInput) Mutate(m *TemplateMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
+	if v := i.AssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTemplateInput on the TemplateCreate builder.
@@ -15425,6 +15367,9 @@ type UpdateTemplateInput struct {
 	RemoveFileIDs         []string
 	ClearTrustCenter      bool
 	TrustCenterID         *string
+	ClearAssessments      bool
+	AddAssessmentIDs      []string
+	RemoveAssessmentIDs   []string
 }
 
 // Mutate applies the UpdateTemplateInput on the TemplateMutation builder.
@@ -15500,6 +15445,15 @@ func (i *UpdateTemplateInput) Mutate(m *TemplateMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearAssessments {
+		m.ClearAssessments()
+	}
+	if v := i.AddAssessmentIDs; len(v) > 0 {
+		m.AddAssessmentIDs(v...)
+	}
+	if v := i.RemoveAssessmentIDs; len(v) > 0 {
+		m.RemoveAssessmentIDs(v...)
 	}
 }
 

@@ -118,6 +118,11 @@ func AssessmentOwnerID(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldEQ(FieldAssessmentOwnerID, v))
 }
 
+// ResponseDueDuration applies equality check predicate on the "response_due_duration" field. It's identical to ResponseDueDurationEQ.
+func ResponseDueDuration(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldResponseDueDuration, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Assessment {
 	return predicate.Assessment(sql.FieldEQ(FieldCreatedAt, v))
@@ -813,6 +818,46 @@ func AssessmentOwnerIDContainsFold(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldContainsFold(FieldAssessmentOwnerID, v))
 }
 
+// ResponseDueDurationEQ applies the EQ predicate on the "response_due_duration" field.
+func ResponseDueDurationEQ(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldResponseDueDuration, v))
+}
+
+// ResponseDueDurationNEQ applies the NEQ predicate on the "response_due_duration" field.
+func ResponseDueDurationNEQ(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNEQ(FieldResponseDueDuration, v))
+}
+
+// ResponseDueDurationIn applies the In predicate on the "response_due_duration" field.
+func ResponseDueDurationIn(vs ...int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldIn(FieldResponseDueDuration, vs...))
+}
+
+// ResponseDueDurationNotIn applies the NotIn predicate on the "response_due_duration" field.
+func ResponseDueDurationNotIn(vs ...int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotIn(FieldResponseDueDuration, vs...))
+}
+
+// ResponseDueDurationGT applies the GT predicate on the "response_due_duration" field.
+func ResponseDueDurationGT(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGT(FieldResponseDueDuration, v))
+}
+
+// ResponseDueDurationGTE applies the GTE predicate on the "response_due_duration" field.
+func ResponseDueDurationGTE(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGTE(FieldResponseDueDuration, v))
+}
+
+// ResponseDueDurationLT applies the LT predicate on the "response_due_duration" field.
+func ResponseDueDurationLT(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLT(FieldResponseDueDuration, v))
+}
+
+// ResponseDueDurationLTE applies the LTE predicate on the "response_due_duration" field.
+func ResponseDueDurationLTE(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLTE(FieldResponseDueDuration, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
@@ -934,7 +979,7 @@ func HasTemplate() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Template

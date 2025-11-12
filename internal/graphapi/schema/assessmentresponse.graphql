@@ -21,19 +21,6 @@ extend type Mutation{
         input: CreateAssessmentResponseInput!
     ): AssessmentResponseCreatePayload!
     """
-    Update an existing assessmentResponse
-    """
-    updateAssessmentResponse(
-        """
-        ID of the assessmentResponse
-        """
-        id: ID!
-        """
-        New values for the assessmentResponse
-        """
-        input: UpdateAssessmentResponseInput!
-    ): AssessmentResponseUpdatePayload!
-    """
     Delete an existing assessmentResponse
     """
     deleteAssessmentResponse(
@@ -55,16 +42,6 @@ type AssessmentResponseCreatePayload {
 }
 
 """
-Return response for updateAssessmentResponse mutation
-"""
-type AssessmentResponseUpdatePayload {
-    """
-    Updated assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
-}
-
-"""
 Return response for deleteAssessmentResponse mutation
 """
 type AssessmentResponseDeletePayload {
@@ -74,12 +51,3 @@ type AssessmentResponseDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessmentResponse mutation
-"""
-type AssessmentResponseBulkCreatePayload {
-    """
-    Created assessmentResponses
-    """
-    assessmentResponses: [AssessmentResponse!]
-}

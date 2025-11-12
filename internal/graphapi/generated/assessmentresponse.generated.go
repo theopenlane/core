@@ -28,73 +28,6 @@ import (
 
 // region    **************************** field.gotpl *****************************
 
-func (ec *executionContext) _AssessmentResponseBulkCreatePayload_assessmentResponses(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentResponseBulkCreatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_AssessmentResponseBulkCreatePayload_assessmentResponses,
-		func(ctx context.Context) (any, error) {
-			return obj.AssessmentResponses, nil
-		},
-		nil,
-		ec.marshalOAssessmentResponse2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseᚄ,
-		true,
-		false,
-	)
-}
-
-func (ec *executionContext) fieldContext_AssessmentResponseBulkCreatePayload_assessmentResponses(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentResponseBulkCreatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_AssessmentResponse_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_AssessmentResponse_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_AssessmentResponse_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_AssessmentResponse_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_AssessmentResponse_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_AssessmentResponse_ownerID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_AssessmentResponse_assessmentID(ctx, field)
-			case "email":
-				return ec.fieldContext_AssessmentResponse_email(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_AssessmentResponse_sendAttempts(ctx, field)
-			case "status":
-				return ec.fieldContext_AssessmentResponse_status(ctx, field)
-			case "assignedAt":
-				return ec.fieldContext_AssessmentResponse_assignedAt(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_AssessmentResponse_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
-			case "documentDataID":
-				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
-			case "owner":
-				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
-			case "document":
-				return ec.fieldContext_AssessmentResponse_document(ctx, field)
-			case "assessment":
-				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 func (ec *executionContext) _AssessmentResponseCreatePayload_assessmentResponse(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentResponseCreatePayload) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -151,10 +84,10 @@ func (ec *executionContext) fieldContext_AssessmentResponseCreatePayload_assessm
 				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
 			case "owner":
 				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
-			case "document":
-				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			case "assessment":
 				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
+			case "document":
+				return ec.fieldContext_AssessmentResponse_document(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
 		},
@@ -191,73 +124,6 @@ func (ec *executionContext) fieldContext_AssessmentResponseDeletePayload_deleted
 	return fc, nil
 }
 
-func (ec *executionContext) _AssessmentResponseUpdatePayload_assessmentResponse(ctx context.Context, field graphql.CollectedField, obj *model.AssessmentResponseUpdatePayload) (ret graphql.Marshaler) {
-	return graphql.ResolveField(
-		ctx,
-		ec.OperationContext,
-		field,
-		ec.fieldContext_AssessmentResponseUpdatePayload_assessmentResponse,
-		func(ctx context.Context) (any, error) {
-			return obj.AssessmentResponse, nil
-		},
-		nil,
-		ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponse,
-		true,
-		true,
-	)
-}
-
-func (ec *executionContext) fieldContext_AssessmentResponseUpdatePayload_assessmentResponse(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
-	fc = &graphql.FieldContext{
-		Object:     "AssessmentResponseUpdatePayload",
-		Field:      field,
-		IsMethod:   false,
-		IsResolver: false,
-		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
-			switch field.Name {
-			case "id":
-				return ec.fieldContext_AssessmentResponse_id(ctx, field)
-			case "createdAt":
-				return ec.fieldContext_AssessmentResponse_createdAt(ctx, field)
-			case "updatedAt":
-				return ec.fieldContext_AssessmentResponse_updatedAt(ctx, field)
-			case "createdBy":
-				return ec.fieldContext_AssessmentResponse_createdBy(ctx, field)
-			case "updatedBy":
-				return ec.fieldContext_AssessmentResponse_updatedBy(ctx, field)
-			case "ownerID":
-				return ec.fieldContext_AssessmentResponse_ownerID(ctx, field)
-			case "assessmentID":
-				return ec.fieldContext_AssessmentResponse_assessmentID(ctx, field)
-			case "email":
-				return ec.fieldContext_AssessmentResponse_email(ctx, field)
-			case "sendAttempts":
-				return ec.fieldContext_AssessmentResponse_sendAttempts(ctx, field)
-			case "status":
-				return ec.fieldContext_AssessmentResponse_status(ctx, field)
-			case "assignedAt":
-				return ec.fieldContext_AssessmentResponse_assignedAt(ctx, field)
-			case "startedAt":
-				return ec.fieldContext_AssessmentResponse_startedAt(ctx, field)
-			case "completedAt":
-				return ec.fieldContext_AssessmentResponse_completedAt(ctx, field)
-			case "dueDate":
-				return ec.fieldContext_AssessmentResponse_dueDate(ctx, field)
-			case "documentDataID":
-				return ec.fieldContext_AssessmentResponse_documentDataID(ctx, field)
-			case "owner":
-				return ec.fieldContext_AssessmentResponse_owner(ctx, field)
-			case "document":
-				return ec.fieldContext_AssessmentResponse_document(ctx, field)
-			case "assessment":
-				return ec.fieldContext_AssessmentResponse_assessment(ctx, field)
-			}
-			return nil, fmt.Errorf("no field named %q was found under type AssessmentResponse", field.Name)
-		},
-	}
-	return fc, nil
-}
-
 // endregion **************************** field.gotpl *****************************
 
 // region    **************************** input.gotpl *****************************
@@ -269,42 +135,6 @@ func (ec *executionContext) fieldContext_AssessmentResponseUpdatePayload_assessm
 // endregion ************************** interface.gotpl ***************************
 
 // region    **************************** object.gotpl ****************************
-
-var assessmentResponseBulkCreatePayloadImplementors = []string{"AssessmentResponseBulkCreatePayload"}
-
-func (ec *executionContext) _AssessmentResponseBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentResponseBulkCreatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentResponseBulkCreatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("AssessmentResponseBulkCreatePayload")
-		case "assessmentResponses":
-			out.Values[i] = ec._AssessmentResponseBulkCreatePayload_assessmentResponses(ctx, field, obj)
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
 
 var assessmentResponseCreatePayloadImplementors = []string{"AssessmentResponseCreatePayload"}
 
@@ -384,45 +214,6 @@ func (ec *executionContext) _AssessmentResponseDeletePayload(ctx context.Context
 	return out
 }
 
-var assessmentResponseUpdatePayloadImplementors = []string{"AssessmentResponseUpdatePayload"}
-
-func (ec *executionContext) _AssessmentResponseUpdatePayload(ctx context.Context, sel ast.SelectionSet, obj *model.AssessmentResponseUpdatePayload) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, assessmentResponseUpdatePayloadImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	deferred := make(map[string]*graphql.FieldSet)
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("AssessmentResponseUpdatePayload")
-		case "assessmentResponse":
-			out.Values[i] = ec._AssessmentResponseUpdatePayload_assessmentResponse(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				out.Invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch(ctx)
-	if out.Invalids > 0 {
-		return graphql.Null
-	}
-
-	atomic.AddInt32(&ec.deferred, int32(len(deferred)))
-
-	for label, dfs := range deferred {
-		ec.processDeferredGroup(graphql.DeferredGroup{
-			Label:    label,
-			Path:     graphql.GetPath(ctx),
-			FieldSet: dfs,
-			Context:  ctx,
-		})
-	}
-
-	return out
-}
-
 // endregion **************************** object.gotpl ****************************
 
 // region    ***************************** type.gotpl *****************************
@@ -453,20 +244,6 @@ func (ec *executionContext) marshalNAssessmentResponseDeletePayload2ᚖgithubᚗ
 		return graphql.Null
 	}
 	return ec._AssessmentResponseDeletePayload(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNAssessmentResponseUpdatePayload2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseUpdatePayload(ctx context.Context, sel ast.SelectionSet, v model.AssessmentResponseUpdatePayload) graphql.Marshaler {
-	return ec._AssessmentResponseUpdatePayload(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNAssessmentResponseUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentResponseUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentResponseUpdatePayload) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
-		}
-		return graphql.Null
-	}
-	return ec._AssessmentResponseUpdatePayload(ctx, sel, v)
 }
 
 // endregion ***************************** type.gotpl *****************************

@@ -290,6 +290,7 @@ type ComplexityRoot struct {
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
+		ResponseDueDuration func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Template            func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
@@ -318,20 +319,21 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentOwnerID func(childComplexity int) int
-		AssessmentType    func(childComplexity int) int
-		CreatedAt         func(childComplexity int) int
-		CreatedBy         func(childComplexity int) int
-		HistoryTime       func(childComplexity int) int
-		ID                func(childComplexity int) int
-		Name              func(childComplexity int) int
-		Operation         func(childComplexity int) int
-		OwnerID           func(childComplexity int) int
-		Ref               func(childComplexity int) int
-		Tags              func(childComplexity int) int
-		TemplateID        func(childComplexity int) int
-		UpdatedAt         func(childComplexity int) int
-		UpdatedBy         func(childComplexity int) int
+		AssessmentOwnerID   func(childComplexity int) int
+		AssessmentType      func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		CreatedBy           func(childComplexity int) int
+		HistoryTime         func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Name                func(childComplexity int) int
+		Operation           func(childComplexity int) int
+		OwnerID             func(childComplexity int) int
+		Ref                 func(childComplexity int) int
+		ResponseDueDuration func(childComplexity int) int
+		Tags                func(childComplexity int) int
+		TemplateID          func(childComplexity int) int
+		UpdatedAt           func(childComplexity int) int
+		UpdatedBy           func(childComplexity int) int
 	}
 
 	AssessmentHistoryConnection struct {
@@ -364,10 +366,6 @@ type ComplexityRoot struct {
 		Status         func(childComplexity int) int
 		UpdatedAt      func(childComplexity int) int
 		UpdatedBy      func(childComplexity int) int
-	}
-
-	AssessmentResponseBulkCreatePayload struct {
-		AssessmentResponses func(childComplexity int) int
 	}
 
 	AssessmentResponseConnection struct {
@@ -419,10 +417,6 @@ type ComplexityRoot struct {
 	AssessmentResponseHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
-	}
-
-	AssessmentResponseUpdatePayload struct {
-		AssessmentResponse func(childComplexity int) int
 	}
 
 	AssessmentUpdatePayload struct {
@@ -3340,7 +3334,6 @@ type ComplexityRoot struct {
 		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
 		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
 		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
-		UpdateAssessmentResponse             func(childComplexity int, id string, input generated.UpdateAssessmentResponseInput) int
 		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
 		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
 		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
@@ -5898,6 +5891,7 @@ type ComplexityRoot struct {
 	}
 
 	Template struct {
+		Assessments      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Description      func(childComplexity int) int
@@ -8019,6 +8013,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.OwnerID(childComplexity), true
 
+	case "Assessment.responseDueDuration":
+		if e.complexity.Assessment.ResponseDueDuration == nil {
+			break
+		}
+
+		return e.complexity.Assessment.ResponseDueDuration(childComplexity), true
+
 	case "Assessment.tags":
 		if e.complexity.Assessment.Tags == nil {
 			break
@@ -8184,6 +8185,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentHistory.Ref(childComplexity), true
+
+	case "AssessmentHistory.responseDueDuration":
+		if e.complexity.AssessmentHistory.ResponseDueDuration == nil {
+			break
+		}
+
+		return e.complexity.AssessmentHistory.ResponseDueDuration(childComplexity), true
 
 	case "AssessmentHistory.tags":
 		if e.complexity.AssessmentHistory.Tags == nil {
@@ -8373,13 +8381,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponse.UpdatedBy(childComplexity), true
-
-	case "AssessmentResponseBulkCreatePayload.assessmentResponses":
-		if e.complexity.AssessmentResponseBulkCreatePayload.AssessmentResponses == nil {
-			break
-		}
-
-		return e.complexity.AssessmentResponseBulkCreatePayload.AssessmentResponses(childComplexity), true
 
 	case "AssessmentResponseConnection.edges":
 		if e.complexity.AssessmentResponseConnection.Edges == nil {
@@ -8590,13 +8591,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentResponseHistoryEdge.Node(childComplexity), true
-
-	case "AssessmentResponseUpdatePayload.assessmentResponse":
-		if e.complexity.AssessmentResponseUpdatePayload.AssessmentResponse == nil {
-			break
-		}
-
-		return e.complexity.AssessmentResponseUpdatePayload.AssessmentResponse(childComplexity), true
 
 	case "AssessmentUpdatePayload.assessment":
 		if e.complexity.AssessmentUpdatePayload.Assessment == nil {
@@ -24737,18 +24731,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateAssessment(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentInput)), true
 
-	case "Mutation.updateAssessmentResponse":
-		if e.complexity.Mutation.UpdateAssessmentResponse == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_updateAssessmentResponse_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.UpdateAssessmentResponse(childComplexity, args["id"].(string), args["input"].(generated.UpdateAssessmentResponseInput)), true
-
 	case "Mutation.updateAsset":
 		if e.complexity.Mutation.UpdateAsset == nil {
 			break
@@ -40630,6 +40612,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TaskUpdatePayload.Task(childComplexity), true
 
+	case "Template.assessments":
+		if e.complexity.Template.Assessments == nil {
+			break
+		}
+
+		args, err := ec.field_Template_assessments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Template.Assessments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssessmentOrder), args["where"].(*generated.AssessmentWhereInput)), true
+
 	case "Template.createdAt":
 		if e.complexity.Template.CreatedAt == nil {
 			break
@@ -45395,7 +45389,6 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateAPITokenInput,
 		ec.unmarshalInputUpdateActionPlanInput,
 		ec.unmarshalInputUpdateAssessmentInput,
-		ec.unmarshalInputUpdateAssessmentResponseInput,
 		ec.unmarshalInputUpdateAssetInput,
 		ec.unmarshalInputUpdateContactInput,
 		ec.unmarshalInputUpdateControlImplementationInput,
@@ -47314,19 +47307,6 @@ extend type Mutation{
         input: CreateAssessmentResponseInput!
     ): AssessmentResponseCreatePayload!
     """
-    Update an existing assessmentResponse
-    """
-    updateAssessmentResponse(
-        """
-        ID of the assessmentResponse
-        """
-        id: ID!
-        """
-        New values for the assessmentResponse
-        """
-        input: UpdateAssessmentResponseInput!
-    ): AssessmentResponseUpdatePayload!
-    """
     Delete an existing assessmentResponse
     """
     deleteAssessmentResponse(
@@ -47348,16 +47328,6 @@ type AssessmentResponseCreatePayload {
 }
 
 """
-Return response for updateAssessmentResponse mutation
-"""
-type AssessmentResponseUpdatePayload {
-    """
-    Updated assessmentResponse
-    """
-    assessmentResponse: AssessmentResponse!
-}
-
-"""
 Return response for deleteAssessmentResponse mutation
 """
 type AssessmentResponseDeletePayload {
@@ -47367,15 +47337,6 @@ type AssessmentResponseDeletePayload {
     deletedID: ID!
 }
 
-"""
-Return response for createBulkAssessmentResponse mutation
-"""
-type AssessmentResponseBulkCreatePayload {
-    """
-    Created assessmentResponses
-    """
-    assessmentResponses: [AssessmentResponse!]
-}
 `, BuiltIn: false},
 	{Name: "../schema/asset.graphql", Input: `extend type Query {
     """
@@ -51090,6 +51051,10 @@ type Assessment implements Node {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int!
   owner: Organization
   blockedGroups(
     """
@@ -51284,6 +51249,10 @@ type AssessmentHistory implements Node {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int!
 }
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
@@ -51352,6 +51321,7 @@ enum AssessmentHistoryOrderField {
   updated_at
   name
   assessment_type
+  response_due_duration
 }
 """
 AssessmentHistoryWhereInput is used for filtering AssessmentHistory objects.
@@ -51547,6 +51517,17 @@ input AssessmentHistoryWhereInput {
   assessmentOwnerIDNotNil: Boolean
   assessmentOwnerIDEqualFold: String
   assessmentOwnerIDContainsFold: String
+  """
+  response_due_duration field predicates
+  """
+  responseDueDuration: Int
+  responseDueDurationNEQ: Int
+  responseDueDurationIn: [Int!]
+  responseDueDurationNotIn: [Int!]
+  responseDueDurationGT: Int
+  responseDueDurationGTE: Int
+  responseDueDurationLT: Int
+  responseDueDurationLTE: Int
 }
 """
 Ordering options for Assessment connections
@@ -51569,6 +51550,7 @@ enum AssessmentOrderField {
   updated_at
   name
   assessment_type
+  response_due_duration
 }
 type AssessmentResponse implements Node {
   id: ID!
@@ -51617,17 +51599,15 @@ type AssessmentResponse implements Node {
   """
   documentDataID: ID
   owner: Organization
-  """
-  the document containing the user's response data
-  """
-  document: DocumentData
   assessment: Assessment!
+  document: DocumentData
 }
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
 enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
+  SENT
   COMPLETED
   OVERDUE
 }
@@ -51716,6 +51696,7 @@ AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
 enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
   NOT_STARTED
+  SENT
   COMPLETED
   OVERDUE
 }
@@ -51777,12 +51758,13 @@ enum AssessmentResponseHistoryOrderField {
   history_time
   created_at
   updated_at
+  email
   send_attempts
   status
-  ASSIGNED_AT
-  STARTED_AT
-  COMPLETED_AT
-  DUE_DATE
+  assigned_at
+  started_at
+  completed_at
+  due_date
 }
 """
 AssessmentResponseHistoryWhereInput is used for filtering AssessmentResponseHistory objects.
@@ -52019,24 +52001,6 @@ input AssessmentResponseHistoryWhereInput {
   dueDateLTE: Time
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
-  """
-  document_data_id field predicates
-  """
-  documentDataID: String
-  documentDataIDNEQ: String
-  documentDataIDIn: [String!]
-  documentDataIDNotIn: [String!]
-  documentDataIDGT: String
-  documentDataIDGTE: String
-  documentDataIDLT: String
-  documentDataIDLTE: String
-  documentDataIDContains: String
-  documentDataIDHasPrefix: String
-  documentDataIDHasSuffix: String
-  documentDataIDIsNil: Boolean
-  documentDataIDNotNil: Boolean
-  documentDataIDEqualFold: String
-  documentDataIDContainsFold: String
 }
 """
 Ordering options for AssessmentResponse connections
@@ -52057,12 +52021,13 @@ Properties by which AssessmentResponse connections can be ordered.
 enum AssessmentResponseOrderField {
   created_at
   updated_at
+  email
   send_attempts
   status
-  ASSIGNED_AT
-  STARTED_AT
-  COMPLETED_AT
-  DUE_DATE
+  assigned_at
+  started_at
+  completed_at
+  due_date
 }
 """
 AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -52264,38 +52229,20 @@ input AssessmentResponseWhereInput {
   dueDateIsNil: Boolean
   dueDateNotNil: Boolean
   """
-  document_data_id field predicates
-  """
-  documentDataID: ID
-  documentDataIDNEQ: ID
-  documentDataIDIn: [ID!]
-  documentDataIDNotIn: [ID!]
-  documentDataIDGT: ID
-  documentDataIDGTE: ID
-  documentDataIDLT: ID
-  documentDataIDLTE: ID
-  documentDataIDContains: ID
-  documentDataIDHasPrefix: ID
-  documentDataIDHasSuffix: ID
-  documentDataIDIsNil: Boolean
-  documentDataIDNotNil: Boolean
-  documentDataIDEqualFold: ID
-  documentDataIDContainsFold: ID
-  """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
   """
-  document edge predicates
-  """
-  hasDocument: Boolean
-  hasDocumentWith: [DocumentDataWhereInput!]
-  """
   assessment edge predicates
   """
   hasAssessment: Boolean
   hasAssessmentWith: [AssessmentWhereInput!]
+  """
+  document edge predicates
+  """
+  hasDocument: Boolean
+  hasDocumentWith: [DocumentDataWhereInput!]
 }
 """
 AssessmentWhereInput is used for filtering Assessment objects.
@@ -52455,6 +52402,17 @@ input AssessmentWhereInput {
   assessmentOwnerIDNotNil: Boolean
   assessmentOwnerIDEqualFold: String
   assessmentOwnerIDContainsFold: String
+  """
+  response_due_duration field predicates
+  """
+  responseDueDuration: Int
+  responseDueDurationNEQ: Int
+  responseDueDurationIn: [Int!]
+  responseDueDurationNotIn: [Int!]
+  responseDueDurationGT: Int
+  responseDueDurationGTE: Int
+  responseDueDurationLT: Int
+  responseDueDurationLTE: Int
   """
   owner edge predicates
   """
@@ -58811,6 +58769,10 @@ input CreateAssessmentInput {
   the id of the group that owns the assessment
   """
   assessmentOwnerID: String
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int
   ownerID: ID
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
@@ -58828,28 +58790,12 @@ input CreateAssessmentResponseInput {
   """
   email: String!
   """
-  the current status of the assessment for this user
-  """
-  status: AssessmentResponseAssessmentResponseStatus
-  """
-  when the assessment was assigned to the user
-  """
-  assignedAt: Time!
-  """
-  when the user started the assessment
-  """
-  startedAt: Time
-  """
-  when the user completed the assessment
-  """
-  completedAt: Time
-  """
   when the assessment is due
   """
   dueDate: Time
   ownerID: ID
-  documentID: ID
   assessmentID: ID!
+  documentID: ID
 }
 """
 CreateAssetInput is used for create Asset object.
@@ -61610,6 +61556,7 @@ input CreateTemplateInput {
   documentIDs: [ID!]
   fileIDs: [ID!]
   trustCenterID: ID
+  assessmentIDs: [ID!]
 }
 """
 CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -110615,6 +110562,37 @@ type Template implements Node {
     where: FileWhereInput
   ): FileConnection!
   trustCenter: TrustCenter
+  assessments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assessments returned from the connection.
+    """
+    orderBy: [AssessmentOrder!]
+
+    """
+    Filtering options for Assessments returned from the connection.
+    """
+    where: AssessmentWhereInput
+  ): AssessmentConnection!
 }
 """
 A connection to a list of items.
@@ -111298,6 +111276,11 @@ input TemplateWhereInput {
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  assessments edge predicates
+  """
+  hasAssessments: Boolean
+  hasAssessmentsWith: [AssessmentWhereInput!]
 }
 """
 The builtin Time type
@@ -115697,6 +115680,10 @@ input UpdateAssessmentInput {
   """
   assessmentOwnerID: String
   clearAssessmentOwnerID: Boolean
+  """
+  the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+  """
+  responseDueDuration: Int
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -115712,33 +115699,6 @@ input UpdateAssessmentInput {
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean
-}
-"""
-UpdateAssessmentResponseInput is used for update AssessmentResponse object.
-Input was generated by ent.
-"""
-input UpdateAssessmentResponseInput {
-  """
-  the current status of the assessment for this user
-  """
-  status: AssessmentResponseAssessmentResponseStatus
-  """
-  when the user started the assessment
-  """
-  startedAt: Time
-  """
-  when the user completed the assessment
-  """
-  completedAt: Time
-  clearCompletedAt: Boolean
-  """
-  when the assessment is due
-  """
-  dueDate: Time
-  clearDueDate: Boolean
-  documentID: ID
-  clearDocument: Boolean
-  assessmentID: ID
 }
 """
 UpdateAssetInput is used for update Asset object.
@@ -119663,6 +119623,9 @@ input UpdateTemplateInput {
   clearFiles: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  addAssessmentIDs: [ID!]
+  removeAssessmentIDs: [ID!]
+  clearAssessments: Boolean
 }
 """
 UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.

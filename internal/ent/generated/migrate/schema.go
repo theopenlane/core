@@ -253,8 +253,9 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "assessment_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_id", Type: field.TypeString},
 	}
 	// AssessmentsTable holds the schema information for the "assessments" table.
 	AssessmentsTable = &schema.Table{
@@ -263,16 +264,16 @@ var (
 		PrimaryKey: []*schema.Column{AssessmentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "assessments_templates_template",
-				Columns:    []*schema.Column{AssessmentsColumns[11]},
-				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
-			},
-			{
 				Symbol:     "assessments_organizations_assessments",
 				Columns:    []*schema.Column{AssessmentsColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assessments_templates_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[13]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
+				OnDelete:   schema.NoAction,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -312,6 +313,7 @@ var (
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "template_id", Type: field.TypeString},
 		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
 	AssessmentHistoryTable = &schema.Table{
@@ -337,7 +339,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
@@ -426,7 +428,7 @@ var (
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
@@ -10579,8 +10581,8 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	AssessmentsTable.ForeignKeys[0].RefTable = TemplatesTable
-	AssessmentsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",
 	}

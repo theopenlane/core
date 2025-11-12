@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
@@ -51,6 +52,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 			Comment("the email address of the recipient").
 			Annotations(
 				entx.FieldSearchable(),
+				entgql.OrderField("email"),
 			).
 			Immutable().
 			Validate(func(email string) error {
@@ -68,40 +70,48 @@ func (AssessmentResponse) Fields() []ent.Field {
 
 		field.Enum("status").
 			GoType(enums.AssessmentResponseStatus("")).
-			Default(enums.AssessmentResponseStatusNotStarted.String()).
+			Default(enums.AssessmentResponseStatusSent.String()).
 			Comment("the current status of the assessment for this user").
 			Annotations(
 				entgql.OrderField("status"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 
 		field.Time("assigned_at").
 			Comment("when the assessment was assigned to the user").
 			Immutable().
+			Default(time.Now).
 			Annotations(
-				entgql.OrderField("ASSIGNED_AT"),
+				entgql.OrderField("assigned_at"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 
 		field.Time("started_at").
 			Comment("when the user started the assessment").
 			Default(time.Now()).
 			Annotations(
-				entgql.OrderField("STARTED_AT"),
+				entgql.OrderField("started_at"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.Time("completed_at").
 			Comment("when the user completed the assessment").
 			Optional().
 			Annotations(
-				entgql.OrderField("COMPLETED_AT"),
+				entgql.OrderField("completed_at"),
+				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.Time("due_date").
 			Comment("when the assessment is due").
 			Optional().
 			Annotations(
-				entgql.OrderField("DUE_DATE"),
+				entgql.OrderField("due_date"),
 			),
 		field.String("document_data_id").
-			Comment("the document containing the user's response data").
-			Optional(),
+			Optional().
+			Annotations(
+				entgql.Skip(^entgql.SkipType),
+			).
+			Comment("the document containing the user's response data"),
 	}
 }
 
@@ -119,18 +129,21 @@ func (ar AssessmentResponse) Mixin() []ent.Mixin {
 
 func (ar AssessmentResponse) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
-			fromSchema: ar,
-			edgeSchema: DocumentData{},
-			field:      "document_data_id",
-			comment:    "the document containing the user's response data",
-		}),
-
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: ar,
 			edgeSchema: Assessment{},
 			field:      "assessment_id",
 			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: ar,
+			edgeSchema: DocumentData{},
+			field:      "document_data_id",
+			name:       "document_data",
+			required:   false,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
@@ -151,6 +164,9 @@ func (AssessmentResponse) Policy() ent.Policy {
 func (AssessmentResponse) Annotations() []schema.Annotation {
 	return []schema.Annotation{
 		entfga.SelfAccessChecks(),
+		entgql.Skip(
+			entgql.SkipMutationUpdateInput,
+		),
 	}
 }
 
@@ -179,5 +195,11 @@ func (AssessmentResponse) Indexes() []ent.Index {
 func (AssessmentResponse) Modules() []models.OrgModule {
 	return []models.OrgModule{
 		models.CatalogComplianceModule,
+	}
+}
+
+func (AssessmentResponse) Hooks() []ent.Hook {
+	return []ent.Hook{
+		hooks.HookCreateAssessmentResponse(),
 	}
 }

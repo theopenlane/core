@@ -303,18 +303,19 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "Assessment",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			assessment.FieldCreatedAt:         {Type: field.TypeTime, Column: assessment.FieldCreatedAt},
-			assessment.FieldUpdatedAt:         {Type: field.TypeTime, Column: assessment.FieldUpdatedAt},
-			assessment.FieldCreatedBy:         {Type: field.TypeString, Column: assessment.FieldCreatedBy},
-			assessment.FieldUpdatedBy:         {Type: field.TypeString, Column: assessment.FieldUpdatedBy},
-			assessment.FieldDeletedAt:         {Type: field.TypeTime, Column: assessment.FieldDeletedAt},
-			assessment.FieldDeletedBy:         {Type: field.TypeString, Column: assessment.FieldDeletedBy},
-			assessment.FieldTags:              {Type: field.TypeJSON, Column: assessment.FieldTags},
-			assessment.FieldOwnerID:           {Type: field.TypeString, Column: assessment.FieldOwnerID},
-			assessment.FieldName:              {Type: field.TypeString, Column: assessment.FieldName},
-			assessment.FieldAssessmentType:    {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
-			assessment.FieldTemplateID:        {Type: field.TypeString, Column: assessment.FieldTemplateID},
-			assessment.FieldAssessmentOwnerID: {Type: field.TypeString, Column: assessment.FieldAssessmentOwnerID},
+			assessment.FieldCreatedAt:           {Type: field.TypeTime, Column: assessment.FieldCreatedAt},
+			assessment.FieldUpdatedAt:           {Type: field.TypeTime, Column: assessment.FieldUpdatedAt},
+			assessment.FieldCreatedBy:           {Type: field.TypeString, Column: assessment.FieldCreatedBy},
+			assessment.FieldUpdatedBy:           {Type: field.TypeString, Column: assessment.FieldUpdatedBy},
+			assessment.FieldDeletedAt:           {Type: field.TypeTime, Column: assessment.FieldDeletedAt},
+			assessment.FieldDeletedBy:           {Type: field.TypeString, Column: assessment.FieldDeletedBy},
+			assessment.FieldTags:                {Type: field.TypeJSON, Column: assessment.FieldTags},
+			assessment.FieldOwnerID:             {Type: field.TypeString, Column: assessment.FieldOwnerID},
+			assessment.FieldName:                {Type: field.TypeString, Column: assessment.FieldName},
+			assessment.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
+			assessment.FieldTemplateID:          {Type: field.TypeString, Column: assessment.FieldTemplateID},
+			assessment.FieldAssessmentOwnerID:   {Type: field.TypeString, Column: assessment.FieldAssessmentOwnerID},
+			assessment.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessment.FieldResponseDueDuration},
 		},
 	}
 	graph.Nodes[4] = &sqlgraph.Node{
@@ -328,21 +329,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "AssessmentHistory",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			assessmenthistory.FieldHistoryTime:       {Type: field.TypeTime, Column: assessmenthistory.FieldHistoryTime},
-			assessmenthistory.FieldRef:               {Type: field.TypeString, Column: assessmenthistory.FieldRef},
-			assessmenthistory.FieldOperation:         {Type: field.TypeEnum, Column: assessmenthistory.FieldOperation},
-			assessmenthistory.FieldCreatedAt:         {Type: field.TypeTime, Column: assessmenthistory.FieldCreatedAt},
-			assessmenthistory.FieldUpdatedAt:         {Type: field.TypeTime, Column: assessmenthistory.FieldUpdatedAt},
-			assessmenthistory.FieldCreatedBy:         {Type: field.TypeString, Column: assessmenthistory.FieldCreatedBy},
-			assessmenthistory.FieldUpdatedBy:         {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedBy},
-			assessmenthistory.FieldDeletedAt:         {Type: field.TypeTime, Column: assessmenthistory.FieldDeletedAt},
-			assessmenthistory.FieldDeletedBy:         {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
-			assessmenthistory.FieldTags:              {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
-			assessmenthistory.FieldOwnerID:           {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
-			assessmenthistory.FieldName:              {Type: field.TypeString, Column: assessmenthistory.FieldName},
-			assessmenthistory.FieldAssessmentType:    {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
-			assessmenthistory.FieldTemplateID:        {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
-			assessmenthistory.FieldAssessmentOwnerID: {Type: field.TypeString, Column: assessmenthistory.FieldAssessmentOwnerID},
+			assessmenthistory.FieldHistoryTime:         {Type: field.TypeTime, Column: assessmenthistory.FieldHistoryTime},
+			assessmenthistory.FieldRef:                 {Type: field.TypeString, Column: assessmenthistory.FieldRef},
+			assessmenthistory.FieldOperation:           {Type: field.TypeEnum, Column: assessmenthistory.FieldOperation},
+			assessmenthistory.FieldCreatedAt:           {Type: field.TypeTime, Column: assessmenthistory.FieldCreatedAt},
+			assessmenthistory.FieldUpdatedAt:           {Type: field.TypeTime, Column: assessmenthistory.FieldUpdatedAt},
+			assessmenthistory.FieldCreatedBy:           {Type: field.TypeString, Column: assessmenthistory.FieldCreatedBy},
+			assessmenthistory.FieldUpdatedBy:           {Type: field.TypeString, Column: assessmenthistory.FieldUpdatedBy},
+			assessmenthistory.FieldDeletedAt:           {Type: field.TypeTime, Column: assessmenthistory.FieldDeletedAt},
+			assessmenthistory.FieldDeletedBy:           {Type: field.TypeString, Column: assessmenthistory.FieldDeletedBy},
+			assessmenthistory.FieldTags:                {Type: field.TypeJSON, Column: assessmenthistory.FieldTags},
+			assessmenthistory.FieldOwnerID:             {Type: field.TypeString, Column: assessmenthistory.FieldOwnerID},
+			assessmenthistory.FieldName:                {Type: field.TypeString, Column: assessmenthistory.FieldName},
+			assessmenthistory.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
+			assessmenthistory.FieldTemplateID:          {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
+			assessmenthistory.FieldAssessmentOwnerID:   {Type: field.TypeString, Column: assessmenthistory.FieldAssessmentOwnerID},
+			assessmenthistory.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessmenthistory.FieldResponseDueDuration},
 		},
 	}
 	graph.Nodes[5] = &sqlgraph.Node{
@@ -4687,7 +4689,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"template",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,
@@ -4720,18 +4722,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"document",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   assessmentresponse.DocumentTable,
-			Columns: []string{assessmentresponse.DocumentColumn},
-			Bidi:    false,
-		},
-		"AssessmentResponse",
-		"DocumentData",
-	)
-	graph.MustAddE(
 		"assessment",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -4742,6 +4732,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"AssessmentResponse",
 		"Assessment",
+	)
+	graph.MustAddE(
+		"document",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   assessmentresponse.DocumentTable,
+			Columns: []string{assessmentresponse.DocumentColumn},
+			Bidi:    false,
+		},
+		"AssessmentResponse",
+		"DocumentData",
 	)
 	graph.MustAddE(
 		"owner",
@@ -11116,6 +11118,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenter",
 	)
 	graph.MustAddE(
+		"assessments",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   template.AssessmentsTable,
+			Columns: []string{template.AssessmentsColumn},
+			Bidi:    false,
+		},
+		"Template",
+		"Assessment",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -12922,6 +12936,11 @@ func (f *AssessmentFilter) WhereAssessmentOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldAssessmentOwnerID))
 }
 
+// WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.
+func (f *AssessmentFilter) WhereResponseDueDuration(p entql.Int64P) {
+	f.Where(p.Field(assessment.FieldResponseDueDuration))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *AssessmentFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -13121,6 +13140,11 @@ func (f *AssessmentHistoryFilter) WhereAssessmentOwnerID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldAssessmentOwnerID))
 }
 
+// WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.
+func (f *AssessmentHistoryFilter) WhereResponseDueDuration(p entql.Int64P) {
+	f.Where(p.Field(assessmenthistory.FieldResponseDueDuration))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *AssessmentResponseQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -13255,20 +13279,6 @@ func (f *AssessmentResponseFilter) WhereHasOwnerWith(preds ...predicate.Organiza
 	})))
 }
 
-// WhereHasDocument applies a predicate to check if query has an edge document.
-func (f *AssessmentResponseFilter) WhereHasDocument() {
-	f.Where(entql.HasEdge("document"))
-}
-
-// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
-func (f *AssessmentResponseFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
-	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasAssessment applies a predicate to check if query has an edge assessment.
 func (f *AssessmentResponseFilter) WhereHasAssessment() {
 	f.Where(entql.HasEdge("assessment"))
@@ -13277,6 +13287,20 @@ func (f *AssessmentResponseFilter) WhereHasAssessment() {
 // WhereHasAssessmentWith applies a predicate to check if query has an edge assessment with a given conditions (other predicates).
 func (f *AssessmentResponseFilter) WhereHasAssessmentWith(preds ...predicate.Assessment) {
 	f.Where(entql.HasEdgeWith("assessment", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasDocument applies a predicate to check if query has an edge document.
+func (f *AssessmentResponseFilter) WhereHasDocument() {
+	f.Where(entql.HasEdge("document"))
+}
+
+// WhereHasDocumentWith applies a predicate to check if query has an edge document with a given conditions (other predicates).
+func (f *AssessmentResponseFilter) WhereHasDocumentWith(preds ...predicate.DocumentData) {
+	f.Where(entql.HasEdgeWith("document", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -35221,6 +35245,20 @@ func (f *TemplateFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *TemplateFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssessments applies a predicate to check if query has an edge assessments.
+func (f *TemplateFilter) WhereHasAssessments() {
+	f.Where(entql.HasEdge("assessments"))
+}
+
+// WhereHasAssessmentsWith applies a predicate to check if query has an edge assessments with a given conditions (other predicates).
+func (f *TemplateFilter) WhereHasAssessmentsWith(preds ...predicate.Assessment) {
+	f.Where(entql.HasEdgeWith("assessments", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

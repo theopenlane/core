@@ -190,6 +190,27 @@ func (_u *AssessmentHistoryUpdate) ClearAssessmentOwnerID() *AssessmentHistoryUp
 	return _u
 }
 
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdate) SetResponseDueDuration(v int64) *AssessmentHistoryUpdate {
+	_u.mutation.ResetResponseDueDuration()
+	_u.mutation.SetResponseDueDuration(v)
+	return _u
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_u *AssessmentHistoryUpdate) SetNillableResponseDueDuration(v *int64) *AssessmentHistoryUpdate {
+	if v != nil {
+		_u.SetResponseDueDuration(*v)
+	}
+	return _u
+}
+
+// AddResponseDueDuration adds value to the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdate) AddResponseDueDuration(v int64) *AssessmentHistoryUpdate {
+	_u.mutation.AddResponseDueDuration(v)
+	return _u
+}
+
 // Mutation returns the AssessmentHistoryMutation object of the builder.
 func (_u *AssessmentHistoryUpdate) Mutation() *AssessmentHistoryMutation {
 	return _u.mutation
@@ -313,6 +334,12 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if _u.mutation.AssessmentOwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
+		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -496,6 +523,27 @@ func (_u *AssessmentHistoryUpdateOne) ClearAssessmentOwnerID() *AssessmentHistor
 	return _u
 }
 
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdateOne) SetResponseDueDuration(v int64) *AssessmentHistoryUpdateOne {
+	_u.mutation.ResetResponseDueDuration()
+	_u.mutation.SetResponseDueDuration(v)
+	return _u
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_u *AssessmentHistoryUpdateOne) SetNillableResponseDueDuration(v *int64) *AssessmentHistoryUpdateOne {
+	if v != nil {
+		_u.SetResponseDueDuration(*v)
+	}
+	return _u
+}
+
+// AddResponseDueDuration adds value to the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdateOne) AddResponseDueDuration(v int64) *AssessmentHistoryUpdateOne {
+	_u.mutation.AddResponseDueDuration(v)
+	return _u
+}
+
 // Mutation returns the AssessmentHistoryMutation object of the builder.
 func (_u *AssessmentHistoryUpdateOne) Mutation() *AssessmentHistoryMutation {
 	return _u.mutation
@@ -649,6 +697,12 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if _u.mutation.AssessmentOwnerIDCleared() {
 		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
+		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
