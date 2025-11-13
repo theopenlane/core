@@ -56,7 +56,7 @@ func isValidChannels(channels []enums.Channel) error {
 
 	for _, ch := range channels {
 		if !validMap[string(ch)] {
-			return fmt.Errorf("invalid channel: %s", ch)
+			return fmt.Errorf("%w: %s", ErrInvalidChannel, ch)
 		}
 	}
 
