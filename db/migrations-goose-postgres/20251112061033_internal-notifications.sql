@@ -1,0 +1,15 @@
+-- +goose Up
+-- create "notifications" table
+CREATE TABLE "notifications" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "tags" jsonb NULL, "notification_type" character varying NOT NULL, "object_type" character varying NOT NULL, "title" character varying NOT NULL, "body" text NOT NULL, "data" jsonb NULL, "read_at" timestamptz NULL, "channels" jsonb NULL, "owner_id" character varying NULL, "user_id" character varying NOT NULL, PRIMARY KEY ("id"), CONSTRAINT "notifications_organizations_notifications" FOREIGN KEY ("owner_id") REFERENCES "organizations" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, CONSTRAINT "notifications_users_notifications" FOREIGN KEY ("user_id") REFERENCES "users" ("id") ON UPDATE NO ACTION ON DELETE NO ACTION);
+-- create index "notification_owner_id" to table: "notifications"
+CREATE INDEX "notification_owner_id" ON "notifications" ("owner_id") WHERE (deleted_at IS NULL);
+-- create index "notification_user_id_read_at_owner_id" to table: "notifications"
+CREATE INDEX "notification_user_id_read_at_owner_id" ON "notifications" ("user_id", "read_at", "owner_id") WHERE (deleted_at IS NULL);
+
+-- +goose Down
+-- reverse: create index "notification_user_id_read_at_owner_id" to table: "notifications"
+DROP INDEX "notification_user_id_read_at_owner_id";
+-- reverse: create index "notification_owner_id" to table: "notifications"
+DROP INDEX "notification_owner_id";
+-- reverse: create "notifications" table
+DROP TABLE "notifications";
