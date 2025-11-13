@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -18,13 +18,15 @@ import (
 func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Assessment.Create().SetInput(input).Save(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create assessment")
+
 		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessment"})
 	}
 
@@ -42,7 +44,7 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -52,6 +54,8 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
+		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to update assessment")
+
 		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessment"})
 	}
 
@@ -63,10 +67,14 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 // DeleteAssessment is the resolver for the deleteAssessment field.
 func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Assessment.DeleteOneID(id).Exec(ctx); err != nil {
+		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to delete assessment")
+
 		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessment"})
 	}
 
 	if err := generated.AssessmentEdgeCleanup(ctx, id); err != nil {
+		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to cascade delete assessment edges")
+
 		return nil, newCascadeDeleteError(err)
 	}
 

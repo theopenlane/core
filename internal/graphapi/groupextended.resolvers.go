@@ -8,12 +8,12 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
@@ -121,7 +121,7 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -170,7 +170,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) (*model.GroupCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, groupInput.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -312,7 +312,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj *generated.CreateGroupInput, data *generated.CreateGroupSettingInput) error {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, obj.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return rout.ErrPermissionDenied
 	}
@@ -335,7 +335,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
-		log.Error().Msg("unable to get group from context")
+		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
 	}
@@ -363,7 +363,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
-		log.Error().Msg("unable to get group from context")
+		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
 	}
@@ -386,7 +386,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj *generated.UpdateGroupInput, data *generated.UpdateGroupSettingInput) error {
 	groupID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if groupID == nil {
-		log.Error().Msg("unable to get group from context")
+		logx.FromContext(ctx).Error().Msg("unable to get group from context")
 
 		return ErrInternalServerError
 	}

@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -28,7 +28,7 @@ func (r *mutationResolver) CreateTrustCenterCompliance(ctx context.Context, inpu
 			return nil, rout.NewMissingRequiredFieldError("trustCenterID")
 		}
 
-		log.Warn().Str("trust center id", trustCenterID).Msg("trustCenterID not provided, using organization's trust center")
+		logx.FromContext(ctx).Warn().Str("trust center id", trustCenterID).Msg("trustCenterID not provided, using organization's trust center")
 
 		input.TrustCenterID = &trustCenterID
 
@@ -62,7 +62,7 @@ func (r *mutationResolver) CreateBulkTrustCenterCompliance(ctx context.Context, 
 func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Context, input graphql.Upload) (*model.TrustCenterComplianceBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateTrustCenterComplianceInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, err
 	}

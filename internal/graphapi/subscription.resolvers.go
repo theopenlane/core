@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 )
 
@@ -18,13 +18,13 @@ import (
 func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generated.Task, error) {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get subject ID from context")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject ID from context")
 		return nil, newPermissionDeniedError()
 	}
 
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
-		log.Error().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
+		logx.FromContext(ctx).Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
 		return nil, ErrInternalServerError
 	}
 

@@ -7,12 +7,12 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/programmembership"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
@@ -21,7 +21,7 @@ import (
 func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input model.CreateProgramWithMembersInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -96,7 +96,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.CreateFullProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.Program.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -257,7 +257,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj *generated.UpdateProgramInput, data []*model.AddProgramMembershipInput) error {
 	programID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if programID == nil {
-		log.Error().Msg("unable to get program from context")
+		logx.FromContext(ctx).Error().Msg("unable to get program from context")
 
 		return ErrInternalServerError
 	}
@@ -294,7 +294,7 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 
 	programID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if programID == nil {
-		log.Error().Msg("unable to get program from context")
+		logx.FromContext(ctx).Error().Msg("unable to get program from context")
 
 		return ErrInternalServerError
 	}
