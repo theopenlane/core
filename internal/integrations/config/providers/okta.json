@@ -4,7 +4,7 @@
   "category": "sso",
   "authType": "apikey",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-okta/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://developer.okta.com/docs/reference/api/overview/",
   "labels": {
     "vendor": "okta",

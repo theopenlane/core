@@ -4,7 +4,7 @@
   "category": "compliance",
   "authType": "aws_sts",
   "active": true,
-  "logoUrl": "https://static-00.iconduck.com/assets.00/aws-icon-2048x2048-uqgz6h3o.png",
+  "logoUrl": "",
   "docsUrl": "https://docs.aws.amazon.com/audit-manager/latest/userguide/what-is.html",
   "awsSts": {
     "sessionName": "openlane-audit",

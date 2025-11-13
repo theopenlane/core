@@ -11,5 +11,5 @@ const TypeAzureEntraID = types.ProviderType("azure_entra_id")
 
 // Builder returns the Azure Entra ID provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeAzureEntraID)
+	return oauth.Builder(TypeAzureEntraID, oauth.WithOperations(azureOperations()))
 }

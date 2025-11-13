@@ -42,6 +42,7 @@ type ProviderRegistry interface {
 	Provider(provider types.ProviderType) (types.Provider, bool)
 	Config(provider types.ProviderType) (config.ProviderSpec, bool)
 	ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig
+	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
 }
 
 // SchemaRegistry interface for dynamic schema registration
@@ -125,9 +126,13 @@ type Handler struct {
 	IntegrationRegistry ProviderRegistry
 	// IntegrationStore handles persistence for integration metadata and secrets
 	IntegrationStore *keystore.Store
-	// IntegrationBroker exchanges credentials for provider access tokens.
+	// IntegrationBroker exchanges credentials for provider access tokens
 	IntegrationBroker *keystore.Broker
-	// KeymakerService orchestrates integration activation flows.
+	// IntegrationClients reuses provider SDK clients via pooled builders
+	IntegrationClients *keystore.ClientPoolManager
+	// IntegrationOperations standardizes executing provider operations
+	IntegrationOperations *keystore.OperationManager
+	// KeymakerService orchestrates integration activation flows
 	KeymakerService *keymaker.Service
 }
 

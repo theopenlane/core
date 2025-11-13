@@ -4,7 +4,7 @@
   "category": "devops",
   "authType": "apikey",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-vercel/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://vercel.com/docs/rest-api",
   "apiKey": {
     "keyLabel": "API Token",

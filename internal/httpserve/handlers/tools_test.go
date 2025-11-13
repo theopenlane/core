@@ -3,6 +3,7 @@ package handlers_test
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -108,6 +109,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPondPool       *soiree.PondPool
+	registeredRoutes     map[string]struct{}
 
 	// OpenAPI operations for reuse in tests
 	startImpersonationOp *openapi3.Operation
@@ -177,6 +179,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 func (suite *HandlerTestSuite) SetupTest() {
 	t := suite.T()
+
+	suite.registeredRoutes = make(map[string]struct{})
 
 	ctx := context.Background()
 
@@ -281,6 +285,15 @@ func (suite *HandlerTestSuite) registerTestHandler(method, path string, operatio
 	})
 }
 
+func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	key := method + " " + path
+	if _, exists := suite.registeredRoutes[key]; exists {
+		return
+	}
+	suite.registeredRoutes[key] = struct{}{}
+	suite.registerTestHandler(method, path, operation, handlerFunc)
+}
+
 func (suite *HandlerTestSuite) TearDownTest() {
 	if suite.db != nil {
 		err := suite.db.CloseAll()
@@ -358,7 +371,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		},
 	}
 
-	reg, err := registry.New(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
+	reg, err := registry.NewRegistry(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
 	require.NoError(suite.T(), err)
 
 	sessions := keymaker.NewMemorySessionStore()
@@ -368,6 +381,11 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	suite.h.IntegrationRegistry = reg
 	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
 	suite.h.KeymakerService = svc
+
+	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
+	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
+	require.NoError(suite.T(), err)
+	suite.h.IntegrationOperations = manager
 }
 
 type testOAuthProvider struct {
@@ -389,7 +407,13 @@ func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext
 	if state == "" {
 		state = "state"
 	}
-	authURL := fmt.Sprintf("https://example.com/oauth/authorize?state=%s", state)
+	values := url.Values{}
+	values.Set("state", state)
+	if len(input.Scopes) > 0 {
+		values.Set("scope", strings.Join(input.Scopes, " "))
+	}
+
+	authURL := fmt.Sprintf("https://example.com/oauth/authorize?%s", values.Encode())
 	return &testAuthSession{
 		provider: p.provider,
 		state:    state,

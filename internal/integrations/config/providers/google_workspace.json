@@ -4,7 +4,7 @@
   "category": "identity",
   "authType": "oauth2",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-google-directory/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://developers.google.com/admin-sdk/directory",
   "oauth": {
     "clientId": "${GOOGLE_WORKSPACE_CLIENT_ID}",
@@ -20,7 +20,7 @@
       "access_type": "offline",
       "prompt": "consent"
     },
-    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
   },
   "userInfo": {
     "url": "https://openidconnect.googleapis.com/v1/userinfo",

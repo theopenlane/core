@@ -26,10 +26,14 @@ type Provider struct {
 	authParams   map[string]string
 	tokenParams  map[string]string
 	capabilities types.ProviderCapabilities
+	operations   []types.OperationDescriptor
 }
 
+// ProviderOption customizes OAuth provider construction.
+type ProviderOption func(*Provider)
+
 // New constructs a Provider from the supplied spec
-func New(ctx context.Context, spec config.ProviderSpec) (*Provider, error) {
+func New(ctx context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
 	if spec.OAuth == nil {
 		return nil, providers.ErrSpecOAuthRequired
 	}
@@ -45,12 +49,12 @@ func New(ctx context.Context, spec config.ProviderSpec) (*Provider, error) {
 		Scopes:      spec.OAuth.Scopes,
 	}
 
-	var opts []rp.Option
+	var rpOpts []rp.Option
 	if spec.OAuth.UsePKCE {
-		opts = append(opts, rp.WithPKCE(nil))
+		rpOpts = append(rpOpts, rp.WithPKCE(nil))
 	}
 
-	rparty, err := rp.NewRelyingPartyOAuth(cfg, opts...)
+	rparty, err := rp.NewRelyingPartyOAuth(cfg, rpOpts...)
 	if err != nil {
 		return nil, fmt.Errorf("%w: %w", providers.ErrRelyingPartyInit, err)
 	}
@@ -69,6 +73,12 @@ func New(ctx context.Context, spec config.ProviderSpec) (*Provider, error) {
 		},
 	}
 
+	for _, opt := range options {
+		if opt != nil {
+			opt(provider)
+		}
+	}
+
 	return provider, nil
 }
 
@@ -82,28 +92,45 @@ func (p *Provider) Capabilities() types.ProviderCapabilities {
 	return p.capabilities
 }
 
+// Operations returns the provider-published operations if configured.
+func (p *Provider) Operations() []types.OperationDescriptor {
+	if len(p.operations) == 0 {
+		return nil
+	}
+
+	ops := make([]types.OperationDescriptor, len(p.operations))
+	copy(ops, p.operations)
+
+	return ops
+}
+
 // BeginAuth starts an OAuth authorization flow
 func (p *Provider) BeginAuth(ctx context.Context, input types.AuthContext) (types.AuthSession, error) {
 	scopes := p.spec.OAuth.Scopes
 	if len(input.Scopes) > 0 {
 		scopes = input.Scopes
 	}
+
 	state := input.State
+
 	if strings.TrimSpace(state) == "" {
 		generated, err := helpers.RandomState(32)
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", providers.ErrStateGeneration, err)
 		}
+
 		state = generated
 	}
 
 	var authOpts []rp.AuthURLOpt
+
 	if len(scopes) > 0 {
 		scopeValue := strings.Join(scopes, " ")
 		authOpts = append(authOpts, func() []oauth2.AuthCodeOption {
 			return []oauth2.AuthCodeOption{oauth2.SetAuthURLParam("scope", scopeValue)}
 		})
 	}
+
 	for key, value := range p.authParams {
 		k := key
 		v := value
@@ -151,4 +178,39 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 	}
 
 	return payload, nil
+}
+
+// WithOperations configures provider-managed operations.
+func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
+	sanitized := sanitizeOperationDescriptors(descriptors)
+	return func(p *Provider) {
+		if len(sanitized) == 0 {
+			return
+		}
+
+		ops := make([]types.OperationDescriptor, len(sanitized))
+		for i, descriptor := range sanitized {
+			if descriptor.Provider == types.ProviderUnknown {
+				descriptor.Provider = p.providerType
+			}
+			ops[i] = descriptor
+		}
+		p.operations = ops
+	}
+}
+
+func sanitizeOperationDescriptors(descriptors []types.OperationDescriptor) []types.OperationDescriptor {
+	if len(descriptors) == 0 {
+		return nil
+	}
+
+	out := make([]types.OperationDescriptor, 0, len(descriptors))
+	for _, descriptor := range descriptors {
+		if descriptor.Run == nil || descriptor.Name == "" {
+			continue
+		}
+		out = append(out, descriptor)
+	}
+
+	return out
 }

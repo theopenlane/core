@@ -2,7 +2,7 @@ package vercel
 
 import (
 	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/providers/oauth"
+	"github.com/theopenlane/core/internal/integrations/providers/apikey"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -11,5 +11,9 @@ const TypeVercel = types.ProviderType("vercel")
 
 // Builder returns the Vercel provider builder
 func Builder() providers.Builder {
-	return oauth.Builder(TypeVercel)
+	return apikey.Builder(
+		TypeVercel,
+		apikey.WithTokenField("apiToken"),
+		apikey.WithOperations(vercelOperations()),
+	)
 }

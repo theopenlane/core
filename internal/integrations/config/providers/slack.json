@@ -4,7 +4,7 @@
   "category": "collab",
   "authType": "oauth2",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-slack/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://api.slack.com/authentication/oauth-v2",
   "oauth": {
     "clientId": "${SLACK_CLIENT_ID}",
@@ -15,7 +15,7 @@
       "identity.basic",
       "identity.email"
     ],
-    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
   },
   "userInfo": {
     "url": "https://slack.com/api/users.identity",

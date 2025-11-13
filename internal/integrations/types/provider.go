@@ -2,7 +2,6 @@ package types
 
 import (
 	"context"
-	"strings"
 )
 
 // ProviderType is a strongly typed identifier for an integration provider
@@ -18,7 +17,7 @@ const (
 // ProviderTypeFromString normalizes arbitrary user/config input into a stable
 // ProviderType by trimming whitespace and lowercasing.
 func ProviderTypeFromString(value string) ProviderType {
-	return ProviderType(strings.TrimSpace(strings.ToLower(value)))
+	return ProviderType(value)
 }
 
 // AuthKind indicates how a provider authenticates (oauth2, oidc, workload identity, etc.).
@@ -29,9 +28,7 @@ const (
 	AuthKindOIDC             AuthKind = "oidc"
 	AuthKindAPIKey           AuthKind = "apikey"
 	AuthKindWorkloadIdentity AuthKind = "workload_identity"
-	AuthKindGitHubApp        AuthKind = "github_app"
 	AuthKindAWSFederation    AuthKind = "aws_sts"
-	AuthKindAzureFederated   AuthKind = "azure_federated"
 )
 
 // ProviderCapabilities describe optional behaviours supported by a provider
@@ -75,6 +72,36 @@ type Provider interface {
 	Capabilities() ProviderCapabilities
 	BeginAuth(ctx context.Context, input AuthContext) (AuthSession, error)
 	Mint(ctx context.Context, subject CredentialSubject) (CredentialPayload, error)
+}
+
+// ClientName identifies a specific client type exposed by a provider (e.g., rest, graphql).
+type ClientName string
+
+// ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config.
+type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config map[string]any) (any, error)
+
+// ClientDescriptor describes a provider-managed client that can be pooled/reused downstream.
+type ClientDescriptor struct {
+	Provider     ProviderType
+	Name         ClientName
+	Description  string
+	Build        ClientBuilderFunc
+	ConfigSchema map[string]any
+}
+
+// ClientProvider is implemented by providers that expose SDK clients for downstream services.
+type ClientProvider interface {
+	Provider
+	ClientDescriptors() []ClientDescriptor
+}
+
+// ClientRequest contains the parameters required to request a client instance.
+type ClientRequest struct {
+	OrgID    string
+	Provider ProviderType
+	Client   ClientName
+	Config   map[string]any
+	Force    bool
 }
 
 // AuthContext carries the state necessary to start an OAuth/OIDC transaction.
