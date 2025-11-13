@@ -78,6 +78,3 @@ junit*.xml
 
 # build files
 dist/
-zitadel
-zitadel-go
-oidc
