@@ -5,44 +5,48 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/iam/auth"
 )
 
 func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 	t := suite.T()
 
-	// setup handler
-	// Create operation for CreateQuestionnaireAnonymousJWT
 	operation := suite.createImpersonationOperation("CreateQuestionnaireAnonymousJWT", "Create questionnaire anonymous JWT")
 	suite.registerTestHandler("POST", "questionnaire/auth/anonymous", operation, suite.h.CreateQuestionnaireAnonymousJWT)
 
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
+	ctx = contextx.With(ctx, auth.QuestionnaireContextKey{})
 
-	// Create a test template
-	templateType := enums.Document
 	template, err := suite.db.Template.Create().
-		SetName("Test Assessment Template").
-		SetTemplateType(templateType).
 		SetOwnerID(testUser1.OrganizationID).
+		SetName("Test Template").
+		SetTemplateType("questionnaire").
+		SetJsonconfig(map[string]interface{}{
+			"title": "Sample Questionnaire",
+			"questions": []map[string]interface{}{
+				{
+					"id":       "q1",
+					"question": "Sample question",
+					"type":     "text",
+				},
+			},
+		}).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
-	// Create a test assessment
 	assessment, err := suite.db.Assessment.Create().
-		SetName("Test Assessment").
-		SetTemplateID(template.ID).
-		SetAssessmentType(enums.AssessmentTypeExternal).
 		SetOwnerID(testUser1.OrganizationID).
+		SetTemplateID(template.ID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
@@ -50,39 +54,40 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 		name           string
 		assessmentID   string
 		expectedStatus int
-		expectSuccess  bool
 		expectedError  string
+		expectSuccess  bool
 	}{
 		{
-			name:           "successful anonymous JWT creation",
+			name:           "happy path - valid assessment ID",
 			assessmentID:   assessment.ID,
 			expectedStatus: http.StatusOK,
 			expectSuccess:  true,
 		},
 		{
-			name:           "assessment not found",
-			assessmentID:   "nonexistent-assessment-id",
-			expectedStatus: http.StatusUnauthorized,
-			expectedError:  "assessment not found",
-		},
-		{
 			name:           "missing assessment ID",
 			assessmentID:   "",
 			expectedStatus: http.StatusBadRequest,
-			expectedError:  "assessment_id",
+			expectedError:  "missing assessment ID",
+		},
+		{
+			name:           "nonexistent assessment ID",
+			assessmentID:   "nonexistent-id",
+			expectedStatus: http.StatusNotFound,
+			expectedError:  "assessment not found",
 		},
 	}
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			body := fmt.Sprintf(`{"assessment_id":"%s"}`, tc.assessmentID)
-			req := httptest.NewRequest(http.MethodPost, "/questionnaire/auth/anonymous", strings.NewReader(body))
-			req.Header.Set("Content-Type", "application/json")
+			target := "/questionnaire/auth/anonymous"
+			if tc.assessmentID != "" {
+				target = fmt.Sprintf("%s?assessment_id=%s", target, tc.assessmentID)
+			}
 
-			// Set writer for tests that write on the response
+			req := httptest.NewRequest(http.MethodPost, target, nil)
+
 			recorder := httptest.NewRecorder()
 
-			// Using the ServerHTTP on echo will trigger the router and middleware
 			suite.e.ServeHTTP(recorder, req)
 
 			res := recorder.Result()
@@ -92,7 +97,6 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 
 			var out *models.CreateQuestionnaireAnonymousJWTResponse
 
-			// parse request body
 			if err := json.NewDecoder(res.Body).Decode(&out); err != nil {
 				t.Error("error parsing response", err)
 			}
@@ -104,12 +108,11 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 				assert.NotEmpty(t, out.Session, "session should not be empty")
 				assert.Equal(t, "Bearer", out.TokenType, "token type should be bearer")
 			} else {
-				// For error cases, the response structure might be different
+
 				if out == nil {
 					var errorResp map[string]interface{}
 					res.Body.Close()
-					req2 := httptest.NewRequest(http.MethodPost, "/questionnaire/auth/anonymous", strings.NewReader(body))
-					req2.Header.Set("Content-Type", "application/json")
+					req2 := httptest.NewRequest(http.MethodPost, target, nil)
 					recorder2 := httptest.NewRecorder()
 					suite.e.ServeHTTP(recorder2, req2)
 					res2 := recorder2.Result()
@@ -125,8 +128,6 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 		})
 	}
 
-	// Cleanup
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
 	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)
 }
-

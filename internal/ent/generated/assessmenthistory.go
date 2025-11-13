@@ -48,8 +48,6 @@ type AssessmentHistory struct {
 	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
 	// the template id associated with the assessment
 	TemplateID string `json:"template_id,omitempty"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration int64 `json:"response_due_duration,omitempty"`
 	selectValues        sql.SelectValues
@@ -66,7 +64,7 @@ func (*AssessmentHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case assessmenthistory.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
-		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID, assessmenthistory.FieldAssessmentOwnerID:
+		case assessmenthistory.FieldID, assessmenthistory.FieldRef, assessmenthistory.FieldCreatedBy, assessmenthistory.FieldUpdatedBy, assessmenthistory.FieldDeletedBy, assessmenthistory.FieldOwnerID, assessmenthistory.FieldName, assessmenthistory.FieldAssessmentType, assessmenthistory.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case assessmenthistory.FieldHistoryTime, assessmenthistory.FieldCreatedAt, assessmenthistory.FieldUpdatedAt, assessmenthistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -177,12 +175,6 @@ func (_m *AssessmentHistory) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.TemplateID = value.String
 			}
-		case assessmenthistory.FieldAssessmentOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
-			} else if value.Valid {
-				_m.AssessmentOwnerID = value.String
-			}
 		case assessmenthistory.FieldResponseDueDuration:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field response_due_duration", values[i])
@@ -266,9 +258,6 @@ func (_m *AssessmentHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("template_id=")
 	builder.WriteString(_m.TemplateID)
-	builder.WriteString(", ")
-	builder.WriteString("assessment_owner_id=")
-	builder.WriteString(_m.AssessmentOwnerID)
 	builder.WriteString(", ")
 	builder.WriteString("response_due_duration=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ResponseDueDuration))

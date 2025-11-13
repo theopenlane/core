@@ -46,8 +46,6 @@ const (
 	FieldAssessmentType = "assessment_type"
 	// FieldTemplateID holds the string denoting the template_id field in the database.
 	FieldTemplateID = "template_id"
-	// FieldAssessmentOwnerID holds the string denoting the assessment_owner_id field in the database.
-	FieldAssessmentOwnerID = "assessment_owner_id"
 	// FieldResponseDueDuration holds the string denoting the response_due_duration field in the database.
 	FieldResponseDueDuration = "response_due_duration"
 	// Table holds the table name of the assessmenthistory in the database.
@@ -71,7 +69,6 @@ var Columns = []string{
 	FieldName,
 	FieldAssessmentType,
 	FieldTemplateID,
-	FieldAssessmentOwnerID,
 	FieldResponseDueDuration,
 }
 
@@ -203,11 +200,6 @@ func ByAssessmentType(opts ...sql.OrderTermOption) OrderOption {
 // ByTemplateID orders the results by the template_id field.
 func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
-}
-
-// ByAssessmentOwnerID orders the results by the assessment_owner_id field.
-func ByAssessmentOwnerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssessmentOwnerID, opts...).ToFunc()
 }
 
 // ByResponseDueDuration orders the results by the response_due_duration field.

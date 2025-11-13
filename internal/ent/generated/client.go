@@ -2350,63 +2350,6 @@ func (c *AssessmentClient) QueryOwner(_m *Assessment) *OrganizationQuery {
 	return query
 }
 
-// QueryBlockedGroups queries the blocked_groups edge of a Assessment.
-func (c *AssessmentClient) QueryBlockedGroups(_m *Assessment) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessment.Table, assessment.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, assessment.BlockedGroupsTable, assessment.BlockedGroupsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryEditors queries the editors edge of a Assessment.
-func (c *AssessmentClient) QueryEditors(_m *Assessment) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessment.Table, assessment.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, assessment.EditorsTable, assessment.EditorsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
-// QueryViewers queries the viewers edge of a Assessment.
-func (c *AssessmentClient) QueryViewers(_m *Assessment) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessment.Table, assessment.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, assessment.ViewersTable, assessment.ViewersColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryTemplate queries the template edge of a Assessment.
 func (c *AssessmentClient) QueryTemplate(_m *Assessment) *TemplateQuery {
 	query := (&TemplateClient{config: c.config}).Query()

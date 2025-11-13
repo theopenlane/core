@@ -315,7 +315,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessment.FieldName:                {Type: field.TypeString, Column: assessment.FieldName},
 			assessment.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
 			assessment.FieldTemplateID:          {Type: field.TypeString, Column: assessment.FieldTemplateID},
-			assessment.FieldAssessmentOwnerID:   {Type: field.TypeString, Column: assessment.FieldAssessmentOwnerID},
 			assessment.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessment.FieldResponseDueDuration},
 		},
 	}
@@ -344,7 +343,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmenthistory.FieldName:                {Type: field.TypeString, Column: assessmenthistory.FieldName},
 			assessmenthistory.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
 			assessmenthistory.FieldTemplateID:          {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
-			assessmenthistory.FieldAssessmentOwnerID:   {Type: field.TypeString, Column: assessmenthistory.FieldAssessmentOwnerID},
 			assessmenthistory.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessmenthistory.FieldResponseDueDuration},
 		},
 	}
@@ -4676,42 +4674,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Assessment",
 		"Organization",
-	)
-	graph.MustAddE(
-		"blocked_groups",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.BlockedGroupsTable,
-			Columns: []string{assessment.BlockedGroupsColumn},
-			Bidi:    false,
-		},
-		"Assessment",
-		"Group",
-	)
-	graph.MustAddE(
-		"editors",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.EditorsTable,
-			Columns: []string{assessment.EditorsColumn},
-			Bidi:    false,
-		},
-		"Assessment",
-		"Group",
-	)
-	graph.MustAddE(
-		"viewers",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.ViewersTable,
-			Columns: []string{assessment.ViewersColumn},
-			Bidi:    false,
-		},
-		"Assessment",
-		"Group",
 	)
 	graph.MustAddE(
 		"template",
@@ -13007,11 +12969,6 @@ func (f *AssessmentFilter) WhereTemplateID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldTemplateID))
 }
 
-// WhereAssessmentOwnerID applies the entql string predicate on the assessment_owner_id field.
-func (f *AssessmentFilter) WhereAssessmentOwnerID(p entql.StringP) {
-	f.Where(p.Field(assessment.FieldAssessmentOwnerID))
-}
-
 // WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.
 func (f *AssessmentFilter) WhereResponseDueDuration(p entql.Int64P) {
 	f.Where(p.Field(assessment.FieldResponseDueDuration))
@@ -13025,48 +12982,6 @@ func (f *AssessmentFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *AssessmentFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasBlockedGroups applies a predicate to check if query has an edge blocked_groups.
-func (f *AssessmentFilter) WhereHasBlockedGroups() {
-	f.Where(entql.HasEdge("blocked_groups"))
-}
-
-// WhereHasBlockedGroupsWith applies a predicate to check if query has an edge blocked_groups with a given conditions (other predicates).
-func (f *AssessmentFilter) WhereHasBlockedGroupsWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("blocked_groups", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasEditors applies a predicate to check if query has an edge editors.
-func (f *AssessmentFilter) WhereHasEditors() {
-	f.Where(entql.HasEdge("editors"))
-}
-
-// WhereHasEditorsWith applies a predicate to check if query has an edge editors with a given conditions (other predicates).
-func (f *AssessmentFilter) WhereHasEditorsWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("editors", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasViewers applies a predicate to check if query has an edge viewers.
-func (f *AssessmentFilter) WhereHasViewers() {
-	f.Where(entql.HasEdge("viewers"))
-}
-
-// WhereHasViewersWith applies a predicate to check if query has an edge viewers with a given conditions (other predicates).
-func (f *AssessmentFilter) WhereHasViewersWith(preds ...predicate.Group) {
-	f.Where(entql.HasEdgeWith("viewers", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -13209,11 +13124,6 @@ func (f *AssessmentHistoryFilter) WhereAssessmentType(p entql.StringP) {
 // WhereTemplateID applies the entql string predicate on the template_id field.
 func (f *AssessmentHistoryFilter) WhereTemplateID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldTemplateID))
-}
-
-// WhereAssessmentOwnerID applies the entql string predicate on the assessment_owner_id field.
-func (f *AssessmentHistoryFilter) WhereAssessmentOwnerID(p entql.StringP) {
-	f.Where(p.Field(assessmenthistory.FieldAssessmentOwnerID))
 }
 
 // WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.

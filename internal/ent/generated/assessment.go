@@ -43,8 +43,6 @@ type Assessment struct {
 	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
 	// the template id associated with the assessment
 	TemplateID string `json:"template_id,omitempty"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration int64 `json:"response_due_duration,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
@@ -57,25 +55,16 @@ type Assessment struct {
 type AssessmentEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// groups that are blocked from viewing or editing the risk
-	BlockedGroups []*Group `json:"blocked_groups,omitempty"`
-	// provides edit access to the risk to members of the group
-	Editors []*Group `json:"editors,omitempty"`
-	// provides view access to the risk to members of the group
-	Viewers []*Group `json:"viewers,omitempty"`
 	// Template holds the value of the template edge.
 	Template *Template `json:"template,omitempty"`
 	// AssessmentResponses holds the value of the assessment_responses edge.
 	AssessmentResponses []*AssessmentResponse `json:"assessment_responses,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [6]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [6]map[string]int
+	totalCount [3]map[string]int
 
-	namedBlockedGroups       map[string][]*Group
-	namedEditors             map[string][]*Group
-	namedViewers             map[string][]*Group
 	namedAssessmentResponses map[string][]*AssessmentResponse
 }
 
@@ -90,39 +79,12 @@ func (e AssessmentEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// BlockedGroupsOrErr returns the BlockedGroups value or an error if the edge
-// was not loaded in eager-loading.
-func (e AssessmentEdges) BlockedGroupsOrErr() ([]*Group, error) {
-	if e.loadedTypes[1] {
-		return e.BlockedGroups, nil
-	}
-	return nil, &NotLoadedError{edge: "blocked_groups"}
-}
-
-// EditorsOrErr returns the Editors value or an error if the edge
-// was not loaded in eager-loading.
-func (e AssessmentEdges) EditorsOrErr() ([]*Group, error) {
-	if e.loadedTypes[2] {
-		return e.Editors, nil
-	}
-	return nil, &NotLoadedError{edge: "editors"}
-}
-
-// ViewersOrErr returns the Viewers value or an error if the edge
-// was not loaded in eager-loading.
-func (e AssessmentEdges) ViewersOrErr() ([]*Group, error) {
-	if e.loadedTypes[3] {
-		return e.Viewers, nil
-	}
-	return nil, &NotLoadedError{edge: "viewers"}
-}
-
 // TemplateOrErr returns the Template value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e AssessmentEdges) TemplateOrErr() (*Template, error) {
 	if e.Template != nil {
 		return e.Template, nil
-	} else if e.loadedTypes[4] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: template.Label}
 	}
 	return nil, &NotLoadedError{edge: "template"}
@@ -131,7 +93,7 @@ func (e AssessmentEdges) TemplateOrErr() (*Template, error) {
 // AssessmentResponsesOrErr returns the AssessmentResponses value or an error if the edge
 // was not loaded in eager-loading.
 func (e AssessmentEdges) AssessmentResponsesOrErr() ([]*AssessmentResponse, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[2] {
 		return e.AssessmentResponses, nil
 	}
 	return nil, &NotLoadedError{edge: "assessment_responses"}
@@ -146,7 +108,7 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case assessment.FieldResponseDueDuration:
 			values[i] = new(sql.NullInt64)
-		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID, assessment.FieldAssessmentOwnerID:
+		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case assessment.FieldCreatedAt, assessment.FieldUpdatedAt, assessment.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -239,12 +201,6 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TemplateID = value.String
 			}
-		case assessment.FieldAssessmentOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
-			} else if value.Valid {
-				_m.AssessmentOwnerID = value.String
-			}
 		case assessment.FieldResponseDueDuration:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
 				return fmt.Errorf("unexpected type %T for field response_due_duration", values[i])
@@ -267,21 +223,6 @@ func (_m *Assessment) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Assessment entity.
 func (_m *Assessment) QueryOwner() *OrganizationQuery {
 	return NewAssessmentClient(_m.config).QueryOwner(_m)
-}
-
-// QueryBlockedGroups queries the "blocked_groups" edge of the Assessment entity.
-func (_m *Assessment) QueryBlockedGroups() *GroupQuery {
-	return NewAssessmentClient(_m.config).QueryBlockedGroups(_m)
-}
-
-// QueryEditors queries the "editors" edge of the Assessment entity.
-func (_m *Assessment) QueryEditors() *GroupQuery {
-	return NewAssessmentClient(_m.config).QueryEditors(_m)
-}
-
-// QueryViewers queries the "viewers" edge of the Assessment entity.
-func (_m *Assessment) QueryViewers() *GroupQuery {
-	return NewAssessmentClient(_m.config).QueryViewers(_m)
 }
 
 // QueryTemplate queries the "template" edge of the Assessment entity.
@@ -350,85 +291,10 @@ func (_m *Assessment) String() string {
 	builder.WriteString("template_id=")
 	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
-	builder.WriteString("assessment_owner_id=")
-	builder.WriteString(_m.AssessmentOwnerID)
-	builder.WriteString(", ")
 	builder.WriteString("response_due_duration=")
 	builder.WriteString(fmt.Sprintf("%v", _m.ResponseDueDuration))
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedBlockedGroups returns the BlockedGroups named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Assessment) NamedBlockedGroups(name string) ([]*Group, error) {
-	if _m.Edges.namedBlockedGroups == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedBlockedGroups[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Assessment) appendNamedBlockedGroups(name string, edges ...*Group) {
-	if _m.Edges.namedBlockedGroups == nil {
-		_m.Edges.namedBlockedGroups = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedBlockedGroups[name] = []*Group{}
-	} else {
-		_m.Edges.namedBlockedGroups[name] = append(_m.Edges.namedBlockedGroups[name], edges...)
-	}
-}
-
-// NamedEditors returns the Editors named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Assessment) NamedEditors(name string) ([]*Group, error) {
-	if _m.Edges.namedEditors == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedEditors[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Assessment) appendNamedEditors(name string, edges ...*Group) {
-	if _m.Edges.namedEditors == nil {
-		_m.Edges.namedEditors = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedEditors[name] = []*Group{}
-	} else {
-		_m.Edges.namedEditors[name] = append(_m.Edges.namedEditors[name], edges...)
-	}
-}
-
-// NamedViewers returns the Viewers named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Assessment) NamedViewers(name string) ([]*Group, error) {
-	if _m.Edges.namedViewers == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedViewers[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Assessment) appendNamedViewers(name string, edges ...*Group) {
-	if _m.Edges.namedViewers == nil {
-		_m.Edges.namedViewers = make(map[string][]*Group)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedViewers[name] = []*Group{}
-	} else {
-		_m.Edges.namedViewers[name] = append(_m.Edges.namedViewers[name], edges...)
-	}
 }
 
 // NamedAssessmentResponses returns the AssessmentResponses named value or an error if the edge was not

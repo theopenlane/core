@@ -18,8 +18,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -154,6 +154,9 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			// Deny creation if questionnaire context is missing (enforces anonymous JWT requirement)
+			rule.DenyIfMissingQuestionnaireContext(),
+			// If questionnaire context is present, check normal access
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
@@ -172,9 +175,7 @@ func (AssessmentResponse) Annotations() []schema.Annotation {
 
 // Interceptors of the AssessmentResponse
 func (AssessmentResponse) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.AssessmentResponse](),
-	}
+	return []ent.Interceptor{}
 }
 
 // Indexes of the AssessmentResponse
@@ -201,5 +202,6 @@ func (AssessmentResponse) Modules() []models.OrgModule {
 func (AssessmentResponse) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookCreateAssessmentResponse(),
+		hooks.HookUpdateAssessmentResponse(),
 	}
 }

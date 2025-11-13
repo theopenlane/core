@@ -469,7 +469,6 @@ func init() {
 	assessmentMixinHooks2 := assessmentMixin[2].Hooks()
 	assessmentMixinHooks4 := assessmentMixin[4].Hooks()
 	assessmentMixinHooks6 := assessmentMixin[6].Hooks()
-	assessmentMixinHooks7 := assessmentMixin[7].Hooks()
 	assessmentHooks := schema.Assessment{}.Hooks()
 
 	assessment.Hooks[1] = assessmentMixinHooks0[0]
@@ -482,13 +481,7 @@ func init() {
 
 	assessment.Hooks[5] = assessmentMixinHooks6[0]
 
-	assessment.Hooks[6] = assessmentMixinHooks7[0]
-
-	assessment.Hooks[7] = assessmentMixinHooks7[1]
-
-	assessment.Hooks[8] = assessmentMixinHooks7[2]
-
-	assessment.Hooks[9] = assessmentHooks[0]
+	assessment.Hooks[6] = assessmentHooks[0]
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters2 := assessmentMixin[2].Interceptors()
 	assessmentMixinInters6 := assessmentMixin[6].Interceptors()
@@ -528,7 +521,7 @@ func init() {
 	// assessment.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	assessment.NameValidator = assessmentDescName.Validators[0].(func(string) error)
 	// assessmentDescResponseDueDuration is the schema descriptor for response_due_duration field.
-	assessmentDescResponseDueDuration := assessmentFields[4].Descriptor()
+	assessmentDescResponseDueDuration := assessmentFields[3].Descriptor()
 	// assessment.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
 	assessment.DefaultResponseDueDuration = assessmentDescResponseDueDuration.Default.(int64)
 	// assessmentDescID is the schema descriptor for id field.
@@ -567,7 +560,7 @@ func init() {
 	// assessmenthistory.DefaultTags holds the default value on creation for the tags field.
 	assessmenthistory.DefaultTags = assessmenthistoryDescTags.Default.([]string)
 	// assessmenthistoryDescResponseDueDuration is the schema descriptor for response_due_duration field.
-	assessmenthistoryDescResponseDueDuration := assessmenthistoryFields[16].Descriptor()
+	assessmenthistoryDescResponseDueDuration := assessmenthistoryFields[15].Descriptor()
 	// assessmenthistory.DefaultResponseDueDuration holds the default value on creation for the response_due_duration field.
 	assessmenthistory.DefaultResponseDueDuration = assessmenthistoryDescResponseDueDuration.Default.(int64)
 	// assessmenthistoryDescID is the schema descriptor for id field.
@@ -601,15 +594,15 @@ func init() {
 	assessmentresponse.Hooks[5] = assessmentresponseMixinHooks5[1]
 
 	assessmentresponse.Hooks[6] = assessmentresponseHooks[0]
+
+	assessmentresponse.Hooks[7] = assessmentresponseHooks[1]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
-	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters2[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters5[0]
 	assessmentresponse.Interceptors[3] = assessmentresponseMixinInters5[1]
-	assessmentresponse.Interceptors[4] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields3 := assessmentresponseMixin[3].Fields()
@@ -1774,6 +1767,8 @@ func init() {
 	documentdata.Hooks[6] = documentdataMixinHooks6[1]
 
 	documentdata.Hooks[7] = documentdataHooks[0]
+
+	documentdata.Hooks[8] = documentdataHooks[1]
 	documentdataMixinInters1 := documentdataMixin[1].Interceptors()
 	documentdataMixinInters2 := documentdataMixin[2].Interceptors()
 	documentdataMixinInters6 := documentdataMixin[6].Interceptors()

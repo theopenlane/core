@@ -352,6 +352,10 @@ var defaultSkipCreateUserPermissionsFunc = func(ctx context.Context, m ent.Mutat
 		return true
 	}
 
+	if _, ok := contextx.From[auth.QuestionnaireContextKey](ctx); ok {
+		return true
+	}
+
 	return false
 }
 

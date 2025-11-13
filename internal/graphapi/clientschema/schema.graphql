@@ -2314,107 +2314,10 @@ type Assessment implements Node {
 	"""
 	templateID: ID!
 	"""
-	the id of the group that owns the assessment
-	"""
-	assessmentOwnerID: String
-	"""
 	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	"""
 	responseDueDuration: Int!
 	owner: Organization
-	blockedGroups(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
-	editors(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
-	viewers(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
 	template: Template!
 	assessmentResponses(
 		"""
@@ -2529,10 +2432,6 @@ type AssessmentHistory implements Node {
 	the template id associated with the assessment
 	"""
 	templateID: String!
-	"""
-	the id of the group that owns the assessment
-	"""
-	assessmentOwnerID: String
 	"""
 	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	"""
@@ -2783,24 +2682,6 @@ input AssessmentHistoryWhereInput {
 	templateIDHasSuffix: String
 	templateIDEqualFold: String
 	templateIDContainsFold: String
-	"""
-	assessment_owner_id field predicates
-	"""
-	assessmentOwnerID: String
-	assessmentOwnerIDNEQ: String
-	assessmentOwnerIDIn: [String!]
-	assessmentOwnerIDNotIn: [String!]
-	assessmentOwnerIDGT: String
-	assessmentOwnerIDGTE: String
-	assessmentOwnerIDLT: String
-	assessmentOwnerIDLTE: String
-	assessmentOwnerIDContains: String
-	assessmentOwnerIDHasPrefix: String
-	assessmentOwnerIDHasSuffix: String
-	assessmentOwnerIDIsNil: Boolean
-	assessmentOwnerIDNotNil: Boolean
-	assessmentOwnerIDEqualFold: String
-	assessmentOwnerIDContainsFold: String
 	"""
 	response_due_duration field predicates
 	"""
@@ -3704,24 +3585,6 @@ input AssessmentWhereInput {
 	templateIDEqualFold: ID
 	templateIDContainsFold: ID
 	"""
-	assessment_owner_id field predicates
-	"""
-	assessmentOwnerID: String
-	assessmentOwnerIDNEQ: String
-	assessmentOwnerIDIn: [String!]
-	assessmentOwnerIDNotIn: [String!]
-	assessmentOwnerIDGT: String
-	assessmentOwnerIDGTE: String
-	assessmentOwnerIDLT: String
-	assessmentOwnerIDLTE: String
-	assessmentOwnerIDContains: String
-	assessmentOwnerIDHasPrefix: String
-	assessmentOwnerIDHasSuffix: String
-	assessmentOwnerIDIsNil: Boolean
-	assessmentOwnerIDNotNil: Boolean
-	assessmentOwnerIDEqualFold: String
-	assessmentOwnerIDContainsFold: String
-	"""
 	response_due_duration field predicates
 	"""
 	responseDueDuration: Int
@@ -3737,21 +3600,6 @@ input AssessmentWhereInput {
 	"""
 	hasOwner: Boolean
 	hasOwnerWith: [OrganizationWhereInput!]
-	"""
-	blocked_groups edge predicates
-	"""
-	hasBlockedGroups: Boolean
-	hasBlockedGroupsWith: [GroupWhereInput!]
-	"""
-	editors edge predicates
-	"""
-	hasEditors: Boolean
-	hasEditorsWith: [GroupWhereInput!]
-	"""
-	viewers edge predicates
-	"""
-	hasViewers: Boolean
-	hasViewersWith: [GroupWhereInput!]
 	"""
 	template edge predicates
 	"""
@@ -10578,17 +10426,10 @@ input CreateAssessmentInput {
 	name: String!
 	assessmentType: AssessmentAssessmentType
 	"""
-	the id of the group that owns the assessment
-	"""
-	assessmentOwnerID: String
-	"""
 	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	"""
 	responseDueDuration: Int
 	ownerID: ID
-	blockedGroupIDs: [ID!]
-	editorIDs: [ID!]
-	viewerIDs: [ID!]
 	templateID: ID!
 	assessmentResponseIDs: [ID!]
 }
@@ -77816,25 +77657,11 @@ input UpdateAssessmentInput {
 	"""
 	name: String
 	"""
-	the id of the group that owns the assessment
-	"""
-	assessmentOwnerID: String
-	clearAssessmentOwnerID: Boolean
-	"""
 	the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	"""
 	responseDueDuration: Int
 	ownerID: ID
 	clearOwner: Boolean
-	addBlockedGroupIDs: [ID!]
-	removeBlockedGroupIDs: [ID!]
-	clearBlockedGroups: Boolean
-	addEditorIDs: [ID!]
-	removeEditorIDs: [ID!]
-	clearEditors: Boolean
-	addViewerIDs: [ID!]
-	removeViewerIDs: [ID!]
-	clearViewers: Boolean
 	templateID: ID
 	addAssessmentResponseIDs: [ID!]
 	removeAssessmentResponseIDs: [ID!]
