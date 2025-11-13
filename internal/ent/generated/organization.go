@@ -214,11 +214,13 @@ type OrganizationEdges struct {
 	Reviews []*Review `json:"reviews,omitempty"`
 	// Vulnerabilities holds the value of the vulnerabilities edge.
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Notifications holds the value of the notifications edge.
+	Notifications []*Notification `json:"notifications,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [77]bool
+	loadedTypes [78]bool
 	// totalCount holds the count of the edges above.
 	totalCount [73]map[string]int
 
@@ -295,6 +297,7 @@ type OrganizationEdges struct {
 	namedFindings                      map[string][]*Finding
 	namedReviews                       map[string][]*Review
 	namedVulnerabilities               map[string][]*Vulnerability
+	namedNotifications                 map[string][]*Notification
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -988,10 +991,19 @@ func (e OrganizationEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
 	return nil, &NotLoadedError{edge: "vulnerabilities"}
 }
 
+// NotificationsOrErr returns the Notifications value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) NotificationsOrErr() ([]*Notification, error) {
+	if e.loadedTypes[76] {
+		return e.Notifications, nil
+	}
+	return nil, &NotLoadedError{edge: "notifications"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[76] {
+	if e.loadedTypes[77] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1530,6 +1542,11 @@ func (_m *Organization) QueryReviews() *ReviewQuery {
 // QueryVulnerabilities queries the "vulnerabilities" edge of the Organization entity.
 func (_m *Organization) QueryVulnerabilities() *VulnerabilityQuery {
 	return NewOrganizationClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryNotifications queries the "notifications" edge of the Organization entity.
+func (_m *Organization) QueryNotifications() *NotificationQuery {
+	return NewOrganizationClient(_m.config).QueryNotifications(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3371,6 +3388,30 @@ func (_m *Organization) appendNamedVulnerabilities(name string, edges ...*Vulner
 		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
 	} else {
 		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedNotifications returns the Notifications named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedNotifications(name string) ([]*Notification, error) {
+	if _m.Edges.namedNotifications == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedNotifications[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedNotifications(name string, edges ...*Notification) {
+	if _m.Edges.namedNotifications == nil {
+		_m.Edges.namedNotifications = make(map[string][]*Notification)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedNotifications[name] = []*Notification{}
+	} else {
+		_m.Edges.namedNotifications[name] = append(_m.Edges.namedNotifications[name], edges...)
 	}
 }
 

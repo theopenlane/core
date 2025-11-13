@@ -2993,6 +2993,47 @@ func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input [
 	}, nil
 }
 
+// bulkUpdateTrustCenterDoc updates multiple TrustCenterDoc entities
+func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []string, input generated.UpdateTrustCenterDocInput) (*model.TrustCenterDocBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterDoc, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each trustcenterdoc individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			log.Error().Msg("empty id in bulk update for trustcenterdoc")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterDoc.Get(ctx, id)
+		if err != nil {
+			log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to get trustcenterdoc in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to update trustcenterdoc in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.TrustCenterDocBulkUpdatePayload{
+		TrustCenterDocs: results,
+		UpdatedIDs:      updatedIDs,
+	}, nil
+}
+
 // bulkDeleteTrustCenterDoc deletes multiple TrustCenterDoc entities by their IDs
 func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error) {
 	if len(ids) == 0 {

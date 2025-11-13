@@ -21,6 +21,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
 	"github.com/theopenlane/core/internal/ent/generated/impersonationevent"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/passwordresettoken"
@@ -65,6 +66,7 @@ type UserQuery struct {
 	withProgramsOwned                *ProgramQuery
 	withImpersonationEvents          *ImpersonationEventQuery
 	withTargetedImpersonations       *ImpersonationEventQuery
+	withNotifications                *NotificationQuery
 	withGroupMemberships             *GroupMembershipQuery
 	withOrgMemberships               *OrgMembershipQuery
 	withProgramMemberships           *ProgramMembershipQuery
@@ -88,6 +90,7 @@ type UserQuery struct {
 	withNamedProgramsOwned           map[string]*ProgramQuery
 	withNamedImpersonationEvents     map[string]*ImpersonationEventQuery
 	withNamedTargetedImpersonations  map[string]*ImpersonationEventQuery
+	withNamedNotifications           map[string]*NotificationQuery
 	withNamedGroupMemberships        map[string]*GroupMembershipQuery
 	withNamedOrgMemberships          map[string]*OrgMembershipQuery
 	withNamedProgramMemberships      map[string]*ProgramMembershipQuery
@@ -627,6 +630,31 @@ func (_q *UserQuery) QueryTargetedImpersonations() *ImpersonationEventQuery {
 	return query
 }
 
+// QueryNotifications chains the current query on the "notifications" edge.
+func (_q *UserQuery) QueryNotifications() *NotificationQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, selector),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.NotificationsTable, user.NotificationsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships chains the current query on the "group_memberships" edge.
 func (_q *UserQuery) QueryGroupMemberships() *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: _q.config}).Query()
@@ -914,6 +942,7 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withProgramsOwned:           _q.withProgramsOwned.Clone(),
 		withImpersonationEvents:     _q.withImpersonationEvents.Clone(),
 		withTargetedImpersonations:  _q.withTargetedImpersonations.Clone(),
+		withNotifications:           _q.withNotifications.Clone(),
 		withGroupMemberships:        _q.withGroupMemberships.Clone(),
 		withOrgMemberships:          _q.withOrgMemberships.Clone(),
 		withProgramMemberships:      _q.withProgramMemberships.Clone(),
@@ -1144,6 +1173,17 @@ func (_q *UserQuery) WithTargetedImpersonations(opts ...func(*ImpersonationEvent
 	return _q
 }
 
+// WithNotifications tells the query-builder to eager-load the nodes that are connected to
+// the "notifications" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNotifications(opts ...func(*NotificationQuery)) *UserQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withNotifications = query
+	return _q
+}
+
 // WithGroupMemberships tells the query-builder to eager-load the nodes that are connected to
 // the "group_memberships" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *UserQuery) WithGroupMemberships(opts ...func(*GroupMembershipQuery)) *UserQuery {
@@ -1261,7 +1301,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [23]bool{
+		loadedTypes = [24]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1282,6 +1322,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withProgramsOwned != nil,
 			_q.withImpersonationEvents != nil,
 			_q.withTargetedImpersonations != nil,
+			_q.withNotifications != nil,
 			_q.withGroupMemberships != nil,
 			_q.withOrgMemberships != nil,
 			_q.withProgramMemberships != nil,
@@ -1460,6 +1501,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			return nil, err
 		}
 	}
+	if query := _q.withNotifications; query != nil {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *User) { n.Edges.Notifications = []*Notification{} },
+			func(n *User, e *Notification) { n.Edges.Notifications = append(n.Edges.Notifications, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withGroupMemberships; query != nil {
 		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
@@ -1606,6 +1654,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadTargetedImpersonations(ctx, query, nodes,
 			func(n *User) { n.appendNamedTargetedImpersonations(name) },
 			func(n *User, e *ImpersonationEvent) { n.appendNamedTargetedImpersonations(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedNotifications {
+		if err := _q.loadNotifications(ctx, query, nodes,
+			func(n *User) { n.appendNamedNotifications(name) },
+			func(n *User, e *Notification) { n.appendNamedNotifications(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2403,6 +2458,36 @@ func (_q *UserQuery) loadTargetedImpersonations(ctx context.Context, query *Impe
 	}
 	return nil
 }
+func (_q *UserQuery) loadNotifications(ctx context.Context, query *NotificationQuery, nodes []*User, init func(*User), assign func(*User, *Notification)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*User)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(notification.FieldUserID)
+	}
+	query.Where(predicate.Notification(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(user.NotificationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.UserID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "user_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *UserQuery) loadGroupMemberships(ctx context.Context, query *GroupMembershipQuery, nodes []*User, init func(*User), assign func(*User, *GroupMembership)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*User)
@@ -2846,6 +2931,20 @@ func (_q *UserQuery) WithNamedTargetedImpersonations(name string, opts ...func(*
 		_q.withNamedTargetedImpersonations = make(map[string]*ImpersonationEventQuery)
 	}
 	_q.withNamedTargetedImpersonations[name] = query
+	return _q
+}
+
+// WithNamedNotifications tells the query-builder to eager-load the nodes that are connected to the "notifications"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *UserQuery) WithNamedNotifications(name string, opts ...func(*NotificationQuery)) *UserQuery {
+	query := (&NotificationClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedNotifications == nil {
+		_q.withNamedNotifications = make(map[string]*NotificationQuery)
+	}
+	_q.withNamedNotifications[name] = query
 	return _q
 }
 

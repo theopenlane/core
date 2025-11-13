@@ -8,6 +8,7 @@ import (
 	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/core/internal/httpserve/specs"
 )
 
 // registerOpenAPIHandler embeds our generated open api specs and serves it behind /api-docs
@@ -16,13 +17,18 @@ func registerOpenAPIHandler(router *Router) (err error) {
 		Path:        "/api-docs",
 		Method:      http.MethodGet,
 		Name:        "APIDocs",
-		Description: "Get OpenAPI 3.0 specification for this API",
+		Description: "Get OpenAPI 3.1.1 specification for this API",
 		Tags:        []string{"documentation"},
 		OperationID: "APIDocs",
 		Security:    handlers.PublicSecurity,
 		Middlewares: *publicEndpoint,
 		SimpleHandler: func(ctx echo.Context) error {
-			return ctx.JSON(http.StatusOK, router.OAS)
+			if len(specs.OpenlaneSpec) == 0 {
+				return ctx.NoContent(http.StatusInternalServerError)
+			}
+
+			ctx.Response().Header().Set(httpsling.HeaderContentType, httpsling.ContentTypeJSON)
+			return ctx.Blob(http.StatusOK, httpsling.ContentTypeJSON, specs.OpenlaneSpec)
 		},
 	}
 

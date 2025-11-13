@@ -87,6 +87,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -311,6 +312,8 @@ type Client struct {
 	Note *NoteClient
 	// NoteHistory is the client for interacting with the NoteHistory builders.
 	NoteHistory *NoteHistoryClient
+	// Notification is the client for interacting with the Notification builders.
+	Notification *NotificationClient
 	// Onboarding is the client for interacting with the Onboarding builders.
 	Onboarding *OnboardingClient
 	// OrgMembership is the client for interacting with the OrgMembership builders.
@@ -525,6 +528,7 @@ func (c *Client) init() {
 	c.NarrativeHistory = NewNarrativeHistoryClient(c.config)
 	c.Note = NewNoteClient(c.config)
 	c.NoteHistory = NewNoteHistoryClient(c.config)
+	c.Notification = NewNotificationClient(c.config)
 	c.Onboarding = NewOnboardingClient(c.config)
 	c.OrgMembership = NewOrgMembershipClient(c.config)
 	c.OrgMembershipHistory = NewOrgMembershipHistoryClient(c.config)
@@ -857,6 +861,7 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
 		Note:                              NewNoteClient(cfg),
 		NoteHistory:                       NewNoteHistoryClient(cfg),
+		Notification:                      NewNotificationClient(cfg),
 		Onboarding:                        NewOnboardingClient(cfg),
 		OrgMembership:                     NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
@@ -1007,6 +1012,7 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		NarrativeHistory:                  NewNarrativeHistoryClient(cfg),
 		Note:                              NewNoteClient(cfg),
 		NoteHistory:                       NewNoteHistoryClient(cfg),
+		Notification:                      NewNotificationClient(cfg),
 		Onboarding:                        NewOnboardingClient(cfg),
 		OrgMembership:                     NewOrgMembershipClient(cfg),
 		OrgMembershipHistory:              NewOrgMembershipHistoryClient(cfg),
@@ -1116,8 +1122,8 @@ func (c *Client) Use(hooks ...Hook) {
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
 		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
 		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
-		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Notification, c.Onboarding,
+		c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
@@ -1160,8 +1166,8 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
 		c.JobRunnerToken, c.JobTemplate, c.JobTemplateHistory, c.MappableDomain,
 		c.MappableDomainHistory, c.MappedControl, c.MappedControlHistory, c.Narrative,
-		c.NarrativeHistory, c.Note, c.NoteHistory, c.Onboarding, c.OrgMembership,
-		c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
+		c.NarrativeHistory, c.Note, c.NoteHistory, c.Notification, c.Onboarding,
+		c.OrgMembership, c.OrgMembershipHistory, c.OrgModule, c.OrgPrice, c.OrgProduct,
 		c.OrgSubscription, c.OrgSubscriptionHistory, c.Organization,
 		c.OrganizationHistory, c.OrganizationSetting, c.OrganizationSettingHistory,
 		c.PasswordResetToken, c.PersonalAccessToken, c.Procedure, c.ProcedureHistory,
@@ -1394,6 +1400,8 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.Note.mutate(ctx, m)
 	case *NoteHistoryMutation:
 		return c.NoteHistory.mutate(ctx, m)
+	case *NotificationMutation:
+		return c.Notification.mutate(ctx, m)
 	case *OnboardingMutation:
 		return c.Onboarding.mutate(ctx, m)
 	case *OrgMembershipMutation:
@@ -16271,6 +16279,179 @@ func (c *NoteHistoryClient) mutate(ctx context.Context, m *NoteHistoryMutation) 
 	}
 }
 
+// NotificationClient is a client for the Notification schema.
+type NotificationClient struct {
+	config
+}
+
+// NewNotificationClient returns a client for the Notification from the given config.
+func NewNotificationClient(c config) *NotificationClient {
+	return &NotificationClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `notification.Hooks(f(g(h())))`.
+func (c *NotificationClient) Use(hooks ...Hook) {
+	c.hooks.Notification = append(c.hooks.Notification, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `notification.Intercept(f(g(h())))`.
+func (c *NotificationClient) Intercept(interceptors ...Interceptor) {
+	c.inters.Notification = append(c.inters.Notification, interceptors...)
+}
+
+// Create returns a builder for creating a Notification entity.
+func (c *NotificationClient) Create() *NotificationCreate {
+	mutation := newNotificationMutation(c.config, OpCreate)
+	return &NotificationCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of Notification entities.
+func (c *NotificationClient) CreateBulk(builders ...*NotificationCreate) *NotificationCreateBulk {
+	return &NotificationCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *NotificationClient) MapCreateBulk(slice any, setFunc func(*NotificationCreate, int)) *NotificationCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &NotificationCreateBulk{err: fmt.Errorf("calling to NotificationClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*NotificationCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &NotificationCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for Notification.
+func (c *NotificationClient) Update() *NotificationUpdate {
+	mutation := newNotificationMutation(c.config, OpUpdate)
+	return &NotificationUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *NotificationClient) UpdateOne(_m *Notification) *NotificationUpdateOne {
+	mutation := newNotificationMutation(c.config, OpUpdateOne, withNotification(_m))
+	return &NotificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *NotificationClient) UpdateOneID(id string) *NotificationUpdateOne {
+	mutation := newNotificationMutation(c.config, OpUpdateOne, withNotificationID(id))
+	return &NotificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for Notification.
+func (c *NotificationClient) Delete() *NotificationDelete {
+	mutation := newNotificationMutation(c.config, OpDelete)
+	return &NotificationDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *NotificationClient) DeleteOne(_m *Notification) *NotificationDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *NotificationClient) DeleteOneID(id string) *NotificationDeleteOne {
+	builder := c.Delete().Where(notification.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &NotificationDeleteOne{builder}
+}
+
+// Query returns a query builder for Notification.
+func (c *NotificationClient) Query() *NotificationQuery {
+	return &NotificationQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeNotification},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a Notification entity by its id.
+func (c *NotificationClient) Get(ctx context.Context, id string) (*Notification, error) {
+	return c.Query().Where(notification.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *NotificationClient) GetX(ctx context.Context, id string) *Notification {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a Notification.
+func (c *NotificationClient) QueryOwner(_m *Notification) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notification.OwnerTable, notification.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a Notification.
+func (c *NotificationClient) QueryUser(_m *Notification) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(notification.Table, notification.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, notification.UserTable, notification.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *NotificationClient) Hooks() []Hook {
+	hooks := c.hooks.Notification
+	return append(hooks[:len(hooks):len(hooks)], notification.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *NotificationClient) Interceptors() []Interceptor {
+	inters := c.inters.Notification
+	return append(inters[:len(inters):len(inters)], notification.Interceptors[:]...)
+}
+
+func (c *NotificationClient) mutate(ctx context.Context, m *NotificationMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&NotificationCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&NotificationUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&NotificationUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&NotificationDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown Notification mutation op: %q", m.Op())
+	}
+}
+
 // OnboardingClient is a client for the Onboarding schema.
 type OnboardingClient struct {
 	config
@@ -19294,6 +19475,25 @@ func (c *OrganizationClient) QueryVulnerabilities(_m *Organization) *Vulnerabili
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Vulnerability
 		step.Edge.Schema = schemaConfig.Vulnerability
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryNotifications queries the notifications edge of a Organization.
+func (c *OrganizationClient) QueryNotifications(_m *Organization) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.NotificationsTable, organization.NotificationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -29732,6 +29932,25 @@ func (c *UserClient) QueryTargetedImpersonations(_m *User) *ImpersonationEventQu
 	return query
 }
 
+// QueryNotifications queries the notifications edge of a User.
+func (c *UserClient) QueryNotifications(_m *User) *NotificationQuery {
+	query := (&NotificationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(user.Table, user.FieldID, id),
+			sqlgraph.To(notification.Table, notification.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, user.NotificationsTable, user.NotificationsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Notification
+		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryGroupMemberships queries the group_memberships edge of a User.
 func (c *UserClient) QueryGroupMemberships(_m *User) *GroupMembershipQuery {
 	query := (&GroupMembershipClient{config: c.config}).Query()
@@ -31081,8 +31300,8 @@ type (
 		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
 		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
 		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
-		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
+		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
+		OrgPrice, OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
 		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,
@@ -31114,8 +31333,8 @@ type (
 		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
 		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
 		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
-		Onboarding, OrgMembership, OrgMembershipHistory, OrgModule, OrgPrice,
-		OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
+		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
+		OrgPrice, OrgProduct, OrgSubscription, OrgSubscriptionHistory, Organization,
 		OrganizationHistory, OrganizationSetting, OrganizationSettingHistory,
 		PasswordResetToken, PersonalAccessToken, Procedure, ProcedureHistory, Program,
 		ProgramHistory, ProgramMembership, ProgramMembershipHistory, Remediation,

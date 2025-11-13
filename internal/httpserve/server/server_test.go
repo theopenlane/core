@@ -1,17 +1,20 @@
 package server_test
 
 import (
+	"context"
 	"net/http"
 	"net/http/cookiejar"
+	"net/http/httptest"
+	"net/url"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 
 	"github.com/mcuadros/go-defaults"
 
 	echo "github.com/theopenlane/echox"
-
-	"net/http/httptest"
+	"github.com/theopenlane/httpsling"
 
 	"github.com/theopenlane/core/config"
 	serverconfig "github.com/theopenlane/core/internal/httpserve/config"
@@ -27,6 +30,76 @@ func (testHandler) Routes(g *echo.Group) {
 	g.POST("/test", func(c echo.Context) error {
 		return c.NoContent(http.StatusOK)
 	})
+}
+
+type handlerRoundTripper struct {
+	handler http.Handler
+}
+
+func (rt *handlerRoundTripper) RoundTrip(req *http.Request) (*http.Response, error) {
+	rec := httptest.NewRecorder()
+	rt.handler.ServeHTTP(rec, req)
+	return rec.Result(), nil
+}
+
+type httpslingTestClient struct {
+	requester *httpsling.Requester
+	jar       http.CookieJar
+	baseURL   *url.URL
+}
+
+func newHTTPSlingTestClient(handler http.Handler) (*httpslingTestClient, error) {
+	jar, err := cookiejar.New(nil)
+	if err != nil {
+		return nil, err
+	}
+
+	baseURL, err := url.Parse("https://router.test")
+	if err != nil {
+		return nil, err
+	}
+
+	httpClient := &http.Client{
+		Jar:       jar,
+		Transport: &handlerRoundTripper{handler: handler},
+	}
+
+	requester, err := httpsling.New(
+		httpsling.WithHTTPClient(httpClient),
+		httpsling.URL(baseURL.String()),
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &httpslingTestClient{
+		requester: requester,
+		jar:       jar,
+		baseURL:   baseURL,
+	}, nil
+}
+
+func (c *httpslingTestClient) cookieValue(name string) string {
+	for _, ck := range c.jar.Cookies(c.baseURL) {
+		if ck.Name == name {
+			return ck.Value
+		}
+	}
+
+	return ""
+}
+
+func (c *httpslingTestClient) get(ctx context.Context, path string) (*http.Response, error) {
+	return c.requester.ReceiveWithContext(ctx, nil, httpsling.Get(path))
+}
+
+func (c *httpslingTestClient) post(ctx context.Context, path string, header http.Header) (*http.Response, error) {
+	opts := []httpsling.Option{httpsling.Post(path)}
+	if header != nil {
+		opts = append(opts, httpsling.HeadersFromValues(header))
+	}
+
+	return c.requester.ReceiveWithContext(ctx, nil, opts...)
 }
 
 func TestServerCSRF(t *testing.T) {
@@ -62,39 +135,27 @@ func TestServerCSRF(t *testing.T) {
 	})
 	testHandler{}.Routes(srv.Router.Echo.Group(""))
 
-	ts := httptest.NewServer(srv.Router.Echo)
-	defer ts.Close()
-
-	jar, err := cookiejar.New(nil)
-	assert.NoError(t, err)
-
-	client := &http.Client{Jar: jar}
+	client, err := newHTTPSlingTestClient(srv.Router.Echo)
+	require.NoError(t, err)
+	ctx := context.Background()
 
 	// first request should set csrf cookie
-	resp, err := client.Get(ts.URL + "/livez")
+	resp, err := client.get(ctx, "/livez")
 	assert.NoError(t, err)
 	resp.Body.Close()
-	var token string
-	for _, ck := range jar.Cookies(resp.Request.URL) {
-		if ck.Name == "ol.csrf-token" {
-			token = ck.Value
-		}
-	}
+	token := client.cookieValue("ol.csrf-token")
 	assert.NotEmpty(t, token)
 
 	// missing header should return 400
-	req, err := http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	assert.NoError(t, err)
-	resp, err = client.Do(req)
+	resp, err = client.post(ctx, "/test", nil)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusBadRequest, resp.StatusCode)
 	resp.Body.Close()
 
 	// include token header
-	req, err = http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	assert.NoError(t, err)
-	req.Header.Set("X-CSRF-Token", token)
-	resp, err = client.Do(req)
+	headers := make(http.Header)
+	headers.Set("X-CSRF-Token", token)
+	resp, err = client.post(ctx, "/test", headers)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	resp.Body.Close()
@@ -134,39 +195,26 @@ func TestServerDisabledCSRF(t *testing.T) {
 	})
 	testHandler{}.Routes(srv.Router.Echo.Group(""))
 
-	ts := httptest.NewServer(srv.Router.Echo)
-	defer ts.Close()
-
-	jar, err := cookiejar.New(nil)
-	assert.NoError(t, err)
-
-	client := &http.Client{Jar: jar}
+	client, err := newHTTPSlingTestClient(srv.Router.Echo)
+	require.NoError(t, err)
+	ctx := context.Background()
 
 	// first request should not set csrf cookie since CSRF is disabled
-	resp, err := client.Get(ts.URL + "/livez")
+	resp, err := client.get(ctx, "/livez")
 	assert.NoError(t, err)
 	resp.Body.Close()
-	var token string
-	for _, ck := range jar.Cookies(resp.Request.URL) {
-		if ck.Name == "ol.csrf-token" {
-			token = ck.Value
-		}
-	}
-	assert.Empty(t, token)
+	assert.Empty(t, client.cookieValue("ol.csrf-token"))
 
 	// missing header should return 200 OK since CSRF is disabled
-	req, err := http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	assert.NoError(t, err)
-	resp, err = client.Do(req)
+	resp, err = client.post(ctx, "/test", nil)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	resp.Body.Close()
 
 	// include token header, no effect since CSRF is disabled
-	req, err = http.NewRequest(http.MethodPost, ts.URL+"/test", nil)
-	assert.NoError(t, err)
-	req.Header.Set("X-CSRF-Token", token)
-	resp, err = client.Do(req)
+	headers := make(http.Header)
+	headers.Set("X-CSRF-Token", "unused")
+	resp, err = client.post(ctx, "/test", headers)
 	assert.NoError(t, err)
 	assert.Equal(t, http.StatusOK, resp.StatusCode)
 	resp.Body.Close()

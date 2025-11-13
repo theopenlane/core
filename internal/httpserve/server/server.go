@@ -151,7 +151,7 @@ func (s *Server) StartEchoServer(ctx context.Context) error {
 	}
 
 	// Generate tag definitions from registered operations
-	GenerateTagsFromOperations(s.Router.OAS)
+	generateTagsFromOperations(s.Router.OAS)
 
 	// Print routes on startup
 	routes := s.Router.Echo.Router().Routes()

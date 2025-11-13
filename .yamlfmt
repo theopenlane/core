@@ -1,5 +1,6 @@
 exclude:
   - config/
   - pkg/catalog/
+  - internal/httpserve/specs/
 formatter:
   retain_line_breaks: true

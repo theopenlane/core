@@ -110,6 +110,8 @@ const (
 	EdgeImpersonationEvents = "impersonation_events"
 	// EdgeTargetedImpersonations holds the string denoting the targeted_impersonations edge name in mutations.
 	EdgeTargetedImpersonations = "targeted_impersonations"
+	// EdgeNotifications holds the string denoting the notifications edge name in mutations.
+	EdgeNotifications = "notifications"
 	// EdgeGroupMemberships holds the string denoting the group_memberships edge name in mutations.
 	EdgeGroupMemberships = "group_memberships"
 	// EdgeOrgMemberships holds the string denoting the org_memberships edge name in mutations.
@@ -248,6 +250,13 @@ const (
 	TargetedImpersonationsInverseTable = "impersonation_events"
 	// TargetedImpersonationsColumn is the table column denoting the targeted_impersonations relation/edge.
 	TargetedImpersonationsColumn = "target_user_id"
+	// NotificationsTable is the table that holds the notifications relation/edge.
+	NotificationsTable = "notifications"
+	// NotificationsInverseTable is the table name for the Notification entity.
+	// It exists in this package in order to avoid circular dependency with the "notification" package.
+	NotificationsInverseTable = "notifications"
+	// NotificationsColumn is the table column denoting the notifications relation/edge.
+	NotificationsColumn = "user_id"
 	// GroupMembershipsTable is the table that holds the group_memberships relation/edge.
 	GroupMembershipsTable = "group_memberships"
 	// GroupMembershipsInverseTable is the table name for the GroupMembership entity.
@@ -804,6 +813,20 @@ func ByTargetedImpersonations(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 	}
 }
 
+// ByNotificationsCount orders the results by notifications count.
+func ByNotificationsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newNotificationsStep(), opts...)
+	}
+}
+
+// ByNotifications orders the results by notifications terms.
+func ByNotifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newNotificationsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByGroupMembershipsCount orders the results by group_memberships count.
 func ByGroupMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -983,6 +1006,13 @@ func newTargetedImpersonationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TargetedImpersonationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TargetedImpersonationsTable, TargetedImpersonationsColumn),
+	)
+}
+func newNotificationsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(NotificationsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
 	)
 }
 func newGroupMembershipsStep() *sqlgraph.Step {

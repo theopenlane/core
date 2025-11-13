@@ -39,6 +39,7 @@ type importSchemaMutation interface {
 
 	SetName(string)
 	SetDetails(string)
+	SetStatus(enums.DocumentStatus)
 	SetFileID(string)
 	FileID() (string, bool)
 	SetURL(string)
@@ -126,6 +127,7 @@ func mutationToFileKey(m importSchemaMutation) string {
 
 // importFileToSchema is a helper that reads an uploaded file from context, downloads it from storage, parses it,
 // sanitizes the content and sets the document name, fileID and details on the mutation
+// strips the front matter if present from the details and sets frontmatter fields, such as title, on the mutation as well
 // if updateOnly is true, it will only update the details if a file is uploaded, and no other fields are modified
 func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, updateOnly bool) error {
 	key := mutationToFileKey(m)
@@ -160,14 +162,29 @@ func importFileToSchema[T importSchemaMutation](ctx context.Context, m T, update
 
 	p := bluemonday.UGCPolicy()
 
+	// use a default name for the document on created
 	if !updateOnly {
 		m.SetName(filenameToTitle(file[0].OriginalName))
+	}
+
+	// if frontmatter is present and has a title, use it as the document name
+	if parsedContent.Frontmatter != nil {
+		// If frontmatter is present, see if title is set and use it as the document name
+		if parsedContent.Frontmatter.Title != "" {
+			m.SetName(parsedContent.Frontmatter.Title)
+		}
+
+		if parsedContent.Frontmatter.Status != "" {
+			status := enums.ToDocumentStatus(parsedContent.Frontmatter.Status)
+
+			m.SetStatus(*status)
+		}
 	}
 
 	m.SetFileID(file[0].ID)
 
 	var detailsStr string
-	switch v := parsedContent.(type) {
+	switch v := parsedContent.Data.(type) {
 	case string:
 		detailsStr = v
 	case []byte:
@@ -258,7 +275,7 @@ func importURLToSchema(m importSchemaMutation) error {
 
 	// Convert structured results into a string representation for details
 	var detailsStr string
-	switch v := parsed.(type) {
+	switch v := parsed.Data.(type) {
 	case string:
 		detailsStr = v
 	default:

@@ -1,0 +1,12 @@
+{{- if .Values.openlane.config.create }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: openlane-config-file
+  namespace: openlane
+  labels:
+    app: openlane
+    component: config
+data:
+  config.yaml: |-

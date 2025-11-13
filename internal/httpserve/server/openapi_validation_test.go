@@ -3,7 +3,6 @@ package server_test
 import (
 	"context"
 	"encoding/json"
-	"net/http/httptest"
 	"strings"
 	"testing"
 
@@ -55,10 +54,6 @@ func TestOpenAPISpecValidation(t *testing.T) {
 	// Register ALL routes - this is the key part that tests our actual route definitions
 	err = route.RegisterRoutes(srv.Router)
 	require.NoError(t, err, "failed to register routes")
-
-	// Create test server
-	ts := httptest.NewServer(srv.Router.Echo)
-	defer ts.Close()
 
 	// Get the OpenAPI specification directly from the router (same data as /api-docs endpoint)
 	// Note: We skip the HTTP request to avoid middleware dependencies in tests

@@ -14,7 +14,6 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/utils/rout"
-	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/catalog"
@@ -35,6 +34,46 @@ var (
 	errProviderRequired      = errors.New("provider parameter is required")
 	errIntegrationIDRequired = errors.New("integration ID is required")
 )
+
+const (
+	exampleUserULID        = "01K9MJ23ND309PAN0ZV1ECFYT7"
+	exampleUserAltULID     = "01K9MJ23ND309PAN0ZQFK6N2R3"
+	exampleOrgULID         = "01K9MJ3PD7XKJSCT9ZWYGW9CVE"
+	exampleOrgAltULID      = "01K9MJ23ND309PAN0ZTX6ESG47"
+	exampleJoinedOrgULID   = "01K9MJ23ND309PAN0ZWTN4C0PJ"
+	exampleSessionULID     = "01K9MJ23ND309PAN0Z6GN2BH90"
+	exampleTokenULID       = "01K9MJ23ND309PAN0ZA9XQ3MFH" // #nosec G101 -- example token placeholder used only in docs
+	exampleIntegrationULID = "01K9MJ23ND309PAN0ZNKQ6HB5S"
+)
+
+func exampleULID(key string) string {
+	switch key {
+	case "user":
+		return exampleUserULID
+	case "user_alt":
+		return exampleUserAltULID
+	case "organization":
+		return exampleOrgULID
+	case "organization_alt":
+		return exampleOrgAltULID
+	case "joined_org":
+		return exampleJoinedOrgULID
+	case "session":
+		return exampleSessionULID
+	case "token":
+		return exampleTokenULID
+	case "integration":
+		return exampleIntegrationULID
+	default:
+		return exampleUserULID
+	}
+}
+
+var exampleBaseTime = time.Date(2025, time.January, 1, 12, 0, 0, 0, time.UTC)
+
+func exampleTime(offset time.Duration) time.Time {
+	return exampleBaseTime.Add(offset)
+}
 
 // =========
 // Auth Data
@@ -290,7 +329,7 @@ type RegisterReply struct {
 func (r *RegisterReply) ExampleResponse() any {
 	return RegisterReply{
 		Reply:   rout.Reply{Success: true},
-		ID:      ulids.New().String(),
+		ID:      exampleULID("user"),
 		Email:   "jsnow@example.com",
 		Message: "User registered successfully",
 	}
@@ -380,7 +419,7 @@ func (r *SwitchOrganizationRequest) Validate() error {
 
 // ExampleSwitchSuccessRequest is an example of a successful switch organization request for OpenAPI documentation
 var ExampleSwitchSuccessRequest = SwitchOrganizationRequest{
-	TargetOrganizationID: ulids.New().String(),
+	TargetOrganizationID: exampleULID("organization"),
 }
 
 // ExampleSwitchSuccessReply is an example of a successful switch organization response for OpenAPI documentation
@@ -418,7 +457,7 @@ type VerifyReply struct {
 func (r *VerifyReply) ExampleResponse() any {
 	return VerifyReply{
 		Reply:   rout.Reply{Success: true},
-		ID:      ulids.New().String(),
+		ID:      exampleULID("user"),
 		Email:   "jsnow@example.com",
 		Message: "Email verified successfully",
 		AuthData: AuthData{
@@ -449,7 +488,7 @@ var ExampleVerifySuccessResponse = VerifyReply{
 	Reply: rout.Reply{
 		Success: true,
 	},
-	ID:      ulids.New().String(),
+	ID:      exampleULID("user_alt"),
 	Email:   "gregor.clegane@theopenlane.io",
 	Message: "Email has been verified",
 	AuthData: AuthData{
@@ -944,10 +983,10 @@ type InviteReply struct {
 func (r *InviteReply) ExampleResponse() any {
 	return InviteReply{
 		Reply:       rout.Reply{Success: true},
-		ID:          ulids.New().String(),
+		ID:          exampleULID("user"),
 		Email:       "jsnow@example.com",
 		Message:     "Invitation accepted successfully",
-		JoinedOrgID: ulids.New().String(),
+		JoinedOrgID: exampleULID("joined_org"),
 		Role:        "admin",
 		AuthData: AuthData{
 			AccessToken:  "access_token",
@@ -1159,7 +1198,7 @@ func (r *AccountRolesOrganizationReply) ExampleResponse() any {
 	return AccountRolesOrganizationReply{
 		Reply:          rout.Reply{Success: true},
 		Roles:          []string{"can_view", "can_edit"},
-		OrganizationID: ulids.New().String(),
+		OrganizationID: exampleULID("organization"),
 	}
 }
 
@@ -1202,7 +1241,7 @@ func (r *AccountFeaturesReply) ExampleResponse() any {
 	return AccountFeaturesReply{
 		Reply:          rout.Reply{Success: true},
 		Features:       []string{"policy-and-procedure-module", "compliance-module"},
-		OrganizationID: ulids.New().String(),
+		OrganizationID: exampleULID("organization"),
 	}
 }
 
@@ -1282,8 +1321,8 @@ var ExampleUploadFilesSuccessResponse = UploadFilesReply{
 			ID:           "1234",
 			OriginalName: "file.txt",
 			MD5:          []byte("1234"),
-			CreatedAt:    time.Now(),
-			UpdatedAt:    time.Now(),
+			CreatedAt:    exampleTime(-time.Hour),
+			UpdatedAt:    exampleTime(0),
 		},
 	},
 }
@@ -1482,7 +1521,7 @@ func (r *SSOLoginRequest) Validate() error {
 
 // ExampleSSOLoginRequest is an example request for OpenAPI documentation
 var ExampleSSOLoginRequest = SSOLoginRequest{
-	OrganizationID: ulids.New().String(),
+	OrganizationID: exampleULID("organization"),
 	ReturnURL:      "https://app.sitb.com",
 }
 
@@ -1515,7 +1554,7 @@ func (r *SSOCallbackRequest) Validate() error {
 var ExampleSSOCallbackRequest = SSOCallbackRequest{
 	Code:           "code",
 	State:          "state",
-	OrganizationID: ulids.New().String(),
+	OrganizationID: exampleULID("organization"),
 }
 
 // SSOTokenCallbackRequest holds the query parameters for completing token SSO authorization
@@ -1586,7 +1625,7 @@ func (r *SSOStatusReply) ExampleResponse() any {
 		Provider:       enums.SSOProviderOkta,
 		DiscoveryURL:   "https://accounts.example.com/.well-known/openid_configuration",
 		SAMLSignInURL:  "https://accounts.example.com/saml/signin",
-		OrganizationID: ulids.New().String(),
+		OrganizationID: exampleULID("organization"),
 		OrgTFAEnforced: true,
 		UserTFAEnabled: false,
 	}
@@ -1604,7 +1643,7 @@ var ExampleSSOStatusReply = SSOStatusReply{
 	Provider:       enums.SSOProviderOkta,
 	DiscoveryURL:   "https://id.example.com/.well-known/openid-configuration",
 	SAMLSignInURL:  "https://id.example.com/saml/signin",
-	OrganizationID: ulids.New().String(),
+	OrganizationID: exampleULID("organization_alt"),
 	OrgTFAEnforced: true,
 	UserTFAEnabled: false,
 }
@@ -1648,24 +1687,24 @@ type SSOTokenAuthorizeReply struct {
 func (r *SSOTokenAuthorizeReply) ExampleResponse() any {
 	return SSOTokenAuthorizeReply{
 		Reply:          rout.Reply{Success: true},
-		OrganizationID: ulids.New().String(),
-		TokenID:        ulids.New().String(),
+		OrganizationID: exampleULID("organization"),
+		TokenID:        exampleULID("token"),
 		Message:        "Token authorized successfully",
 	}
 }
 
 // ExampleSSOTokenAuthorizeRequest is an example request for OpenAPI documentation
 var ExampleSSOTokenAuthorizeRequest = SSOTokenAuthorizeRequest{
-	OrganizationID: ulids.New().String(),
-	TokenID:        ulids.New().String(),
+	OrganizationID: exampleULID("organization"),
+	TokenID:        exampleULID("token"),
 	TokenType:      "api",
 }
 
 // ExampleSSOTokenAuthorizeReply is an example response for OpenAPI documentation
 var ExampleSSOTokenAuthorizeReply = SSOTokenAuthorizeReply{
 	Reply:          rout.Reply{Success: true},
-	OrganizationID: ulids.New().String(),
-	TokenID:        ulids.New().String(),
+	OrganizationID: exampleULID("organization"),
+	TokenID:        exampleULID("token"),
 	Message:        "success",
 }
 
@@ -1728,8 +1767,8 @@ func (r *StartImpersonationReply) ExampleResponse() any {
 	return StartImpersonationReply{
 		Reply:     rout.Reply{Success: true},
 		Token:     "impersonation_token_example",
-		ExpiresAt: time.Now().Add(time.Hour),
-		SessionID: ulids.New().String(),
+		ExpiresAt: exampleTime(time.Hour),
+		SessionID: exampleULID("session"),
 		Message:   "Impersonation session started successfully",
 	}
 }
@@ -1828,7 +1867,7 @@ type IntegrationTokenResponse struct {
 
 // ExampleResponse returns an example IntegrationTokenResponse for OpenAPI documentation
 func (r *IntegrationTokenResponse) ExampleResponse() any {
-	expiresAt := time.Now().Add(time.Hour * 24 * 30) // nolint:mnd
+	expiresAt := exampleTime(30 * 24 * time.Hour) // nolint:mnd
 
 	return IntegrationTokenResponse{
 		Reply:    rout.Reply{Success: true},
@@ -1876,7 +1915,7 @@ func (r *IntegrationStatusResponse) ExampleResponse() any {
 		TokenValid:   true,
 		TokenExpired: false,
 		Message:      "Integration status retrieved successfully",
-		Integration:  map[string]any{"id": ulids.New().String(), "name": "GitHub Integration"},
+		Integration:  map[string]any{"id": exampleULID("integration"), "name": "GitHub Integration"},
 	}
 }
 
@@ -2022,7 +2061,7 @@ func (r *OAuthCallbackRequest) Validate() error {
 
 // ExampleStartImpersonationRequest is an example request for OpenAPI documentation
 var ExampleStartImpersonationRequest = StartImpersonationRequest{
-	TargetUserID: ulids.New().String(),
+	TargetUserID: exampleULID("user_alt"),
 	Type:         "support",
 	Reason:       "Customer support assistance for account recovery",
 	Duration:     nil, // Use default
@@ -2031,15 +2070,15 @@ var ExampleStartImpersonationRequest = StartImpersonationRequest{
 // ExampleStartImpersonationReply is an example response for OpenAPI documentation
 var ExampleStartImpersonationReply = StartImpersonationReply{
 	Reply:     rout.Reply{Success: true},
-	Token:     "imp_" + ulids.New().String(),
-	ExpiresAt: time.Now().Add(time.Hour),
-	SessionID: ulids.New().String(),
+	Token:     "imp_" + exampleULID("token"),
+	ExpiresAt: exampleTime(time.Hour),
+	SessionID: exampleULID("session"),
 	Message:   "Impersonation session started successfully",
 }
 
 // ExampleEndImpersonationRequest is an example request for OpenAPI documentation
 var ExampleEndImpersonationRequest = EndImpersonationRequest{
-	SessionID: ulids.New().String(),
+	SessionID: exampleULID("session"),
 	Reason:    "Support task completed",
 }
 
@@ -2062,7 +2101,7 @@ func (r *OAuthCallbackResponse) ExampleResponse() any {
 	return OAuthCallbackResponse{
 		Reply:       rout.Reply{Success: true},
 		Success:     true,
-		Integration: map[string]any{"id": ulids.New().String(), "provider": "github", "status": "connected"},
+		Integration: map[string]any{"id": exampleULID("integration"), "provider": "github", "status": "connected"},
 		Message:     "Successfully connected GitHub integration",
 	}
 }

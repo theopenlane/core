@@ -76,6 +76,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -2034,6 +2035,33 @@ func (f TraverseNoteHistory) Traverse(ctx context.Context, q generated.Query) er
 	return fmt.Errorf("unexpected query type %T. expect *generated.NoteHistoryQuery", q)
 }
 
+// The NotificationFunc type is an adapter to allow the use of ordinary function as a Querier.
+type NotificationFunc func(context.Context, *generated.NotificationQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f NotificationFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.NotificationQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.NotificationQuery", q)
+}
+
+// The TraverseNotification type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseNotification func(context.Context, *generated.NotificationQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseNotification) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseNotification) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.NotificationQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.NotificationQuery", q)
+}
+
 // The OnboardingFunc type is an adapter to allow the use of ordinary function as a Querier.
 type OnboardingFunc func(context.Context, *generated.OnboardingQuery) (generated.Value, error)
 
@@ -3874,6 +3902,8 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.NoteQuery, predicate.Note, note.OrderOption]{typ: generated.TypeNote, tq: q}, nil
 	case *generated.NoteHistoryQuery:
 		return &query[*generated.NoteHistoryQuery, predicate.NoteHistory, notehistory.OrderOption]{typ: generated.TypeNoteHistory, tq: q}, nil
+	case *generated.NotificationQuery:
+		return &query[*generated.NotificationQuery, predicate.Notification, notification.OrderOption]{typ: generated.TypeNotification, tq: q}, nil
 	case *generated.OnboardingQuery:
 		return &query[*generated.OnboardingQuery, predicate.Onboarding, onboarding.OrderOption]{typ: generated.TypeOnboarding, tq: q}, nil
 	case *generated.OrgMembershipQuery:

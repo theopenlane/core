@@ -89,6 +89,8 @@ var (
 	ErrNotSingularTrustCenter = errors.New("you can only create/manage one trust center at a time")
 	// ErrStatusApprovedNotAllowed is returned when a user attempts to set status to APPROVED without being in the approver or delegate group
 	ErrStatusApprovedNotAllowed = errors.New("you must be in the approver group to mark as approved")
+	// ErrInvalidChannel is returned when an invalid notification channel is provided
+	ErrInvalidChannel = errors.New("invalid channel")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

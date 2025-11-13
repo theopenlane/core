@@ -14,13 +14,15 @@ var (
 	SSOProviderGoogleWorkspace SSOProvider = "GOOGLE_WORKSPACE"
 	SSOProviderSlack           SSOProvider = "SLACK"
 	SSOProviderGithub          SSOProvider = "GITHUB"
+	SSOProviderEntraID         SSOProvider = "MICROSOFT_ENTRA_ID"
+	SSOProviderGenericOIDC     SSOProvider = "GENERIC_OIDC"
 	SSOProviderNone            SSOProvider = "NONE"
 	SSOProviderInvalid         SSOProvider = "INVALID"
 )
 
 // Values returns all possible SSOProvider values.
 func (SSOProvider) Values() (kinds []string) {
-	for _, s := range []SSOProvider{SSOProviderOkta, SSOProviderOneLogin, SSOProviderGoogleWorkspace, SSOProviderSlack, SSOProviderGithub, SSOProviderNone} {
+	for _, s := range []SSOProvider{SSOProviderOkta, SSOProviderOneLogin, SSOProviderGoogleWorkspace, SSOProviderSlack, SSOProviderGithub, SSOProviderEntraID, SSOProviderGenericOIDC, SSOProviderNone} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -43,6 +45,10 @@ func ToSSOProvider(in string) *SSOProvider {
 		return &SSOProviderGithub
 	case SSOProviderNone.String():
 		return &SSOProviderNone
+	case SSOProviderEntraID.String():
+		return &SSOProviderEntraID
+	case SSOProviderGenericOIDC.String():
+		return &SSOProviderGenericOIDC
 	default:
 		return &SSOProviderInvalid
 	}

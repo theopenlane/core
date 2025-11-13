@@ -5,10 +5,12 @@ package internalpolicy
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 )
 
@@ -32,14 +34,15 @@ func init() {
 	updateCmd.Flags().StringP("status", "s", "", "status of the policy")
 	updateCmd.Flags().StringP("type", "t", "", "type of the policy")
 	updateCmd.Flags().StringP("revision", "v", "v0.1", "revision of the policy")
+	updateCmd.Flags().StringP("file", "f", "", "local path to file to upload as the procedure details")
 	updateCmd.Flags().StringP("editor-group-id", "g", "", "editor group id")
 }
 
 // updateValidation validates the required fields for the command
-func updateValidation() (id string, input openlaneclient.UpdateInternalPolicyInput, err error) {
+func updateValidation() (id string, input openlaneclient.UpdateInternalPolicyInput, detailsFile *graphql.Upload, err error) {
 	id = cmd.Config.String("id")
 	if id == "" {
-		return id, input, cmd.NewRequiredFieldMissingError("internal policy id")
+		return id, input, nil, cmd.NewRequiredFieldMissingError("internal policy id")
 	}
 
 	// validation of required fields for the update command
@@ -74,7 +77,22 @@ func updateValidation() (id string, input openlaneclient.UpdateInternalPolicyInp
 		input.AddEditorIDs = []string{editorGroupID}
 	}
 
-	return id, input, nil
+	detailsFileLoc := cmd.Config.String("file")
+	if detailsFileLoc != "" {
+		file, err := storage.NewUploadFile(detailsFileLoc)
+		if err != nil {
+			return id, input, nil, err
+		}
+
+		detailsFile = &graphql.Upload{
+			File:        file.RawFile,
+			Filename:    file.OriginalName,
+			Size:        file.Size,
+			ContentType: file.ContentType,
+		}
+	}
+
+	return id, input, detailsFile, nil
 }
 
 // update an existing internal policy in the platform
@@ -88,8 +106,15 @@ func update(ctx context.Context) error {
 		defer cmd.StoreSessionCookies(client)
 	}
 
-	id, input, err := updateValidation()
+	id, input, detailsFile, err := updateValidation()
 	cobra.CheckErr(err)
+
+	if detailsFile != nil {
+		o, err := client.UpdateInternalPolicyWithFile(ctx, id, *detailsFile, input)
+		cobra.CheckErr(err)
+
+		return consoleOutput(o)
+	}
 
 	o, err := client.UpdateInternalPolicy(ctx, id, input)
 	cobra.CheckErr(err)

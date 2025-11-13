@@ -17,4 +17,7 @@ packages:
   github.com/theopenlane/core/pkg/openlaneclient:
     config:
       dir: olclient/mocks
-      include-interface-regex: 'OpenlaneGraphClient'
+      include-interface-regex: "OpenlaneGraphClient"
+  github.com/theopenlane/core/pkg/corejobs/internal/pirsch:
+    config:
+      all: true

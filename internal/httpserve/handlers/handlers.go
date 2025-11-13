@@ -206,7 +206,9 @@ func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler,
 			op.RequestBody = &openapi3.RequestBodyRef{Value: request}
 
 			request.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(requestExample)}
+			request.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{
+				Value: openapi3.NewExample(normalizeExampleValue(requestExample)),
+			}
 		}
 
 		// Register success response schema dynamically
@@ -224,7 +226,9 @@ func BindAndValidateWithAutoRegistry[T any, R any](ctx echo.Context, _ *Handler,
 			op.AddResponse(http.StatusOK, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{
+				Value: openapi3.NewExample(normalizeExampleValue(exampleObject)),
+			}
 		}
 	}
 
@@ -433,7 +437,7 @@ func BindAndValidateQueryParamsWithResponse[T any, R any](ctx echo.Context, op *
 			op.AddResponse(http.StatusOK, response)
 
 			response.Content.Get(httpsling.ContentTypeJSON).Examples = make(map[string]*openapi3.ExampleRef)
-			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(exampleObject)}
+			response.Content.Get(httpsling.ContentTypeJSON).Examples["success"] = &openapi3.ExampleRef{Value: openapi3.NewExample(normalizeExampleValue(exampleObject))}
 		}
 	}
 
