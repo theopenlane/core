@@ -28,6 +28,49 @@ var (
 	errMissingResponse                      = errors.New("missing response")
 )
 
+// HookDocumentDataQuestionnaire runs on document data create mutations to allow questionnaire submissions by anonymous users
+func HookDocumentDataQuestionnaire() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.DocumentDataFunc(func(ctx context.Context, m *generated.DocumentDataMutation) (generated.Value, error) {
+			templateID, _ := m.TemplateID()
+			if templateID == "" {
+				return nil, errMissingTemplate
+			}
+
+			docTemplate, err := m.Client().Template.Query().Where(template.ID(templateID)).Only(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			// Only handle questionnaire templates
+			if docTemplate.Kind != enums.TemplateKindQuestionnaire {
+				return next.Mutate(ctx, m)
+			}
+
+			// Verify anonymous questionnaire user context
+			anon, ok := auth.AnonymousQuestionnaireUserFromContext(ctx)
+			if !ok || anon.SubjectEmail == "" || anon.AssessmentID == "" || anon.OrganizationID == "" {
+				return nil, errMustBeAnonymousUser
+			}
+
+			response, ok := m.Data()
+			if !ok {
+				return nil, errMissingResponse
+			}
+
+			// Validate the questionnaire response against the template schema if present
+			if docTemplate.Jsonconfig != nil {
+				if err = validateJSON(docTemplate.Jsonconfig, response); err != nil {
+					return nil, err
+				}
+			}
+
+			// Allow the mutation to proceed
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpCreate)
+}
+
 // HookDocumentDataTrustCenterNDA runs on document data create mutations to ensure trust center NDA document submissions are valid
 func HookDocumentDataTrustCenterNDA() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {

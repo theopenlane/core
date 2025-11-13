@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
-	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/pkg/enums"
@@ -155,20 +154,6 @@ func (_c *AssessmentCreate) SetTemplateID(v string) *AssessmentCreate {
 	return _c
 }
 
-// SetAssessmentOwnerID sets the "assessment_owner_id" field.
-func (_c *AssessmentCreate) SetAssessmentOwnerID(v string) *AssessmentCreate {
-	_c.mutation.SetAssessmentOwnerID(v)
-	return _c
-}
-
-// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
-func (_c *AssessmentCreate) SetNillableAssessmentOwnerID(v *string) *AssessmentCreate {
-	if v != nil {
-		_c.SetAssessmentOwnerID(*v)
-	}
-	return _c
-}
-
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_c *AssessmentCreate) SetResponseDueDuration(v int64) *AssessmentCreate {
 	_c.mutation.SetResponseDueDuration(v)
@@ -200,51 +185,6 @@ func (_c *AssessmentCreate) SetNillableID(v *string) *AssessmentCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *AssessmentCreate) SetOwner(v *Organization) *AssessmentCreate {
 	return _c.SetOwnerID(v.ID)
-}
-
-// AddBlockedGroupIDs adds the "blocked_groups" edge to the Group entity by IDs.
-func (_c *AssessmentCreate) AddBlockedGroupIDs(ids ...string) *AssessmentCreate {
-	_c.mutation.AddBlockedGroupIDs(ids...)
-	return _c
-}
-
-// AddBlockedGroups adds the "blocked_groups" edges to the Group entity.
-func (_c *AssessmentCreate) AddBlockedGroups(v ...*Group) *AssessmentCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddBlockedGroupIDs(ids...)
-}
-
-// AddEditorIDs adds the "editors" edge to the Group entity by IDs.
-func (_c *AssessmentCreate) AddEditorIDs(ids ...string) *AssessmentCreate {
-	_c.mutation.AddEditorIDs(ids...)
-	return _c
-}
-
-// AddEditors adds the "editors" edges to the Group entity.
-func (_c *AssessmentCreate) AddEditors(v ...*Group) *AssessmentCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddEditorIDs(ids...)
-}
-
-// AddViewerIDs adds the "viewers" edge to the Group entity by IDs.
-func (_c *AssessmentCreate) AddViewerIDs(ids ...string) *AssessmentCreate {
-	_c.mutation.AddViewerIDs(ids...)
-	return _c
-}
-
-// AddViewers adds the "viewers" edges to the Group entity.
-func (_c *AssessmentCreate) AddViewers(v ...*Group) *AssessmentCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddViewerIDs(ids...)
 }
 
 // SetTemplate sets the "template" edge to the Template entity.
@@ -444,10 +384,6 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 		_node.AssessmentType = value
 	}
-	if value, ok := _c.mutation.AssessmentOwnerID(); ok {
-		_spec.SetField(assessment.FieldAssessmentOwnerID, field.TypeString, value)
-		_node.AssessmentOwnerID = value
-	}
 	if value, ok := _c.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
 		_node.ResponseDueDuration = value
@@ -468,57 +404,6 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.OwnerID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.BlockedGroupsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.BlockedGroupsTable,
-			Columns: []string{assessment.BlockedGroupsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.EditorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.EditorsTable,
-			Columns: []string{assessment.EditorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.ViewersIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   assessment.ViewersTable,
-			Columns: []string{assessment.ViewersColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {

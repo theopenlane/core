@@ -53,10 +53,10 @@ func (Assessment) Fields() []ent.Field {
 			),
 		field.String("template_id").
 			Comment("the template id associated with the assessment"),
-		field.String("assessment_owner_id").
-			Optional().
-			Unique().
-			Comment("the id of the group that owns the assessment"),
+		// field.String("assessment_owner_id").
+		// 	Optional().
+		// 	Unique().
+		// 	Comment("the id of the group that owns the assessment"),
 		field.Int64("response_due_duration").
 			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
 			Default(DefaultResponseDueDuration).
@@ -70,7 +70,7 @@ func (a Assessment) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(a),
-			newGroupPermissionsMixin(),
+			// newGroupPermissionsMixin(),
 		},
 	}.getMixins(a)
 }
@@ -116,9 +116,7 @@ func (Assessment) Indexes() []ent.Index {
 
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		// interceptors.FilterQueryResults[generated.Assessment](),
-	}
+	return []ent.Interceptor{}
 }
 
 func (Assessment) Hooks() []ent.Hook {

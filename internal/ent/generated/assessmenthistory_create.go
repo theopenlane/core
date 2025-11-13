@@ -186,20 +186,6 @@ func (_c *AssessmentHistoryCreate) SetTemplateID(v string) *AssessmentHistoryCre
 	return _c
 }
 
-// SetAssessmentOwnerID sets the "assessment_owner_id" field.
-func (_c *AssessmentHistoryCreate) SetAssessmentOwnerID(v string) *AssessmentHistoryCreate {
-	_c.mutation.SetAssessmentOwnerID(v)
-	return _c
-}
-
-// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
-func (_c *AssessmentHistoryCreate) SetNillableAssessmentOwnerID(v *string) *AssessmentHistoryCreate {
-	if v != nil {
-		_c.SetAssessmentOwnerID(*v)
-	}
-	return _c
-}
-
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_c *AssessmentHistoryCreate) SetResponseDueDuration(v int64) *AssessmentHistoryCreate {
 	_c.mutation.SetResponseDueDuration(v)
@@ -429,10 +415,6 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 	if value, ok := _c.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 		_node.TemplateID = value
-	}
-	if value, ok := _c.mutation.AssessmentOwnerID(); ok {
-		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
-		_node.AssessmentOwnerID = value
 	}
 	if value, ok := _c.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)

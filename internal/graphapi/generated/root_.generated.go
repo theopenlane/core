@@ -279,13 +279,10 @@ type ComplexityRoot struct {
 	}
 
 	Assessment struct {
-		AssessmentOwnerID   func(childComplexity int) int
 		AssessmentResponses func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		AssessmentType      func(childComplexity int) int
-		BlockedGroups       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
-		Editors             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                  func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
@@ -296,7 +293,6 @@ type ComplexityRoot struct {
 		TemplateID          func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
-		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 	}
 
 	AssessmentConnection struct {
@@ -319,7 +315,6 @@ type ComplexityRoot struct {
 	}
 
 	AssessmentHistory struct {
-		AssessmentOwnerID   func(childComplexity int) int
 		AssessmentType      func(childComplexity int) int
 		CreatedAt           func(childComplexity int) int
 		CreatedBy           func(childComplexity int) int
@@ -7921,13 +7916,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ActionPlanUpdatePayload.ActionPlan(childComplexity), true
 
-	case "Assessment.assessmentOwnerID":
-		if e.complexity.Assessment.AssessmentOwnerID == nil {
-			break
-		}
-
-		return e.complexity.Assessment.AssessmentOwnerID(childComplexity), true
-
 	case "Assessment.assessmentResponses":
 		if e.complexity.Assessment.AssessmentResponses == nil {
 			break
@@ -7947,18 +7935,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.AssessmentType(childComplexity), true
 
-	case "Assessment.blockedGroups":
-		if e.complexity.Assessment.BlockedGroups == nil {
-			break
-		}
-
-		args, err := ec.field_Assessment_blockedGroups_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Assessment.BlockedGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
 	case "Assessment.createdAt":
 		if e.complexity.Assessment.CreatedAt == nil {
 			break
@@ -7972,18 +7948,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.CreatedBy(childComplexity), true
-
-	case "Assessment.editors":
-		if e.complexity.Assessment.Editors == nil {
-			break
-		}
-
-		args, err := ec.field_Assessment_editors_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Assessment.Editors(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Assessment.id":
 		if e.complexity.Assessment.ID == nil {
@@ -8055,18 +8019,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.UpdatedBy(childComplexity), true
 
-	case "Assessment.viewers":
-		if e.complexity.Assessment.Viewers == nil {
-			break
-		}
-
-		args, err := ec.field_Assessment_viewers_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Assessment.Viewers(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
-
 	case "AssessmentConnection.edges":
 		if e.complexity.AssessmentConnection.Edges == nil {
 			break
@@ -8115,13 +8067,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentEdge.Node(childComplexity), true
-
-	case "AssessmentHistory.assessmentOwnerID":
-		if e.complexity.AssessmentHistory.AssessmentOwnerID == nil {
-			break
-		}
-
-		return e.complexity.AssessmentHistory.AssessmentOwnerID(childComplexity), true
 
 	case "AssessmentHistory.assessmentType":
 		if e.complexity.AssessmentHistory.AssessmentType == nil {
@@ -51048,107 +50993,10 @@ type Assessment implements Node {
   """
   templateID: ID!
   """
-  the id of the group that owns the assessment
-  """
-  assessmentOwnerID: String
-  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int!
   owner: Organization
-  blockedGroups(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  editors(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
-  viewers(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   template: Template!
   assessmentResponses(
     """
@@ -51245,10 +51093,6 @@ type AssessmentHistory implements Node {
   the template id associated with the assessment
   """
   templateID: String!
-  """
-  the id of the group that owns the assessment
-  """
-  assessmentOwnerID: String
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
@@ -51499,24 +51343,6 @@ input AssessmentHistoryWhereInput {
   templateIDHasSuffix: String
   templateIDEqualFold: String
   templateIDContainsFold: String
-  """
-  assessment_owner_id field predicates
-  """
-  assessmentOwnerID: String
-  assessmentOwnerIDNEQ: String
-  assessmentOwnerIDIn: [String!]
-  assessmentOwnerIDNotIn: [String!]
-  assessmentOwnerIDGT: String
-  assessmentOwnerIDGTE: String
-  assessmentOwnerIDLT: String
-  assessmentOwnerIDLTE: String
-  assessmentOwnerIDContains: String
-  assessmentOwnerIDHasPrefix: String
-  assessmentOwnerIDHasSuffix: String
-  assessmentOwnerIDIsNil: Boolean
-  assessmentOwnerIDNotNil: Boolean
-  assessmentOwnerIDEqualFold: String
-  assessmentOwnerIDContainsFold: String
   """
   response_due_duration field predicates
   """
@@ -52385,24 +52211,6 @@ input AssessmentWhereInput {
   templateIDEqualFold: ID
   templateIDContainsFold: ID
   """
-  assessment_owner_id field predicates
-  """
-  assessmentOwnerID: String
-  assessmentOwnerIDNEQ: String
-  assessmentOwnerIDIn: [String!]
-  assessmentOwnerIDNotIn: [String!]
-  assessmentOwnerIDGT: String
-  assessmentOwnerIDGTE: String
-  assessmentOwnerIDLT: String
-  assessmentOwnerIDLTE: String
-  assessmentOwnerIDContains: String
-  assessmentOwnerIDHasPrefix: String
-  assessmentOwnerIDHasSuffix: String
-  assessmentOwnerIDIsNil: Boolean
-  assessmentOwnerIDNotNil: Boolean
-  assessmentOwnerIDEqualFold: String
-  assessmentOwnerIDContainsFold: String
-  """
   response_due_duration field predicates
   """
   responseDueDuration: Int
@@ -52418,21 +52226,6 @@ input AssessmentWhereInput {
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
-  """
-  blocked_groups edge predicates
-  """
-  hasBlockedGroups: Boolean
-  hasBlockedGroupsWith: [GroupWhereInput!]
-  """
-  editors edge predicates
-  """
-  hasEditors: Boolean
-  hasEditorsWith: [GroupWhereInput!]
-  """
-  viewers edge predicates
-  """
-  hasViewers: Boolean
-  hasViewersWith: [GroupWhereInput!]
   """
   template edge predicates
   """
@@ -58766,17 +58559,10 @@ input CreateAssessmentInput {
   name: String!
   assessmentType: AssessmentAssessmentType
   """
-  the id of the group that owns the assessment
-  """
-  assessmentOwnerID: String
-  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
   ownerID: ID
-  blockedGroupIDs: [ID!]
-  editorIDs: [ID!]
-  viewerIDs: [ID!]
   templateID: ID!
   assessmentResponseIDs: [ID!]
 }
@@ -115676,25 +115462,11 @@ input UpdateAssessmentInput {
   """
   name: String
   """
-  the id of the group that owns the assessment
-  """
-  assessmentOwnerID: String
-  clearAssessmentOwnerID: Boolean
-  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
   ownerID: ID
   clearOwner: Boolean
-  addBlockedGroupIDs: [ID!]
-  removeBlockedGroupIDs: [ID!]
-  clearBlockedGroups: Boolean
-  addEditorIDs: [ID!]
-  removeEditorIDs: [ID!]
-  clearEditors: Boolean
-  addViewerIDs: [ID!]
-  removeViewerIDs: [ID!]
-  clearViewers: Boolean
   templateID: ID
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]

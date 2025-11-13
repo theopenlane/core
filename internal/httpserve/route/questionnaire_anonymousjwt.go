@@ -15,10 +15,11 @@ func registerQuestionnaireAnonymousJWTHandler(router *Router) error {
 		Description: "Create anonymous JWT token for questionnaire access",
 		Tags:        []string{"questionnaire", "authentication"},
 		OperationID: "QuestionnaireAnonymousJWT",
-		Security:    handlers.PublicSecurity,
-		Middlewares: *publicEndpoint,
+		Security:    handlers.BasicSecurity(),
+		Middlewares: *unauthenticatedEndpoint,
 		Handler:     router.Handler.CreateQuestionnaireAnonymousJWT,
 	}
 
 	return router.AddUnversionedHandlerRoute(config)
 }
+

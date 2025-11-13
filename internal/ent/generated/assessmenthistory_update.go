@@ -170,26 +170,6 @@ func (_u *AssessmentHistoryUpdate) SetNillableTemplateID(v *string) *AssessmentH
 	return _u
 }
 
-// SetAssessmentOwnerID sets the "assessment_owner_id" field.
-func (_u *AssessmentHistoryUpdate) SetAssessmentOwnerID(v string) *AssessmentHistoryUpdate {
-	_u.mutation.SetAssessmentOwnerID(v)
-	return _u
-}
-
-// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdate) SetNillableAssessmentOwnerID(v *string) *AssessmentHistoryUpdate {
-	if v != nil {
-		_u.SetAssessmentOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
-func (_u *AssessmentHistoryUpdate) ClearAssessmentOwnerID() *AssessmentHistoryUpdate {
-	_u.mutation.ClearAssessmentOwnerID()
-	return _u
-}
-
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_u *AssessmentHistoryUpdate) SetResponseDueDuration(v int64) *AssessmentHistoryUpdate {
 	_u.mutation.ResetResponseDueDuration()
@@ -328,12 +308,6 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssessmentOwnerID(); ok {
-		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
-	}
-	if _u.mutation.AssessmentOwnerIDCleared() {
-		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
@@ -500,26 +474,6 @@ func (_u *AssessmentHistoryUpdateOne) SetNillableTemplateID(v *string) *Assessme
 	if v != nil {
 		_u.SetTemplateID(*v)
 	}
-	return _u
-}
-
-// SetAssessmentOwnerID sets the "assessment_owner_id" field.
-func (_u *AssessmentHistoryUpdateOne) SetAssessmentOwnerID(v string) *AssessmentHistoryUpdateOne {
-	_u.mutation.SetAssessmentOwnerID(v)
-	return _u
-}
-
-// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
-func (_u *AssessmentHistoryUpdateOne) SetNillableAssessmentOwnerID(v *string) *AssessmentHistoryUpdateOne {
-	if v != nil {
-		_u.SetAssessmentOwnerID(*v)
-	}
-	return _u
-}
-
-// ClearAssessmentOwnerID clears the value of the "assessment_owner_id" field.
-func (_u *AssessmentHistoryUpdateOne) ClearAssessmentOwnerID() *AssessmentHistoryUpdateOne {
-	_u.mutation.ClearAssessmentOwnerID()
 	return _u
 }
 
@@ -691,12 +645,6 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
-	}
-	if value, ok := _u.mutation.AssessmentOwnerID(); ok {
-		_spec.SetField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString, value)
-	}
-	if _u.mutation.AssessmentOwnerIDCleared() {
-		_spec.ClearField(assessmenthistory.FieldAssessmentOwnerID, field.TypeString)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)

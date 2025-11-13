@@ -150,6 +150,36 @@ func createResponseEmail(ctx context.Context, m *generated.AssessmentResponseMut
 	return err
 }
 
+// HookUpdateAssessmentResponse checks if the assessment response is past due and updates the status accordingly
+func HookUpdateAssessmentResponse() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.AssessmentResponseFunc(func(ctx context.Context, m *generated.AssessmentResponseMutation) (generated.Value, error) {
+			id, exists := m.ID()
+			if !exists {
+				return next.Mutate(ctx, m)
+			}
+
+			assessmentResp, err := m.Client().AssessmentResponse.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			if !assessmentResp.DueDate.IsZero() && time.Now().After(assessmentResp.DueDate) {
+				newStatus, statusBeingSet := m.Status()
+
+				shouldSetOverdue := (statusBeingSet && newStatus == enums.AssessmentResponseStatusCompleted) ||
+					(!statusBeingSet && assessmentResp.Status != enums.AssessmentResponseStatusOverdue)
+
+				if shouldSetOverdue {
+					m.SetStatus(enums.AssessmentResponseStatusOverdue)
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdateOne)
+}
+
 // validateAndSetDueDate validates the due_date field and sets it based on the assessment's response_due_duration if not provided
 func validateAndSetDueDate(ctx context.Context, m *generated.AssessmentResponseMutation) error {
 	dueDate, dueDateExists := m.DueDate()

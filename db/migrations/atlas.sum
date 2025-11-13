@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 h1:4mbV/pGgZariYdpnuXELTERepu5VgyMIGQgTHDDZB8M=
 ||||||| parent of e1d3404b (1:m templates -> assessments)
 h1:jMjo8j3iz84J1za32cr1cvCJWzqAMn38kXz/548SMng=
@@ -11,6 +12,11 @@ h1:F9BVdDA79oQ/c8izASVlflIfbr9MxWpD4jU8a4Rmc0s=
 =======
 h1:pt13LsquCE1vYnF2EXwTsjM5iuPqTZ/T/R/aj938vJA=
 >>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)
+||||||| parent of 30ad18db (fixes)
+h1:pt13LsquCE1vYnF2EXwTsjM5iuPqTZ/T/R/aj938vJA=
+=======
+h1:T3uZR0gnYRCOl5w6J/49S2+qe32adQw5DsyC7it0B4U=
+>>>>>>> 30ad18db (fixes)
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -110,5 +116,12 @@ h1:pt13LsquCE1vYnF2EXwTsjM5iuPqTZ/T/R/aj938vJA=
 20251117155926_notifications-schema.sql h1:aAJGW+dXylSUk5lokXaE71zdAV7py/NwHU13LG31DEs=
 =======
 20251112144403_fixes.sql h1:TWDgNTFRW62P9cAMwAHEiwp95YF1NqfeGUa7U3Ut/VQ=
+<<<<<<< HEAD
 20251117155926_notifications-schema.sql h1:tindSroHuUFOJUnJ0cm4NObQNuexfOKZxi+jDBaZ/Nk=
 >>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)
+||||||| parent of 30ad18db (fixes)
+20251117155926_notifications-schema.sql h1:tindSroHuUFOJUnJ0cm4NObQNuexfOKZxi+jDBaZ/Nk=
+=======
+20251113145343_sifhfkf.sql h1:fX70qqHrrR+asxiD9fqv1EErHXhUO7vyDjiThPhtjAs=
+20251117155926_notifications-schema.sql h1:zf6UbmdCbEzGac8/N6+R6GEHhuyShv+pPWsDU2kvQe8=
+>>>>>>> 30ad18db (fixes)

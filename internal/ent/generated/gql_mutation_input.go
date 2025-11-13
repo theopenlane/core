@@ -788,12 +788,8 @@ type CreateAssessmentInput struct {
 	Tags                  []string
 	Name                  string
 	AssessmentType        *enums.AssessmentType
-	AssessmentOwnerID     *string
 	ResponseDueDuration   *int64
 	OwnerID               *string
-	BlockedGroupIDs       []string
-	EditorIDs             []string
-	ViewerIDs             []string
 	TemplateID            string
 	AssessmentResponseIDs []string
 }
@@ -807,23 +803,11 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.AssessmentType; v != nil {
 		m.SetAssessmentType(*v)
 	}
-	if v := i.AssessmentOwnerID; v != nil {
-		m.SetAssessmentOwnerID(*v)
-	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.BlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.EditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.ViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
 	}
 	m.SetTemplateID(i.TemplateID)
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
@@ -843,20 +827,9 @@ type UpdateAssessmentInput struct {
 	Tags                        []string
 	AppendTags                  []string
 	Name                        *string
-	ClearAssessmentOwnerID      bool
-	AssessmentOwnerID           *string
 	ResponseDueDuration         *int64
 	ClearOwner                  bool
 	OwnerID                     *string
-	ClearBlockedGroups          bool
-	AddBlockedGroupIDs          []string
-	RemoveBlockedGroupIDs       []string
-	ClearEditors                bool
-	AddEditorIDs                []string
-	RemoveEditorIDs             []string
-	ClearViewers                bool
-	AddViewerIDs                []string
-	RemoveViewerIDs             []string
 	TemplateID                  *string
 	ClearAssessmentResponses    bool
 	AddAssessmentResponseIDs    []string
@@ -877,12 +850,6 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.Name; v != nil {
 		m.SetName(*v)
 	}
-	if i.ClearAssessmentOwnerID {
-		m.ClearAssessmentOwnerID()
-	}
-	if v := i.AssessmentOwnerID; v != nil {
-		m.SetAssessmentOwnerID(*v)
-	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
 	}
@@ -891,33 +858,6 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearBlockedGroups {
-		m.ClearBlockedGroups()
-	}
-	if v := i.AddBlockedGroupIDs; len(v) > 0 {
-		m.AddBlockedGroupIDs(v...)
-	}
-	if v := i.RemoveBlockedGroupIDs; len(v) > 0 {
-		m.RemoveBlockedGroupIDs(v...)
-	}
-	if i.ClearEditors {
-		m.ClearEditors()
-	}
-	if v := i.AddEditorIDs; len(v) > 0 {
-		m.AddEditorIDs(v...)
-	}
-	if v := i.RemoveEditorIDs; len(v) > 0 {
-		m.RemoveEditorIDs(v...)
-	}
-	if i.ClearViewers {
-		m.ClearViewers()
-	}
-	if v := i.AddViewerIDs; len(v) > 0 {
-		m.AddViewerIDs(v...)
-	}
-	if v := i.RemoveViewerIDs; len(v) > 0 {
-		m.RemoveViewerIDs(v...)
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)

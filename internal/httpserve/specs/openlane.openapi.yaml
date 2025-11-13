@@ -479,6 +479,12 @@ components:
                     example: jsnow@example.com
                     type: string
             type: object
+        GetQuestionnaireResponse:
+            properties:
+                jsonconfig:
+                    additionalProperties: {}
+                    type: object
+            type: object
         Group:
             description: |
                 SCIM Group resource as defined in RFC 7643 Section 4.2.
@@ -1524,6 +1530,15 @@ components:
                     type: string
                 type:
                     description: The type of impersonation (support, job, admin)
+                    type: string
+            type: object
+        SubmitQuestionnaireResponse:
+            properties:
+                completed_at:
+                    type: string
+                document_data_id:
+                    type: string
+                status:
                     type: string
             type: object
         SwitchOrganizationReply:
@@ -2598,6 +2613,57 @@ paths:
             summary: GraphQL Endpoint
             tags:
                 - graphql
+    /questionnaire:
+        get:
+            description: Get questionnaire template configuration for authenticated anonymous users
+            operationId: GetQuestionnaire
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        jsonconfig: {}
+                            schema:
+                                $ref: '#/components/schemas/GetQuestionnaireResponse'
+                    description: Success
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Get questionnaire template configuration for authenticated anonymous users
+            tags:
+                - questionnaire
+        post:
+            description: Submit questionnaire response data for authenticated anonymous users
+            operationId: SubmitQuestionnaire
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        completed_at: ""
+                                        document_data_id: ""
+                                        status: ""
+                            schema:
+                                $ref: '#/components/schemas/SubmitQuestionnaireResponse'
+                    description: Success
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Submit questionnaire response data for authenticated anonymous users
+            tags:
+                - questionnaire
     /questionnaire/auth/anonymous:
         post:
             description: Create anonymous JWT token for questionnaire access
@@ -2615,7 +2681,8 @@ paths:
                     description: Success
                 default:
                     description: ""
-            security: []
+            security:
+                - basic: []
             summary: Create anonymous JWT token for questionnaire access
             tags:
                 - questionnaire

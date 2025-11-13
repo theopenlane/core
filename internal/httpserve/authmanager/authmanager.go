@@ -123,7 +123,7 @@ func (a *Client) GenerateAnonymousTrustCenterSession(ctx context.Context, w http
 }
 
 // GenerateAnonymousQuestionnaireSession creates a new auth session for the anonymous questionnaire user
-func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetAssessmentID string) (*models.AuthData, error) {
+func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w http.ResponseWriter, targetOrgID string, targetAssessmentID string, email string) (*models.AuthData, error) {
 	anonUserID := fmt.Sprintf("%s%s", AnonQuestionnaireJWTPrefix, uuid.New().String())
 
 	claims := &tokens.Claims{
@@ -133,6 +133,7 @@ func (a *Client) GenerateAnonymousQuestionnaireSession(ctx context.Context, w ht
 		UserID:       anonUserID,
 		OrgID:        targetOrgID,
 		AssessmentID: targetAssessmentID,
+		Email:        email,
 	}
 
 	return a.generateAnonymousSession(ctx, w, anonUserID, claims)

@@ -2,7 +2,6 @@
 mutation CreateAssessment($input: CreateAssessmentInput!) {
   createAssessment(input: $input) {
     assessment {
-      assessmentOwnerID
       assessmentType
       createdAt
       createdBy
@@ -34,7 +33,6 @@ query GetAllAssessments {
     }
     edges {
       node {
-        assessmentOwnerID
         assessmentType
         createdAt
         createdBy
@@ -51,7 +49,6 @@ query GetAllAssessments {
 }
 query GetAssessmentByID($assessmentId: ID!) {
   assessment(id: $assessmentId) {
-    assessmentOwnerID
     assessmentType
     createdAt
     createdBy
@@ -76,7 +73,6 @@ query GetAssessments($first: Int, $last: Int, $where: AssessmentWhereInput) {
     }
     edges {
       node {
-        assessmentOwnerID
         assessmentType
         createdAt
         createdBy
@@ -94,7 +90,6 @@ query GetAssessments($first: Int, $last: Int, $where: AssessmentWhereInput) {
 mutation UpdateAssessment($updateAssessmentId: ID!, $input: UpdateAssessmentInput!) {
   updateAssessment(id: $updateAssessmentId, input: $input) {
     assessment {
-      assessmentOwnerID
       assessmentType
       createdAt
       createdBy

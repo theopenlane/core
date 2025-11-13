@@ -36,6 +36,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
@@ -269,6 +270,28 @@ func (suite *HandlerTestSuite) registerTestHandler(method, path string, operatio
 			Registry:  suite.router.SchemaRegistry,
 		})
 	})
+}
+
+// registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
+func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	authmw := suite.createAuthMiddleware()
+	suite.e.Add(method, path, func(c echo.Context) error {
+		return handlerFunc(c, &handlers.OpenAPIContext{
+			Operation: operation,
+			Registry:  suite.router.SchemaRegistry,
+		})
+	}, authmw)
+}
+
+// createAuthMiddleware creates authentication middleware for tests
+func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
+	opts := []authmiddleware.Option{
+		authmiddleware.WithDBClient(suite.db),
+		authmiddleware.WithAllowAnonymous(true),
+	}
+
+	conf := authmiddleware.NewAuthOptions(opts...)
+	return authmiddleware.Authenticate(&conf)
 }
 
 func (suite *HandlerTestSuite) TearDownTest() {
