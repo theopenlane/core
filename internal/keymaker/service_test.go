@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/theopenlane/core/internal/integrations"
+	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -134,7 +135,7 @@ func TestService_CompleteAuthorizationExpired(t *testing.T) {
 }
 
 type fakeResolver struct {
-	provider types.Provider
+	provider providers.Provider
 }
 
 func (r fakeResolver) Provider(pt types.ProviderType) (types.Provider, bool) {
@@ -149,6 +150,7 @@ func (r fakeResolver) Provider(pt types.ProviderType) (types.Provider, bool) {
 
 type fakeKeystore struct {
 	saves []saveCall
+	err   error
 }
 
 type saveCall struct {
@@ -161,6 +163,9 @@ func (f *fakeKeystore) SaveCredential(_ context.Context, orgID string, payload t
 		orgID:   orgID,
 		payload: payload,
 	})
+	if f.err != nil {
+		return types.CredentialPayload{}, f.err
+	}
 	return payload, nil
 }
 
@@ -169,6 +174,8 @@ type fakeProvider struct {
 	state        string
 	authURL      string
 	payload      types.CredentialPayload
+	beginErr     error
+	finishErr    error
 }
 
 func (p *fakeProvider) Type() types.ProviderType {
@@ -180,11 +187,15 @@ func (p *fakeProvider) Capabilities() types.ProviderCapabilities {
 }
 
 func (p *fakeProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
+	if p.beginErr != nil {
+		return nil, p.beginErr
+	}
 	return &fakeAuthSession{
 		provider: p.providerType,
 		state:    p.state,
 		authURL:  p.authURL,
 		payload:  p.payload,
+		finishErr: p.finishErr,
 	}, nil
 }
 
@@ -193,10 +204,11 @@ func (p *fakeProvider) Mint(context.Context, types.CredentialSubject) (types.Cre
 }
 
 type fakeAuthSession struct {
-	provider types.ProviderType
-	state    string
-	authURL  string
-	payload  types.CredentialPayload
+	provider  types.ProviderType
+	state     string
+	authURL   string
+	payload   types.CredentialPayload
+	finishErr error
 }
 
 func (s *fakeAuthSession) ProviderType() types.ProviderType {
@@ -212,5 +224,8 @@ func (s *fakeAuthSession) AuthURL() string {
 }
 
 func (s *fakeAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
+	if s.finishErr != nil {
+		return types.CredentialPayload{}, s.finishErr
+	}
 	return s.payload, nil
 }

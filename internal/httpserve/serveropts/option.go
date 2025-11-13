@@ -36,7 +36,6 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/bootstrap"
 	integrationsconfig "github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
@@ -259,7 +258,7 @@ func WithReadyChecks(c *entx.EntClientConfig, f *fgax.Client, r *redis.Client, j
 func loadProviderRegistry(specPath string) (*registry.Registry, error) {
 	ctx := context.Background()
 	if strings.TrimSpace(specPath) == "" {
-		return bootstrap.LoadDefaultRegistry(ctx)
+		return registry.LoadDefaultRegistry(ctx)
 	}
 
 	loader, err := buildFSLoader(specPath)
@@ -267,7 +266,7 @@ func loadProviderRegistry(specPath string) (*registry.Registry, error) {
 		return nil, err
 	}
 
-	return bootstrap.LoadRegistry(ctx, loader)
+	return registry.LoadRegistry(ctx, loader)
 }
 
 func buildFSLoader(path string) (*integrationsconfig.FSLoader, error) {

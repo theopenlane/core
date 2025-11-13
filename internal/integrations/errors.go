@@ -25,8 +25,6 @@ var (
 	ErrCredentialExpired = errors.New("integrations: credential expired")
 	// ErrSchemaVersionUnsupported indicates a provider spec declares an unknown schema version.
 	ErrSchemaVersionUnsupported = errors.New("integrations: schema version unsupported")
-	// ErrEnvVarNotDefined signals a required environment variable placeholder was not provided.
-	ErrEnvVarNotDefined = errors.New("integrations: environment variable not defined")
 	// ErrStateRequired indicates the OAuth state parameter is missing.
 	ErrStateRequired = errors.New("integrations: state required")
 	// ErrAuthorizationCodeRequired indicates the OAuth authorization code was omitted.

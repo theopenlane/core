@@ -2,7 +2,7 @@
   "name": "azure_security_center",
   "displayName": "Microsoft Defender for Cloud",
   "category": "compliance",
-  "authType": "apikey",
+  "authType": "oauth2",
   "active": true,
   "logoUrl": "https://azure.microsoft.com/svghandler/microsoft-defender/?width=256&height=256",
   "docsUrl": "https://learn.microsoft.com/en-us/azure/defender-for-cloud/",

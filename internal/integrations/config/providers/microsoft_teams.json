@@ -4,7 +4,7 @@
   "category": "collab",
   "authType": "oauth2",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-microsoft-teams/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/authentication",
   "oauth": {
     "clientId": "${MICROSOFT_TEAMS_CLIENT_ID}",
@@ -17,7 +17,7 @@
       "https://graph.microsoft.com/Channel.ReadBasic.All",
       "offline_access"
     ],
-    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
   },
   "userInfo": {
     "url": "https://graph.microsoft.com/v1.0/me",

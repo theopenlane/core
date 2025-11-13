@@ -45,8 +45,14 @@ var (
 	ErrInvalidProvider = errors.New("oauth2 provider not supported")
 	// ErrMissingOrganizationContext is returned when organization context is missing during OAuth flow
 	ErrMissingOrganizationContext = errors.New("missing organization context")
+	// ErrInvalidOrganizationContext is returned when organization context does not match authenticated user
+	ErrInvalidOrganizationContext = errors.New("invalid organization context")
 	// ErrMissingUserContext is returned when user context is missing during OAuth flow
 	ErrMissingUserContext = errors.New("missing user context")
+	// ErrInvalidUserContext is returned when user context does not match authenticated user
+	ErrInvalidUserContext = errors.New("invalid user context")
+	// ErrNoAuthUser is returned when the user couldn't be identified by the request
+	ErrNoAuthUser = errors.New("could not identify authenticated user in request")
 	// ErrPassWordResetTokenInvalid is returned when the provided token and secret do not match the stored
 	ErrPassWordResetTokenInvalid = errors.New("password reset token invalid")
 	// ErrNonUniquePassword is returned when the password was already used

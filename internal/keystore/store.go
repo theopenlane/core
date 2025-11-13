@@ -15,8 +15,13 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	hushschema "github.com/theopenlane/core/internal/ent/generated/hush"
 	integration "github.com/theopenlane/core/internal/ent/generated/integration"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/contextx"
 )
 
 // Store persists credential payloads using Ent-backed integrations and hush secrets
@@ -43,8 +48,12 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 		return types.CredentialPayload{}, ErrOrgIDRequired
 	}
 
-	integrationRecord, err := s.ensureIntegration(ctx, orgID, payload.Provider)
+	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	systemCtx = contextx.With(systemCtx, auth.OrgSubscriptionContextKey{})
+
+	integrationRecord, err := s.ensureIntegration(systemCtx, orgID, payload.Provider)
 	if err != nil {
+		logx.FromContext(systemCtx).Error().Err(err).Msg("failed to ensure integration record")
 		return types.CredentialPayload{}, err
 	}
 
@@ -59,29 +68,33 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 				hushschema.HasIntegrationsWith(integration.ID(integrationRecord.ID)),
 			),
 		).
-		Only(ctx)
+		Only(systemCtx)
 
 	if err != nil {
 		if !ent.IsNotFound(err) {
+			logx.FromContext(systemCtx).Error().Err(err).Msg("failed to query existing credential")
 			return types.CredentialPayload{}, err
 		}
 
 		_, createErr := s.db.Hush.Create().
 			SetOwnerID(orgID).
+			SetName(secretName).
 			SetSecretName(secretName).
 			SetKind(string(payload.Kind)).
 			SetCredentialSet(envelope).
 			AddIntegrations(integrationRecord).
-			Save(ctx)
+			Save(systemCtx)
 		if createErr != nil {
+			logx.FromContext(systemCtx).Error().Err(createErr).Msg("failed to create credential record")
 			return types.CredentialPayload{}, createErr
 		}
 	} else {
 		_, updateErr := existing.Update().
 			SetCredentialSet(envelope).
 			SetKind(string(payload.Kind)).
-			Save(ctx)
+			Save(systemCtx)
 		if updateErr != nil {
+			logx.FromContext(systemCtx).Error().Err(updateErr).Msg("failed to update credential record")
 			return types.CredentialPayload{}, updateErr
 		}
 	}
@@ -137,6 +150,59 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 	return types.CredentialPayload{}, ErrCredentialNotFound
 }
 
+// DeleteIntegration removes the integration and associated secrets for the given org.
+func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integrationID string) (types.ProviderType, string, error) {
+	if s == nil || s.db == nil {
+		return types.ProviderUnknown, "", fmt.Errorf("keystore: store not initialized")
+	}
+
+	if strings.TrimSpace(orgID) == "" {
+		return types.ProviderUnknown, "", integrations.ErrOrgIDRequired
+	}
+	if strings.TrimSpace(integrationID) == "" {
+		return types.ProviderUnknown, "", integrations.ErrIntegrationIDRequired
+	}
+
+	record, err := s.db.Integration.Query().
+		Where(
+			integration.IDEQ(integrationID),
+			integration.OwnerIDEQ(orgID),
+		).
+		WithSecrets().
+		Only(ctx)
+	if err != nil {
+		return types.ProviderUnknown, "", err
+	}
+
+	tx, err := s.db.Tx(ctx)
+	if err != nil {
+		return types.ProviderUnknown, "", err
+	}
+
+	if len(record.Edges.Secrets) > 0 {
+		secretIDs := make([]string, 0, len(record.Edges.Secrets))
+		for _, secret := range record.Edges.Secrets {
+			secretIDs = append(secretIDs, secret.ID)
+		}
+
+		if _, err := tx.Hush.Delete().Where(hushschema.IDIn(secretIDs...)).Exec(ctx); err != nil {
+			tx.Rollback() //nolint:errcheck
+			return types.ProviderUnknown, "", err
+		}
+	}
+
+	if err := tx.Integration.DeleteOneID(record.ID).Exec(ctx); err != nil {
+		tx.Rollback() //nolint:errcheck
+		return types.ProviderUnknown, "", err
+	}
+
+	if err := tx.Commit(); err != nil {
+		return types.ProviderUnknown, "", err
+	}
+
+	return types.ProviderTypeFromString(record.Kind), record.ID, nil
+}
+
 // ensureIntegration guarantees an integration record exists for the given org/provider pair
 func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
 	record, err := s.db.Integration.Query().
@@ -155,12 +221,10 @@ func (s *Store) ensureIntegration(ctx context.Context, orgID string, provider ty
 		return nil, err
 	}
 
-	name := strings.ToUpper(string(provider)) + " Integration"
-
 	record, createErr := s.db.Integration.Create().
 		SetOwnerID(orgID).
 		SetKind(string(provider)).
-		SetName(name).
+		SetName(string(provider)).
 		Save(ctx)
 	if createErr != nil {
 		return nil, createErr

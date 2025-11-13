@@ -3,6 +3,7 @@ package handlers
 import (
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -18,7 +19,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 )
 
-// ConfigureIntegrationProvider stores non-OAuth credentials/configuration for a provider.
+// ConfigureIntegrationProvider stores non-OAuth credentials/configuration for a provider
 func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *OpenAPIContext) error {
 	payload, err := BindAndValidateWithAutoRegistry(ctx, h, openapiCtx.Operation, openapi.ExampleIntegrationConfigPayload, openapi.IntegrationConfigResponse{}, openapiCtx.Registry)
 	if err != nil {
@@ -60,6 +61,10 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 		return h.BadRequest(ctx, rout.MissingField("payload"), openapiCtx)
 	}
 
+	if key, ok := attrs["serviceAccountKey"].(string); ok && strings.TrimSpace(key) != "" {
+		attrs["serviceAccountKey"] = normalizeServiceAccountKey(key)
+	}
+
 	schemaLoader := gojsonschema.NewGoLoader(spec.CredentialsSchema)
 	documentLoader := gojsonschema.NewGoLoader(attrs)
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
@@ -68,12 +73,21 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if fieldErrs := jsonschemautil.FieldErrorsFromResult(result); len(fieldErrs) > 0 {
-		// MKA fix this
-		return h.BadRequest(ctx, nil, openapiCtx)
+		return h.BadRequest(ctx, fieldErrs[0], openapiCtx)
 	}
 
 	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
 		return h.InternalServerError(ctx, err, openapiCtx)
+	}
+
+	if err := h.runIntegrationHealthCheck(requestCtx, orgID, providerType); err != nil {
+		switch {
+		case errors.Is(err, errIntegrationOperationsNotConfigured),
+			errors.Is(err, errIntegrationRegistryNotConfigured):
+			return h.InternalServerError(ctx, err, openapiCtx)
+		default:
+			return h.BadRequest(ctx, wrapIntegrationError("validate", err), openapiCtx)
+		}
 	}
 
 	out := openapi.IntegrationConfigResponse{
@@ -102,7 +116,54 @@ func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID stri
 	}
 
 	_, err = h.IntegrationStore.SaveCredential(ctx, orgID, payload)
+
 	return err
+}
+
+func cloneProviderData(data map[string]any) map[string]any {
+	if len(data) == 0 {
+		return nil
+	}
+
+	cloned := make(map[string]any, len(data))
+	for key, value := range data {
+		if key == "serviceAccountKey" {
+			cloned[key] = normalizeServiceAccountKey(stringifyValue(value))
+			continue
+		}
+		cloned[key] = cloneProviderValue(value)
+	}
+
+	return cloned
+}
+
+func cloneProviderValue(value any) any {
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v)
+	case fmt.Stringer:
+		return strings.TrimSpace(v.String())
+	case []string:
+		out := make([]string, len(v))
+		for i, item := range v {
+			out[i] = strings.TrimSpace(item)
+		}
+		return out
+	case []any:
+		out := make([]any, len(v))
+		for i, item := range v {
+			out[i] = cloneProviderValue(item)
+		}
+		return out
+	case map[string]any:
+		out := make(map[string]any, len(v))
+		for key, item := range v {
+			out[key] = cloneProviderValue(item)
+		}
+		return out
+	default:
+		return v
+	}
 }
 
 func stringifyValue(value any) string {
@@ -120,13 +181,65 @@ func stringifyValue(value any) string {
 	}
 }
 
-func cloneProviderData(data map[string]any) map[string]any {
-	if len(data) == 0 {
+func normalizeServiceAccountKey(input string) string {
+	trimmed := strings.TrimSpace(input)
+	if trimmed == "" {
+		return ""
+	}
+
+	var decoded string
+	if err := json.Unmarshal([]byte(trimmed), &decoded); err == nil {
+		return strings.TrimSpace(decoded)
+	}
+
+	return trimmed
+}
+
+const defaultHealthOperation types.OperationName = "health.default"
+
+func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, provider types.ProviderType) error {
+	if h.IntegrationOperations == nil {
+		return errIntegrationOperationsNotConfigured
+	}
+	if h.IntegrationRegistry == nil {
+		return errIntegrationRegistryNotConfigured
+	}
+
+	if !h.providerHasHealthOperation(provider) {
 		return nil
 	}
-	cloned := make(map[string]any, len(data))
-	for key, value := range data {
-		cloned[key] = stringifyValue(value)
+
+	result, err := h.IntegrationOperations.Run(ctx, types.OperationRequest{
+		OrgID:    orgID,
+		Provider: provider,
+		Name:     defaultHealthOperation,
+		Force:    true,
+	})
+	if err != nil {
+		return err
 	}
-	return cloned
+
+	if result.Status != types.OperationStatusOK {
+		summary := strings.TrimSpace(result.Summary)
+		if summary == "" {
+			summary = "provider health check failed"
+		}
+		return fmt.Errorf("%s", summary)
+	}
+
+	return nil
+}
+
+func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
+	if h.IntegrationRegistry == nil {
+		return false
+	}
+
+	for _, descriptor := range h.IntegrationRegistry.OperationDescriptors(provider) {
+		if descriptor.Name == defaultHealthOperation {
+			return true
+		}
+	}
+
+	return false
 }

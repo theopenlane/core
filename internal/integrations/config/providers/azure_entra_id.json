@@ -4,7 +4,7 @@
   "category": "identity",
   "authType": "oauth2",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-microsoft-entra-id/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://learn.microsoft.com/en-us/entra/identity-platform/",
   "oauth": {
     "clientId": "${AZURE_ENTRA_CLIENT_ID}",
@@ -15,7 +15,7 @@
       "https://graph.microsoft.com/.default",
       "offline_access"
     ],
-    "redirectUri": "https://app.openlane.io/integrations/oauth/callback"
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
   },
   "userInfo": {
     "url": "https://graph.microsoft.com/v1.0/me",

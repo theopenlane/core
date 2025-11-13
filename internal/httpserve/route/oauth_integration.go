@@ -88,3 +88,19 @@ func registerIntegrationProvidersHandler(router *Router) error {
 
 	return router.AddV1HandlerRoute(config)
 }
+
+func registerIntegrationOperationHandler(router *Router) error {
+	config := Config{
+		Path:        "/integrations/:provider/operations/run",
+		Method:      http.MethodPost,
+		Name:        "RunIntegrationOperation",
+		Description: "Execute a provider operation using stored credentials",
+		Tags:        []string{"integrations"},
+		OperationID: "RunIntegrationOperation",
+		Security:    handlers.AllSecurityRequirements(),
+		Middlewares: *authenticatedEndpoint,
+		Handler:     router.Handler.RunIntegrationOperation,
+	}
+
+	return router.AddV1HandlerRoute(config)
+}

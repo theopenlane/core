@@ -421,5 +421,5 @@ data:
 {{- else }}
   CORE_INTEGRATIONOAUTHPROVIDER_SUCCESSREDIRECTURL: ""
 {{- end }}
-  CORE_INTEGRATIONOAUTHPROVIDER_PROVIDERSPECPATH: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath | quote | default "internal/keystore/config/providers" }}
+  CORE_INTEGRATIONOAUTHPROVIDER_PROVIDERSPECPATH: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath | quote | default "internal/integrations/config/providers" }}
 {{- end }}

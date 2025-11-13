@@ -4,7 +4,7 @@
   "category": "cloud",
   "authType": "workload_identity",
   "active": true,
-  "logoUrl": "https://ssl.gstatic.com/images/branding/product/2x/google_cloud_64dp.png",
+  "logoUrl": "",
   "docsUrl": "https://cloud.google.com/security-command-center/docs",
   "workloadIdentity": {
     "scopes": [
@@ -24,11 +24,27 @@
     "type": "object",
     "additionalProperties": false,
     "required": [
-      "projectId",
-      "workloadIdentityProvider",
-      "audience",
-      "serviceAccountEmail",
-      "organizationId"
+      "projectId"
+    ],
+    "allOf": [
+      {
+        "anyOf": [
+          {
+            "required": [
+              "serviceAccountKey"
+            ]
+          },
+          {
+            "required": [
+              "workloadIdentityProvider",
+              "audience",
+              "serviceAccountEmail",
+              "organizationId",
+              "subjectToken"
+            ]
+          }
+        ]
+      }
     ],
     "properties": {
       "projectId": {
@@ -92,6 +108,18 @@
         "type": "string",
         "title": "Findings Filter",
         "description": "Optional CEL filter applied when querying SCC findings."
+      },
+      "subjectToken": {
+        "type": "string",
+        "title": "Subject Token",
+        "description": "External identity token (JWT/SAML/OIDC) used as the workload identity subject when STS exchanges occur.",
+        "minLength": 1
+      },
+      "serviceAccountKey": {
+        "type": "string",
+        "title": "Service Account Key JSON",
+        "description": "Paste a Google Cloud service-account JSON key to mint access tokens directly (testing shortcut).",
+        "minLength": 1
       }
     }
   }
