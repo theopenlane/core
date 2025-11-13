@@ -82,6 +82,68 @@
         flex-direction: column;
         gap: 0.75rem;
       }
+      .provider-operations {
+        border-top: 1px solid #e2e8f0;
+        padding-top: 0.75rem;
+        margin-top: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .operation-heading {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #334155;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+      .operation-row {
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 0.75rem;
+        background: #f8fafc;
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .operation-title-line {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+      .operation-title {
+        font-weight: 600;
+      }
+      .operation-kind {
+        font-size: 0.75rem;
+        background: #e2e8f0;
+        border-radius: 12px;
+        padding: 2px 8px;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: #475569;
+      }
+      .operation-controls {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+      .operation-controls textarea {
+        font-size: 0.85rem;
+      }
+      .operation-hint {
+        font-size: 0.8rem;
+        color: #64748b;
+      }
+      .operation-force {
+        font-size: 0.85rem;
+        color: #475569;
+      }
+      .operation-run-btn {
+        align-self: flex-start;
+      }
       .status-badge {
         display: inline-block;
         padding: 4px 10px;
@@ -135,6 +197,24 @@
         padding: 1.5rem;
         overflow-y: auto;
       }
+      .config-form {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+      }
+      .config-form__field {
+        display: flex;
+        flex-direction: column;
+        gap: 0.25rem;
+      }
+      .config-form .form-text {
+        font-size: 0.85rem;
+      }
+      .config-form__empty {
+        text-align: center;
+        color: #64748b;
+        font-style: italic;
+      }
       .config-modal__close {
         border: none;
         background: none;
@@ -145,8 +225,8 @@
         color: #0f5132;
       }
       .status-configured {
-        background: #d7e8ff;
-        color: #0b3d91;
+        background: #cdeed8;
+        color: #0f5132;
       }
       .status-expired {
         background: #fff3cd;
@@ -201,21 +281,21 @@
 
           <section class="mt-4">
             <div class="d-flex justify-content-between align-items-center">
-              <h2 class="mb-3">Available Providers</h2>
-              <button class="btn btn-outline-primary btn-sm" id="refreshProviders">Refresh Providers</button>
-            </div>
-            <div id="providersContainer" class="providers-grid">
-              <div class="text-center text-muted" id="providersPlaceholder">Loading provider metadata...</div>
-            </div>
-          </section>
-
-          <section class="mt-5">
-            <div class="d-flex justify-content-between align-items-center">
               <h2 class="mb-3">Configured Integrations</h2>
               <button class="btn btn-outline-secondary btn-sm" id="refreshIntegrations">Refresh List</button>
             </div>
             <div id="integrationsList" class="mb-4">
               <div class="text-center text-muted">No data loaded yet</div>
+            </div>
+          </section>
+
+          <section class="mt-5">
+            <div class="d-flex justify-content-between align-items-center">
+              <h2 class="mb-3">Available Providers</h2>
+              <button class="btn btn-outline-primary btn-sm" id="refreshProviders">Refresh Providers</button>
+            </div>
+            <div id="providersContainer" class="providers-grid">
+              <div class="text-center text-muted" id="providersPlaceholder">Loading provider metadata...</div>
             </div>
           </section>
 
@@ -233,7 +313,6 @@
       </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@2.12.3/dist/jsoneditor.min.js"></script>
     <div class="config-modal" id="configModal" aria-hidden="true">
       <div class="config-modal__dialog">
         <div class="config-modal__header d-flex justify-content-between align-items-center">
@@ -252,13 +331,15 @@
         </div>
       </div>
     </div>
+
     <script>
       const apiBase = "http://localhost:17608";
       let authToken = null;
       let userInfo = null;
       const providerMetadata = new Map();
       let activeConfigProvider = null;
-      let configModalEditor = null;
+      let activeCredentialSchema = null;
+      let configModalForm = null;
       const integrationSecretsQuery = `
         query ($kind: String!) {
           integrations(where: { kind: $kind }) {
@@ -286,18 +367,219 @@
       `;
 
       const providerDomId = (name) => name.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
-      function renderSchemaSummary(schema) {
-        if (!schema?.properties) {
-          return '<p class="text-muted small mb-0">Credential schema not available.</p>';
+      const toTitleCase = (value = "") =>
+        value
+          .toString()
+          .replace(/[_-]+/g, " ")
+          .replace(/\s+/g, " ")
+          .trim()
+          .replace(/\b\w/g, (char) => char.toUpperCase());
+
+      function inferInputType(prop = {}) {
+        if (prop.type === "integer" || prop.type === "number") return "number";
+        if (prop.format === "password" || prop.secret === true) return "password";
+        if (prop.format === "email") return "email";
+        if (prop.format === "uri" || prop.format === "url") return "url";
+        return "text";
+      }
+
+      function buildCredentialField(key, prop = {}, isRequired = false) {
+        const fieldId = `config-${key}`.replace(/[^a-z0-9_-]/gi, "-");
+        const labelText = prop.title || toTitleCase(key);
+        if (prop.type === "boolean") {
+          const wrapper = document.createElement("div");
+          wrapper.className = "form-check form-switch";
+          const input = document.createElement("input");
+          input.type = "checkbox";
+          input.className = "form-check-input";
+          input.id = fieldId;
+          input.name = key;
+          input.dataset.field = key;
+          if (prop.default !== undefined) {
+            input.checked = Boolean(prop.default);
+          }
+          wrapper.appendChild(input);
+
+          const label = document.createElement("label");
+          label.className = "form-check-label";
+          label.setAttribute("for", fieldId);
+          label.textContent = labelText;
+          if (isRequired) {
+            const star = document.createElement("span");
+            star.className = "text-danger ms-1";
+            star.textContent = "*";
+            label.appendChild(star);
+          }
+          wrapper.appendChild(label);
+
+          if (prop.description) {
+            const hint = document.createElement("small");
+            hint.className = "form-text";
+            hint.textContent = prop.description;
+            wrapper.appendChild(hint);
+          }
+          return wrapper;
         }
-        const required = new Set(schema.required || []);
-        const items = Object.entries(schema.properties).map(([key, prop]) => {
-          const title = prop.title || key;
-          const desc = prop.description || "Required by the integration";
-          const requiredMark = required.has(key) ? '<span class="text-danger ms-1">*</span>' : "";
-          return `<li><strong>${title}</strong>${requiredMark}<div class="text-muted">${desc}</div></li>`;
+
+        const wrapper = document.createElement("div");
+        wrapper.className = "config-form__field";
+        const label = document.createElement("label");
+        label.className = "form-label fw-semibold";
+        label.setAttribute("for", fieldId);
+        label.textContent = labelText;
+        if (isRequired) {
+          const star = document.createElement("span");
+          star.className = "text-danger ms-1";
+          star.textContent = "*";
+          label.appendChild(star);
+        }
+        wrapper.appendChild(label);
+
+        let control;
+        if (Array.isArray(prop.enum) && prop.enum.length) {
+          control = document.createElement("select");
+          control.className = "form-select";
+          const placeholderOption = document.createElement("option");
+          placeholderOption.value = "";
+          placeholderOption.textContent = "Select value";
+          if (isRequired && prop.default === undefined) {
+            placeholderOption.disabled = true;
+            placeholderOption.selected = true;
+          }
+          control.appendChild(placeholderOption);
+          prop.enum.forEach((value) => {
+            const option = document.createElement("option");
+            option.value = value;
+            option.textContent = value;
+            if (prop.default === value) {
+              option.selected = true;
+              placeholderOption.selected = false;
+            }
+            control.appendChild(option);
+          });
+        } else if (prop.type === "array") {
+          control = document.createElement("textarea");
+          control.className = "form-control";
+          const defaultRowCount = Array.isArray(prop.default) ? prop.default.length : 0;
+          control.rows = Math.min(8, Math.max(3, defaultRowCount || 3));
+          control.placeholder = "Enter one value per line";
+          control.dataset.arrayField = "true";
+          if (Array.isArray(prop.default)) {
+            control.value = prop.default.join("\n");
+          }
+        } else {
+          control = document.createElement("input");
+          control.className = "form-control";
+          control.type = inferInputType(prop);
+          if (prop.default !== undefined && prop.default !== null) {
+            control.value = prop.default;
+          }
+        }
+
+        control.id = fieldId;
+        control.name = key;
+        control.dataset.field = key;
+        if (control.tagName === "INPUT" && control.type === "password") {
+          control.autocomplete = "new-password";
+        }
+        if (isRequired) {
+          control.required = true;
+        }
+        if (!control.placeholder) {
+          if (prop.example) {
+            control.placeholder = prop.example;
+          } else if (Array.isArray(prop.examples) && prop.examples.length) {
+            control.placeholder = prop.examples[0];
+          }
+        }
+        if (prop.minLength) control.minLength = prop.minLength;
+        if (prop.maxLength) control.maxLength = prop.maxLength;
+        if (prop.pattern) control.pattern = prop.pattern;
+        if (prop.minimum !== undefined) control.min = prop.minimum;
+        if (prop.maximum !== undefined) control.max = prop.maximum;
+        if (prop.readonly || prop.readOnly) control.readOnly = true;
+
+        wrapper.appendChild(control);
+
+        const descriptionBits = [];
+        if (prop.description) descriptionBits.push(prop.description);
+        if (prop.type === "array") descriptionBits.push("Separate values with new lines.");
+        if (descriptionBits.length) {
+          const hint = document.createElement("small");
+          hint.className = "form-text text-muted";
+          hint.textContent = descriptionBits.join(" ");
+          wrapper.appendChild(hint);
+        }
+        return wrapper;
+      }
+
+      function renderCredentialForm(schema) {
+        const form = document.createElement("form");
+        form.className = "config-form";
+        form.id = "configModalForm";
+        form.setAttribute("novalidate", "novalidate");
+        const properties = schema?.properties || {};
+        const keys = Object.keys(properties);
+        if (keys.length === 0) {
+          const empty = document.createElement("p");
+          empty.className = "config-form__empty mb-0";
+          empty.textContent = "This provider does not require credential inputs.";
+          form.appendChild(empty);
+          return form;
+        }
+        const requiredFields = new Set(schema.required || []);
+        keys.forEach((key) => {
+          form.appendChild(buildCredentialField(key, properties[key], requiredFields.has(key)));
         });
-        return `<ul class="list-unstyled small mb-0">${items.join("")}</ul>`;
+        return form;
+      }
+
+      function collectCredentialValues(form, schema) {
+        const values = {};
+        const properties = schema?.properties || {};
+        Object.entries(properties).forEach(([key, prop]) => {
+          const field = form.querySelector(`[data-field="${key}"]`);
+          if (!field) return;
+          if (prop.type === "boolean") {
+            values[key] = field.checked;
+            return;
+          }
+          if (prop.type === "array") {
+            const raw = field.value.trim();
+            if (raw) {
+              const items = raw
+                .split(/[\r\n,]+/)
+                .map((item) => item.trim())
+                .filter(Boolean);
+              if (items.length > 0) {
+                values[key] = items;
+              }
+            } else if (field.required) {
+              values[key] = [];
+            }
+            return;
+          }
+          const rawValue = field.value;
+          if (rawValue === "" || rawValue === undefined || rawValue === null) {
+            return;
+          }
+          if (prop.type === "integer") {
+            const parsed = parseInt(rawValue, 10);
+            if (!Number.isNaN(parsed)) {
+              values[key] = parsed;
+            }
+            return;
+          }
+          if (prop.type === "number") {
+            const parsed = parseFloat(rawValue);
+            if (!Number.isNaN(parsed)) {
+              values[key] = parsed;
+            }
+            return;
+          }
+          values[key] = rawValue.trim();
+        });
+        return values;
       }
 
       function openConfigModal(providerName) {
@@ -307,55 +589,70 @@
           return;
         }
         activeConfigProvider = providerName;
+        activeCredentialSchema = provider.credentialsSchema;
         const modal = document.getElementById("configModal");
         document.getElementById("configModalTitle").textContent = `Configure ${provider.displayName || provider.name}`;
         document.getElementById("configModalSubtitle").textContent =
           provider.labels?.vendor ? `Vendor: ${provider.labels.vendor}` : "";
         const container = document.getElementById("configEditorContainer");
         container.innerHTML = "";
-        if (configModalEditor) {
-          configModalEditor.destroy();
-          configModalEditor = null;
-        }
-        configModalEditor = new JSONEditor(container, {
-          schema: provider.credentialsSchema,
-          theme: "bootstrap5",
-          disable_collapse: true,
-          disable_properties: true,
-          prompt_before_delete: false,
-        });
+        configModalForm = renderCredentialForm(activeCredentialSchema);
+        container.appendChild(configModalForm);
         modal.classList.add("show");
       }
 
       function closeConfigModal() {
         const modal = document.getElementById("configModal");
         modal.classList.remove("show");
-        if (configModalEditor) {
-          configModalEditor.destroy();
-          configModalEditor = null;
+        if (configModalForm) {
+          configModalForm.remove();
+          configModalForm = null;
         }
         activeConfigProvider = null;
+        activeCredentialSchema = null;
       }
 
       async function submitConfiguration() {
-        if (!activeConfigProvider || !configModalEditor) {
+        if (!activeConfigProvider || !configModalForm || !activeCredentialSchema) {
           log("No provider selected for configuration", "error");
           return;
         }
+        if (!configModalForm.reportValidity()) {
+          log("Resolve validation errors before submitting configuration", "error");
+          return;
+        }
+        const submitButton = document.getElementById("configModalSubmit");
         try {
-          const payload = { payload: configModalEditor.getValue() };
-          log(`Submitting configuration for ${activeConfigProvider}`, "info");
-          const response = await makeRequest(`/v1/integrations/${activeConfigProvider}/config`, {
+          const providerName = activeConfigProvider;
+          if (!providerName) {
+            throw new Error("No provider selected");
+          }
+          const payload = { payload: collectCredentialValues(configModalForm, activeCredentialSchema) };
+          if (submitButton) {
+            submitButton.disabled = true;
+            submitButton.textContent = "Submitting...";
+          }
+          log(`Submitting configuration for ${providerName}`, "info");
+          const response = await makeRequest(`/v1/integrations/${providerName}/config`, {
             method: "POST",
             body: JSON.stringify(payload),
           });
           if (!response.ok) throw new Error(await response.text());
-          log(`Configuration saved for ${activeConfigProvider}`, "success");
+          const result = await response.json();
+          if (!result?.success) {
+            throw new Error("Configuration response did not indicate success");
+          }
+          log(`Configuration saved for ${providerName}`, "success");
           closeConfigModal();
-          await handleStatus(activeConfigProvider);
+          await handleStatus(providerName);
           await loadIntegrations();
         } catch (err) {
           log(`Failed to save configuration: ${err.message}`, "error");
+        } finally {
+          if (submitButton) {
+            submitButton.disabled = false;
+            submitButton.textContent = "Submit Configuration";
+          }
         }
       }
 
@@ -556,12 +853,14 @@
               <div class="provider-body">
                 <small class="text-muted mb-0">Authentication: ${(provider.authType || "unknown").toUpperCase()}</small>
               </div>
+              <div class="provider-operations d-none" id="${id}-operations"></div>
               <div class="provider-actions d-grid gap-2" id="${id}-actions"></div>
             `;
 
             container.appendChild(card);
 
             const actions = card.querySelector(`#${id}-actions`);
+            const operationsPanel = card.querySelector(`#${id}-operations`);
             const addButton = (label, style, handler) => {
               const btn = document.createElement("button");
               btn.type = "button";
@@ -571,6 +870,85 @@
               actions.appendChild(btn);
               return btn;
             };
+
+            if (Array.isArray(provider.operations) && provider.operations.length) {
+              operationsPanel.classList.remove("d-none");
+              const heading = document.createElement("div");
+              heading.className = "operation-heading";
+              heading.textContent = "Operations";
+              operationsPanel.appendChild(heading);
+
+              provider.operations.forEach((operation) => {
+                const opRow = document.createElement("div");
+                opRow.className = "operation-row";
+
+                const titleLine = document.createElement("div");
+                titleLine.className = "operation-title-line";
+                const title = document.createElement("div");
+                title.className = "operation-title";
+                title.textContent = operation.name;
+                titleLine.appendChild(title);
+                const kind = document.createElement("span");
+                kind.className = "operation-kind";
+                kind.textContent = operation.kind || "operation";
+                titleLine.appendChild(kind);
+                opRow.appendChild(titleLine);
+
+                if (operation.description) {
+                  const desc = document.createElement("div");
+                  desc.className = "operation-hint";
+                  desc.textContent = operation.description;
+                  opRow.appendChild(desc);
+                }
+
+                const controls = document.createElement("div");
+                controls.className = "operation-controls";
+
+                let configInput = null;
+                if (operation.configSchema && Object.keys(operation.configSchema).length > 0) {
+                  configInput = document.createElement("textarea");
+                  configInput.className = "form-control form-control-sm";
+                  configInput.rows = 3;
+                  configInput.placeholder = "Optional config JSON (match schema)";
+                  controls.appendChild(configInput);
+                } else {
+                  const hint = document.createElement("div");
+                  hint.className = "operation-hint";
+                  hint.textContent = "No config required";
+                  controls.appendChild(hint);
+                }
+
+                const forceWrapper = document.createElement("label");
+                forceWrapper.className = "form-check form-switch operation-force";
+                const forceInput = document.createElement("input");
+                forceInput.type = "checkbox";
+                forceInput.className = "form-check-input";
+                forceInput.checked = false;
+                forceWrapper.appendChild(forceInput);
+                const forceText = document.createElement("span");
+                forceText.className = "ms-2";
+                forceText.textContent = "Force fresh credentials";
+                forceWrapper.appendChild(forceText);
+                controls.appendChild(forceWrapper);
+
+                const runBtn = document.createElement("button");
+                runBtn.type = "button";
+                runBtn.className = "btn btn-sm btn-success operation-run-btn";
+                runBtn.textContent = "Run Operation";
+                runBtn.addEventListener("click", () =>
+                  handleOperation(
+                    provider.name,
+                    operation.name,
+                    configInput ? configInput.value : "",
+                    forceInput.checked,
+                  ),
+                );
+                controls.appendChild(runBtn);
+
+                opRow.appendChild(controls);
+                operationsPanel.appendChild(opRow);
+              });
+            }
 
             if (provider.credentialsSchema) {
               addButton("Submit Configuration", "primary", () => openConfigModal(provider.name));
@@ -651,6 +1029,45 @@
         } catch (err) {
           log(`Status check failed: ${err.message}`, "error");
           updateProviderStatus(provider, "disconnected");
+        }
+      }
+
+      async function handleOperation(provider, operation, rawConfig, force) {
+        let config = {};
+        if (rawConfig && rawConfig.trim()) {
+          try {
+            config = JSON.parse(rawConfig);
+          } catch (err) {
+            log(`Invalid config JSON for ${operation}: ${err.message}`, "error");
+            return;
+          }
+        }
+        try {
+          log(`Running ${operation} for ${provider}`, "info");
+          const response = await makeRequest(`/v1/integrations/${provider}/operations/run`, {
+            method: "POST",
+            body: JSON.stringify({
+              payload: {
+                operation,
+                config,
+                force: Boolean(force),
+              },
+            }),
+          });
+          const raw = await response.text();
+          if (!response.ok) {
+            throw new Error(raw || `HTTP ${response.status}`);
+          }
+          const data = raw ? JSON.parse(raw) : {};
+          const status = (data.status || "unknown").toUpperCase();
+          const summary = data.summary || data.message || "No summary returned";
+          const logType = data.success === false || status !== "OK" ? "warning" : "success";
+          log(`Operation ${operation} (${status}): ${summary}`, logType);
+          if (data.details) {
+            log(`Details: ${JSON.stringify(data.details)}`, "info");
+          }
+        } catch (err) {
+          log(`Operation ${operation} failed: ${err.message}`, "error");
         }
       }
 

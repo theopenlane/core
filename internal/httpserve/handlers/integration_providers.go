@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"maps"
 	"strings"
 
 	echo "github.com/theopenlane/echox"
@@ -19,6 +20,7 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 
 	catalog := h.IntegrationRegistry.ProviderMetadataCatalog()
 	result := make([]openapi.IntegrationProviderMetadata, 0, len(catalog))
+
 	for providerType, meta := range catalog {
 		spec, ok := h.IntegrationRegistry.Config(providerType)
 		if !ok {
@@ -41,6 +43,7 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 				if len(meta.Schema) > 0 {
 					return meta.Schema
 				}
+
 				return spec.CredentialsSchema
 			}(),
 		}
@@ -54,6 +57,19 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 				UsePKCE:     spec.OAuth.UsePKCE,
 				AuthParams:  spec.OAuth.AuthParams,
 				TokenParams: spec.OAuth.TokenParams,
+			}
+		}
+
+		if descriptors := h.IntegrationRegistry.OperationDescriptors(providerType); len(descriptors) > 0 {
+			entry.Operations = make([]openapi.IntegrationOperationMetadata, 0, len(descriptors))
+			for _, descriptor := range descriptors {
+				entry.Operations = append(entry.Operations, openapi.IntegrationOperationMetadata{
+					Name:         string(descriptor.Name),
+					Kind:         string(descriptor.Kind),
+					Description:  descriptor.Description,
+					Client:       string(descriptor.Client),
+					ConfigSchema: cloneProviderSchema(descriptor.ConfigSchema),
+				})
 			}
 		}
 
@@ -73,8 +89,17 @@ func defaultProviderName(provider types.ProviderType, fallback string) string {
 	if strings.TrimSpace(fallback) != "" {
 		return fallback
 	}
+
 	if provider == types.ProviderUnknown {
 		return ""
 	}
+
 	return strings.ToLower(string(provider))
+}
+
+func cloneProviderSchema(input map[string]any) map[string]any {
+	if len(input) == 0 {
+		return nil
+	}
+	return maps.Clone(input)
 }

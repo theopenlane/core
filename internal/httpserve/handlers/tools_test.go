@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"net/url"
 	"strings"
 	"testing"
 	"time"
@@ -46,7 +47,6 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
@@ -110,7 +110,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPondPool       *soiree.PondPool
-	sharedAuthMiddleware echo.MiddlewareFunc
+	registeredRoutes     map[string]struct{}
 
 	// OpenAPI operations for reuse in tests
 	startImpersonationOp *openapi3.Operation
@@ -180,6 +180,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 
 func (suite *HandlerTestSuite) SetupTest() {
 	t := suite.T()
+
+	suite.registeredRoutes = make(map[string]struct{})
 
 	ctx := context.Background()
 
@@ -288,34 +290,13 @@ func (suite *HandlerTestSuite) registerTestHandler(method, path string, operatio
 	})
 }
 
-// registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
-func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
-	suite.e.Add(method, path, func(c echo.Context) error {
-		return handlerFunc(c, &handlers.OpenAPIContext{
-			Operation: operation,
-			Registry:  suite.router.SchemaRegistry,
-		})
-	}, suite.sharedAuthMiddleware)
-}
-
-// createAuthMiddleware creates authentication middleware for tests
-func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
-	// get keys from the token manager
-	keys, err := suite.db.TokenManager.Keys()
-	require.NoError(suite.T(), err)
-
-	// local validator to avoid JWK cache issues
-	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
-
-	opts := []authmiddleware.Option{
-		authmiddleware.WithDBClient(suite.db),
-		authmiddleware.WithAllowAnonymous(true),
-		authmiddleware.WithValidator(validator),
+func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	key := method + " " + path
+	if _, exists := suite.registeredRoutes[key]; exists {
+		return
 	}
-
-	conf := authmiddleware.NewAuthOptions(opts...)
-
-	return authmiddleware.Authenticate(&conf)
+	suite.registeredRoutes[key] = struct{}{}
+	suite.registerTestHandler(method, path, operation, handlerFunc)
 }
 
 func (suite *HandlerTestSuite) TearDownTest() {
@@ -395,7 +376,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		},
 	}
 
-	reg, err := registry.New(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
+	reg, err := registry.NewRegistry(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
 	require.NoError(suite.T(), err)
 
 	sessions := keymaker.NewMemorySessionStore()
@@ -405,6 +386,11 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 	suite.h.IntegrationRegistry = reg
 	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
 	suite.h.KeymakerService = svc
+
+	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
+	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
+	require.NoError(suite.T(), err)
+	suite.h.IntegrationOperations = manager
 }
 
 type testOAuthProvider struct {
@@ -426,7 +412,13 @@ func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext
 	if state == "" {
 		state = "state"
 	}
-	authURL := fmt.Sprintf("https://example.com/oauth/authorize?state=%s", state)
+	values := url.Values{}
+	values.Set("state", state)
+	if len(input.Scopes) > 0 {
+		values.Set("scope", strings.Join(input.Scopes, " "))
+	}
+
+	authURL := fmt.Sprintf("https://example.com/oauth/authorize?%s", values.Encode())
 	return &testAuthSession{
 		provider: p.provider,
 		state:    state,

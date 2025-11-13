@@ -5,6 +5,8 @@ import "errors"
 var (
 	// ErrSpecOAuthRequired indicates the provider spec is missing OAuth configuration
 	ErrSpecOAuthRequired = errors.New("integrations/providers: oauth spec required")
+	// ErrSpecWorkloadIdentityRequired indicates the provider spec is missing workload identity configuration
+	ErrSpecWorkloadIdentityRequired = errors.New("integrations/providers: workload identity spec required")
 	// ErrTokenUnavailable indicates the stored credential did not include an oauth2 token
 	ErrTokenUnavailable = errors.New("integrations/providers: oauth token unavailable")
 	// ErrRelyingPartyInit indicates Zitadel RP construction failed

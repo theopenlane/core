@@ -157,8 +157,8 @@ entconfig:
         timezone: UTC
         token: ""
         workspace: ""
-integrationOauthProvider:
-    providerSpecPath: internal/keystore/config/providers
+  integrationOauthProvider:
+    providerSpecPath: internal/integrations/config/providers
     successRedirectUrl: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable

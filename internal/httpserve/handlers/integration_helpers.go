@@ -7,10 +7,11 @@ import (
 )
 
 var (
-	errIntegrationBrokerNotConfigured   = errors.New("integration broker not configured")
-	errIntegrationStoreNotConfigured    = errors.New("integration store not configured")
-	errIntegrationRegistryNotConfigured = errors.New("integration registry not configured")
-	errKeymakerNotConfigured            = errors.New("integration keymaker service not configured")
+	errIntegrationBrokerNotConfigured     = errors.New("integration broker not configured")
+	errIntegrationStoreNotConfigured      = errors.New("integration store not configured")
+	errIntegrationRegistryNotConfigured   = errors.New("integration registry not configured")
+	errIntegrationOperationsNotConfigured = errors.New("integration operations manager not configured")
+	errKeymakerNotConfigured              = errors.New("integration keymaker service not configured")
 )
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
@@ -18,7 +19,7 @@ type IntegrationOauthProviderConfig struct {
 	// SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
 	SuccessRedirectURL string `json:"successRedirectUrl" koanf:"successRedirectUrl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 	// ProviderSpecPath is the path to the declarative provider spec configuration file.
-	ProviderSpecPath string `json:"providerSpecPath" koanf:"providerSpecPath" default:"internal/keystore/config/providers"`
+	ProviderSpecPath string `json:"providerSpecPath" koanf:"providerSpecPath" default:"internal/integrations/config/providers"`
 }
 
 var (

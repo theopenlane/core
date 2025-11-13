@@ -31,7 +31,7 @@ func FieldErrorsFromResult(res *gojsonschema.Result) []error {
 		switch issue.Type() {
 		case "required":
 			err = rout.MissingField(field)
-		case "additional_property":
+		case "additional_property", "additional_property_not_allowed":
 			err = rout.RestrictedField(field)
 		default:
 			err = &rout.FieldError{

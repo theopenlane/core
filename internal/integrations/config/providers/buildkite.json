@@ -4,7 +4,7 @@
   "category": "ci",
   "authType": "apikey",
   "active": true,
-  "logoUrl": "https://connectors.airbyte.com/files/metadata/airbyte/source-buildkite/latest/icon.svg",
+  "logoUrl": "",
   "docsUrl": "https://buildkite.com/docs/apis/rest-api",
   "apiKey": {
     "keyLabel": "API Token",

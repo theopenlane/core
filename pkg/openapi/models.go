@@ -6,7 +6,6 @@ import (
 	"mime/multipart"
 	"net/mail"
 	"net/textproto"
-	"slices"
 	"strings"
 	"time"
 
@@ -1960,7 +1959,8 @@ type ListIntegrationsResponse struct {
 // DeleteIntegrationResponse is the response for deleting an integration
 type DeleteIntegrationResponse struct {
 	rout.Reply
-	Message string `json:"message"`
+	Message   string `json:"message"`
+	DeletedID string `json:"deletedId,omitempty"`
 }
 
 // IntegrationStatusResponse is the response for checking integration status
@@ -2071,14 +2071,6 @@ func (r *OAuthFlowRequest) Validate() error {
 
 	if r.Provider == "" {
 		return rout.NewMissingRequiredFieldError("provider")
-	}
-
-	// Validate supported providers
-	supportedProviders := []string{"github", "slack"}
-
-	validProvider := slices.Contains(supportedProviders, r.Provider)
-	if !validProvider {
-		return rout.InvalidField("provider")
 	}
 
 	// Clean up scopes
@@ -2368,6 +2360,46 @@ type IntegrationConfigPayload struct {
 	Body IntegrationConfigRequest `json:"payload"`
 }
 
+// IntegrationOperationParams captures path parameters for operation requests.
+type IntegrationOperationParams struct {
+	Provider string `param:"provider" description:"Integration provider identifier" example:"gcp_scc"`
+}
+
+// IntegrationOperationRequest describes a provider operation to run.
+type IntegrationOperationRequest struct {
+	Operation string         `json:"operation" validate:"required"`
+	Config    map[string]any `json:"config,omitempty"`
+	Force     bool           `json:"force,omitempty"`
+}
+
+// IntegrationOperationPayload wraps the params with the operation body.
+type IntegrationOperationPayload struct {
+	IntegrationOperationParams
+	Body IntegrationOperationRequest `json:"payload"`
+}
+
+// ExampleIntegrationOperationPayload demonstrates a sample operation request.
+var ExampleIntegrationOperationPayload = IntegrationOperationPayload{
+	IntegrationOperationParams: IntegrationOperationParams{Provider: "gcp_scc"},
+	Body: IntegrationOperationRequest{
+		Operation: "findings.collect",
+		Config: map[string]any{
+			"sourceId": "organizations/123/sources/456",
+			"filter":   `severity="HIGH"`,
+		},
+		Force: true,
+	},
+}
+
+// IntegrationOperationMetadata describes an operation published by a provider.
+type IntegrationOperationMetadata struct {
+	Name         string         `json:"name"`
+	Kind         string         `json:"kind"`
+	Description  string         `json:"description,omitempty"`
+	Client       string         `json:"client,omitempty"`
+	ConfigSchema map[string]any `json:"configSchema,omitempty"`
+}
+
 // IntegrationProviderMetadata describes the data required for rendering integration forms.
 type IntegrationProviderMetadata struct {
 	Name              string                         `json:"name"`
@@ -2383,6 +2415,7 @@ type IntegrationProviderMetadata struct {
 	Persistence       *keystore.PersistenceSpec      `json:"persistence,omitempty"`
 	CredentialsSchema map[string]any                 `json:"credentialsSchema,omitempty"`
 	Labels            map[string]string              `json:"labels,omitempty"`
+	Operations        []IntegrationOperationMetadata `json:"operations,omitempty"`
 }
 
 // ExampleIntegrationConfigPayload demonstrates a full integration configuration request.
@@ -2394,6 +2427,9 @@ var ExampleIntegrationConfigPayload = IntegrationConfigPayload{
 		ProjectID:                "sample-project",
 		OrganizationID:           "1234567890",
 		WorkloadIdentityProvider: "projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider",
+		Additional: map[string]any{
+			"serviceAccountKey": "{ \"type\": \"service_account\", ... }",
+		},
 	},
 }
 
@@ -2421,10 +2457,45 @@ type IntegrationConfigResponse struct {
 	Provider string `json:"provider"`
 }
 
+// IntegrationOperationResponse reports the result of a provider operation.
+type IntegrationOperationResponse struct {
+	rout.Reply
+	Provider  string         `json:"provider"`
+	Operation string         `json:"operation"`
+	Status    string         `json:"status"`
+	Summary   string         `json:"summary"`
+	Details   map[string]any `json:"details,omitempty"`
+}
+
 // ExampleResponse returns an example IntegrationConfigResponse for OpenAPI documentation.
 func (r *IntegrationConfigResponse) ExampleResponse() any {
 	return IntegrationConfigResponse{
 		Reply:    rout.Reply{Success: true},
 		Provider: "gcp_scc",
 	}
+}
+
+// ExampleResponse returns a sample IntegrationOperationResponse.
+func (r *IntegrationOperationResponse) ExampleResponse() any {
+	return IntegrationOperationResponse{
+		Reply:     rout.Reply{Success: true},
+		Provider:  "gcp_scc",
+		Operation: "findings.collect",
+		Status:    "ok",
+		Summary:   "Collected 5 findings from organizations/123/sources/456",
+		Details: map[string]any{
+			"totalFindings": 5,
+		},
+	}
+}
+
+// DisconnectIntegrationRequest is the request payload for disconnecting an integration
+type DisconnectIntegrationRequest struct {
+	Provider      string `param:"provider" description:"Integration provider key" example:"github"`
+	IntegrationID string `query:"integration_id,omitempty" description:"Specific integration ID to delete"`
+}
+
+// ExampleDisconnectIntegrationRequest provides an example disconnect request for OpenAPI documentation
+var ExampleDisconnectIntegrationRequest = DisconnectIntegrationRequest{
+	Provider: "github",
 }

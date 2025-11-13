@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -37,7 +38,9 @@ func (h *Handler) setOAuthCookies(ctx echo.Context, cfg sessions.CookieConfig, v
 	for name, value := range values {
 		if value == "" {
 			continue
+
 		}
+
 		sessions.SetCookie(writer, value, name, cfg)
 	}
 
@@ -72,16 +75,6 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
 		return h.Unauthorized(ctx, err, openapiCtx)
-	}
-
-	if h.IntegrationRegistry == nil {
-		return h.InternalServerError(ctx, errIntegrationRegistryNotConfigured, openapiCtx)
-	}
-	if h.KeymakerService == nil {
-		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
-	}
-	if h.IntegrationStore == nil {
-		return h.InternalServerError(ctx, errIntegrationStoreNotConfigured, openapiCtx)
 	}
 
 	providerType, err := parseProviderType(in.Provider)
@@ -159,18 +152,43 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
+	if in.State != stateCookie.Value {
+		log.Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
+
+		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
+	}
+
 	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
 	if err != nil {
 		log.Error().Err(err).Msg("failed to get oauth_org_id cookie")
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
-	if _, err := sessions.GetCookie(ctx.Request(), oauthUserIDCookieName); err != nil {
+	userCookie, err := sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
+	if err != nil {
 		log.Error().Err(err).Msg("failed to get oauth_user_id cookie")
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
-	result, err := h.KeymakerService.CompleteAuthorization(ctx.Request().Context(), keymaker.CompleteRequest{
+	reqCtx := ctx.Request().Context()
+	user, err := auth.GetAuthenticatedUserFromContext(reqCtx)
+	if err != nil {
+		return h.Unauthorized(ctx, err, openapiCtx)
+	}
+
+	if user.OrganizationID != orgCookie.Value {
+		log.Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", user.OrganizationID).Msg("oauth organization cookie mismatch")
+		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
+	}
+
+	if user.SubjectID != userCookie.Value {
+		log.Error().Str("cookieUserID", userCookie.Value).Str("userID", user.SubjectID).Msg("oauth user cookie mismatch")
+		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
+	}
+
+	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
+
+	result, err := h.KeymakerService.CompleteAuthorization(systemCtx, keymaker.CompleteRequest{
 		State: in.State,
 		Code:  in.Code,
 	})
@@ -194,22 +212,21 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.Success(ctx, rout.Reply{Success: true})
 	}
 
-	log.Info().
-		Str("provider", string(result.Provider)).
-		Str("org_id", orgCookie.Value).
-		Msg("integration oauth flow completed")
-
 	return ctx.Redirect(http.StatusFound, redirectURL)
 }
 
 // generateOAuthState creates a secure state parameter containing org ID and provider.
 func (h *Handler) generateOAuthState(orgID, provider string) (string, error) {
 	const stateRandomBytesLength = 16
+
 	randomBytes := make([]byte, stateRandomBytesLength)
+
 	if _, err := rand.Read(randomBytes); err != nil {
 		return "", err
 	}
+
 	stateData := buildStatePayload(orgID, provider, randomBytes)
+
 	return base64.URLEncoding.EncodeToString([]byte(stateData)), nil
 }
 
@@ -225,9 +242,11 @@ func mergeScopes(spec config.ProviderSpec, requested []string) []string {
 			}
 		}
 	}
+
 	if spec.OAuth != nil {
 		add(spec.OAuth.Scopes)
 	}
+
 	add(requested)
 
 	if len(values) == 0 {
@@ -235,9 +254,11 @@ func mergeScopes(spec config.ProviderSpec, requested []string) []string {
 	}
 
 	out := make([]string, 0, len(values))
+
 	for scope := range values {
 		out = append(out, scope)
 	}
+
 	return out
 }
 
@@ -252,30 +273,15 @@ func buildIntegrationRedirectURL(baseURL string, provider types.ProviderType) st
 	}
 
 	q := u.Query()
+
 	providerName := strings.ToLower(string(provider))
+
 	q.Set("provider", strings.ToLower(string(provider)))
 	q.Set("status", "success")
 	q.Set("message", fmt.Sprintf("Successfully connected %s integration", providerName))
 	u.RawQuery = q.Encode()
+
 	return u.String()
-}
-
-// retrieveIntegrationToken gets stored OAuth token for a provider.
-func (h *Handler) retrieveIntegrationToken(ctx context.Context, orgID, provider string) (*openapi.IntegrationToken, error) {
-	if h.IntegrationStore == nil {
-		return nil, errIntegrationStoreNotConfigured
-	}
-
-	providerType, err := parseProviderType(provider)
-	if err != nil {
-		return nil, err
-	}
-
-	payload, err := h.IntegrationStore.LoadCredential(ctx, orgID, providerType)
-	if err != nil {
-		return nil, err
-	}
-	return integrationTokenFromPayload(provider, payload)
 }
 
 // RefreshIntegrationToken refreshes an expired OAuth token if refresh token is available.
@@ -334,6 +340,7 @@ func integrationTokenFromPayload(provider string, payload types.CredentialPayloa
 	if !tokenOpt.IsPresent() {
 		return nil, wrapTokenError("find access", provider, keystore.ErrCredentialNotFound)
 	}
+
 	token := tokenOpt.MustGet()
 
 	var expiresAt *time.Time
@@ -358,6 +365,7 @@ func parseProviderType(provider string) (types.ProviderType, error) {
 	if pt == types.ProviderUnknown {
 		return types.ProviderUnknown, ErrInvalidProvider
 	}
+
 	return pt, nil
 }
 

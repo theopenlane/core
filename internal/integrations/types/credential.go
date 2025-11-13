@@ -112,6 +112,7 @@ func WithCredential[T any](value T, encoder func(T) models.CredentialSet) Creden
 		if encoder == nil {
 			return
 		}
+
 		payload.Data = encoder(value)
 	}
 }
@@ -135,14 +136,16 @@ func MergeScopes(dest []string, source ...string) []string {
 	filtered := lo.Map(source, func(item string, _ int) string {
 		return strings.TrimSpace(item)
 	})
+
 	nonEmpty := lo.Filter(filtered, func(item string, _ int) bool {
 		return item != ""
 	})
+
 	return lo.Uniq(append(dest, nonEmpty...))
 }
 
-// Redacted returns a shallow copy of the payload with sensitive fields cleared.
-// Useful for logging and telemetry without leaking credentials.
+// Redacted returns a shallow copy of the payload with sensitive fields cleared
+// Useful for logging and telemetry without leaking credentials
 func (p CredentialPayload) Redacted() CredentialPayload {
 	clone := CredentialPayload{
 		Provider: p.Provider,
@@ -158,16 +161,16 @@ func (p CredentialPayload) Redacted() CredentialPayload {
 	if claims := helpers.CloneOIDCClaims(p.Claims); claims != nil {
 		clone.Claims = claims
 	}
-	// Intentionally drop Data; CredentialSet contains sensitive material.
+	// Intentionally drop Data; CredentialSet contains sensitive material
 	return clone
 }
 
-// OAuthTokenOption returns a cloned token wrapped in an Option.
+// OAuthTokenOption returns a cloned token wrapped in an Option
 func (p CredentialPayload) OAuthTokenOption() mo.Option[*oauth2.Token] {
 	return optionFromPointer(helpers.CloneOAuthToken(p.Token))
 }
 
-// ClaimsOption returns cloned OIDC claims wrapped in an Option.
+// ClaimsOption returns cloned OIDC claims wrapped in an Option
 func (p CredentialPayload) ClaimsOption() mo.Option[*oidc.IDTokenClaims] {
 	return optionFromPointer(helpers.CloneOIDCClaims(p.Claims))
 }
@@ -176,6 +179,7 @@ func optionFromPointer[T any](value *T) mo.Option[*T] {
 	if value == nil {
 		return mo.None[*T]()
 	}
+
 	return mo.Some(value)
 }
 
@@ -190,6 +194,7 @@ func isCredentialSetEmpty(set models.CredentialSet) bool {
 		set.OAuthRefreshToken,
 		set.OAuthTokenType,
 	}
+
 	for _, field := range fields {
 		if strings.TrimSpace(field) != "" {
 			return false
