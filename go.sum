@@ -730,8 +730,8 @@ github.com/valyala/fasttemplate v1.2.2 h1:lxLXG0uE3Qnshl9QyaK6XJxMXlQZELvChBOCmQ
 github.com/valyala/fasttemplate v1.2.2/go.mod h1:KHLXt3tVN2HBp8eijSv/kGJopbvo7S+qRAEEKiv+SiQ=
 github.com/vektah/gqlparser/v2 v2.5.31 h1:YhWGA1mfTjID7qJhd1+Vxhpk5HTgydrGU9IgkWBTJ7k=
 github.com/vektah/gqlparser/v2 v2.5.31/go.mod h1:c1I28gSOVNzlfc4WuDlqU7voQnsqI6OG2amkBAFmgts=
-github.com/vektra/mockery/v3 v3.5.5 h1:1ExE+yqz3ytvEOe7pUH5VWIwmsYlSq+FjWPVVLdE8O4=
-github.com/vektra/mockery/v3 v3.5.5/go.mod h1:Oti3Df0WP8wwT31yuVri3QNsDeMUQU5Q4QEg8EabaBw=
+github.com/vektra/mockery/v3 v3.6.0 h1:T4VaJh/o2dqEBT9jzdSQVuSKVXMzB6oTeVENshm7NuU=
+github.com/vektra/mockery/v3 v3.6.0/go.mod h1:Oti3Df0WP8wwT31yuVri3QNsDeMUQU5Q4QEg8EabaBw=
 github.com/vmihailenco/msgpack/v5 v5.4.1 h1:cQriyiUvjTwOHg8QZaPihLWeRAAVoCpE00IUPn0Bjt8=
 github.com/vmihailenco/msgpack/v5 v5.4.1/go.mod h1:GaZTsDaehaPpQVyxrf5mtQlH+pc21PIudVV/E3rRQok=
 github.com/vmihailenco/tagparser/v2 v2.0.0 h1:y09buUbR+b5aycVFQs/g70pqKVZNBmxwAhO7/IwNM9g=
