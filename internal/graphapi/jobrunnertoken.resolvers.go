@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunnertoken"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -18,14 +18,14 @@ import (
 func (r *mutationResolver) CreateJobRunnerToken(ctx context.Context, input generated.CreateJobRunnerTokenInput) (*model.JobRunnerTokenCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).JobRunnerToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobrunnertoken"})
 	}
 
 	return &model.JobRunnerTokenCreatePayload{
@@ -36,11 +36,11 @@ func (r *mutationResolver) CreateJobRunnerToken(ctx context.Context, input gener
 // DeleteJobRunnerToken is the resolver for the deleteJobRunnerToken field.
 func (r *mutationResolver) DeleteJobRunnerToken(ctx context.Context, id string) (*model.JobRunnerTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).JobRunnerToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "jobrunnertoken"})
 	}
 
 	if err := generated.JobRunnerTokenEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.JobRunnerTokenDeletePayload{
@@ -52,12 +52,12 @@ func (r *mutationResolver) DeleteJobRunnerToken(ctx context.Context, id string) 
 func (r *queryResolver) JobRunnerToken(ctx context.Context, id string) (*generated.JobRunnerToken, error) {
 	query, err := withTransactionalMutation(ctx).JobRunnerToken.Query().Where(jobrunnertoken.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnertoken"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnertoken"})
 	}
 
 	return res, nil

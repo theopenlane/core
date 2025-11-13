@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subscriber"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,14 +19,14 @@ import (
 func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Subscriber.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
 	}
 
 	return &model.SubscriberCreatePayload{
@@ -39,7 +39,7 @@ func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*ge
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -51,15 +51,15 @@ func (r *mutationResolver) CreateBulkSubscriber(ctx context.Context, input []*ge
 func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input graphql.Upload) (*model.SubscriberBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateSubscriberInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -74,12 +74,12 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -89,7 +89,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
 	}
 
 	return &model.SubscriberUpdatePayload{
@@ -101,7 +101,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, ownerID *string) (*model.SubscriberDeletePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, ownerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
@@ -110,15 +110,15 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
 	}
 
 	if err := withTransactionalMutation(ctx).Subscriber.DeleteOneID(subscriber.ID).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
 	}
 
 	if err := generated.SubscriberEdgeCleanup(ctx, subscriber.ID); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.SubscriberDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 func (r *queryResolver) Subscriber(ctx context.Context, email string) (*generated.Subscriber, error) {
 	query, err := withTransactionalMutation(ctx).Subscriber.Query().Where(subscriber.EmailEQ(email)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	return res, nil

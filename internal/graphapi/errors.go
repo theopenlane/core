@@ -1,17 +1,18 @@
 package graphapi
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"strings"
 
 	"github.com/lib/pq"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 )
 
@@ -109,7 +110,9 @@ func newPermissionDeniedError() NotAuthorizedError {
 	return NotAuthorizedError{}
 }
 
-func newCascadeDeleteError(err error) error {
+func newCascadeDeleteError(ctx context.Context, err error) error {
+	logx.FromContext(ctx).Error().Err(err).Msg("failed to cascade delete associated objects")
+
 	return fmt.Errorf("%w: %v", ErrCascadeDelete, err)
 }
 
@@ -227,9 +230,9 @@ func newValidationError(errMsg string) *ValidationError {
 }
 
 // parseRequestError logs and parses the error and returns the appropriate error type for the client
-func parseRequestError(err error, a action) error {
+func parseRequestError(ctx context.Context, err error, a action) error {
 	// log the error for debugging
-	log.Error().
+	logx.FromContext(ctx).Error().
 		Err(err).
 		Str("action", a.action).
 		Str("object", a.object).
@@ -239,7 +242,7 @@ func parseRequestError(err error, a action) error {
 	case generated.IsValidationError(err):
 		validationError := err.(*generated.ValidationError)
 
-		log.Debug().
+		logx.FromContext(ctx).Info().
 			Err(validationError).
 			Str("field", validationError.Name).
 			Msg("validation error")
@@ -257,7 +260,7 @@ func parseRequestError(err error, a action) error {
 	case generated.IsConstraintError(err):
 		constraintError := err.(*generated.ConstraintError)
 
-		log.Debug().Err(constraintError).Msg("constraint error")
+		logx.FromContext(ctx).Info().Err(constraintError).Msg("constraint error")
 
 		// Check for unique constraint error
 		if strings.Contains(strings.ToLower(constraintError.Error()), "unique") {
@@ -273,19 +276,19 @@ func parseRequestError(err error, a action) error {
 
 		return constraintError
 	case generated.IsNotFound(err):
-		log.Debug().Err(err).Msg("request object was not found")
+		logx.FromContext(ctx).Info().Err(err).Msg("request object was not found")
 
 		return newNotFoundError(a.object)
 	case errors.Is(err, privacy.Deny):
-		log.Debug().Err(err).Msg("user has no access to the requested object due to privacy rules")
+		logx.FromContext(ctx).Info().Err(err).Msg("user has no access to the requested object due to privacy rules")
 
 		return newNotFoundError(a.object)
 	case errors.Is(err, generated.ErrPermissionDenied):
-		log.Debug().Err(err).Msg("user has no access to the requested object due to permissions")
+		logx.FromContext(ctx).Info().Err(err).Msg("user has no access to the requested object due to permissions")
 
 		return newPermissionDeniedError()
 	default:
-		log.Error().Err(err).Msg("unexpected error occurred")
+		logx.FromContext(ctx).Error().Err(err).Msg("unexpected error occurred")
 
 		return err
 	}

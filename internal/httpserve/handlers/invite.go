@@ -7,7 +7,6 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"github.com/oklog/ulid/v2"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -60,7 +60,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	// get the authenticated user from the context
 	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
-		log.Err(err).Msg("unable to get user id from context")
+		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -78,7 +78,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSessionWithOrg(ctxWithToken, ctx.Response().Writer, user, invitedUser.OwnerID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -126,7 +126,7 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 			return nil, nil, nil, err
 		}
 
-		log.Error().Err(err).Msg("error retrieving invite token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving invite token")
 
 		return nil, nil, nil, err
 	}
@@ -150,7 +150,7 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 	// get user details for logged in user
 	user, err := h.getUserByEmail(reqCtx, userEmail)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user for request")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user for request")
 
 		return nil, nil, nil, err
 	}
@@ -181,7 +181,7 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 
 	// set tokens for request
 	if err := invite.setOrgInviteTokens(invitedUser, inv.Token); err != nil {
-		log.Error().Err(err).Msg("unable to set invite token for request")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set invite token for request")
 
 		return nil, nil, nil, err
 	}
@@ -194,7 +194,7 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 
 	// check and ensure the token has not expired
 	if t.ExpiresAt, err = invite.GetInviteExpires(); err != nil {
-		log.Error().Err(err).Msg("unable to parse expiration")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
 		return nil, nil, nil, err
 	}
@@ -213,7 +213,7 @@ func (h *Handler) processInvitation(ctx echo.Context, invitationToken, userEmail
 	}
 
 	if err := updateInviteStatusAccepted(ctxWithToken, invitedUser); err != nil {
-		log.Error().Err(err).Msg("unable to update invite status")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update invite status")
 
 		return nil, nil, nil, err
 	}

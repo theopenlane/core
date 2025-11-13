@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -18,14 +18,14 @@ import (
 func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input generated.CreateAssessmentResponseInput) (*model.AssessmentResponseCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).AssessmentResponse.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "assessmentresponse"})
 	}
 
 	return &model.AssessmentResponseCreatePayload{
@@ -37,12 +37,12 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 func (r *mutationResolver) UpdateAssessmentResponse(ctx context.Context, id string, input generated.UpdateAssessmentResponseInput) (*model.AssessmentResponseUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).AssessmentResponse.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessmentresponse"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateAssessmentResponse(ctx context.Context, id stri
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessmentresponse"})
 	}
 
 	return &model.AssessmentResponseUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateAssessmentResponse(ctx context.Context, id stri
 // DeleteAssessmentResponse is the resolver for the deleteAssessmentResponse field.
 func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).AssessmentResponse.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "assessmentresponse"})
 	}
 
 	if err := generated.AssessmentResponseEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssessmentResponseDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id stri
 func (r *queryResolver) AssessmentResponse(ctx context.Context, id string) (*generated.AssessmentResponse, error) {
 	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().Where(assessmentresponse.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
 	}
 
 	return res, nil

@@ -7,7 +7,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -130,7 +129,7 @@ func CheckOrgAccess() privacy.MutationRule {
 func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
 		if res, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil || res == nil {
-			log.Err(err).Msg("unable to get authenticated user context")
+			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
 
 			return err
 		}
@@ -143,7 +142,7 @@ func DenyQueryIfNotAuthenticated() privacy.QueryRule {
 func DenyMutationIfNotAuthenticated() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, _ ent.Mutation) error {
 		if res, err := auth.GetAuthenticatedUserFromContext(ctx); err != nil || res == nil {
-			log.Err(err).Msg("unable to get authenticated user context")
+			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
 
 			return err
 		}

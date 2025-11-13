@@ -9,11 +9,11 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -48,7 +48,7 @@ func UpdateFileWithStorageMetadata(ctx context.Context, entFile *ent.File, fileD
 	}
 
 	if _, err := update.Save(allowCtx); err != nil {
-		log.Error().Err(err).Msg("failed to update file with storage metadata")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to update file with storage metadata")
 
 		return err
 	}
@@ -90,7 +90,7 @@ func createFile(ctx context.Context, f pkgobjects.File) (*ent.File, error) {
 		SetInput(set).
 		Save(allowCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to create file")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create file")
 
 		return nil, err
 	}

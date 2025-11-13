@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
@@ -23,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -135,7 +135,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	entUser, err := h.CheckAndCreateUser(ctxWithToken, tokens.IDTokenClaims.Name, tokens.IDTokenClaims.Email, enums.AuthProviderOIDC, tokens.IDTokenClaims.Picture)
 	if err != nil {
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
-			log.Error().Err(err).Str("email", tokens.IDTokenClaims.Email).Msg("email not allowed")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", tokens.IDTokenClaims.Email).Msg("email not allowed")
 
 			return h.InvalidInput(ctx, err, openapi)
 		}
@@ -187,7 +187,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 		aErr := h.authorizeTokenSSO(privacy.DecisionContext(userCtx, privacy.Allow), tokenType.Value, tokenID.Value, orgCookie.Value)
 		if aErr != nil {
-			log.Error().Err(aErr).Msg("unable to authorize token for SSO")
+			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
 			return h.InternalServerError(ctx, aErr, openapi)
 		}

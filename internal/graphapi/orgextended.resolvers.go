@@ -8,7 +8,6 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	entorg "github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
@@ -16,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 )
@@ -24,7 +24,7 @@ import (
 func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) (*model.OrganizationCreatePayload, error) {
 	res, err := r.CreateOrganization(ctx, organizationInput, nil)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
 	}
 
 	memberInput := make([]*generated.CreateOrgMembershipInput, len(members))
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 	}
 
 	if _, err := r.CreateBulkOrgMembership(ctx, memberInput); err != nil {
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "org_membership"})
 	}
 
 	query, err := withTransactionalMutation(ctx).Organization.
@@ -47,12 +47,12 @@ func (r *mutationResolver) CreateOrganizationWithMembers(ctx context.Context, or
 		Where(entorg.IDEQ(res.Organization.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
 	}
 
 	return &model.OrganizationCreatePayload{
@@ -65,15 +65,15 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 	// Step 1: Get current user from context
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 	}
 
 	currentUserID := au.SubjectID
 	organizationID := au.OrganizationID
 
 	if organizationID == "" {
-		log.Error().Msg("unable to determine organization for ownership transfer")
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+		logx.FromContext(ctx).Error().Msg("unable to determine organization for ownership transfer")
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 	}
 
 	c := withTransactionalMutation(ctx)
@@ -81,7 +81,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 	// Step 2: Verify organization exists
 	org, err := c.Organization.Get(ctx, organizationID)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
 	}
 
 	// Step 3: Verify current user is the owner
@@ -92,12 +92,12 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to find current user's membership")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to find current user's membership")
 		return nil, newNotFoundError("org_membership")
 	}
 
 	if currentUserMembership.Role != enums.RoleOwner {
-		log.Info().
+		logx.FromContext(ctx).Info().
 			Str("user_id", currentUserID).
 			Str("organization_id", organizationID).
 			Str("role", currentUserMembership.Role.String()).
@@ -128,7 +128,7 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 
 	if err != nil {
 		// User is not a member or doesn't exist - create an invite with ownership_transfer=true
-		log.Info().
+		logx.FromContext(ctx).Info().
 			Str("new_owner_email", newOwnerEmail).
 			Str("organization_id", organizationID).
 			Msg("new owner not a member, creating ownership transfer invitation")
@@ -144,14 +144,14 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		}
 
 		if _, err := c.Invite.Create().SetInput(inviteInput).Save(ctx); err != nil {
-			log.Error().Err(err).Msg("unable to create ownership transfer invitation")
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to create ownership transfer invitation")
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 		}
 
 		invitationSent = true
 	} else {
 		// User is already a member - directly update roles
-		log.Info().
+		logx.FromContext(ctx).Info().
 			Str("new_owner_id", newOwnerUser.ID).
 			Str("organization_id", organizationID).
 			Msg("new owner already a member, directly transferring ownership")
@@ -162,8 +162,8 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		if err := c.OrgMembership.UpdateOneID(newOwnerMembership.ID).
 			SetRole(newRole).
 			Exec(allowCtx); err != nil {
-			log.Error().Err(err).Msg("unable to update new owner role")
-			return nil, parseRequestError(err, action{action: ActionUpdate, object: "org_membership"})
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to update new owner role")
+			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "org_membership"})
 		}
 
 		// Update current owner to ADMIN role
@@ -171,11 +171,11 @@ func (r *mutationResolver) TransferOrganizationOwnership(ctx context.Context, ne
 		if err := c.OrgMembership.UpdateOneID(currentUserMembership.ID).
 			SetRole(adminRole).
 			Exec(allowCtx); err != nil {
-			log.Error().Err(err).Msg("unable to demote current owner to admin")
-			return nil, parseRequestError(err, action{action: ActionUpdate, object: "org_membership"})
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to demote current owner to admin")
+			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "org_membership"})
 		}
 
-		log.Info().
+		logx.FromContext(ctx).Info().
 			Str("organization_id", organizationID).
 			Str("old_owner_id", currentUserID).
 			Str("new_owner_id", newOwnerUser.ID).
@@ -194,7 +194,7 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 
 	orgSettings, err := c.OrganizationSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "organization"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
 	}
 
 	obj.SettingID = &orgSettings.ID
@@ -206,7 +206,7 @@ func (r *createOrganizationInputResolver) CreateOrgSettings(ctx context.Context,
 func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []*generated.CreateOrgMembershipInput) error {
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if orgID == nil {
-		log.Error().Msg("unable to get org from context")
+		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
 	}
@@ -220,7 +220,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 	}
 
 	if err := c.OrgMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil
@@ -230,7 +230,7 @@ func (r *updateOrganizationInputResolver) AddOrgMembers(ctx context.Context, obj
 func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, obj *generated.UpdateOrganizationInput, data []string) error {
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if orgID == nil {
-		log.Error().Msg("unable to get org from context")
+		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
 	}
@@ -242,7 +242,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 		orgmembership.IDIn(data...),
 	).Exec(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil
@@ -252,7 +252,7 @@ func (r *updateOrganizationInputResolver) RemoveOrgMembers(ctx context.Context, 
 func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context, obj *generated.UpdateOrganizationInput, data *generated.UpdateOrganizationSettingInput) error {
 	orgID := graphutils.GetStringInputVariableByName(ctx, "id")
 	if orgID == nil {
-		log.Error().Msg("unable to get org from context")
+		logx.FromContext(ctx).Error().Msg("unable to get org from context")
 
 		return ErrInternalServerError
 	}
@@ -264,19 +264,19 @@ func (r *updateOrganizationInputResolver) UpdateOrgSettings(ctx context.Context,
 	if settingID == nil {
 		org, err := c.Organization.Get(ctx, *orgID)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 		}
 
 		setting, err := org.Setting(ctx)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 		}
 
 		settingID = &setting.ID
 	}
 
 	if err := c.OrganizationSetting.UpdateOneID(*settingID).SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return nil

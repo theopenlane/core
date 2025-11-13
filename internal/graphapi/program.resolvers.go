@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,14 +19,14 @@ import (
 func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.CreateProgramInput) (*model.ProgramCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	return &model.ProgramCreatePayload{
@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*gener
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,9 +55,9 @@ func (r *mutationResolver) CreateBulkProgram(ctx context.Context, input []*gener
 func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graphql.Upload) (*model.ProgramBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateProgramInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +67,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -79,12 +79,12 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 	}
 
 	return &model.ProgramUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 // DeleteProgram is the resolver for the deleteProgram field.
 func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model.ProgramDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Program.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "program"})
 	}
 
 	if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProgramDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkProgram(ctx context.Context, ids []string) 
 func (r *queryResolver) Program(ctx context.Context, id string) (*generated.Program, error) {
 	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	return res, nil

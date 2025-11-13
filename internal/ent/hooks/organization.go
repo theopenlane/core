@@ -162,22 +162,33 @@ func HookOrganizationDelete() ent.Hook {
 			}
 
 			if err := updateOrgSubscriptionOnDelete(ctx, m); err != nil {
-				return v, err
+				// do not block the delete if we can't update the subscription
+				// the subscription will be cancelled with the event hook after this
+				// mutation completes
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to update org subscription on organization delete")
 			}
 
 			newOrgID, err := updateUserDefaultOrgOnDelete(ctx, m)
-			// if we got an error, return it
+			// if we got an error, log it and return
 			// if we didn't get a new org id, keep going and don't
 			// update the session cookie
-			if err != nil || newOrgID == "" {
-				return v, err
+			// returning an error here would rollback the delete but permissions would already be removed
+			if err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to update user's default organization on organization delete")
+				return v, nil
+			}
+
+			if newOrgID == "" {
+				return v, nil
 			}
 
 			// if the deleted org was the current org, update the session cookie
 			am := authmanager.New(m.Client())
 
 			if err := updateUserAuthSession(ctx, am, newOrgID); err != nil {
-				return v, err
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to update user auth session on organization delete")
+
+				return v, nil
 			}
 
 			return v, nil
@@ -341,7 +352,7 @@ func postOrganizationCreation(ctx context.Context, orgCreated *generated.Organiz
 // validateOrgDeletion ensures the organization can be deleted
 func validateOrgDeletion(ctx context.Context, m *generated.OrganizationMutation) error {
 	deletedID, ok := m.ID()
-	if !ok {
+	if !ok || deletedID == "" {
 		return nil
 	}
 
@@ -381,7 +392,7 @@ func updateUserDefaultOrgOnDelete(ctx context.Context, m *generated.Organization
 // updateOrgSubscriptionOnDelete updates the org subscription to inactive and sets the status to canceled
 func updateOrgSubscriptionOnDelete(ctx context.Context, m *generated.OrganizationMutation) error {
 	deletedOrgID, ok := m.ID()
-	if !ok {
+	if !ok || deletedOrgID == "" {
 		return nil
 	}
 

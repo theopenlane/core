@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -18,7 +18,7 @@ func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 
 	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
-		log.Err(err).Msg("unable to get user id from context")
+		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -26,7 +26,7 @@ func (h *Handler) UserInfo(ctx echo.Context, openapi *OpenAPIContext) error {
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user by subject")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err, openapi)
 	}

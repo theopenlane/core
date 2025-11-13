@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,14 +19,14 @@ import (
 func (r *mutationResolver) CreateControlObjective(ctx context.Context, input generated.CreateControlObjectiveInput) (*model.ControlObjectiveCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).ControlObjective.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
 	}
 
 	return &model.ControlObjectiveCreatePayload{
@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,9 +55,9 @@ func (r *mutationResolver) CreateBulkControlObjective(ctx context.Context, input
 func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, input graphql.Upload) (*model.ControlObjectiveBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateControlObjectiveInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +67,7 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -79,12 +79,12 @@ func (r *mutationResolver) CreateBulkCSVControlObjective(ctx context.Context, in
 func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string, input generated.UpdateControlObjectiveInput) (*model.ControlObjectiveUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ControlObjective.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlobjective"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "controlobjective"})
 	}
 
 	return &model.ControlObjectiveUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateControlObjective(ctx context.Context, id string
 // DeleteControlObjective is the resolver for the deleteControlObjective field.
 func (r *mutationResolver) DeleteControlObjective(ctx context.Context, id string) (*model.ControlObjectiveDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "controlobjective"})
 	}
 
 	if err := generated.ControlObjectiveEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ControlObjectiveDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkControlObjective(ctx context.Context, ids [
 func (r *queryResolver) ControlObjective(ctx context.Context, id string) (*generated.ControlObjective, error) {
 	query, err := withTransactionalMutation(ctx).ControlObjective.Query().Where(controlobjective.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
 	}
 
 	return res, nil

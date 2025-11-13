@@ -4,7 +4,7 @@ import (
 	"database/sql"
 	"slices"
 
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -29,7 +29,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 
 	userID, err := auth.GetSubjectIDFromContext(reqCtx)
 	if err != nil {
-		log.Err(err).Msg("unable to get user id from context")
+		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -37,13 +37,13 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 	// get user from database by subject
 	user, err := h.getUserTFASettings(reqCtx, userID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
 
 	if user.Edges.TfaSettings == nil || len(user.Edges.TfaSettings) != 1 || user.Edges.TfaSettings[0].TfaSecret == nil {
-		log.Info().Msg("tfa validation request but user has no TFA settings")
+		logx.FromContext(reqCtx).Info().Msg("tfa validation request but user has no TFA settings")
 
 		return h.InvalidInput(ctx, ErrInvalidInput, openapi)
 	}
@@ -58,7 +58,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 			tfasetting.RecoveryCodes = append(tfasetting.RecoveryCodes[:recoveryCodeIndex], tfasetting.RecoveryCodes[recoveryCodeIndex+1:]...)
 
 			if err := h.updateRecoveryCodes(reqCtx, tfasetting.ID, tfasetting.RecoveryCodes); err != nil {
-				log.Error().Err(err).Msg("unable to update recovery codes")
+				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update recovery codes")
 
 				return h.BadRequest(ctx, err, openapi)
 			}
@@ -79,7 +79,7 @@ func (h *Handler) ValidateTOTP(ctx echo.Context, openapi *OpenAPIContext) error 
 	}
 
 	if err := h.OTPManager.Manager.ValidateTOTP(reqCtx, &totpUser, in.TOTPCode); err != nil {
-		log.Error().Err(err).Msg("unable to validate TOTP code")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to validate TOTP code")
 
 		return h.BadRequest(ctx, err, openapi)
 	}

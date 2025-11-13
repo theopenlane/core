@@ -7,7 +7,6 @@ import (
 
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
-	"github.com/rs/zerolog/log"
 
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -17,7 +16,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
@@ -137,37 +135,6 @@ func (a *Client) GenerateOauthAuthSession(ctx context.Context, w http.ResponseWr
 	return auth, nil
 }
 
-// checkActiveSubscription checks if the organization has an active subscription
-func (a *Client) checkActiveSubscription(ctx context.Context, orgID string) (active bool, err error) { //nolint:unused
-	// if the entitlement manager is disabled, we can skip the check
-	if !a.GetDBClient().EntitlementManager.Config.IsEnabled() {
-		return true, nil
-	}
-
-	if orgID == "" {
-		log.Warn().Msg("organization ID is required to check for active subscription")
-
-		return false, nil
-	}
-
-	if _, ok := contextx.From[auth.OrganizationCreationContextKey](ctx); ok {
-		return true, nil
-	}
-
-	// allow to skip the org interceptor middleware before a user could potentially be authenticated
-	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.OrgSubscriptionContextKey{})
-
-	subscription, err := a.db.OrgSubscription.Query().Select("active").Where(orgsubscription.OwnerID(orgID)).Only(allowCtx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Str("organization_id", orgID).Msg("failed to find org subscription for organization")
-
-		return false, err
-	}
-
-	return subscription != nil && subscription.Active, nil
-}
-
 // createClaims creates the claims for the JWT token using the id for the user and organization
 // if not target org is provided, the user's default org is used
 func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID string) *tokens.Claims {
@@ -179,7 +146,7 @@ func createClaimsWithOrg(ctx context.Context, u *generated.User, targetOrgID str
 
 	modules, err := rule.GetFeaturesForSpecificOrganization(ctx, targetOrgID)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
 	}
 
 	return &tokens.Claims{
@@ -197,7 +164,7 @@ func (a *Client) createTokenPair(ctx context.Context, user *generated.User, targ
 	newTarget, err := a.authCheck(ctx, user, targetOrgID)
 	if err != nil {
 		if targetOrgID != "" {
-			log.Error().Err(err).Msg("user attempting to switch into an org they cannot access")
+			logx.FromContext(ctx).Error().Err(err).Msg("user attempting to switch into an org they cannot access")
 
 			return nil, err
 		}
