@@ -5,7 +5,6 @@ import (
 	"errors"
 	"strings"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"golang.org/x/oauth2"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -27,7 +27,9 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
-	ctxWithToken := token.NewContextWithOauthTooToken(ctx.Request().Context(), in.Email)
+	reqCtx := ctx.Request().Context()
+
+	ctxWithToken := token.NewContextWithOauthTooToken(reqCtx, in.Email)
 
 	// create oauth2 token from request input
 	tok := &oauth2.Token{
@@ -43,7 +45,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	user, err := h.CheckAndCreateUser(ctxWithToken, in.Name, in.Email, enums.AuthProvider(strings.ToUpper(in.AuthProvider)), in.Image)
 	if err != nil {
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
-			log.Error().Err(err).Str("email", in.Email).Msg("email not allowed during registration")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", in.Email).Msg("email not allowed during registration")
 
 			return h.InvalidInput(ctx, err, openapi)
 		}
@@ -54,16 +56,16 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	// set user to verified
 	if !user.Edges.Setting.EmailConfirmed {
 		if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
-			log.Error().Err(err).Msg("unable to set email as verified")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set email as verified")
 
 			return h.InternalServerError(ctx, err, openapi)
 		}
 	}
 
 	// create claims for verified user
-	auth, err := h.AuthManager.GenerateOauthAuthSession(ctx.Request().Context(), ctx.Response().Writer, user, *in)
+	auth, err := h.AuthManager.GenerateOauthAuthSession(reqCtx, ctx.Response().Writer, user, *in)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

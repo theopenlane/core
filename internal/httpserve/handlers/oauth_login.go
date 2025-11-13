@@ -10,7 +10,6 @@ import (
 	githubOAuth2 "golang.org/x/oauth2/github"
 	googleOAuth2 "golang.org/x/oauth2/google"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/iam/providers/github"
@@ -23,6 +22,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -145,7 +145,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			log.Error().Err(err).Msg("unable to create new auth session")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to create new auth session")
 
 			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 
@@ -225,7 +225,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			log.Error().Err(err).Msg("unable to create new auth session")
+			logx.FromContext(ctx).Error().Err(err).Msg("unable to create new auth session")
 
 			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
 

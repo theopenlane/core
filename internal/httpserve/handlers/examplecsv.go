@@ -4,7 +4,7 @@ import (
 	"embed"
 	"net/http"
 
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 )
@@ -21,7 +21,8 @@ func (h *Handler) ExampleCSV(ctx echo.Context, openapi *OpenAPIContext) error {
 
 	content, err := examplecsv.ReadFile("csv/sample_" + in.Filename + ".csv")
 	if err != nil {
-		log.Warn().Msgf("failed to read example csv file: %s", in.Filename)
+		logx.FromContext(ctx.Request().Context()).Warn().Msgf("failed to read example csv file: %s", in.Filename)
+
 		return h.InternalServerError(ctx, err, openapi)
 	}
 

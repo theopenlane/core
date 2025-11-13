@@ -7,11 +7,11 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/internal/objects/store"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -51,7 +51,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 		entFile, err := store.CreateFileRecord(ctx, file)
 		if err != nil {
-			log.Error().Err(err).Str("file", file.OriginalName).Msg("failed to create file record")
+			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).Msg("failed to create file record")
 			finish("error")
 
 			return ctx, nil, err
@@ -73,7 +73,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 		uploadedFile, err := svc.Upload(ctx, file.RawFile, uploadOpts)
 		if err != nil {
-			log.Error().Err(err).Str("file", file.OriginalName).Msg("failed to upload file")
+			logx.FromContext(ctx).Error().Err(err).Str("file", file.OriginalName).Msg("failed to upload file")
 			finish("error")
 
 			return ctx, nil, err
@@ -85,7 +85,7 @@ func HandleUploads(ctx context.Context, svc *objects.Service, files []pkgobjects
 
 		mergeUploadedFileMetadata(uploadedFile, entFile.ID, file)
 		if err := store.UpdateFileWithStorageMetadata(ctx, entFile, *uploadedFile); err != nil {
-			log.Error().Err(err).Msg("failed to update file metadata")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to update file metadata")
 			finish("error")
 
 			return ctx, nil, err
@@ -139,7 +139,7 @@ func HandleRollback(ctx context.Context, svc *objects.Service, files []pkgobject
 		}); err != nil {
 			// intentionally continue deleting other files even if one fails because this
 			// is a best-effort cleanup process for a failed request
-			log.Error().Err(err).Msg("failed to delete uploaded file during rollback")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to delete uploaded file during rollback")
 		}
 	}
 }

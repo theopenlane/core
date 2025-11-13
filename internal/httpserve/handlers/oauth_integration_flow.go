@@ -14,7 +14,6 @@ import (
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/contextx"
@@ -143,15 +142,17 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// Validate state matches what was set in the cookie
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get oauth_state cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_state cookie")
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
 
 	if in.State != stateCookie.Value {
-		log.Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
+		logx.FromContext(reqCtx).Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
 
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
@@ -159,7 +160,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Get org ID and user ID from cookies
 	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get oauth_org_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_org_id cookie")
 
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapi)
 	}
@@ -168,13 +169,12 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 
 	_, err = sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get oauth_user_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_user_id cookie")
 
 		return h.BadRequest(ctx, ErrMissingUserContext, openapi)
 	}
 
 	// Get the user from database to set authenticated context
-	reqCtx := ctx.Request().Context()
 	respWrite := ctx.Response().Writer
 
 	systemCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -182,7 +182,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Validate state and extract provider from state
 	_, provider, err := h.validateOAuthState(in.State)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to validate oauth state")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to validate oauth state")
 
 		return h.BadRequest(ctx, ErrInvalidState, openapi)
 	}
@@ -201,7 +201,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Exchange code for token
 	oauthToken, err := providerConfig.Config.Exchange(reqCtx, in.Code)
 	if err != nil {
-		log.Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
+		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Msg("failed to exchange OAuth code for token")
 
 		return h.InternalServerError(ctx, ErrExchangeAuthCode, openapi)
 	}
@@ -209,7 +209,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Validate token and get user info
 	userInfo, err := providerConfig.Validate(reqCtx, oauthToken)
 	if err != nil {
-		log.Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
+		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Msg("failed to validate OAuth token")
 
 		return h.InternalServerError(ctx, ErrValidateToken, openapi)
 	}
@@ -217,7 +217,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	// Store integration and tokens (use authenticated context)
 	_, err = h.storeIntegrationTokens(systemCtx, orgID, provider, userInfo, oauthToken)
 	if err != nil {
-		log.Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
+		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

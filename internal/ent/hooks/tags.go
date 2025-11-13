@@ -6,12 +6,12 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // tagMutation is an interface for mutations that have tags
@@ -57,14 +57,14 @@ func HookTags() ent.Hook {
 						SetInput(input).
 						Exec(ctx); err != nil {
 						if !generated.IsConstraintError(err) {
-							log.Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
+							logx.FromContext(ctx).Warn().Err(err).Str("tag", tag).Msg("error creating tag definition")
 						}
 
 						// else, another process created it, so we can ignore the error
-						log.Debug().Str("tag", tag).Msg("tag definition already exists, skipping creation")
+						logx.FromContext(ctx).Debug().Str("tag", tag).Msg("tag definition already exists, skipping creation")
 					}
 				} else if err != nil {
-					log.Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
+					logx.FromContext(ctx).Warn().Err(err).Msg("error querying tag definitions, skipping org tag creation")
 				}
 			}
 

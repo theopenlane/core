@@ -8,13 +8,13 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 var (
@@ -42,7 +42,8 @@ func RequirePaymentMethod() privacy.MutationRuleFunc {
 			Select(organizationsetting.FieldPaymentMethodAdded).
 			Only(ctx)
 		if err != nil {
-			log.Err(err).Msg("failed to fetch organization from db")
+			logx.FromContext(ctx).Err(err).Msg("failed to fetch organization from db")
+
 			return err
 		}
 

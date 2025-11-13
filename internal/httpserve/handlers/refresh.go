@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -10,6 +9,7 @@ import (
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -25,15 +25,15 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// verify the refresh token
 	claims, err := h.TokenManager.Verify(req.RefreshToken)
 	if err != nil {
-		log.Error().Err(err).Msg("error verifying token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
-
-	reqCtx := ctx.Request().Context()
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
 	user, err := h.getUserDetailsByID(reqCtx, claims.Subject)
@@ -53,7 +53,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	// get modules on refresh
 	modules, err := rule.GetFeaturesForSpecificOrganization(reqCtx, claims.OrgID)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error obtaining org features for claims, skipping modules in JWT")
 	}
 
 	claims.Modules = modules
@@ -63,7 +63,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 
 	accessToken, refreshToken, err := h.TokenManager.CreateTokenPair(claims)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating token pair")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating token pair")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
@@ -73,7 +73,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 
 	// set sessions in response
 	if _, err = h.SessionConfig.CreateAndStoreSession(reqCtx, ctx.Response().Writer, user.ID); err != nil {
-		log.Error().Err(err).Msg("error storing session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error storing session")
 
 		return err
 	}

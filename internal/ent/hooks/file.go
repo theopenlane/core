@@ -5,10 +5,10 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/logx"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
 
@@ -51,7 +51,7 @@ func HookFileDelete() ent.Hook {
 					return nil, err
 				}
 
-				log.Debug().Interface("files", files).Msg("deleting files from object storage")
+				logx.FromContext(ctx).Debug().Interface("files", files).Msg("deleting files from object storage")
 
 				for _, f := range files {
 					if f.StoragePath != "" && m.ObjectManager != nil {
@@ -85,6 +85,8 @@ func HookFileDelete() ent.Hook {
 						}
 
 						if err := m.ObjectManager.Delete(ctx, storageFile, nil); err != nil {
+							logx.FromContext(ctx).Error().Err(err).Str("fileID", f.ID).Msg("failed to delete file from object storage")
+
 							return nil, err
 						}
 					}

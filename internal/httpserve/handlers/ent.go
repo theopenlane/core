@@ -6,7 +6,6 @@ import (
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
-	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/core/internal/ent/generated/event"
@@ -21,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
@@ -35,7 +35,7 @@ func (h *Handler) updateUserLastSeen(ctx context.Context, id string, authProvide
 		SetLastSeen(time.Now()).
 		SetLastLoginProvider(authProvider).
 		Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error updating user last seen")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating user last seen")
 
 		return err
 	}
@@ -49,7 +49,7 @@ func (h *Handler) createUser(ctx context.Context, input ent.CreateUserInput) (*e
 		SetInput(input).
 		Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating new user")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating new user")
 
 		return nil, err
 	}
@@ -67,7 +67,7 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 		SetVerifiedEmail(true).
 		Exec(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error updating subscriber verified")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verified")
 		return err
 	}
 
@@ -78,7 +78,7 @@ func (h *Handler) updateSubscriberVerifiedEmail(ctx context.Context, id string, 
 func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *User) error {
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to parse ttl")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse ttl")
 		return err
 	}
 
@@ -88,7 +88,7 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *U
 		SetTTL(ttl).
 		Exec(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error updating subscriber tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber tokens")
 
 		return err
 	}
@@ -100,7 +100,7 @@ func (h *Handler) updateSubscriberVerificationToken(ctx context.Context, user *U
 func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) (*ent.EmailVerificationToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.EmailVerificationExpires.String)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to parse ttl")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse ttl")
 		return nil, err
 	}
 
@@ -112,7 +112,7 @@ func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) 
 		SetSecret(user.EmailVerificationSecret).
 		Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating email verification token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating email verification token")
 
 		return nil, err
 	}
@@ -124,7 +124,7 @@ func (h *Handler) createEmailVerificationToken(ctx context.Context, user *User) 
 func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*ent.PasswordResetToken, error) {
 	ttl, err := time.Parse(time.RFC3339Nano, user.PasswordResetExpires.String)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to parse ttl")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse ttl")
 		return nil, err
 	}
 
@@ -136,7 +136,7 @@ func (h *Handler) createPasswordResetToken(ctx context.Context, user *User) (*en
 		SetSecret(user.PasswordResetSecret).
 		Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating password reset token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating password reset token")
 
 		return nil, err
 	}
@@ -153,7 +153,7 @@ func (h *Handler) getUserByEVToken(ctx context.Context, token string) (*ent.User
 		).
 		QueryOwner().WithSetting().WithEmailVerificationTokens().Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining user from email verification token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from email verification token")
 
 		return nil, err
 	}
@@ -167,13 +167,13 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 		Where(filedownloadtoken.Token(token)).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining file download token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining file download token")
 
 		return nil, nil, err
 	}
 
 	if tokenRecord.FileID == nil || *tokenRecord.FileID == "" {
-		log.Error().Msg("file download token missing file id")
+		logx.FromContext(ctx).Error().Msg("file download token missing file id")
 
 		return nil, nil, ErrDownloadTokenMissingFile
 	}
@@ -182,7 +182,7 @@ func (h *Handler) getFilebyDownloadToken(ctx context.Context, token string) (*en
 
 	fileRecord, err := transaction.FromContext(ctx).File.Get(allowCtx, *tokenRecord.FileID)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining file from download token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining file from download token")
 
 		return nil, nil, err
 	}
@@ -199,7 +199,7 @@ func (h *Handler) getUserByResetToken(ctx context.Context, token string) (*ent.U
 		).
 		QueryOwner().WithSetting().WithPasswordResetTokens().Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining user from reset token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from reset token")
 
 		return nil, err
 	}
@@ -213,7 +213,7 @@ func (h *Handler) getUserByEmail(ctx context.Context, email string) (*ent.User, 
 		Where(user.EmailEqualFold(email)).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining user from email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from email")
 
 		return nil, err
 	}
@@ -227,7 +227,7 @@ func (h *Handler) getUserByID(ctx context.Context, id string) (*ent.User, contex
 		Where(user.ID(id)).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining user from id")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from id")
 
 		return nil, ctx, err
 	}
@@ -257,13 +257,13 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		webauthn.OwnerID(user.ID),
 	).Count(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking existing webauthn credentials")
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking existing webauthn credentials")
 
 		return err
 	}
 
 	if count >= h.OauthProvider.Webauthn.MaxDevices {
-		log.Error().Err(err).Msg("max devices reached")
+		logx.FromContext(ctx).Error().Err(err).Msg("max devices reached")
 
 		return ErrMaxDeviceLimit
 	}
@@ -282,7 +282,7 @@ func (h *Handler) addCredentialToUser(ctx context.Context, user *ent.User, crede
 		SetSignCount(int32(credential.Authenticator.SignCount)). // nolint:gosec
 		Exec(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating passkey")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating passkey")
 
 		return err
 	}
@@ -296,7 +296,7 @@ func (h *Handler) getUserDetailsByID(ctx context.Context, userID string) (*ent.U
 		user.ID(userID),
 	).Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error retrieving user")
+		logx.FromContext(ctx).Error().Err(err).Msg("error retrieving user")
 
 		return nil, err
 	}
@@ -310,7 +310,7 @@ func (h *Handler) getUserTFASettings(ctx context.Context, userID string) (*ent.U
 		user.ID(userID),
 	).WithTfaSettings().Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error retrieving tfa settings for user")
+		logx.FromContext(ctx).Error().Err(err).Msg("error retrieving tfa settings for user")
 
 		return nil, err
 	}
@@ -323,7 +323,7 @@ func (h *Handler) updateRecoveryCodes(ctx context.Context, tfaID string, codes [
 	if err := transaction.FromContext(ctx).TFASetting.UpdateOneID(tfaID).
 		SetRecoveryCodes(codes).
 		Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error updating recovery codes")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating recovery codes")
 
 		return err
 	}
@@ -338,7 +338,7 @@ func (h *Handler) getUserByInviteToken(ctx context.Context, token string) (*ent.
 			invite.Token(token),
 		).WithOwner().Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining user from token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining user from token")
 
 		return nil, err
 	}
@@ -353,7 +353,7 @@ func (h *Handler) countVerificationTokensUserByEmail(ctx context.Context, email 
 			emailverificationtoken.Email(email),
 		)).Count(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error counting verification reset tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error counting verification reset tokens")
 
 		return 0, err
 	}
@@ -369,14 +369,14 @@ func (h *Handler) expireAllVerificationTokensUserByEmail(ctx context.Context, em
 			emailverificationtoken.TTLGT(time.Now()),
 		)).All(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining verification reset tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining verification reset tokens")
 
 		return err
 	}
 
 	for _, pr := range prs {
 		if err := pr.Update().SetTTL(time.Now()).Exec(ctx); err != nil {
-			log.Error().Err(err).Msg("error expiring verification token")
+			logx.FromContext(ctx).Error().Err(err).Msg("error expiring verification token")
 
 			return err
 		}
@@ -393,14 +393,14 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 			passwordresettoken.TTLGT(time.Now()),
 		)).All(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining password reset tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining password reset tokens")
 
 		return err
 	}
 
 	for _, pr := range prs {
 		if err := pr.Update().SetTTL(time.Now()).Exec(ctx); err != nil {
-			log.Error().Err(err).Msg("error expiring password reset token")
+			logx.FromContext(ctx).Error().Err(err).Msg("error expiring password reset token")
 
 			return err
 		}
@@ -413,7 +413,7 @@ func (h *Handler) expireAllResetTokensUserByEmail(ctx context.Context, email str
 func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
 	if err := transaction.FromContext(ctx).UserSetting.
 		UpdateOne(user.Edges.Setting).SetEmailConfirmed(true).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error setting email confirmed")
+		logx.FromContext(ctx).Error().Err(err).Msg("error setting email confirmed")
 
 		return err
 	}
@@ -424,7 +424,7 @@ func (h *Handler) setEmailConfirmed(ctx context.Context, user *ent.User) error {
 // updateUserPassword changes a updates a user's password in the database
 func (h *Handler) updateUserPassword(ctx context.Context, id string, password string) error {
 	if err := transaction.FromContext(ctx).User.UpdateOneID(id).SetPassword(password).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error updating user password")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating user password")
 
 		return err
 	}
@@ -446,7 +446,7 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 			// create user in the database
 			entUser, err = h.createUser(ctx, input)
 			if err != nil {
-				log.Error().Err(err).Msg("error creating new user")
+				logx.FromContext(ctx).Error().Err(err).Msg("error creating new user")
 
 				return nil, err
 			}
@@ -454,7 +454,7 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 			// pull latest user settings to ensure any hook updates are included
 			entUser.Edges.Setting, err = entUser.QuerySetting().Only(ctx)
 			if err != nil {
-				log.Error().Err(err).Msg("error fetching user settings")
+				logx.FromContext(ctx).Error().Err(err).Msg("error fetching user settings")
 
 				return nil, err
 			}
@@ -468,7 +468,7 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 
 	// update last seen of user
 	if err := h.updateUserLastSeen(ctx, entUser.ID, provider); err != nil {
-		log.Error().Err(err).Msg("error updating user last seen")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating user last seen")
 
 		return nil, err
 	}
@@ -478,7 +478,7 @@ func (h *Handler) CheckAndCreateUser(ctx context.Context, name, email string, pr
 
 	// update user avatar
 	if err := h.updateUserAvatar(ctx, entUser, image); err != nil {
-		log.Error().Err(err).Msg("error updating user avatar")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating user avatar")
 
 		return nil, err
 	}
@@ -517,7 +517,7 @@ func (h *Handler) updateUserAvatar(ctx context.Context, user *ent.User, image st
 		User.UpdateOneID(user.ID).
 		SetAvatarRemoteURL(image).
 		Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error updating user avatar")
+		logx.FromContext(ctx).Error().Err(err).Msg("error updating user avatar")
 		return err
 	}
 
@@ -530,7 +530,7 @@ func (h *Handler) setWebauthnAllowed(ctx context.Context, user *ent.User) error 
 		Where(
 			usersetting.UserID(user.ID),
 		).Exec(ctx); err != nil {
-		log.Error().Err(err).Msg("error setting webauthn allowed")
+		logx.FromContext(ctx).Error().Err(err).Msg("error setting webauthn allowed")
 
 		return err
 	}
@@ -546,7 +546,7 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 		).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining subscriber from token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining subscriber from token")
 
 		return nil, err
 	}
@@ -558,7 +558,7 @@ func (h *Handler) getSubscriberByToken(ctx context.Context, token string) (*ent.
 func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization, error) {
 	org, err := transaction.FromContext(ctx).Organization.Get(ctx, id)
 	if err != nil {
-		log.Error().Err(err).Msg("error obtaining organization from id")
+		logx.FromContext(ctx).Error().Err(err).Msg("error obtaining organization from id")
 
 		return nil, err
 	}
@@ -570,7 +570,7 @@ func (h *Handler) getOrgByID(ctx context.Context, id string) (*ent.Organization,
 func (h *Handler) createEvent(ctx context.Context, input ent.CreateEventInput) (*ent.Event, error) {
 	event, err := transaction.FromContext(ctx).Event.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating event")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating event")
 
 		return nil, err
 	}
@@ -582,7 +582,7 @@ func (h *Handler) createEvent(ctx context.Context, input ent.CreateEventInput) (
 func (h *Handler) checkForEventID(ctx context.Context, id string) (bool, error) {
 	exists, err := transaction.FromContext(ctx).Event.Query().Where(event.EventID(id)).Exist(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error checking for event ID")
+		logx.FromContext(ctx).Error().Err(err).Msg("error checking for event ID")
 		return false, err
 	}
 
@@ -597,7 +597,7 @@ func (h *Handler) getOrgByJobRunnerVerificationToken(ctx context.Context, token 
 		).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error fetching runner registration token from database")
+		logx.FromContext(ctx).Error().Err(err).Msg("error fetching runner registration token from database")
 
 		return nil, err
 	}
@@ -618,7 +618,7 @@ func (h *Handler) createJobRunner(ctx context.Context, token *ent.JobRunnerRegis
 		SetUpdatedBy(token.ID).
 		Exec(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("could not create job runner")
+		logx.FromContext(ctx).Error().Err(err).Msg("could not create job runner")
 		return err
 	}
 
@@ -631,7 +631,7 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 		Where(organizationsetting.OrganizationID(orgID)).
 		Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error fetching organization settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("error fetching organization settings")
 
 		return nil, err
 	}
@@ -643,7 +643,7 @@ func (h *Handler) getOrganizationSettingByOrgID(ctx context.Context, orgID strin
 func (h *Handler) getUserDefaultOrgID(ctx context.Context, userID string) (string, error) {
 	us, err := transaction.FromContext(ctx).UserSetting.Query().Where(usersetting.UserID(userID)).WithDefaultOrg().Only(ctx)
 	if err != nil {
-		log.Error().Err(err).Msg("error fetching user settings")
+		logx.FromContext(ctx).Error().Err(err).Msg("error fetching user settings")
 
 		return "", err
 	}

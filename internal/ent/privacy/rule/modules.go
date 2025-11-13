@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	features "github.com/theopenlane/core/internal/entitlements/features"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/permissioncache"
 )
@@ -46,7 +46,7 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 	if cache, ok := permissioncache.CacheFromContext(ctx); ok {
 		moduleFeats, err := cache.GetFeatures(ctx, orgID)
 		if err != nil {
-			log.Err(err).Msg("failed to get feature cache")
+			logx.FromContext(ctx).Err(err).Msg("failed to get feature cache")
 		} else if len(moduleFeats) > 0 {
 			feats := make([]string, 0, len(moduleFeats))
 			for _, f := range moduleFeats {
@@ -93,7 +93,7 @@ func GetFeaturesForSpecificOrganization(ctx context.Context, orgID string) ([]st
 		}
 
 		if err := cache.SetFeatures(ctx, orgID, moduleFeats); err != nil {
-			log.Err(err).Msg("failed to set feature cache")
+			logx.FromContext(ctx).Err(err).Msg("failed to set feature cache")
 		}
 	}
 

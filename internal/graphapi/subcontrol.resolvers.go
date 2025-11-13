@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,7 +55,7 @@ func (r *mutationResolver) CreateBulkSubcontrol(ctx context.Context, input []*ge
 func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input graphql.Upload) (*model.SubcontrolBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateSubcontrolInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
 		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subcontrol"})
 	}
@@ -67,7 +67,7 @@ func (r *mutationResolver) CreateBulkCSVSubcontrol(ctx context.Context, input gr
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -84,7 +84,7 @@ func (r *mutationResolver) UpdateSubcontrol(ctx context.Context, id string, inpu
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
