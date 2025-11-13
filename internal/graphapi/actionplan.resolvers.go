@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateActionPlan(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).ActionPlan.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "actionplan"})
 	}
 
 	return &model.ActionPlanCreatePayload{
@@ -58,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVActionPlan(ctx context.Context, input gr
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "actionplan"})
 	}
 
 	if len(data) == 0 {
@@ -89,7 +89,7 @@ func (r *mutationResolver) UpdateBulkActionPlan(ctx context.Context, ids []strin
 func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, input generated.UpdateActionPlanInput) (*model.ActionPlanUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ActionPlan.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "actionplan"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -104,7 +104,7 @@ func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "actionplan"})
 	}
 
 	return &model.ActionPlanUpdatePayload{
@@ -115,11 +115,11 @@ func (r *mutationResolver) UpdateActionPlan(ctx context.Context, id string, inpu
 // DeleteActionPlan is the resolver for the deleteActionPlan field.
 func (r *mutationResolver) DeleteActionPlan(ctx context.Context, id string) (*model.ActionPlanDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "actionplan"})
 	}
 
 	if err := generated.ActionPlanEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ActionPlanDeletePayload{
@@ -140,12 +140,12 @@ func (r *mutationResolver) DeleteBulkActionPlan(ctx context.Context, ids []strin
 func (r *queryResolver) ActionPlan(ctx context.Context, id string) (*generated.ActionPlan, error) {
 	query, err := withTransactionalMutation(ctx).ActionPlan.Query().Where(actionplan.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplan"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplan"})
 	}
 
 	return res, nil

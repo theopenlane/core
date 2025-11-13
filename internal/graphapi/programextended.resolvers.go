@@ -41,7 +41,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 
 		bulkControls, err := r.cloneControlsFromStandard(ctx, cf, nil)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 
 		for _, control := range bulkControls {
@@ -51,7 +51,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 
 	res, err := createdProgram.SetInput(*input.Program).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	// add the members to the program
@@ -70,7 +70,7 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		}
 
 		if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 	}
 
@@ -79,12 +79,12 @@ func (r *mutationResolver) CreateProgramWithMembers(ctx context.Context, input m
 		Where(program.ID(res.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	return &model.ProgramCreatePayload{
@@ -105,7 +105,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	if hasStandardFilter(input) {
 		bulkControls, err := r.cloneControlsFromStandard(ctx, cloneFilterOptions{standardID: input.StandardID}, nil)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 
 		for _, control := range bulkControls {
@@ -116,7 +116,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 	// create the program
 	res, err := createdProgram.SetInput(*input.Program).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	if len(input.Members) > 0 {
@@ -134,7 +134,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		}
 
 		if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 	}
 
@@ -149,7 +149,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		}
 
 		if err := c.Risk.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 	}
 
@@ -164,7 +164,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		}
 
 		if err := c.Procedure.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 	}
 
@@ -179,7 +179,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		}
 
 		if err := c.InternalPolicy.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 		}
 	}
 
@@ -189,7 +189,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 			control.Control.ProgramIDs = []string{res.ID}
 			_, err := r.CreateControlWithSubcontrols(ctx, *control)
 			if err != nil {
-				return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+				return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 			}
 		}
 	}
@@ -199,12 +199,12 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 		Where(program.ID(res.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	return &model.ProgramCreatePayload{
@@ -216,7 +216,7 @@ func (r *mutationResolver) CreateFullProgram(ctx context.Context, input model.Cr
 func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, input model.CreateControlWithSubcontrolsInput) (*model.ControlCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(*input.Control).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 	}
 
 	// create the subcontrols
@@ -230,7 +230,7 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 		}
 
 		if err := c.Subcontrol.CreateBulk(builders...).Exec(ctx); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 		}
 	}
 
@@ -239,13 +239,13 @@ func (r *mutationResolver) CreateControlWithSubcontrols(ctx context.Context, inp
 		Where(control.ID(res.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 	}
 
 	return &model.ControlCreatePayload{
@@ -280,7 +280,7 @@ func (r *updateProgramInputResolver) AddProgramMembers(ctx context.Context, obj 
 	}
 
 	if err := c.ProgramMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "program"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 	}
 
 	return nil
@@ -306,7 +306,7 @@ func (r *updateProgramInputResolver) RemoveProgramMembers(ctx context.Context, o
 			Where(programmembership.ProgramID(*programID)).
 			Exec(ctx); err != nil {
 
-			return parseRequestError(err, action{action: ActionUpdate, object: "program"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 		}
 	}
 

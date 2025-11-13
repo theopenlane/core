@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateCustomTypeEnum(ctx context.Context, input gener
 
 	res, err := withTransactionalMutation(ctx).CustomTypeEnum.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
 	}
 
 	return &model.CustomTypeEnumCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVCustomTypeEnum(ctx context.Context, inpu
 func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, input generated.UpdateCustomTypeEnumInput) (*model.CustomTypeEnumUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).CustomTypeEnum.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customtypeenum"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customtypeenum"})
 	}
 
 	return &model.CustomTypeEnumUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateCustomTypeEnum(ctx context.Context, id string, 
 // DeleteCustomTypeEnum is the resolver for the deleteCustomTypeEnum field.
 func (r *mutationResolver) DeleteCustomTypeEnum(ctx context.Context, id string) (*model.CustomTypeEnumDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).CustomTypeEnum.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "customtypeenum"})
 	}
 
 	if err := generated.CustomTypeEnumEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.CustomTypeEnumDeletePayload{
@@ -121,12 +121,12 @@ func (r *mutationResolver) DeleteCustomTypeEnum(ctx context.Context, id string) 
 func (r *queryResolver) CustomTypeEnum(ctx context.Context, id string) (*generated.CustomTypeEnum, error) {
 	query, err := withTransactionalMutation(ctx).CustomTypeEnum.Query().Where(customtypeenum.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
 	}
 
 	return res, nil

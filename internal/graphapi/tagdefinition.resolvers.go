@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateTagDefinition(ctx context.Context, input genera
 
 	res, err := withTransactionalMutation(ctx).TagDefinition.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
 	}
 
 	return &model.TagDefinitionCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVTagDefinition(ctx context.Context, input
 func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, input generated.UpdateTagDefinitionInput) (*model.TagDefinitionUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TagDefinition.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tagdefinition"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "tagdefinition"})
 	}
 
 	return &model.TagDefinitionUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateTagDefinition(ctx context.Context, id string, i
 // DeleteTagDefinition is the resolver for the deleteTagDefinition field.
 func (r *mutationResolver) DeleteTagDefinition(ctx context.Context, id string) (*model.TagDefinitionDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TagDefinition.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "tagdefinition"})
 	}
 
 	if err := generated.TagDefinitionEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TagDefinitionDeletePayload{
@@ -121,12 +121,12 @@ func (r *mutationResolver) DeleteTagDefinition(ctx context.Context, id string) (
 func (r *queryResolver) TagDefinition(ctx context.Context, id string) (*generated.TagDefinition, error) {
 	query, err := withTransactionalMutation(ctx).TagDefinition.Query().Where(tagdefinition.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
 	}
 
 	return res, nil

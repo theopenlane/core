@@ -14,11 +14,11 @@ import (
 // DeleteWebauthn is the resolver for the deleteWebauthn field.
 func (r *mutationResolver) DeleteWebauthn(ctx context.Context, id string) (*model.WebauthnDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Webauthn.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "webauthn"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "webauthn"})
 	}
 
 	if err := generated.WebauthnEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.WebauthnDeletePayload{

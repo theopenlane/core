@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateProgramMembership(ctx context.Context, input generated.CreateProgramMembershipInput) (*model.ProgramMembershipCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "programmembership"})
 	}
 
 	return &model.ProgramMembershipCreatePayload{
@@ -42,7 +42,7 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "programmembership"})
 	}
 
 	if len(data) == 0 {
@@ -56,7 +56,7 @@ func (r *mutationResolver) CreateBulkCSVProgramMembership(ctx context.Context, i
 func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id string, input generated.UpdateProgramMembershipInput) (*model.ProgramMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ProgramMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "programmembership"})
 	}
 
 	// setup update request
@@ -64,7 +64,7 @@ func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id strin
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "programmembership"})
 	}
 
 	return &model.ProgramMembershipUpdatePayload{
@@ -75,11 +75,11 @@ func (r *mutationResolver) UpdateProgramMembership(ctx context.Context, id strin
 // DeleteProgramMembership is the resolver for the deleteProgramMembership field.
 func (r *mutationResolver) DeleteProgramMembership(ctx context.Context, id string) (*model.ProgramMembershipDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "programmembership"})
 	}
 
 	if err := generated.ProgramMembershipEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProgramMembershipDeletePayload{
@@ -100,12 +100,12 @@ func (r *mutationResolver) DeleteBulkProgramMembership(ctx context.Context, ids 
 func (r *queryResolver) ProgramMembership(ctx context.Context, id string) (*generated.ProgramMembership, error) {
 	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().Where(programmembership.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembership"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembership"})
 	}
 
 	return res, nil

@@ -21,7 +21,7 @@ func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context,
 	}
 	res, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterwatermarkconfig"})
 	}
 
 	return &model.TrustCenterWatermarkConfigCreatePayload{
@@ -33,7 +33,7 @@ func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context,
 func (r *mutationResolver) UpdateTrustCenterWatermarkConfig(ctx context.Context, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterwatermarkconfig"})
 	}
 
 	// setup update request
@@ -41,7 +41,7 @@ func (r *mutationResolver) UpdateTrustCenterWatermarkConfig(ctx context.Context,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenterwatermarkconfig"})
 	}
 
 	return &model.TrustCenterWatermarkConfigUpdatePayload{
@@ -52,11 +52,11 @@ func (r *mutationResolver) UpdateTrustCenterWatermarkConfig(ctx context.Context,
 // DeleteTrustCenterWatermarkConfig is the resolver for the deleteTrustCenterWatermarkConfig field.
 func (r *mutationResolver) DeleteTrustCenterWatermarkConfig(ctx context.Context, id string) (*model.TrustCenterWatermarkConfigDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenterwatermarkconfig"})
 	}
 
 	if err := generated.TrustCenterWatermarkConfigEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterWatermarkConfigDeletePayload{
@@ -68,12 +68,12 @@ func (r *mutationResolver) DeleteTrustCenterWatermarkConfig(ctx context.Context,
 func (r *queryResolver) TrustCenterWatermarkConfig(ctx context.Context, id string) (*generated.TrustCenterWatermarkConfig, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Query().Where(trustcenterwatermarkconfig.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
 	}
 
 	return res, nil

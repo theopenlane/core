@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateContact(ctx context.Context, input generated.Cr
 
 	res, err := withTransactionalMutation(ctx).Contact.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "contact"})
 	}
 
 	return &model.ContactCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVContact(ctx context.Context, input graph
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "contact"})
 	}
 
 	if len(data) == 0 {
@@ -88,7 +88,7 @@ func (r *mutationResolver) UpdateBulkContact(ctx context.Context, ids []string, 
 func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input generated.UpdateContactInput) (*model.ContactUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Contact.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "contact"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -103,7 +103,7 @@ func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "contact"})
 	}
 
 	return &model.ContactUpdatePayload{
@@ -114,11 +114,11 @@ func (r *mutationResolver) UpdateContact(ctx context.Context, id string, input g
 // DeleteContact is the resolver for the deleteContact field.
 func (r *mutationResolver) DeleteContact(ctx context.Context, id string) (*model.ContactDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Contact.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "contact"})
 	}
 
 	if err := generated.ContactEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ContactDeletePayload{
@@ -139,12 +139,12 @@ func (r *mutationResolver) DeleteBulkContact(ctx context.Context, ids []string) 
 func (r *queryResolver) Contact(ctx context.Context, id string) (*generated.Contact, error) {
 	query, err := withTransactionalMutation(ctx).Contact.Query().Where(contact.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contact"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contact"})
 	}
 
 	return res, nil

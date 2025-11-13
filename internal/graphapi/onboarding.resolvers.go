@@ -23,7 +23,7 @@ func (r *mutationResolver) CreateOnboarding(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Onboarding.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "onboarding"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "onboarding"})
 	}
 
 	return &model.OnboardingCreatePayload{

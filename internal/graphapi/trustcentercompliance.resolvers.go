@@ -21,7 +21,7 @@ func (r *mutationResolver) CreateTrustCenterCompliance(ctx context.Context, inpu
 		// check if the organization has a trust center and set the id
 		trustCenterID, err := withTransactionalMutation(ctx).TrustCenter.Query().OnlyID(ctx)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentercompliance"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
 		}
 
 		if trustCenterID == "" {
@@ -41,7 +41,7 @@ func (r *mutationResolver) CreateTrustCenterCompliance(ctx context.Context, inpu
 
 	res, err := withTransactionalMutation(ctx).TrustCenterCompliance.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
 	}
 
 	return &model.TrustCenterComplianceCreatePayload{
@@ -64,7 +64,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Contex
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
 	}
 
 	if len(data) == 0 {
@@ -78,7 +78,7 @@ func (r *mutationResolver) CreateBulkCSVTrustCenterCompliance(ctx context.Contex
 func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id string, input generated.UpdateTrustCenterComplianceInput) (*model.TrustCenterComplianceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenterCompliance.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentercompliance"})
 	}
 
 	// setup update request
@@ -86,7 +86,7 @@ func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id s
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentercompliance"})
 	}
 
 	return &model.TrustCenterComplianceUpdatePayload{
@@ -97,11 +97,11 @@ func (r *mutationResolver) UpdateTrustCenterCompliance(ctx context.Context, id s
 // DeleteTrustCenterCompliance is the resolver for the deleteTrustCenterCompliance field.
 func (r *mutationResolver) DeleteTrustCenterCompliance(ctx context.Context, id string) (*model.TrustCenterComplianceDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcentercompliance"})
 	}
 
 	if err := generated.TrustCenterComplianceEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterComplianceDeletePayload{
@@ -122,12 +122,12 @@ func (r *mutationResolver) DeleteBulkTrustCenterCompliance(ctx context.Context, 
 func (r *queryResolver) TrustCenterCompliance(ctx context.Context, id string) (*generated.TrustCenterCompliance, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenterCompliance.Query().Where(trustcentercompliance.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
 	}
 
 	return res, nil

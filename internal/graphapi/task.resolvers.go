@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateTask(ctx context.Context, input generated.Creat
 
 	res, err := withTransactionalMutation(ctx).Task.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
 	}
 
 	// Publish task creation event to subscribers if assignee is set
@@ -65,7 +65,7 @@ func (r *mutationResolver) CreateBulkCSVTask(ctx context.Context, input graphql.
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
 	}
 
 	if len(data) == 0 {
@@ -96,7 +96,7 @@ func (r *mutationResolver) UpdateBulkTask(ctx context.Context, ids []string, inp
 func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input generated.UpdateTaskInput) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Task.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "task"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -111,7 +111,7 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "task"})
 	}
 
 	return &model.TaskUpdatePayload{
@@ -122,11 +122,11 @@ func (r *mutationResolver) UpdateTask(ctx context.Context, id string, input gene
 // DeleteTask is the resolver for the deleteTask field.
 func (r *mutationResolver) DeleteTask(ctx context.Context, id string) (*model.TaskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Task.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "task"})
 	}
 
 	if err := generated.TaskEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TaskDeletePayload{
@@ -147,12 +147,12 @@ func (r *mutationResolver) DeleteBulkTask(ctx context.Context, ids []string) (*m
 func (r *queryResolver) Task(ctx context.Context, id string) (*generated.Task, error) {
 	query, err := withTransactionalMutation(ctx).Task.Query().Where(task.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
 	}
 
 	return res, nil

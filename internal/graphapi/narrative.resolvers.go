@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateNarrative(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).Narrative.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
 	}
 
 	return &model.NarrativeCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVNarrative(ctx context.Context, input gra
 func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input generated.UpdateNarrativeInput) (*model.NarrativeUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Narrative.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "narrative"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "narrative"})
 	}
 
 	return &model.NarrativeUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateNarrative(ctx context.Context, id string, input
 // DeleteNarrative is the resolver for the deleteNarrative field.
 func (r *mutationResolver) DeleteNarrative(ctx context.Context, id string) (*model.NarrativeDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Narrative.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "narrative"})
 	}
 
 	if err := generated.NarrativeEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.NarrativeDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkNarrative(ctx context.Context, ids []string
 func (r *queryResolver) Narrative(ctx context.Context, id string) (*generated.Narrative, error) {
 	query, err := withTransactionalMutation(ctx).Narrative.Query().Where(narrative.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
 	}
 
 	return res, nil

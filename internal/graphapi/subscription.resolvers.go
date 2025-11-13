@@ -24,7 +24,7 @@ func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generat
 
 	// Check if subscription manager is available
 	if r.subscriptionManager == nil {
-		logx.FromContext(ctx).Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
+		logx.FromContext(ctx).Info().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
 		return nil, ErrInternalServerError
 	}
 

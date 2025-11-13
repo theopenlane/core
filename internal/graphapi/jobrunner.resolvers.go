@@ -25,7 +25,7 @@ func (r *mutationResolver) CreateJobRunner(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).JobRunner.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobrunner"})
 	}
 
 	return &model.JobRunnerCreatePayload{
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateJobRunner(ctx context.Context, input generated.
 func (r *mutationResolver) UpdateJobRunner(ctx context.Context, id string, input generated.UpdateJobRunnerInput) (*model.JobRunnerUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).JobRunner.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "jobrunner"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateJobRunner(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "jobrunner"})
 	}
 
 	return &model.JobRunnerUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateJobRunner(ctx context.Context, id string, input
 // DeleteJobRunner is the resolver for the deleteJobRunner field.
 func (r *mutationResolver) DeleteJobRunner(ctx context.Context, id string) (*model.JobRunnerDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).JobRunner.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "jobrunner"})
 	}
 
 	if err := generated.JobRunnerEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.JobRunnerDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteJobRunner(ctx context.Context, id string) (*mod
 func (r *queryResolver) JobRunner(ctx context.Context, id string) (*generated.JobRunner, error) {
 	query, err := withTransactionalMutation(ctx).JobRunner.Query().Where(jobrunner.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunner"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunner"})
 	}
 
 	return res, nil

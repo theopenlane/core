@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateInvite(ctx context.Context, input generated.Cre
 
 	res, err := withTransactionalMutation(ctx).Invite.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 	}
 
 	return &model.InviteCreatePayload{
@@ -53,7 +53,7 @@ func (r *mutationResolver) CreateBulkInvite(ctx context.Context, input []*genera
 	for _, i := range input {
 		res, err := r.CreateInvite(ctx, *i)
 		if err != nil {
-			return nil, err
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 		}
 
 		results = append(results, res.Invite)
@@ -71,7 +71,7 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 	}
 
 	return r.CreateBulkInvite(ctx, data)
@@ -81,7 +81,7 @@ func (r *mutationResolver) CreateBulkCSVInvite(ctx context.Context, input graphq
 func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input generated.UpdateInviteInput) (*model.InviteUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Invite.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "invite"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -96,7 +96,7 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "invite"})
 	}
 
 	return &model.InviteUpdatePayload{
@@ -107,11 +107,11 @@ func (r *mutationResolver) UpdateInvite(ctx context.Context, id string, input ge
 // DeleteInvite is the resolver for the deleteInvite field.
 func (r *mutationResolver) DeleteInvite(ctx context.Context, id string) (*model.InviteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Invite.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "invite"})
 	}
 
 	if err := generated.InviteEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.InviteDeletePayload{
@@ -132,12 +132,12 @@ func (r *mutationResolver) DeleteBulkInvite(ctx context.Context, ids []string) (
 func (r *queryResolver) Invite(ctx context.Context, id string) (*generated.Invite, error) {
 	query, err := withTransactionalMutation(ctx).Invite.Query().Where(invite.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "invite"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "invite"})
 	}
 
 	return res, nil

@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateProgram(ctx context.Context, input generated.Cr
 
 	res, err := withTransactionalMutation(ctx).Program.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	return &model.ProgramCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVProgram(ctx context.Context, input graph
 func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input generated.UpdateProgramInput) (*model.ProgramUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Program.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "program"})
 	}
 
 	return &model.ProgramUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateProgram(ctx context.Context, id string, input g
 // DeleteProgram is the resolver for the deleteProgram field.
 func (r *mutationResolver) DeleteProgram(ctx context.Context, id string) (*model.ProgramDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Program.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "program"})
 	}
 
 	if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProgramDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkProgram(ctx context.Context, ids []string) 
 func (r *queryResolver) Program(ctx context.Context, id string) (*generated.Program, error) {
 	query, err := withTransactionalMutation(ctx).Program.Query().Where(program.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	return res, nil

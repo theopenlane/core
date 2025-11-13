@@ -6,9 +6,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -22,7 +22,7 @@ func (r *mutationResolver) bulkCreateActionPlan(ctx context.Context, input []*ge
 
 	res, err := c.ActionPlan.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "actionplan"})
 	}
 
 	// return response
@@ -44,21 +44,21 @@ func (r *mutationResolver) bulkUpdateActionPlan(ctx context.Context, ids []strin
 	// update each actionplan individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for actionplan")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for actionplan")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.ActionPlan.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("actionplan_id", id).Msg("failed to get actionplan in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to get actionplan in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("actionplan_id", id).Msg("failed to update actionplan in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to update actionplan in bulk operation")
 			continue
 		}
 
@@ -88,7 +88,7 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 		funcs = append(funcs, func() {
 			// delete each actionplan individually to ensure proper cleanup
 			if err := r.db.ActionPlan.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to delete actionplan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -96,7 +96,7 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 			}
 
 			if err := generated.ActionPlanEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("actionplan_id", id).Msg("failed to cleanup actionplan edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("actionplan_id", id).Msg("failed to cleanup actionplan edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -112,7 +112,7 @@ func (r *mutationResolver) bulkDeleteActionPlan(ctx context.Context, ids []strin
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some actionplan deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some actionplan deletions failed")
 	}
 
 	return &model.ActionPlanBulkDeletePayload{
@@ -130,7 +130,7 @@ func (r *mutationResolver) bulkCreateAPIToken(ctx context.Context, input []*gene
 
 	res, err := c.APIToken.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "apitoken"})
 	}
 
 	// return response
@@ -155,7 +155,7 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 		funcs = append(funcs, func() {
 			// delete each apitoken individually to ensure proper cleanup
 			if err := r.db.APIToken.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", id).Msg("failed to delete apitoken in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -163,7 +163,7 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 			}
 
 			if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("apitoken_id", id).Msg("failed to cleanup apitoken edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("apitoken_id", id).Msg("failed to cleanup apitoken edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -179,7 +179,7 @@ func (r *mutationResolver) bulkDeleteAPIToken(ctx context.Context, ids []string)
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some apitoken deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some apitoken deletions failed")
 	}
 
 	return &model.APITokenBulkDeletePayload{
@@ -197,7 +197,7 @@ func (r *mutationResolver) bulkCreateAsset(ctx context.Context, input []*generat
 
 	res, err := c.Asset.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
 	}
 
 	// return response
@@ -222,7 +222,7 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 		funcs = append(funcs, func() {
 			// delete each asset individually to ensure proper cleanup
 			if err := r.db.Asset.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("asset_id", id).Msg("failed to delete asset in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -230,7 +230,7 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 			}
 
 			if err := generated.AssetEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("asset_id", id).Msg("failed to cleanup asset edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("asset_id", id).Msg("failed to cleanup asset edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -246,7 +246,7 @@ func (r *mutationResolver) bulkDeleteAsset(ctx context.Context, ids []string) (*
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some asset deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some asset deletions failed")
 	}
 
 	return &model.AssetBulkDeletePayload{
@@ -264,7 +264,7 @@ func (r *mutationResolver) bulkCreateContact(ctx context.Context, input []*gener
 
 	res, err := c.Contact.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "contact"})
 	}
 
 	// return response
@@ -286,21 +286,21 @@ func (r *mutationResolver) bulkUpdateContact(ctx context.Context, ids []string, 
 	// update each contact individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for contact")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for contact")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Contact.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("contact_id", id).Msg("failed to get contact in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to get contact in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("contact_id", id).Msg("failed to update contact in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to update contact in bulk operation")
 			continue
 		}
 
@@ -330,7 +330,7 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 		funcs = append(funcs, func() {
 			// delete each contact individually to ensure proper cleanup
 			if err := r.db.Contact.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to delete contact in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -338,7 +338,7 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 			}
 
 			if err := generated.ContactEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("contact_id", id).Msg("failed to cleanup contact edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("contact_id", id).Msg("failed to cleanup contact edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -354,7 +354,7 @@ func (r *mutationResolver) bulkDeleteContact(ctx context.Context, ids []string) 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some contact deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some contact deletions failed")
 	}
 
 	return &model.ContactBulkDeletePayload{
@@ -372,7 +372,7 @@ func (r *mutationResolver) bulkCreateControl(ctx context.Context, input []*gener
 
 	res, err := c.Control.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 	}
 
 	// return response
@@ -394,21 +394,21 @@ func (r *mutationResolver) bulkUpdateControl(ctx context.Context, ids []string, 
 	// update each control individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for control")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for control")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Control.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("control_id", id).Msg("failed to get control in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to get control in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("control_id", id).Msg("failed to update control in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to update control in bulk operation")
 			continue
 		}
 
@@ -438,7 +438,7 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 		funcs = append(funcs, func() {
 			// delete each control individually to ensure proper cleanup
 			if err := r.db.Control.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to delete control in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -446,7 +446,7 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 			}
 
 			if err := generated.ControlEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("control_id", id).Msg("failed to cleanup control edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("control_id", id).Msg("failed to cleanup control edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -462,7 +462,7 @@ func (r *mutationResolver) bulkDeleteControl(ctx context.Context, ids []string) 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some control deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some control deletions failed")
 	}
 
 	return &model.ControlBulkDeletePayload{
@@ -480,7 +480,7 @@ func (r *mutationResolver) bulkCreateControlImplementation(ctx context.Context, 
 
 	res, err := c.ControlImplementation.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlimplementation"})
 	}
 
 	// return response
@@ -505,7 +505,7 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 		funcs = append(funcs, func() {
 			// delete each controlimplementation individually to ensure proper cleanup
 			if err := r.db.ControlImplementation.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to delete controlimplementation in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -513,7 +513,7 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 			}
 
 			if err := generated.ControlImplementationEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("controlimplementation_id", id).Msg("failed to cleanup controlimplementation edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("controlimplementation_id", id).Msg("failed to cleanup controlimplementation edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -529,7 +529,7 @@ func (r *mutationResolver) bulkDeleteControlImplementation(ctx context.Context, 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlimplementation deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlimplementation deletions failed")
 	}
 
 	return &model.ControlImplementationBulkDeletePayload{
@@ -547,7 +547,7 @@ func (r *mutationResolver) bulkCreateControlObjective(ctx context.Context, input
 
 	res, err := c.ControlObjective.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "controlobjective"})
 	}
 
 	// return response
@@ -572,7 +572,7 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 		funcs = append(funcs, func() {
 			// delete each controlobjective individually to ensure proper cleanup
 			if err := r.db.ControlObjective.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to delete controlobjective in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -580,7 +580,7 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 			}
 
 			if err := generated.ControlObjectiveEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("controlobjective_id", id).Msg("failed to cleanup controlobjective edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("controlobjective_id", id).Msg("failed to cleanup controlobjective edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -596,7 +596,7 @@ func (r *mutationResolver) bulkDeleteControlObjective(ctx context.Context, ids [
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlobjective deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some controlobjective deletions failed")
 	}
 
 	return &model.ControlObjectiveBulkDeletePayload{
@@ -614,7 +614,7 @@ func (r *mutationResolver) bulkCreateCustomDomain(ctx context.Context, input []*
 
 	res, err := c.CustomDomain.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
 	}
 
 	// return response
@@ -639,7 +639,7 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 		funcs = append(funcs, func() {
 			// delete each customdomain individually to ensure proper cleanup
 			if err := r.db.CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", id).Msg("failed to delete customdomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -647,7 +647,7 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 			}
 
 			if err := generated.CustomDomainEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("customdomain_id", id).Msg("failed to cleanup customdomain edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("customdomain_id", id).Msg("failed to cleanup customdomain edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -663,7 +663,7 @@ func (r *mutationResolver) bulkDeleteCustomDomain(ctx context.Context, ids []str
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some customdomain deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some customdomain deletions failed")
 	}
 
 	return &model.CustomDomainBulkDeletePayload{
@@ -681,7 +681,7 @@ func (r *mutationResolver) bulkCreateCustomTypeEnum(ctx context.Context, input [
 
 	res, err := c.CustomTypeEnum.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customtypeenum"})
 	}
 
 	// return response
@@ -700,7 +700,7 @@ func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input 
 
 	res, err := c.DNSVerification.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
 	}
 
 	// return response
@@ -725,7 +725,7 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 		funcs = append(funcs, func() {
 			// delete each dnsverification individually to ensure proper cleanup
 			if err := r.db.DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to delete dnsverification in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -733,7 +733,7 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 			}
 
 			if err := generated.DNSVerificationEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("dnsverification_id", id).Msg("failed to cleanup dnsverification edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("dnsverification_id", id).Msg("failed to cleanup dnsverification edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -749,7 +749,7 @@ func (r *mutationResolver) bulkDeleteDNSVerification(ctx context.Context, ids []
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some dnsverification deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some dnsverification deletions failed")
 	}
 
 	return &model.DNSVerificationBulkDeletePayload{
@@ -767,7 +767,7 @@ func (r *mutationResolver) bulkCreateDocumentData(ctx context.Context, input []*
 
 	res, err := c.DocumentData.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
 	}
 
 	// return response
@@ -792,7 +792,7 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 		funcs = append(funcs, func() {
 			// delete each documentdata individually to ensure proper cleanup
 			if err := r.db.DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", id).Msg("failed to delete documentdata in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -800,7 +800,7 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 			}
 
 			if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("documentdata_id", id).Msg("failed to cleanup documentdata edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("documentdata_id", id).Msg("failed to cleanup documentdata edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -816,7 +816,7 @@ func (r *mutationResolver) bulkDeleteDocumentData(ctx context.Context, ids []str
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some documentdata deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some documentdata deletions failed")
 	}
 
 	return &model.DocumentDataBulkDeletePayload{
@@ -834,7 +834,7 @@ func (r *mutationResolver) bulkCreateEntity(ctx context.Context, input []*genera
 
 	res, err := c.Entity.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
 	}
 
 	// return response
@@ -859,7 +859,7 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 		funcs = append(funcs, func() {
 			// delete each entity individually to ensure proper cleanup
 			if err := r.db.Entity.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to delete entity in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -867,7 +867,7 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 			}
 
 			if err := generated.EntityEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("entity_id", id).Msg("failed to cleanup entity edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("entity_id", id).Msg("failed to cleanup entity edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -883,7 +883,7 @@ func (r *mutationResolver) bulkDeleteEntity(ctx context.Context, ids []string) (
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entity deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entity deletions failed")
 	}
 
 	return &model.EntityBulkDeletePayload{
@@ -901,7 +901,7 @@ func (r *mutationResolver) bulkCreateEntityType(ctx context.Context, input []*ge
 
 	res, err := c.EntityType.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entitytype"})
 	}
 
 	// return response
@@ -926,7 +926,7 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 		funcs = append(funcs, func() {
 			// delete each entitytype individually to ensure proper cleanup
 			if err := r.db.EntityType.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", id).Msg("failed to delete entitytype in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -934,7 +934,7 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 			}
 
 			if err := generated.EntityTypeEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("entitytype_id", id).Msg("failed to cleanup entitytype edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("entitytype_id", id).Msg("failed to cleanup entitytype edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -950,7 +950,7 @@ func (r *mutationResolver) bulkDeleteEntityType(ctx context.Context, ids []strin
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entitytype deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some entitytype deletions failed")
 	}
 
 	return &model.EntityTypeBulkDeletePayload{
@@ -968,7 +968,7 @@ func (r *mutationResolver) bulkCreateEvent(ctx context.Context, input []*generat
 
 	res, err := c.Event.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "event"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "event"})
 	}
 
 	// return response
@@ -993,7 +993,7 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 		funcs = append(funcs, func() {
 			// delete each event individually to ensure proper cleanup
 			if err := r.db.Event.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("event_id", id).Msg("failed to delete event in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1001,7 +1001,7 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 			}
 
 			if err := generated.EventEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("event_id", id).Msg("failed to cleanup event edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("event_id", id).Msg("failed to cleanup event edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1017,7 +1017,7 @@ func (r *mutationResolver) bulkDeleteEvent(ctx context.Context, ids []string) (*
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some event deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some event deletions failed")
 	}
 
 	return &model.EventBulkDeletePayload{
@@ -1041,7 +1041,7 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 		funcs = append(funcs, func() {
 			// delete each export individually to ensure proper cleanup
 			if err := r.db.Export.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("export_id", id).Msg("failed to delete export in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1049,7 +1049,7 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 			}
 
 			if err := generated.ExportEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("export_id", id).Msg("failed to cleanup export edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1065,7 +1065,7 @@ func (r *mutationResolver) bulkDeleteExport(ctx context.Context, ids []string) (
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some export deletions failed")
 	}
 
 	return &model.ExportBulkDeletePayload{
@@ -1083,7 +1083,7 @@ func (r *mutationResolver) bulkCreateFinding(ctx context.Context, input []*gener
 
 	res, err := c.Finding.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "finding"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "finding"})
 	}
 
 	// return response
@@ -1102,7 +1102,7 @@ func (r *mutationResolver) bulkCreateFindingControl(ctx context.Context, input [
 
 	res, err := c.FindingControl.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "findingcontrol"})
 	}
 
 	// return response
@@ -1121,7 +1121,7 @@ func (r *mutationResolver) bulkCreateGroup(ctx context.Context, input []*generat
 
 	res, err := c.Group.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	// return response
@@ -1146,7 +1146,7 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 		funcs = append(funcs, func() {
 			// delete each group individually to ensure proper cleanup
 			if err := r.db.Group.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to delete group in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1154,7 +1154,7 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 			}
 
 			if err := generated.GroupEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("group_id", id).Msg("failed to cleanup group edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("group_id", id).Msg("failed to cleanup group edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1170,7 +1170,7 @@ func (r *mutationResolver) bulkDeleteGroup(ctx context.Context, ids []string) (*
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some group deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some group deletions failed")
 	}
 
 	return &model.GroupBulkDeletePayload{
@@ -1188,7 +1188,7 @@ func (r *mutationResolver) bulkCreateGroupMembership(ctx context.Context, input 
 
 	res, err := c.GroupMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupmembership"})
 	}
 
 	// return response
@@ -1213,7 +1213,7 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 		funcs = append(funcs, func() {
 			// delete each groupmembership individually to ensure proper cleanup
 			if err := r.db.GroupMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to delete groupmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1221,7 +1221,7 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 			}
 
 			if err := generated.GroupMembershipEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("groupmembership_id", id).Msg("failed to cleanup groupmembership edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("groupmembership_id", id).Msg("failed to cleanup groupmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1237,7 +1237,7 @@ func (r *mutationResolver) bulkDeleteGroupMembership(ctx context.Context, ids []
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupmembership deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupmembership deletions failed")
 	}
 
 	return &model.GroupMembershipBulkDeletePayload{
@@ -1255,7 +1255,7 @@ func (r *mutationResolver) bulkCreateGroupSetting(ctx context.Context, input []*
 
 	res, err := c.GroupSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "groupsetting"})
 	}
 
 	// return response
@@ -1280,7 +1280,7 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 		funcs = append(funcs, func() {
 			// delete each groupsetting individually to ensure proper cleanup
 			if err := r.db.GroupSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to delete groupsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1288,7 +1288,7 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 			}
 
 			if err := generated.GroupSettingEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("groupsetting_id", id).Msg("failed to cleanup groupsetting edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("groupsetting_id", id).Msg("failed to cleanup groupsetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1304,7 +1304,7 @@ func (r *mutationResolver) bulkDeleteGroupSetting(ctx context.Context, ids []str
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupsetting deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some groupsetting deletions failed")
 	}
 
 	return &model.GroupSettingBulkDeletePayload{
@@ -1322,7 +1322,7 @@ func (r *mutationResolver) bulkCreateHush(ctx context.Context, input []*generate
 
 	res, err := c.Hush.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "hush"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "hush"})
 	}
 
 	// return response
@@ -1344,21 +1344,21 @@ func (r *mutationResolver) bulkUpdateHush(ctx context.Context, ids []string, inp
 	// update each hush individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for hush")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for hush")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Hush.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("hush_id", id).Msg("failed to get hush in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to get hush in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("hush_id", id).Msg("failed to update hush in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to update hush in bulk operation")
 			continue
 		}
 
@@ -1388,7 +1388,7 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 		funcs = append(funcs, func() {
 			// delete each hush individually to ensure proper cleanup
 			if err := r.db.Hush.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to delete hush in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1396,7 +1396,7 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 			}
 
 			if err := generated.HushEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("hush_id", id).Msg("failed to cleanup hush edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("hush_id", id).Msg("failed to cleanup hush edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1412,7 +1412,7 @@ func (r *mutationResolver) bulkDeleteHush(ctx context.Context, ids []string) (*m
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some hush deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some hush deletions failed")
 	}
 
 	return &model.HushBulkDeletePayload{
@@ -1430,7 +1430,7 @@ func (r *mutationResolver) bulkCreateInternalPolicy(ctx context.Context, input [
 
 	res, err := c.InternalPolicy.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "internalpolicy"})
 	}
 
 	// return response
@@ -1452,21 +1452,21 @@ func (r *mutationResolver) bulkUpdateInternalPolicy(ctx context.Context, ids []s
 	// update each internalpolicy individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for internalpolicy")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for internalpolicy")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.InternalPolicy.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to get internalpolicy in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to get internalpolicy in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to update internalpolicy in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to update internalpolicy in bulk operation")
 			continue
 		}
 
@@ -1496,7 +1496,7 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 		funcs = append(funcs, func() {
 			// delete each internalpolicy individually to ensure proper cleanup
 			if err := r.db.InternalPolicy.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to delete internalpolicy in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1504,7 +1504,7 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 			}
 
 			if err := generated.InternalPolicyEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("internalpolicy_id", id).Msg("failed to cleanup internalpolicy edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("internalpolicy_id", id).Msg("failed to cleanup internalpolicy edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1520,7 +1520,7 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some internalpolicy deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some internalpolicy deletions failed")
 	}
 
 	return &model.InternalPolicyBulkDeletePayload{
@@ -1538,7 +1538,7 @@ func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*genera
 
 	res, err := c.Invite.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
 	}
 
 	// return response
@@ -1563,7 +1563,7 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 		funcs = append(funcs, func() {
 			// delete each invite individually to ensure proper cleanup
 			if err := r.db.Invite.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("invite_id", id).Msg("failed to delete invite in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1571,7 +1571,7 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 			}
 
 			if err := generated.InviteEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("invite_id", id).Msg("failed to cleanup invite edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("invite_id", id).Msg("failed to cleanup invite edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1587,7 +1587,7 @@ func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some invite deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some invite deletions failed")
 	}
 
 	return &model.InviteBulkDeletePayload{
@@ -1605,7 +1605,7 @@ func (r *mutationResolver) bulkCreateJobTemplate(ctx context.Context, input []*g
 
 	res, err := c.JobTemplate.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobtemplate"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobtemplate"})
 	}
 
 	// return response
@@ -1630,7 +1630,7 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 		funcs = append(funcs, func() {
 			// delete each jobtemplate individually to ensure proper cleanup
 			if err := r.db.JobTemplate.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to delete jobtemplate in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1638,7 +1638,7 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 			}
 
 			if err := generated.JobTemplateEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("jobtemplate_id", id).Msg("failed to cleanup jobtemplate edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("jobtemplate_id", id).Msg("failed to cleanup jobtemplate edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1654,7 +1654,7 @@ func (r *mutationResolver) bulkDeleteJobTemplate(ctx context.Context, ids []stri
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some jobtemplate deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some jobtemplate deletions failed")
 	}
 
 	return &model.JobTemplateBulkDeletePayload{
@@ -1672,7 +1672,7 @@ func (r *mutationResolver) bulkCreateMappableDomain(ctx context.Context, input [
 
 	res, err := c.MappableDomain.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappabledomain"})
 	}
 
 	// return response
@@ -1697,7 +1697,7 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 		funcs = append(funcs, func() {
 			// delete each mappabledomain individually to ensure proper cleanup
 			if err := r.db.MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to delete mappabledomain in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1705,7 +1705,7 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 			}
 
 			if err := generated.MappableDomainEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("mappabledomain_id", id).Msg("failed to cleanup mappabledomain edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("mappabledomain_id", id).Msg("failed to cleanup mappabledomain edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1721,7 +1721,7 @@ func (r *mutationResolver) bulkDeleteMappableDomain(ctx context.Context, ids []s
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappabledomain deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappabledomain deletions failed")
 	}
 
 	return &model.MappableDomainBulkDeletePayload{
@@ -1739,7 +1739,7 @@ func (r *mutationResolver) bulkCreateMappedControl(ctx context.Context, input []
 
 	res, err := c.MappedControl.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	// return response
@@ -1764,7 +1764,7 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 		funcs = append(funcs, func() {
 			// delete each mappedcontrol individually to ensure proper cleanup
 			if err := r.db.MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to delete mappedcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1772,7 +1772,7 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 			}
 
 			if err := generated.MappedControlEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to cleanup mappedcontrol edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("mappedcontrol_id", id).Msg("failed to cleanup mappedcontrol edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1788,7 +1788,7 @@ func (r *mutationResolver) bulkDeleteMappedControl(ctx context.Context, ids []st
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappedcontrol deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some mappedcontrol deletions failed")
 	}
 
 	return &model.MappedControlBulkDeletePayload{
@@ -1806,7 +1806,7 @@ func (r *mutationResolver) bulkCreateNarrative(ctx context.Context, input []*gen
 
 	res, err := c.Narrative.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "narrative"})
 	}
 
 	// return response
@@ -1831,7 +1831,7 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 		funcs = append(funcs, func() {
 			// delete each narrative individually to ensure proper cleanup
 			if err := r.db.Narrative.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("narrative_id", id).Msg("failed to delete narrative in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1839,7 +1839,7 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 			}
 
 			if err := generated.NarrativeEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("narrative_id", id).Msg("failed to cleanup narrative edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("narrative_id", id).Msg("failed to cleanup narrative edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1855,7 +1855,7 @@ func (r *mutationResolver) bulkDeleteNarrative(ctx context.Context, ids []string
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some narrative deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some narrative deletions failed")
 	}
 
 	return &model.NarrativeBulkDeletePayload{
@@ -1873,7 +1873,7 @@ func (r *mutationResolver) bulkCreateOrganizationSetting(ctx context.Context, in
 
 	res, err := c.OrganizationSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organizationsetting"})
 	}
 
 	// return response
@@ -1898,7 +1898,7 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 		funcs = append(funcs, func() {
 			// delete each organizationsetting individually to ensure proper cleanup
 			if err := r.db.OrganizationSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to delete organizationsetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1906,7 +1906,7 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 			}
 
 			if err := generated.OrganizationSettingEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("organizationsetting_id", id).Msg("failed to cleanup organizationsetting edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("organizationsetting_id", id).Msg("failed to cleanup organizationsetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1922,7 +1922,7 @@ func (r *mutationResolver) bulkDeleteOrganizationSetting(ctx context.Context, id
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationsetting deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some organizationsetting deletions failed")
 	}
 
 	return &model.OrganizationSettingBulkDeletePayload{
@@ -1940,7 +1940,7 @@ func (r *mutationResolver) bulkCreateOrgMembership(ctx context.Context, input []
 
 	res, err := c.OrgMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "orgmembership"})
 	}
 
 	// return response
@@ -1965,7 +1965,7 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 		funcs = append(funcs, func() {
 			// delete each orgmembership individually to ensure proper cleanup
 			if err := r.db.OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to delete orgmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1973,7 +1973,7 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 			}
 
 			if err := generated.OrgMembershipEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("orgmembership_id", id).Msg("failed to cleanup orgmembership edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("orgmembership_id", id).Msg("failed to cleanup orgmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -1989,7 +1989,7 @@ func (r *mutationResolver) bulkDeleteOrgMembership(ctx context.Context, ids []st
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some orgmembership deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some orgmembership deletions failed")
 	}
 
 	return &model.OrgMembershipBulkDeletePayload{
@@ -2007,7 +2007,7 @@ func (r *mutationResolver) bulkCreateProcedure(ctx context.Context, input []*gen
 
 	res, err := c.Procedure.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
 	}
 
 	// return response
@@ -2029,21 +2029,21 @@ func (r *mutationResolver) bulkUpdateProcedure(ctx context.Context, ids []string
 	// update each procedure individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for procedure")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for procedure")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Procedure.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("procedure_id", id).Msg("failed to get procedure in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to get procedure in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("procedure_id", id).Msg("failed to update procedure in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to update procedure in bulk operation")
 			continue
 		}
 
@@ -2073,7 +2073,7 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 		funcs = append(funcs, func() {
 			// delete each procedure individually to ensure proper cleanup
 			if err := r.db.Procedure.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to delete procedure in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2081,7 +2081,7 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 			}
 
 			if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("procedure_id", id).Msg("failed to cleanup procedure edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2097,7 +2097,7 @@ func (r *mutationResolver) bulkDeleteProcedure(ctx context.Context, ids []string
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some procedure deletions failed")
 	}
 
 	return &model.ProcedureBulkDeletePayload{
@@ -2115,7 +2115,7 @@ func (r *mutationResolver) bulkCreateProgram(ctx context.Context, input []*gener
 
 	res, err := c.Program.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "program"})
 	}
 
 	// return response
@@ -2140,7 +2140,7 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 		funcs = append(funcs, func() {
 			// delete each program individually to ensure proper cleanup
 			if err := r.db.Program.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("program_id", id).Msg("failed to delete program in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2148,7 +2148,7 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 			}
 
 			if err := generated.ProgramEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("program_id", id).Msg("failed to cleanup program edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("program_id", id).Msg("failed to cleanup program edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2164,7 +2164,7 @@ func (r *mutationResolver) bulkDeleteProgram(ctx context.Context, ids []string) 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some program deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some program deletions failed")
 	}
 
 	return &model.ProgramBulkDeletePayload{
@@ -2182,7 +2182,7 @@ func (r *mutationResolver) bulkCreateProgramMembership(ctx context.Context, inpu
 
 	res, err := c.ProgramMembership.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "programmembership"})
 	}
 
 	// return response
@@ -2207,7 +2207,7 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 		funcs = append(funcs, func() {
 			// delete each programmembership individually to ensure proper cleanup
 			if err := r.db.ProgramMembership.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("programmembership_id", id).Msg("failed to delete programmembership in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2215,7 +2215,7 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 			}
 
 			if err := generated.ProgramMembershipEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("programmembership_id", id).Msg("failed to cleanup programmembership edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("programmembership_id", id).Msg("failed to cleanup programmembership edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2231,7 +2231,7 @@ func (r *mutationResolver) bulkDeleteProgramMembership(ctx context.Context, ids 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some programmembership deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some programmembership deletions failed")
 	}
 
 	return &model.ProgramMembershipBulkDeletePayload{
@@ -2249,7 +2249,7 @@ func (r *mutationResolver) bulkCreateRemediation(ctx context.Context, input []*g
 
 	res, err := c.Remediation.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "remediation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "remediation"})
 	}
 
 	// return response
@@ -2268,7 +2268,7 @@ func (r *mutationResolver) bulkCreateReview(ctx context.Context, input []*genera
 
 	res, err := c.Review.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "review"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "review"})
 	}
 
 	// return response
@@ -2287,7 +2287,7 @@ func (r *mutationResolver) bulkCreateRisk(ctx context.Context, input []*generate
 
 	res, err := c.Risk.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
 	}
 
 	// return response
@@ -2309,21 +2309,21 @@ func (r *mutationResolver) bulkUpdateRisk(ctx context.Context, ids []string, inp
 	// update each risk individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for risk")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for risk")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Risk.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("risk_id", id).Msg("failed to get risk in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to get risk in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("risk_id", id).Msg("failed to update risk in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to update risk in bulk operation")
 			continue
 		}
 
@@ -2353,7 +2353,7 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 		funcs = append(funcs, func() {
 			// delete each risk individually to ensure proper cleanup
 			if err := r.db.Risk.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to delete risk in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2361,7 +2361,7 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 			}
 
 			if err := generated.RiskEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("risk_id", id).Msg("failed to cleanup risk edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("risk_id", id).Msg("failed to cleanup risk edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2377,7 +2377,7 @@ func (r *mutationResolver) bulkDeleteRisk(ctx context.Context, ids []string) (*m
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some risk deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some risk deletions failed")
 	}
 
 	return &model.RiskBulkDeletePayload{
@@ -2395,7 +2395,7 @@ func (r *mutationResolver) bulkCreateScan(ctx context.Context, input []*generate
 
 	res, err := c.Scan.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "scan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scan"})
 	}
 
 	// return response
@@ -2417,21 +2417,21 @@ func (r *mutationResolver) bulkUpdateScan(ctx context.Context, ids []string, inp
 	// update each scan individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for scan")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for scan")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Scan.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("scan_id", id).Msg("failed to get scan in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to get scan in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("scan_id", id).Msg("failed to update scan in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to update scan in bulk operation")
 			continue
 		}
 
@@ -2461,7 +2461,7 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 		funcs = append(funcs, func() {
 			// delete each scan individually to ensure proper cleanup
 			if err := r.db.Scan.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to delete scan in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2469,7 +2469,7 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 			}
 
 			if err := generated.ScanEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("scan_id", id).Msg("failed to cleanup scan edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("scan_id", id).Msg("failed to cleanup scan edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2485,7 +2485,7 @@ func (r *mutationResolver) bulkDeleteScan(ctx context.Context, ids []string) (*m
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scan deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scan deletions failed")
 	}
 
 	return &model.ScanBulkDeletePayload{
@@ -2503,7 +2503,7 @@ func (r *mutationResolver) bulkCreateScheduledJob(ctx context.Context, input []*
 
 	res, err := c.ScheduledJob.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
 	}
 
 	// return response
@@ -2528,7 +2528,7 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 		funcs = append(funcs, func() {
 			// delete each scheduledjob individually to ensure proper cleanup
 			if err := r.db.ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to delete scheduledjob in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2536,7 +2536,7 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 			}
 
 			if err := generated.ScheduledJobEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("scheduledjob_id", id).Msg("failed to cleanup scheduledjob edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("scheduledjob_id", id).Msg("failed to cleanup scheduledjob edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2552,7 +2552,7 @@ func (r *mutationResolver) bulkDeleteScheduledJob(ctx context.Context, ids []str
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scheduledjob deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some scheduledjob deletions failed")
 	}
 
 	return &model.ScheduledJobBulkDeletePayload{
@@ -2570,7 +2570,7 @@ func (r *mutationResolver) bulkCreateSubcontrol(ctx context.Context, input []*ge
 
 	res, err := c.Subcontrol.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subcontrol"})
 	}
 
 	// return response
@@ -2595,7 +2595,7 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 		funcs = append(funcs, func() {
 			// delete each subcontrol individually to ensure proper cleanup
 			if err := r.db.Subcontrol.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to delete subcontrol in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2603,7 +2603,7 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 			}
 
 			if err := generated.SubcontrolEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("subcontrol_id", id).Msg("failed to cleanup subcontrol edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("subcontrol_id", id).Msg("failed to cleanup subcontrol edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2619,7 +2619,7 @@ func (r *mutationResolver) bulkDeleteSubcontrol(ctx context.Context, ids []strin
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subcontrol deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subcontrol deletions failed")
 	}
 
 	return &model.SubcontrolBulkDeletePayload{
@@ -2637,7 +2637,7 @@ func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*
 
 	res, err := c.Subprocessor.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subprocessor"})
 	}
 
 	// return response
@@ -2662,7 +2662,7 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 		funcs = append(funcs, func() {
 			// delete each subprocessor individually to ensure proper cleanup
 			if err := r.db.Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to delete subprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2670,7 +2670,7 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 			}
 
 			if err := generated.SubprocessorEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("subprocessor_id", id).Msg("failed to cleanup subprocessor edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to cleanup subprocessor edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2686,7 +2686,7 @@ func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []str
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subprocessor deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some subprocessor deletions failed")
 	}
 
 	return &model.SubprocessorBulkDeletePayload{
@@ -2704,7 +2704,7 @@ func (r *mutationResolver) bulkCreateSubscriber(ctx context.Context, input []*ge
 
 	res, err := c.Subscriber.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
 	}
 
 	// return response
@@ -2723,7 +2723,7 @@ func (r *mutationResolver) bulkCreateTagDefinition(ctx context.Context, input []
 
 	res, err := c.TagDefinition.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "tagdefinition"})
 	}
 
 	// return response
@@ -2742,7 +2742,7 @@ func (r *mutationResolver) bulkCreateTask(ctx context.Context, input []*generate
 
 	res, err := c.Task.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "task"})
 	}
 
 	// return response
@@ -2764,21 +2764,21 @@ func (r *mutationResolver) bulkUpdateTask(ctx context.Context, ids []string, inp
 	// update each task individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for task")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for task")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.Task.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("task_id", id).Msg("failed to get task in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to get task in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("task_id", id).Msg("failed to update task in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to update task in bulk operation")
 			continue
 		}
 
@@ -2808,7 +2808,7 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 		funcs = append(funcs, func() {
 			// delete each task individually to ensure proper cleanup
 			if err := r.db.Task.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to delete task in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2816,7 +2816,7 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 			}
 
 			if err := generated.TaskEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("task_id", id).Msg("failed to cleanup task edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("task_id", id).Msg("failed to cleanup task edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2832,7 +2832,7 @@ func (r *mutationResolver) bulkDeleteTask(ctx context.Context, ids []string) (*m
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some task deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some task deletions failed")
 	}
 
 	return &model.TaskBulkDeletePayload{
@@ -2850,7 +2850,7 @@ func (r *mutationResolver) bulkCreateTemplate(ctx context.Context, input []*gene
 
 	res, err := c.Template.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
 	}
 
 	// return response
@@ -2875,7 +2875,7 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 		funcs = append(funcs, func() {
 			// delete each template individually to ensure proper cleanup
 			if err := r.db.Template.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("template_id", id).Msg("failed to delete template in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2883,7 +2883,7 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 			}
 
 			if err := generated.TemplateEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("template_id", id).Msg("failed to cleanup template edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("template_id", id).Msg("failed to cleanup template edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2899,7 +2899,7 @@ func (r *mutationResolver) bulkDeleteTemplate(ctx context.Context, ids []string)
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some template deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some template deletions failed")
 	}
 
 	return &model.TemplateBulkDeletePayload{
@@ -2917,7 +2917,7 @@ func (r *mutationResolver) bulkCreateTrustCenterCompliance(ctx context.Context, 
 
 	res, err := c.TrustCenterCompliance.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
 	}
 
 	// return response
@@ -2942,7 +2942,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 		funcs = append(funcs, func() {
 			// delete each trustcentercompliance individually to ensure proper cleanup
 			if err := r.db.TrustCenterCompliance.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to delete trustcentercompliance in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2950,7 +2950,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 			}
 
 			if err := generated.TrustCenterComplianceEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to cleanup trustcentercompliance edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcentercompliance_id", id).Msg("failed to cleanup trustcentercompliance edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -2966,7 +2966,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterCompliance(ctx context.Context, 
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentercompliance deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentercompliance deletions failed")
 	}
 
 	return &model.TrustCenterComplianceBulkDeletePayload{
@@ -2984,7 +2984,7 @@ func (r *mutationResolver) bulkCreateTrustCenterDoc(ctx context.Context, input [
 
 	res, err := c.TrustCenterDoc.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdoc"})
 	}
 
 	// return response
@@ -3006,21 +3006,21 @@ func (r *mutationResolver) bulkUpdateTrustCenterDoc(ctx context.Context, ids []s
 	// update each trustcenterdoc individually to ensure proper validation
 	for _, id := range ids {
 		if id == "" {
-			log.Error().Msg("empty id in bulk update for trustcenterdoc")
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for trustcenterdoc")
 			continue
 		}
 
 		// get the existing entity first
 		existing, err := c.TrustCenterDoc.Get(ctx, id)
 		if err != nil {
-			log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to get trustcenterdoc in bulk update operation")
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to get trustcenterdoc in bulk update operation")
 			continue
 		}
 
 		// setup update request
 		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
 		if err != nil {
-			log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to update trustcenterdoc in bulk operation")
+			logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to update trustcenterdoc in bulk operation")
 			continue
 		}
 
@@ -3050,7 +3050,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 		funcs = append(funcs, func() {
 			// delete each trustcenterdoc individually to ensure proper cleanup
 			if err := r.db.TrustCenterDoc.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to delete trustcenterdoc in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3058,7 +3058,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 			}
 
 			if err := generated.TrustCenterDocEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to cleanup trustcenterdoc edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcenterdoc_id", id).Msg("failed to cleanup trustcenterdoc edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3074,7 +3074,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterDoc(ctx context.Context, ids []s
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterdoc deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcenterdoc deletions failed")
 	}
 
 	return &model.TrustCenterDocBulkDeletePayload{
@@ -3092,7 +3092,7 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 
 	res, err := c.TrustCenterSubprocessor.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersubprocessor"})
 	}
 
 	// return response
@@ -3117,7 +3117,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 		funcs = append(funcs, func() {
 			// delete each trustcentersubprocessor individually to ensure proper cleanup
 			if err := r.db.TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to delete trustcentersubprocessor in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3125,7 +3125,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 			}
 
 			if err := generated.TrustCenterSubprocessorEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to cleanup trustcentersubprocessor edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to cleanup trustcentersubprocessor edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3141,7 +3141,7 @@ func (r *mutationResolver) bulkDeleteTrustCenterSubprocessor(ctx context.Context
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentersubprocessor deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some trustcentersubprocessor deletions failed")
 	}
 
 	return &model.TrustCenterSubprocessorBulkDeletePayload{
@@ -3159,7 +3159,7 @@ func (r *mutationResolver) bulkCreateUserSetting(ctx context.Context, input []*g
 
 	res, err := c.UserSetting.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "usersetting"})
 	}
 
 	// return response
@@ -3184,7 +3184,7 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 		funcs = append(funcs, func() {
 			// delete each usersetting individually to ensure proper cleanup
 			if err := r.db.UserSetting.DeleteOneID(id).Exec(ctx); err != nil {
-				log.Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", id).Msg("failed to delete usersetting in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3192,7 +3192,7 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 			}
 
 			if err := generated.UserSettingEdgeCleanup(ctx, id); err != nil {
-				log.Error().Err(err).Str("usersetting_id", id).Msg("failed to cleanup usersetting edges in bulk operation")
+				logx.FromContext(ctx).Error().Err(err).Str("usersetting_id", id).Msg("failed to cleanup usersetting edges in bulk operation")
 				mu.Lock()
 				errors = append(errors, err)
 				mu.Unlock()
@@ -3208,7 +3208,7 @@ func (r *mutationResolver) bulkDeleteUserSetting(ctx context.Context, ids []stri
 	r.withPool().SubmitMultipleAndWait(funcs)
 
 	if len(errors) > 0 {
-		log.Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some usersetting deletions failed")
+		logx.FromContext(ctx).Error().Int("deleted_items", len(deletedIDs)).Int("errors", len(errors)).Msg("some usersetting deletions failed")
 	}
 
 	return &model.UserSettingBulkDeletePayload{
@@ -3226,7 +3226,7 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 
 	res, err := c.Vulnerability.CreateBulk(builders...).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "vulnerability"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "vulnerability"})
 	}
 
 	// return response

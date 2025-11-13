@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateProcedure(ctx context.Context, input generated.
 
 	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
 	}
 
 	return &model.ProcedureCreatePayload{
@@ -50,7 +50,7 @@ func (r *mutationResolver) CreateUploadProcedure(ctx context.Context, procedureF
 
 	res, err := withTransactionalMutation(ctx).Procedure.Create().SetInput(procedureInput).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
 	}
 
 	return &model.ProcedureCreatePayload{
@@ -81,7 +81,7 @@ func (r *mutationResolver) CreateBulkCSVProcedure(ctx context.Context, input gra
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "procedure"})
 	}
 
 	if len(data) == 0 {
@@ -112,7 +112,7 @@ func (r *mutationResolver) UpdateBulkProcedure(ctx context.Context, ids []string
 func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Procedure.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -127,7 +127,7 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
 	}
 
 	return &model.ProcedureUpdatePayload{
@@ -138,11 +138,11 @@ func (r *mutationResolver) UpdateProcedure(ctx context.Context, id string, input
 // DeleteProcedure is the resolver for the deleteProcedure field.
 func (r *mutationResolver) DeleteProcedure(ctx context.Context, id string) (*model.ProcedureDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Procedure.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "procedure"})
 	}
 
 	if err := generated.ProcedureEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ProcedureDeletePayload{
@@ -163,12 +163,12 @@ func (r *mutationResolver) DeleteBulkProcedure(ctx context.Context, ids []string
 func (r *queryResolver) Procedure(ctx context.Context, id string) (*generated.Procedure, error) {
 	query, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
 	}
 
 	return res, nil

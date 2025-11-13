@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateGroup(ctx context.Context, input generated.Crea
 
 	res, err := withTransactionalMutation(ctx).Group.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVGroup(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input generated.UpdateGroupInput) (*model.GroupUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Group.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input gen
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 	}
 
 	return &model.GroupUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateGroup(ctx context.Context, id string, input gen
 // DeleteGroup is the resolver for the deleteGroup field.
 func (r *mutationResolver) DeleteGroup(ctx context.Context, id string) (*model.GroupDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Group.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "group"})
 	}
 
 	if err := generated.GroupEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.GroupDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkGroup(ctx context.Context, ids []string) (*
 func (r *queryResolver) Group(ctx context.Context, id string) (*generated.Group, error) {
 	query, err := withTransactionalMutation(ctx).Group.Query().Where(group.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
 	}
 
 	return res, nil

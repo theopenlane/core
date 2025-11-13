@@ -27,7 +27,7 @@ func (r *mutationResolver) CreateMappedControl(ctx context.Context, input genera
 
 	res, err := withTransactionalMutation(ctx).MappedControl.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	return &model.MappedControlCreatePayload{
@@ -58,7 +58,7 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	if len(data) == 0 {
@@ -78,28 +78,28 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 	for _, obj := range data {
 		ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, obj.FromControlRefCodes)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 		}
 
 		obj.FromControlIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.FromSubcontrolRefCodes)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 		}
 
 		obj.FromSubcontrolIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Control](ctx, obj.ToControlRefCodes)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 		}
 
 		obj.ToControlIDs = ids
 
 		ids, err = getControlIDsFromRefCodes[predicate.Subcontrol](ctx, obj.ToSubcontrolRefCodes)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 		}
 
 		obj.ToSubcontrolIDs = ids
@@ -115,7 +115,7 @@ func (r *mutationResolver) CreateBulkCSVMappedControl(ctx context.Context, input
 func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, input generated.UpdateMappedControlInput) (*model.MappedControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).MappedControl.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappedcontrol"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -130,7 +130,7 @@ func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappedcontrol"})
 	}
 
 	return &model.MappedControlUpdatePayload{
@@ -141,11 +141,11 @@ func (r *mutationResolver) UpdateMappedControl(ctx context.Context, id string, i
 // DeleteMappedControl is the resolver for the deleteMappedControl field.
 func (r *mutationResolver) DeleteMappedControl(ctx context.Context, id string) (*model.MappedControlDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).MappedControl.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "mappedcontrol"})
 	}
 
 	if err := generated.MappedControlEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.MappedControlDeletePayload{
@@ -166,12 +166,12 @@ func (r *mutationResolver) DeleteBulkMappedControl(ctx context.Context, ids []st
 func (r *queryResolver) MappedControl(ctx context.Context, id string) (*generated.MappedControl, error) {
 	query, err := withTransactionalMutation(ctx).MappedControl.Query().Where(mappedcontrol.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
 	}
 
 	return res, nil

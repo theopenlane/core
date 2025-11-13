@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateScheduledJob(ctx context.Context, input generat
 
 	res, err := withTransactionalMutation(ctx).ScheduledJob.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
 	}
 
 	return &model.ScheduledJobCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVScheduledJob(ctx context.Context, input 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjob"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVScheduledJob(ctx context.Context, input 
 func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, input generated.UpdateScheduledJobInput) (*model.ScheduledJobUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ScheduledJob.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjob"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjob"})
 	}
 
 	return &model.ScheduledJobUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateScheduledJob(ctx context.Context, id string, in
 // DeleteScheduledJob is the resolver for the deleteScheduledJob field.
 func (r *mutationResolver) DeleteScheduledJob(ctx context.Context, id string) (*model.ScheduledJobDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ScheduledJob.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "scheduledjob"})
 	}
 
 	if err := generated.ScheduledJobEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ScheduledJobDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkScheduledJob(ctx context.Context, ids []str
 func (r *queryResolver) ScheduledJob(ctx context.Context, id string) (*generated.ScheduledJob, error) {
 	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().Where(scheduledjob.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
 	}
 
 	return res, nil

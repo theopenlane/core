@@ -36,7 +36,7 @@ func (r *mutationResolver) CreateOrganization(ctx context.Context, input generat
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to create organization")
 
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "organization"})
 	}
 
 	return &model.OrganizationCreatePayload{
@@ -50,7 +50,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to get organization")
 
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	// setup update request
@@ -60,7 +60,7 @@ func (r *mutationResolver) UpdateOrganization(ctx context.Context, id string, in
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to update organization")
 
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "organization"})
 	}
 
 	return &model.OrganizationUpdatePayload{
@@ -79,13 +79,13 @@ func (r *mutationResolver) DeleteOrganization(ctx context.Context, id string) (*
 	if err := withTransactionalMutation(ctx).Organization.DeleteOneID(id).Exec(ctx); err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to delete organization")
 
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "organization"})
 	}
 
 	if err := generated.OrganizationEdgeCleanup(ctx, id); err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to cascade delete organization edges")
 
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrganizationDeletePayload{
@@ -105,12 +105,12 @@ func (r *queryResolver) Organization(ctx context.Context, id string) (*generated
 	if err != nil {
 		logx.FromContext(ctx).Error().Str("organization_id", id).Err(err).Msg("failed to query organization")
 
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
 	}
 
 	return res, nil

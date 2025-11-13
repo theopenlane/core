@@ -15,11 +15,11 @@ import (
 // DeleteFile is the resolver for the deleteFile field.
 func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.FileDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).File.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "file"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "file"})
 	}
 
 	if err := generated.FileEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.FileDeletePayload{
@@ -31,12 +31,12 @@ func (r *mutationResolver) DeleteFile(ctx context.Context, id string) (*model.Fi
 func (r *queryResolver) File(ctx context.Context, id string) (*generated.File, error) {
 	query, err := withTransactionalMutation(ctx).File.Query().Where(file.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "file"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "file"})
 	}
 
 	return res, nil

@@ -47,7 +47,7 @@ func (r *queryResolver) AuditLogs(ctx context.Context, after *entgql.Cursor[stri
 
 	auditLogs, err = withTransactionalMutation(ctx).AuditWithFilter(ctx, after, first, before, last, where, nil)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "audit logs"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "audit logs"})
 	}
 
 	if auditLogs == nil {

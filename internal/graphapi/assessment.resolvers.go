@@ -25,9 +25,7 @@ func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Assessment.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to create assessment")
-
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "assessment"})
 	}
 
 	return &model.AssessmentCreatePayload{
@@ -39,7 +37,7 @@ func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated
 func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Assessment.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessment"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -54,9 +52,7 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to update assessment")
-
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessment"})
 	}
 
 	return &model.AssessmentUpdatePayload{
@@ -67,15 +63,11 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 // DeleteAssessment is the resolver for the deleteAssessment field.
 func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Assessment.DeleteOneID(id).Exec(ctx); err != nil {
-		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to delete assessment")
-
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "assessment"})
 	}
 
 	if err := generated.AssessmentEdgeCleanup(ctx, id); err != nil {
-		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to cascade delete assessment edges")
-
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssessmentDeletePayload{
@@ -87,12 +79,12 @@ func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*mo
 func (r *queryResolver) Assessment(ctx context.Context, id string) (*generated.Assessment, error) {
 	query, err := withTransactionalMutation(ctx).Assessment.Query().Where(assessment.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	return res, nil

@@ -18,7 +18,7 @@ import (
 func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, error) {
 	res, err := withTransactionalMutation(ctx).Noder(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "node"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "node"})
 	}
 
 	return res, nil
@@ -28,7 +28,7 @@ func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, e
 func (r *queryResolver) Nodes(ctx context.Context, ids []string) ([]generated.Noder, error) {
 	res, err := withTransactionalMutation(ctx).Noders(ctx, ids)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "node"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "node"})
 	}
 
 	return res, nil
@@ -50,7 +50,7 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 
 	query, err := withTransactionalMutation(ctx).APIToken.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "apitoken"})
 	}
 
 	res, err := query.Paginate(
@@ -62,7 +62,7 @@ func (r *queryResolver) APITokens(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithAPITokenOrder(orderBy),
 		generated.WithAPITokenFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "apitoken"})
 	}
 
 	return res, err
@@ -84,7 +84,7 @@ func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).ActionPlan.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplan"})
 	}
 
 	res, err := query.Paginate(
@@ -96,7 +96,7 @@ func (r *queryResolver) ActionPlans(ctx context.Context, after *entgql.Cursor[st
 		generated.WithActionPlanOrder(orderBy),
 		generated.WithActionPlanFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplan"})
 	}
 
 	return res, err
@@ -116,7 +116,7 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).ActionPlanHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplanhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplanhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -128,7 +128,7 @@ func (r *queryResolver) ActionPlanHistories(ctx context.Context, after *entgql.C
 		generated.WithActionPlanHistoryOrder(orderBy),
 		generated.WithActionPlanHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "actionplanhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "actionplanhistory"})
 	}
 
 	return res, err
@@ -150,7 +150,7 @@ func (r *queryResolver) Assessments(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).Assessment.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	res, err := query.Paginate(
@@ -162,7 +162,7 @@ func (r *queryResolver) Assessments(ctx context.Context, after *entgql.Cursor[st
 		generated.WithAssessmentOrder(orderBy),
 		generated.WithAssessmentFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	return res, err
@@ -182,7 +182,7 @@ func (r *queryResolver) AssessmentHistories(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).AssessmentHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmenthistory"})
 	}
 
 	res, err := query.Paginate(
@@ -194,7 +194,7 @@ func (r *queryResolver) AssessmentHistories(ctx context.Context, after *entgql.C
 		generated.WithAssessmentHistoryOrder(orderBy),
 		generated.WithAssessmentHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmenthistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmenthistory"})
 	}
 
 	return res, err
@@ -216,7 +216,7 @@ func (r *queryResolver) AssessmentResponses(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).AssessmentResponse.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
 	}
 
 	res, err := query.Paginate(
@@ -228,7 +228,7 @@ func (r *queryResolver) AssessmentResponses(ctx context.Context, after *entgql.C
 		generated.WithAssessmentResponseOrder(orderBy),
 		generated.WithAssessmentResponseFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponse"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponse"})
 	}
 
 	return res, err
@@ -248,7 +248,7 @@ func (r *queryResolver) AssessmentResponseHistories(ctx context.Context, after *
 
 	query, err := withTransactionalMutation(ctx).AssessmentResponseHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponsehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -260,7 +260,7 @@ func (r *queryResolver) AssessmentResponseHistories(ctx context.Context, after *
 		generated.WithAssessmentResponseHistoryOrder(orderBy),
 		generated.WithAssessmentResponseHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessmentresponsehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessmentresponsehistory"})
 	}
 
 	return res, err
@@ -282,7 +282,7 @@ func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string]
 
 	query, err := withTransactionalMutation(ctx).Asset.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
 	}
 
 	res, err := query.Paginate(
@@ -294,7 +294,7 @@ func (r *queryResolver) Assets(ctx context.Context, after *entgql.Cursor[string]
 		generated.WithAssetOrder(orderBy),
 		generated.WithAssetFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
 	}
 
 	return res, err
@@ -314,7 +314,7 @@ func (r *queryResolver) AssetHistories(ctx context.Context, after *entgql.Cursor
 
 	query, err := withTransactionalMutation(ctx).AssetHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assethistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assethistory"})
 	}
 
 	res, err := query.Paginate(
@@ -326,7 +326,7 @@ func (r *queryResolver) AssetHistories(ctx context.Context, after *entgql.Cursor
 		generated.WithAssetHistoryOrder(orderBy),
 		generated.WithAssetHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assethistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assethistory"})
 	}
 
 	return res, err
@@ -348,7 +348,7 @@ func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[strin
 
 	query, err := withTransactionalMutation(ctx).Contact.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contact"})
 	}
 
 	res, err := query.Paginate(
@@ -360,7 +360,7 @@ func (r *queryResolver) Contacts(ctx context.Context, after *entgql.Cursor[strin
 		generated.WithContactOrder(orderBy),
 		generated.WithContactFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contact"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contact"})
 	}
 
 	return res, err
@@ -380,7 +380,7 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).ContactHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contacthistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contacthistory"})
 	}
 
 	res, err := query.Paginate(
@@ -392,7 +392,7 @@ func (r *queryResolver) ContactHistories(ctx context.Context, after *entgql.Curs
 		generated.WithContactHistoryOrder(orderBy),
 		generated.WithContactHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "contacthistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "contacthistory"})
 	}
 
 	return res, err
@@ -414,7 +414,7 @@ func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[strin
 
 	query, err := withTransactionalMutation(ctx).Control.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
 	}
 
 	res, err := query.Paginate(
@@ -426,7 +426,7 @@ func (r *queryResolver) Controls(ctx context.Context, after *entgql.Cursor[strin
 		generated.WithControlOrder(orderBy),
 		generated.WithControlFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
 	}
 
 	return res, err
@@ -446,7 +446,7 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).ControlHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -458,7 +458,7 @@ func (r *queryResolver) ControlHistories(ctx context.Context, after *entgql.Curs
 		generated.WithControlHistoryOrder(orderBy),
 		generated.WithControlHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlhistory"})
 	}
 
 	return res, err
@@ -480,7 +480,7 @@ func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgq
 
 	query, err := withTransactionalMutation(ctx).ControlImplementation.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementation"})
 	}
 
 	res, err := query.Paginate(
@@ -492,7 +492,7 @@ func (r *queryResolver) ControlImplementations(ctx context.Context, after *entgq
 		generated.WithControlImplementationOrder(orderBy),
 		generated.WithControlImplementationFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementation"})
 	}
 
 	return res, err
@@ -512,7 +512,7 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 
 	query, err := withTransactionalMutation(ctx).ControlImplementationHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementationhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -524,7 +524,7 @@ func (r *queryResolver) ControlImplementationHistories(ctx context.Context, afte
 		generated.WithControlImplementationHistoryOrder(orderBy),
 		generated.WithControlImplementationHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlimplementationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlimplementationhistory"})
 	}
 
 	return res, err
@@ -546,7 +546,7 @@ func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cur
 
 	query, err := withTransactionalMutation(ctx).ControlObjective.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
 	}
 
 	res, err := query.Paginate(
@@ -558,7 +558,7 @@ func (r *queryResolver) ControlObjectives(ctx context.Context, after *entgql.Cur
 		generated.WithControlObjectiveOrder(orderBy),
 		generated.WithControlObjectiveFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjective"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjective"})
 	}
 
 	return res, err
@@ -578,7 +578,7 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 
 	query, err := withTransactionalMutation(ctx).ControlObjectiveHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjectivehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjectivehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -590,7 +590,7 @@ func (r *queryResolver) ControlObjectiveHistories(ctx context.Context, after *en
 		generated.WithControlObjectiveHistoryOrder(orderBy),
 		generated.WithControlObjectiveHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "controlobjectivehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "controlobjectivehistory"})
 	}
 
 	return res, err
@@ -612,7 +612,7 @@ func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).CustomDomain.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomain"})
 	}
 
 	res, err := query.Paginate(
@@ -624,7 +624,7 @@ func (r *queryResolver) CustomDomains(ctx context.Context, after *entgql.Cursor[
 		generated.WithCustomDomainOrder(orderBy),
 		generated.WithCustomDomainFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomain"})
 	}
 
 	return res, err
@@ -644,7 +644,7 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).CustomDomainHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomainhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -656,7 +656,7 @@ func (r *queryResolver) CustomDomainHistories(ctx context.Context, after *entgql
 		generated.WithCustomDomainHistoryOrder(orderBy),
 		generated.WithCustomDomainHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomainhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomainhistory"})
 	}
 
 	return res, err
@@ -678,7 +678,7 @@ func (r *queryResolver) CustomTypeEnums(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).CustomTypeEnum.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
 	}
 
 	res, err := query.Paginate(
@@ -690,7 +690,7 @@ func (r *queryResolver) CustomTypeEnums(ctx context.Context, after *entgql.Curso
 		generated.WithCustomTypeEnumOrder(orderBy),
 		generated.WithCustomTypeEnumFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customtypeenum"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customtypeenum"})
 	}
 
 	return res, err
@@ -703,7 +703,7 @@ func (r *queryResolver) DNSVerifications(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).DNSVerification.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
 	}
 
 	res, err := query.Paginate(
@@ -715,7 +715,7 @@ func (r *queryResolver) DNSVerifications(ctx context.Context, after *entgql.Curs
 		generated.WithDNSVerificationOrder(orderBy),
 		generated.WithDNSVerificationFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
 	}
 
 	return res, err
@@ -728,7 +728,7 @@ func (r *queryResolver) DNSVerificationHistories(ctx context.Context, after *ent
 
 	query, err := withTransactionalMutation(ctx).DNSVerificationHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverificationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverificationhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -740,7 +740,7 @@ func (r *queryResolver) DNSVerificationHistories(ctx context.Context, after *ent
 		generated.WithDNSVerificationHistoryOrder(orderBy),
 		generated.WithDNSVerificationHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverificationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverificationhistory"})
 	}
 
 	return res, err
@@ -762,7 +762,7 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 
 	query, err := withTransactionalMutation(ctx).DocumentData.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
 	}
 
 	res, err := query.Paginate(
@@ -774,7 +774,7 @@ func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cur
 		generated.WithDocumentDataOrder(orderBy),
 		generated.WithDocumentDataFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
 	}
 
 	return res, err
@@ -794,7 +794,7 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).DocumentDataHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdatahistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdatahistory"})
 	}
 
 	res, err := query.Paginate(
@@ -806,7 +806,7 @@ func (r *queryResolver) DocumentDataHistories(ctx context.Context, after *entgql
 		generated.WithDocumentDataHistoryOrder(orderBy),
 		generated.WithDocumentDataHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdatahistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdatahistory"})
 	}
 
 	return res, err
@@ -828,7 +828,7 @@ func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[strin
 
 	query, err := withTransactionalMutation(ctx).Entity.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
 	}
 
 	res, err := query.Paginate(
@@ -840,7 +840,7 @@ func (r *queryResolver) Entities(ctx context.Context, after *entgql.Cursor[strin
 		generated.WithEntityOrder(orderBy),
 		generated.WithEntityFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
 	}
 
 	return res, err
@@ -860,7 +860,7 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).EntityHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entityhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entityhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -872,7 +872,7 @@ func (r *queryResolver) EntityHistories(ctx context.Context, after *entgql.Curso
 		generated.WithEntityHistoryOrder(orderBy),
 		generated.WithEntityHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entityhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entityhistory"})
 	}
 
 	return res, err
@@ -894,7 +894,7 @@ func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).EntityType.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytype"})
 	}
 
 	res, err := query.Paginate(
@@ -906,7 +906,7 @@ func (r *queryResolver) EntityTypes(ctx context.Context, after *entgql.Cursor[st
 		generated.WithEntityTypeOrder(orderBy),
 		generated.WithEntityTypeFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytype"})
 	}
 
 	return res, err
@@ -926,7 +926,7 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).EntityTypeHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytypehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytypehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -938,7 +938,7 @@ func (r *queryResolver) EntityTypeHistories(ctx context.Context, after *entgql.C
 		generated.WithEntityTypeHistoryOrder(orderBy),
 		generated.WithEntityTypeHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytypehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytypehistory"})
 	}
 
 	return res, err
@@ -960,7 +960,7 @@ func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string]
 
 	query, err := withTransactionalMutation(ctx).Event.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "event"})
 	}
 
 	res, err := query.Paginate(
@@ -972,7 +972,7 @@ func (r *queryResolver) Events(ctx context.Context, after *entgql.Cursor[string]
 		generated.WithEventOrder(orderBy),
 		generated.WithEventFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "event"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "event"})
 	}
 
 	return res, err
@@ -994,7 +994,7 @@ func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[stri
 
 	query, err := withTransactionalMutation(ctx).Evidence.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidence"})
 	}
 
 	res, err := query.Paginate(
@@ -1006,7 +1006,7 @@ func (r *queryResolver) Evidences(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithEvidenceOrder(orderBy),
 		generated.WithEvidenceFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidence"})
 	}
 
 	return res, err
@@ -1026,7 +1026,7 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 
 	query, err := withTransactionalMutation(ctx).EvidenceHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidencehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidencehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1038,7 +1038,7 @@ func (r *queryResolver) EvidenceHistories(ctx context.Context, after *entgql.Cur
 		generated.WithEvidenceHistoryOrder(orderBy),
 		generated.WithEvidenceHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidencehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidencehistory"})
 	}
 
 	return res, err
@@ -1060,7 +1060,7 @@ func (r *queryResolver) Exports(ctx context.Context, after *entgql.Cursor[string
 
 	query, err := withTransactionalMutation(ctx).Export.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "export"})
 	}
 
 	res, err := query.Paginate(
@@ -1072,7 +1072,7 @@ func (r *queryResolver) Exports(ctx context.Context, after *entgql.Cursor[string
 		generated.WithExportOrder(orderBy),
 		generated.WithExportFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "export"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "export"})
 	}
 
 	return res, err
@@ -1094,7 +1094,7 @@ func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).File.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "file"})
 	}
 
 	res, err := query.Paginate(
@@ -1106,7 +1106,7 @@ func (r *queryResolver) Files(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithFileOrder(orderBy),
 		generated.WithFileFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "file"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "file"})
 	}
 
 	return res, err
@@ -1126,7 +1126,7 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).FileHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "filehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "filehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1138,7 +1138,7 @@ func (r *queryResolver) FileHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithFileHistoryOrder(orderBy),
 		generated.WithFileHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "filehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "filehistory"})
 	}
 
 	return res, err
@@ -1160,7 +1160,7 @@ func (r *queryResolver) Findings(ctx context.Context, after *entgql.Cursor[strin
 
 	query, err := withTransactionalMutation(ctx).Finding.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "finding"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "finding"})
 	}
 
 	res, err := query.Paginate(
@@ -1172,7 +1172,7 @@ func (r *queryResolver) Findings(ctx context.Context, after *entgql.Cursor[strin
 		generated.WithFindingOrder(orderBy),
 		generated.WithFindingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "finding"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "finding"})
 	}
 
 	return res, err
@@ -1194,7 +1194,7 @@ func (r *queryResolver) FindingControls(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).FindingControl.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrol"})
 	}
 
 	res, err := query.Paginate(
@@ -1206,7 +1206,7 @@ func (r *queryResolver) FindingControls(ctx context.Context, after *entgql.Curso
 		generated.WithFindingControlOrder(orderBy),
 		generated.WithFindingControlFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findingcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrol"})
 	}
 
 	return res, err
@@ -1226,7 +1226,7 @@ func (r *queryResolver) FindingControlHistories(ctx context.Context, after *entg
 
 	query, err := withTransactionalMutation(ctx).FindingControlHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findingcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrolhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1238,7 +1238,7 @@ func (r *queryResolver) FindingControlHistories(ctx context.Context, after *entg
 		generated.WithFindingControlHistoryOrder(orderBy),
 		generated.WithFindingControlHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findingcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findingcontrolhistory"})
 	}
 
 	return res, err
@@ -1258,7 +1258,7 @@ func (r *queryResolver) FindingHistories(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).FindingHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findinghistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1270,7 +1270,7 @@ func (r *queryResolver) FindingHistories(ctx context.Context, after *entgql.Curs
 		generated.WithFindingHistoryOrder(orderBy),
 		generated.WithFindingHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "findinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "findinghistory"})
 	}
 
 	return res, err
@@ -1292,7 +1292,7 @@ func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string]
 
 	query, err := withTransactionalMutation(ctx).Group.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
 	}
 
 	res, err := query.Paginate(
@@ -1304,7 +1304,7 @@ func (r *queryResolver) Groups(ctx context.Context, after *entgql.Cursor[string]
 		generated.WithGroupOrder(orderBy),
 		generated.WithGroupFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
 	}
 
 	return res, err
@@ -1324,7 +1324,7 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 
 	query, err := withTransactionalMutation(ctx).GroupHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "grouphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "grouphistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1336,7 +1336,7 @@ func (r *queryResolver) GroupHistories(ctx context.Context, after *entgql.Cursor
 		generated.WithGroupHistoryOrder(orderBy),
 		generated.WithGroupHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "grouphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "grouphistory"})
 	}
 
 	return res, err
@@ -1358,7 +1358,7 @@ func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).GroupMembership.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembership"})
 	}
 
 	res, err := query.Paginate(
@@ -1370,7 +1370,7 @@ func (r *queryResolver) GroupMemberships(ctx context.Context, after *entgql.Curs
 		generated.WithGroupMembershipOrder(orderBy),
 		generated.WithGroupMembershipFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembership"})
 	}
 
 	return res, err
@@ -1390,7 +1390,7 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 
 	query, err := withTransactionalMutation(ctx).GroupMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembershiphistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1402,7 +1402,7 @@ func (r *queryResolver) GroupMembershipHistories(ctx context.Context, after *ent
 		generated.WithGroupMembershipHistoryOrder(orderBy),
 		generated.WithGroupMembershipHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupmembershiphistory"})
 	}
 
 	return res, err
@@ -1424,7 +1424,7 @@ func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).GroupSetting.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsetting"})
 	}
 
 	res, err := query.Paginate(
@@ -1436,7 +1436,7 @@ func (r *queryResolver) GroupSettings(ctx context.Context, after *entgql.Cursor[
 		generated.WithGroupSettingOrder(orderBy),
 		generated.WithGroupSettingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsetting"})
 	}
 
 	return res, err
@@ -1456,7 +1456,7 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).GroupSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsettinghistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1468,7 +1468,7 @@ func (r *queryResolver) GroupSettingHistories(ctx context.Context, after *entgql
 		generated.WithGroupSettingHistoryOrder(orderBy),
 		generated.WithGroupSettingHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "groupsettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "groupsettinghistory"})
 	}
 
 	return res, err
@@ -1490,7 +1490,7 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 
 	query, err := withTransactionalMutation(ctx).Hush.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hush"})
 	}
 
 	res, err := query.Paginate(
@@ -1502,7 +1502,7 @@ func (r *queryResolver) Hushes(ctx context.Context, after *entgql.Cursor[string]
 		generated.WithHushOrder(orderBy),
 		generated.WithHushFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "hush"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hush"})
 	}
 
 	return res, err
@@ -1522,7 +1522,7 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).HushHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "hushhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hushhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1534,7 +1534,7 @@ func (r *queryResolver) HushHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithHushHistoryOrder(orderBy),
 		generated.WithHushHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "hushhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "hushhistory"})
 	}
 
 	return res, err
@@ -1556,7 +1556,7 @@ func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[s
 
 	query, err := withTransactionalMutation(ctx).Integration.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
 	}
 
 	res, err := query.Paginate(
@@ -1568,7 +1568,7 @@ func (r *queryResolver) Integrations(ctx context.Context, after *entgql.Cursor[s
 		generated.WithIntegrationOrder(orderBy),
 		generated.WithIntegrationFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
 	}
 
 	return res, err
@@ -1588,7 +1588,7 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).IntegrationHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integrationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integrationhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1600,7 +1600,7 @@ func (r *queryResolver) IntegrationHistories(ctx context.Context, after *entgql.
 		generated.WithIntegrationHistoryOrder(orderBy),
 		generated.WithIntegrationHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integrationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integrationhistory"})
 	}
 
 	return res, err
@@ -1622,7 +1622,7 @@ func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).InternalPolicy.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicy"})
 	}
 
 	res, err := query.Paginate(
@@ -1634,7 +1634,7 @@ func (r *queryResolver) InternalPolicies(ctx context.Context, after *entgql.Curs
 		generated.WithInternalPolicyOrder(orderBy),
 		generated.WithInternalPolicyFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicy"})
 	}
 
 	return res, err
@@ -1654,7 +1654,7 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 
 	query, err := withTransactionalMutation(ctx).InternalPolicyHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicyhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicyhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1666,7 +1666,7 @@ func (r *queryResolver) InternalPolicyHistories(ctx context.Context, after *entg
 		generated.WithInternalPolicyHistoryOrder(orderBy),
 		generated.WithInternalPolicyHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "internalpolicyhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "internalpolicyhistory"})
 	}
 
 	return res, err
@@ -1688,7 +1688,7 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 
 	query, err := withTransactionalMutation(ctx).Invite.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "invite"})
 	}
 
 	res, err := query.Paginate(
@@ -1700,7 +1700,7 @@ func (r *queryResolver) Invites(ctx context.Context, after *entgql.Cursor[string
 		generated.WithInviteOrder(orderBy),
 		generated.WithInviteFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "invite"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "invite"})
 	}
 
 	return res, err
@@ -1722,7 +1722,7 @@ func (r *queryResolver) JobResults(ctx context.Context, after *entgql.Cursor[str
 
 	query, err := withTransactionalMutation(ctx).JobResult.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobresult"})
 	}
 
 	res, err := query.Paginate(
@@ -1734,7 +1734,7 @@ func (r *queryResolver) JobResults(ctx context.Context, after *entgql.Cursor[str
 		generated.WithJobResultOrder(orderBy),
 		generated.WithJobResultFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobresult"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobresult"})
 	}
 
 	return res, err
@@ -1756,7 +1756,7 @@ func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[str
 
 	query, err := withTransactionalMutation(ctx).JobRunner.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunner"})
 	}
 
 	res, err := query.Paginate(
@@ -1768,7 +1768,7 @@ func (r *queryResolver) JobRunners(ctx context.Context, after *entgql.Cursor[str
 		generated.WithJobRunnerOrder(orderBy),
 		generated.WithJobRunnerFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunner"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunner"})
 	}
 
 	return res, err
@@ -1790,7 +1790,7 @@ func (r *queryResolver) JobRunnerRegistrationTokens(ctx context.Context, after *
 
 	query, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
 	}
 
 	res, err := query.Paginate(
@@ -1802,7 +1802,7 @@ func (r *queryResolver) JobRunnerRegistrationTokens(ctx context.Context, after *
 		generated.WithJobRunnerRegistrationTokenOrder(orderBy),
 		generated.WithJobRunnerRegistrationTokenFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
 	}
 
 	return res, err
@@ -1824,7 +1824,7 @@ func (r *queryResolver) JobRunnerTokens(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).JobRunnerToken.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnertoken"})
 	}
 
 	res, err := query.Paginate(
@@ -1836,7 +1836,7 @@ func (r *queryResolver) JobRunnerTokens(ctx context.Context, after *entgql.Curso
 		generated.WithJobRunnerTokenOrder(orderBy),
 		generated.WithJobRunnerTokenFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnertoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnertoken"})
 	}
 
 	return res, err
@@ -1858,7 +1858,7 @@ func (r *queryResolver) JobTemplates(ctx context.Context, after *entgql.Cursor[s
 
 	query, err := withTransactionalMutation(ctx).JobTemplate.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplate"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobtemplate"})
 	}
 
 	res, err := query.Paginate(
@@ -1870,7 +1870,7 @@ func (r *queryResolver) JobTemplates(ctx context.Context, after *entgql.Cursor[s
 		generated.WithJobTemplateOrder(orderBy),
 		generated.WithJobTemplateFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplate"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobtemplate"})
 	}
 
 	return res, err
@@ -1890,7 +1890,7 @@ func (r *queryResolver) JobTemplateHistories(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).JobTemplateHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplatehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobtemplatehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1902,7 +1902,7 @@ func (r *queryResolver) JobTemplateHistories(ctx context.Context, after *entgql.
 		generated.WithJobTemplateHistoryOrder(orderBy),
 		generated.WithJobTemplateHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobtemplatehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobtemplatehistory"})
 	}
 
 	return res, err
@@ -1924,7 +1924,7 @@ func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).MappableDomain.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomain"})
 	}
 
 	res, err := query.Paginate(
@@ -1936,7 +1936,7 @@ func (r *queryResolver) MappableDomains(ctx context.Context, after *entgql.Curso
 		generated.WithMappableDomainOrder(orderBy),
 		generated.WithMappableDomainFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomain"})
 	}
 
 	return res, err
@@ -1956,7 +1956,7 @@ func (r *queryResolver) MappableDomainHistories(ctx context.Context, after *entg
 
 	query, err := withTransactionalMutation(ctx).MappableDomainHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomainhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomainhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -1968,7 +1968,7 @@ func (r *queryResolver) MappableDomainHistories(ctx context.Context, after *entg
 		generated.WithMappableDomainHistoryOrder(orderBy),
 		generated.WithMappableDomainHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomainhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomainhistory"})
 	}
 
 	return res, err
@@ -1990,7 +1990,7 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 
 	query, err := withTransactionalMutation(ctx).MappedControl.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
 	}
 
 	res, err := query.Paginate(
@@ -2002,7 +2002,7 @@ func (r *queryResolver) MappedControls(ctx context.Context, after *entgql.Cursor
 		generated.WithMappedControlOrder(orderBy),
 		generated.WithMappedControlFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrol"})
 	}
 
 	return res, err
@@ -2022,7 +2022,7 @@ func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgq
 
 	query, err := withTransactionalMutation(ctx).MappedControlHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrolhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2034,7 +2034,7 @@ func (r *queryResolver) MappedControlHistories(ctx context.Context, after *entgq
 		generated.WithMappedControlHistoryOrder(orderBy),
 		generated.WithMappedControlHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappedcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappedcontrolhistory"})
 	}
 
 	return res, err
@@ -2056,7 +2056,7 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 
 	query, err := withTransactionalMutation(ctx).Narrative.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
 	}
 
 	res, err := query.Paginate(
@@ -2068,7 +2068,7 @@ func (r *queryResolver) Narratives(ctx context.Context, after *entgql.Cursor[str
 		generated.WithNarrativeOrder(orderBy),
 		generated.WithNarrativeFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrative"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrative"})
 	}
 
 	return res, err
@@ -2088,7 +2088,7 @@ func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cu
 
 	query, err := withTransactionalMutation(ctx).NarrativeHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrativehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrativehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2100,7 +2100,7 @@ func (r *queryResolver) NarrativeHistories(ctx context.Context, after *entgql.Cu
 		generated.WithNarrativeHistoryOrder(orderBy),
 		generated.WithNarrativeHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "narrativehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "narrativehistory"})
 	}
 
 	return res, err
@@ -2122,7 +2122,7 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).Note.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "note"})
 	}
 
 	res, err := query.Paginate(
@@ -2134,7 +2134,7 @@ func (r *queryResolver) Notes(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithNoteOrder(orderBy),
 		generated.WithNoteFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "note"})
 	}
 
 	return res, err
@@ -2154,7 +2154,7 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).NoteHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "notehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "notehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2166,7 +2166,7 @@ func (r *queryResolver) NoteHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithNoteHistoryOrder(orderBy),
 		generated.WithNoteHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "notehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "notehistory"})
 	}
 
 	return res, err
@@ -2188,7 +2188,7 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 
 	query, err := withTransactionalMutation(ctx).OrgMembership.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembership"})
 	}
 
 	res, err := query.Paginate(
@@ -2200,7 +2200,7 @@ func (r *queryResolver) OrgMemberships(ctx context.Context, after *entgql.Cursor
 		generated.WithOrgMembershipOrder(orderBy),
 		generated.WithOrgMembershipFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembership"})
 	}
 
 	return res, err
@@ -2220,7 +2220,7 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 
 	query, err := withTransactionalMutation(ctx).OrgMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembershiphistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2232,7 +2232,7 @@ func (r *queryResolver) OrgMembershipHistories(ctx context.Context, after *entgq
 		generated.WithOrgMembershipHistoryOrder(orderBy),
 		generated.WithOrgMembershipHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembershiphistory"})
 	}
 
 	return res, err
@@ -2252,7 +2252,7 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).OrgSubscription.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
 	}
 
 	res, err := query.Paginate(
@@ -2264,7 +2264,7 @@ func (r *queryResolver) OrgSubscriptions(ctx context.Context, after *entgql.Curs
 		generated.WithOrgSubscriptionOrder(orderBy),
 		generated.WithOrgSubscriptionFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
 	}
 
 	return res, err
@@ -2284,7 +2284,7 @@ func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *ent
 
 	query, err := withTransactionalMutation(ctx).OrgSubscriptionHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscriptionhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscriptionhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2296,7 +2296,7 @@ func (r *queryResolver) OrgSubscriptionHistories(ctx context.Context, after *ent
 		generated.WithOrgSubscriptionHistoryOrder(orderBy),
 		generated.WithOrgSubscriptionHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscriptionhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscriptionhistory"})
 	}
 
 	return res, err
@@ -2318,7 +2318,7 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).Organization.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
 	}
 
 	res, err := query.Paginate(
@@ -2330,7 +2330,7 @@ func (r *queryResolver) Organizations(ctx context.Context, after *entgql.Cursor[
 		generated.WithOrganizationOrder(orderBy),
 		generated.WithOrganizationFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organization"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organization"})
 	}
 
 	return res, err
@@ -2350,7 +2350,7 @@ func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).OrganizationHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2362,7 +2362,7 @@ func (r *queryResolver) OrganizationHistories(ctx context.Context, after *entgql
 		generated.WithOrganizationHistoryOrder(orderBy),
 		generated.WithOrganizationHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationhistory"})
 	}
 
 	return res, err
@@ -2384,7 +2384,7 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).OrganizationSetting.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsetting"})
 	}
 
 	res, err := query.Paginate(
@@ -2396,7 +2396,7 @@ func (r *queryResolver) OrganizationSettings(ctx context.Context, after *entgql.
 		generated.WithOrganizationSettingOrder(orderBy),
 		generated.WithOrganizationSettingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsetting"})
 	}
 
 	return res, err
@@ -2416,7 +2416,7 @@ func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after 
 
 	query, err := withTransactionalMutation(ctx).OrganizationSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsettinghistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2428,7 +2428,7 @@ func (r *queryResolver) OrganizationSettingHistories(ctx context.Context, after 
 		generated.WithOrganizationSettingHistoryOrder(orderBy),
 		generated.WithOrganizationSettingHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "organizationsettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "organizationsettinghistory"})
 	}
 
 	return res, err
@@ -2450,7 +2450,7 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "personalaccesstoken"})
 	}
 
 	res, err := query.Paginate(
@@ -2462,7 +2462,7 @@ func (r *queryResolver) PersonalAccessTokens(ctx context.Context, after *entgql.
 		generated.WithPersonalAccessTokenOrder(orderBy),
 		generated.WithPersonalAccessTokenFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "personalaccesstoken"})
 	}
 
 	return res, err
@@ -2484,7 +2484,7 @@ func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[str
 
 	query, err := withTransactionalMutation(ctx).Procedure.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
 	}
 
 	res, err := query.Paginate(
@@ -2496,7 +2496,7 @@ func (r *queryResolver) Procedures(ctx context.Context, after *entgql.Cursor[str
 		generated.WithProcedureOrder(orderBy),
 		generated.WithProcedureFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedure"})
 	}
 
 	return res, err
@@ -2516,7 +2516,7 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 
 	query, err := withTransactionalMutation(ctx).ProcedureHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedurehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedurehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2528,7 +2528,7 @@ func (r *queryResolver) ProcedureHistories(ctx context.Context, after *entgql.Cu
 		generated.WithProcedureHistoryOrder(orderBy),
 		generated.WithProcedureHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "procedurehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "procedurehistory"})
 	}
 
 	return res, err
@@ -2559,7 +2559,7 @@ func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[strin
 
 	query, err := withTransactionalMutation(ctx).Program.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	res, err := query.Paginate(
@@ -2571,7 +2571,7 @@ func (r *queryResolver) Programs(ctx context.Context, after *entgql.Cursor[strin
 		generated.WithProgramOrder(orderBy),
 		generated.WithProgramFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "program"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "program"})
 	}
 
 	return res, err
@@ -2591,7 +2591,7 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).ProgramHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2603,7 +2603,7 @@ func (r *queryResolver) ProgramHistories(ctx context.Context, after *entgql.Curs
 		generated.WithProgramHistoryOrder(orderBy),
 		generated.WithProgramHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programhistory"})
 	}
 
 	return res, err
@@ -2625,7 +2625,7 @@ func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cu
 
 	query, err := withTransactionalMutation(ctx).ProgramMembership.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembership"})
 	}
 
 	res, err := query.Paginate(
@@ -2637,7 +2637,7 @@ func (r *queryResolver) ProgramMemberships(ctx context.Context, after *entgql.Cu
 		generated.WithProgramMembershipOrder(orderBy),
 		generated.WithProgramMembershipFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembership"})
 	}
 
 	return res, err
@@ -2657,7 +2657,7 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 
 	query, err := withTransactionalMutation(ctx).ProgramMembershipHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembershiphistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2669,7 +2669,7 @@ func (r *queryResolver) ProgramMembershipHistories(ctx context.Context, after *e
 		generated.WithProgramMembershipHistoryOrder(orderBy),
 		generated.WithProgramMembershipHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "programmembershiphistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "programmembershiphistory"})
 	}
 
 	return res, err
@@ -2691,7 +2691,7 @@ func (r *queryResolver) Remediations(ctx context.Context, after *entgql.Cursor[s
 
 	query, err := withTransactionalMutation(ctx).Remediation.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "remediation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "remediation"})
 	}
 
 	res, err := query.Paginate(
@@ -2703,7 +2703,7 @@ func (r *queryResolver) Remediations(ctx context.Context, after *entgql.Cursor[s
 		generated.WithRemediationOrder(orderBy),
 		generated.WithRemediationFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "remediation"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "remediation"})
 	}
 
 	return res, err
@@ -2723,7 +2723,7 @@ func (r *queryResolver) RemediationHistories(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).RemediationHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "remediationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "remediationhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2735,7 +2735,7 @@ func (r *queryResolver) RemediationHistories(ctx context.Context, after *entgql.
 		generated.WithRemediationHistoryOrder(orderBy),
 		generated.WithRemediationHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "remediationhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "remediationhistory"})
 	}
 
 	return res, err
@@ -2757,7 +2757,7 @@ func (r *queryResolver) Reviews(ctx context.Context, after *entgql.Cursor[string
 
 	query, err := withTransactionalMutation(ctx).Review.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "review"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "review"})
 	}
 
 	res, err := query.Paginate(
@@ -2769,7 +2769,7 @@ func (r *queryResolver) Reviews(ctx context.Context, after *entgql.Cursor[string
 		generated.WithReviewOrder(orderBy),
 		generated.WithReviewFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "review"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "review"})
 	}
 
 	return res, err
@@ -2789,7 +2789,7 @@ func (r *queryResolver) ReviewHistories(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).ReviewHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "reviewhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "reviewhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2801,7 +2801,7 @@ func (r *queryResolver) ReviewHistories(ctx context.Context, after *entgql.Curso
 		generated.WithReviewHistoryOrder(orderBy),
 		generated.WithReviewHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "reviewhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "reviewhistory"})
 	}
 
 	return res, err
@@ -2823,7 +2823,7 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).Risk.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
 	}
 
 	res, err := query.Paginate(
@@ -2835,7 +2835,7 @@ func (r *queryResolver) Risks(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithRiskOrder(orderBy),
 		generated.WithRiskFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
 	}
 
 	return res, err
@@ -2855,7 +2855,7 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).RiskHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "riskhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2867,7 +2867,7 @@ func (r *queryResolver) RiskHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithRiskHistoryOrder(orderBy),
 		generated.WithRiskHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "riskhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "riskhistory"})
 	}
 
 	return res, err
@@ -2889,7 +2889,7 @@ func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).Scan.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scan"})
 	}
 
 	res, err := query.Paginate(
@@ -2901,7 +2901,7 @@ func (r *queryResolver) Scans(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithScanOrder(orderBy),
 		generated.WithScanFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scan"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scan"})
 	}
 
 	return res, err
@@ -2921,7 +2921,7 @@ func (r *queryResolver) ScanHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).ScanHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scanhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scanhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2933,7 +2933,7 @@ func (r *queryResolver) ScanHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithScanHistoryOrder(orderBy),
 		generated.WithScanHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scanhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scanhistory"})
 	}
 
 	return res, err
@@ -2955,7 +2955,7 @@ func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).ScheduledJob.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
 	}
 
 	res, err := query.Paginate(
@@ -2967,7 +2967,7 @@ func (r *queryResolver) ScheduledJobs(ctx context.Context, after *entgql.Cursor[
 		generated.WithScheduledJobOrder(orderBy),
 		generated.WithScheduledJobFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjob"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjob"})
 	}
 
 	return res, err
@@ -2987,7 +2987,7 @@ func (r *queryResolver) ScheduledJobHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).ScheduledJobHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -2999,7 +2999,7 @@ func (r *queryResolver) ScheduledJobHistories(ctx context.Context, after *entgql
 		generated.WithScheduledJobHistoryOrder(orderBy),
 		generated.WithScheduledJobHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobhistory"})
 	}
 
 	return res, err
@@ -3021,7 +3021,7 @@ func (r *queryResolver) ScheduledJobRuns(ctx context.Context, after *entgql.Curs
 
 	query, err := withTransactionalMutation(ctx).ScheduledJobRun.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
 	}
 
 	res, err := query.Paginate(
@@ -3033,7 +3033,7 @@ func (r *queryResolver) ScheduledJobRuns(ctx context.Context, after *entgql.Curs
 		generated.WithScheduledJobRunOrder(orderBy),
 		generated.WithScheduledJobRunFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
 	}
 
 	return res, err
@@ -3055,7 +3055,7 @@ func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[stri
 
 	query, err := withTransactionalMutation(ctx).Standard.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
 	}
 
 	res, err := query.Paginate(
@@ -3067,7 +3067,7 @@ func (r *queryResolver) Standards(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithStandardOrder(orderBy),
 		generated.WithStandardFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
 	}
 
 	return res, err
@@ -3087,7 +3087,7 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 
 	query, err := withTransactionalMutation(ctx).StandardHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standardhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standardhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3099,7 +3099,7 @@ func (r *queryResolver) StandardHistories(ctx context.Context, after *entgql.Cur
 		generated.WithStandardHistoryOrder(orderBy),
 		generated.WithStandardHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standardhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standardhistory"})
 	}
 
 	return res, err
@@ -3121,7 +3121,7 @@ func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).Subcontrol.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrol"})
 	}
 
 	res, err := query.Paginate(
@@ -3133,7 +3133,7 @@ func (r *queryResolver) Subcontrols(ctx context.Context, after *entgql.Cursor[st
 		generated.WithSubcontrolOrder(orderBy),
 		generated.WithSubcontrolFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrol"})
 	}
 
 	return res, err
@@ -3153,7 +3153,7 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).SubcontrolHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrolhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3165,7 +3165,7 @@ func (r *queryResolver) SubcontrolHistories(ctx context.Context, after *entgql.C
 		generated.WithSubcontrolHistoryOrder(orderBy),
 		generated.WithSubcontrolHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subcontrolhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subcontrolhistory"})
 	}
 
 	return res, err
@@ -3187,7 +3187,7 @@ func (r *queryResolver) Subprocessors(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).Subprocessor.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessor"})
 	}
 
 	res, err := query.Paginate(
@@ -3199,7 +3199,7 @@ func (r *queryResolver) Subprocessors(ctx context.Context, after *entgql.Cursor[
 		generated.WithSubprocessorOrder(orderBy),
 		generated.WithSubprocessorFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessor"})
 	}
 
 	return res, err
@@ -3219,7 +3219,7 @@ func (r *queryResolver) SubprocessorHistories(ctx context.Context, after *entgql
 
 	query, err := withTransactionalMutation(ctx).SubprocessorHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessorhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessorhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3231,7 +3231,7 @@ func (r *queryResolver) SubprocessorHistories(ctx context.Context, after *entgql
 		generated.WithSubprocessorHistoryOrder(orderBy),
 		generated.WithSubprocessorHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessorhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessorhistory"})
 	}
 
 	return res, err
@@ -3253,7 +3253,7 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).Subscriber.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	res, err := query.Paginate(
@@ -3265,7 +3265,7 @@ func (r *queryResolver) Subscribers(ctx context.Context, after *entgql.Cursor[st
 		generated.WithSubscriberOrder(orderBy),
 		generated.WithSubscriberFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	return res, err
@@ -3287,7 +3287,7 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 
 	query, err := withTransactionalMutation(ctx).TFASetting.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
 	}
 
 	res, err := query.Paginate(
@@ -3299,7 +3299,7 @@ func (r *queryResolver) TfaSettings(ctx context.Context, after *entgql.Cursor[st
 		generated.WithTFASettingOrder(orderBy),
 		generated.WithTFASettingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tfasetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tfasetting"})
 	}
 
 	return res, err
@@ -3321,7 +3321,7 @@ func (r *queryResolver) TagDefinitions(ctx context.Context, after *entgql.Cursor
 
 	query, err := withTransactionalMutation(ctx).TagDefinition.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
 	}
 
 	res, err := query.Paginate(
@@ -3333,7 +3333,7 @@ func (r *queryResolver) TagDefinitions(ctx context.Context, after *entgql.Cursor
 		generated.WithTagDefinitionOrder(orderBy),
 		generated.WithTagDefinitionFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "tagdefinition"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "tagdefinition"})
 	}
 
 	return res, err
@@ -3355,7 +3355,7 @@ func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).Task.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
 	}
 
 	res, err := query.Paginate(
@@ -3367,7 +3367,7 @@ func (r *queryResolver) Tasks(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithTaskOrder(orderBy),
 		generated.WithTaskFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "task"})
 	}
 
 	return res, err
@@ -3387,7 +3387,7 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).TaskHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "taskhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "taskhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3399,7 +3399,7 @@ func (r *queryResolver) TaskHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithTaskHistoryOrder(orderBy),
 		generated.WithTaskHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "taskhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "taskhistory"})
 	}
 
 	return res, err
@@ -3421,7 +3421,7 @@ func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[stri
 
 	query, err := withTransactionalMutation(ctx).Template.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
 	}
 
 	res, err := query.Paginate(
@@ -3433,7 +3433,7 @@ func (r *queryResolver) Templates(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithTemplateOrder(orderBy),
 		generated.WithTemplateFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
 	}
 
 	return res, err
@@ -3453,7 +3453,7 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 
 	query, err := withTransactionalMutation(ctx).TemplateHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "templatehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "templatehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3465,7 +3465,7 @@ func (r *queryResolver) TemplateHistories(ctx context.Context, after *entgql.Cur
 		generated.WithTemplateHistoryOrder(orderBy),
 		generated.WithTemplateHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "templatehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "templatehistory"})
 	}
 
 	return res, err
@@ -3487,7 +3487,7 @@ func (r *queryResolver) TrustCenters(ctx context.Context, after *entgql.Cursor[s
 
 	query, err := withTransactionalMutation(ctx).TrustCenter.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
 	}
 
 	res, err := query.Paginate(
@@ -3499,7 +3499,7 @@ func (r *queryResolver) TrustCenters(ctx context.Context, after *entgql.Cursor[s
 		generated.WithTrustCenterOrder(orderBy),
 		generated.WithTrustCenterFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
 	}
 
 	return res, err
@@ -3521,7 +3521,7 @@ func (r *queryResolver) TrustCenterCompliances(ctx context.Context, after *entgq
 
 	query, err := withTransactionalMutation(ctx).TrustCenterCompliance.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
 	}
 
 	res, err := query.Paginate(
@@ -3533,7 +3533,7 @@ func (r *queryResolver) TrustCenterCompliances(ctx context.Context, after *entgq
 		generated.WithTrustCenterComplianceOrder(orderBy),
 		generated.WithTrustCenterComplianceFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliance"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliance"})
 	}
 
 	return res, err
@@ -3553,7 +3553,7 @@ func (r *queryResolver) TrustCenterComplianceHistories(ctx context.Context, afte
 
 	query, err := withTransactionalMutation(ctx).TrustCenterComplianceHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliancehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliancehistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3565,7 +3565,7 @@ func (r *queryResolver) TrustCenterComplianceHistories(ctx context.Context, afte
 		generated.WithTrustCenterComplianceHistoryOrder(orderBy),
 		generated.WithTrustCenterComplianceHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentercompliancehistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentercompliancehistory"})
 	}
 
 	return res, err
@@ -3587,7 +3587,7 @@ func (r *queryResolver) TrustCenterDocs(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).TrustCenterDoc.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdoc"})
 	}
 
 	res, err := query.Paginate(
@@ -3599,7 +3599,7 @@ func (r *queryResolver) TrustCenterDocs(ctx context.Context, after *entgql.Curso
 		generated.WithTrustCenterDocOrder(orderBy),
 		generated.WithTrustCenterDocFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterdoc"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdoc"})
 	}
 
 	return res, err
@@ -3619,7 +3619,7 @@ func (r *queryResolver) TrustCenterDocHistories(ctx context.Context, after *entg
 
 	query, err := withTransactionalMutation(ctx).TrustCenterDocHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterdochistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdochistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3631,7 +3631,7 @@ func (r *queryResolver) TrustCenterDocHistories(ctx context.Context, after *entg
 		generated.WithTrustCenterDocHistoryOrder(orderBy),
 		generated.WithTrustCenterDocHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterdochistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterdochistory"})
 	}
 
 	return res, err
@@ -3651,7 +3651,7 @@ func (r *queryResolver) TrustCenterHistories(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).TrustCenterHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3663,7 +3663,7 @@ func (r *queryResolver) TrustCenterHistories(ctx context.Context, after *entgql.
 		generated.WithTrustCenterHistoryOrder(orderBy),
 		generated.WithTrustCenterHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterhistory"})
 	}
 
 	return res, err
@@ -3685,7 +3685,7 @@ func (r *queryResolver) TrustCenterSettings(ctx context.Context, after *entgql.C
 
 	query, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersetting"})
 	}
 
 	res, err := query.Paginate(
@@ -3697,7 +3697,7 @@ func (r *queryResolver) TrustCenterSettings(ctx context.Context, after *entgql.C
 		generated.WithTrustCenterSettingOrder(orderBy),
 		generated.WithTrustCenterSettingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersetting"})
 	}
 
 	return res, err
@@ -3717,7 +3717,7 @@ func (r *queryResolver) TrustCenterSettingHistories(ctx context.Context, after *
 
 	query, err := withTransactionalMutation(ctx).TrustCenterSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersettinghistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3729,7 +3729,7 @@ func (r *queryResolver) TrustCenterSettingHistories(ctx context.Context, after *
 		generated.WithTrustCenterSettingHistoryOrder(orderBy),
 		generated.WithTrustCenterSettingHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersettinghistory"})
 	}
 
 	return res, err
@@ -3751,7 +3751,7 @@ func (r *queryResolver) TrustCenterSubprocessors(ctx context.Context, after *ent
 
 	query, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessor"})
 	}
 
 	res, err := query.Paginate(
@@ -3763,7 +3763,7 @@ func (r *queryResolver) TrustCenterSubprocessors(ctx context.Context, after *ent
 		generated.WithTrustCenterSubprocessorOrder(orderBy),
 		generated.WithTrustCenterSubprocessorFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessor"})
 	}
 
 	return res, err
@@ -3783,7 +3783,7 @@ func (r *queryResolver) TrustCenterSubprocessorHistories(ctx context.Context, af
 
 	query, err := withTransactionalMutation(ctx).TrustCenterSubprocessorHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3795,7 +3795,7 @@ func (r *queryResolver) TrustCenterSubprocessorHistories(ctx context.Context, af
 		generated.WithTrustCenterSubprocessorHistoryOrder(orderBy),
 		generated.WithTrustCenterSubprocessorHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcentersubprocessorhistory"})
 	}
 
 	return res, err
@@ -3817,7 +3817,7 @@ func (r *queryResolver) TrustCenterWatermarkConfigs(ctx context.Context, after *
 
 	query, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
 	}
 
 	res, err := query.Paginate(
@@ -3829,7 +3829,7 @@ func (r *queryResolver) TrustCenterWatermarkConfigs(ctx context.Context, after *
 		generated.WithTrustCenterWatermarkConfigOrder(orderBy),
 		generated.WithTrustCenterWatermarkConfigFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfig"})
 	}
 
 	return res, err
@@ -3849,7 +3849,7 @@ func (r *queryResolver) TrustCenterWatermarkConfigHistories(ctx context.Context,
 
 	query, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfigHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3861,7 +3861,7 @@ func (r *queryResolver) TrustCenterWatermarkConfigHistories(ctx context.Context,
 		generated.WithTrustCenterWatermarkConfigHistoryOrder(orderBy),
 		generated.WithTrustCenterWatermarkConfigHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterwatermarkconfighistory"})
 	}
 
 	return res, err
@@ -3883,7 +3883,7 @@ func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string],
 
 	query, err := withTransactionalMutation(ctx).User.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	res, err := query.Paginate(
@@ -3895,7 +3895,7 @@ func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string],
 		generated.WithUserOrder(orderBy),
 		generated.WithUserFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	return res, err
@@ -3915,7 +3915,7 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 
 	query, err := withTransactionalMutation(ctx).UserHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "userhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "userhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3927,7 +3927,7 @@ func (r *queryResolver) UserHistories(ctx context.Context, after *entgql.Cursor[
 		generated.WithUserHistoryOrder(orderBy),
 		generated.WithUserHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "userhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "userhistory"})
 	}
 
 	return res, err
@@ -3949,7 +3949,7 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 
 	query, err := withTransactionalMutation(ctx).UserSetting.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersetting"})
 	}
 
 	res, err := query.Paginate(
@@ -3961,7 +3961,7 @@ func (r *queryResolver) UserSettings(ctx context.Context, after *entgql.Cursor[s
 		generated.WithUserSettingOrder(orderBy),
 		generated.WithUserSettingFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "usersetting"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersetting"})
 	}
 
 	return res, err
@@ -3981,7 +3981,7 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 
 	query, err := withTransactionalMutation(ctx).UserSettingHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "usersettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersettinghistory"})
 	}
 
 	res, err := query.Paginate(
@@ -3993,7 +3993,7 @@ func (r *queryResolver) UserSettingHistories(ctx context.Context, after *entgql.
 		generated.WithUserSettingHistoryOrder(orderBy),
 		generated.WithUserSettingHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "usersettinghistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "usersettinghistory"})
 	}
 
 	return res, err
@@ -4015,7 +4015,7 @@ func (r *queryResolver) Vulnerabilities(ctx context.Context, after *entgql.Curso
 
 	query, err := withTransactionalMutation(ctx).Vulnerability.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "vulnerability"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "vulnerability"})
 	}
 
 	res, err := query.Paginate(
@@ -4027,7 +4027,7 @@ func (r *queryResolver) Vulnerabilities(ctx context.Context, after *entgql.Curso
 		generated.WithVulnerabilityOrder(orderBy),
 		generated.WithVulnerabilityFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "vulnerability"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "vulnerability"})
 	}
 
 	return res, err
@@ -4047,7 +4047,7 @@ func (r *queryResolver) VulnerabilityHistories(ctx context.Context, after *entgq
 
 	query, err := withTransactionalMutation(ctx).VulnerabilityHistory.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "vulnerabilityhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "vulnerabilityhistory"})
 	}
 
 	res, err := query.Paginate(
@@ -4059,7 +4059,7 @@ func (r *queryResolver) VulnerabilityHistories(ctx context.Context, after *entgq
 		generated.WithVulnerabilityHistoryOrder(orderBy),
 		generated.WithVulnerabilityHistoryFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "vulnerabilityhistory"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "vulnerabilityhistory"})
 	}
 
 	return res, err
@@ -4079,7 +4079,7 @@ func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[stri
 
 	query, err := withTransactionalMutation(ctx).Webauthn.Query().CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "webauthn"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "webauthn"})
 	}
 
 	res, err := query.Paginate(
@@ -4091,7 +4091,7 @@ func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithWebauthnOrder(orderBy),
 		generated.WithWebauthnFilter(where.Filter))
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "webauthn"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "webauthn"})
 	}
 
 	return res, err

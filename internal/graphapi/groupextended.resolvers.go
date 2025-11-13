@@ -68,7 +68,7 @@ func (r *groupResolver) Permissions(ctx context.Context, obj *generated.Group, a
 		WithNarrativeBlockedGroups().
 		Paginate(ctx, after, first, before, last)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "group"})
 	}
 
 	for _, r := range res.Edges {
@@ -128,7 +128,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 
 	res, err := r.CreateGroup(ctx, groupInput)
 	if err != nil {
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	if len(members) > 0 {
@@ -143,7 +143,7 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		}
 
 		if _, err := r.CreateBulkGroupMembership(ctx, memberInput); err != nil {
-			return nil, err
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 		}
 	}
 
@@ -153,12 +153,12 @@ func (r *mutationResolver) CreateGroupWithMembers(ctx context.Context, groupInpu
 		Where(group.IDEQ(res.Group.ID)).
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -178,7 +178,7 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 	if inheritGroupPermissions != nil {
 		groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, inheritGroupPermissions)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 		}
 
 		for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {
@@ -276,17 +276,17 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 
 	res, err := withTransactionalMutation(ctx).Group.Create().SetInput(groupInput).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	if cloneGroupMembers != nil {
 		existingMembers, err := res.QueryMembers().All(ctx)
 		if err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 		}
 
 		if err := r.createGroupMembersViaClone(ctx, cloneGroupMembers, res.ID, existingMembers); err != nil {
-			return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 		}
 	}
 
@@ -295,12 +295,12 @@ func (r *mutationResolver) CreateGroupByClone(ctx context.Context, groupInput ge
 		WithMembers().
 		CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	finalResult, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	return &model.GroupCreatePayload{
@@ -319,7 +319,7 @@ func (r *createGroupInputResolver) CreateGroupSettings(ctx context.Context, obj 
 
 	groupSettings, err := withTransactionalMutation(ctx).GroupSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	obj.SettingID = &groupSettings.ID
@@ -349,7 +349,7 @@ func (r *updateGroupInputResolver) AddGroupMembers(ctx context.Context, obj *gen
 	}
 
 	if err := c.GroupMembership.CreateBulk(builders...).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "group"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 	}
 
 	return nil
@@ -375,7 +375,7 @@ func (r *updateGroupInputResolver) RemoveGroupMembers(ctx context.Context, obj *
 			Where(groupmembership.GroupID(*groupID)).
 			Exec(ctx); err != nil {
 
-			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 		}
 	}
 
@@ -398,12 +398,12 @@ func (r *updateGroupInputResolver) UpdateGroupSettings(ctx context.Context, obj 
 	if settingID == nil {
 		group, err := c.Group.Get(ctx, *groupID)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 		}
 
 		setting, err := group.Setting(ctx)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "group"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "group"})
 		}
 
 		settingID = &setting.ID
@@ -421,7 +421,7 @@ func (r *updateGroupInputResolver) InheritGroupPermissions(ctx context.Context, 
 
 	groupWithPermissions, err := getGroupByIDWithPermissionsEdges(ctx, data)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "group"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "group"})
 	}
 
 	for _, controlEditor := range groupWithPermissions.Edges.ControlEditors {

@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateOrgMembership(ctx context.Context, input generated.CreateOrgMembershipInput) (*model.OrgMembershipCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrgMembership.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "orgmembership"})
 	}
 
 	return &model.OrgMembershipCreatePayload{
@@ -50,7 +50,7 @@ func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "orgmembership"})
 	}
 
 	if len(data) == 0 {
@@ -72,7 +72,7 @@ func (r *mutationResolver) CreateBulkCSVOrgMembership(ctx context.Context, input
 func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, input generated.UpdateOrgMembershipInput) (*model.OrgMembershipUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "orgmembership"})
 	}
 
 	// setup update request
@@ -80,7 +80,7 @@ func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "orgmembership"})
 	}
 
 	return &model.OrgMembershipUpdatePayload{
@@ -92,15 +92,15 @@ func (r *mutationResolver) UpdateOrgMembership(ctx context.Context, id string, i
 func (r *mutationResolver) DeleteOrgMembership(ctx context.Context, id string) (*model.OrgMembershipDeletePayload, error) {
 	res, err := withTransactionalMutation(ctx).OrgMembership.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "orgmembership"})
 	}
 
 	if err := withTransactionalMutation(ctx).OrgMembership.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "orgmembership"})
 	}
 
 	if err := generated.OrgMembershipEdgeCleanup(ctx, res.UserID); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.OrgMembershipDeletePayload{
@@ -121,12 +121,12 @@ func (r *mutationResolver) DeleteBulkOrgMembership(ctx context.Context, ids []st
 func (r *queryResolver) OrgMembership(ctx context.Context, id string) (*generated.OrgMembership, error) {
 	query, err := withTransactionalMutation(ctx).OrgMembership.Query().Where(orgmembership.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembership"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgmembership"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgmembership"})
 	}
 
 	return res, nil

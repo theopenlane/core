@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateRisk(ctx context.Context, input generated.Creat
 
 	res, err := withTransactionalMutation(ctx).Risk.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
 	}
 
 	return &model.RiskCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVRisk(ctx context.Context, input graphql.
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "risk"})
 	}
 
 	if len(data) == 0 {
@@ -88,7 +88,7 @@ func (r *mutationResolver) UpdateBulkRisk(ctx context.Context, ids []string, inp
 func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input generated.UpdateRiskInput) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Risk.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -103,7 +103,7 @@ func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
 	}
 
 	return &model.RiskUpdatePayload{
@@ -114,11 +114,11 @@ func (r *mutationResolver) UpdateRisk(ctx context.Context, id string, input gene
 // DeleteRisk is the resolver for the deleteRisk field.
 func (r *mutationResolver) DeleteRisk(ctx context.Context, id string) (*model.RiskDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Risk.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "risk"})
 	}
 
 	if err := generated.RiskEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.RiskDeletePayload{
@@ -139,12 +139,12 @@ func (r *mutationResolver) DeleteBulkRisk(ctx context.Context, ids []string) (*m
 func (r *queryResolver) Risk(ctx context.Context, id string) (*generated.Risk, error) {
 	query, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "risk"})
 	}
 
 	return res, nil

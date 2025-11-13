@@ -27,7 +27,7 @@ import (
 func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TaskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "taskcomment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "taskcomment"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -41,13 +41,13 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "taskcomment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "taskcomment"})
 	}
 
 	// Get the task that owns this comment
 	taskRes, err := withTransactionalMutation(ctx).Task.Query().Where(task.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "task"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "task"})
 	}
 
 	return &model.TaskUpdatePayload{
@@ -59,19 +59,19 @@ func (r *mutationResolver) UpdateTaskComment(ctx context.Context, id string, inp
 func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "control"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "control"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).Control.Query().Where(control.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "control"})
 	}
 
 	return &model.ControlUpdatePayload{
@@ -83,19 +83,19 @@ func (r *mutationResolver) UpdateControlComment(ctx context.Context, id string, 
 func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.SubcontrolUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subcontrol"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subcontrol"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).Subcontrol.Query().Where(subcontrol.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subcontrol"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subcontrol"})
 	}
 
 	return &model.SubcontrolUpdatePayload{
@@ -107,19 +107,19 @@ func (r *mutationResolver) UpdateSubcontrolComment(ctx context.Context, id strin
 func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.ProcedureUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).Procedure.Query().Where(procedure.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "procedure"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "procedure"})
 	}
 
 	return &model.ProcedureUpdatePayload{
@@ -131,19 +131,19 @@ func (r *mutationResolver) UpdateProcedureComment(ctx context.Context, id string
 func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.RiskUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).Risk.Query().Where(risk.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "risk"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "risk"})
 	}
 
 	return &model.RiskUpdatePayload{
@@ -155,19 +155,19 @@ func (r *mutationResolver) UpdateRiskComment(ctx context.Context, id string, inp
 func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.InternalPolicyUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "internalpolicy"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "internalpolicy"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).InternalPolicy.Query().Where(internalpolicy.HasCommentsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "internalpolicy"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "internalpolicy"})
 	}
 
 	return &model.InternalPolicyUpdatePayload{
@@ -179,19 +179,19 @@ func (r *mutationResolver) UpdateInternalPolicyComment(ctx context.Context, id s
 func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 	}
 
 	// setup update request
 	req := res.Update().SetInput(input)
 
 	if err = req.Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 	}
 
 	objectRes, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.HasPostsWith(note.ID(id))).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 	}
 
 	return &model.TrustCenterUpdatePayload{
@@ -202,11 +202,11 @@ func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string,
 // DeleteNote is the resolver for the deleteNote field.
 func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "note"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "note"})
 	}
 
 	if err := generated.NoteEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.NoteDeletePayload{
@@ -218,12 +218,12 @@ func (r *mutationResolver) DeleteNote(ctx context.Context, id string) (*model.No
 func (r *queryResolver) Note(ctx context.Context, id string) (*generated.Note, error) {
 	query, err := withTransactionalMutation(ctx).Note.Query().Where(note.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "note"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "note"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "note"})
 	}
 
 	return res, nil
@@ -248,7 +248,7 @@ func (r *updateControlInputResolver) AddComment(ctx context.Context, obj *genera
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -261,7 +261,7 @@ func (r *updateControlInputResolver) DeleteComment(ctx context.Context, obj *gen
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -286,7 +286,7 @@ func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj 
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -299,7 +299,7 @@ func (r *updateInternalPolicyInputResolver) DeleteComment(ctx context.Context, o
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -324,7 +324,7 @@ func (r *updateProcedureInputResolver) AddComment(ctx context.Context, obj *gene
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -337,7 +337,7 @@ func (r *updateProcedureInputResolver) DeleteComment(ctx context.Context, obj *g
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -362,7 +362,7 @@ func (r *updateRiskInputResolver) AddComment(ctx context.Context, obj *generated
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -375,7 +375,7 @@ func (r *updateRiskInputResolver) DeleteComment(ctx context.Context, obj *genera
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -400,7 +400,7 @@ func (r *updateSubcontrolInputResolver) AddComment(ctx context.Context, obj *gen
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -413,7 +413,7 @@ func (r *updateSubcontrolInputResolver) DeleteComment(ctx context.Context, obj *
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -438,7 +438,7 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -451,7 +451,7 @@ func (r *updateTaskInputResolver) DeleteComment(ctx context.Context, obj *genera
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil
@@ -476,7 +476,7 @@ func (r *updateTrustCenterInputResolver) AddPost(ctx context.Context, obj *gener
 	}
 
 	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
 
 	return nil
@@ -489,7 +489,7 @@ func (r *updateTrustCenterInputResolver) DeletePost(ctx context.Context, obj *ge
 	}
 
 	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
-		return parseRequestError(err, action{action: ActionDelete, object: "comment"})
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
 	}
 
 	return nil

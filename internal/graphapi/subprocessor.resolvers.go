@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateSubprocessor(ctx context.Context, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subprocessor.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subprocessor"})
 	}
 
 	return &model.SubprocessorCreatePayload{
@@ -42,7 +42,7 @@ func (r *mutationResolver) CreateBulkCSVSubprocessor(ctx context.Context, input 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subprocessor"})
 	}
 
 	if len(data) == 0 {
@@ -56,7 +56,7 @@ func (r *mutationResolver) CreateBulkCSVSubprocessor(ctx context.Context, input 
 func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Subprocessor.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subprocessor"})
 	}
 
 	// setup update request
@@ -64,7 +64,7 @@ func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subprocessor"})
 	}
 
 	return &model.SubprocessorUpdatePayload{
@@ -75,11 +75,11 @@ func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, in
 // DeleteSubprocessor is the resolver for the deleteSubprocessor field.
 func (r *mutationResolver) DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subprocessor"})
 	}
 
 	if err := generated.SubprocessorEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.SubprocessorDeletePayload{
@@ -100,12 +100,12 @@ func (r *mutationResolver) DeleteBulkSubprocessor(ctx context.Context, ids []str
 func (r *queryResolver) Subprocessor(ctx context.Context, id string) (*generated.Subprocessor, error) {
 	query, err := withTransactionalMutation(ctx).Subprocessor.Query().Where(subprocessor.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessor"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subprocessor"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subprocessor"})
 	}
 
 	return res, nil

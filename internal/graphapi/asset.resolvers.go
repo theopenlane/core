@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateAsset(ctx context.Context, input generated.Crea
 
 	res, err := withTransactionalMutation(ctx).Asset.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
 	}
 
 	return &model.AssetCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "asset"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVAsset(ctx context.Context, input graphql
 func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input generated.UpdateAssetInput) (*model.AssetUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Asset.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "asset"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input gen
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "asset"})
 	}
 
 	return &model.AssetUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateAsset(ctx context.Context, id string, input gen
 // DeleteAsset is the resolver for the deleteAsset field.
 func (r *mutationResolver) DeleteAsset(ctx context.Context, id string) (*model.AssetDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Asset.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "asset"})
 	}
 
 	if err := generated.AssetEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssetDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkAsset(ctx context.Context, ids []string) (*
 func (r *queryResolver) Asset(ctx context.Context, id string) (*generated.Asset, error) {
 	query, err := withTransactionalMutation(ctx).Asset.Query().Where(asset.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "asset"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "asset"})
 	}
 
 	return res, nil

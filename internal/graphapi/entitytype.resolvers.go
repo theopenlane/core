@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateEntityType(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).EntityType.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entitytype"})
 	}
 
 	return &model.EntityTypeCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input gr
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entitytype"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVEntityType(ctx context.Context, input gr
 func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, input generated.UpdateEntityTypeInput) (*model.EntityTypeUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).EntityType.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entitytype"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entitytype"})
 	}
 
 	return &model.EntityTypeUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateEntityType(ctx context.Context, id string, inpu
 // DeleteEntityType is the resolver for the deleteEntityType field.
 func (r *mutationResolver) DeleteEntityType(ctx context.Context, id string) (*model.EntityTypeDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).EntityType.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "entitytype"})
 	}
 
 	if err := generated.EntityTypeEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.EntityTypeDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkEntityType(ctx context.Context, ids []strin
 func (r *queryResolver) EntityType(ctx context.Context, id string) (*generated.EntityType, error) {
 	query, err := withTransactionalMutation(ctx).EntityType.Query().Where(entitytype.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytype"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entitytype"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entitytype"})
 	}
 
 	return res, nil

@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateCustomDomain(ctx context.Context, input generat
 
 	res, err := withTransactionalMutation(ctx).CustomDomain.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
 	}
 
 	return &model.CustomDomainCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVCustomDomain(ctx context.Context, input 
 func (r *mutationResolver) UpdateCustomDomain(ctx context.Context, id string, input generated.UpdateCustomDomainInput) (*model.CustomDomainUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).CustomDomain.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customdomain"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateCustomDomain(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "customdomain"})
 	}
 
 	return &model.CustomDomainUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateCustomDomain(ctx context.Context, id string, in
 // DeleteCustomDomain is the resolver for the deleteCustomDomain field.
 func (r *mutationResolver) DeleteCustomDomain(ctx context.Context, id string) (*model.CustomDomainDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).CustomDomain.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "customdomain"})
 	}
 
 	if err := generated.CustomDomainEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.CustomDomainDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkCustomDomain(ctx context.Context, ids []str
 func (r *queryResolver) CustomDomain(ctx context.Context, id string) (*generated.CustomDomain, error) {
 	query, err := withTransactionalMutation(ctx).CustomDomain.Query().Where(customdomain.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomain"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "customdomain"})
 	}
 
 	return res, nil

@@ -25,7 +25,7 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 
 	res, err := withTransactionalMutation(ctx).TrustCenter.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenter"})
 	}
 
 	return &model.TrustCenterCreatePayload{
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateTrustCenter(ctx context.Context, input generate
 func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, input generated.UpdateTrustCenterInput) (*model.TrustCenterUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).TrustCenter.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, inp
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 	}
 
 	return &model.TrustCenterUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateTrustCenter(ctx context.Context, id string, inp
 // DeleteTrustCenter is the resolver for the deleteTrustCenter field.
 func (r *mutationResolver) DeleteTrustCenter(ctx context.Context, id string) (*model.TrustCenterDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenter.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "trustcenter"})
 	}
 
 	if err := generated.TrustCenterEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TrustCenterDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteTrustCenter(ctx context.Context, id string) (*m
 func (r *queryResolver) TrustCenter(ctx context.Context, id string) (*generated.TrustCenter, error) {
 	query, err := withTransactionalMutation(ctx).TrustCenter.Query().Where(trustcenter.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "trustcenter"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenter"})
 	}
 
 	return res, nil

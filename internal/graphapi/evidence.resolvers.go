@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Evidence.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "evidence"})
 	}
 
 	return &model.EvidenceCreatePayload{
@@ -38,7 +38,7 @@ func (r *mutationResolver) CreateEvidence(ctx context.Context, input generated.C
 func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Evidence.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "evidence"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -53,7 +53,7 @@ func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "evidence"})
 	}
 
 	return &model.EvidenceUpdatePayload{
@@ -64,11 +64,11 @@ func (r *mutationResolver) UpdateEvidence(ctx context.Context, id string, input 
 // DeleteEvidence is the resolver for the deleteEvidence field.
 func (r *mutationResolver) DeleteEvidence(ctx context.Context, id string) (*model.EvidenceDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Evidence.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "evidence"})
 	}
 
 	if err := generated.EvidenceEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.EvidenceDeletePayload{
@@ -80,12 +80,12 @@ func (r *mutationResolver) DeleteEvidence(ctx context.Context, id string) (*mode
 func (r *queryResolver) Evidence(ctx context.Context, id string) (*generated.Evidence, error) {
 	query, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidence"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "evidence"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "evidence"})
 	}
 
 	return res, nil

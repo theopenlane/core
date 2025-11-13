@@ -25,7 +25,7 @@ func (r *mutationResolver) CreateScheduledJobRun(ctx context.Context, input gene
 
 	res, err := withTransactionalMutation(ctx).ScheduledJobRun.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "scheduledjobrun"})
 	}
 
 	return &model.ScheduledJobRunCreatePayload{
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateScheduledJobRun(ctx context.Context, input gene
 func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string, input generated.UpdateScheduledJobRunInput) (*model.ScheduledJobRunUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).ScheduledJobRun.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjobrun"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "scheduledjobrun"})
 	}
 
 	return &model.ScheduledJobRunUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateScheduledJobRun(ctx context.Context, id string,
 // DeleteScheduledJobRun is the resolver for the deleteScheduledJobRun field.
 func (r *mutationResolver) DeleteScheduledJobRun(ctx context.Context, id string) (*model.ScheduledJobRunDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).ScheduledJobRun.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "scheduledjobrun"})
 	}
 
 	if err := generated.ScheduledJobRunEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ScheduledJobRunDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteScheduledJobRun(ctx context.Context, id string)
 func (r *queryResolver) ScheduledJobRun(ctx context.Context, id string) (*generated.ScheduledJobRun, error) {
 	query, err := withTransactionalMutation(ctx).ScheduledJobRun.Query().Where(scheduledjobrun.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "scheduledjobrun"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "scheduledjobrun"})
 	}
 
 	return res, nil

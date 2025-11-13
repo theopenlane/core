@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateTemplate(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Template.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
 	}
 
 	return &model.TemplateCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "template"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVTemplate(ctx context.Context, input grap
 func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) (*model.TemplateUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Template.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "template"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "template"})
 	}
 
 	return &model.TemplateUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateTemplate(ctx context.Context, id string, input 
 // DeleteTemplate is the resolver for the deleteTemplate field.
 func (r *mutationResolver) DeleteTemplate(ctx context.Context, id string) (*model.TemplateDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Template.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "template"})
 	}
 
 	if err := generated.TemplateEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.TemplateDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkTemplate(ctx context.Context, ids []string)
 func (r *queryResolver) Template(ctx context.Context, id string) (*generated.Template, error) {
 	query, err := withTransactionalMutation(ctx).Template.Query().Where(template.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "template"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "template"})
 	}
 
 	return res, nil

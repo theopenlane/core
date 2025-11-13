@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateDNSVerification(ctx context.Context, input gene
 
 	res, err := withTransactionalMutation(ctx).DNSVerification.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
 	}
 
 	return &model.DNSVerificationCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, inp
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "dnsverification"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVDNSVerification(ctx context.Context, inp
 func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string, input generated.UpdateDNSVerificationInput) (*model.DNSVerificationUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DNSVerification.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "dnsverification"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string,
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "dnsverification"})
 	}
 
 	return &model.DNSVerificationUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateDNSVerification(ctx context.Context, id string,
 // DeleteDNSVerification is the resolver for the deleteDNSVerification field.
 func (r *mutationResolver) DeleteDNSVerification(ctx context.Context, id string) (*model.DNSVerificationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DNSVerification.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "dnsverification"})
 	}
 
 	if err := generated.DNSVerificationEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DNSVerificationDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkDNSVerification(ctx context.Context, ids []
 func (r *queryResolver) DNSVerification(ctx context.Context, id string) (*generated.DNSVerification, error) {
 	query, err := withTransactionalMutation(ctx).DNSVerification.Query().Where(dnsverification.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "dnsverification"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "dnsverification"})
 	}
 
 	return res, nil

@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateDocumentData(ctx context.Context, input generat
 
 	res, err := withTransactionalMutation(ctx).DocumentData.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
 	}
 
 	return &model.DocumentDataCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "documentdata"})
 	}
 
 	if len(data) == 0 {
@@ -79,7 +79,7 @@ func (r *mutationResolver) CreateBulkCSVDocumentData(ctx context.Context, input 
 func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, input generated.UpdateDocumentDataInput) (*model.DocumentDataUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).DocumentData.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "documentdata"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "documentdata"})
 	}
 
 	return &model.DocumentDataUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateDocumentData(ctx context.Context, id string, in
 // DeleteDocumentData is the resolver for the deleteDocumentData field.
 func (r *mutationResolver) DeleteDocumentData(ctx context.Context, id string) (*model.DocumentDataDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).DocumentData.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "documentdata"})
 	}
 
 	if err := generated.DocumentDataEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.DocumentDataDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkDocumentData(ctx context.Context, ids []str
 func (r *queryResolver) DocumentData(ctx context.Context, id string) (*generated.DocumentData, error) {
 	query, err := withTransactionalMutation(ctx).DocumentData.Query().Where(documentdata.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "documentdata"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "documentdata"})
 	}
 
 	return res, nil

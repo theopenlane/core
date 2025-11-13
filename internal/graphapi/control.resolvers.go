@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateControl(ctx context.Context, input generated.Cr
 
 	res, err := withTransactionalMutation(ctx).Control.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 	}
 
 	return &model.ControlCreatePayload{
@@ -57,7 +57,7 @@ func (r *mutationResolver) CreateBulkCSVControl(ctx context.Context, input graph
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "control"})
 	}
 
 	if len(data) == 0 {
@@ -88,7 +88,7 @@ func (r *mutationResolver) UpdateBulkControl(ctx context.Context, ids []string, 
 func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input generated.UpdateControlInput) (*model.ControlUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Control.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "control"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -103,7 +103,7 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "control"})
 	}
 
 	return &model.ControlUpdatePayload{
@@ -114,11 +114,11 @@ func (r *mutationResolver) UpdateControl(ctx context.Context, id string, input g
 // DeleteControl is the resolver for the deleteControl field.
 func (r *mutationResolver) DeleteControl(ctx context.Context, id string) (*model.ControlDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Control.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "control"})
 	}
 
 	if err := generated.ControlEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.ControlDeletePayload{
@@ -139,12 +139,12 @@ func (r *mutationResolver) DeleteBulkControl(ctx context.Context, ids []string) 
 func (r *queryResolver) Control(ctx context.Context, id string) (*generated.Control, error) {
 	query, err := withTransactionalMutation(ctx).Control.Query().Where(control.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "control"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "control"})
 	}
 
 	return res, nil

@@ -25,7 +25,7 @@ func (r *mutationResolver) CreateJobRunnerRegistrationToken(ctx context.Context,
 
 	res, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "jobrunnerregistrationtoken"})
 	}
 
 	return &model.JobRunnerRegistrationTokenCreatePayload{
@@ -36,11 +36,11 @@ func (r *mutationResolver) CreateJobRunnerRegistrationToken(ctx context.Context,
 // DeleteJobRunnerRegistrationToken is the resolver for the deleteJobRunnerRegistrationToken field.
 func (r *mutationResolver) DeleteJobRunnerRegistrationToken(ctx context.Context, id string) (*model.JobRunnerRegistrationTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "jobrunnerregistrationtoken"})
 	}
 
 	if err := generated.JobRunnerRegistrationTokenEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.JobRunnerRegistrationTokenDeletePayload{
@@ -52,12 +52,12 @@ func (r *mutationResolver) DeleteJobRunnerRegistrationToken(ctx context.Context,
 func (r *queryResolver) JobRunnerRegistrationToken(ctx context.Context, id string) (*generated.JobRunnerRegistrationToken, error) {
 	query, err := withTransactionalMutation(ctx).JobRunnerRegistrationToken.Query().Where(jobrunnerregistrationtoken.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "jobrunnerregistrationtoken"})
 	}
 
 	return res, nil

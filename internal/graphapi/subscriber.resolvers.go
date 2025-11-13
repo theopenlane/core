@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateSubscriber(ctx context.Context, input generated
 
 	res, err := withTransactionalMutation(ctx).Subscriber.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
 	}
 
 	return &model.SubscriberCreatePayload{
@@ -53,7 +53,7 @@ func (r *mutationResolver) CreateBulkCSVSubscriber(ctx context.Context, input gr
 	if err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -74,7 +74,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -89,7 +89,7 @@ func (r *mutationResolver) UpdateSubscriber(ctx context.Context, email string, i
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "subscriber"})
 	}
 
 	return &model.SubscriberUpdatePayload{
@@ -110,15 +110,15 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 			subscriber.EmailEQ(email),
 		).Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
 	}
 
 	if err := withTransactionalMutation(ctx).Subscriber.DeleteOneID(subscriber.ID).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "subscriber"})
 	}
 
 	if err := generated.SubscriberEdgeCleanup(ctx, subscriber.ID); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.SubscriberDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteSubscriber(ctx context.Context, email string, o
 func (r *queryResolver) Subscriber(ctx context.Context, email string) (*generated.Subscriber, error) {
 	query, err := withTransactionalMutation(ctx).Subscriber.Query().Where(subscriber.EmailEQ(email)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "subscriber"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "subscriber"})
 	}
 
 	return res, nil

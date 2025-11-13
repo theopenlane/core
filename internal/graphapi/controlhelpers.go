@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
@@ -33,7 +34,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 
 	whereP, err := getControlWherePredicate(where)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
 	}
 
 	whereFilter := control.CategoryNEQ("")
@@ -52,7 +53,7 @@ func (r *queryResolver) getAllCategories(ctx context.Context, fieldName string, 
 			control.FieldReferenceFramework).
 		Where(whereFilter).All(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "categories"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "categories"})
 	}
 
 	tmp := map[string]map[string]bool{}
@@ -238,6 +239,8 @@ func getControlIDsFromRefCodes[T predicate.Control | predicate.Subcontrol](ctx c
 
 	mappedData, err := getStandardRefCodes(data)
 	if err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to get standard ref codes")
+
 		return nil, err
 	}
 

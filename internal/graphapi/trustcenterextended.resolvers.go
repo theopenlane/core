@@ -23,7 +23,7 @@ func (r *createTrustCenterInputResolver) CreateTrustCenterSetting(ctx context.Co
 
 	groupSettings, err := withTransactionalMutation(ctx).TrustCenterSetting.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "trustcenter"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenter"})
 	}
 
 	obj.SettingID = &groupSettings.ID
@@ -47,12 +47,12 @@ func (r *updateTrustCenterInputResolver) UpdateTrustCenterSetting(ctx context.Co
 	if settingID == nil {
 		trustCenter, err := c.TrustCenter.Get(ctx, *trustCenterID)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 		}
 
 		setting, err := trustCenter.Setting(ctx)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "trustcenter"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcenter"})
 		}
 
 		settingID = &setting.ID

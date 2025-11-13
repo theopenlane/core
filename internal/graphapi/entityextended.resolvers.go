@@ -20,7 +20,7 @@ func (r *createEntityInputResolver) Note(ctx context.Context, obj *generated.Cre
 
 	note, err := c.Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "entity"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
 	}
 
 	obj.NoteIDs = []string{note.ID}
@@ -43,7 +43,7 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 		// get the entity in order to set the organization in the auth context
 		res, err := withTransactionalMutation(ctx).Entity.Get(ctx, *id)
 		if err != nil {
-			return parseRequestError(err, action{action: ActionUpdate, object: "entity"})
+			return parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
 		}
 
 		// set the organization in the auth context if its not done for us
@@ -57,7 +57,7 @@ func (r *updateEntityInputResolver) Note(ctx context.Context, obj *generated.Upd
 
 	note, err := c.Note.Create().SetInput(*data).Save(ctx)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionUpdate, object: "entity"})
+		return parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
 	}
 
 	obj.AddNoteIDs = []string{note.ID}

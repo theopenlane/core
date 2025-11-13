@@ -25,7 +25,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 
 	res, err := withTransactionalMutation(ctx).Standard.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "standard"})
 	}
 
 	return &model.StandardCreatePayload{
@@ -37,7 +37,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "standard"})
 	}
 
 	// set the organization in the auth context if its not done for us
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "standard"})
 	}
 
 	return &model.StandardUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input 
 // DeleteStandard is the resolver for the deleteStandard field.
 func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*model.StandardDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Standard.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "standard"})
 	}
 
 	if err := generated.StandardEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.StandardDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteStandard(ctx context.Context, id string) (*mode
 func (r *queryResolver) Standard(ctx context.Context, id string) (*generated.Standard, error) {
 	query, err := withTransactionalMutation(ctx).Standard.Query().Where(standard.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "standard"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "standard"})
 	}
 
 	return res, nil
