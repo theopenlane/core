@@ -155,7 +155,7 @@ func ControlEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasControlWith(control.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasControlWith(control.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("deleting subcontrol")
+			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("error deleting subcontrol")
 			return err
 		}
 	}
@@ -336,14 +336,14 @@ func GroupEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).GroupSetting.Query().Where((groupsetting.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupsettingCount, err := FromContext(ctx).GroupSetting.Delete().Where(groupsetting.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", groupsettingCount).Msg("deleting groupsetting")
+			logx.FromContext(ctx).Error().Err(err).Int("count", groupsettingCount).Msg("error deleting groupsetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasGroupWith(group.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasGroupWith(group.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("error deleting groupmembership")
 			return err
 		}
 	}
@@ -458,7 +458,7 @@ func JobTemplateEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasJobTemplateWith(jobtemplate.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasJobTemplateWith(jobtemplate.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("deleting scheduledjob")
+			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
 			return err
 		}
 	}
@@ -537,14 +537,14 @@ func OrgMembershipEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("error deleting groupmembership")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", programmembershipCount).Msg("deleting programmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", programmembershipCount).Msg("error deleting programmembership")
 			return err
 		}
 	}
@@ -593,406 +593,406 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).Organization.Query().Where(organization.HasParentWith(organization.ID(id))).Exist(ctx); err == nil && exists {
 		if organizationCount, err := FromContext(ctx).Organization.Delete().Where(organization.HasParentWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", organizationCount).Msg("deleting child organization")
+			logx.FromContext(ctx).Error().Err(err).Int("count", organizationCount).Msg("error deleting child organization")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrganizationSetting.Query().Where((organizationsetting.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if organizationsettingCount, err := FromContext(ctx).OrganizationSetting.Delete().Where(organizationsetting.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", organizationsettingCount).Msg("deleting organizationsetting")
+			logx.FromContext(ctx).Error().Err(err).Int("count", organizationsettingCount).Msg("error deleting organizationsetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).APIToken.Query().Where((apitoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if apitokenCount, err := FromContext(ctx).APIToken.Delete().Where(apitoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", apitokenCount).Msg("deleting apitoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", apitokenCount).Msg("error deleting apitoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).File.Query().Where((file.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if fileCount, err := FromContext(ctx).File.Delete().Where(file.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("deleting file")
+			logx.FromContext(ctx).Error().Err(err).Int("count", fileCount).Msg("error deleting file")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Hush.Query().Where((hush.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if hushCount, err := FromContext(ctx).Hush.Delete().Where(hush.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", hushCount).Msg("deleting hush")
+			logx.FromContext(ctx).Error().Err(err).Int("count", hushCount).Msg("error deleting hush")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Group.Query().Where((group.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupCount, err := FromContext(ctx).Group.Delete().Where(group.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", groupCount).Msg("deleting group")
+			logx.FromContext(ctx).Error().Err(err).Int("count", groupCount).Msg("error deleting group")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Template.Query().Where((template.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("deleting template")
+			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("error deleting template")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Integration.Query().Where((integration.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if integrationCount, err := FromContext(ctx).Integration.Delete().Where(integration.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", integrationCount).Msg("deleting integration")
+			logx.FromContext(ctx).Error().Err(err).Int("count", integrationCount).Msg("error deleting integration")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("deleting documentdata")
+			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("error deleting documentdata")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgSubscription.Query().Where((orgsubscription.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgsubscriptionCount, err := FromContext(ctx).OrgSubscription.Delete().Where(orgsubscription.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgsubscriptionCount).Msg("deleting orgsubscription")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgsubscriptionCount).Msg("error deleting orgsubscription")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgProduct.Query().Where((orgproduct.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgproductCount, err := FromContext(ctx).OrgProduct.Delete().Where(orgproduct.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgproductCount).Msg("deleting orgproduct")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgproductCount).Msg("error deleting orgproduct")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgPrice.Query().Where((orgprice.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgpriceCount, err := FromContext(ctx).OrgPrice.Delete().Where(orgprice.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgpriceCount).Msg("deleting orgprice")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgpriceCount).Msg("error deleting orgprice")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgModule.Query().Where((orgmodule.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmoduleCount, err := FromContext(ctx).OrgModule.Delete().Where(orgmodule.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgmoduleCount).Msg("deleting orgmodule")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgmoduleCount).Msg("error deleting orgmodule")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Invite.Query().Where((invite.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if inviteCount, err := FromContext(ctx).Invite.Delete().Where(invite.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", inviteCount).Msg("deleting invite")
+			logx.FromContext(ctx).Error().Err(err).Int("count", inviteCount).Msg("error deleting invite")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Subscriber.Query().Where((subscriber.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subscriberCount, err := FromContext(ctx).Subscriber.Delete().Where(subscriber.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", subscriberCount).Msg("deleting subscriber")
+			logx.FromContext(ctx).Error().Err(err).Int("count", subscriberCount).Msg("error deleting subscriber")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Entity.Query().Where((entity.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entityCount, err := FromContext(ctx).Entity.Delete().Where(entity.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", entityCount).Msg("deleting entity")
+			logx.FromContext(ctx).Error().Err(err).Int("count", entityCount).Msg("error deleting entity")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EntityType.Query().Where((entitytype.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if entitytypeCount, err := FromContext(ctx).EntityType.Delete().Where(entitytype.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", entitytypeCount).Msg("deleting entitytype")
+			logx.FromContext(ctx).Error().Err(err).Int("count", entitytypeCount).Msg("error deleting entitytype")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Contact.Query().Where((contact.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if contactCount, err := FromContext(ctx).Contact.Delete().Where(contact.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", contactCount).Msg("deleting contact")
+			logx.FromContext(ctx).Error().Err(err).Int("count", contactCount).Msg("error deleting contact")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Note.Query().Where((note.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if noteCount, err := FromContext(ctx).Note.Delete().Where(note.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("deleting note")
+			logx.FromContext(ctx).Error().Err(err).Int("count", noteCount).Msg("error deleting note")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Task.Query().Where((task.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if taskCount, err := FromContext(ctx).Task.Delete().Where(task.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", taskCount).Msg("deleting task")
+			logx.FromContext(ctx).Error().Err(err).Int("count", taskCount).Msg("error deleting task")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Program.Query().Where((program.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if programCount, err := FromContext(ctx).Program.Delete().Where(program.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", programCount).Msg("deleting program")
+			logx.FromContext(ctx).Error().Err(err).Int("count", programCount).Msg("error deleting program")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Procedure.Query().Where((procedure.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if procedureCount, err := FromContext(ctx).Procedure.Delete().Where(procedure.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", procedureCount).Msg("deleting procedure")
+			logx.FromContext(ctx).Error().Err(err).Int("count", procedureCount).Msg("error deleting procedure")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).InternalPolicy.Query().Where((internalpolicy.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if internalpolicyCount, err := FromContext(ctx).InternalPolicy.Delete().Where(internalpolicy.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", internalpolicyCount).Msg("deleting internalpolicy")
+			logx.FromContext(ctx).Error().Err(err).Int("count", internalpolicyCount).Msg("error deleting internalpolicy")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Risk.Query().Where((risk.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if riskCount, err := FromContext(ctx).Risk.Delete().Where(risk.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", riskCount).Msg("deleting risk")
+			logx.FromContext(ctx).Error().Err(err).Int("count", riskCount).Msg("error deleting risk")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ControlObjective.Query().Where((controlobjective.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlobjectiveCount, err := FromContext(ctx).ControlObjective.Delete().Where(controlobjective.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", controlobjectiveCount).Msg("deleting controlobjective")
+			logx.FromContext(ctx).Error().Err(err).Int("count", controlobjectiveCount).Msg("error deleting controlobjective")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Narrative.Query().Where((narrative.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if narrativeCount, err := FromContext(ctx).Narrative.Delete().Where(narrative.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", narrativeCount).Msg("deleting narrative")
+			logx.FromContext(ctx).Error().Err(err).Int("count", narrativeCount).Msg("error deleting narrative")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Control.Query().Where((control.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlCount, err := FromContext(ctx).Control.Delete().Where(control.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", controlCount).Msg("deleting control")
+			logx.FromContext(ctx).Error().Err(err).Int("count", controlCount).Msg("error deleting control")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Subcontrol.Query().Where((subcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subcontrolCount, err := FromContext(ctx).Subcontrol.Delete().Where(subcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("deleting subcontrol")
+			logx.FromContext(ctx).Error().Err(err).Int("count", subcontrolCount).Msg("error deleting subcontrol")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ControlImplementation.Query().Where((controlimplementation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if controlimplementationCount, err := FromContext(ctx).ControlImplementation.Delete().Where(controlimplementation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", controlimplementationCount).Msg("deleting controlimplementation")
+			logx.FromContext(ctx).Error().Err(err).Int("count", controlimplementationCount).Msg("error deleting controlimplementation")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).MappedControl.Query().Where((mappedcontrol.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if mappedcontrolCount, err := FromContext(ctx).MappedControl.Delete().Where(mappedcontrol.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", mappedcontrolCount).Msg("deleting mappedcontrol")
+			logx.FromContext(ctx).Error().Err(err).Int("count", mappedcontrolCount).Msg("error deleting mappedcontrol")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Evidence.Query().Where((evidence.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if evidenceCount, err := FromContext(ctx).Evidence.Delete().Where(evidence.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", evidenceCount).Msg("deleting evidence")
+			logx.FromContext(ctx).Error().Err(err).Int("count", evidenceCount).Msg("error deleting evidence")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Standard.Query().Where((standard.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if standardCount, err := FromContext(ctx).Standard.Delete().Where(standard.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", standardCount).Msg("deleting standard")
+			logx.FromContext(ctx).Error().Err(err).Int("count", standardCount).Msg("error deleting standard")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ActionPlan.Query().Where((actionplan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if actionplanCount, err := FromContext(ctx).ActionPlan.Delete().Where(actionplan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", actionplanCount).Msg("deleting actionplan")
+			logx.FromContext(ctx).Error().Err(err).Int("count", actionplanCount).Msg("error deleting actionplan")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).CustomDomain.Query().Where((customdomain.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if customdomainCount, err := FromContext(ctx).CustomDomain.Delete().Where(customdomain.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", customdomainCount).Msg("deleting customdomain")
+			logx.FromContext(ctx).Error().Err(err).Int("count", customdomainCount).Msg("error deleting customdomain")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).JobRunner.Query().Where((jobrunner.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnerCount, err := FromContext(ctx).JobRunner.Delete().Where(jobrunner.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerCount).Msg("deleting jobrunner")
+			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerCount).Msg("error deleting jobrunner")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).JobRunnerToken.Query().Where((jobrunnertoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnertokenCount, err := FromContext(ctx).JobRunnerToken.Delete().Where(jobrunnertoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnertokenCount).Msg("deleting jobrunnertoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnertokenCount).Msg("error deleting jobrunnertoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).JobRunnerRegistrationToken.Query().Where((jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobrunnerregistrationtokenCount, err := FromContext(ctx).JobRunnerRegistrationToken.Delete().Where(jobrunnerregistrationtoken.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("deleting jobrunnerregistrationtoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", jobrunnerregistrationtokenCount).Msg("error deleting jobrunnerregistrationtoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).DNSVerification.Query().Where((dnsverification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if dnsverificationCount, err := FromContext(ctx).DNSVerification.Delete().Where(dnsverification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", dnsverificationCount).Msg("deleting dnsverification")
+			logx.FromContext(ctx).Error().Err(err).Int("count", dnsverificationCount).Msg("error deleting dnsverification")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).JobTemplate.Query().Where((jobtemplate.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobtemplateCount, err := FromContext(ctx).JobTemplate.Delete().Where(jobtemplate.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobtemplateCount).Msg("deleting jobtemplate")
+			logx.FromContext(ctx).Error().Err(err).Int("count", jobtemplateCount).Msg("error deleting jobtemplate")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ScheduledJob.Query().Where((scheduledjob.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobCount, err := FromContext(ctx).ScheduledJob.Delete().Where(scheduledjob.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("deleting scheduledjob")
+			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobCount).Msg("error deleting scheduledjob")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).JobResult.Query().Where((jobresult.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if jobresultCount, err := FromContext(ctx).JobResult.Delete().Where(jobresult.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", jobresultCount).Msg("deleting jobresult")
+			logx.FromContext(ctx).Error().Err(err).Int("count", jobresultCount).Msg("error deleting jobresult")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).ScheduledJobRun.Query().Where((scheduledjobrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scheduledjobrunCount, err := FromContext(ctx).ScheduledJobRun.Delete().Where(scheduledjobrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobrunCount).Msg("deleting scheduledjobrun")
+			logx.FromContext(ctx).Error().Err(err).Int("count", scheduledjobrunCount).Msg("error deleting scheduledjobrun")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenter.Query().Where((trustcenter.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterCount, err := FromContext(ctx).TrustCenter.Delete().Where(trustcenter.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterCount).Msg("deleting trustcenter")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterCount).Msg("error deleting trustcenter")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Asset.Query().Where((asset.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assetCount, err := FromContext(ctx).Asset.Delete().Where(asset.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", assetCount).Msg("deleting asset")
+			logx.FromContext(ctx).Error().Err(err).Int("count", assetCount).Msg("error deleting asset")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Scan.Query().Where((scan.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if scanCount, err := FromContext(ctx).Scan.Delete().Where(scan.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", scanCount).Msg("deleting scan")
+			logx.FromContext(ctx).Error().Err(err).Int("count", scanCount).Msg("error deleting scan")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Subprocessor.Query().Where((subprocessor.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if subprocessorCount, err := FromContext(ctx).Subprocessor.Delete().Where(subprocessor.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", subprocessorCount).Msg("deleting subprocessor")
+			logx.FromContext(ctx).Error().Err(err).Int("count", subprocessorCount).Msg("error deleting subprocessor")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Export.Query().Where((export.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if exportCount, err := FromContext(ctx).Export.Delete().Where(export.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", exportCount).Msg("deleting export")
+			logx.FromContext(ctx).Error().Err(err).Int("count", exportCount).Msg("error deleting export")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("error deleting trustcenterwatermarkconfig")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Assessment.Query().Where((assessment.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assessmentCount, err := FromContext(ctx).Assessment.Delete().Where(assessment.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentCount).Msg("deleting assessment")
+			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentCount).Msg("error deleting assessment")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).AssessmentResponse.Query().Where((assessmentresponse.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if assessmentresponseCount, err := FromContext(ctx).AssessmentResponse.Delete().Where(assessmentresponse.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentresponseCount).Msg("deleting assessmentresponse")
+			logx.FromContext(ctx).Error().Err(err).Int("count", assessmentresponseCount).Msg("error deleting assessmentresponse")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).CustomTypeEnum.Query().Where((customtypeenum.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if customtypeenumCount, err := FromContext(ctx).CustomTypeEnum.Delete().Where(customtypeenum.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", customtypeenumCount).Msg("deleting customtypeenum")
+			logx.FromContext(ctx).Error().Err(err).Int("count", customtypeenumCount).Msg("error deleting customtypeenum")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TagDefinition.Query().Where((tagdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if tagdefinitionCount, err := FromContext(ctx).TagDefinition.Delete().Where(tagdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", tagdefinitionCount).Msg("deleting tagdefinition")
+			logx.FromContext(ctx).Error().Err(err).Int("count", tagdefinitionCount).Msg("error deleting tagdefinition")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Remediation.Query().Where((remediation.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if remediationCount, err := FromContext(ctx).Remediation.Delete().Where(remediation.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", remediationCount).Msg("deleting remediation")
+			logx.FromContext(ctx).Error().Err(err).Int("count", remediationCount).Msg("error deleting remediation")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Finding.Query().Where((finding.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if findingCount, err := FromContext(ctx).Finding.Delete().Where(finding.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", findingCount).Msg("deleting finding")
+			logx.FromContext(ctx).Error().Err(err).Int("count", findingCount).Msg("error deleting finding")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Review.Query().Where((review.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if reviewCount, err := FromContext(ctx).Review.Delete().Where(review.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", reviewCount).Msg("deleting review")
+			logx.FromContext(ctx).Error().Err(err).Int("count", reviewCount).Msg("error deleting review")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Vulnerability.Query().Where((vulnerability.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if vulnerabilityCount, err := FromContext(ctx).Vulnerability.Delete().Where(vulnerability.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", vulnerabilityCount).Msg("deleting vulnerability")
+			logx.FromContext(ctx).Error().Err(err).Int("count", vulnerabilityCount).Msg("error deleting vulnerability")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("deleting notification")
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("error deleting notification")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("error deleting orgmembership")
 			return err
 		}
 	}
@@ -1047,7 +1047,7 @@ func ProgramEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).ProgramMembership.Query().Where((programmembership.HasProgramWith(program.ID(id)))).Exist(ctx); err == nil && exists {
 		if programmembershipCount, err := FromContext(ctx).ProgramMembership.Delete().Where(programmembership.HasProgramWith(program.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", programmembershipCount).Msg("deleting programmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", programmembershipCount).Msg("error deleting programmembership")
 			return err
 		}
 	}
@@ -1210,7 +1210,7 @@ func TemplateEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).DocumentData.Query().Where((documentdata.HasTemplateWith(template.ID(id)))).Exist(ctx); err == nil && exists {
 		if documentdataCount, err := FromContext(ctx).DocumentData.Delete().Where(documentdata.HasTemplateWith(template.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("deleting documentdata")
+			logx.FromContext(ctx).Error().Err(err).Int("count", documentdataCount).Msg("error deleting documentdata")
 			return err
 		}
 	}
@@ -1229,42 +1229,42 @@ func TrustCenterEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).TrustCenterSetting.Query().Where((trustcentersetting.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersettingCount, err := FromContext(ctx).TrustCenterSetting.Delete().Where(trustcentersetting.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("deleting trustcentersetting")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersettingCount).Msg("error deleting trustcentersetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenterWatermarkConfig.Query().Where((trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterwatermarkconfigCount, err := FromContext(ctx).TrustCenterWatermarkConfig.Delete().Where(trustcenterwatermarkconfig.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("deleting trustcenterwatermarkconfig")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterwatermarkconfigCount).Msg("error deleting trustcenterwatermarkconfig")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenterSubprocessor.Query().Where((trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentersubprocessorCount, err := FromContext(ctx).TrustCenterSubprocessor.Delete().Where(trustcentersubprocessor.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersubprocessorCount).Msg("deleting trustcentersubprocessor")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentersubprocessorCount).Msg("error deleting trustcentersubprocessor")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenterDoc.Query().Where((trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcenterdocCount, err := FromContext(ctx).TrustCenterDoc.Delete().Where(trustcenterdoc.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterdocCount).Msg("deleting trustcenterdoc")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcenterdocCount).Msg("error deleting trustcenterdoc")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TrustCenterCompliance.Query().Where((trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if trustcentercomplianceCount, err := FromContext(ctx).TrustCenterCompliance.Delete().Where(trustcentercompliance.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentercomplianceCount).Msg("deleting trustcentercompliance")
+			logx.FromContext(ctx).Error().Err(err).Int("count", trustcentercomplianceCount).Msg("error deleting trustcentercompliance")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Template.Query().Where((template.HasTrustCenterWith(trustcenter.ID(id)))).Exist(ctx); err == nil && exists {
 		if templateCount, err := FromContext(ctx).Template.Delete().Where(template.HasTrustCenterWith(trustcenter.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("deleting template")
+			logx.FromContext(ctx).Error().Err(err).Int("count", templateCount).Msg("error deleting template")
 			return err
 		}
 	}
@@ -1343,70 +1343,70 @@ func UserEdgeCleanup(ctx context.Context, id string) error {
 
 	if exists, err := FromContext(ctx).PersonalAccessToken.Query().Where((personalaccesstoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if personalaccesstokenCount, err := FromContext(ctx).PersonalAccessToken.Delete().Where(personalaccesstoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", personalaccesstokenCount).Msg("deleting personalaccesstoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", personalaccesstokenCount).Msg("error deleting personalaccesstoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).TFASetting.Query().Where((tfasetting.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if tfasettingCount, err := FromContext(ctx).TFASetting.Delete().Where(tfasetting.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", tfasettingCount).Msg("deleting tfasetting")
+			logx.FromContext(ctx).Error().Err(err).Int("count", tfasettingCount).Msg("error deleting tfasetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).UserSetting.Query().Where((usersetting.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if usersettingCount, err := FromContext(ctx).UserSetting.Delete().Where(usersetting.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", usersettingCount).Msg("deleting usersetting")
+			logx.FromContext(ctx).Error().Err(err).Int("count", usersettingCount).Msg("error deleting usersetting")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).EmailVerificationToken.Query().Where((emailverificationtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if emailverificationtokenCount, err := FromContext(ctx).EmailVerificationToken.Delete().Where(emailverificationtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", emailverificationtokenCount).Msg("deleting emailverificationtoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", emailverificationtokenCount).Msg("error deleting emailverificationtoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).FileDownloadToken.Query().Where((filedownloadtoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if filedownloadtokenCount, err := FromContext(ctx).FileDownloadToken.Delete().Where(filedownloadtoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", filedownloadtokenCount).Msg("deleting filedownloadtoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", filedownloadtokenCount).Msg("error deleting filedownloadtoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).PasswordResetToken.Query().Where((passwordresettoken.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if passwordresettokenCount, err := FromContext(ctx).PasswordResetToken.Delete().Where(passwordresettoken.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", passwordresettokenCount).Msg("deleting passwordresettoken")
+			logx.FromContext(ctx).Error().Err(err).Int("count", passwordresettokenCount).Msg("error deleting passwordresettoken")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Webauthn.Query().Where((webauthn.HasOwnerWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if webauthnCount, err := FromContext(ctx).Webauthn.Delete().Where(webauthn.HasOwnerWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", webauthnCount).Msg("deleting webauthn")
+			logx.FromContext(ctx).Error().Err(err).Int("count", webauthnCount).Msg("error deleting webauthn")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).Notification.Query().Where((notification.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if notificationCount, err := FromContext(ctx).Notification.Delete().Where(notification.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("deleting notification")
+			logx.FromContext(ctx).Error().Err(err).Int("count", notificationCount).Msg("error deleting notification")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("deleting orgmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("error deleting orgmembership")
 			return err
 		}
 	}
 
 	if exists, err := FromContext(ctx).GroupMembership.Query().Where((groupmembership.HasUserWith(user.ID(id)))).Exist(ctx); err == nil && exists {
 		if groupmembershipCount, err := FromContext(ctx).GroupMembership.Delete().Where(groupmembership.HasUserWith(user.ID(id))).Exec(ctx); err != nil {
-			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("deleting groupmembership")
+			logx.FromContext(ctx).Error().Err(err).Int("count", groupmembershipCount).Msg("error deleting groupmembership")
 			return err
 		}
 	}
