@@ -644,6 +644,16 @@ func UserIDHasSuffix(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldHasSuffix(FieldUserID, v))
 }
 
+// UserIDIsNil applies the IsNil predicate on the "user_id" field.
+func UserIDIsNil() predicate.Notification {
+	return predicate.Notification(sql.FieldIsNull(FieldUserID))
+}
+
+// UserIDNotNil applies the NotNil predicate on the "user_id" field.
+func UserIDNotNil() predicate.Notification {
+	return predicate.Notification(sql.FieldNotNull(FieldUserID))
+}
+
 // UserIDEqualFold applies the EqualFold predicate on the "user_id" field.
 func UserIDEqualFold(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldEqualFold(FieldUserID, v))

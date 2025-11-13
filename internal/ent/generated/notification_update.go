@@ -160,6 +160,12 @@ func (_u *NotificationUpdate) SetNillableUserID(v *string) *NotificationUpdate {
 	return _u
 }
 
+// ClearUserID clears the value of the "user_id" field.
+func (_u *NotificationUpdate) ClearUserID() *NotificationUpdate {
+	_u.mutation.ClearUserID()
+	return _u
+}
+
 // SetNotificationType sets the "notification_type" field.
 func (_u *NotificationUpdate) SetNotificationType(v enums.NotificationType) *NotificationUpdate {
 	_u.mutation.SetNotificationType(v)
@@ -342,11 +348,6 @@ func (_u *NotificationUpdate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.UserID(); ok {
-		if err := notification.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`generated: validator failed for field "Notification.user_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.NotificationType(); ok {
 		if err := notification.NotificationTypeValidator(v); err != nil {
 			return &ValidationError{Name: "notification_type", err: fmt.Errorf(`generated: validator failed for field "Notification.notification_type": %w`, err)}
@@ -366,9 +367,6 @@ func (_u *NotificationUpdate) check() error {
 		if err := notification.BodyValidator(v); err != nil {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
-	}
-	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Notification.user"`)
 	}
 	return nil
 }
@@ -677,6 +675,12 @@ func (_u *NotificationUpdateOne) SetNillableUserID(v *string) *NotificationUpdat
 	return _u
 }
 
+// ClearUserID clears the value of the "user_id" field.
+func (_u *NotificationUpdateOne) ClearUserID() *NotificationUpdateOne {
+	_u.mutation.ClearUserID()
+	return _u
+}
+
 // SetNotificationType sets the "notification_type" field.
 func (_u *NotificationUpdateOne) SetNotificationType(v enums.NotificationType) *NotificationUpdateOne {
 	_u.mutation.SetNotificationType(v)
@@ -872,11 +876,6 @@ func (_u *NotificationUpdateOne) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
 		}
 	}
-	if v, ok := _u.mutation.UserID(); ok {
-		if err := notification.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`generated: validator failed for field "Notification.user_id": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.NotificationType(); ok {
 		if err := notification.NotificationTypeValidator(v); err != nil {
 			return &ValidationError{Name: "notification_type", err: fmt.Errorf(`generated: validator failed for field "Notification.notification_type": %w`, err)}
@@ -896,9 +895,6 @@ func (_u *NotificationUpdateOne) check() error {
 		if err := notification.BodyValidator(v); err != nil {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
-	}
-	if _u.mutation.UserCleared() && len(_u.mutation.UserIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Notification.user"`)
 	}
 	return nil
 }

@@ -1,9 +1,6 @@
 package schema
 
 import (
-	"context"
-	"fmt"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
@@ -17,6 +14,7 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -47,7 +45,7 @@ func (Notification) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("user_id").
 			Comment("the user this notification is for").
-			NotEmpty(),
+			Optional(),
 		field.Enum("notification_type").
 			Comment("the type of notification - organization or user").
 			GoType(enums.NotificationType("")),
@@ -73,30 +71,11 @@ func (Notification) Fields() []ent.Field {
 			Optional(),
 	}
 }
+
 // Hooks of the Notification
 func (Notification) Hooks() []ent.Hook {
 	return []ent.Hook{
-		func(next ent.Mutator) ent.Mutator {
-			return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
-				// Validate channels field
-				channels, ok := m.Field("channels")
-				if ok && channels != nil {
-					if chSlice, ok := channels.([]enums.Channel); ok {
-						validChannels := enums.Channel("").Values()
-						validMap := make(map[string]bool)
-						for _, v := range validChannels {
-							validMap[v] = true
-						}
-						for _, ch := range chSlice {
-							if !validMap[string(ch)] {
-								return nil, fmt.Errorf("invalid channel: %s", ch)
-							}
-						}
-					}
-				}
-				return next.Mutate(ctx, m)
-			})
-		},
+		hooks.HookNotification(),
 	}
 }
 
@@ -117,7 +96,6 @@ func (n Notification) Edges() []ent.Edge {
 			fromSchema: n,
 			edgeSchema: User{},
 			field:      "user_id",
-			required:   true,
 			annotations: []schema.Annotation{
 				entgql.Skip(entgql.SkipAll),
 			},
@@ -165,5 +143,3 @@ func (Notification) Policy() ent.Policy {
 		),
 	)
 }
-
-

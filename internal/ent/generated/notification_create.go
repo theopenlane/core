@@ -134,6 +134,14 @@ func (_c *NotificationCreate) SetUserID(v string) *NotificationCreate {
 	return _c
 }
 
+// SetNillableUserID sets the "user_id" field if the given value is not nil.
+func (_c *NotificationCreate) SetNillableUserID(v *string) *NotificationCreate {
+	if v != nil {
+		_c.SetUserID(*v)
+	}
+	return _c
+}
+
 // SetNotificationType sets the "notification_type" field.
 func (_c *NotificationCreate) SetNotificationType(v enums.NotificationType) *NotificationCreate {
 	_c.mutation.SetNotificationType(v)
@@ -280,14 +288,6 @@ func (_c *NotificationCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "Notification.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.UserID(); !ok {
-		return &ValidationError{Name: "user_id", err: errors.New(`generated: missing required field "Notification.user_id"`)}
-	}
-	if v, ok := _c.mutation.UserID(); ok {
-		if err := notification.UserIDValidator(v); err != nil {
-			return &ValidationError{Name: "user_id", err: fmt.Errorf(`generated: validator failed for field "Notification.user_id": %w`, err)}
-		}
-	}
 	if _, ok := _c.mutation.NotificationType(); !ok {
 		return &ValidationError{Name: "notification_type", err: errors.New(`generated: missing required field "Notification.notification_type"`)}
 	}
@@ -319,9 +319,6 @@ func (_c *NotificationCreate) check() error {
 		if err := notification.BodyValidator(v); err != nil {
 			return &ValidationError{Name: "body", err: fmt.Errorf(`generated: validator failed for field "Notification.body": %w`, err)}
 		}
-	}
-	if len(_c.mutation.UserIDs()) == 0 {
-		return &ValidationError{Name: "user", err: errors.New(`generated: missing required edge "Notification.user"`)}
 	}
 	return nil
 }
