@@ -157,7 +157,7 @@ entconfig:
         timezone: UTC
         token: ""
         workspace: ""
-  integrationOauthProvider:
+integrationOauthProvider:
     providerSpecPath: internal/integrations/config/providers
     successRedirectUrl: ""
 jobQueue:
