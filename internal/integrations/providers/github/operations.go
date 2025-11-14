@@ -3,7 +3,6 @@ package github
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -112,7 +111,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		}, err
 	}
 
-	samples := make([]map[string]any, 0, min(5, len(repos)))
+	samples := make([]map[string]any, 0, minInt(5, len(repos)))
 	for _, repo := range repos {
 		if len(samples) >= cap(samples) {
 			break
@@ -158,7 +157,7 @@ func githubAPIGet(ctx context.Context, token, path string, params url.Values, ou
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("github api %s: %s", path, resp.Status)
+		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
 	}
 
 	if out == nil {
@@ -172,12 +171,12 @@ func githubAPIGet(ctx context.Context, token, path string, params url.Values, ou
 func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
-		return "", errors.New("github: oauth token missing")
+		return "", ErrOAuthTokenMissing
 	}
 
 	token := tokenOpt.MustGet()
 	if token == nil || token.AccessToken == "" {
-		return "", errors.New("github: access token empty")
+		return "", ErrAccessTokenEmpty
 	}
 
 	return token.AccessToken, nil
@@ -220,7 +219,8 @@ func clampPerPage(value int) int {
 	return value
 }
 
-func min(a, b int) int {
+// minInt returns the minimum of two integers
+func minInt(a, b int) int {
 	if a < b {
 		return a
 	}

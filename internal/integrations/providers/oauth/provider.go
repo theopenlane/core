@@ -33,7 +33,7 @@ type Provider struct {
 type ProviderOption func(*Provider)
 
 // New constructs a Provider from the supplied spec
-func New(ctx context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
+func New(_ context.Context, spec config.ProviderSpec, options ...ProviderOption) (*Provider, error) {
 	if spec.OAuth == nil {
 		return nil, providers.ErrSpecOAuthRequired
 	}
@@ -105,7 +105,7 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 }
 
 // BeginAuth starts an OAuth authorization flow
-func (p *Provider) BeginAuth(ctx context.Context, input types.AuthContext) (types.AuthSession, error) {
+func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
 	scopes := p.spec.OAuth.Scopes
 	if len(input.Scopes) > 0 {
 		scopes = input.Scopes
@@ -199,6 +199,7 @@ func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	}
 }
 
+// sanitizeOperationDescriptors filters out invalid operation descriptors
 func sanitizeOperationDescriptors(descriptors []types.OperationDescriptor) []types.OperationDescriptor {
 	if len(descriptors) == 0 {
 		return nil

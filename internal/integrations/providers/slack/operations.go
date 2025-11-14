@@ -3,7 +3,6 @@ package slack
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"net/http"
 	"net/url"
@@ -77,7 +76,7 @@ func runSlackHealthOperation(ctx context.Context, input types.OperationInput) (t
 			Status:  types.OperationStatusFailed,
 			Summary: "Slack auth.test returned error",
 			Details: map[string]any{"error": resp.Error},
-		}, errors.New(resp.Error)
+		}, fmt.Errorf("%w: %s", ErrSlackAPIError, resp.Error)
 	}
 
 	return types.OperationResult{
@@ -111,7 +110,7 @@ func runSlackTeamOperation(ctx context.Context, input types.OperationInput) (typ
 			Status:  types.OperationStatusFailed,
 			Summary: "Slack team.info returned error",
 			Details: map[string]any{"error": resp.Error},
-		}, errors.New(resp.Error)
+		}, fmt.Errorf("%w: %s", ErrSlackAPIError, resp.Error)
 	}
 
 	team := resp.Team
@@ -149,7 +148,7 @@ func slackAPIGet(ctx context.Context, token, method string, params url.Values, o
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("slack api %s: %s", method, resp.Status)
+		return fmt.Errorf("%w (method %s): %s", ErrAPIRequest, method, resp.Status)
 	}
 
 	if out == nil {
@@ -163,12 +162,12 @@ func slackAPIGet(ctx context.Context, token, method string, params url.Values, o
 func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
-		return "", errors.New("slack: oauth token missing")
+		return "", ErrOAuthTokenMissing
 	}
 
 	token := tokenOpt.MustGet()
 	if token == nil || token.AccessToken == "" {
-		return "", errors.New("slack: access token empty")
+		return "", ErrAccessTokenEmpty
 	}
 
 	return token.AccessToken, nil

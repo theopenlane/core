@@ -2,7 +2,6 @@ package cloudflare
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -52,12 +51,11 @@ func runCloudflareHealth(ctx context.Context, input types.OperationInput) (types
 	}
 
 	if !resp.Success {
-		summary := "Cloudflare token verification returned errors"
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
-			Summary: summary,
+			Summary: "Cloudflare token verification returned errors",
 			Details: map[string]any{"errors": resp.Errors},
-		}, fmt.Errorf(summary)
+		}, ErrTokenVerificationFailed
 	}
 
 	return types.OperationResult{

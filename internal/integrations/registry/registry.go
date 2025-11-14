@@ -21,10 +21,10 @@ type Registry struct {
 	operations map[types.ProviderType][]types.OperationDescriptor
 }
 
-// New builds a registry from the supplied specs and factories
+// NewRegistry builds a registry from the supplied specs and factories
 func NewRegistry(ctx context.Context, specs map[types.ProviderType]config.ProviderSpec, builders []providers.Builder) (*Registry, error) {
 	if len(specs) == 0 {
-		return nil, fmt.Errorf("integrations/registry: no provider specs supplied")
+		return nil, ErrNoProviderSpecs
 	}
 
 	instance := &Registry{
@@ -102,6 +102,7 @@ func (r *Registry) ProviderMetadata(provider types.ProviderType) (types.Provider
 // ProviderMetadataCatalog returns a copy of all provider metadata entries.
 func (r *Registry) ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig {
 	out := make(map[types.ProviderType]types.ProviderConfig, len(r.configs))
+
 	for key, spec := range r.configs {
 		out[key] = spec.ToProviderConfig()
 	}
@@ -118,6 +119,7 @@ func (r *Registry) ClientDescriptors(provider types.ProviderType) []types.Client
 
 	out := make([]types.ClientDescriptor, len(descriptors))
 	copy(out, descriptors)
+
 	return out
 }
 
@@ -126,7 +128,9 @@ func (r *Registry) ClientDescriptorCatalog() map[types.ProviderType][]types.Clie
 	out := make(map[types.ProviderType][]types.ClientDescriptor, len(r.clients))
 	for provider, descriptors := range r.clients {
 		copied := make([]types.ClientDescriptor, len(descriptors))
+
 		copy(copied, descriptors)
+
 		out[provider] = copied
 	}
 
@@ -142,12 +146,14 @@ func (r *Registry) OperationDescriptors(provider types.ProviderType) []types.Ope
 
 	out := make([]types.OperationDescriptor, len(descriptors))
 	copy(out, descriptors)
+
 	return out
 }
 
 // OperationDescriptorCatalog returns a copy of all provider operation descriptors.
 func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.OperationDescriptor {
 	out := make(map[types.ProviderType][]types.OperationDescriptor, len(r.operations))
+
 	for provider, descriptors := range r.operations {
 		copied := make([]types.OperationDescriptor, len(descriptors))
 		copy(copied, descriptors)
@@ -176,6 +182,7 @@ func LoadDefaultRegistry(ctx context.Context) (*Registry, error) {
 	return LoadRegistry(ctx, loader)
 }
 
+// sanitizeDescriptors filters out invalid client descriptors and assigns provider type
 func sanitizeDescriptors(provider types.ProviderType, descriptors []types.ClientDescriptor) []types.ClientDescriptor {
 	if len(descriptors) == 0 {
 		return nil
@@ -195,22 +202,27 @@ func sanitizeDescriptors(provider types.ProviderType, descriptors []types.Client
 	return out
 }
 
+// sanitizeOperationDescriptors filters out invalid operation descriptors and assigns provider type
 func sanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
 	if len(descriptors) == 0 {
 		return nil
 	}
 
 	out := make([]types.OperationDescriptor, 0, len(descriptors))
+
 	for _, descriptor := range descriptors {
 		if descriptor.Run == nil {
 			continue
 		}
+
 		if descriptor.Name == "" {
 			continue
 		}
+
 		if descriptor.Provider == types.ProviderUnknown {
 			descriptor.Provider = provider
 		}
+
 		out = append(out, descriptor)
 	}
 

@@ -222,9 +222,9 @@ func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, p
 	if result.Status != types.OperationStatusOK {
 		summary := strings.TrimSpace(result.Summary)
 		if summary == "" {
-			summary = "provider health check failed"
+			return ErrProviderHealthCheckFailed
 		}
-		return fmt.Errorf("%s", summary)
+		return fmt.Errorf("%w: %s", ErrProviderHealthCheckFailed, summary)
 	}
 
 	return nil

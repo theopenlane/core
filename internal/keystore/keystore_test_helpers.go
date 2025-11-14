@@ -6,7 +6,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
-// credentialSourceStub implements CredentialSource for tests.
+// credentialSourceStub implements CredentialSource for tests
 type credentialSourceStub struct {
 	getPayload  types.CredentialPayload
 	mintPayload types.CredentialPayload
