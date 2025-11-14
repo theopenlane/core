@@ -191,10 +191,10 @@ func (p *fakeProvider) BeginAuth(context.Context, types.AuthContext) (types.Auth
 		return nil, p.beginErr
 	}
 	return &fakeAuthSession{
-		provider: p.providerType,
-		state:    p.state,
-		authURL:  p.authURL,
-		payload:  p.payload,
+		provider:  p.providerType,
+		state:     p.state,
+		authURL:   p.authURL,
+		payload:   p.payload,
 		finishErr: p.finishErr,
 	}, nil
 }

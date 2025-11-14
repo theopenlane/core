@@ -15,9 +15,15 @@ import (
 const (
 	githubOperationHealth types.OperationName = "health.default"
 	githubOperationRepos  types.OperationName = "repos.collect_metadata"
+
+	httpTimeout          = 10 * time.Second
+	defaultPerPage       = 50
+	maxPerPage           = 100
+	httpBadRequestStatus = 400
+	maxSampleSize        = 5
 )
 
-var githubHTTPClient = &http.Client{Timeout: 10 * time.Second}
+var githubHTTPClient = &http.Client{Timeout: httpTimeout}
 
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -97,7 +103,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}
 
 	params := url.Values{}
-	params.Set("per_page", fmt.Sprintf("%d", clampPerPage(intFromConfig(input.Config, "per_page", 50))))
+	params.Set("per_page", fmt.Sprintf("%d", clampPerPage(intFromConfig(input.Config, "per_page", defaultPerPage))))
 	if visibility := stringFromConfig(input.Config, "visibility"); visibility != "" {
 		params.Set("visibility", visibility)
 	}
@@ -111,7 +117,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 		}, err
 	}
 
-	samples := make([]map[string]any, 0, minInt(5, len(repos)))
+	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(repos)))
 	for _, repo := range repos {
 		if len(samples) >= cap(samples) {
 			break
@@ -156,7 +162,7 @@ func githubAPIGet(ctx context.Context, token, path string, params url.Values, ou
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= httpBadRequestStatus {
 		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
 	}
 
@@ -211,10 +217,10 @@ func intFromConfig(config map[string]any, key string, fallback int) int {
 
 func clampPerPage(value int) int {
 	if value <= 0 {
-		return 50
+		return defaultPerPage
 	}
-	if value > 100 {
-		return 100
+	if value > maxPerPage {
+		return maxPerPage
 	}
 	return value
 }

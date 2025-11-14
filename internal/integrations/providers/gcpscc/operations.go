@@ -18,6 +18,11 @@ const (
 	OperationHealthDefault   types.OperationName = "health.default"
 	OperationCollectFindings types.OperationName = "findings.collect"
 	OperationScanSettings    types.OperationName = "settings.scan"
+
+	findingsPageSize      = 100
+	maxSampleSize         = 5
+	settingsPageSize      = 10
+	sampleConfigsCapacity = 5
 )
 
 var (
@@ -138,12 +143,12 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 	req := &securitycenterpb.ListFindingsRequest{
 		Parent:   sourceName,
 		Filter:   filter,
-		PageSize: 100,
+		PageSize: findingsPageSize,
 	}
 
 	it := client.ListFindings(ctx, req)
 	total := 0
-	samples := make([]map[string]any, 0, 5)
+	samples := make([]map[string]any, 0, maxSampleSize)
 
 	for {
 		result, err := it.Next()
@@ -203,11 +208,11 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 
 	req := &securitycenterpb.ListNotificationConfigsRequest{
 		Parent:   parent,
-		PageSize: 10,
+		PageSize: settingsPageSize,
 	}
 
 	it := client.ListNotificationConfigs(ctx, req)
-	configs := make([]map[string]any, 0, 5)
+	configs := make([]map[string]any, 0, sampleConfigsCapacity)
 	count := 0
 
 	for {

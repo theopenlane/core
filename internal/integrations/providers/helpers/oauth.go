@@ -12,8 +12,13 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+const (
+	defaultHTTPTimeout   = 10 * time.Second
+	httpBadRequestStatus = 400
+)
+
 // defaultHTTPClient is the fallback HTTP client when callers do not supply one
-var defaultHTTPClient = &http.Client{Timeout: 10 * time.Second}
+var defaultHTTPClient = &http.Client{Timeout: defaultHTTPTimeout}
 
 // OAuthTokenFromPayload extracts a usable access token from the credential payload.
 func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
@@ -68,7 +73,7 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= httpBadRequestStatus {
 		return fmt.Errorf("%w (url %s): %s", ErrHTTPRequestFailed, url, resp.Status)
 	}
 
