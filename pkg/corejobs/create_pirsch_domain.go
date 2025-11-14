@@ -8,11 +8,10 @@ import (
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/riverboat/pkg/riverqueue"
-
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/corejobs/internal/pirsch"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 )
 
 const (
@@ -46,7 +45,10 @@ type CreatePirschDomainWorker struct {
 
 	pirschClient pirsch.Client
 	olClient     olclient.OpenlaneClient
-	riverClient  riverqueue.JobClient
+
+	// riverClient is used to insert cleanup jobs, this should be configured on the server based
+	// on the DatabaseHost in the config
+	riverClient riverqueue.JobClient
 }
 
 // WithPirschClient sets the Pirsch client for the worker
@@ -90,15 +92,6 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 
 	if w.pirschClient == nil {
 		w.pirschClient = pirsch.NewClient(w.Config.PirschClientID, w.Config.PirschClientSecret)
-	}
-
-	if w.riverClient == nil {
-		riverClient, err := riverqueue.New(ctx, riverqueue.WithConnectionURI(w.Config.DatabaseHost))
-		if err != nil {
-			return err
-		}
-
-		w.riverClient = riverClient
 	}
 
 	// Get the trust center
@@ -189,6 +182,12 @@ func (w *CreatePirschDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 			Str("trust_center_id", job.Args.TrustCenterID).
 			Str("pirsch_domain_id", domain.ID).
 			Msg("failed to update trust center with pirsch domain information, attempting cleanup")
+
+		if w.riverClient == nil {
+			log.Error().Msg("river client is not set on worker, cannot insert cleanup job")
+
+			return err
+		}
 
 		// Insert a delete job to reliably clean up the pirsch domain
 		_, insertErr := w.riverClient.Insert(ctx, DeletePirschDomainArgs{

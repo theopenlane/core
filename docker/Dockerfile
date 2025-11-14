@@ -1,4 +1,7 @@
-FROM gcr.io/distroless/base:nonroot
+FROM gcr.io/distroless/static:nonroot
+
+# add sh for debugging purposes
+COPY --from=busybox /bin/sh /bin/sh
 
 # `nonroot` coming from distroless
 USER 65532:65532
