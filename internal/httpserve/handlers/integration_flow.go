@@ -86,6 +86,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
+	if !spec.Active {
+		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
+	}
 	if spec.AuthType != types.AuthKindOAuth2 && spec.AuthType != types.AuthKindOIDC {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}

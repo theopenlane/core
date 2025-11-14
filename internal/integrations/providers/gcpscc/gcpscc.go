@@ -29,9 +29,9 @@ const TypeGCPSCC = types.ProviderType("gcp_scc")
 
 const (
 	workloadGrantType        = "urn:ietf:params:oauth:grant-type:token-exchange"
-	requestedTokenType       = "urn:ietf:params:oauth:token-type:access_token"       //nolint:gosec
+	requestedTokenType       = "urn:ietf:params:oauth:token-type:access_token" //nolint:gosec
 	defaultScope             = "https://www.googleapis.com/auth/cloud-platform"
-	defaultSubjectTokenType  = "urn:ietf:params:oauth:token-type:id_token"           //nolint:gosec
+	defaultSubjectTokenType  = "urn:ietf:params:oauth:token-type:id_token" //nolint:gosec
 	subjectTokenAttr         = "subject_token"
 	subjectTokenTypeAttr     = "subject_token_type"
 	minImpersonationLifetime = time.Minute

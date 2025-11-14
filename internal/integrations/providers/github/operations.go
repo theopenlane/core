@@ -2,13 +2,13 @@ package github
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
 	"strings"
 	"time"
 
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -16,14 +16,10 @@ const (
 	githubOperationHealth types.OperationName = "health.default"
 	githubOperationRepos  types.OperationName = "repos.collect_metadata"
 
-	httpTimeout          = 10 * time.Second
-	defaultPerPage       = 50
-	maxPerPage           = 100
-	httpBadRequestStatus = 400
-	maxSampleSize        = 5
+	defaultPerPage = 50
+	maxPerPage     = 100
+	maxSampleSize  = 5
 )
-
-var githubHTTPClient = &http.Client{Timeout: httpTimeout}
 
 func githubOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -75,7 +71,7 @@ func runGitHubHealthOperation(ctx context.Context, input types.OperationInput) (
 	}
 
 	var user githubUserResponse
-	if err := githubAPIGet(ctx, token, "user", nil, &user); err != nil {
+	if err := fetchGitHubResource(ctx, token, "user", nil, &user); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "GitHub user lookup failed",
@@ -109,7 +105,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}
 
 	var repos []githubRepoResponse
-	if err := githubAPIGet(ctx, token, "user/repos", params, &repos); err != nil {
+	if err := fetchGitHubResource(ctx, token, "user/repos", params, &repos); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "GitHub repository collection failed",
@@ -141,7 +137,7 @@ func runGitHubRepoOperation(ctx context.Context, input types.OperationInput) (ty
 	}, nil
 }
 
-func githubAPIGet(ctx context.Context, token, path string, params url.Values, out any) error {
+func fetchGitHubResource(ctx context.Context, token, path string, params url.Values, out any) error {
 	endpoint := "https://api.github.com/" + path
 	if params != nil {
 		if encoded := params.Encode(); encoded != "" {
@@ -149,29 +145,18 @@ func githubAPIGet(ctx context.Context, token, path string, params url.Values, ou
 		}
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
+	headers := map[string]string{
+		"Accept": "application/vnd.github+json",
+	}
+
+	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, headers, out); err != nil {
+		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+			return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, err.Error())
+		}
 		return err
 	}
 
-	req.Header.Set("Accept", "application/vnd.github+json")
-	req.Header.Set("Authorization", "Bearer "+token)
-	resp, err := githubHTTPClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= httpBadRequestStatus {
-		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
-	}
-
-	if out == nil {
-		return nil
-	}
-
-	dec := json.NewDecoder(resp.Body)
-	return dec.Decode(out)
+	return nil
 }
 
 func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {

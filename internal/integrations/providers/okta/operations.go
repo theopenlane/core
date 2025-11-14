@@ -2,25 +2,19 @@ package okta
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
 	"strings"
-	"time"
 
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 const (
 	oktaHealthOp   types.OperationName = "health.default"
 	oktaPoliciesOp types.OperationName = "policies.collect"
-
-	httpTimeout          = 10 * time.Second
-	maxSampleSize        = 5
-	httpBadRequestStatus = 400
 )
-
-var oktaHTTPClient = &http.Client{Timeout: httpTimeout}
+const maxSampleSize = 5
 
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -110,28 +104,16 @@ func oktaCredentials(input types.OperationInput) (string, string, error) {
 }
 
 func oktaGET(ctx context.Context, endpoint, apiToken string, out any) error {
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
+	headers := map[string]string{
+		"Authorization": "SSWS " + apiToken,
+	}
+
+	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, "", headers, out); err != nil {
+		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+			return fmt.Errorf("%w (endpoint %s): %s", ErrAPIRequest, endpoint, err.Error())
+		}
 		return err
 	}
 
-	req.Header.Set("Authorization", "SSWS "+apiToken)
-	req.Header.Set("Accept", "application/json")
-
-	resp, err := oktaHTTPClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= httpBadRequestStatus {
-		return fmt.Errorf("%w (endpoint %s): %s", ErrAPIRequest, endpoint, resp.Status)
-	}
-
-	if out == nil {
-		return nil
-	}
-
-	dec := json.NewDecoder(resp.Body)
-	return dec.Decode(out)
+	return nil
 }
