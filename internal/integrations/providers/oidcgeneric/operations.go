@@ -61,7 +61,7 @@ func runOIDCHealth(userInfoURL string) types.OperationFunc {
 	}
 }
 
-func runOIDCClaims(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+func runOIDCClaims(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
 	claims := input.Credential.Claims
 	if claims == nil {
 		return types.OperationResult{

@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-
 // ProviderOption customizes API key providers.
 type ProviderOption func(*providerConfig)
 

@@ -29,9 +29,9 @@ const TypeGCPSCC = types.ProviderType("gcp_scc")
 
 const (
 	workloadGrantType        = "urn:ietf:params:oauth:grant-type:token-exchange"
-	requestedTokenType       = "urn:ietf:params:oauth:token-type:access_token"
+	requestedTokenType       = "urn:ietf:params:oauth:token-type:access_token"       //nolint:gosec
 	defaultScope             = "https://www.googleapis.com/auth/cloud-platform"
-	defaultSubjectTokenType  = "urn:ietf:params:oauth:token-type:id_token"
+	defaultSubjectTokenType  = "urn:ietf:params:oauth:token-type:id_token"           //nolint:gosec
 	subjectTokenAttr         = "subject_token"
 	subjectTokenTypeAttr     = "subject_token_type"
 	minImpersonationLifetime = time.Minute
@@ -77,7 +77,7 @@ type workloadDefaults struct {
 func Builder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeGCPSCC,
-		BuildFunc: func(ctx context.Context, spec config.ProviderSpec) (providers.Provider, error) {
+		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			if spec.WorkloadIdentity == nil {
 				return nil, providers.ErrSpecWorkloadIdentityRequired
 			}
@@ -136,7 +136,7 @@ func (p *Provider) Capabilities() types.ProviderCapabilities {
 }
 
 // BeginAuth is not applicable for workload identity flows; callers should rely on declarative metadata.
-func (p *Provider) BeginAuth(ctx context.Context, _ types.AuthContext) (types.AuthSession, error) {
+func (p *Provider) BeginAuth(_ context.Context, _ types.AuthContext) (types.AuthSession, error) {
 	return nil, ErrBeginAuthNotSupported
 }
 

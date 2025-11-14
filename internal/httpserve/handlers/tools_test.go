@@ -623,8 +623,8 @@ func (suite *HandlerTestSuite) orgSubscriptionMocks() {
 	}).Return(nil)
 
 	// setup mocks for getting entitlements
-	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
-		mockCustomerSearchResult := args.Get(4).(*stripe.EntitlementsActiveEntitlementList)
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.EntitlementsActiveEntitlementList")).Run(func(args mock.Arguments) {
+		mockCustomerSearchResult := args.Get(3).(*stripe.EntitlementsActiveEntitlementList)
 
 		*mockCustomerSearchResult = stripe.EntitlementsActiveEntitlementList{
 			Data: []*stripe.EntitlementsActiveEntitlement{

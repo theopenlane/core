@@ -7,7 +7,7 @@ import (
 )
 
 // credentialSourceStub implements CredentialSource for tests
-type credentialSourceStub struct {
+type credentialSourceStub struct { //nolint:unused
 	getPayload  types.CredentialPayload
 	mintPayload types.CredentialPayload
 	getErr      error
@@ -22,7 +22,7 @@ type credentialSourceStub struct {
 	lastMintProvider types.ProviderType
 }
 
-func (s *credentialSourceStub) Get(_ context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) {
+func (s *credentialSourceStub) Get(_ context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) { //nolint:unused
 	s.getCount++
 	s.lastGetOrgID = orgID
 	s.lastGetProvider = provider
@@ -39,7 +39,7 @@ func (s *credentialSourceStub) Get(_ context.Context, orgID string, provider typ
 	return payload, nil
 }
 
-func (s *credentialSourceStub) Mint(_ context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) {
+func (s *credentialSourceStub) Mint(_ context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) { //nolint:unused
 	s.mintCount++
 	s.lastMintOrgID = orgID
 	s.lastMintProvider = provider

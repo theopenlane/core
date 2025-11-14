@@ -14,9 +14,13 @@ import (
 const (
 	oktaHealthOp   types.OperationName = "health.default"
 	oktaPoliciesOp types.OperationName = "policies.collect"
+
+	httpTimeout          = 10 * time.Second
+	maxSampleSize        = 5
+	httpBadRequestStatus = 400
 )
 
-var oktaHTTPClient = &http.Client{Timeout: 10 * time.Second}
+var oktaHTTPClient = &http.Client{Timeout: httpTimeout}
 
 func oktaOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -76,8 +80,8 @@ func runOktaPolicies(ctx context.Context, input types.OperationInput) (types.Ope
 	}
 
 	samples := resp
-	if len(samples) > 5 {
-		samples = samples[:5]
+	if len(samples) > maxSampleSize {
+		samples = samples[:maxSampleSize]
 	}
 
 	return types.OperationResult{
@@ -120,7 +124,7 @@ func oktaGET(ctx context.Context, endpoint, apiToken string, out any) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= httpBadRequestStatus {
 		return fmt.Errorf("%w (endpoint %s): %s", ErrAPIRequest, endpoint, resp.Status)
 	}
 

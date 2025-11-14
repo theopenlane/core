@@ -11,6 +11,8 @@ import (
 const (
 	azureSecurityHealth  types.OperationName = "health.default"
 	azureSecurityPricing types.OperationName = "security.pricing_overview"
+
+	maxSampleSize = 5
 )
 
 func azureSecurityOperations() []types.OperationDescriptor {
@@ -69,7 +71,7 @@ func runAzureSecurityPricing(ctx context.Context, input types.OperationInput) (t
 		}, err
 	}
 
-	samples := make([]map[string]any, 0, 5)
+	samples := make([]map[string]any, 0, maxSampleSize)
 	for _, item := range resp.Value {
 		if len(samples) >= cap(samples) {
 			break
