@@ -43,6 +43,8 @@ var (
 	ErrDeleteSecrets = fmt.Errorf("failed to delete integration secrets")
 	// ErrUnsupportedAuthType indicates the provider does not support the requested flow
 	ErrUnsupportedAuthType = fmt.Errorf("provider does not support this authentication flow")
+	// ErrProviderHealthCheckFailed indicates the provider health check failed
+	ErrProviderHealthCheckFailed = errors.New("provider health check failed")
 )
 
 // buildStatePayload encodes the OAuth state payload for cookies and callbacks.

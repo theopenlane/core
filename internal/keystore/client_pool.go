@@ -2,13 +2,8 @@ package keystore
 
 import (
 	"context"
-	"crypto/sha256"
-	"encoding/hex"
-	"encoding/json"
 	"errors"
 	"fmt"
-	"maps"
-	"sort"
 	"strings"
 	"time"
 
@@ -20,26 +15,34 @@ import (
 )
 
 const (
+	// defaultClientPoolTTL is the duration that cached clients remain valid
 	defaultClientPoolTTL = 5 * time.Minute
-	refreshSkew          = cacheSkew
+	// refreshSkew defines how far before token expiry refresh operations begin
+	refreshSkew = cacheSkew
 )
 
 // CredentialSource exposes the subset of broker operations required by the client pool
 type CredentialSource interface {
+	// Get retrieves the latest credential payload for the given org/provider pair
 	Get(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error)
+	// Mint obtains a fresh credential payload for the given org/provider pair
 	Mint(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error)
 }
 
 // ClientBuilder constructs provider SDK clients from credential payloads
 type ClientBuilder[T any, Config any] interface {
+	// Build constructs a new client instance using the supplied credential payload and configuration
 	Build(ctx context.Context, payload types.CredentialPayload, config Config) (T, error)
+	// ProviderType returns the provider identifier handled by this builder
 	ProviderType() types.ProviderType
 }
 
 // ClientBuilderFunc adapts a function to the ClientBuilder interface
 type ClientBuilderFunc[T any, Config any] struct {
+	// Provider identifies which provider this builder handles
 	Provider types.ProviderType
-	BuildFn  func(context.Context, types.CredentialPayload, Config) (T, error)
+	// BuildFn is the function that constructs the client
+	BuildFn func(context.Context, types.CredentialPayload, Config) (T, error)
 }
 
 // Build constructs the client using the configured function
@@ -59,18 +62,26 @@ func (f ClientBuilderFunc[T, Config]) ProviderType() types.ProviderType {
 
 // ClientPool orchestrates credential retrieval and client caching for a specific provider type
 type ClientPool[T any, Config any] struct {
-	source   CredentialSource
+	// source provides credential retrieval and refresh capabilities
+	source CredentialSource
+	// provider identifies which provider this pool serves
 	provider types.ProviderType
-	builder  eddy.Builder[T, types.CredentialPayload, Config]
-	service  *eddy.ClientService[T, types.CredentialPayload, Config]
-	now      func() time.Time
+	// builder constructs new client instances
+	builder eddy.Builder[T, types.CredentialPayload, Config]
+	// service manages the underlying client cache
+	service *eddy.ClientService[T, types.CredentialPayload, Config]
+	// now returns the current time, overridable for testing
+	now func() time.Time
 }
 
 // ClientPoolOption customizes client pool construction
 type ClientPoolOption[T any, Config any] func(*ClientPool[T, Config], *clientPoolSettings[Config])
 
+// clientPoolSettings configures client pool behavior
 type clientPoolSettings[Config any] struct {
-	ttl         time.Duration
+	// ttl specifies how long clients remain cached
+	ttl time.Duration
+	// configClone creates copies of configuration objects
 	configClone func(Config) Config
 }
 
@@ -162,9 +173,13 @@ func WithClientForceRefresh[Config any]() ClientRequestOption[Config] {
 	}
 }
 
+// clientRequest captures the parameters for a single client retrieval
 type clientRequest[Config any] struct {
-	orgID        string
-	config       Config
+	// orgID identifies the organization requesting the client
+	orgID string
+	// config provides provider-specific configuration
+	config Config
+	// forceRefresh bypasses caches and forces credential refresh
 	forceRefresh bool
 }
 
@@ -208,6 +223,7 @@ func (p *ClientPool[T, Config]) Get(ctx context.Context, orgID string, opts ...C
 	return client.MustGet(), nil
 }
 
+// resolveCredential retrieves or refreshes the credential for the given request
 func (p *ClientPool[T, Config]) resolveCredential(ctx context.Context, req clientRequest[Config]) (types.CredentialPayload, error) {
 	if req.forceRefresh {
 		return p.refreshCredential(ctx, req.orgID, types.CredentialPayload{})
@@ -228,6 +244,7 @@ func (p *ClientPool[T, Config]) resolveCredential(ctx context.Context, req clien
 	return payload, nil
 }
 
+// refreshCredential obtains a fresh credential and evicts stale cache entries
 func (p *ClientPool[T, Config]) refreshCredential(ctx context.Context, orgID string, previous types.CredentialPayload) (types.CredentialPayload, error) {
 	if previous.Provider != types.ProviderUnknown {
 		p.evict(orgID, credentialVersion(previous))
@@ -241,6 +258,7 @@ func (p *ClientPool[T, Config]) refreshCredential(ctx context.Context, orgID str
 	return refreshed, nil
 }
 
+// evict removes a client from the cache by org and credential version
 func (p *ClientPool[T, Config]) evict(orgID, version string) {
 	if orgID == "" {
 		return
@@ -252,6 +270,7 @@ func (p *ClientPool[T, Config]) evict(orgID, version string) {
 	})
 }
 
+// shouldRefreshCredential determines if a credential needs refreshing based on its expiry
 func shouldRefreshCredential(payload types.CredentialPayload, now func() time.Time) bool {
 	if payload.Token == nil || payload.Token.Expiry.IsZero() {
 		return false
@@ -261,12 +280,17 @@ func shouldRefreshCredential(payload types.CredentialPayload, now func() time.Ti
 	return now().After(refreshAt)
 }
 
+// clientCacheKey uniquely identifies a cached client instance
 type clientCacheKey struct {
-	OrgID    string
+	// OrgID identifies the organization owning the client
+	OrgID string
+	// Provider identifies which provider issued the client
 	Provider types.ProviderType
-	Version  string
+	// Version tracks credential version to invalidate stale clients
+	Version string
 }
 
+// String returns a string representation of the cache key
 func (k clientCacheKey) String() string {
 	base := fmt.Sprintf("%s:%s", k.OrgID, k.Provider)
 	version := strings.TrimSpace(k.Version)
@@ -276,18 +300,23 @@ func (k clientCacheKey) String() string {
 	return base + ":" + version
 }
 
+// clientBuilderAdapter adapts ClientBuilder to eddy's Builder interface
 type clientBuilderAdapter[T any, Config any] struct {
+	// builder is the underlying client builder
 	builder ClientBuilder[T, Config]
 }
 
+// Build constructs a client using the adapted builder
 func (a clientBuilderAdapter[T, Config]) Build(ctx context.Context, payload types.CredentialPayload, config Config) (T, error) {
 	return a.builder.Build(ctx, payload, config)
 }
 
+// ProviderType returns the provider identifier as a string
 func (a clientBuilderAdapter[T, Config]) ProviderType() string {
 	return string(a.builder.ProviderType())
 }
 
+// cloneCredentialPayload creates a deep copy of a credential payload
 func cloneCredentialPayload(payload types.CredentialPayload) types.CredentialPayload {
 	clone := types.CredentialPayload{
 		Provider: payload.Provider,
@@ -299,14 +328,11 @@ func cloneCredentialPayload(payload types.CredentialPayload) types.CredentialPay
 	return clone
 }
 
+// cloneCredentialSet creates a deep copy of a credential set
 func cloneCredentialSet(set models.CredentialSet) models.CredentialSet {
 	clone := set
-	if set.ProviderData != nil {
-		clone.ProviderData = maps.Clone(set.ProviderData)
-	}
-	if set.Claims != nil {
-		clone.Claims = maps.Clone(set.Claims)
-	}
+	clone.ProviderData = helpers.DeepCloneMap(set.ProviderData)
+	clone.Claims = helpers.DeepCloneMap(set.Claims)
 	if set.OAuthExpiry != nil {
 		expiry := *set.OAuthExpiry
 		clone.OAuthExpiry = &expiry
@@ -314,31 +340,24 @@ func cloneCredentialSet(set models.CredentialSet) models.CredentialSet {
 	return clone
 }
 
+// credentialVersion computes a hash representing the credential's content
 func credentialVersion(payload types.CredentialPayload) string {
 	if payload.Provider == types.ProviderUnknown {
 		return ""
 	}
 
-	hasher := sha256.New()
-	write := func(values ...string) {
-		for _, value := range values {
-			if value == "" {
-				continue
-			}
-			_, _ = hasher.Write([]byte(value))
-		}
-	}
-
-	write(string(payload.Provider), string(payload.Kind))
+	builder := helpers.NewHashBuilder().
+		WriteStrings(string(payload.Provider), string(payload.Kind))
 
 	if payload.Token != nil {
-		write(payload.Token.AccessToken, payload.Token.RefreshToken, payload.Token.TokenType)
-		if !payload.Token.Expiry.IsZero() {
-			write(payload.Token.Expiry.UTC().Format(time.RFC3339Nano))
-		}
+		builder.WriteStrings(
+			payload.Token.AccessToken,
+			payload.Token.RefreshToken,
+			payload.Token.TokenType,
+		).WriteTime(payload.Token.Expiry)
 	}
 
-	write(
+	builder.WriteStrings(
 		payload.Data.AccessKeyID,
 		payload.Data.SecretAccessKey,
 		payload.Data.ProjectID,
@@ -347,45 +366,10 @@ func credentialVersion(payload types.CredentialPayload) string {
 		payload.Data.OAuthAccessToken,
 		payload.Data.OAuthRefreshToken,
 		payload.Data.OAuthTokenType,
-	)
+	).WriteTimePtr(payload.Data.OAuthExpiry)
 
-	if payload.Data.OAuthExpiry != nil {
-		write(payload.Data.OAuthExpiry.UTC().Format(time.RFC3339Nano))
-	}
+	builder.WriteSortedMap(payload.Data.ProviderData).
+		WriteSortedMap(payload.Data.Claims)
 
-	if len(payload.Data.ProviderData) > 0 {
-		keys := make([]string, 0, len(payload.Data.ProviderData))
-		for key := range payload.Data.ProviderData {
-			keys = append(keys, key)
-		}
-		sort.Strings(keys)
-		for _, key := range keys {
-			write(key)
-			value := payload.Data.ProviderData[key]
-			switch v := value.(type) {
-			case string:
-				write(v)
-			default:
-				if encoded, err := json.Marshal(v); err == nil {
-					_, _ = hasher.Write(encoded)
-				}
-			}
-		}
-	}
-
-	if len(payload.Data.Claims) > 0 {
-		keys := make([]string, 0, len(payload.Data.Claims))
-		for key := range payload.Data.Claims {
-			keys = append(keys, key)
-		}
-		sort.Strings(keys)
-		for _, key := range keys {
-			write(key)
-			if encoded, err := json.Marshal(payload.Data.Claims[key]); err == nil {
-				_, _ = hasher.Write(encoded)
-			}
-		}
-	}
-
-	return hex.EncodeToString(hasher.Sum(nil))
+	return builder.Hex()
 }

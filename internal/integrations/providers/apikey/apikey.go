@@ -2,7 +2,6 @@ package apikey
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"maps"
 	"strings"
@@ -13,10 +12,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-var (
-	errProviderMetadataRequired = errors.New("apikey: provider metadata required")
-	errTokenFieldRequired       = errors.New("apikey: token field required")
-)
 
 // ProviderOption customizes API key providers.
 type ProviderOption func(*providerConfig)
@@ -58,7 +53,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		ProviderType: provider,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			if spec.AuthType != "" && spec.AuthType != types.AuthKindAPIKey {
-				return nil, fmt.Errorf("apikey: provider %s expects authType %s (found %s)", provider, types.AuthKindAPIKey, spec.AuthType)
+				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, provider, types.AuthKindAPIKey, spec.AuthType)
 			}
 
 			return &Provider{
@@ -112,13 +107,13 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 
 // BeginAuth is not supported for API key providers.
 func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
-	return nil, fmt.Errorf("%s: BeginAuth is not supported; configure credentials via metadata", p.provider)
+	return nil, fmt.Errorf("%w (provider %s)", ErrBeginAuthNotSupported, p.provider)
 }
 
 // Mint materializes a stored API key configuration into a credential payload.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
 	if p == nil {
-		return types.CredentialPayload{}, fmt.Errorf("apikey: provider not initialized")
+		return types.CredentialPayload{}, ErrProviderNotInitialized
 	}
 
 	providerData := subject.Credential.Data.ProviderData
@@ -126,12 +121,12 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		if token := strings.TrimSpace(subject.Credential.Data.APIToken); token != "" {
 			return subject.Credential, nil
 		}
-		return types.CredentialPayload{}, errProviderMetadataRequired
+		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
 	token := strings.TrimSpace(fmt.Sprint(providerData[p.tokenField]))
 	if token == "" {
-		return types.CredentialPayload{}, fmt.Errorf("%w: %s", errTokenFieldRequired, p.tokenField)
+		return types.CredentialPayload{}, fmt.Errorf("%w: %s", ErrTokenFieldRequired, p.tokenField)
 	}
 
 	cloned := maps.Clone(providerData)

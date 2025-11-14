@@ -9,28 +9,38 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// cacheSkew defines how far before token expiry the cache entry should be invalidated
 const cacheSkew = 30 * time.Second
 
 // Broker exchanges persisted credentials for short-lived tokens via registered providers
 type Broker struct {
-	store    *Store
+	// store persists and retrieves credential payloads
+	store *Store
+	// registry provides access to provider implementations for minting
 	registry *registry.Registry
 
-	mu    sync.RWMutex
+	// mu protects concurrent access to the cache
+	mu sync.RWMutex
+	// cache stores recently used credentials to avoid database roundtrips
 	cache map[cacheKey]cachedCredential
 
+	// now returns the current time, overridable for testing
 	now func() time.Time
 }
 
 // cacheKey uniquely identifies a cached credential entry
 type cacheKey struct {
-	OrgID    string
+	// OrgID identifies the organization owning the credential
+	OrgID string
+	// Provider identifies which provider issued the credential
 	Provider types.ProviderType
 }
 
 // cachedCredential holds a credential payload and its expiry time
 type cachedCredential struct {
+	// payload contains the cached credential data
 	payload types.CredentialPayload
+	// expires specifies when this cache entry should be invalidated
 	expires time.Time
 }
 
@@ -60,7 +70,7 @@ func (b *Broker) Get(ctx context.Context, orgID string, provider types.ProviderT
 	return payload, nil
 }
 
-// Mint refreshes the stored credential via the provider and returns the updated payload.
+// Mint refreshes the stored credential via the provider and returns the updated payload
 func (b *Broker) Mint(ctx context.Context, orgID string, provider types.ProviderType) (types.CredentialPayload, error) {
 	providerInstance, err := b.lookupProvider(provider)
 	if err != nil {

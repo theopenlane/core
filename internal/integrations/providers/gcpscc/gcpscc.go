@@ -66,12 +66,11 @@ type Provider struct {
 }
 
 type workloadDefaults struct {
-	scopes              []string
-	tokenLifetime       time.Duration
-	audience            string
-	targetServiceAcct   string
-	subjectTokenType    string
-	workforcePoolHelper string
+	scopes            []string
+	tokenLifetime     time.Duration
+	audience          string
+	targetServiceAcct string
+	subjectTokenType  string
 }
 
 // Builder returns the GCP SCC provider builder.
@@ -138,7 +137,7 @@ func (p *Provider) Capabilities() types.ProviderCapabilities {
 
 // BeginAuth is not applicable for workload identity flows; callers should rely on declarative metadata.
 func (p *Provider) BeginAuth(ctx context.Context, _ types.AuthContext) (types.AuthSession, error) {
-	return nil, fmt.Errorf("gcpscc: BeginAuth is not supported; supply metadata via credential schema")
+	return nil, ErrBeginAuthNotSupported
 }
 
 // Mint exchanges stored workload identity metadata for short-lived Google credentials and persists the updated payload.

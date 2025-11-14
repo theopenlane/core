@@ -3,7 +3,6 @@ package config
 import (
 	"context"
 	"encoding/json"
-	"errors"
 	"fmt"
 	"io/fs"
 	"path/filepath"
@@ -35,14 +34,14 @@ func NewFSLoader(fsys fs.FS, path string) *FSLoader {
 }
 
 // Load walks the configured directory and decodes every JSON provider file
-func (l *FSLoader) Load(ctx context.Context) (map[types.ProviderType]ProviderSpec, error) {
+func (l *FSLoader) Load(_ context.Context) (map[types.ProviderType]ProviderSpec, error) {
 	if l == nil || l.FS == nil {
-		return nil, fmt.Errorf("%w: fs loader not configured", integrations.ErrLoaderRequired)
+		return nil, fmt.Errorf("%w: %w", integrations.ErrLoaderRequired, ErrFSLoaderNotConfigured)
 	}
 
 	dirEntries, err := fs.ReadDir(l.FS, l.Path)
 	if err != nil {
-		return nil, fmt.Errorf("integrations/config: read dir %q: %w", l.Path, err)
+		return nil, fmt.Errorf("%w %q: %w", ErrReadDirectory, l.Path, err)
 	}
 
 	specs := make(map[types.ProviderType]ProviderSpec, len(dirEntries))
@@ -60,12 +59,12 @@ func (l *FSLoader) Load(ctx context.Context) (map[types.ProviderType]ProviderSpe
 		fullPath := filepath.Join(l.Path, entry.Name())
 		bytes, readErr := fs.ReadFile(l.FS, fullPath)
 		if readErr != nil {
-			return nil, fmt.Errorf("integrations/config: read %q: %w", fullPath, readErr)
+			return nil, fmt.Errorf("%w %q: %w", ErrReadFile, fullPath, readErr)
 		}
 
 		spec, decodeErr := decodeProviderSpec(bytes, parser)
 		if decodeErr != nil {
-			return nil, fmt.Errorf("integrations/config: decode %q: %w", fullPath, decodeErr)
+			return nil, fmt.Errorf("%w %q: %w", ErrDecodeSpec, fullPath, decodeErr)
 		}
 
 		if !spec.Active {
@@ -89,6 +88,7 @@ func (l *FSLoader) Load(ctx context.Context) (map[types.ProviderType]ProviderSpe
 	return specs, nil
 }
 
+// decodeProviderSpec unmarshals provider spec data using the specified parser
 func decodeProviderSpec(data []byte, parser koanf.Parser) (ProviderSpec, error) {
 	k := koanf.New(".")
 	if parser == nil {
@@ -118,20 +118,25 @@ func decodeProviderSpec(data []byte, parser koanf.Parser) (ProviderSpec, error) 
 	return spec, nil
 }
 
+// rawBytesProvider implements koanf.Provider for raw byte slices
 type rawBytesProvider struct {
 	data []byte
 }
 
+// Read is not supported by rawBytesProvider
 func (p rawBytesProvider) Read() (map[string]any, error) {
-	return nil, errors.New("rawBytesProvider does not support Read")
+	return nil, ErrRawBytesProviderRead
 }
 
+// ReadBytes returns the raw byte data for parsing
 func (p rawBytesProvider) ReadBytes() ([]byte, error) {
 	return p.data, nil
 }
 
+// jsonParser implements koanf.Parser for JSON data
 type jsonParser struct{}
 
+// Unmarshal decodes JSON bytes into a map
 func (jsonParser) Unmarshal(bytes []byte) (map[string]any, error) {
 	var out map[string]any
 	if err := json.Unmarshal(bytes, &out); err != nil {
@@ -140,10 +145,12 @@ func (jsonParser) Unmarshal(bytes []byte) (map[string]any, error) {
 	return out, nil
 }
 
+// Marshal encodes a map into JSON bytes
 func (jsonParser) Marshal(value map[string]any) ([]byte, error) {
 	return json.Marshal(value)
 }
 
+// parserForFile selects the appropriate parser based on file extension
 func parserForFile(name string) koanf.Parser {
 	switch strings.ToLower(filepath.Ext(name)) {
 	case ".yaml", ".yml":

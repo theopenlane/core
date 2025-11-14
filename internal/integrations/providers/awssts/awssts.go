@@ -2,7 +2,6 @@ package awssts
 
 import (
 	"context"
-	"errors"
 	"fmt"
 	"maps"
 	"strings"
@@ -13,11 +12,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-var (
-	errProviderMetadataRequired = errors.New("awssts: provider metadata required")
-	errRoleARNRequired          = errors.New("awssts: roleArn required")
-	errRegionRequired           = errors.New("awssts: region required")
-)
 
 // ProviderOption customizes AWS STS providers.
 type ProviderOption func(*providerConfig)
@@ -46,7 +40,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 		ProviderType: provider,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
 			if spec.AuthType != "" && spec.AuthType != types.AuthKindAWSFederation {
-				return nil, fmt.Errorf("awssts: provider %s expects authType %s (found %s)", provider, types.AuthKindAWSFederation, spec.AuthType)
+				return nil, fmt.Errorf("%w (provider %s expects %s, found %s)", ErrAuthTypeMismatch, provider, types.AuthKindAWSFederation, spec.AuthType)
 			}
 
 			return &Provider{
@@ -98,28 +92,28 @@ func (p *Provider) Operations() []types.OperationDescriptor {
 
 // BeginAuth is not supported for AWS STS metadata flows.
 func (p *Provider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
-	return nil, fmt.Errorf("%s: BeginAuth is not supported; configure credentials via metadata", p.provider)
+	return nil, fmt.Errorf("%w (provider %s)", ErrBeginAuthNotSupported, p.provider)
 }
 
 // Mint validates the stored AWS metadata and persists structured credential fields.
 func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
 	if p == nil {
-		return types.CredentialPayload{}, fmt.Errorf("awssts: provider not initialized")
+		return types.CredentialPayload{}, ErrProviderNotInitialized
 	}
 
 	meta := cloneProviderData(subject.Credential.Data.ProviderData)
 	if len(meta) == 0 {
-		return types.CredentialPayload{}, errProviderMetadataRequired
+		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
 	roleArn := stringValue(meta, "roleArn")
 	if roleArn == "" {
-		return types.CredentialPayload{}, errRoleARNRequired
+		return types.CredentialPayload{}, ErrRoleARNRequired
 	}
 
 	region := stringValue(meta, "region")
 	if region == "" {
-		return types.CredentialPayload{}, errRegionRequired
+		return types.CredentialPayload{}, ErrRegionRequired
 	}
 
 	sanitized := maps.Clone(meta)

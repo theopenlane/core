@@ -12,16 +12,26 @@ import (
 
 // ActivationSession captures the temporary state required to complete an OAuth flow
 type ActivationSession struct {
-	State          string
-	Provider       types.ProviderType
-	OrgID          string
-	IntegrationID  string
-	Scopes         []string
-	Metadata       map[string]any
+	// State is the unique CSRF token identifying this authorization session
+	State string
+	// Provider identifies which provider is handling the authorization
+	Provider types.ProviderType
+	// OrgID identifies the organization initiating the flow
+	OrgID string
+	// IntegrationID identifies the integration record being activated
+	IntegrationID string
+	// Scopes contains the authorization scopes requested from the provider
+	Scopes []string
+	// Metadata carries additional provider-specific configuration
+	Metadata map[string]any
+	// LabelOverrides customizes UI labels presented during authorization
 	LabelOverrides map[string]string
-	CreatedAt      time.Time
-	ExpiresAt      time.Time
-	AuthSession    types.AuthSession
+	// CreatedAt records when the session was initiated
+	CreatedAt time.Time
+	// ExpiresAt specifies when the session becomes invalid
+	ExpiresAt time.Time
+	// AuthSession holds the provider-specific authorization state
+	AuthSession types.AuthSession
 }
 
 // SessionStore persists activation sessions until the provider callback is completed
@@ -32,7 +42,9 @@ type SessionStore interface {
 
 // MemorySessionStore stores activation sessions in memory and is safe for concurrent use
 type MemorySessionStore struct {
-	mu       sync.Mutex
+	// mu protects concurrent access to the sessions map
+	mu sync.Mutex
+	// sessions indexes activation sessions by their state token
 	sessions map[string]ActivationSession
 }
 
