@@ -13,14 +13,18 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-// CredentialKind distinguishes the various credential payloads managed by the broker.
+// CredentialKind distinguishes the various credential payloads managed by the broker
 type CredentialKind string
 
 const (
+	// CredentialKindOAuthToken represents OAuth2 token credentials
 	CredentialKindOAuthToken CredentialKind = "oauth_token"
-	CredentialKindMetadata   CredentialKind = "integration_metadata"
-	CredentialKindAPIKey     CredentialKind = "api_key"
-	CredentialKindWorkload   CredentialKind = "workload_identity"
+	// CredentialKindMetadata represents integration metadata credentials
+	CredentialKindMetadata CredentialKind = "integration_metadata"
+	// CredentialKindAPIKey represents API key credentials
+	CredentialKindAPIKey CredentialKind = "api_key"
+	// CredentialKindWorkload represents workload identity credentials
+	CredentialKindWorkload CredentialKind = "workload_identity"
 )
 
 // CredentialPayload is the canonical envelope exchanged between keymaker and keystore.
@@ -84,6 +88,7 @@ func NewCredentialBuilder(provider ProviderType) *CredentialBuilder {
 // With appends options to the builder.
 func (b *CredentialBuilder) With(opts ...CredentialOption) *CredentialBuilder {
 	b.options = append(b.options, opts...)
+
 	return b
 }
 
@@ -175,6 +180,7 @@ func (p CredentialPayload) ClaimsOption() mo.Option[*oidc.IDTokenClaims] {
 	return optionFromPointer(helpers.CloneOIDCClaims(p.Claims))
 }
 
+// optionFromPointer wraps a pointer in an Option, returning None if nil
 func optionFromPointer[T any](value *T) mo.Option[*T] {
 	if value == nil {
 		return mo.None[*T]()
@@ -183,6 +189,7 @@ func optionFromPointer[T any](value *T) mo.Option[*T] {
 	return mo.Some(value)
 }
 
+// isCredentialSetEmpty checks if all fields in a credential set are empty
 func isCredentialSetEmpty(set models.CredentialSet) bool {
 	fields := []string{
 		set.AccessKeyID,

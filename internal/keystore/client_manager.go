@@ -2,20 +2,24 @@ package keystore
 
 import (
 	"context"
-	"maps"
 	"strings"
 	"sync"
 
 	"github.com/samber/lo"
 
+	"github.com/theopenlane/core/internal/integrations/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
 // ClientPoolManager manages client pools constructed from provider-published descriptors
 type ClientPoolManager struct {
-	source      CredentialSource
-	mu          sync.RWMutex
-	pools       map[clientDescriptorKey]*ClientPool[any, map[string]any]
+	// source provides credential retrieval and refresh capabilities
+	source CredentialSource
+	// mu protects concurrent access to pools and descriptors maps
+	mu sync.RWMutex
+	// pools indexes client pools by provider and client name
+	pools map[clientDescriptorKey]*ClientPool[any, map[string]any]
+	// descriptors stores registered client descriptors
 	descriptors map[clientDescriptorKey]types.ClientDescriptor
 }
 
@@ -101,6 +105,7 @@ func (m *ClientPoolManager) Descriptors() map[types.ProviderType][]types.ClientD
 	return grouped
 }
 
+// descriptorKey extracts and validates the unique key from a client descriptor
 func descriptorKey(descriptor types.ClientDescriptor) (clientDescriptorKey, error) {
 	if descriptor.Provider == types.ProviderUnknown {
 		return clientDescriptorKey{}, ErrProviderRequired
@@ -118,29 +123,34 @@ func descriptorKey(descriptor types.ClientDescriptor) (clientDescriptorKey, erro
 	}, nil
 }
 
+// descriptorClientBuilder adapts a ClientDescriptor to the ClientBuilder interface
 type descriptorClientBuilder struct {
+	// descriptor contains the provider-published client configuration
 	descriptor types.ClientDescriptor
 }
 
+// Build constructs a client using the descriptor's build function
 func (b descriptorClientBuilder) Build(ctx context.Context, payload types.CredentialPayload, config map[string]any) (any, error) {
 	cloned := cloneConfigMap(config)
 	return b.descriptor.Build(ctx, payload, cloned)
 }
 
+// ProviderType returns the provider identifier for this client builder
 func (b descriptorClientBuilder) ProviderType() types.ProviderType {
 	return b.descriptor.Provider
 }
 
+// cloneConfigMap creates a deep copy of the configuration map
 func cloneConfigMap(input map[string]any) map[string]any {
-	if input == nil {
-		return nil
-	}
-	return maps.Clone(input)
+	return helpers.DeepCloneMap(input)
 }
 
+// clientDescriptorKey uniquely identifies a client descriptor by provider and name
 type clientDescriptorKey struct {
+	// Provider identifies which provider publishes the client
 	Provider types.ProviderType
-	Name     types.ClientName
+	// Name identifies the specific client type within the provider
+	Name types.ClientName
 }
 
 // FlattenDescriptors converts a map of provider descriptors into a single slice for manager construction

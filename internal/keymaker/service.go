@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// defaultSessionTTL is the duration that OAuth sessions remain valid if no custom TTL is configured
 const defaultSessionTTL = 15 * time.Minute
 
 // ProviderResolver exposes provider lookups. registry.Registry satisfies this interface
@@ -34,12 +35,17 @@ type ServiceOptions struct {
 
 // Service orchestrates activation flows by brokering providers, sessions, and keystore writes
 type Service struct {
+	// providers resolves provider instances by type
 	providers ProviderResolver
-	keystore  CredentialWriter
-	sessions  SessionStore
+	// keystore persists credential payloads after activation
+	keystore CredentialWriter
+	// sessions stores temporary OAuth state until callback completion
+	sessions SessionStore
 
+	// sessionTTL controls the lifetime of pending OAuth sessions
 	sessionTTL time.Duration
-	now        func() time.Time
+	// now returns the current time, overridable for testing
+	now func() time.Time
 }
 
 // NewService constructs a Service from the supplied dependencies
@@ -77,35 +83,52 @@ func NewService(providers ProviderResolver, keystore CredentialWriter, sessions 
 
 // BeginRequest carries the information required to start an OAuth/OIDC activation flow
 type BeginRequest struct {
-	OrgID          string
-	IntegrationID  string
-	Provider       types.ProviderType
-	RedirectURI    string
-	Scopes         []string
-	Metadata       map[string]any
+	// OrgID identifies the organization initiating the flow
+	OrgID string
+	// IntegrationID identifies the integration record being activated
+	IntegrationID string
+	// Provider specifies which provider to use for authorization
+	Provider types.ProviderType
+	// RedirectURI overrides the default callback URL if specified
+	RedirectURI string
+	// Scopes requests specific authorization scopes from the provider
+	Scopes []string
+	// Metadata carries additional provider-specific configuration
+	Metadata map[string]any
+	// LabelOverrides customizes UI labels presented during authorization
 	LabelOverrides map[string]string
-	State          string
+	// State optionally supplies a custom CSRF token
+	State string
 }
 
 // BeginResponse returns the authorization URL/state pair for the caller to redirect the user
 type BeginResponse struct {
+	// Provider identifies which provider is handling the authorization
 	Provider types.ProviderType
-	State    string
-	AuthURL  string
+	// State contains the CSRF token that must be validated during callback
+	State string
+	// AuthURL is the provider authorization URL where the user should be redirected
+	AuthURL string
 }
 
 // CompleteRequest carries the state/code pair received from the provider callback
 type CompleteRequest struct {
+	// State is the CSRF token returned by the provider that identifies the session
 	State string
-	Code  string
+	// Code is the authorization code exchanged for credentials
+	Code string
 }
 
 // CompleteResult reports the persisted credential and related identifiers
 type CompleteResult struct {
-	Provider      types.ProviderType
-	OrgID         string
+	// Provider identifies which provider issued the credential
+	Provider types.ProviderType
+	// OrgID identifies the organization that owns the credential
+	OrgID string
+	// IntegrationID identifies the integration record containing the credential
 	IntegrationID string
-	Credential    types.CredentialPayload
+	// Credential contains the persisted credential payload
+	Credential types.CredentialPayload
 }
 
 // BeginAuthorization starts an OAuth/OIDC transaction with the requested provider

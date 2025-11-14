@@ -75,7 +75,7 @@ func runSecurityCenterHealthOperation(ctx context.Context, input types.Operation
 
 	client, ok := input.Client.(*cloudscc.Client)
 	if !ok || client == nil {
-		return types.OperationResult{}, fmt.Errorf("gcpscc: security center client required")
+		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
 	parent, err := resolveSecurityCenterParent(meta)
@@ -122,7 +122,7 @@ func runSecurityCenterFindingsOperation(ctx context.Context, input types.Operati
 
 	client, ok := input.Client.(*cloudscc.Client)
 	if !ok || client == nil {
-		return types.OperationResult{}, fmt.Errorf("gcpscc: security center client required")
+		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
 	sourceName, err := resolveSecurityCenterSource(meta, input.Config)
@@ -193,7 +193,7 @@ func runSecurityCenterSettingsOperation(ctx context.Context, input types.Operati
 
 	client, ok := input.Client.(*cloudscc.Client)
 	if !ok || client == nil {
-		return types.OperationResult{}, fmt.Errorf("gcpscc: security center client required")
+		return types.OperationResult{}, ErrSecurityCenterClientRequired
 	}
 
 	parent, err := resolveSecurityCenterParent(meta)

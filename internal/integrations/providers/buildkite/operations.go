@@ -91,7 +91,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 		}, err
 	}
 
-	samples := make([]map[string]any, 0, min(5, len(orgs)))
+	samples := make([]map[string]any, 0, minInt(5, len(orgs)))
 	for _, org := range orgs {
 		if len(samples) >= cap(samples) {
 			break
@@ -131,7 +131,7 @@ func buildkiteAPIGet(ctx context.Context, token, path string, out any) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("buildkite api %s: %s", path, resp.Status)
+		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
 	}
 
 	if out == nil {
@@ -142,7 +142,8 @@ func buildkiteAPIGet(ctx context.Context, token, path string, out any) error {
 	return dec.Decode(out)
 }
 
-func min(a, b int) int {
+// minInt returns the minimum of two integers
+func minInt(a, b int) int {
 	if a < b {
 		return a
 	}

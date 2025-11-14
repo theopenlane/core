@@ -104,7 +104,7 @@ func fetchOrganization(ctx context.Context, token string) (graphOrganization, er
 	}
 
 	if len(resp.Value) == 0 {
-		return graphOrganization{}, fmt.Errorf("graph returned zero organizations")
+		return graphOrganization{}, ErrNoOrganizations
 	}
 
 	return resp.Value[0], nil

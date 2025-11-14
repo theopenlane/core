@@ -100,7 +100,7 @@ func oktaCredentials(input types.OperationInput) (string, string, error) {
 	}
 	apiToken := strings.TrimSpace(data.APIToken)
 	if baseURL == "" || apiToken == "" {
-		return "", "", fmt.Errorf("okta: org url or api token missing")
+		return "", "", ErrCredentialsMissing
 	}
 	return baseURL, apiToken, nil
 }
@@ -121,7 +121,7 @@ func oktaGET(ctx context.Context, endpoint, apiToken string, out any) error {
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("okta api %s: %s", endpoint, resp.Status)
+		return fmt.Errorf("%w (endpoint %s): %s", ErrAPIRequest, endpoint, resp.Status)
 	}
 
 	if out == nil {

@@ -10,25 +10,29 @@ import (
 type ProviderType string
 
 const (
-	// ProviderUnknown represents an unset provider identifier.
+	// ProviderUnknown represents an unset provider identifier
 	ProviderUnknown ProviderType = ""
 )
 
-// ProviderTypeFromString normalizes arbitrary user/config input into a stable
-// ProviderType by trimming whitespace and lowercasing.
+// ProviderTypeFromString normalizes arbitrary user/config input into a stable ProviderType
 func ProviderTypeFromString(value string) ProviderType {
 	return ProviderType(value)
 }
 
-// AuthKind indicates how a provider authenticates (oauth2, oidc, workload identity, etc.).
+// AuthKind indicates how a provider authenticates (oauth2, oidc, workload identity, etc)
 type AuthKind string
 
 const (
-	AuthKindOAuth2           AuthKind = "oauth2"
-	AuthKindOIDC             AuthKind = "oidc"
-	AuthKindAPIKey           AuthKind = "apikey"
+	// AuthKindOAuth2 represents OAuth2 authentication
+	AuthKindOAuth2 AuthKind = "oauth2"
+	// AuthKindOIDC represents OpenID Connect authentication
+	AuthKindOIDC AuthKind = "oidc"
+	// AuthKindAPIKey represents API key authentication
+	AuthKindAPIKey AuthKind = "apikey"
+	// AuthKindWorkloadIdentity represents workload identity authentication
 	AuthKindWorkloadIdentity AuthKind = "workload_identity"
-	AuthKindAWSFederation    AuthKind = "aws_sts"
+	// AuthKindAWSFederation represents AWS STS federation authentication
+	AuthKindAWSFederation AuthKind = "aws_sts"
 )
 
 // ProviderCapabilities describe optional behaviours supported by a provider
@@ -41,8 +45,7 @@ type ProviderCapabilities struct {
 	SupportsMetadataForm bool
 }
 
-// ProviderConfig mirrors the declarative provider specification (JSON/YAML)
-// used by the HTTP handlers to render forms
+// ProviderConfig mirrors the declarative provider specification (JSON/YAML) used by HTTP handlers to render forms
 type ProviderConfig struct {
 	// Type is the unique provider identifier
 	Type ProviderType
@@ -64,47 +67,60 @@ type ProviderConfig struct {
 	Metadata map[string]any
 }
 
-// Provider defines the behaviour required to integrate a third-party system.
-// Implementations typically wrap Zitadel's relying-party helpers and provider-
-// specific grant workflows.
+// Provider defines the behaviour required to integrate a third-party system
 type Provider interface {
+	// Type returns the provider identifier
 	Type() ProviderType
+	// Capabilities returns the capabilities supported by the provider
 	Capabilities() ProviderCapabilities
+	// BeginAuth starts an authentication flow
 	BeginAuth(ctx context.Context, input AuthContext) (AuthSession, error)
+	// Mint refreshes or exchanges credentials
 	Mint(ctx context.Context, subject CredentialSubject) (CredentialPayload, error)
 }
 
-// ClientName identifies a specific client type exposed by a provider (e.g., rest, graphql).
+// ClientName identifies a specific client type exposed by a provider (e.g., rest, graphql)
 type ClientName string
 
-// ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config.
+// ClientBuilderFunc constructs provider-specific clients using persisted credentials and optional config
 type ClientBuilderFunc func(ctx context.Context, payload CredentialPayload, config map[string]any) (any, error)
 
-// ClientDescriptor describes a provider-managed client that can be pooled/reused downstream.
+// ClientDescriptor describes a provider-managed client that can be pooled/reused downstream
 type ClientDescriptor struct {
-	Provider     ProviderType
-	Name         ClientName
-	Description  string
-	Build        ClientBuilderFunc
+	// Provider identifies which provider offers this client
+	Provider ProviderType
+	// Name is the unique client identifier
+	Name ClientName
+	// Description explains what the client does
+	Description string
+	// Build is the function that constructs the client
+	Build ClientBuilderFunc
+	// ConfigSchema defines the JSON schema for client configuration
 	ConfigSchema map[string]any
 }
 
-// ClientProvider is implemented by providers that expose SDK clients for downstream services.
+// ClientProvider is implemented by providers that expose SDK clients for downstream services
 type ClientProvider interface {
 	Provider
+	// ClientDescriptors returns the list of clients offered by the provider
 	ClientDescriptors() []ClientDescriptor
 }
 
-// ClientRequest contains the parameters required to request a client instance.
+// ClientRequest contains the parameters required to request a client instance
 type ClientRequest struct {
-	OrgID    string
+	// OrgID identifies the organization requesting the client
+	OrgID string
+	// Provider identifies which provider to use
 	Provider ProviderType
-	Client   ClientName
-	Config   map[string]any
-	Force    bool
+	// Client identifies which client type to build
+	Client ClientName
+	// Config contains client-specific configuration
+	Config map[string]any
+	// Force bypasses cached client instances
+	Force bool
 }
 
-// AuthContext carries the state necessary to start an OAuth/OIDC transaction.
+// AuthContext carries the state necessary to start an OAuth/OIDC transaction
 type AuthContext struct {
 	// OrgID identifies the organization initiating the flow
 	OrgID string
@@ -122,18 +138,20 @@ type AuthContext struct {
 	LabelOverrides map[string]string
 }
 
-// AuthSession encapsulates an authorization transaction (state, nonce, URL).
-// Keymaker implementations store arbitrary data inside the session, then call
-// Finish once the provider redirected with an authorization code.
+// AuthSession encapsulates an authorization transaction (state, nonce, URL)
+// Keymaker implementations store arbitrary data inside the session, then call Finish once the provider redirected with an authorization code
 type AuthSession interface {
+	// ProviderType returns the provider identifier for this session
 	ProviderType() ProviderType
+	// State returns the CSRF state value
 	State() string
+	// AuthURL returns the URL where the user should be redirected
 	AuthURL() string
+	// Finish exchanges the authorization code for credentials
 	Finish(ctx context.Context, code string) (CredentialPayload, error)
 }
 
-// CredentialSubject is passed to Provider.Mint when the broker needs to refresh
-// or exchange long-lived credentials for short-lived ones (e.g., STS, PKCE).
+// CredentialSubject is passed to Provider.Mint when the broker needs to refresh or exchange long-lived credentials for short-lived ones (e.g., STS, PKCE)
 type CredentialSubject struct {
 	// Provider identifies the provider whose credentials are being refreshed
 	Provider ProviderType

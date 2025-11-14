@@ -12,18 +12,19 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
+// defaultHTTPClient is the fallback HTTP client when callers do not supply one
 var defaultHTTPClient = &http.Client{Timeout: 10 * time.Second}
 
 // OAuthTokenFromPayload extracts a usable access token from the credential payload.
 func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
 	tokenOpt := payload.OAuthTokenOption()
 	if !tokenOpt.IsPresent() {
-		return "", fmt.Errorf("%s: oauth token missing", provider)
+		return "", fmt.Errorf("%w (provider %s)", ErrOAuthTokenMissing, provider)
 	}
 
 	token := tokenOpt.MustGet()
 	if token == nil || token.AccessToken == "" {
-		return "", fmt.Errorf("%s: access token empty", provider)
+		return "", fmt.Errorf("%w (provider %s)", ErrAccessTokenEmpty, provider)
 	}
 
 	return token.AccessToken, nil
@@ -33,7 +34,7 @@ func OAuthTokenFromPayload(payload types.CredentialPayload, provider string) (st
 func APITokenFromPayload(payload types.CredentialPayload, provider string) (string, error) {
 	token := strings.TrimSpace(payload.Data.APIToken)
 	if token == "" {
-		return "", fmt.Errorf("%s: api token missing", provider)
+		return "", fmt.Errorf("%w (provider %s)", ErrAPITokenMissing, provider)
 	}
 
 	return token, nil
@@ -68,7 +69,7 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= 400 {
-		return fmt.Errorf("request to %s failed: %s", url, resp.Status)
+		return fmt.Errorf("%w (url %s): %s", ErrHTTPRequestFailed, url, resp.Status)
 	}
 
 	if out == nil {

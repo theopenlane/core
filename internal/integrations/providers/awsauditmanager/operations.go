@@ -27,7 +27,7 @@ func runAWSAuditHealth(ctx context.Context, input types.OperationInput) (types.O
 	_ = ctx
 	meta := input.Credential.Data.ProviderData
 	if len(meta) == 0 {
-		return types.OperationResult{}, fmt.Errorf("aws audit manager: provider metadata missing")
+		return types.OperationResult{}, ErrMetadataMissing
 	}
 
 	account := strings.TrimSpace(stringValue(meta, "accountId"))
@@ -35,10 +35,10 @@ func runAWSAuditHealth(ctx context.Context, input types.OperationInput) (types.O
 	roleArn := strings.TrimSpace(stringValue(meta, "roleArn"))
 
 	if roleArn == "" {
-		return types.OperationResult{}, fmt.Errorf("aws audit manager: roleArn missing")
+		return types.OperationResult{}, ErrRoleARNMissing
 	}
 	if region == "" {
-		return types.OperationResult{}, fmt.Errorf("aws audit manager: region missing")
+		return types.OperationResult{}, ErrRegionMissing
 	}
 
 	details := map[string]any{

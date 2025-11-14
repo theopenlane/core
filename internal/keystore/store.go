@@ -3,7 +3,6 @@ package keystore
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strings"
 	"time"
 
@@ -26,7 +25,9 @@ import (
 
 // Store persists credential payloads using Ent-backed integrations and hush secrets
 type Store struct {
-	db  *ent.Client
+	// db provides access to the Ent ORM client for database operations
+	db *ent.Client
+	// now returns the current time, overridable for testing
 	now func() time.Time
 }
 
@@ -105,7 +106,7 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 // EnsureIntegration guarantees an integration record exists for the given org/provider pair
 func (s *Store) EnsureIntegration(ctx context.Context, orgID string, provider types.ProviderType) (*ent.Integration, error) {
 	if s == nil {
-		return nil, fmt.Errorf("keystore: store not initialized")
+		return nil, ErrStoreNotInitialized
 	}
 
 	return s.ensureIntegration(ctx, orgID, provider)
@@ -150,10 +151,10 @@ func (s *Store) LoadCredential(ctx context.Context, orgID string, provider types
 	return types.CredentialPayload{}, ErrCredentialNotFound
 }
 
-// DeleteIntegration removes the integration and associated secrets for the given org.
+// DeleteIntegration removes the integration and associated secrets for the given org
 func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integrationID string) (types.ProviderType, string, error) {
 	if s == nil || s.db == nil {
-		return types.ProviderUnknown, "", fmt.Errorf("keystore: store not initialized")
+		return types.ProviderUnknown, "", ErrStoreNotInitialized
 	}
 
 	if strings.TrimSpace(orgID) == "" {

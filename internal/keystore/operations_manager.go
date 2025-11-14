@@ -13,9 +13,13 @@ import (
 
 // OperationManager executes provider-published operations using stored credentials and optional client pools
 type OperationManager struct {
-	source      CredentialSource
-	clients     *ClientPoolManager
-	mu          sync.RWMutex
+	// source provides credential retrieval and refresh capabilities
+	source CredentialSource
+	// clients provides access to pooled provider clients
+	clients *ClientPoolManager
+	// mu protects concurrent access to the descriptors map
+	mu sync.RWMutex
+	// descriptors indexes registered operations by provider and name
 	descriptors map[operationKey]types.OperationDescriptor
 }
 
@@ -125,6 +129,7 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 	return result, nil
 }
 
+// resolveCredential retrieves or refreshes the credential based on the request flags
 func (m *OperationManager) resolveCredential(ctx context.Context, req types.OperationRequest) (types.CredentialPayload, error) {
 	if req.Force {
 		return m.source.Mint(ctx, req.OrgID, req.Provider)
@@ -133,6 +138,7 @@ func (m *OperationManager) resolveCredential(ctx context.Context, req types.Oper
 	return m.source.Get(ctx, req.OrgID, req.Provider)
 }
 
+// resolveClient retrieves a client instance if the operation requires one
 func (m *OperationManager) resolveClient(ctx context.Context, req types.OperationRequest, descriptor types.OperationDescriptor) (any, error) {
 	if descriptor.Client == "" {
 		return nil, nil
@@ -172,11 +178,15 @@ func (m *OperationManager) Descriptors() map[types.ProviderType][]types.Operatio
 	return grouped
 }
 
+// operationKey uniquely identifies an operation by provider and name
 type operationKey struct {
+	// Provider identifies which provider publishes the operation
 	Provider types.ProviderType
-	Name     types.OperationName
+	// Name identifies the specific operation within the provider
+	Name types.OperationName
 }
 
+// operationDescriptorKey extracts and validates the unique key from an operation descriptor
 func operationDescriptorKey(descriptor types.OperationDescriptor) (operationKey, error) {
 	if descriptor.Provider == types.ProviderUnknown {
 		return operationKey{}, ErrProviderRequired

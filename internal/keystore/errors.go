@@ -29,4 +29,6 @@ var (
 	ErrOperationDescriptorInvalid = errors.New("keystore: operation descriptor invalid")
 	// ErrOperationClientManagerRequired indicates an operation requires a client pool but none was provided
 	ErrOperationClientManagerRequired = errors.New("keystore: client manager required for operation")
+	// ErrStoreNotInitialized indicates the store instance is nil
+	ErrStoreNotInitialized = errors.New("keystore: store not initialized")
 )
