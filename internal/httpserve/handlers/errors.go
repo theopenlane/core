@@ -43,6 +43,8 @@ var (
 	ErrNoEmailFound = errors.New("no email found from oauth provider")
 	// ErrInvalidProvider is returned when registering a user with an unsupported oauth provider
 	ErrInvalidProvider = errors.New("oauth2 provider not supported")
+	// ErrProviderDisabled is returned when the provider is configured but inactive
+	ErrProviderDisabled = errors.New("provider is currently disabled")
 	// ErrMissingOrganizationContext is returned when organization context is missing during OAuth flow
 	ErrMissingOrganizationContext = errors.New("missing organization context")
 	// ErrInvalidOrganizationContext is returned when organization context does not match authenticated user

@@ -2,12 +2,11 @@ package slack
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
 	"net/url"
-	"time"
 
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -15,8 +14,6 @@ const (
 	slackOperationHealth types.OperationName = "health.default"
 	slackOperationTeam   types.OperationName = "team.inspect"
 )
-
-var slackHTTPClient = &http.Client{Timeout: 10 * time.Second}
 
 func slackOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -134,29 +131,14 @@ func slackAPIGet(ctx context.Context, token, method string, params url.Values, o
 		}
 	}
 
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
+	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, out); err != nil {
+		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+			return fmt.Errorf("%w (method %s): %s", ErrAPIRequest, method, err.Error())
+		}
 		return err
 	}
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Accept", "application/json")
 
-	resp, err := slackHTTPClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= 400 {
-		return fmt.Errorf("%w (method %s): %s", ErrAPIRequest, method, resp.Status)
-	}
-
-	if out == nil {
-		return nil
-	}
-
-	dec := json.NewDecoder(resp.Body)
-	return dec.Decode(out)
+	return nil
 }
 
 func oauthTokenFromPayload(payload types.CredentialPayload) (string, error) {
