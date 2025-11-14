@@ -3,7 +3,6 @@ package handlers
 import (
 	"sort"
 
-	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
 	echo "github.com/theopenlane/echox"
 
@@ -50,7 +49,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	}
 
 	if err != nil {
-		log.Error().Err(err).Msg("error getting features")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting features")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

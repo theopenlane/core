@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -14,6 +13,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -28,8 +28,10 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// setup viewer context
-	ctxWithToken := token.NewContextWithVerifyToken(ctx.Request().Context(), in.Token)
+	ctxWithToken := token.NewContextWithVerifyToken(reqCtx, in.Token)
 
 	entUser, err := h.getUserByEVToken(ctxWithToken, in.Token)
 	if err != nil {
@@ -37,7 +39,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 			return h.BadRequest(ctx, err, openapi)
 		}
 
-		log.Error().Err(err).Msg("error retrieving user token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user token")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
@@ -54,7 +56,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	if !entUser.Edges.Setting.EmailConfirmed {
 		// set tokens for request
 		if err := user.setUserTokens(entUser, in.Token); err != nil {
-			log.Error().Err(err).Msg("unable to set user tokens for request")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set user tokens for request")
 
 			return h.BadRequest(ctx, err, openapi)
 		}
@@ -65,7 +67,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		}
 
 		if t.ExpiresAt, err = user.GetVerificationExpires(); err != nil {
-			log.Error().Err(err).Msg("unable to parse expiration")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
@@ -77,7 +79,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 
 				meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
 				if err != nil {
-					log.Error().Err(err).Msg("unable to resend verification token")
+					logx.FromContext(reqCtx).Error().Err(err).Msg("unable to resend verification token")
 
 					return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 				}
@@ -103,7 +105,7 @@ func (h *Handler) VerifyEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	// create new claims for the user
 	auth, err := h.AuthManager.GenerateUserAuthSession(userCtx, ctx.Response().Writer, entUser)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}

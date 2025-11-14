@@ -15,11 +15,11 @@ import (
 // DeleteIntegration is the resolver for the deleteIntegration field.
 func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*model.IntegrationDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Integration.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "integration"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "integration"})
 	}
 
 	if err := generated.IntegrationEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.IntegrationDeletePayload{
@@ -31,12 +31,12 @@ func (r *mutationResolver) DeleteIntegration(ctx context.Context, id string) (*m
 func (r *queryResolver) Integration(ctx context.Context, id string) (*generated.Integration, error) {
 	query, err := withTransactionalMutation(ctx).Integration.Query().Where(integration.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "integration"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "integration"})
 	}
 
 	return res, nil

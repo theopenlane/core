@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -16,6 +15,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -30,8 +30,10 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// setup viewer context
-	ctxWithToken := token.NewContextWithVerifyToken(ctx.Request().Context(), in.Token)
+	ctxWithToken := token.NewContextWithVerifyToken(reqCtx, in.Token)
 
 	entSubscriber, err := h.getSubscriberByToken(ctxWithToken, in.Token)
 	if err != nil {
@@ -39,13 +41,13 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 			return h.BadRequest(ctx, err, openapi)
 		}
 
-		log.Error().Err(err).Msg("error retrieving subscriber")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving subscriber")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	// add org to the authenticated context
-	reqCtx := auth.WithAuthenticatedUser(ctxWithToken, &auth.AuthenticatedUser{
+	reqCtx = auth.WithAuthenticatedUser(ctxWithToken, &auth.AuthenticatedUser{
 		OrganizationID:  entSubscriber.OwnerID,
 		OrganizationIDs: []string{entSubscriber.OwnerID},
 	})
@@ -63,7 +65,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 				return h.Created(ctx, out)
 			}
 
-			log.Error().Err(err).Msg("error verifying subscriber token")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying subscriber token")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
@@ -73,7 +75,7 @@ func (h *Handler) VerifySubscriptionHandler(ctx echo.Context, openapi *OpenAPICo
 		}
 
 		if err := h.updateSubscriberVerifiedEmail(ctxWithToken, entSubscriber.ID, input); err != nil {
-			log.Error().Err(err).Msg("error updating subscriber")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating subscriber")
 
 			return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 		}
@@ -107,7 +109,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 
 	t.ExpiresAt, err = user.GetVerificationExpires()
 	if err != nil {
-		log.Error().Err(err).Msg("unable to parse expiration")
+		logx.FromContext(ctx).Error().Err(err).Msg("unable to parse expiration")
 
 		return ErrUnableToVerifyEmail
 	}
@@ -117,14 +119,14 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 		// if token is expired, create new token and send email
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			if err := user.CreateVerificationToken(); err != nil {
-				log.Error().Err(err).Msg("error creating verification token")
+				logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
 
 				return err
 			}
 
 			// update token settings in the database
 			if err := h.updateSubscriberVerificationToken(ctx, user); err != nil {
-				log.Error().Err(err).Msg("error updating subscriber verification token")
+				logx.FromContext(ctx).Error().Err(err).Msg("error updating subscriber verification token")
 
 				return err
 			}
@@ -134,7 +136,7 @@ func (h *Handler) verifySubscriberToken(ctx context.Context, entSubscriber *gene
 
 			// resend email with new token to the subscriber
 			if err := h.sendSubscriberEmail(ctxWithToken, user, entSubscriber.OwnerID); err != nil {
-				log.Error().Err(err).Msg("error sending subscriber email")
+				logx.FromContext(ctx).Error().Err(err).Msg("error sending subscriber email")
 
 				return err
 			}

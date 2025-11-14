@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/objects/store"
 	"github.com/theopenlane/core/internal/objects/upload"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -74,6 +75,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		// Parse files from GraphQL variables using the consolidated parser
 		filesMap, err := pkgobjects.ParseFilesFromSource(op.Variables)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to parse files from graphql variables")
+
 			return nil, err
 		}
 
@@ -97,6 +100,8 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 				// Add object details using existing logic
 				enhanced, err := retrieveObjectDetails(rctx, k, &fileUpload)
 				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to retrieve object details for upload")
+
 					return nil, err
 				}
 
@@ -116,13 +121,15 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 
 			defer func() {
 				if removeErr := multipartForm.RemoveAll(); removeErr != nil {
-					log.Ctx(ctx).Warn().Err(removeErr).Msg("failed to clean multipart form")
+					logx.FromContext(ctx).Warn().Err(removeErr).Msg("failed to clean multipart form")
 				}
 			}()
 		}
 
 		ctx, _, err = upload.HandleUploads(ctx, u, uploads)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to handle file uploads")
+
 			return nil, err
 		}
 
@@ -138,11 +145,18 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 		if err != nil {
 			// rollback the uploaded files in case of an error
 			upload.HandleRollback(ctx, u, uploads)
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to process resolver after file upload, rolling back uploads")
+
 			return nil, err
 		}
 
 		// add the file permissions before returning the field
 		if ctx, err = store.AddFilePermissions(ctx); err != nil {
+			// rollback the uploaded files in case of an error
+			upload.HandleRollback(ctx, u, uploads)
+
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to add file permissions to uploaded files")
+
 			return nil, err
 		}
 

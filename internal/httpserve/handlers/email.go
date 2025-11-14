@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rs/zerolog/log"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 )
@@ -17,7 +17,7 @@ func (h *Handler) sendVerificationEmail(ctx context.Context, user *User, token s
 		LastName:  user.LastName,
 	}, token)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating email verification")
 
 		return err
 	}
@@ -26,12 +26,12 @@ func (h *Handler) sendVerificationEmail(ctx context.Context, user *User, token s
 		Message: *email,
 	}, nil)
 	if err != nil {
-		log.Error().Err(err).Msg("error queueing email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}
 
-	log.Debug().Msg("queued email")
+	logx.FromContext(ctx).Debug().Msg("queued email")
 
 	return nil
 }
@@ -53,7 +53,7 @@ func (h *Handler) sendSubscriberEmail(ctx context.Context, user *User, orgID str
 		LastName:  user.LastName,
 	}, org.DisplayName, user.GetVerificationToken())
 	if err != nil {
-		log.Error().Err(err).Msg("error creating email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating email verification")
 
 		return err
 	}
@@ -62,7 +62,7 @@ func (h *Handler) sendSubscriberEmail(ctx context.Context, user *User, orgID str
 		Message: *email,
 	}, nil)
 	if err != nil {
-		log.Error().Err(err).Msg("error queueing email verification")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing email verification")
 
 		return err
 	}
@@ -78,7 +78,7 @@ func (h *Handler) sendPasswordResetRequestEmail(ctx context.Context, user *User)
 		LastName:  user.LastName,
 	}, user.GetPasswordResetToken())
 	if err != nil {
-		log.Error().Err(err).Msg("error creating password reset email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating password reset email")
 
 		return err
 	}
@@ -87,7 +87,7 @@ func (h *Handler) sendPasswordResetRequestEmail(ctx context.Context, user *User)
 		Message: *email,
 	}, nil)
 	if err != nil {
-		log.Error().Err(err).Msg("error queueing  password reset email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing  password reset email")
 
 		return err
 	}
@@ -103,7 +103,7 @@ func (h *Handler) sendPasswordResetSuccessEmail(ctx context.Context, user *User)
 		LastName:  user.LastName,
 	})
 	if err != nil {
-		log.Error().Err(err).Msg("error creating password reset success email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating password reset success email")
 
 		return err
 	}
@@ -112,7 +112,7 @@ func (h *Handler) sendPasswordResetSuccessEmail(ctx context.Context, user *User)
 		Message: *email,
 	}, nil)
 	if err != nil {
-		log.Error().Err(err).Msg("error queueing  password reset success email")
+		logx.FromContext(ctx).Error().Err(err).Msg("error queueing  password reset success email")
 
 		return err
 	}

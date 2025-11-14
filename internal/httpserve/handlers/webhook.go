@@ -26,6 +26,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -91,12 +92,14 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	req := ctx.Request()
 	res := ctx.Response()
 
+	reqCtx := req.Context()
+
 	webhookReq := &models.StripeWebhookRequest{APIVersion: ctx.QueryParam("api_version")}
 
 	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookDiscardAPIVersion != "" {
 		if webhookReq.APIVersion == h.Entitlements.Config.StripeWebhookDiscardAPIVersion {
 			webhookResponseCounter.WithLabelValues("api_version_discarded", "200").Inc()
-			log.Debug().Str("api_version", webhookReq.APIVersion).Msg("webhook with discard API version received, ignoring")
+			logx.FromContext(reqCtx).Debug().Str("api_version", webhookReq.APIVersion).Msg("webhook with discard API version received, ignoring")
 
 			return h.Success(ctx, "webhook ignored - API version being discarded")
 		}
@@ -105,7 +108,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	if webhookReq.APIVersion != "" && h.Entitlements.Config.StripeWebhookAPIVersion != "" {
 		if webhookReq.APIVersion != h.Entitlements.Config.StripeWebhookAPIVersion {
 			webhookResponseCounter.WithLabelValues("api_version_mismatch", "200").Inc()
-			log.Warn().Str("api_version", webhookReq.APIVersion).Str("expected_version", h.Entitlements.Config.StripeWebhookAPIVersion).Msg("webhook with unexpected API version")
+			logx.FromContext(reqCtx).Warn().Str("api_version", webhookReq.APIVersion).Str("expected_version", h.Entitlements.Config.StripeWebhookAPIVersion).Msg("webhook with unexpected API version")
 
 			return h.Success(ctx, "webhook ignored - API version mismatch")
 		}
@@ -114,16 +117,16 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	payload, err := io.ReadAll(http.MaxBytesReader(res.Writer, req.Body, maxBodyBytes))
 	if err != nil {
 		webhookResponseCounter.WithLabelValues("payload_exceeded", "500").Inc()
-		log.Error().Err(err).Msg("failed to read request body")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to read request body")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
 
-	log.Info().Msgf("version: %s", webhookReq.APIVersion)
+	logx.FromContext(reqCtx).Info().Msgf("version: %s", webhookReq.APIVersion)
 
 	if payload == nil {
 		webhookResponseCounter.WithLabelValues("empty_payload", "400").Inc()
-		log.Error().Msg("empty payload received")
+		logx.FromContext(reqCtx).Error().Msg("empty payload received")
 
 		return h.BadRequest(ctx, errPayloadEmpty, openapi)
 	}
@@ -132,7 +135,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	if webhookSecret == "" {
 		webhookResponseCounter.WithLabelValues("missing_webhook_secret", "500").Inc()
-		log.Error().Str("api_version", webhookReq.APIVersion).Msg("missing webhook secret for API version")
+		logx.FromContext(reqCtx).Error().Str("api_version", webhookReq.APIVersion).Msg("missing webhook secret for API version")
 
 		return h.InternalServerError(ctx, errMissingSecret, openapi)
 	}
@@ -140,7 +143,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	event, err := webhook.ConstructEvent(payload, req.Header.Get(stripeSignatureHeaderKey), webhookSecret)
 	if err != nil {
 		webhookResponseCounter.WithLabelValues("event_signature_failure", "400").Inc()
-		log.Error().Err(err).Str("api_version", webhookReq.APIVersion).Msg("failed to construct event")
+		logx.FromContext(reqCtx).Error().Err(err).Str("api_version", webhookReq.APIVersion).Msg("failed to construct event")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -149,7 +152,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 
 	if !supportedEventTypes[event.Type] {
 		webhookResponseCounter.WithLabelValues(string(event.Type)+"_discarded", "200").Inc()
-		log.Debug().Str("event_type", string(event.Type)).Msg("unsupported event type")
+		logx.FromContext(reqCtx).Debug().Str("event_type", string(event.Type)).Msg("unsupported event type")
 
 		return h.Success(ctx, "unsupported event type")
 	}
@@ -160,7 +163,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 	exists, err := h.checkForEventID(newCtx, event.ID)
 	if err != nil {
 		webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
-		log.Error().Err(err).Msg("failed to check for event ID")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to check for event ID")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -169,16 +172,16 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		meowevent, err := h.createEvent(newCtx, ent.CreateEventInput{EventID: &event.ID})
 		if err != nil {
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
-			log.Error().Err(err).Msg("failed to create event")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to create event")
 
 			return h.InternalServerError(ctx, err, openapi)
 		}
 
-		log.Debug().Msgf("internal event: %v", meowevent)
+		logx.FromContext(reqCtx).Debug().Msgf("internal event: %v", meowevent)
 
 		if err = h.HandleEvent(newCtx, &event); err != nil {
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
-			log.Error().Str("event", string(event.Type)).Err(err).Msg("failed to handle event")
+			logx.FromContext(reqCtx).Error().Str("event", string(event.Type)).Err(err).Msg("failed to handle event")
 
 			return h.InternalServerError(ctx, err, openapi)
 		}
@@ -198,9 +201,11 @@ func unmarshalEventData[T interface{}](e *stripe.Event) (*T, error) {
 	err := json.Unmarshal(e.Data.Raw, &data)
 	if err != nil {
 		log.Error().Err(err).Msg("Failed to unmarshal event data")
+
+		return nil, err
 	}
 
-	return &data, err
+	return &data, nil
 }
 
 // HandleEvent unmarshals event data and triggers a corresponding function to be executed based on case match
@@ -236,14 +241,14 @@ func (h *Handler) HandleEvent(c context.Context, e *stripe.Event) error {
 		err = h.handleSubscriptionPaused(c, subscription)
 		if ent.IsNotFound(err) {
 			// if org subscription not found, just log and move on
-			log.Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for paused/deleted subscription, skipping further processing")
+			logx.FromContext(c).Info().Str("subscription_id", subscription.ID).Msg("org subscription not found for paused/deleted subscription, skipping further processing")
 
 			return nil
 		}
 
 		return err
 	default:
-		log.Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
+		logx.FromContext(c).Warn().Str("event_type", string(e.Type)).Msg("unsupported event type")
 
 		return ErrUnsupportedEventType
 	}
@@ -265,7 +270,7 @@ func (h *Handler) invalidateAPITokens(ctx context.Context, orgID string) error {
 		return err
 	}
 
-	log.Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked API tokens")
+	logx.FromContext(ctx).Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked API tokens")
 
 	return nil
 }
@@ -283,7 +288,7 @@ func (h *Handler) invalidatePersonalAccessTokens(ctx context.Context, orgID stri
 		return err
 	}
 
-	log.Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked personal access tokens tokens")
+	logx.FromContext(ctx).Debug().Str("organization_id", orgID).Int("num_tokens_revoked", num).Msg("revoked personal access tokens tokens")
 
 	return nil
 }
@@ -315,7 +320,7 @@ func (h *Handler) handleSubscriptionPaused(ctx context.Context, s *stripe.Subscr
 func (h *Handler) handleSubscriptionUpdated(ctx context.Context, s *stripe.Subscription) error {
 	_, err := h.syncOrgSubscriptionWithStripe(ctx, s)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to sync org subscription with stripe")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to sync org subscription with stripe")
 
 		return err
 	}
@@ -331,7 +336,7 @@ func (h *Handler) handleTrialWillEnd(ctx context.Context, s *stripe.Subscription
 // handlePaymentMethodAdded handles payment intent events for added payment methods
 func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *stripe.PaymentMethod) error {
 	if paymentMethod.Customer == nil {
-		log.Error().Msg("payment method has no customer, cannot proceed")
+		logx.FromContext(ctx).Error().Msg("payment method has no customer, cannot proceed")
 
 		return nil
 	}
@@ -342,7 +347,7 @@ func (h *Handler) handlePaymentMethodAdded(ctx context.Context, paymentMethod *s
 		Where(organization.StripeCustomerID(paymentMethod.Customer.ID)).
 		Only(allowCtx)
 	if err != nil {
-		log.Error().Err(err).Msg("could not fetch organization by stripe customer id")
+		logx.FromContext(ctx).Error().Err(err).Msg("could not fetch organization by stripe customer id")
 		return err
 	}
 
@@ -383,7 +388,7 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 						SetStripeSubscriptionID(subscription.ID).
 						Exec(allowCtx)
 					if err != nil {
-						log.Error().Err(err).Msg("failed to update org subscription with stripe subscription id")
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to update org subscription with stripe subscription id")
 					}
 
 					// but still return the org subscription to update the rest of the fields
@@ -407,14 +412,14 @@ func getOrgSubscription(ctx context.Context, subscription *stripe.Subscription) 
 			}
 
 			if orgSubscription == nil {
-				log.Warn().Str("subscription_id", subscription.ID).Msg("org subscription never existed in system")
+				logx.FromContext(ctx).Warn().Str("subscription_id", subscription.ID).Msg("org subscription never existed in system")
 			} else {
-				log.Info().Str("subscription_id", subscription.ID).Msg("org subscription found but was already deleted")
+				logx.FromContext(ctx).Info().Str("subscription_id", subscription.ID).Msg("org subscription found but was already deleted")
 			}
 
 		}
 
-		log.Warn().Err(err).Msg("failed to find org subscription")
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to find org subscription")
 
 		return nil, err
 	}
@@ -430,7 +435,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 	// getOrgSubscription exhausts all possible routes to find the org so this is fine
 	if ent.IsNotFound(err) {
 		// no org subscription found, nothing to sync
-		log.Info().Str("subscription_id", subscription.ID).Msg("no org subscription found to sync with stripe subscription")
+		logx.FromContext(ctx).Info().Str("subscription_id", subscription.ID).Msg("no org subscription found to sync with stripe subscription")
 
 		return nil, nil
 	}
@@ -451,7 +456,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Str("status", orgSubscription.StripeSubscriptionStatus).Msg("stripe subscription status changed")
 	}
 
 	if stripeOrgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
@@ -459,7 +464,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Str("trial_expires_at", stripeOrgSubscription.TrialExpiresAt.String()).Msg("subscription trial expiration changed")
 	}
 
 	if orgSubscription.TrialExpiresAt != nil && orgSubscription.TrialExpiresAt != stripeOrgSubscription.TrialExpiresAt {
@@ -467,7 +472,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", orgSubscription.TrialExpiresAt.String()).Msg("trial expiration changed")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Str("expires_at", orgSubscription.TrialExpiresAt.String()).Msg("trial expiration changed")
 	}
 
 	if stripeOrgSubscription.DaysUntilDue != nil && orgSubscription.DaysUntilDue != stripeOrgSubscription.DaysUntilDue {
@@ -475,7 +480,7 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Str("days_until_due", *stripeOrgSubscription.DaysUntilDue).Msg("days until due changed")
 	}
 
 	if orgSubscription.Active != stripeOrgSubscription.Active {
@@ -483,22 +488,22 @@ func (h *Handler) syncOrgSubscriptionWithStripe(ctx context.Context, subscriptio
 
 		changed = true
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Bool("active", orgSubscription.Active).Msg("active status changed")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Bool("active", orgSubscription.Active).Msg("active status changed")
 	}
 
 	if changed {
 		// Collect all changes and execute the mutation once
 		err = mutation.Exec(ctx)
 		if err != nil {
-			log.Error().Err(err).Msg("failed to update OrgSubscription")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to update OrgSubscription")
 
 			return nil, err
 		}
 
-		log.Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
+		logx.FromContext(ctx).Debug().Str("subscription_id", orgSubscription.ID).Msg("OrgSubscription updated successfully")
 
 		if err := h.clearFeatureCache(ctx, orgSubscription.OwnerID); err != nil {
-			log.Error().Err(err).Msg("failed to ensure feature tuples")
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to ensure feature tuples")
 		}
 	}
 

@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -18,27 +18,27 @@ import (
 func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error) {
 	cnameTarget := r.trustCenterCnameTarget
 	if cnameTarget == "" {
-		return nil, parseRequestError(ErrMissingTrustCenterCnameTarget, action{action: ActionCreate, object: "trustcenterdomain"})
+		return nil, parseRequestError(ctx, ErrMissingTrustCenterCnameTarget, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 	transactionCtx := withTransactionalMutation(ctx)
 
 	mappableDomainID, err := transactionCtx.MappableDomain.Query().Where(mappabledomain.Name(cnameTarget)).FirstID(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 
 	trustCenter, err := transactionCtx.TrustCenter.Get(ctx, input.TrustCenterID)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "trustcenterdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 
 	if trustCenter.CustomDomainID != "" {
-		return nil, parseRequestError(ErrTrustCenterDomainAlreadyExists, action{action: ActionCreate, object: "trustcenterdomain"})
+		return nil, parseRequestError(ctx, ErrTrustCenterDomainAlreadyExists, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &trustCenter.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -51,7 +51,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 		}).
 		Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
 	}
 
 	updateReq := trustCenter.Update().SetInput(generated.UpdateTrustCenterInput{
@@ -60,7 +60,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 
 	_, err = updateReq.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "customdomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "customdomain"})
 	}
 
 	return &model.TrustCenterDomainCreatePayload{

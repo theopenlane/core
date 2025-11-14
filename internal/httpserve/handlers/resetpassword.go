@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"github.com/oklog/ulid/v2"
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -18,6 +17,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -35,13 +35,15 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// setup viewer context
-	ctxWithToken := token.NewContextWithResetToken(ctx.Request().Context(), req.Token)
+	ctxWithToken := token.NewContextWithResetToken(reqCtx, req.Token)
 
 	// lookup user from db based on provided token
 	entUser, err := h.getUserByResetToken(ctxWithToken, req.Token)
 	if err != nil {
-		log.Error().Err(err).Msg("error retrieving user token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user token")
 
 		if generated.IsNotFound(err) {
 			return h.BadRequest(ctx, ErrPassWordResetTokenInvalid, openapi)
@@ -58,7 +60,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 
 	// set tokens for request
 	if err := user.setResetTokens(entUser, req.Token); err != nil {
-		log.Error().Err(err).Msg("unable to set reset tokens for request")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set reset tokens for request")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -76,7 +78,7 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	}
 
 	if token.ExpiresAt, err = user.GetPasswordResetExpires(); err != nil {
-		log.Error().Err(err).Msg("unable to parse expiration")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to parse expiration")
 
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
@@ -106,13 +108,13 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	userCtx := setAuthenticatedContext(ctxWithToken, entUser)
 
 	if err := h.updateUserPassword(userCtx, entUser.ID, req.Password); err != nil {
-		log.Error().Err(err).Msg("error updating user password")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error updating user password")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
 
 	if err := h.expireAllResetTokensUserByEmail(userCtx, user.Email); err != nil {
-		log.Error().Err(err).Msg("error expiring existing tokens")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error expiring existing tokens")
 
 		return h.BadRequest(ctx, err, openapi)
 	}

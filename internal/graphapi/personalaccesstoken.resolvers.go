@@ -16,7 +16,7 @@ import (
 func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input generated.CreatePersonalAccessTokenInput) (*model.PersonalAccessTokenCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "personalaccesstoken"})
 	}
 
 	return &model.PersonalAccessTokenCreatePayload{
@@ -28,7 +28,7 @@ func (r *mutationResolver) CreatePersonalAccessToken(ctx context.Context, input 
 func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id string, input generated.UpdatePersonalAccessTokenInput) (*model.PersonalAccessTokenUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).PersonalAccessToken.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "personalaccesstoken"})
 	}
 
 	// setup update request
@@ -36,7 +36,7 @@ func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id str
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "personalaccesstoken"})
 	}
 
 	return &model.PersonalAccessTokenUpdatePayload{
@@ -47,11 +47,11 @@ func (r *mutationResolver) UpdatePersonalAccessToken(ctx context.Context, id str
 // DeletePersonalAccessToken is the resolver for the deletePersonalAccessToken field.
 func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id string) (*model.PersonalAccessTokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).PersonalAccessToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "personalaccesstoken"})
 	}
 
 	if err := generated.PersonalAccessTokenEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.PersonalAccessTokenDeletePayload{
@@ -63,12 +63,12 @@ func (r *mutationResolver) DeletePersonalAccessToken(ctx context.Context, id str
 func (r *queryResolver) PersonalAccessToken(ctx context.Context, id string) (*generated.PersonalAccessToken, error) {
 	query, err := withTransactionalMutation(ctx).PersonalAccessToken.Query().Where(personalaccesstoken.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "personalaccesstoken"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "personalaccesstoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "personalaccesstoken"})
 	}
 
 	return res, nil

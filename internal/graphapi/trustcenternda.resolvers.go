@@ -17,12 +17,12 @@ import (
 func (r *mutationResolver) CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error) {
 	trustCenterNDAPayload, err := createTrustCenterNDA(ctx, input)
 	if err != nil {
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
 	}
 
 	wildcardTuple := fgax.CreateWildcardViewerTuple(trustCenterNDAPayload.Template.ID, generated.TypeTemplate)
 	if _, err := r.db.Authz.WriteTupleKeys(ctx, wildcardTuple, nil); err != nil {
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenternda"})
 	}
 
 	return trustCenterNDAPayload, nil

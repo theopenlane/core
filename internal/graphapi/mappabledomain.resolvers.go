@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,7 +19,7 @@ import (
 func (r *mutationResolver) CreateMappableDomain(ctx context.Context, input generated.CreateMappableDomainInput) (*model.MappableDomainCreatePayload, error) {
 	res, err := withTransactionalMutation(ctx).MappableDomain.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappabledomain"})
 	}
 
 	return &model.MappableDomainCreatePayload{
@@ -40,9 +40,9 @@ func (r *mutationResolver) CreateBulkMappableDomain(ctx context.Context, input [
 func (r *mutationResolver) CreateBulkCSVMappableDomain(ctx context.Context, input graphql.Upload) (*model.MappableDomainBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateMappableDomainInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "mappabledomain"})
 	}
 
 	if len(data) == 0 {
@@ -56,7 +56,7 @@ func (r *mutationResolver) CreateBulkCSVMappableDomain(ctx context.Context, inpu
 func (r *mutationResolver) UpdateMappableDomain(ctx context.Context, id string, input generated.UpdateMappableDomainInput) (*model.MappableDomainUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).MappableDomain.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappabledomain"})
 	}
 
 	// setup update request
@@ -64,7 +64,7 @@ func (r *mutationResolver) UpdateMappableDomain(ctx context.Context, id string, 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "mappabledomain"})
 	}
 
 	return &model.MappableDomainUpdatePayload{
@@ -75,11 +75,11 @@ func (r *mutationResolver) UpdateMappableDomain(ctx context.Context, id string, 
 // DeleteMappableDomain is the resolver for the deleteMappableDomain field.
 func (r *mutationResolver) DeleteMappableDomain(ctx context.Context, id string) (*model.MappableDomainDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).MappableDomain.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "mappabledomain"})
 	}
 
 	if err := generated.MappableDomainEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.MappableDomainDeletePayload{
@@ -100,12 +100,12 @@ func (r *mutationResolver) DeleteBulkMappableDomain(ctx context.Context, ids []s
 func (r *queryResolver) MappableDomain(ctx context.Context, id string) (*generated.MappableDomain, error) {
 	query, err := withTransactionalMutation(ctx).MappableDomain.Query().Where(mappabledomain.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomain"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "mappabledomain"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "mappabledomain"})
 	}
 
 	return res, nil

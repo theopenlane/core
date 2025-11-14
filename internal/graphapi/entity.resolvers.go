@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,14 +19,14 @@ import (
 func (r *mutationResolver) CreateEntity(ctx context.Context, input generated.CreateEntityInput) (*model.EntityCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Entity.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
 	}
 
 	return &model.EntityCreatePayload{
@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,9 +55,9 @@ func (r *mutationResolver) CreateBulkEntity(ctx context.Context, input []*genera
 func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphql.Upload) (*model.EntityBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateEntityInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "entity"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +67,7 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -79,12 +79,12 @@ func (r *mutationResolver) CreateBulkCSVEntity(ctx context.Context, input graphq
 func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input generated.UpdateEntityInput) (*model.EntityUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Entity.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -94,7 +94,7 @@ func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input ge
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "entity"})
 	}
 
 	return &model.EntityUpdatePayload{
@@ -105,11 +105,11 @@ func (r *mutationResolver) UpdateEntity(ctx context.Context, id string, input ge
 // DeleteEntity is the resolver for the deleteEntity field.
 func (r *mutationResolver) DeleteEntity(ctx context.Context, id string) (*model.EntityDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Entity.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "entity"})
 	}
 
 	if err := generated.EntityEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.EntityDeletePayload{
@@ -130,12 +130,12 @@ func (r *mutationResolver) DeleteBulkEntity(ctx context.Context, ids []string) (
 func (r *queryResolver) Entity(ctx context.Context, id string) (*generated.Entity, error) {
 	query, err := withTransactionalMutation(ctx).Entity.Query().Where(entity.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "entity"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "entity"})
 	}
 
 	return res, nil

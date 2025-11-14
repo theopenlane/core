@@ -8,10 +8,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/apitoken"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -19,14 +19,16 @@ import (
 func (r *mutationResolver) CreateAPIToken(ctx context.Context, input generated.CreateAPITokenInput) (*model.APITokenCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).APIToken.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "apitoken"})
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to create API token")
+
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "apitoken"})
 	}
 
 	return &model.APITokenCreatePayload{
@@ -43,7 +45,7 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, input); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -55,9 +57,9 @@ func (r *mutationResolver) CreateBulkAPIToken(ctx context.Context, input []*gene
 func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input graphql.Upload) (*model.APITokenBulkCreatePayload, error) {
 	data, err := unmarshalBulkData[generated.CreateAPITokenInput](input)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to unmarshal bulk data")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to unmarshal bulk data")
 
-		return nil, err
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "apitoken"})
 	}
 
 	if len(data) == 0 {
@@ -67,7 +69,7 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 	// set the organization in the auth context if its not done for us
 	// this will choose the first input OwnerID when using a personal access token
 	if err := setOrganizationInAuthContextBulkRequest(ctx, data); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
@@ -79,12 +81,12 @@ func (r *mutationResolver) CreateBulkCSVAPIToken(ctx context.Context, input grap
 func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input generated.UpdateAPITokenInput) (*model.APITokenUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).APIToken.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "apitoken"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -94,7 +96,9 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "apitoken"})
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to update API token")
+
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "apitoken"})
 	}
 
 	return &model.APITokenUpdatePayload{
@@ -105,11 +109,15 @@ func (r *mutationResolver) UpdateAPIToken(ctx context.Context, id string, input 
 // DeleteAPIToken is the resolver for the deleteAPIToken field.
 func (r *mutationResolver) DeleteAPIToken(ctx context.Context, id string) (*model.APITokenDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).APIToken.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "apitoken"})
+		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to delete API token")
+
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "apitoken"})
 	}
 
 	if err := generated.APITokenEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		logx.FromContext(ctx).Error().Str("id", id).Err(err).Msg("failed to cleanup API token edges")
+
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.APITokenDeletePayload{
@@ -130,12 +138,12 @@ func (r *mutationResolver) DeleteBulkAPIToken(ctx context.Context, ids []string)
 func (r *queryResolver) APIToken(ctx context.Context, id string) (*generated.APIToken, error) {
 	query, err := withTransactionalMutation(ctx).APIToken.Query().Where(apitoken.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "apitoken"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "apitoken"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "apitoken"})
 	}
 
 	return res, nil

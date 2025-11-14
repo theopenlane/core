@@ -6,10 +6,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
@@ -741,7 +741,7 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 	// log the errors for debugging
 	if len(errors) > 0 {
-		log.Error().Errs("errors", errors).Msg("search failed for one or more entities")
+		logx.FromContext(ctx).Error().Errs("errors", errors).Msg("search failed for one or more entities")
 	}
 
 	// return the results

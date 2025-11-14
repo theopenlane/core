@@ -6,7 +6,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -16,6 +15,7 @@ import (
 	entval "github.com/theopenlane/core/internal/ent/validator"
 
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -45,15 +45,18 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		LastLoginProvider: &enums.AuthProviderCredentials,
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// set viewer context
-	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), req.Email)
+	ctxWithToken := token.NewContextWithSignUpToken(reqCtx, req.Email)
 
 	if req.Token != nil {
 		ctxWithToken = token.NewContextWithOrgInviteToken(ctxWithToken, *req.Token)
 
 		invitedUser, err := h.getUserByInviteToken(ctxWithToken, *req.Token)
 		if err != nil {
-			log.Error().Err(err).Msg("error retrieving invite token")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving invite token")
+
 			return h.BadRequest(ctx, err, openapi)
 		}
 
@@ -68,7 +71,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 	meowuser, err := h.createUser(ctxWithToken, input)
 	if err != nil {
-		log.Error().Err(err).Msg("error creating new user")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating new user")
 
 		if IsUniqueConstraintError(err) {
 			return h.Conflict(ctx, "user already exists", UserExistsErrCode, openapi)
@@ -79,7 +82,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		}
 
 		if errors.Is(err, entval.ErrEmailNotAllowed) {
-			log.Error().Err(err).Str("email", input.Email).Msg("email not allowed")
+			logx.FromContext(reqCtx).Error().Err(err).Str("email", input.Email).Msg("email not allowed")
 
 			return h.InvalidInput(ctx, err, openapi)
 		}
@@ -121,7 +124,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		meowtoken, err := h.storeAndSendEmailVerificationToken(userCtx, user)
 		if err != nil {
-			log.Error().Err(err).Msg("error storing email verification token")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error storing email verification token")
 
 			return h.InternalServerError(ctx, err, openapi)
 		}
@@ -138,7 +141,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *User) (*generated.EmailVerificationToken, error) {
 	// expire all existing tokens
 	if err := h.expireAllVerificationTokensUserByEmail(ctx, user.Email); err != nil {
-		log.Error().Err(err).Msg("error expiring existing tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error expiring existing tokens")
 
 		return nil, err
 	}
@@ -146,7 +149,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 	// check if the user has attempted to verify their email too many times
 	attempts, err := h.countVerificationTokensUserByEmail(ctx, user.Email)
 	if err != nil {
-		log.Error().Err(err).Msg("error getting existing tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error getting existing tokens")
 
 		return nil, err
 	}
@@ -157,7 +160,7 @@ func (h *Handler) storeAndSendEmailVerificationToken(ctx context.Context, user *
 
 	// create a new token and store it in the database
 	if err := user.CreateVerificationToken(); err != nil {
-		log.Error().Err(err).Msg("error creating verification token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating verification token")
 
 		return nil, err
 	}

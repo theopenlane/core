@@ -15,7 +15,7 @@ import (
 func (r *createMappedControlInputResolver) FromControlRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, data)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	obj.FromControlIDs = ids
@@ -27,7 +27,7 @@ func (r *createMappedControlInputResolver) FromControlRefCodes(ctx context.Conte
 func (r *createMappedControlInputResolver) FromSubcontrolRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Subcontrol](ctx, data)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	obj.FromSubcontrolIDs = ids
@@ -39,7 +39,7 @@ func (r *createMappedControlInputResolver) FromSubcontrolRefCodes(ctx context.Co
 func (r *createMappedControlInputResolver) ToControlRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Control](ctx, data)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	obj.ToControlIDs = ids
@@ -51,7 +51,7 @@ func (r *createMappedControlInputResolver) ToControlRefCodes(ctx context.Context
 func (r *createMappedControlInputResolver) ToSubcontrolRefCodes(ctx context.Context, obj *generated.CreateMappedControlInput, data []string) error {
 	ids, err := getControlIDsFromRefCodes[predicate.Subcontrol](ctx, data)
 	if err != nil {
-		return parseRequestError(err, action{action: ActionCreate, object: "mappedcontrol"})
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "mappedcontrol"})
 	}
 
 	obj.ToSubcontrolIDs = ids

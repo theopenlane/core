@@ -26,7 +26,7 @@ func (r *mutationResolver) CreateUser(ctx context.Context, input generated.Creat
 func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) (*model.UserUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).User.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "user"})
 	}
 
 	// setup update request
@@ -34,7 +34,7 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input gene
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "user"})
 	}
 
 	return &model.UserUpdatePayload{
@@ -45,11 +45,11 @@ func (r *mutationResolver) UpdateUser(ctx context.Context, id string, input gene
 // DeleteUser is the resolver for the deleteUser field.
 func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.UserDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).User.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "user"})
 	}
 
 	if err := generated.UserEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.UserDeletePayload{
@@ -61,12 +61,12 @@ func (r *mutationResolver) DeleteUser(ctx context.Context, id string) (*model.Us
 func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, error) {
 	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	return res, nil
@@ -76,17 +76,17 @@ func (r *queryResolver) User(ctx context.Context, id string) (*generated.User, e
 func (r *queryResolver) Self(ctx context.Context) (*generated.User, error) {
 	userID, err := auth.GetSubjectIDFromContext(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	query, err := withTransactionalMutation(ctx).User.Query().Where(user.ID(userID)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "user"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "user"})
 	}
 
 	return res, nil

@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"entgo.io/ent"
-	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/fgax"
 
@@ -28,7 +27,7 @@ func HookDeletePermissions() ent.Hook {
 
 			mut, ok := m.(utils.GenericMutation)
 			if !ok {
-				log.Warn().Msg("DeletePermissionsHook: mutation does not implement GenericMutation, skipping")
+				logx.FromContext(ctx).Warn().Msg("DeletePermissionsHook: mutation does not implement GenericMutation, skipping")
 				return next.Mutate(ctx, m)
 			}
 

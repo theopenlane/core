@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -25,7 +24,7 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
-			log.Err(err).Msg("unable to get authenticated user context")
+			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")
 
 			return err
 		}

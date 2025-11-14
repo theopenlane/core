@@ -369,7 +369,7 @@ func HookStatusApproval() ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			mut, ok := m.(statusMutation)
 			if !ok {
-				log.Info().Msg("status approval hook used on unsupported mutation type")
+				logx.FromContext(ctx).Info().Msg("status approval hook used on unsupported mutation type")
 				return next.Mutate(ctx, m)
 			}
 
@@ -440,6 +440,7 @@ const (
 func updatePlaceholderText(details string, orgName string) string {
 	if orgName == "" {
 		log.Warn().Msg("organization name is empty, using default placeholder value")
+
 		orgName = "[Company Name]"
 	}
 

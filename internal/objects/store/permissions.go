@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 
-	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
@@ -12,6 +11,7 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/logx"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -68,13 +68,15 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 				tuples = append(tuples, orgReq)
 			}
 
-			log.Debug().Interface("req", req).Msg("adding file permissions")
+			logx.FromContext(ctx).Debug().Interface("req", req).Msg("adding file permissions")
 
 			if _, err := utils.AuthzClientFromContext(ctx).WriteTupleKeys(ctx, tuples, nil); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to write tuple keys")
+
 				return ctx, err
 			}
 
-			log.Debug().Interface("req", req).Msg("added file permissions")
+			logx.FromContext(ctx).Debug().Interface("req", req).Msg("added file permissions")
 
 			ctx = pkgobjects.RemoveFileFromContext(ctx, f)
 

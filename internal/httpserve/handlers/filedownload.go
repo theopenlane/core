@@ -11,9 +11,9 @@ import (
 	"github.com/oklog/ulid/v2"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
@@ -60,29 +60,29 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 			return h.BadRequest(ctx, err, openapi)
 		}
 
-		log.Error().Err(err).Msg("error retrieving user token")
+		logx.FromContext(requestCtx).Error().Err(err).Msg("error retrieving user token")
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
-	log.Debug().Msg("able to fetch file by download token")
+	logx.FromContext(requestCtx).Debug().Msg("able to fetch file by download token")
 
 	d := &Download{
 		Token: in.Token,
 	}
 
 	if err := d.setDownloadTokens(downloadTokenRecord, d.Token); err != nil {
-		log.Debug().Err(err).Msg("download token mismatch")
+		logx.FromContext(requestCtx).Debug().Err(err).Msg("download token mismatch")
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
 	expiresAt, err := d.GetDownloadExpires()
 	if err != nil {
-		log.Error().Err(err).Msg("unable to parse download token expiration")
+		logx.FromContext(requestCtx).Error().Err(err).Msg("unable to parse download token expiration")
 		return h.InternalServerError(ctx, ErrUnableToVerifyEmail, openapi)
 	}
 
 	if expiresAt.IsZero() {
-		log.Debug().Msg("download token missing expiration")
+		logx.FromContext(requestCtx).Debug().Msg("download token missing expiration")
 		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
@@ -111,7 +111,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	if err := downloadToken.Verify(d.GetDownloadToken(), d.Secret); err != nil {
-		log.Debug().Err(err).Msg("download token verification failed")
+		logx.FromContext(requestCtx).Debug().Err(err).Msg("download token verification failed")
 
 		if errors.Is(err, tokens.ErrTokenExpired) {
 			return h.BadRequest(ctx, err, openapi)
@@ -121,19 +121,19 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	if err := validateTokenAuthorization(requestCtx, downloadToken); err != nil {
-		log.Debug().Err(err).Msg("token authorization failed")
+		logx.FromContext(requestCtx).Debug().Err(err).Msg("token authorization failed")
 		return h.Unauthorized(ctx, err, openapi)
 	}
 
 	download, err := h.ObjectStore.Download(requestCtx, nil, storFile, &storage.DownloadOptions{})
 	if err != nil {
 		if errors.Is(err, dbprovider.ErrFileNotFound) || ent.IsNotFound(err) {
-			log.Debug().Err(err).Msg("file not found in storage")
+			logx.FromContext(requestCtx).Debug().Err(err).Msg("file not found in storage")
 
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 
-		log.Error().Err(err).Msg("error downloading file from storage")
+		logx.FromContext(requestCtx).Error().Err(err).Msg("error downloading file from storage")
 		return h.InternalServerError(ctx, err, openapi)
 	}
 

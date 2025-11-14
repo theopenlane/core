@@ -3,12 +3,12 @@ package handlers
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -40,7 +40,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 			return h.Success(ctx, out, openapi)
 		}
 
-		log.Error().Err(err).Msg("error retrieving user email")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user email")
 
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -65,13 +65,13 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 // storeAndSendPasswordResetToken creates a password reset token for the user and sends an email with the token
 func (h *Handler) storeAndSendPasswordResetToken(ctx context.Context, user *User) (*ent.PasswordResetToken, error) {
 	if err := h.expireAllResetTokensUserByEmail(ctx, user.Email); err != nil {
-		log.Error().Err(err).Msg("error expiring existing tokens")
+		logx.FromContext(ctx).Error().Err(err).Msg("error expiring existing tokens")
 
 		return nil, err
 	}
 
 	if err := user.CreatePasswordResetToken(); err != nil {
-		log.Error().Err(err).Msg("error creating password reset token")
+		logx.FromContext(ctx).Error().Err(err).Msg("error creating password reset token")
 		return nil, err
 	}
 

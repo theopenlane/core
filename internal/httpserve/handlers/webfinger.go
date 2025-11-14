@@ -4,11 +4,11 @@ import (
 	"context"
 	"strings"
 
-	"github.com/rs/zerolog/log"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/utils/rout"
@@ -45,14 +45,14 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 
 		user, err := h.getUserByEmail(allowCtx, email)
 		if err != nil {
-			log.Debug().Err(err).Msg("webfinger user lookup failed")
+			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger user lookup failed")
 
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 
 		orgID, err = h.getUserDefaultOrgID(allowCtx, user.ID)
 		if err != nil {
-			log.Debug().Err(err).Msg("webfinger org lookup failed")
+			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger org lookup failed")
 
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
@@ -70,7 +70,7 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 	out, err := h.fetchSSOStatus(reqCtx, orgID, userID)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			log.Debug().Err(err).Msg("webfinger org setting not found")
+			logx.FromContext(reqCtx).Debug().Err(err).Msg("webfinger org setting not found")
 
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}

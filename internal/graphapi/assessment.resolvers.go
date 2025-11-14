@@ -7,10 +7,10 @@ package graphapi
 import (
 	"context"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -18,14 +18,14 @@ import (
 func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated.CreateAssessmentInput) (*model.AssessmentCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.NewMissingRequiredFieldError("owner_id")
 	}
 
 	res, err := withTransactionalMutation(ctx).Assessment.Create().SetInput(input).Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionCreate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "assessment"})
 	}
 
 	return &model.AssessmentCreatePayload{
@@ -37,12 +37,12 @@ func (r *mutationResolver) CreateAssessment(ctx context.Context, input generated
 func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, input generated.UpdateAssessmentInput) (*model.AssessmentUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Assessment.Get(ctx, id)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessment"})
 	}
 
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		log.Error().Err(err).Msg("failed to set organization in auth context")
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
 
 		return nil, rout.ErrPermissionDenied
 	}
@@ -52,7 +52,7 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 
 	res, err = req.Save(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionUpdate, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessment"})
 	}
 
 	return &model.AssessmentUpdatePayload{
@@ -63,11 +63,11 @@ func (r *mutationResolver) UpdateAssessment(ctx context.Context, id string, inpu
 // DeleteAssessment is the resolver for the deleteAssessment field.
 func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*model.AssessmentDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Assessment.DeleteOneID(id).Exec(ctx); err != nil {
-		return nil, parseRequestError(err, action{action: ActionDelete, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionDelete, object: "assessment"})
 	}
 
 	if err := generated.AssessmentEdgeCleanup(ctx, id); err != nil {
-		return nil, newCascadeDeleteError(err)
+		return nil, newCascadeDeleteError(ctx, err)
 	}
 
 	return &model.AssessmentDeletePayload{
@@ -79,12 +79,12 @@ func (r *mutationResolver) DeleteAssessment(ctx context.Context, id string) (*mo
 func (r *queryResolver) Assessment(ctx context.Context, id string) (*generated.Assessment, error) {
 	query, err := withTransactionalMutation(ctx).Assessment.Query().Where(assessment.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "assessment"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "assessment"})
 	}
 
 	return res, nil

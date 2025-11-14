@@ -5,13 +5,13 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
 )
@@ -27,8 +27,10 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// Get the current authenticated user (the impersonator)
-	currentUser, err := auth.GetAuthenticatedUserFromContext(ctx.Request().Context())
+	currentUser, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
 		return h.Unauthorized(ctx, ErrAuthenticationRequired, openapi)
 	}
@@ -54,7 +56,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	// Get target user information and validate organization membership
-	targetUser, err := h.getTargetUser(ctx.Request().Context(), req.TargetUserID, orgID)
+	targetUser, err := h.getTargetUser(reqCtx, req.TargetUserID, orgID)
 	if err != nil {
 		return h.InternalServerError(ctx, err, openapi)
 	}
@@ -77,7 +79,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	// Create impersonation token with proper claims
-	token, err := h.TokenManager.CreateImpersonationToken(ctx.Request().Context(), tokens.CreateImpersonationTokenOptions{
+	token, err := h.TokenManager.CreateImpersonationToken(reqCtx, tokens.CreateImpersonationTokenOptions{
 		ImpersonatorID:    currentUser.SubjectID,
 		ImpersonatorEmail: currentUser.SubjectEmail,
 		TargetUserID:      req.TargetUserID,
@@ -97,7 +99,7 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	if err != nil {
 		// If we can't extract the session ID, the token creation was successful
 		// but we have an issue with token parsing - this should not happen
-		log.Error().Err(err).Msg("failed to extract session ID from newly created impersonation token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to extract session ID from newly created impersonation token")
 
 		return h.InternalServerError(ctx, ErrFailedToExtractSessionID, openapi)
 	}
@@ -119,12 +121,12 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	}
 
 	if currentUser.IsSystemAdmin {
-		log.Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
+		logx.FromContext(reqCtx).Info().Str("target_user_id", req.TargetUserID).Msg("system admin impersonation initiated")
 	}
 
-	if err := h.logImpersonationEvent(ctx.Request().Context(), "start", auditLog); err != nil {
+	if err := h.logImpersonationEvent(reqCtx, "start", auditLog); err != nil {
 		// Log the error but don't fail the request
-		log.Error().Err(err).Msg("failed to log impersonation event")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation event")
 	}
 
 	response := models.StartImpersonationReply{
@@ -145,8 +147,10 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		return h.InvalidInput(ctx, err, openapi)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// Get impersonated user from context
-	impUser, ok := auth.ImpersonatedUserFromContext(ctx.Request().Context())
+	impUser, ok := auth.ImpersonatedUserFromContext(reqCtx)
 	if !ok {
 		return h.BadRequest(ctx, ErrNoActiveImpersonationSession, openapi)
 	}
@@ -157,7 +161,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 	}
 
 	// Log impersonation end
-	if err := h.logImpersonationEvent(ctx.Request().Context(), "end", &auth.ImpersonationAuditLog{
+	if err := h.logImpersonationEvent(reqCtx, "end", &auth.ImpersonationAuditLog{
 		SessionID:         req.SessionID,
 		Type:              impUser.ImpersonationContext.Type,
 		ImpersonatorID:    impUser.ImpersonationContext.ImpersonatorID,
@@ -172,7 +176,7 @@ func (h *Handler) EndImpersonation(ctx echo.Context, openapi *OpenAPIContext) er
 		OrganizationID:    impUser.OrganizationID,
 		Scopes:            impUser.ImpersonationContext.Scopes,
 	}); err != nil {
-		log.Error().Err(err).Msg("failed to log impersonation end event")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to log impersonation end event")
 	}
 
 	response := models.EndImpersonationReply{
@@ -249,7 +253,7 @@ func (h *Handler) getDefaultScopes(impType string) []string {
 // logImpersonationEvent logs impersonation events for audit purposes
 // and persists it into the database
 func (h *Handler) logImpersonationEvent(ctx context.Context, action string, auditLog *auth.ImpersonationAuditLog) error {
-	log.Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
+	logx.FromContext(ctx).Info().Str("action", action).Str("target_user_id", auditLog.TargetUserID).Msg("impersonation event")
 
 	_, err := h.DBClient.ImpersonationEvent.Create().
 		SetAction(*enums.ToImpersonationAction(action)).

@@ -15,12 +15,12 @@ import (
 func (r *queryResolver) OrgSubscription(ctx context.Context, id string) (*generated.OrgSubscription, error) {
 	query, err := withTransactionalMutation(ctx).OrgSubscription.Query().Where(orgsubscription.ID(id)).CollectFields(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
 	}
 
 	res, err := query.Only(ctx)
 	if err != nil {
-		return nil, parseRequestError(err, action{action: ActionGet, object: "orgsubscription"})
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "orgsubscription"})
 	}
 
 	return res, nil

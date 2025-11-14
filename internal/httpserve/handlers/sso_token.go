@@ -4,8 +4,8 @@ import (
 	"errors"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
@@ -35,13 +35,13 @@ func (h *Handler) SSOTokenAuthorizeHandler(ctx echo.Context, openapi *OpenAPICon
 	switch in.TokenType {
 	case "api":
 		if _, err := h.DBClient.APIToken.Get(reqCtx, in.TokenID); err != nil {
-			log.Error().Err(err).Msg("unable to find api token for SSO")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to find api token for SSO")
 
 			return h.BadRequest(ctx, err, openapi)
 		}
 	case "personal":
 		if _, err := h.DBClient.PersonalAccessToken.Get(reqCtx, in.TokenID); err != nil {
-			log.Error().Err(err).Msg("unable to find personal access token")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to find personal access token")
 
 			return h.BadRequest(ctx, err, openapi)
 		}

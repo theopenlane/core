@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
@@ -12,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
@@ -32,7 +32,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 
 	ac, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
-		log.Err(err).Msg("unable to get user id from context")
+		logx.FromContext(reqCtx).Err(err).Msg("unable to get user id from context")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -45,7 +45,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 	// get user from database by subject
 	user, err := h.getUserDetailsByID(reqCtx, ac.SubjectID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to get user by subject")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to get user by subject")
 
 		return h.BadRequest(ctx, err, openapi)
 	}
@@ -63,7 +63,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 		if mErr == nil && member.Role != enums.RoleOwner {
 			authURL, err := h.generateSSOAuthURL(ctx, in.TargetOrganizationID)
 			if err != nil {
-				log.Error().Err(err).Msg("unable to generate SSO auth URL")
+				logx.FromContext(reqCtx).Error().Err(err).Msg("unable to generate SSO auth URL")
 				return h.BadRequest(ctx, err, openapi)
 			}
 
@@ -95,7 +95,7 @@ func (h *Handler) SwitchHandler(ctx echo.Context, openapi *OpenAPIContext) error
 	// create new claims for the user
 	authData, err := h.AuthManager.GenerateUserAuthSessionWithOrg(reqCtx, ctx.Response().Writer, user, in.TargetOrganizationID)
 	if err != nil {
-		log.Error().Err(err).Msg("unable to create new auth session")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
 		return h.Unauthorized(ctx, err)
 	}

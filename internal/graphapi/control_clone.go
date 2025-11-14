@@ -322,6 +322,8 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 		WithSubcontrols().
 		CollectFields(allowCtx)
 	if err != nil {
+		logger.Error().Err(err).Msg("error collecting fields for cloned controls")
+
 		return nil, err
 	}
 

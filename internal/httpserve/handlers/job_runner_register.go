@@ -3,9 +3,9 @@ package handlers
 import (
 	"time"
 
-	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
@@ -28,7 +28,7 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context, openapi *OpenAPIContext) e
 			return h.Unauthorized(ctx, err)
 		}
 
-		log.Error().Err(err).Msg("error retrieving job runner registration token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving job runner registration token")
 
 		return h.InternalServerError(ctx, ErrUnableToRegisterJobRunner, openapi)
 	}
@@ -44,7 +44,7 @@ func (h *Handler) RegisterJobRunner(ctx echo.Context, openapi *OpenAPIContext) e
 	})
 
 	if err := h.createJobRunner(ctxWithToken, registrationToken, *r); err != nil {
-		log.Error().Err(err).Msg("could not create a new runner with your token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("could not create a new runner with your token")
 
 		if generated.IsConstraintError(err) {
 			return h.BadRequest(ctx, ErrJobRunnerAlreadyRegistered, openapi)

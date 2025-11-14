@@ -3,13 +3,13 @@ package handlers
 import (
 	"errors"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/utils/rout"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/privacy/token"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -24,8 +24,10 @@ func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 		return nil
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	// set viewer context
-	ctxWithToken := token.NewContextWithSignUpToken(ctx.Request().Context(), in.Email)
+	ctxWithToken := token.NewContextWithSignUpToken(reqCtx, in.Email)
 
 	out := &models.ResendReply{
 		Reply:   rout.Reply{Success: true},
@@ -41,7 +43,7 @@ func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 			return h.Success(ctx, out, openapi)
 		}
 
-		log.Error().Err(err).Msg("error retrieving user email")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user email")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
@@ -65,7 +67,7 @@ func (h *Handler) ResendEmail(ctx echo.Context, openapi *OpenAPIContext) error {
 	}
 
 	if _, err = h.storeAndSendEmailVerificationToken(userCtx, user); err != nil {
-		log.Error().Err(err).Msg("error storing email verification token")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error storing email verification token")
 
 		if errors.Is(err, ErrMaxAttempts) {
 			return h.TooManyRequests(ctx, err)
