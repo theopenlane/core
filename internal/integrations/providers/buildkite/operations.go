@@ -2,10 +2,8 @@ package buildkite
 
 import (
 	"context"
-	"encoding/json"
+	"errors"
 	"fmt"
-	"net/http"
-	"time"
 
 	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -15,12 +13,8 @@ const (
 	buildkiteOperationHealth types.OperationName = "health.default"
 	buildkiteOperationOrgs   types.OperationName = "organizations.collect"
 
-	httpTimeout          = 10 * time.Second
-	maxSampleSize        = 5
-	httpBadRequestStatus = 400
+	maxSampleSize = 5
 )
-
-var buildkiteHTTPClient = &http.Client{Timeout: httpTimeout}
 
 func buildkiteOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -60,7 +54,7 @@ func runBuildkiteHealthOperation(ctx context.Context, input types.OperationInput
 	}
 
 	var user buildkiteUserResponse
-	if err := buildkiteAPIGet(ctx, token, "user", &user); err != nil {
+	if err := fetchBuildkiteResource(ctx, token, "user", &user); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "Buildkite user lookup failed",
@@ -87,7 +81,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 	}
 
 	var orgs []buildkiteOrgResponse
-	if err := buildkiteAPIGet(ctx, token, "organizations", &orgs); err != nil {
+	if err := fetchBuildkiteResource(ctx, token, "organizations", &orgs); err != nil {
 		return types.OperationResult{
 			Status:  types.OperationStatusFailed,
 			Summary: "Buildkite organizations fetch failed",
@@ -118,32 +112,16 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 	}, nil
 }
 
-func buildkiteAPIGet(ctx context.Context, token, path string, out any) error {
+func fetchBuildkiteResource(ctx context.Context, token, path string, out any) error {
 	endpoint := fmt.Sprintf("https://api.buildkite.com/v2/%s", path)
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
-	if err != nil {
+	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, out); err != nil {
+		if errors.Is(err, helpers.ErrHTTPRequestFailed) {
+			return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, err.Error())
+		}
 		return err
 	}
 
-	req.Header.Set("Authorization", "Bearer "+token)
-	req.Header.Set("Accept", "application/json")
-
-	resp, err := buildkiteHTTPClient.Do(req)
-	if err != nil {
-		return err
-	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode >= httpBadRequestStatus {
-		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
-	}
-
-	if out == nil {
-		return nil
-	}
-
-	dec := json.NewDecoder(resp.Body)
-	return dec.Decode(out)
+	return nil
 }
 
 // minInt returns the minimum of two integers

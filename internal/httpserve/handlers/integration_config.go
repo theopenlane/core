@@ -51,6 +51,9 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
+	if !spec.Active {
+		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
+	}
 
 	if len(spec.CredentialsSchema) == 0 {
 		return h.BadRequest(ctx, rout.MissingField("credentialsSchema"), openapiCtx)
