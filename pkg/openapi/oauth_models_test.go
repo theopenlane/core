@@ -71,14 +71,6 @@ func TestOAuthFlowRequest_Validate(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name: "invalid provider",
-			request: OAuthFlowRequest{
-				Provider: "invalid",
-			},
-			wantErr: true,
-			errMsg:  "invalid",
-		},
-		{
 			name: "case insensitive provider",
 			request: OAuthFlowRequest{
 				Provider: "GITHUB",

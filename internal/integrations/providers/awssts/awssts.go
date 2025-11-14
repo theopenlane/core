@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
-
 // ProviderOption customizes AWS STS providers.
 type ProviderOption func(*providerConfig)
 

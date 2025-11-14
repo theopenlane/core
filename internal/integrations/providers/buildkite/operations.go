@@ -14,9 +14,13 @@ import (
 const (
 	buildkiteOperationHealth types.OperationName = "health.default"
 	buildkiteOperationOrgs   types.OperationName = "organizations.collect"
+
+	httpTimeout          = 10 * time.Second
+	maxSampleSize        = 5
+	httpBadRequestStatus = 400
 )
 
-var buildkiteHTTPClient = &http.Client{Timeout: 10 * time.Second}
+var buildkiteHTTPClient = &http.Client{Timeout: httpTimeout}
 
 func buildkiteOperations() []types.OperationDescriptor {
 	return []types.OperationDescriptor{
@@ -91,7 +95,7 @@ func runBuildkiteOrganizationsOperation(ctx context.Context, input types.Operati
 		}, err
 	}
 
-	samples := make([]map[string]any, 0, minInt(5, len(orgs)))
+	samples := make([]map[string]any, 0, minInt(maxSampleSize, len(orgs)))
 	for _, org := range orgs {
 		if len(samples) >= cap(samples) {
 			break
@@ -130,7 +134,7 @@ func buildkiteAPIGet(ctx context.Context, token, path string, out any) error {
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode >= 400 {
+	if resp.StatusCode >= httpBadRequestStatus {
 		return fmt.Errorf("%w (path %s): %s", ErrAPIRequest, path, resp.Status)
 	}
 

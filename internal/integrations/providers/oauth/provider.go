@@ -17,6 +17,10 @@ import (
 	"github.com/theopenlane/core/pkg/models"
 )
 
+const (
+	stateLength = 32
+)
+
 // Provider implements the types.Provider interface using Zitadel's relying party helpers
 type Provider struct {
 	providerType types.ProviderType
@@ -114,7 +118,7 @@ func (p *Provider) BeginAuth(_ context.Context, input types.AuthContext) (types.
 	state := input.State
 
 	if strings.TrimSpace(state) == "" {
-		generated, err := helpers.RandomState(32)
+		generated, err := helpers.RandomState(stateLength)
 		if err != nil {
 			return nil, fmt.Errorf("%w: %w", providers.ErrStateGeneration, err)
 		}

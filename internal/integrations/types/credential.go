@@ -18,7 +18,7 @@ type CredentialKind string
 
 const (
 	// CredentialKindOAuthToken represents OAuth2 token credentials
-	CredentialKindOAuthToken CredentialKind = "oauth_token"
+	CredentialKindOAuthToken CredentialKind = "oauth_token" //nolint:gosec
 	// CredentialKindMetadata represents integration metadata credentials
 	CredentialKindMetadata CredentialKind = "integration_metadata"
 	// CredentialKindAPIKey represents API key credentials

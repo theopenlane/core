@@ -24,6 +24,10 @@ import (
 	"github.com/theopenlane/utils/passwd"
 )
 
+const (
+	exampleFindingsCount = 5
+)
+
 // ExampleProvider interface allows response models to provide their own examples
 // This eliminates the need for separate Example* variables and static switch statements
 type ExampleProvider interface {
@@ -2484,7 +2488,7 @@ func (r *IntegrationOperationResponse) ExampleResponse() any {
 		Status:    "ok",
 		Summary:   "Collected 5 findings from organizations/123/sources/456",
 		Details: map[string]any{
-			"totalFindings": 5,
+			"totalFindings": exampleFindingsCount,
 		},
 	}
 }
