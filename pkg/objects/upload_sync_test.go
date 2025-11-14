@@ -8,7 +8,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+var testMutex sync.Mutex
+
 func TestAddUpload(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	AddUpload()
@@ -29,6 +34,9 @@ func TestAddUpload(t *testing.T) {
 }
 
 func TestDoneUpload(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	uploadWaitGroup.Add(1)
@@ -48,6 +56,9 @@ func TestDoneUpload(t *testing.T) {
 }
 
 func TestWaitForUploads(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	uploadWaitGroup.Add(1)
@@ -74,6 +85,9 @@ func TestWaitForUploads(t *testing.T) {
 }
 
 func TestUploadSync_Concurrent(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	const numGoroutines = 10
@@ -106,6 +120,9 @@ func TestUploadSync_Concurrent(t *testing.T) {
 }
 
 func TestUploadSync_MultipleWaiters(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	AddUpload()
@@ -153,6 +170,9 @@ func TestUploadSync_MultipleWaiters(t *testing.T) {
 }
 
 func TestUploadSync_NoUploads(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	done := make(chan bool)
@@ -169,6 +189,9 @@ func TestUploadSync_NoUploads(t *testing.T) {
 }
 
 func TestUploadSync_SequentialOperations(t *testing.T) {
+	testMutex.Lock()
+	defer testMutex.Unlock()
+
 	uploadWaitGroup = sync.WaitGroup{}
 
 	AddUpload()
@@ -189,13 +212,14 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	AddUpload()
 	AddUpload()
 
+	done2 := make(chan bool)
 	go func() {
 		WaitForUploads()
-		done <- true
+		done2 <- true
 	}()
 
 	select {
-	case <-done:
+	case <-done2:
 		t.Fatal("WaitForUploads should be waiting for new uploads")
 	case <-time.After(500 * time.Millisecond):
 	}
@@ -204,7 +228,7 @@ func TestUploadSync_SequentialOperations(t *testing.T) {
 	DoneUpload()
 
 	select {
-	case <-done:
+	case <-done2:
 	case <-time.After(1000 * time.Millisecond):
 		t.Fatal("WaitForUploads should complete after all new uploads are done")
 	}
