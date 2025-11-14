@@ -429,6 +429,7 @@ steps:
           - "**.go"
           - go.{mod,sum}
           - cmd/**
+          - docker/Dockerfile
         agents:
           queue: $LARGE_RUNNER_QUEUE
           size: $RUNNER_LARGE
@@ -593,6 +594,7 @@ steps:
         if_changed:
           - "**.go"
           - go.{mod,sum}
+          - docker/Dockerfile
         commands: |
           #!/bin/bash
           chmod +x ${APP_NAME}
