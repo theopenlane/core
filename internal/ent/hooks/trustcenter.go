@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -99,6 +100,14 @@ func HookTrustCenter() ent.Hook {
 				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
+			if trustCenter.CustomDomainID != "" {
+				if _, err = m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
+					TrustCenterID: trustCenter.ID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
 			return trustCenter, nil
 		})
 	}, ent.OpCreate)
@@ -109,3 +118,60 @@ const defaultOverview = `
 
 This is the default overview for your trust center. You can customize this by editing the trust center settings.
 `
+
+// HookTrustCenterDelete runs on trust center delete mutations
+func HookTrustCenterDelete() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
+			// Get the Pirsch domain ID if it exists
+			// if it exists, then kick off the DeletePirschDomain job
+			if pid, ok := m.PirschDomainID(); ok && pid != "" {
+				_, err := m.Job.Insert(ctx, corejobs.DeletePirschDomainArgs{
+					PirschDomainID: pid,
+				}, nil)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpDeleteOne|ent.OpDelete)
+}
+
+func HookTrustCenterUpdate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
+			// Get the previous custom domain ID
+			// If the custom domain ID has been updated from nothing/nil, then kick off the CreatePirschDomain job
+			previousCustomDomainID, err := m.OldCustomDomainID(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			mutationCustomDomainID, mutationCustomDomainIDExists := m.CustomDomainID()
+
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return v, err
+			}
+
+			tcID, err := GetObjectIDFromEntValue(v)
+			if err != nil {
+				return v, err
+			}
+
+			if mutationCustomDomainIDExists && previousCustomDomainID == "" && mutationCustomDomainID != "" {
+				_, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
+					TrustCenterID: tcID,
+				}, nil)
+				if err != nil {
+					return nil, err
+				}
+			}
+			// TODO(acookin): update the pirsch domain if the custom domain has changed
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdateOne)
+}
