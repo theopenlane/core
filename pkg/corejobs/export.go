@@ -14,6 +14,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/gertd/go-pluralize"
 	"github.com/gocarina/gocsv"
+	"github.com/microcosm-cc/bluemonday"
 	"github.com/riverqueue/river"
 	"github.com/rs/zerolog/log"
 	"github.com/stoewer/go-strcase"
@@ -255,11 +256,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 //	  }
 //	}
 func (w *ExportContentWorker) buildGraphQLQuery(root string, singular string, fields []string, hasWhere bool) string {
-	if len(fields) == 0 {
-		fields = []string{"id"}
-	}
-
-	fieldStr := strings.Join(fields, "\n        ")
+	fieldStr := CreateFieldsStr(fields)
 
 	var (
 		varStr string
@@ -288,6 +285,64 @@ func (w *ExportContentWorker) buildGraphQLQuery(root string, singular string, fi
 }`, varStr, root, argStr, fieldStr)
 }
 
+// CreateFieldsStr creates a graphql fields string from a list of fields
+// supporting nested fields using dot notation
+//
+// e.g:
+//
+//	["id", "name", "owner.name", "tasks.title"]
+//
+// becomes:
+//
+//	id
+//	name
+//	owner { name }
+//	tasks { edges { node { title } }
+func CreateFieldsStr(fields []string) string {
+	if len(fields) == 0 {
+		fields = []string{"id"}
+	}
+
+	fieldStr := ""
+
+	for _, f := range fields {
+		if strings.Contains(f, ".") {
+			// split and create nested fields
+			parts := strings.Split(f, ".")
+
+			fieldStr += parts[0] + "\n        "
+
+			numClosingBraces := 0
+			for i, p := range parts[1:] {
+				// check the parent to see if it is plural, which will be the same index as the loop
+				// because we are looping over parts[1:]
+				isParentPlural := pluralize.NewClient().IsPlural(parts[i])
+
+				if isParentPlural {
+					fieldStr += "{ edges { node { " + p + " "
+					numClosingBraces += 3
+				} else {
+					fieldStr += "{  " + p + " "
+					numClosingBraces++
+				}
+
+				if i == len(parts[1:])-1 {
+					for range numClosingBraces {
+						fieldStr += " } "
+					}
+				}
+			}
+
+			// Add a newline after the closing braces
+			fieldStr += "\n        "
+		} else {
+			fieldStr += f + "\n        "
+		}
+	}
+
+	return fieldStr
+}
+
 // extractErrors converts a slice of errors from the request into one
 func extractErrors(errs []any) error {
 	if len(errs) == 0 {
@@ -311,6 +366,7 @@ func extractErrors(errs []any) error {
 	return ErrUnknownGraphQLError
 }
 
+// executeGraphQLQuery performs a GraphQL query against the Openlane API
 func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query string, variables map[string]any, jobArgs ExportContentArgs) (map[string]any, error) {
 	body := map[string]any{"query": query}
 	if len(variables) > 0 {
@@ -350,39 +406,56 @@ func (w *ExportContentWorker) executeGraphQLQuery(ctx context.Context, query str
 	return result.Data, nil
 }
 
+// marshalToCSV converts a list of nodes (maps) into CSV format
+// and stripes any HTML from the values
 func (w *ExportContentWorker) marshalToCSV(nodes []map[string]any) ([]byte, error) {
 	if len(nodes) == 0 {
 		return nil, nil
 	}
 
-	headers := make([]string, 0)
-	for k := range nodes[0] {
-		headers = append(headers, k)
+	// 1) Flatten all nodes
+	flatNodes := make([]map[string]any, len(nodes))
+	headerSet := make(map[string]struct{})
+
+	for i, n := range nodes {
+		flat := make(map[string]any)
+		flatten("", n, flat)
+		flatNodes[i] = flat
+
+		for k := range flat {
+			headerSet[k] = struct{}{}
+		}
 	}
 
-	if len(headers) == 0 {
+	if len(headerSet) == 0 {
 		return nil, nil
 	}
 
+	// 2) Build sorted, stable headers
+	headers := make([]string, 0, len(headerSet))
+	for k := range headerSet {
+		headers = append(headers, k)
+	}
+
+	// 3) Write CSV
 	var buf bytes.Buffer
-
 	wr := csv.NewWriter(&buf)
-
 	writer := gocsv.NewSafeCSVWriter(wr)
 
 	if err := writer.Write(headers); err != nil {
 		return nil, err
 	}
 
-	for _, node := range nodes {
+	for _, node := range flatNodes {
 		row := make([]string, len(headers))
 		for i, h := range headers {
-			val := node[h]
-			if val == nil {
+			val, ok := node[h]
+			if !ok || val == nil {
 				row[i] = ""
-			} else {
-				row[i] = fmt.Sprint(val)
+				continue
 			}
+
+			row[i] = cleanHTML(val)
 		}
 
 		if err := writer.Write(row); err != nil {
@@ -397,6 +470,32 @@ func (w *ExportContentWorker) marshalToCSV(nodes []map[string]any) ([]byte, erro
 	}
 
 	return buf.Bytes(), nil
+}
+
+// flatten flattens a nested map into a flat map with dot notation keys
+func flatten(prefix string, v any, out map[string]any) {
+	switch val := v.(type) {
+	case map[string]any:
+		for k, v2 := range val {
+			key := k
+			if prefix != "" {
+				key = prefix + "." + k
+			}
+			flatten(key, v2, out)
+		}
+
+	case []any:
+		for i, v2 := range val {
+			key := fmt.Sprintf("%s.%d", prefix, i)
+			flatten(key, v2, out)
+		}
+
+	default:
+		// leaf value
+		if prefix != "" {
+			out[prefix] = val
+		}
+	}
 }
 
 func (w *ExportContentWorker) updateExportStatus(ctx context.Context, exportID string, status enums.ExportStatus, err error) error {
@@ -487,4 +586,15 @@ func (w *ExportContentWorker) fetchPage(ctx context.Context, query, rootQuery st
 	}
 
 	return nodes, hasNext, endCursor, nil
+}
+
+var stripHTML = bluemonday.StrictPolicy()
+
+func cleanHTML(v any) string {
+	raw := fmt.Sprint(v)
+
+	cleaned := stripHTML.Sanitize(raw)
+	cleaned = strings.TrimSpace(strings.Join(strings.Fields(cleaned), " "))
+
+	return cleaned
 }

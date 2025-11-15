@@ -1,7 +1,4 @@
-FROM gcr.io/distroless/static:nonroot
-
-# add sh for debugging purposes
-COPY --from=busybox /bin/sh /bin/sh
+FROM cgr.dev/chainguard/bash:latest
 
 # `nonroot` coming from distroless
 USER 65532:65532

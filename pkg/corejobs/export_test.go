@@ -385,3 +385,76 @@ func TestExportContentArgs_Kind(t *testing.T) {
 	args := corejobs.ExportContentArgs{}
 	require.Equal(t, "export_content", args.Kind())
 }
+
+func TestCreateFieldsStr(t *testing.T) {
+	t.Parallel()
+
+	testCases := []struct {
+		name     string
+		fields   []string
+		expected string
+	}{
+		{
+			name:     "empty fields returns id",
+			fields:   []string{},
+			expected: "id\n        ",
+		},
+		{
+			name:     "nil fields returns id",
+			fields:   nil,
+			expected: "id\n        ",
+		},
+		{
+			name:     "simple fields",
+			fields:   []string{"id", "name", "description"},
+			expected: "id\n        name\n        description\n        ",
+		},
+		{
+			name:     "single nested field",
+			fields:   []string{"owner.name"},
+			expected: "owner\n        {  name  } \n        ",
+		},
+		{
+			name:     "nested field with plural parent",
+			fields:   []string{"tasks.title"},
+			expected: "tasks\n        { edges { node { title  }  }  } \n        ",
+		},
+		{
+			name:     "deeply nested field",
+			fields:   []string{"owner.tasks.title"},
+			expected: "owner\n        {  tasks { edges { node { title  }  }  }  } \n        ",
+		},
+		{
+			name:     "mixed simple and nested fields",
+			fields:   []string{"id", "name", "owner.name", "description"},
+			expected: "id\n        name\n        owner\n        {  name  } \n        description\n        ",
+		},
+		{
+			name:     "multiple nested fields",
+			fields:   []string{"owner.name", "tasks.title"},
+			expected: "owner\n        {  name  } \n        tasks\n        { edges { node { title  }  }  } \n        ",
+		},
+		{
+			name:     "nested field with multiple levels and plurals",
+			fields:   []string{"controls.tasks.assignee.name"},
+			expected: "controls\n        { edges { node { tasks { edges { node { assignee {  name  }  }  }  }  }  }  } \n       ",
+		},
+		{
+			name:     "single field",
+			fields:   []string{"id"},
+			expected: "id\n        ",
+		},
+		{
+			name:     "field with singular to singular nesting",
+			fields:   []string{"owner.profile.email"},
+			expected: "owner\n        {  profile {  email  }  } \n        ",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			result := corejobs.CreateFieldsStr(tc.fields)
+			require.Equal(t, tc.expected, result)
+		})
+	}
+}

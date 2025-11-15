@@ -38,6 +38,14 @@ func systemAdminCheck(ctx context.Context) error {
 		return privacy.Allow
 	}
 
+	// this covers the impersonation path where the
+	// auth context is no longer an admin, but
+	// the original user was an admin
+	admin, ok := auth.SystemAdminFromContext(ctx)
+	if ok && admin.IsSystemAdmin {
+		return privacy.Allow
+	}
+
 	// if not a system admin, skip to the next rule
 	return privacy.Skip
 }
