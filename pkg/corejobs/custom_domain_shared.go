@@ -11,7 +11,7 @@ type CustomDomainConfig struct {
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the custom domain worker is enabled"`
 
-	CloudflareAPIKey string `koanf:"cloudflareApiKey" json:"cloudflareApiKey" jsonschema:"required description=the cloudflare api key"`
+	CloudflareAPIKey string `koanf:"cloudflareApiKey" json:"cloudflareApiKey" jsonschema:"required description=the cloudflare api key" sensitive:"true"`
 
 	ValidateInterval time.Duration `koanf:"validateInterval" json:"validateInterval" jsonschema:"required,default=5m description=the interval to validate custom domains"`
 }

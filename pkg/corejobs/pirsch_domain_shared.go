@@ -11,5 +11,5 @@ type PirschDomainConfig struct {
 	// PirschClientID is the client id for the pirsch API
 	PirschClientID string `koanf:"pirschClientID" json:"pirschClientID" jsonschema:"required description=the pirsch client id"`
 	// PirschClientSecret is the client secret for the pirsch API
-	PirschClientSecret string `koanf:"pirschClientSecret" json:"pirschClientSecret" jsonschema:"required description=the pirsch client secret"`
+	PirschClientSecret string `koanf:"pirschClientSecret" json:"pirschClientSecret" jsonschema:"required description=the pirsch client secret" sensitive:"true"`
 }

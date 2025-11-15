@@ -13,7 +13,7 @@ type OpenlaneConfig struct {
 	// OpenlaneAPIHost is the host URL for the Openlane API
 	OpenlaneAPIHost string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
 	// OpenlaneAPIToken is the API token for authenticating with the Openlane API
-	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
+	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token" sensitive:"true"`
 }
 
 var allowedPrefixes = []string{

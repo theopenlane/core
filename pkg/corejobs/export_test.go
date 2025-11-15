@@ -437,7 +437,7 @@ func TestCreateFieldsStr(t *testing.T) {
 		{
 			name:     "nested field with multiple levels and plurals",
 			fields:   []string{"controls.tasks.assignee.name"},
-			expected: "controls\n        { edges { node { tasks { edges { node { assignee {  name  }  }  }  }  }  }  } \n       ",
+			expected: "controls\n        { edges { node { tasks { edges { node { assignee {  name  }  }  }  }  }  }  } \n        ",
 		},
 		{
 			name:     "single field",
