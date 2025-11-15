@@ -86,15 +86,6 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 		w.olClient = cl
 	}
 
-	if w.riverClient == nil {
-		riverClient, err := riverqueue.New(ctx, riverqueue.WithConnectionURI(w.Config.DatabaseHost))
-		if err != nil {
-			return err
-		}
-
-		w.riverClient = riverClient
-	}
-
 	// get the custom domain
 	customDomain, err := w.olClient.GetCustomDomainByID(ctx, job.Args.CustomDomainID)
 	if err != nil {
@@ -133,6 +124,12 @@ func (w *CreateCustomDomainWorker) Work(ctx context.Context, job *river.Job[Crea
 
 	defer func() {
 		if err != nil {
+			if w.riverClient == nil {
+				log.Error().Msg("river client is not set on worker, cannot insert delete_cloudflare_custom_hostname job")
+
+				return
+			}
+
 			_, insertErr := w.riverClient.Insert(ctx, DeleteCustomDomainArgs{
 				CloudflareCustomHostnameID: res.ID,
 				CloudflareZoneID:           zoneID,

@@ -17,7 +17,7 @@ type DeleteExportContentArgs struct {
 
 type DeleteExportWorkerConfig struct {
 	// embed OpenlaneConfig to reuse validation and client creation logic
-	OpenlaneConfig
+	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for deleting exports"`
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the delete export worker is enabled"`
 

@@ -7,7 +7,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
@@ -44,10 +43,9 @@ type WatermarkDocArgs struct {
 func (WatermarkDocArgs) Kind() string { return "watermark_doc" }
 
 type WatermarkWorkerConfig struct {
-	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the watermark worker is enabled"`
+	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for watermarking"`
 
-	OpenlaneAPIHost  string `koanf:"openlaneAPIHost" json:"openlaneAPIHost" jsonschema:"required description=the openlane api host"`
-	OpenlaneAPIToken string `koanf:"openlaneAPIToken" json:"openlaneAPIToken" jsonschema:"required description=the openlane api token"`
+	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the watermark worker is enabled"`
 }
 
 // WatermarkDocWorker is the worker to process watermarking of a document
@@ -71,22 +69,12 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 	logger.Info().Msg("starting document watermarking")
 
 	if w.olClient == nil {
-		olconfig := openlaneclient.NewDefaultConfig()
-
-		baseURL, err := url.Parse(w.Config.OpenlaneAPIHost)
+		cl, err := w.Config.getOpenlaneClient()
 		if err != nil {
 			return err
 		}
 
-		opts := []openlaneclient.ClientOption{openlaneclient.WithBaseURL(baseURL)}
-		opts = append(opts, openlaneclient.WithCredentials(openlaneclient.Authorization{
-			BearerToken: w.Config.OpenlaneAPIToken,
-		}))
-
-		w.olClient, err = openlaneclient.New(olconfig, opts...)
-		if err != nil {
-			return err
-		}
+		w.olClient = cl
 	}
 
 	// Set status to in progress

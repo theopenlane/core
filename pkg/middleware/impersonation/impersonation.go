@@ -201,7 +201,8 @@ func SystemAdminUserContextMiddleware() echo.MiddlewareFunc {
 				SubjectID:          targetUserID,
 				SubjectEmail:       "", // Will be populated by subsequent middleware if needed
 				OrganizationID:     targetOrgID,
-				AuthenticationType: auth.APITokenAuthentication,
+				OrganizationIDs:    []string{targetOrgID},
+				AuthenticationType: auth.PATAuthentication,
 				IsSystemAdmin:      false, // Target user runs with their own permissions
 			}
 

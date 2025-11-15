@@ -734,9 +734,11 @@ It lacks proper PDF structure and will cause parsing errors.
 			// Create worker
 			worker := &corejobs.WatermarkDocWorker{
 				Config: corejobs.WatermarkWorkerConfig{
-					Enabled:          true,
-					OpenlaneAPIHost:  "https://api.example.com",
-					OpenlaneAPIToken: "test-token",
+					OpenlaneConfig: corejobs.OpenlaneConfig{
+						OpenlaneAPIHost:  "https://api.example.com",
+						OpenlaneAPIToken: "test-token",
+					},
+					Enabled: true,
 				},
 			}
 			worker.WithOpenlaneClient(olMock)

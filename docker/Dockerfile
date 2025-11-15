@@ -1,4 +1,4 @@
-FROM gcr.io/distroless/base:nonroot
+FROM cgr.dev/chainguard/bash:latest
 
 # `nonroot` coming from distroless
 USER 65532:65532
