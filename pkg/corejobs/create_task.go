@@ -68,7 +68,7 @@ func (a CreateTaskArgs) InsertOpts() river.InsertOpts {
 // TaskWorkerConfig contains configuration for the create task worker
 type TaskWorkerConfig struct {
 	// embed OpenlaneConfig to reuse validation and client creation logic
-	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for task creation"`
+	OpenlaneConfig `koanf:",squash" jsonschema:"description=the openlane API configuration for task creation"`
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required,description=whether the task worker is enabled"`
 }
