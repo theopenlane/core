@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"io/fs"
 	"os"
+	"path/filepath"
+	"runtime"
 
 	"github.com/rs/zerolog/log"
 	"gopkg.in/yaml.v3"
@@ -13,10 +15,8 @@ import (
 )
 
 const (
-	jsonFilename   = "openlane.openapi.json"
-	yamlFilename   = "openlane.openapi.yaml"
-	jsonOutputPath = "../" + jsonFilename
-	yamlOutputPath = "../" + yamlFilename
+	jsonFilename = "openlane.openapi.json"
+	yamlFilename = "openlane.openapi.yaml"
 
 	specFilePerm fs.FileMode = 0o600
 )
@@ -32,6 +32,14 @@ func run() error {
 	if err != nil {
 		return fmt.Errorf("build OpenAPI spec: %w", err)
 	}
+
+	outputDir, err := specsOutputDir()
+	if err != nil {
+		return err
+	}
+
+	jsonOutputPath := filepath.Join(outputDir, jsonFilename)
+	yamlOutputPath := filepath.Join(outputDir, yamlFilename)
 
 	jsonData, err := json.MarshalIndent(spec, "", "  ")
 	if err != nil {
@@ -57,4 +65,14 @@ func run() error {
 	}
 
 	return nil
+}
+
+func specsOutputDir() (string, error) {
+	_, currentFile, _, ok := runtime.Caller(0)
+	if !ok {
+		return "", fmt.Errorf("determine caller path: %w", server.ErrFailedToGetFilePath)
+	}
+
+	// Current file is .../internal/httpserve/specs/generate/main.go, so go up two directories
+	return filepath.Dir(filepath.Dir(currentFile)), nil
 }

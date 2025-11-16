@@ -7,6 +7,7 @@ import (
 	"go/parser"
 	"go/token"
 	"maps"
+	"net/url"
 	"path/filepath"
 	"reflect"
 	"runtime"
@@ -148,7 +149,7 @@ func mergeSCIMSpec(mainSpec *openapi3.T) error {
 	log.Info().Msg("loaded embedded SCIM OpenAPI spec")
 
 	// Merge all spec components
-	mergePaths(mainSpec, scimSpec)
+	mergePaths(mainSpec, scimSpec, getBasePathFromServers(scimSpec.Servers))
 	mergeComponents(mainSpec, scimSpec)
 	mergeTags(mainSpec, scimSpec)
 
@@ -161,7 +162,7 @@ func mergeSCIMSpec(mainSpec *openapi3.T) error {
 }
 
 // mergePaths merges paths from source spec into main spec
-func mergePaths(mainSpec, sourceSpec *openapi3.T) {
+func mergePaths(mainSpec, sourceSpec *openapi3.T, basePath string) {
 	if sourceSpec.Paths == nil {
 		return
 	}
@@ -172,9 +173,52 @@ func mergePaths(mainSpec, sourceSpec *openapi3.T) {
 
 	for path, pathItem := range sourceSpec.Paths.Map() {
 		if pathItem != nil {
-			mainSpec.Paths.Set(path, pathItem)
+			mainSpec.Paths.Set(applyBasePath(path, basePath), pathItem)
 		}
 	}
+}
+
+// getBasePathFromServers extracts the base path portion from the provided servers list
+func getBasePathFromServers(servers openapi3.Servers) string {
+	for _, server := range servers {
+		if server == nil || server.URL == "" {
+			continue
+		}
+
+		parsed, err := url.Parse(server.URL)
+		if err != nil {
+			continue
+		}
+
+		if parsed.Path == "" {
+			continue
+		}
+
+		if parsed.Path[0] != '/' {
+			return "/" + parsed.Path
+		}
+
+		return parsed.Path
+	}
+
+	return ""
+}
+
+// applyBasePath prefixes a path with the provided base path, ensuring only a single slash boundary
+func applyBasePath(path, basePath string) string {
+	if basePath == "" {
+		return path
+	}
+
+	base := strings.TrimSuffix(basePath, "/")
+	trimmedPath := strings.TrimPrefix(path, "/")
+
+	// When trimmedPath is empty we just return the base
+	if trimmedPath == "" {
+		return base
+	}
+
+	return base + "/" + trimmedPath
 }
 
 // mergeComponents merges all component types from source spec into main spec
