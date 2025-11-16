@@ -150,17 +150,7 @@ entConfig:
         token: ""
         workspace: ""
 integrationOauthProvider:
-    github:
-        clientEndpoint: ""
-        clientId: ""
-        clientSecret: ""
-        scopes: null
-    redirectUrl: ""
-    slack:
-        clientEndpoint: ""
-        clientId: ""
-        clientSecret: ""
-        scopes: null
+    providerSpecPath: internal/integrations/config/providers
     successRedirectUrl: ""
 jobQueue:
     connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable

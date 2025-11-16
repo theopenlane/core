@@ -1107,9 +1107,6 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationOauthProvider }}
     integrationOauthProvider:
-      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl }}
-      redirectUrl: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.redirectUrl | quote }}
-      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl }}
       successRedirectUrl: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl | quote }}
       {{- else if .Values.domain }}
@@ -1117,41 +1114,8 @@ data:
       {{- else }}
       successRedirectUrl: ""
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.github }}
-      github:
-        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId }}
-        clientId: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientId | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint }}
-        clientEndpoint: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.github.clientEndpoint | quote }}
-        {{- else if .Values.domain }}
-        clientEndpoint: "https://api.{{ .Values.domain }}"
-        {{- else }}
-        clientEndpoint: ""
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.github.scopes | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        scopes:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack }}
-      slack:
-        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId }}
-        clientId: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientId | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint }}
-        clientEndpoint: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.slack.clientEndpoint | quote }}
-        {{- else if .Values.domain }}
-        clientEndpoint: "https://api.{{ .Values.domain }}"
-        {{- else }}
-        clientEndpoint: ""
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationOauthProvider.slack.scopes | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        scopes:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
+      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath }}
+      providerSpecPath: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath | quote }}
       {{- end }}
     {{- end }}
 {{- end }}

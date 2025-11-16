@@ -15,6 +15,7 @@ tool (
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
+	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20251110171208-cf1482ecb7fc
 	github.com/99designs/gqlgen v0.17.83
@@ -115,11 +116,13 @@ require (
 	golang.org/x/term v0.37.0
 	golang.org/x/text v0.31.0
 	golang.org/x/tools v0.39.0
+	google.golang.org/api v0.253.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
 
 require (
+	cloud.google.com/go/longrunning v0.7.0 // indirect
 	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
@@ -127,7 +130,6 @@ require (
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
-	google.golang.org/api v0.253.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
