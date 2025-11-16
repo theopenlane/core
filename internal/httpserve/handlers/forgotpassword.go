@@ -42,7 +42,7 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user email")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// create password reset email token
@@ -56,7 +56,9 @@ func (h *Handler) ForgotPassword(ctx echo.Context, openapi *OpenAPIContext) erro
 	authCtx := setAuthenticatedContext(reqCtx, entUser)
 
 	if _, err = h.storeAndSendPasswordResetToken(authCtx, user); err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error storing and sending password reset token")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	return h.Success(ctx, out, openapi)

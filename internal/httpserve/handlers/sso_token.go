@@ -135,7 +135,9 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 
 		_, err = h.DBClient.APIToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
 		if err != nil {
-			return h.InternalServerError(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating api token")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	case "personal":
 		tkn, err := h.DBClient.PersonalAccessToken.Get(allowCtx, tokenIDCookie.Value)
@@ -151,7 +153,9 @@ func (h *Handler) SSOTokenCallbackHandler(ctx echo.Context, openapi *OpenAPICont
 
 		_, err = h.DBClient.PersonalAccessToken.UpdateOne(tkn).SetSSOAuthorizations(tkn.SSOAuthorizations).Save(allowCtx)
 		if err != nil {
-			return h.InternalServerError(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error updating personal access token")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	default:
 		return h.BadRequest(ctx, errInvalidTokenType, openapi)

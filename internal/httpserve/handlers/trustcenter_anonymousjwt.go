@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -66,7 +67,9 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
 
-			return h.InternalServerError(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error querying trust center")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	} else {
 		// 5. if not default trust center, all we care about is the hostname.
@@ -81,13 +84,17 @@ func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenA
 				return h.Unauthorized(ctx, ErrTrustCenterNotFound)
 			}
 
-			return h.InternalServerError(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error querying trust center by custom domain")
+
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	}
 
 	auth, err := h.AuthManager.GenerateAnonymousTrustCenterSession(reqCtx, ctx.Response().Writer, trustCenter.OwnerID, trustCenter.ID)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	response := models.CreateTrustCenterAnonymousJWTResponse{

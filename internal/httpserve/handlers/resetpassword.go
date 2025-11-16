@@ -120,7 +120,9 @@ func (h *Handler) ResetPassword(ctx echo.Context, openapi *OpenAPIContext) error
 	}
 
 	if err := h.sendPasswordResetSuccessEmail(userCtx, user); err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error sending password reset success email")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	out := &models.ResetPasswordReply{

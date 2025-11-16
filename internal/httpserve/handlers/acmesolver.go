@@ -37,7 +37,7 @@ func (h *Handler) ACMESolverHandler(ctx echo.Context, openapi *OpenAPIContext) e
 			return h.NotFound(ctx, err)
 		}
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	return ctx.String(http.StatusOK, res.ExpectedAcmeChallengeValue)

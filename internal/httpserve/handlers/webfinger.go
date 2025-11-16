@@ -75,7 +75,9 @@ func (h *Handler) WebfingerHandler(ctx echo.Context, openapi *OpenAPIContext) er
 			return h.NotFound(ctx, ErrNotFound, openapi)
 		}
 
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error fetching sso status")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	return h.Success(ctx, out, openapi)

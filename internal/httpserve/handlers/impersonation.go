@@ -58,7 +58,9 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 	// Get target user information and validate organization membership
 	targetUser, err := h.getTargetUser(reqCtx, req.TargetUserID, orgID)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting target user")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Set default scopes based on impersonation type
@@ -75,7 +77,9 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 
 	// Use the TokenManager to create impersonation token
 	if h.TokenManager == nil {
-		return h.InternalServerError(ctx, ErrTokenManagerNotConfigured, openapi)
+		logx.FromContext(reqCtx).Error().Msg("token manager not configured")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Create impersonation token with proper claims
@@ -91,7 +95,9 @@ func (h *Handler) StartImpersonation(ctx echo.Context, openapi *OpenAPIContext) 
 		Scopes:            scopes,
 	})
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error creating impersonation token")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Extract session ID from the created token claims

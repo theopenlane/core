@@ -98,11 +98,15 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 
 		_, _, _, err := h.processInvitation(ctx, *req.Token, meowuser.Email)
 		if err != nil {
-			return h.BadRequest(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("error processing invitation")
+
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 
 		if err := h.setEmailConfirmed(userCtx, meowuser); err != nil {
-			return h.BadRequest(ctx, err, openapi)
+			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set email as verified")
+
+			return h.BadRequest(ctx, ErrUnableToVerifyEmail, openapi)
 		}
 	}
 
@@ -126,7 +130,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error storing email verification token")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
 		// only return the token in development

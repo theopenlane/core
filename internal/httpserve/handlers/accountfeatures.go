@@ -32,7 +32,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	in.ID, err = h.getOrganizationID(in.ID, au)
@@ -51,7 +51,7 @@ func (h *Handler) AccountFeaturesHandler(ctx echo.Context, openapi *OpenAPIConte
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting features")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// sort for consistency

@@ -31,7 +31,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	in.ID, err = h.getOrganizationID(in.ID, au)
@@ -56,7 +56,7 @@ func (h *Handler) AccountRolesOrganizationHandler(ctx echo.Context, openapi *Ope
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Interface("access_request", req).Msg("error checking access")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	return h.Success(ctx, models.AccountRolesOrganizationReply{

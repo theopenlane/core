@@ -50,7 +50,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 			return h.InvalidInput(ctx, err, openapi)
 		}
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// set user to verified
@@ -58,7 +58,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 		if err := h.setEmailConfirmed(ctxWithToken, user); err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("unable to set email as verified")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	}
 
@@ -67,7 +67,7 @@ func (h *Handler) OauthRegister(ctx echo.Context, openapi *OpenAPIContext) error
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	out := models.LoginReply{
