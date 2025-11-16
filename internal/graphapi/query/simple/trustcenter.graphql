@@ -136,8 +136,20 @@ query GetTrustCenterByID($trustCenterId: ID!) {
   }
 }
 
-query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
-  trustCenters(first: $first, last: $last, where: $where) {
+query GetTrustCenters(
+  $first: Int
+  $last: Int
+  $after: Cursor
+  $before: Cursor
+  $where: TrustCenterWhereInput
+) {
+  trustCenters(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+  ) {
     totalCount
     pageInfo {
       startCursor
@@ -186,7 +198,10 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
   }
 }
 
-mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
+mutation UpdateTrustCenter(
+  $updateTrustCenterId: ID!
+  $input: UpdateTrustCenterInput!
+) {
   updateTrustCenter(id: $updateTrustCenterId, input: $input) {
     trustCenter {
       createdAt
@@ -222,6 +237,58 @@ mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterI
         foregroundColor
         backgroundColor
         accentColor
+      }
+    }
+  }
+}
+
+fragment TrustCenterSettingFields on TrustCenterSetting {
+  accentColor
+  backgroundColor
+  themeMode
+  primaryColor
+  secondaryForegroundColor
+  secondaryBackgroundColor
+  font
+  foregroundColor
+  logoRemoteURL
+  logoFile {
+    presignedURL
+  }
+}
+
+query GetTrustCentersCacheData(
+  $first: Int
+  $last: Int
+  $after: Cursor
+  $before: Cursor
+  $where: TrustCenterWhereInput
+) {
+  trustCenters(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        id
+        ownerID
+        setting {
+          ...TrustCenterSettingFields
+        }
+        customDomain {
+          cnameRecord
+          dnsVerificationID
+        }
       }
     }
   }

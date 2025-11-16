@@ -50674,12 +50674,12 @@ func (_c *MockOpenlaneGraphClient_GetTrustCenterWatermarkConfigs_Call) RunAndRet
 }
 
 // GetTrustCenters provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) GetTrustCenters(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error) {
+func (_mock *MockOpenlaneGraphClient) GetTrustCenters(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, first, last, where, interceptors)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, first, last, where)
+		tmpRet = _mock.Called(ctx, first, last, after, before, where)
 	}
 	ret := tmpRet
 
@@ -50689,18 +50689,18 @@ func (_mock *MockOpenlaneGraphClient) GetTrustCenters(ctx context.Context, first
 
 	var r0 *openlaneclient.GetTrustCenters
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)); ok {
-		return returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenters); ok {
-		r0 = returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCenters); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.GetTrustCenters)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, first, last, where, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -50716,14 +50716,16 @@ type MockOpenlaneGraphClient_GetTrustCenters_Call struct {
 //   - ctx context.Context
 //   - first *int64
 //   - last *int64
+//   - after *string
+//   - before *string
 //   - where *openlaneclient.TrustCenterWhereInput
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenters(ctx interface{}, first interface{}, last interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCenters(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCenters_Call {
 	return &MockOpenlaneGraphClient_GetTrustCenters_Call{Call: _e.mock.On("GetTrustCenters",
-		append([]interface{}{ctx, first, last, where}, interceptors...)...)}
+		append([]interface{}{ctx, first, last, after, before, where}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Run(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -50737,22 +50739,32 @@ func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Run(run func(ctx context
 		if args[2] != nil {
 			arg2 = args[2].(*int64)
 		}
-		var arg3 *openlaneclient.TrustCenterWhereInput
+		var arg3 *string
 		if args[3] != nil {
-			arg3 = args[3].(*openlaneclient.TrustCenterWhereInput)
+			arg3 = args[3].(*string)
 		}
-		var arg4 []clientv2.RequestInterceptor
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.TrustCenterWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.TrustCenterWhereInput)
+		}
+		var arg6 []clientv2.RequestInterceptor
 		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 4 {
-			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
 		}
-		arg4 = variadicArgs
+		arg6 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
 			arg3,
-			arg4...,
+			arg4,
+			arg5,
+			arg6...,
 		)
 	})
 	return _c
@@ -50763,7 +50775,114 @@ func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) Return(getTrustCenters *
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+func (_c *MockOpenlaneGraphClient_GetTrustCenters_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCenters, error)) *MockOpenlaneGraphClient_GetTrustCenters_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
+// GetTrustCentersCacheData provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GetTrustCentersCacheData(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCentersCacheData, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, first, last, after, before, where, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, first, last, after, before, where)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GetTrustCentersCacheData")
+	}
+
+	var r0 *openlaneclient.GetTrustCentersCacheData
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCentersCacheData, error)); ok {
+		return returnFunc(ctx, first, last, after, before, where, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) *openlaneclient.GetTrustCentersCacheData); ok {
+		r0 = returnFunc(ctx, first, last, after, before, where, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GetTrustCentersCacheData)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, *int64, *int64, *string, *string, *openlaneclient.TrustCenterWhereInput, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, first, last, after, before, where, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GetTrustCentersCacheData_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GetTrustCentersCacheData'
+type MockOpenlaneGraphClient_GetTrustCentersCacheData_Call struct {
+	*mock.Call
+}
+
+// GetTrustCentersCacheData is a helper method to define mock.On call
+//   - ctx context.Context
+//   - first *int64
+//   - last *int64
+//   - after *string
+//   - before *string
+//   - where *openlaneclient.TrustCenterWhereInput
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GetTrustCentersCacheData(ctx interface{}, first interface{}, last interface{}, after interface{}, before interface{}, where interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call {
+	return &MockOpenlaneGraphClient_GetTrustCentersCacheData_Call{Call: _e.mock.On("GetTrustCentersCacheData",
+		append([]interface{}{ctx, first, last, after, before, where}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call) Run(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 *int64
+		if args[1] != nil {
+			arg1 = args[1].(*int64)
+		}
+		var arg2 *int64
+		if args[2] != nil {
+			arg2 = args[2].(*int64)
+		}
+		var arg3 *string
+		if args[3] != nil {
+			arg3 = args[3].(*string)
+		}
+		var arg4 *string
+		if args[4] != nil {
+			arg4 = args[4].(*string)
+		}
+		var arg5 *openlaneclient.TrustCenterWhereInput
+		if args[5] != nil {
+			arg5 = args[5].(*openlaneclient.TrustCenterWhereInput)
+		}
+		var arg6 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 6 {
+			variadicArgs = args[6].([]clientv2.RequestInterceptor)
+		}
+		arg6 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4,
+			arg5,
+			arg6...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call) Return(getTrustCentersCacheData *openlaneclient.GetTrustCentersCacheData, err error) *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call {
+	_c.Call.Return(getTrustCentersCacheData, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call) RunAndReturn(run func(ctx context.Context, first *int64, last *int64, after *string, before *string, where *openlaneclient.TrustCenterWhereInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GetTrustCentersCacheData, error)) *MockOpenlaneGraphClient_GetTrustCentersCacheData_Call {
 	_c.Call.Return(run)
 	return _c
 }
