@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -21,6 +20,8 @@ import (
 
 // Notification holds the schema definition for the Notification entity
 type Notification struct {
+	SchemaFuncs
+
 	ent.Schema
 }
 
@@ -107,8 +108,7 @@ func (Notification) Indexes() []ent.Index {
 	return []ent.Index{
 		// Index for common query: "get all users unread notifications"
 		// filters on org, user, and read_at
-		index.Fields("user_id", "read_at", "owner_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("user_id", "read_at", "owner_id"),
 	}
 }
 
