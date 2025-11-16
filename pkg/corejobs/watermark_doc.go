@@ -43,7 +43,7 @@ type WatermarkDocArgs struct {
 func (WatermarkDocArgs) Kind() string { return "watermark_doc" }
 
 type WatermarkWorkerConfig struct {
-	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for watermarking"`
+	OpenlaneConfig `koanf:",squash" jsonschema:"description=the openlane API configuration for watermarking"`
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the watermark worker is enabled"`
 }

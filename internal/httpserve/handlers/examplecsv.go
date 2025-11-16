@@ -23,7 +23,7 @@ func (h *Handler) ExampleCSV(ctx echo.Context, openapi *OpenAPIContext) error {
 	if err != nil {
 		logx.FromContext(ctx.Request().Context()).Warn().Msgf("failed to read example csv file: %s", in.Filename)
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	return ctx.Blob(http.StatusOK, "text/csv", content)

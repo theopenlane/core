@@ -7,7 +7,7 @@ import (
 // CustomDomainConfig contains the configuration for the custom domain workers
 type CustomDomainConfig struct {
 	// embed OpenlaneConfig to reuse validation and client creation logic
-	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for watermarking"`
+	OpenlaneConfig `koanf:",squash" jsonschema:"description=the openlane API configuration for watermarking"`
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the custom domain worker is enabled"`
 

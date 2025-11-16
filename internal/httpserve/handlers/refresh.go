@@ -32,14 +32,15 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("error verifying token")
 
-		return h.BadRequest(ctx, err, openapi)
+		return h.BadRequest(ctx, ErrUnableToVerifyToken, openapi)
 	}
 
 	// check user in the database, sub == claims subject and ensure only one record is returned
 	user, err := h.getUserDetailsByID(reqCtx, claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, ErrNoAuthUser, openapi)
+			logx.Ctx(reqCtx).Info().Str("userID", user.ID).Msg("user not found during token refresh")
+			return h.NotFound(ctx, ErrProcessingRequest, openapi)
 		}
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -47,7 +48,9 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 
 	// ensure the user is still active
 	if user.Edges.Setting.Status != "ACTIVE" {
-		return h.NotFound(ctx, ErrNoAuthUser, openapi)
+		logx.Ctx(reqCtx).Info().Str("userID", user.ID).Msg("user not active during token refresh")
+
+		return h.NotFound(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// get modules on refresh

@@ -67,7 +67,9 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 
 	user, err := h.getUserDetailsByID(reqCtx, userID)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error retrieving user details")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	ctxWithToken, user, invitedUser, err := h.processInvitation(ctx, in.Token, user.Email)
@@ -80,7 +82,7 @@ func (h *Handler) OrganizationInviteAccept(ctx echo.Context, openapi *OpenAPICon
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// reply with the relevant details

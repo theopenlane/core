@@ -142,7 +142,9 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 
 		metrics.RecordLogin(false)
 
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error provisioning user")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// set the context for the authenticated user
@@ -167,7 +169,9 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 	authData, err := h.AuthManager.GenerateOauthAuthSession(userCtx, ctx.Response().Writer, entUser, oauthReq)
 	if err != nil {
 		metrics.RecordLogin(false)
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	if tokenID, tErr := sessions.GetCookie(ctx.Request(), "token_id"); tErr == nil {
@@ -189,7 +193,7 @@ func (h *Handler) SSOCallbackHandler(ctx echo.Context, openapi *OpenAPIContext) 
 		if aErr != nil {
 			logx.FromContext(reqCtx).Error().Err(aErr).Msg("unable to authorize token for SSO")
 
-			return h.InternalServerError(ctx, aErr, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
 		sessions.RemoveCookie(ctx.Response().Writer, "token_id", sessions.CookieConfig{Path: "/"})

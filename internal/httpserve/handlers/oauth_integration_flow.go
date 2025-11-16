@@ -100,7 +100,9 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapi *OpenAPIContext) erro
 	// Generate state parameter for security
 	state, err := h.generateOAuthState(orgID, in.Provider)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(userCtx).Error().Err(err).Msg("failed to generate oauth state")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Set the state as a cookie for validation in callback
@@ -219,7 +221,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapi *OpenAPIContext)
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Str("provider", provider).Str("org_id", orgID).Msg("failed to store integration tokens")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	// Clean up the OAuth cookies after successful completion (like SSO handler)

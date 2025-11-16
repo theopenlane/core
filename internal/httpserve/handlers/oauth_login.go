@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
@@ -116,13 +117,13 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		redirectURI, err := h.getRedirectURI(req)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
 		googleUser, err := google.UserFromContext(ctx)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -131,7 +132,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 		// check if users exists and create if not
 		user, err := h.CheckAndCreateUser(ctxWithToken, googleUser.Name, googleUser.Email, enums.AuthProviderGoogle, googleUser.Picture)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -145,9 +146,7 @@ func (h *Handler) issueGoogleSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("unable to create new auth session")
-
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 
 			return
 		}
@@ -191,19 +190,19 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 		redirectURI, err := h.getRedirectURI(req)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
 		githubUser, err := github.UserFromContext(ctx)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
 		// we need the email to keep going, if its not there error the request
 		if githubUser.Email == nil {
-			oauthLoginErrorWrapper(w, ErrNoEmailFound, http.StatusBadRequest)
+			oauthLoginErrorWrapper(ctx, w, ErrNoEmailFound, http.StatusBadRequest)
 			return
 		}
 
@@ -212,7 +211,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 		// check if users exists and create if not, updates last seen of existing user
 		user, err := h.CheckAndCreateUser(ctxWithToken, *githubUser.Name, *githubUser.Email, enums.AuthProviderGitHub, *githubUser.AvatarURL)
 		if err != nil {
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 			return
 		}
 
@@ -225,9 +224,7 @@ func (h *Handler) issueGitHubSession() http.Handler {
 
 		auth, err := h.AuthManager.GenerateOauthAuthSession(ctxWithToken, w, user, oauthReq)
 		if err != nil {
-			logx.FromContext(ctx).Error().Err(err).Msg("unable to create new auth session")
-
-			oauthLoginErrorWrapper(w, err, http.StatusInternalServerError)
+			oauthLoginErrorWrapper(ctx, w, err, http.StatusInternalServerError)
 
 			return
 		}
@@ -274,12 +271,19 @@ func (h *Handler) getRedirectURI(req *http.Request) (string, error) {
 
 // oauthLoginErrorWrapper is a helper to wrap oauth login errors and record the failed login attempt
 // in the metrics
-func oauthLoginErrorWrapper(w http.ResponseWriter, err error, code int) {
+func oauthLoginErrorWrapper(ctx context.Context, w http.ResponseWriter, err error, code int) {
+	logx.FromContext(ctx).Error().Err(err).Msg("error during oauth login")
+
 	if errors.Is(err, entval.ErrEmailNotAllowed) {
 		code = http.StatusBadRequest
 	}
 
 	metrics.RecordLogin(false)
+
+	// return generic processing error for 500s
+	if code == http.StatusInternalServerError {
+		err = ErrProcessingRequest
+	}
 
 	http.Error(w, err.Error(), code)
 }
