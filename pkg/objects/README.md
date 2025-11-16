@@ -77,16 +77,19 @@ func main() {
 All providers implement the same interface and are safe to use concurrently from goroutines. Construct them with provider‑specific options and credentials.
 
 - Disk (`providers/disk`)
+
   - Stores files on local filesystem paths for development/testing
   - Options: `WithBucket`, `WithBasePath`, optional `WithLocalURL` for presigned URLs
   - Example: `disk.NewDiskProvider(options)`
 
 - Amazon S3 (`providers/s3`)
+
   - Options: `WithBucket`, `WithRegion`, `WithEndpoint` (minio/alt endpoints)
   - Build via `NewS3Provider(options, ...)` or `NewS3ProviderResult(...).Get()`
   - Credentials can come from `ProviderOptions.Credentials` or environment
 
 - Cloudflare R2 (`providers/r2`)
+
   - Similar to S3 in usage, supports account‑specific credentials and endpoints
 
 - Database (`providers/database`)
@@ -136,6 +139,7 @@ exists, _ := provider.Exists(ctx, &storage.File{ FileMetadata: storage.FileMetad
 ## Storage Structure
 
 Files are stored with the following pattern:
+
 ```
 s3://bucket-name/organization-id/file-id/filename.ext
 r2://bucket-name/organization-id/file-id/filename.ext
@@ -145,6 +149,7 @@ database://default/file-id (database provider uses file ID, not paths)
 ### Example
 
 For organization `01HYQZ5YTVJ0P2R2HF7N3W3MQZ`, and file record `01J1FILEXYZABCD5678` uploading `report.pdf`:
+
 ```
 s3://my-bucket/01HYQZ5YTVJ0P2R2HF7N3W3MQZ/01J1FILEXYZABCD5678/report.pdf
 ```
@@ -160,6 +165,7 @@ When a file is uploaded through `HandleUploads`:
 5. Storage providers use `path.Join(FolderDestination, FileName)` to construct the object key.
 
 **Code:** `internal/objects/upload/handler.go`
+
 ```go
 entFile, ownerOrgID, err := store.CreateFileRecord(ctx, file)
 // ...
@@ -173,6 +179,7 @@ if folderPath != "" {
 ### Provider Implementation
 
 **S3 Provider:** `pkg/objects/storage/providers/s3/provider.go`
+
 ```go
 func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagetypes.UploadFileOptions) (*storagetypes.UploadedFileMetadata, error) {
     objectKey := opts.FileName
@@ -184,9 +191,11 @@ func (p *Provider) Upload(ctx context.Context, reader io.Reader, opts *storagety
 ```
 
 **R2 Provider:** `pkg/objects/storage/providers/r2/provider.go`
+
 - Same implementation as S3
 
 **Database Provider:** `pkg/objects/storage/providers/database/provider.go`
+
 - Stores files by file ID directly in database
 - No folder structure concept (files are stored as binary blobs)
 
@@ -225,15 +234,15 @@ In this repository, dynamic provider selection and concurrency are handled by an
 
 If you want a similar setup in your own project:
 
-1) Define a `ProviderBuilder` for each backend you support, capable of reading configuration + hints and returning a `storage.Provider`
+1. Define a `ProviderBuilder` for each backend you support, capable of reading configuration + hints and returning a `storage.Provider`
 
-2) Use a resolver to map `(context, hints) -> (builder + runtime config)`
+2. Use a resolver to map `(context, hints) -> (builder + runtime config)`
 
-3) Use a thread‑safe client pool to cache provider instances by a stable key (e.g., org + integration), so concurrent requests reuse clients
+3. Use a thread‑safe client pool to cache provider instances by a stable key (e.g., org + integration), so concurrent requests reuse clients
 
-4) Wrap `storage.ObjectService` to consume the resolved provider. The `ObjectService` is intentionally small and stateless to make this easy to compose
+4. Wrap `storage.ObjectService` to consume the resolved provider. The `ObjectService` is intentionally small and stateless to make this easy to compose
 
-Within this repo, see `internal/objects/service.go` and `internal/objects/resolver` for a reference implementation.
+Within this repo, see `internal/objects/service.go` and `pkg/objects/resolver` for a reference implementation.
 
 ## Validation & Readiness
 
@@ -268,9 +277,11 @@ The repository includes a strongly typed configuration model (see `pkg/objects/s
 ## FAQ
 
 - Can I upload to multiple providers at once
+
   - Yes, orchestrate multiple calls to `ObjectService.Upload` with different providers; the service is stateless and supports concurrent use
 
 - How do I choose a provider per organization
+
   - Pass `ProviderHints` with an `OrganizationID` and build a resolver that maps orgs/integrations to providers. The internal orchestration layer demonstrates this pattern
 
 - Do I need to use the internal orchestration layer

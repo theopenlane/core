@@ -7,7 +7,7 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/objects/resolver"
+	"github.com/theopenlane/core/pkg/objects/resolver"
 	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
@@ -40,3 +40,4 @@ func TestResolveProviderUsesConfigWhenCredentialSyncDisabled(t *testing.T) {
 	assert.Equal(t, "test-bucket", resolved.Config.Bucket)
 	assert.Equal(t, "us-west-2", resolved.Config.Region)
 }
+

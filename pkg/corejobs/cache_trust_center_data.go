@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/rs/zerolog/log"
 	"github.com/samber/lo"
@@ -39,6 +40,10 @@ type CacheTrustCenterDataConfig struct {
 	OpenlaneConfig `koanf:",squash" jsonschema:"description=the openlane API configuration for caching trust center data"`
 	// ObjectStorage contains the configuration for object storage
 	ObjectStorage storage.ProviderConfig `koanf:"objectStorage" json:"objectStorage" jsonschema:"description=the object storage configuration"`
+	// Enabled indicates whether the cache trust center data worker is enabled
+	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the cache trust center data worker is enabled"`
+	// CacheInterval is the interval at which to cache trust center data
+	CacheInterval time.Duration `koanf:"cacheInterval" json:"cacheInterval" jsonschema:"required,default=10m description=the interval at which to cache trust center data"`
 }
 
 // Kind satisfies the river.Job interface
