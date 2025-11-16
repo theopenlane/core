@@ -3835,8 +3835,6 @@ var (
 		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
 		{Name: "created_by", Type: field.TypeString, Nullable: true},
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
-		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
-		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "notification_type", Type: field.TypeEnum, Enums: []string{"ORGANIZATION", "USER"}},
 		{Name: "object_type", Type: field.TypeString},
@@ -3856,13 +3854,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notifications_organizations_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[15]},
+				Columns:    []*schema.Column{NotificationsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notifications_users_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[16]},
+				Columns:    []*schema.Column{NotificationsColumns[14]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3871,7 +3869,7 @@ var (
 			{
 				Name:    "notification_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[15]},
+				Columns: []*schema.Column{NotificationsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3879,7 +3877,7 @@ var (
 			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[16], NotificationsColumns[13], NotificationsColumns[15]},
+				Columns: []*schema.Column{NotificationsColumns[14], NotificationsColumns[11], NotificationsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
