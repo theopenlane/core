@@ -21,8 +21,6 @@ import (
 
 // Notification holds the schema definition for the Notification entity
 type Notification struct {
-	SchemaFuncs
-
 	ent.Schema
 }
 
@@ -83,7 +81,7 @@ func (Notification) Hooks() []ent.Hook {
 func (n Notification) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
-		excludeSoftDelete: true,
+		excludeSoftDelete:  true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(n),
 		},
