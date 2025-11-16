@@ -121,6 +121,8 @@ var (
 	ErrDownloadTokenMissingFile = errors.New("download token missing associated file")
 	// ErrLoginFailed is returned when login fails
 	ErrLoginFailed = errors.New("login failed, please check your credentials and try again")
+	// ErrUnableToVerifyToken is returned when unable to verify a token
+	ErrUnableToVerifyToken = errors.New("unable to verify token, please try again")
 )
 
 var (
