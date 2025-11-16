@@ -24,6 +24,7 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
@@ -192,14 +193,14 @@ func (suite *HandlerTestSuite) TestLoginHandler() {
 			username:       validConfirmedUser.UserInfo.Email,
 			password:       "thisisnottherightone",
 			expectedStatus: http.StatusBadRequest,
-			expectedErr:    rout.ErrInvalidCredentials,
+			expectedErr:    handlers.ErrLoginFailed,
 		},
 		{
 			name:           "user not found",
 			username:       "rick.sanchez@theopenlane.io",
 			password:       validPassword,
 			expectedStatus: http.StatusBadRequest,
-			expectedErr:    auth.ErrNoAuthUser,
+			expectedErr:    handlers.ErrLoginFailed,
 		},
 		{
 			name:           "empty username",
