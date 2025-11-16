@@ -78,7 +78,7 @@ require (
 	github.com/pressly/goose/v3 v3.26.0
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
-	github.com/redis/go-redis/v9 v9.14.1
+	github.com/redis/go-redis/v9 v9.16.0
 	github.com/riverqueue/river v0.26.0
 	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.26.0
 	github.com/riverqueue/river/rivertype v0.26.0
@@ -98,7 +98,7 @@ require (
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.21.0
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.4.3
+	github.com/theopenlane/riverboat v0.4.4
 	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.14
@@ -120,7 +120,8 @@ require (
 )
 
 require (
-	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
+	github.com/clipperhouse/stringish v0.1.1 // indirect
+	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect

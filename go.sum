@@ -153,8 +153,10 @@ github.com/chzyer/readline v1.5.1/go.mod h1:Eh+b79XXUwfKfcPLepksvw2tcLE/Ct21YObk
 github.com/chzyer/test v0.0.0-20180213035817-a1ea475d72b1/go.mod h1:Q3SI9o4m/ZMnBNeIyt5eFwwo7qiLfzFZmjNmxjkiQlU=
 github.com/chzyer/test v1.0.0 h1:p3BQDXSxOhOG0P9z6/hGnII4LGiEPOYBhs8asl/fC04=
 github.com/chzyer/test v1.0.0/go.mod h1:2JlltgoNkt4TW/z9V/IzDdFaMTM2JPIi26O1pF38GC8=
-github.com/clipperhouse/uax29/v2 v2.2.0 h1:ChwIKnQN3kcZteTXMgb1wztSgaU+ZemkgWdohwgs8tY=
-github.com/clipperhouse/uax29/v2 v2.2.0/go.mod h1:EFJ2TJMRUaplDxHKj1qAEhCtQPW2tJSwu5BF98AuoVM=
+github.com/clipperhouse/stringish v0.1.1 h1:+NSqMOr3GR6k1FdRhhnXrLfztGzuG+VuFDfatpWHKCs=
+github.com/clipperhouse/stringish v0.1.1/go.mod h1:v/WhFtE1q0ovMta2+m+UbpZ+2/HEXNWYXQgCt4hdOzA=
+github.com/clipperhouse/uax29/v2 v2.3.0 h1:SNdx9DVUqMoBuBoW3iLOj4FQv3dN5mDtuqwuhIGpJy4=
+github.com/clipperhouse/uax29/v2 v2.3.0/go.mod h1:Wn1g7MK6OoeDT0vL+Q0SQLDz/KpfsVRgg6W7ihQeh4g=
 github.com/cloudflare/cloudflare-go/v6 v6.2.0 h1:VuJAXeVlnftU/XIcAi/xXwEkU/TOaHhmM68HKVpyLD8=
 github.com/cloudflare/cloudflare-go/v6 v6.2.0/go.mod h1:Lj3MUqjvKctXRpdRhLQxZYRrNZHuRs0XYuH8JtQGyoI=
 github.com/cncf/xds/go v0.0.0-20250501225837-2ac532fd4443 h1:aQ3y1lwWyqYPiWZThqv1aFbZMiM9vblcSArJRf2Irls=
@@ -580,8 +582,8 @@ github.com/prometheus/procfs v0.19.1 h1:QVtROpTkphuXuNlnCv3m1ut3JytkXHtQ3xvck/Ym
 github.com/prometheus/procfs v0.19.1/go.mod h1:M0aotyiemPhBCM0z5w87kL22CxfcH05ZpYlu+b4J7mw=
 github.com/ravilushqa/otelgqlgen v0.19.0 h1:LbgdvOeZLW3y6qJoZHu2qd1srsB2aYRDiY8moPfmZkQ=
 github.com/ravilushqa/otelgqlgen v0.19.0/go.mod h1:89WViMNkh5tnf6PYQGDFQDyLdhpQSlDdQ2/lYkdnlHg=
-github.com/redis/go-redis/v9 v9.14.1 h1:nDCrEiJmfOWhD76xlaw+HXT0c9hfNWeXgl0vIRYSDvQ=
-github.com/redis/go-redis/v9 v9.14.1/go.mod h1:huWgSWd8mW6+m0VPhJjSSQ+d6Nh1VICQ6Q5lHuCH/Iw=
+github.com/redis/go-redis/v9 v9.16.0 h1:OotgqgLSRCmzfqChbQyG1PHC3tLNR89DG4jdOERSEP4=
+github.com/redis/go-redis/v9 v9.16.0/go.mod h1:u410H11HMLoB+TP67dz8rL9s6QW2j76l0//kSOd3370=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec h1:W09IVJc94icq4NjY3clb7Lk8O1qJ8BdBEF8z0ibU0rE=
 github.com/remyoudompheng/bigfft v0.0.0-20230129092748-24d4a6f8daec/go.mod h1:qqbHyh8v60DhA7CoWK5oRCqLrMHRGoxYCSS9EjAz6Eo=
 github.com/resend/resend-go/v2 v2.27.0 h1:ZOXxU6oh6+w3W6f+o38z5cHP4J4pgq19mwn+rYZ/Ul0=
@@ -693,8 +695,8 @@ github.com/theopenlane/iam v0.21.0 h1:cWOB7yLC/e18ZIhtDrVLi60Mq3Hy1s1rlJ8Jzn8wrR
 github.com/theopenlane/iam v0.21.0/go.mod h1:tHuq7kZIHP8rMfilv5JnbBN4Mk1zS0VCtXSeFx9OxtI=
 github.com/theopenlane/newman v0.2.1 h1:9tbkP0W0q3HJZKWpMbJ/W7YoeE92zghEoa7hBeJt80o=
 github.com/theopenlane/newman v0.2.1/go.mod h1:+kr2ZIdSRUaOHw+MwUqRdof6dEdw9qCHDZfyfTfPnAQ=
-github.com/theopenlane/riverboat v0.4.3 h1:J6G5VHO8e2/DUGOvIXbz3pYZL7aj3m1c6JZbBXFhZGM=
-github.com/theopenlane/riverboat v0.4.3/go.mod h1:PG2eM7n9ihUzj9HxzA8mNhm/39bvC9DNDuh6WIXGeY0=
+github.com/theopenlane/riverboat v0.4.4 h1:NEmRrEWBnzYMBkQizILeS/zqTGyZBJMnyYC/31p6ocs=
+github.com/theopenlane/riverboat v0.4.4/go.mod h1:z26YEKXqzBXENdqmDumY4nA4se3JHJFB+X2FNpvwO8w=
 github.com/theopenlane/utils v0.5.2 h1:5Hpg+lgSGxBZwirh9DQumTHCBU9Wgopjp7Oug2FA+1c=
 github.com/theopenlane/utils v0.5.2/go.mod h1:d7F811pRS817S9wo9SmsSghS5GDgN32BFn6meMM9PM0=
 github.com/tidwall/gjson v1.14.2/go.mod h1:/wbyibRr2FHMks5tjHJ5F8dMZh3AcwJEMf5vlfC0lxk=
