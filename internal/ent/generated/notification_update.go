@@ -68,46 +68,6 @@ func (_u *NotificationUpdate) ClearUpdatedBy() *NotificationUpdate {
 	return _u
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *NotificationUpdate) SetDeletedAt(v time.Time) *NotificationUpdate {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableDeletedAt(v *time.Time) *NotificationUpdate {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *NotificationUpdate) ClearDeletedAt() *NotificationUpdate {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *NotificationUpdate) SetDeletedBy(v string) *NotificationUpdate {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *NotificationUpdate) SetNillableDeletedBy(v *string) *NotificationUpdate {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *NotificationUpdate) ClearDeletedBy() *NotificationUpdate {
-	_u.mutation.ClearDeletedBy()
-	return _u
-}
-
 // SetTags sets the "tags" field.
 func (_u *NotificationUpdate) SetTags(v []string) *NotificationUpdate {
 	_u.mutation.SetTags(v)
@@ -407,18 +367,6 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notification.FieldUpdatedBy, field.TypeString)
 	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(notification.FieldDeletedAt, field.TypeTime, value)
-	}
-	if _u.mutation.DeletedAtCleared() {
-		_spec.ClearField(notification.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(notification.FieldDeletedBy, field.TypeString, value)
-	}
-	if _u.mutation.DeletedByCleared() {
-		_spec.ClearField(notification.FieldDeletedBy, field.TypeString)
-	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
 	}
@@ -580,46 +528,6 @@ func (_u *NotificationUpdateOne) SetNillableUpdatedBy(v *string) *NotificationUp
 // ClearUpdatedBy clears the value of the "updated_by" field.
 func (_u *NotificationUpdateOne) ClearUpdatedBy() *NotificationUpdateOne {
 	_u.mutation.ClearUpdatedBy()
-	return _u
-}
-
-// SetDeletedAt sets the "deleted_at" field.
-func (_u *NotificationUpdateOne) SetDeletedAt(v time.Time) *NotificationUpdateOne {
-	_u.mutation.SetDeletedAt(v)
-	return _u
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableDeletedAt(v *time.Time) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetDeletedAt(*v)
-	}
-	return _u
-}
-
-// ClearDeletedAt clears the value of the "deleted_at" field.
-func (_u *NotificationUpdateOne) ClearDeletedAt() *NotificationUpdateOne {
-	_u.mutation.ClearDeletedAt()
-	return _u
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_u *NotificationUpdateOne) SetDeletedBy(v string) *NotificationUpdateOne {
-	_u.mutation.SetDeletedBy(v)
-	return _u
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_u *NotificationUpdateOne) SetNillableDeletedBy(v *string) *NotificationUpdateOne {
-	if v != nil {
-		_u.SetDeletedBy(*v)
-	}
-	return _u
-}
-
-// ClearDeletedBy clears the value of the "deleted_by" field.
-func (_u *NotificationUpdateOne) ClearDeletedBy() *NotificationUpdateOne {
-	_u.mutation.ClearDeletedBy()
 	return _u
 }
 
@@ -951,18 +859,6 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	}
 	if _u.mutation.UpdatedByCleared() {
 		_spec.ClearField(notification.FieldUpdatedBy, field.TypeString)
-	}
-	if value, ok := _u.mutation.DeletedAt(); ok {
-		_spec.SetField(notification.FieldDeletedAt, field.TypeTime, value)
-	}
-	if _u.mutation.DeletedAtCleared() {
-		_spec.ClearField(notification.FieldDeletedAt, field.TypeTime)
-	}
-	if value, ok := _u.mutation.DeletedBy(); ok {
-		_spec.SetField(notification.FieldDeletedBy, field.TypeString, value)
-	}
-	if _u.mutation.DeletedByCleared() {
-		_spec.ClearField(notification.FieldDeletedBy, field.TypeString)
 	}
 	if value, ok := _u.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)

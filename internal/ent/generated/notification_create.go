@@ -80,34 +80,6 @@ func (_c *NotificationCreate) SetNillableUpdatedBy(v *string) *NotificationCreat
 	return _c
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (_c *NotificationCreate) SetDeletedAt(v time.Time) *NotificationCreate {
-	_c.mutation.SetDeletedAt(v)
-	return _c
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableDeletedAt(v *time.Time) *NotificationCreate {
-	if v != nil {
-		_c.SetDeletedAt(*v)
-	}
-	return _c
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_c *NotificationCreate) SetDeletedBy(v string) *NotificationCreate {
-	_c.mutation.SetDeletedBy(v)
-	return _c
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableDeletedBy(v *string) *NotificationCreate {
-	if v != nil {
-		_c.SetDeletedBy(*v)
-	}
-	return _c
-}
-
 // SetTags sets the "tags" field.
 func (_c *NotificationCreate) SetTags(v []string) *NotificationCreate {
 	_c.mutation.SetTags(v)
@@ -371,14 +343,6 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.UpdatedBy(); ok {
 		_spec.SetField(notification.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
-	}
-	if value, ok := _c.mutation.DeletedAt(); ok {
-		_spec.SetField(notification.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := _c.mutation.DeletedBy(); ok {
-		_spec.SetField(notification.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
 	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
