@@ -228,4 +228,3 @@ func (rc *ruleCoordinator) resolveProviderWithBuilder(provider storage.ProviderT
 		Config:  resolved.Config,
 	}, nil
 }
-
