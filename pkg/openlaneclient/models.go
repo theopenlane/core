@@ -27,6 +27,10 @@ type APIToken struct {
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
+	// public identifier for the token (used to lookup token record)
+	TokenPublicID *string `json:"tokenPublicID,omitempty"`
+	// secret portion of the token key material (stored for verification by token manager)
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
@@ -205,6 +209,38 @@ type APITokenWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// token_public_id field predicates
+	TokenPublicID             *string  `json:"tokenPublicID,omitempty"`
+	TokenPublicIdneq          *string  `json:"tokenPublicIDNEQ,omitempty"`
+	TokenPublicIDIn           []string `json:"tokenPublicIDIn,omitempty"`
+	TokenPublicIDNotIn        []string `json:"tokenPublicIDNotIn,omitempty"`
+	TokenPublicIdgt           *string  `json:"tokenPublicIDGT,omitempty"`
+	TokenPublicIdgte          *string  `json:"tokenPublicIDGTE,omitempty"`
+	TokenPublicIdlt           *string  `json:"tokenPublicIDLT,omitempty"`
+	TokenPublicIdlte          *string  `json:"tokenPublicIDLTE,omitempty"`
+	TokenPublicIDContains     *string  `json:"tokenPublicIDContains,omitempty"`
+	TokenPublicIDHasPrefix    *string  `json:"tokenPublicIDHasPrefix,omitempty"`
+	TokenPublicIDHasSuffix    *string  `json:"tokenPublicIDHasSuffix,omitempty"`
+	TokenPublicIDIsNil        *bool    `json:"tokenPublicIDIsNil,omitempty"`
+	TokenPublicIDNotNil       *bool    `json:"tokenPublicIDNotNil,omitempty"`
+	TokenPublicIDEqualFold    *string  `json:"tokenPublicIDEqualFold,omitempty"`
+	TokenPublicIDContainsFold *string  `json:"tokenPublicIDContainsFold,omitempty"`
+	// token_secret field predicates
+	TokenSecret             *string  `json:"tokenSecret,omitempty"`
+	TokenSecretNeq          *string  `json:"tokenSecretNEQ,omitempty"`
+	TokenSecretIn           []string `json:"tokenSecretIn,omitempty"`
+	TokenSecretNotIn        []string `json:"tokenSecretNotIn,omitempty"`
+	TokenSecretGt           *string  `json:"tokenSecretGT,omitempty"`
+	TokenSecretGte          *string  `json:"tokenSecretGTE,omitempty"`
+	TokenSecretLt           *string  `json:"tokenSecretLT,omitempty"`
+	TokenSecretLte          *string  `json:"tokenSecretLTE,omitempty"`
+	TokenSecretContains     *string  `json:"tokenSecretContains,omitempty"`
+	TokenSecretHasPrefix    *string  `json:"tokenSecretHasPrefix,omitempty"`
+	TokenSecretHasSuffix    *string  `json:"tokenSecretHasSuffix,omitempty"`
+	TokenSecretIsNil        *bool    `json:"tokenSecretIsNil,omitempty"`
+	TokenSecretNotNil       *bool    `json:"tokenSecretNotNil,omitempty"`
+	TokenSecretEqualFold    *string  `json:"tokenSecretEqualFold,omitempty"`
+	TokenSecretContainsFold *string  `json:"tokenSecretContainsFold,omitempty"`
 	// expires_at field predicates
 	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
 	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`
@@ -6273,6 +6309,10 @@ type CreateAPITokenInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name associated with the token
 	Name string `json:"name"`
+	// public identifier for the token (used to lookup token record)
+	TokenPublicID *string `json:"tokenPublicID,omitempty"`
+	// secret portion of the token key material (stored for verification by token manager)
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
@@ -7566,6 +7606,10 @@ type CreatePersonalAccessTokenInput struct {
 	Tags []string `json:"tags,omitempty"`
 	// the name associated with the token
 	Name string `json:"name"`
+	// public identifier for the token (used to lookup token record)
+	TokenPublicID *string `json:"tokenPublicID,omitempty"`
+	// secret portion of the token key material (stored for verification by token manager)
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
@@ -25174,6 +25218,10 @@ type PersonalAccessToken struct {
 	// the name associated with the token
 	Name  string `json:"name"`
 	Token string `json:"token"`
+	// public identifier for the token (used to lookup token record)
+	TokenPublicID *string `json:"tokenPublicID,omitempty"`
+	// secret portion of the token key material (stored for verification by token manager)
+	TokenSecret *string `json:"tokenSecret,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expiresAt,omitempty"`
 	// a description of the token's purpose
@@ -25332,6 +25380,38 @@ type PersonalAccessTokenWhereInput struct {
 	NameHasSuffix    *string  `json:"nameHasSuffix,omitempty"`
 	NameEqualFold    *string  `json:"nameEqualFold,omitempty"`
 	NameContainsFold *string  `json:"nameContainsFold,omitempty"`
+	// token_public_id field predicates
+	TokenPublicID             *string  `json:"tokenPublicID,omitempty"`
+	TokenPublicIdneq          *string  `json:"tokenPublicIDNEQ,omitempty"`
+	TokenPublicIDIn           []string `json:"tokenPublicIDIn,omitempty"`
+	TokenPublicIDNotIn        []string `json:"tokenPublicIDNotIn,omitempty"`
+	TokenPublicIdgt           *string  `json:"tokenPublicIDGT,omitempty"`
+	TokenPublicIdgte          *string  `json:"tokenPublicIDGTE,omitempty"`
+	TokenPublicIdlt           *string  `json:"tokenPublicIDLT,omitempty"`
+	TokenPublicIdlte          *string  `json:"tokenPublicIDLTE,omitempty"`
+	TokenPublicIDContains     *string  `json:"tokenPublicIDContains,omitempty"`
+	TokenPublicIDHasPrefix    *string  `json:"tokenPublicIDHasPrefix,omitempty"`
+	TokenPublicIDHasSuffix    *string  `json:"tokenPublicIDHasSuffix,omitempty"`
+	TokenPublicIDIsNil        *bool    `json:"tokenPublicIDIsNil,omitempty"`
+	TokenPublicIDNotNil       *bool    `json:"tokenPublicIDNotNil,omitempty"`
+	TokenPublicIDEqualFold    *string  `json:"tokenPublicIDEqualFold,omitempty"`
+	TokenPublicIDContainsFold *string  `json:"tokenPublicIDContainsFold,omitempty"`
+	// token_secret field predicates
+	TokenSecret             *string  `json:"tokenSecret,omitempty"`
+	TokenSecretNeq          *string  `json:"tokenSecretNEQ,omitempty"`
+	TokenSecretIn           []string `json:"tokenSecretIn,omitempty"`
+	TokenSecretNotIn        []string `json:"tokenSecretNotIn,omitempty"`
+	TokenSecretGt           *string  `json:"tokenSecretGT,omitempty"`
+	TokenSecretGte          *string  `json:"tokenSecretGTE,omitempty"`
+	TokenSecretLt           *string  `json:"tokenSecretLT,omitempty"`
+	TokenSecretLte          *string  `json:"tokenSecretLTE,omitempty"`
+	TokenSecretContains     *string  `json:"tokenSecretContains,omitempty"`
+	TokenSecretHasPrefix    *string  `json:"tokenSecretHasPrefix,omitempty"`
+	TokenSecretHasSuffix    *string  `json:"tokenSecretHasSuffix,omitempty"`
+	TokenSecretIsNil        *bool    `json:"tokenSecretIsNil,omitempty"`
+	TokenSecretNotNil       *bool    `json:"tokenSecretNotNil,omitempty"`
+	TokenSecretEqualFold    *string  `json:"tokenSecretEqualFold,omitempty"`
+	TokenSecretContainsFold *string  `json:"tokenSecretContainsFold,omitempty"`
 	// expires_at field predicates
 	ExpiresAt       *time.Time   `json:"expiresAt,omitempty"`
 	ExpiresAtNeq    *time.Time   `json:"expiresAtNEQ,omitempty"`

@@ -40,6 +40,10 @@ type APIToken struct {
 	Name string `json:"name,omitempty"`
 	// Token holds the value of the "token" field.
 	Token string `json:"token,omitempty"`
+	// public identifier for the token (used to lookup token record)
+	TokenPublicID *string `json:"token_public_id,omitempty"`
+	// secret portion of the token key material (stored for verification by token manager)
+	TokenSecret *string `json:"token_secret,omitempty"`
 	// when the token expires
 	ExpiresAt *time.Time `json:"expires_at,omitempty"`
 	// a description of the token's purpose
@@ -95,7 +99,7 @@ func (*APIToken) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case apitoken.FieldIsActive:
 			values[i] = new(sql.NullBool)
-		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldDescription, apitoken.FieldRevokedReason, apitoken.FieldRevokedBy:
+		case apitoken.FieldID, apitoken.FieldCreatedBy, apitoken.FieldUpdatedBy, apitoken.FieldDeletedBy, apitoken.FieldOwnerID, apitoken.FieldName, apitoken.FieldToken, apitoken.FieldTokenPublicID, apitoken.FieldTokenSecret, apitoken.FieldDescription, apitoken.FieldRevokedReason, apitoken.FieldRevokedBy:
 			values[i] = new(sql.NullString)
 		case apitoken.FieldCreatedAt, apitoken.FieldUpdatedAt, apitoken.FieldDeletedAt, apitoken.FieldExpiresAt, apitoken.FieldLastUsedAt, apitoken.FieldRevokedAt:
 			values[i] = new(sql.NullTime)
@@ -181,6 +185,20 @@ func (_m *APIToken) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field token", values[i])
 			} else if value.Valid {
 				_m.Token = value.String
+			}
+		case apitoken.FieldTokenPublicID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token_public_id", values[i])
+			} else if value.Valid {
+				_m.TokenPublicID = new(string)
+				*_m.TokenPublicID = value.String
+			}
+		case apitoken.FieldTokenSecret:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field token_secret", values[i])
+			} else if value.Valid {
+				_m.TokenSecret = new(string)
+				*_m.TokenSecret = value.String
 			}
 		case apitoken.FieldExpiresAt:
 			if value, ok := values[i].(*sql.NullTime); !ok {
@@ -316,6 +334,16 @@ func (_m *APIToken) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("token=")
 	builder.WriteString(_m.Token)
+	builder.WriteString(", ")
+	if v := _m.TokenPublicID; v != nil {
+		builder.WriteString("token_public_id=")
+		builder.WriteString(*v)
+	}
+	builder.WriteString(", ")
+	if v := _m.TokenSecret; v != nil {
+		builder.WriteString("token_secret=")
+		builder.WriteString(*v)
+	}
 	builder.WriteString(", ")
 	if v := _m.ExpiresAt; v != nil {
 		builder.WriteString("expires_at=")

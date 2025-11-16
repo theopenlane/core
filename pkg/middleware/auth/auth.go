@@ -294,13 +294,13 @@ func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string)
 	ctx = privacy.DecisionContext(ctx, privacy.Allow)
 
 	// check if the token is a personal access token
-	au, id, err := isValidPersonalAccessToken(ctx, conf.DBClient, token, orgFromHeader)
+	au, id, err := isValidPersonalAccessToken(ctx, conf, token, orgFromHeader)
 	if err == nil {
 		return au, id, nil
 	}
 
 	// check if the token is an API token
-	au, id, err = isValidAPIToken(ctx, conf.DBClient, token)
+	au, id, err = isValidAPIToken(ctx, conf, token)
 	if err == nil {
 		return au, id, nil
 	}
@@ -309,9 +309,93 @@ func checkToken(ctx context.Context, conf *Options, token, orgFromHeader string)
 }
 
 // isValidPersonalAccessToken checks if the provided token is a valid personal access token and returns the authenticated user
-func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
+func isValidPersonalAccessToken(ctx context.Context, conf *Options,
 	token, orgFromHeader string) (*auth.AuthenticatedUser, string, error) {
-	pat, err := fetchPATFunc(ctx, dbClient, token)
+
+	// If TokenManager is configured, use it to verify the token and obtain the token ID
+	if conf != nil && conf.TokenManager != nil {
+		// VerifyAPIToken now expects token, publicID, secret and optional options.
+		// Pass empty publicID/secret here; the TokenManager will parse the provided
+		// token string itself. It returns a ulid.ULID value, so convert to string
+		// when using with ent ID predicates.
+		tokenULID, err := conf.TokenManager.VerifyAPIToken(token, "", "")
+		if err != nil {
+			return nil, "", err
+		}
+
+		tokenID := tokenULID.String()
+
+		pat, err := conf.DBClient.PersonalAccessToken.Query().Where(personalaccesstoken.ID(tokenID)).
+			WithOwner().WithOrganizations().Only(privacy.DecisionContext(ctx, privacy.Allow))
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, "", rout.ErrInvalidCredentials
+			}
+
+			return nil, "", err
+		}
+
+		// replace pat variable below by reusing existing logic
+		// continue with validation below
+		// (we now have pat)
+		// check if the token has expired
+		if pat.ExpiresAt != nil && pat.ExpiresAt.Before(time.Now()) {
+			return nil, "", rout.ErrExpiredCredentials
+		}
+
+		// gather the authorized organization IDs
+		var orgIDs []string
+
+		orgs := pat.Edges.Organizations
+
+		if len(orgs) == 0 {
+			// an access token must have at least one organization to be used
+			return nil, "", rout.ErrInvalidCredentials
+		}
+
+		for _, org := range orgs {
+			enforced, err := isSSOEnforcedFunc(ctx, conf.DBClient, org.ID)
+			if err != nil {
+				return nil, "", err
+			}
+
+			if enforced {
+				authorized, err := isPATSSOAuthorizedFunc(ctx, conf.DBClient, pat.ID, org.ID)
+				if err != nil {
+					return nil, "", err
+				}
+
+				if !authorized {
+					return nil, "", ErrTokenSSORequired
+				}
+			}
+
+			orgIDs = append(orgIDs, org.ID)
+		}
+
+		systemAdmin, err := isSystemAdminFunc(ctx, conf.DBClient, pat.OwnerID, auth.UserSubjectType)
+		if err != nil {
+			return nil, "", err
+		}
+
+		authUser := &auth.AuthenticatedUser{
+			SubjectID:          pat.OwnerID,
+			SubjectName:        getSubjectName(pat.Edges.Owner),
+			SubjectEmail:       pat.Edges.Owner.Email,
+			OrganizationIDs:    orgIDs,
+			AuthenticationType: auth.PATAuthentication,
+			IsSystemAdmin:      systemAdmin,
+		}
+
+		if slices.Contains(orgIDs, orgFromHeader) {
+			authUser.OrganizationID = orgFromHeader
+		}
+
+		return authUser, pat.ID, nil
+	}
+
+	// fallback: TokenManager not configured; verify by matching stored token value
+	pat, err := fetchPATFunc(ctx, conf.DBClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -332,13 +416,13 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	}
 
 	for _, org := range orgs {
-		enforced, err := isSSOEnforcedFunc(ctx, dbClient, org.ID)
+		enforced, err := isSSOEnforcedFunc(ctx, conf.DBClient, org.ID)
 		if err != nil {
 			return nil, "", err
 		}
 
 		if enforced {
-			authorized, err := isPATSSOAuthorizedFunc(ctx, dbClient, pat.ID, org.ID)
+			authorized, err := isPATSSOAuthorizedFunc(ctx, conf.DBClient, pat.ID, org.ID)
 			if err != nil {
 				return nil, "", err
 			}
@@ -351,7 +435,7 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 		orgIDs = append(orgIDs, org.ID)
 	}
 
-	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, pat.OwnerID, auth.UserSubjectType)
+	systemAdmin, err := isSystemAdminFunc(ctx, conf.DBClient, pat.OwnerID, auth.UserSubjectType)
 	if err != nil {
 		return nil, "", err
 	}
@@ -372,8 +456,59 @@ func isValidPersonalAccessToken(ctx context.Context, dbClient *ent.Client,
 	return authUser, pat.ID, nil
 }
 
-func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*auth.AuthenticatedUser, string, error) {
-	t, err := fetchAPITokenFunc(ctx, dbClient, token)
+func isValidAPIToken(ctx context.Context, conf *Options, token string) (*auth.AuthenticatedUser, string, error) {
+	// If TokenManager is configured, use it to verify the token and obtain the token ID
+	if conf != nil && conf.TokenManager != nil {
+		tokenULID, err := conf.TokenManager.VerifyAPIToken(token, "", "")
+		if err != nil {
+			return nil, "", err
+		}
+
+		tokenID := tokenULID.String()
+
+		t, err := conf.DBClient.APIToken.Query().Where(apitoken.ID(tokenID)).Only(privacy.DecisionContext(ctx, privacy.Allow))
+		if err != nil {
+			if ent.IsNotFound(err) {
+				return nil, "", rout.ErrInvalidCredentials
+			}
+
+			return nil, "", err
+		}
+
+		// check if the token has expired
+		if t.ExpiresAt != nil && t.ExpiresAt.Before(time.Now()) {
+			return nil, "", rout.ErrExpiredCredentials
+		}
+
+		enforced, err := isSSOEnforcedFunc(ctx, conf.DBClient, t.OwnerID)
+		if err != nil {
+			return nil, "", err
+		}
+
+		if enforced {
+			if t.SSOAuthorizations == nil || t.SSOAuthorizations[t.OwnerID].IsZero() {
+				return nil, "", ErrTokenSSORequired
+			}
+		}
+
+		systemAdmin, err := isSystemAdminFunc(ctx, conf.DBClient, t.OwnerID, auth.ServiceSubjectType)
+		if err != nil {
+			return nil, "", err
+		}
+
+		return &auth.AuthenticatedUser{
+			SubjectID:          t.ID,
+			SubjectName:        fmt.Sprintf("service: %s", t.Name),
+			SubjectEmail:       "", // no email for service accounts
+			OrganizationID:     t.OwnerID,
+			OrganizationIDs:    []string{t.OwnerID},
+			AuthenticationType: auth.APITokenAuthentication,
+			IsSystemAdmin:      systemAdmin,
+		}, t.ID, nil
+	}
+
+	// fallback: TokenManager not configured; verify by matching stored token value
+	t, err := fetchAPITokenFunc(ctx, conf.DBClient, token)
 	if err != nil {
 		return nil, "", err
 	}
@@ -383,7 +518,7 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		return nil, "", rout.ErrExpiredCredentials
 	}
 
-	enforced, err := isSSOEnforcedFunc(ctx, dbClient, t.OwnerID)
+	enforced, err := isSSOEnforcedFunc(ctx, conf.DBClient, t.OwnerID)
 	if err != nil {
 		return nil, "", err
 	}
@@ -394,7 +529,7 @@ func isValidAPIToken(ctx context.Context, dbClient *ent.Client, token string) (*
 		}
 	}
 
-	systemAdmin, err := isSystemAdminFunc(ctx, dbClient, t.OwnerID, auth.ServiceSubjectType)
+	systemAdmin, err := isSystemAdminFunc(ctx, conf.DBClient, t.OwnerID, auth.ServiceSubjectType)
 	if err != nil {
 		return nil, "", err
 	}

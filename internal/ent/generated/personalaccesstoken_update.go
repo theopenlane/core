@@ -529,6 +529,12 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
 	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenPublicID, field.TypeString)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenSecret, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
 	}
@@ -1261,6 +1267,12 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenPublicID, field.TypeString)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)

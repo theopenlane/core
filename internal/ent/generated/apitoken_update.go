@@ -463,6 +463,12 @@ func (_u *APITokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
 	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(apitoken.FieldTokenPublicID, field.TypeString)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(apitoken.FieldTokenSecret, field.TypeString)
+	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)
 	}
@@ -1035,6 +1041,12 @@ func (_u *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, err 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(apitoken.FieldTokenPublicID, field.TypeString)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(apitoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)

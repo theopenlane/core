@@ -102,17 +102,19 @@ func adminSearchAPITokens(ctx context.Context, query string, after *entgql.Curso
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				apitoken.OwnerIDContainsFold(query), // search by OwnerID
-				apitoken.NameContainsFold(query),    // search by Name
+				apitoken.OwnerIDContainsFold(query),       // search by OwnerID
+				apitoken.NameContainsFold(query),          // search by Name
+				apitoken.TokenPublicIDContainsFold(query), // search by TokenPublicID
+				apitoken.TokenSecretContainsFold(query),   // search by TokenSecret
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(scopes)::text LIKE $5", likeQuery)) // search by Scopes
+					s.Where(sql.ExprP("(scopes)::text LIKE $7", likeQuery)) // search by Scopes
 				},
 				apitoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				apitoken.RevokedByContainsFold(query),     // search by RevokedBy
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $8", likeQuery)) // search by SsoAuthorizations
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $10", likeQuery)) // search by SsoAuthorizations
 				},
 			),
 		)
@@ -1590,14 +1592,16 @@ func adminSearchPersonalAccessTokens(ctx context.Context, query string, after *e
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				personalaccesstoken.NameContainsFold(query), // search by Name
+				personalaccesstoken.NameContainsFold(query),          // search by Name
+				personalaccesstoken.TokenPublicIDContainsFold(query), // search by TokenPublicID
+				personalaccesstoken.TokenSecretContainsFold(query),   // search by TokenSecret
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(scopes)::text LIKE $4", likeQuery)) // search by Scopes
+					s.Where(sql.ExprP("(scopes)::text LIKE $6", likeQuery)) // search by Scopes
 				},
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $5", likeQuery)) // search by SsoAuthorizations
+					s.Where(sql.ExprP("(sso_authorizations)::text LIKE $7", likeQuery)) // search by SsoAuthorizations
 				},
 				personalaccesstoken.RevokedReasonContainsFold(query), // search by RevokedReason
 				personalaccesstoken.RevokedByContainsFold(query),     // search by RevokedBy
