@@ -62,7 +62,7 @@ type ExportContentArgs struct {
 // ExportWorkerConfig configuration for the export content worker
 type ExportWorkerConfig struct {
 	// embed OpenlaneConfig to reuse validation and client creation logic
-	OpenlaneConfig `koanf:",squash" json:",squash" jsonschema:"description=the openlane API configuration for exporting"`
+	OpenlaneConfig `koanf:",squash" jsonschema:"description=the openlane API configuration for exporting"`
 
 	Enabled bool `koanf:"enabled" json:"enabled" jsonschema:"required description=whether the export worker is enabled"`
 }
