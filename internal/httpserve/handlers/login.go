@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 
 	echo "github.com/theopenlane/echox"
@@ -40,14 +41,14 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Err(err).Msg("unable to find user by email")
 
-		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed, openapi)
 	}
 
 	if user.Edges.Setting.Status != enums.UserStatusActive {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("user not active")
 
-		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed, openapi)
 	}
 
 	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
@@ -61,7 +62,7 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("no password set for user")
 
-		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed, openapi)
 	}
 
 	// verify the password is correct
@@ -70,14 +71,14 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("invalid password provided during login")
 
-		return h.BadRequest(ctx, rout.ErrInvalidCredentials, openapi)
+		return h.BadRequest(ctx, ErrLoginFailed, openapi)
 	}
 
 	if !user.Edges.Setting.EmailConfirmed {
 		metrics.RecordLogin(false)
 		logx.FromContext(reqCtx).Info().Str("email", req.Username).Msg("user email not verified, unable to login")
 
-		return h.BadRequest(ctx, auth.ErrUnverifiedUser, openapi)
+		return h.BadRequest(ctx, fmt.Errorf("%w: please check your email and verify your account", auth.ErrUnverifiedUser), openapi)
 	}
 
 	// set context for remaining request based on logged in user
@@ -88,13 +89,13 @@ func (h *Handler) LoginHandler(ctx echo.Context, openapi *OpenAPIContext) error 
 	if err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to create new auth session")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrLoginFailed, openapi)
 	}
 
 	if err := h.updateUserLastSeen(userCtx, user.ID, enums.AuthProviderCredentials); err != nil {
 		logx.FromContext(reqCtx).Error().Err(err).Msg("unable to update last seen")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrLoginFailed, openapi)
 	}
 
 	// check if orgStatus is enforced, but user has not yet configured

@@ -39,7 +39,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	user, err := h.getUserDetailsByID(reqCtx, claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			return h.NotFound(ctx, ErrNoAuthUser, openapi)
+			return h.NotFound(ctx, auth.ErrNoAuthUser, openapi)
 		}
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
@@ -47,7 +47,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 
 	// ensure the user is still active
 	if user.Edges.Setting.Status != "ACTIVE" {
-		return h.NotFound(ctx, ErrNoAuthUser, openapi)
+		return h.NotFound(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	// get modules on refresh

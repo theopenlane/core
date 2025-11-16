@@ -13,6 +13,7 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
+	"github.com/theopenlane/iam/auth"
 	provider "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
@@ -181,7 +182,7 @@ func (h *Handler) FinishWebauthnRegistration(ctx echo.Context, openapi *OpenAPIC
 
 	wd, ok := webauthnData.(webauthn.SessionData)
 	if !ok {
-		return h.BadRequest(ctx, ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	user := &provider.User{
@@ -309,7 +310,7 @@ func (h *Handler) FinishWebauthnLogin(ctx echo.Context, openapi *OpenAPIContext)
 	if !ok {
 		metrics.RecordLogin(false)
 
-		return h.BadRequest(ctx, ErrNoAuthUser, openapi)
+		return h.BadRequest(ctx, auth.ErrNoAuthUser, openapi)
 	}
 
 	data, err := json.Marshal(requestData)
