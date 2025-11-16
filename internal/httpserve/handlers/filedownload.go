@@ -134,7 +134,7 @@ func (h *Handler) FileDownloadHandler(ctx echo.Context, openapi *OpenAPIContext)
 		}
 
 		logx.FromContext(requestCtx).Error().Err(err).Msg("error downloading file from storage")
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	headers := ctx.Response().Header()

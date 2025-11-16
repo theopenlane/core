@@ -119,7 +119,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		webhookResponseCounter.WithLabelValues("payload_exceeded", "500").Inc()
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to read request body")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	logx.FromContext(reqCtx).Info().Msgf("version: %s", webhookReq.APIVersion)
@@ -165,7 +165,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 		webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to check for event ID")
 
-		return h.InternalServerError(ctx, err, openapi)
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	if !exists {
@@ -174,7 +174,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to create event")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
 		logx.FromContext(reqCtx).Debug().Msgf("internal event: %v", meowevent)
@@ -183,7 +183,7 @@ func (h *Handler) WebhookReceiverHandler(ctx echo.Context, openapi *OpenAPIConte
 			webhookResponseCounter.WithLabelValues(string(event.Type), "500").Inc()
 			logx.FromContext(reqCtx).Error().Str("event", string(event.Type)).Err(err).Msg("failed to handle event")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 	}
 

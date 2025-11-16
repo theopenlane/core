@@ -130,7 +130,7 @@ func (h *Handler) RegisterHandler(ctx echo.Context, openapi *OpenAPIContext) err
 		if err != nil {
 			logx.FromContext(reqCtx).Error().Err(err).Msg("error storing email verification token")
 
-			return h.InternalServerError(ctx, err, openapi)
+			return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 		}
 
 		// only return the token in development
