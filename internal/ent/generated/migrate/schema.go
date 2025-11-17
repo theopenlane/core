@@ -3867,14 +3867,6 @@ var (
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "notification_owner_id",
-				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[13]},
-				Annotation: &entsql.IndexAnnotation{
-					Where: "deleted_at is NULL",
-				},
-			},
-			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
 				Columns: []*schema.Column{NotificationsColumns[14], NotificationsColumns[11], NotificationsColumns[13]},
