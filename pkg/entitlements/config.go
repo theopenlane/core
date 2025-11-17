@@ -4,23 +4,23 @@ type Config struct {
 	// Enabled determines if the entitlements service is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// PrivateStripeKey is the key for the stripe service
-	PrivateStripeKey string `json:"privateStripeKey" koanf:"privateStripeKey" default:"" sensitive:"true"`
+	PrivateStripeKey string `json:"privatestripekey" koanf:"privatestripekey" default:"" sensitive:"true"`
 	// StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)
-	StripeWebhookSecret string `json:"stripeWebhookSecret" koanf:"stripeWebhookSecret" default:"" sensitive:"true"`
+	StripeWebhookSecret string `json:"stripewebhooksecret" koanf:"stripewebhooksecret" default:"" sensitive:"true"`
 	// StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback
-	StripeWebhookSecrets map[string]string `json:"stripeWebhookSecrets" koanf:"stripeWebhookSecrets" sensitive:"true"`
+	StripeWebhookSecrets map[string]string `json:"stripewebhooksecrets" koanf:"stripewebhooksecrets" sensitive:"true"`
 	// StripeWebhookURL is the URL for the stripe webhook
-	StripeWebhookURL string `json:"stripeWebhookURL" koanf:"stripeWebhookURL" default:"https://api.theopenlane.io/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
+	StripeWebhookURL string `json:"stripewebhookurl" koanf:"stripewebhookurl" default:"https://api.theopenlane.io/stripe/webhook" domain:"inherit" domainPrefix:"https://api" domainSuffix:"/v1/stripe/webhook"`
 	// StripeBillingPortalSuccessURL
-	StripeBillingPortalSuccessURL string `json:"stripeBillingPortalSuccessURL" koanf:"stripeBillingPortalSuccessURL" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
+	StripeBillingPortalSuccessURL string `json:"stripebillingportalsuccessurl" koanf:"stripebillingportalsuccessurl" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
 	// StripeCancellationReturnURL is the URL for the stripe cancellation return
-	StripeCancellationReturnURL string `json:"stripeCancellationReturnURL" koanf:"stripeCancellationReturnURL" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
+	StripeCancellationReturnURL string `json:"stripecancellationreturnurl" koanf:"stripecancellationreturnurl" default:"https://console.theopenlane.io/organization-settings/billing" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/billing"`
 	// StripeWebhookEvents is the list of events to register when creating a webhook endpoint
-	StripeWebhookEvents []string `json:"stripeWebhookEvents" koanf:"stripeWebhookEvents"`
+	StripeWebhookEvents []string `json:"stripewebhookevents" koanf:"stripewebhookevents"`
 	// StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-	StripeWebhookAPIVersion string `json:"stripeWebhookAPIVersion" koanf:"stripeWebhookAPIVersion" default:"2025_10_29_CLOVER"`
+	StripeWebhookAPIVersion string `json:"stripewebhookapiversion" koanf:"stripewebhookapiversion" default:"2025_10_29_CLOVER"`
 	// StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-	StripeWebhookDiscardAPIVersion string `json:"stripeWebhookDiscardAPIVersion" koanf:"stripeWebhookDiscardAPIVersion" default:""`
+	StripeWebhookDiscardAPIVersion string `json:"stripewebhookdiscardapiversion" koanf:"stripewebhookdiscardapiversion" default:""`
 }
 
 type ConfigOpts func(*Config)

@@ -3,21 +3,22 @@ server:
   debug: true
   pretty: true
   dev: true
+  complexitylimit: 200
   graphPool:
     maxWorkers: 10
-  csrfProtection:
+  csrfprotection:
     enabled: false
     header: X-CSRF-Token
     cookie: ol.csrf-token
     secure: false # set to true in production
-    sameSite: Lax
-    cookiePath: /
-  enableGraphExtensions: true
-  enableGraphSubscriptions: false
-  cacheControl:
+    samesite: Lax
+    cookiepath: /
+  enablegraphextensions: true
+  enablegraphsubscriptions: false
+  cachecontrol:
     enabled: false
   cors:
-    allowOrigins:
+    alloworigins:
       - http://localhost:3001
       - http://localhost:5500
       - https://studio.apollographql.com
@@ -35,14 +36,14 @@ dbx:
 # db settings
 db:
   debug: true
-  driverName: pgx
-  cacheTTL: 10s
-  multiWrite: false
-  migrationProvider: "goose"
-  runMigrations: true
-  enableHistory: true
+  drivername: pgx
+  cachettl: 10s
+  multiwrite: false
+  migrationprovider: "goose"
+  runmigrations: true
+  enablehistory: true
 
-jobQueue:
+jobqueue:
 
 # auth settings
 auth:
@@ -50,71 +51,71 @@ auth:
   token:
     kid: "02GGBS68AM12178M0REW3CEAFF"
     audience: "http://localhost:17608"
-    refreshAudience: "http://localhost:17608"
+    refreshaudience: "http://localhost:17608"
     issuer: "http://localhost:17608"
     jwksEndpoint: "http://localhost:17608/.well-known/jwks.json"
-  supportedProviders:
+  supportedproviders:
     - google
     - github
   providers:
     google:
-      clientEndpoint: "http://localhost:17608"
-      clientId: "client_id_here.apps.googleusercontent.com"
-      clientSecret: "client_secret_here"
+      clientendpoint: "http://localhost:17608"
+      clientid: "client_id_here.apps.googleusercontent.com"
+      clientsecret: "client_secret_here"
       scopes:
         - email
         - profile
     github:
-      clientEndpoint: "http://localhost:17608"
-      clientId: "client_id_here"
-      clientSecret: "client_secret_here"
+      clientendpoint: "http://localhost:17608"
+      clientid: "client_id_here"
+      clientsecret: "client_secret_here"
       scopes:
         - user:email
         - read:user
     webauthn:
       debug: false
       enabled: true
-      relyingPartyId: "localhost"
-      requestOrigins:
+      relyingpartyid: "localhost"
+      requestorigins:
         - "http://localhost:3001"
 
 # totp settings
 totp:
-  codeLength: 6
+  codelength: 6
   enabled: true
   issuer: "theopenlane.io"
-  recoveryCodeCount: 16
-  recoveryCodeLength: 8
+  recoverycodecount: 16
+  recoverycodelength: 8
   redis: true
   secret: "4af7d1842cef4aa7b098cb68361002df"
 
 # authz settings
 authz:
   enabled: true
-  storeName: openlane
-  hostUrl: http://localhost:8080
+  storename: openlane
+  hosturl: http://localhost:8080
   # set to true in dev so the model is updated when changes happen; the container needs to be restarted to see the changes
-  createNewModel: true
+  createnewmodel: true
   credentials:
-    apiToken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
+    apitoken: "QKwHEmWX99RnFh28eSRJ3GWlfb2FQkL7toh1GJpzch1mMkVeMg"
 
 # session settings
 sessions:
-  encryptionKey: encryptionsecret
-  signingKey: my-signing-secret
-  httpOnly: true
-  sameSite: "Lax"
+  encryptionkey: encryptionsecret
+  signingkey: my-signing-secret
+  httponly: true
+  samesite: "Lax"
   secure: false # set to true in production
 
 # email settings
 email:
-  companyAddress: 5150 Broadway St &middot; San Antonio, TX 78209
-  companyName: Openlane
+  companyaddress: 5150 Broadway St &middot; San Antonio, TX 78209
+  companyname: Openlane
   corporation: theopenlane, Inc.
-  fromEmail: no-reply@mail.theopenlane.io
-  supportEmail: support@theopenlane.io
+  fromemail: no-reply@mail.theopenlane.io
+  supportemail: support@theopenlane.io
   urls:
-    verifySubscriber: https://www.theopenlane.io/subscribe
+    verifysubscriber: https://www.theopenlane.io/subscribe
     verify: https://console.theopenlane.io/verify
     reset: https://console.theopenlane.io/password-reset
     invite: https://console.theopenlane.io/invite
@@ -124,83 +125,81 @@ email:
 
 ratelimit:
   enabled: false
-  includeMethod: false
-  includePath: false
-  sendRetryAfterHeader: true
+  includemethod: false
+  includepath: false
+  sendretryafterheader: true
   options:
     - requests: 10
       window: 1s
 
 entConfig:
-  maxSchemaImportSize: 262144
+  maxschemaimportsize: 262144
   modules:
     # this should only be enabled if you have subscriptions enabled as well
     enabled: false
     # this will use the catalog-sandbox.yaml, otherwise it will use catalog.yaml
     # this should allow you to use the sandbox without requiring seeding new price data
-    useSandbox: true
-  entityTypes:
+    usesandbox: true
+  entitytypes:
     - vendor
     - account
 
   windmill:
     enabled: true
-    baseURL: "http://localhost:8090"
+    baseurl: "http://localhost:8090"
     workspace: "test"
     token: "token_here"
-    defaultTimeout: "30s"
-    onFailureScript: ""
-    onSuccessScript: ""
+    defaulttimeout: "30s"
+    onfailurescript: ""
+    onsuccessscript: ""
 
 objectStorage:
-  devMode: true
+  devmode: true
   enabled: true
   providers:
       disk:
           bucket: ""
           credentials:
-              accessKeyID: ""
-              accountID: ""
-              apiToken: ""
-              endpoint: ""
-              projectID: ""
-              secretAccessKey: ""
+            accesskeyid: ""
+            accountid: ""
+            apitoken: ""
+            projectid: ""
+            secretaccesskey: ""
           enabled: false
           endpoint: ""
-          ensureAvailable: false
+          ensureavailable: false
           region: ""
       s3:
           bucket: ""
           credentials:
-              accessKeyID: ""
-              accountID: ""
-              apiToken: ""
+              accesskeyid: ""
+              accountid: ""
+              apitoken: ""
               endpoint: ""
-              projectID: ""
-              secretAccessKey: ""
+              projectid: ""
+              secretaccesskey: ""
           enabled: false
           endpoint: ""
-          ensureAvailable: false
+          ensureavailable: false
           region: ""
 
 subscription:
   enabled: false
-  publicStripeKey: pk_test_redacted
-  privateStripeKey: sk_test_redacted
-  stripeBillingPortalSuccessURL: http://localhost:3001/organization-settings/billing
-  stripeCancellationReturnURL: http://localhost:3001/organization-settings/billing/subscription_canceled
-  stripeWebhookURL: https://localhost:17608/v1/stripe/webhook
-  stripeWebhookSecret: ""
+  privatestripekey: sk_test_redacted
+  stripebillingportalsuccessurl: http://localhost:3001/organization-settings/billing
+  stripecancellationreturnurl: http://localhost:3001/organization-settings/billing/subscription_canceled
+  stripewebhookurl: https://localhost:17608/v1/stripe/webhook
+  stripewebhooksecret: ""
 
-integrationOauthProvider:
-  successRedirectUrl: "http://localhost:3001/organization-settings/integrations"
+integrationoauthprovider:
+  successredirecturl: "http://localhost:3001/organization-settings/integrations"
   github:
-    clientEndpoint: http://localhost:17608
-    clientId: ""
-    clientSecret: ""
+    clientendpoint: http://localhost:17608
+    clientid: ""
+    clientsecret: ""
     scopes: ["read:user", "user:email", "repo"]
   slack:
-    clientEndpoint: http://localhost:17608
-    clientId: ""
-    clientSecret: ""
+    clientendpoint: http://localhost:17608
+    clientid: ""
+    clientsecret: ""
     scopes: ["channels:read", "chat:write", "users:read"]

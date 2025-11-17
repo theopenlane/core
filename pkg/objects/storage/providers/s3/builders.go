@@ -34,8 +34,12 @@ func (b *Builder) Build(_ context.Context, credentials storage.ProviderCredentia
 	cfg := config.Clone()
 	cfg.Credentials = credentials
 
-	if cfg.Bucket == "" || cfg.Region == "" || cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
+	if cfg.Bucket == "" || cfg.Region == "" {
 		return nil, ErrS3CredentialsRequired
+	}
+
+	if cfg.Credentials.AccessKeyID == "" || cfg.Credentials.SecretAccessKey == "" {
+		return nil, ErrS3SecretCredentialRequired
 	}
 
 	provider, err := NewS3Provider(cfg, b.opts...)

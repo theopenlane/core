@@ -90,11 +90,11 @@ type ProviderConfig struct {
 	// Keys are the form field keys that will be processed for uploads
 	Keys []string `json:"keys" koanf:"keys" default:"[uploadFile]"`
 	// MaxSizeMB is the maximum file size allowed in MB
-	MaxSizeMB int64 `json:"maxSizeMB" koanf:"maxSizeMB"`
+	MaxSizeMB int64 `json:"maxsizemb" koanf:"maxsizemb"`
 	// MaxMemoryMB is the maximum memory to use for file uploads in MB
-	MaxMemoryMB int64 `json:"maxMemoryMB" koanf:"maxMemoryMB"`
+	MaxMemoryMB int64 `json:"maxmemorymb" koanf:"maxmemorymb"`
 	// DevMode enables simple file upload handling for local development and testing
-	DevMode bool `json:"devMode" koanf:"devMode" default:"false"`
+	DevMode bool `json:"devmode" koanf:"devmode" default:"false"`
 	// Providers contains configuration for each storage provider
 	Providers Providers `json:"providers" koanf:"providers"`
 }
@@ -103,7 +103,7 @@ type Providers struct {
 	// S3 provider configuration
 	S3 ProviderConfigs `json:"s3" koanf:"s3"`
 	// CloudflareR2 provider configuration
-	CloudflareR2 ProviderConfigs `json:"cloudflareR2" koanf:"cloudflareR2"`
+	CloudflareR2 ProviderConfigs `json:"cloudflarer2" koanf:"cloudflarer2"`
 	// GCS provider configuration
 	GCS ProviderConfigs `json:"gcs" koanf:"gcs"`
 	// Disk provider configuration
@@ -118,7 +118,7 @@ type ProviderConfigs struct {
 	// Enabled indicates if this provider is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// EnsureAvailable enforces provider availability before completing server startup
-	EnsureAvailable bool `json:"ensureAvailable" koanf:"ensureAvailable" default:"false"`
+	EnsureAvailable bool `json:"ensureavailable" koanf:"ensureavailable" default:"false"`
 	// Region for cloud providers
 	Region string `json:"region" koanf:"region"`
 	// Bucket name for cloud providers
@@ -126,9 +126,9 @@ type ProviderConfigs struct {
 	// Endpoint for custom endpoints
 	Endpoint string `json:"endpoint" koanf:"endpoint"`
 	// ProxyPresignEnabled toggles proxy-signed download URL generation
-	ProxyPresignEnabled bool `json:"proxyPresignEnabled" koanf:"proxyPresignEnabled" default:"false"`
+	ProxyPresignEnabled bool `json:"proxypresignenabled" koanf:"proxypresignenabled" default:"false"`
 	// BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-	BaseURL string `json:"baseURL" koanf:"baseURL" default:"http://localhost:17608/v1/files"`
+	BaseURL string `json:"baseurl" koanf:"baseurl" default:"http://localhost:17608/v1/files"`
 	// Credentials contains the credentials for accessing the provider
 	Credentials ProviderCredentials `json:"credentials" koanf:"credentials"`
 }
@@ -136,15 +136,15 @@ type ProviderConfigs struct {
 // ProviderCredentials contains credentials for a storage provider
 type ProviderCredentials struct {
 	// AccessKeyID for cloud providers
-	AccessKeyID string `json:"accessKeyID" koanf:"accessKeyID" sensitive:"true"`
+	AccessKeyID string `json:"accesskeyid" koanf:"accesskeyid" sensitive:"true"`
 	// SecretAccessKey for cloud providers
-	SecretAccessKey string `json:"secretAccessKey" koanf:"secretAccessKey" sensitive:"true"`
+	SecretAccessKey string `json:"secretaccesskey" koanf:"secretaccesskey" sensitive:"true"`
 	// ProjectID for GCS
-	ProjectID string `json:"projectID" koanf:"projectID" sensitive:"true"`
+	ProjectID string `json:"projectid" koanf:"projectid" sensitive:"true"`
 	// AccountID for Cloudflare R2
-	AccountID string `json:"accountID" koanf:"accountID" sensitive:"true"`
+	AccountID string `json:"accountid" koanf:"accountid" sensitive:"true"`
 	// APIToken for Cloudflare R2
-	APIToken string `json:"apiToken" koanf:"apiToken" sensitive:"true"`
+	APIToken string `json:"apitoken" koanf:"apitoken" sensitive:"true"`
 }
 
 // ProviderOption configures runtime provider options

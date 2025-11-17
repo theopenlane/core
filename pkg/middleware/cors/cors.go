@@ -17,9 +17,9 @@ type Config struct {
 	// Prefixes is a map of prefixes to allowed origins
 	Prefixes map[string][]string `json:"prefixes" koanf:"prefixes"`
 	// AllowOrigins is a list of allowed origins
-	AllowOrigins []string `json:"allowOrigins" koanf:"allowOrigins" domain:"inherit" domainPrefix:"https://console,https://docs,https://www"`
+	AllowOrigins []string `json:"alloworigins" koanf:"alloworigins" domain:"inherit" domainPrefix:"https://console,https://docs,https://www"`
 	// CookieInsecure sets the cookie to be insecure
-	CookieInsecure bool `json:"cookieInsecure" koanf:"cookieInsecure"`
+	CookieInsecure bool `json:"cookieinsecure" koanf:"cookieinsecure"`
 }
 
 // DefaultConfig creates a default config

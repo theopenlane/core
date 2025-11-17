@@ -13,13 +13,13 @@ type EmailVerificationConfig struct {
 	// Enabled indicates whether email verification is enabled
 	Enabled bool `json:"enabled" koanf:"enabled" default:"false" description:"enable email verification"`
 	// EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses
-	EnableAutoUpdateDisposable bool `json:"enableAutoUpdateDisposable" koanf:"enableAutoUpdateDisposable" default:"true" description:"automatically update disposable email addresses"`
+	EnableAutoUpdateDisposable bool `json:"enableautoupdatedisposable" koanf:"enableautoupdatedisposable" default:"true" description:"automatically update disposable email addresses"`
 	// EnableGravatarCheck indicates whether to check for Gravatar existence
-	EnableGravatarCheck bool `json:"enableGravatarCheck" koanf:"enableGravatarCheck" default:"true" description:"check for Gravatar existence"`
+	EnableGravatarCheck bool `json:"enablegravatarcheck" koanf:"enablegravatarcheck" default:"true" description:"check for Gravatar existence"`
 	// EnableSMTPCheck indicates whether to check email by smtp
-	EnableSMTPCheck bool `json:"enableSMTPCheck" koanf:"enableSMTPCheck" default:"false" description:"check email by smtp"`
+	EnableSMTPCheck bool `json:"enablesmtpcheck" koanf:"enablesmtpcheck" default:"false" description:"check email by smtp"`
 	// AllowedEmailTypes defines the allowed email types for verification
-	AllowedEmailTypes AllowedEmailTypes `json:"allowedEmailTypes" koanf:"allowedEmailTypes"`
+	AllowedEmailTypes AllowedEmailTypes `json:"allowedemailtypes" koanf:"allowedemailtypes"`
 }
 
 // EmailVerifier is a wrapper around the emailverifier.Verifier with additional configuration

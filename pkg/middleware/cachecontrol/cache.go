@@ -15,9 +15,9 @@ type Config struct {
 	// Skipper defines a function to skip middleware
 	Skipper middleware.Skipper `json:"-" koanf:"-"`
 	// noCacheHeaders is the header <-> match map pair to match in http for entity headers to remove
-	NoCacheHeaders map[string]string `json:"noCacheHeaders" koanf:"noCacheHeaders"`
+	NoCacheHeaders map[string]string `json:"nocacheheaders" koanf:"nocacheheaders"`
 	// etagHeaders is the string of entity headers to remove
-	EtagHeaders []string `json:"etagHeaders" koanf:"etagHeaders"`
+	EtagHeaders []string `json:"etagheaders" koanf:"etagheaders"`
 }
 
 // DefaultConfig is the default configuration of the middleware

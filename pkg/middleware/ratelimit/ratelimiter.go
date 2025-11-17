@@ -32,7 +32,7 @@ type RateOption struct {
 	Expiration time.Duration `json:"expiration" koanf:"expiration"`
 	// FlushInterval defines how frequently expired values are purged from memory.
 	// When unset, FlushInterval defaults to 10s.
-	FlushInterval time.Duration `json:"flushInterval" koanf:"flushInterval"`
+	FlushInterval time.Duration `json:"flushinterval" koanf:"flushinterval"`
 }
 
 // Config defines the configuration settings for the rate limiter middleware.
@@ -45,21 +45,21 @@ type Config struct {
 	Headers []string `json:"headers" koanf:"headers" default:"[True-Client-IP]"`
 	// ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
 	// 0 means the closest client, 1 the proxy behind it, etc.
-	ForwardedIndexFromBehind int `json:"forwardedIndexFromBehind" koanf:"forwardedIndexFromBehind" default:"0"`
+	ForwardedIndexFromBehind int `json:"forwardedindexfrombehind" koanf:"forwardedindexfrombehind" default:"0"`
 	// IncludePath appends the request path to the limiter key when true.
-	IncludePath bool `json:"includePath" koanf:"includePath" default:"false"`
+	IncludePath bool `json:"includepath" koanf:"includepath" default:"false"`
 	// IncludeMethod appends the request method to the limiter key when true.
-	IncludeMethod bool `json:"includeMethod" koanf:"includeMethod" default:"false"`
+	IncludeMethod bool `json:"includemethod" koanf:"includemethod" default:"false"`
 	// KeyPrefix allows scoping the limiter key space with a static prefix.
-	KeyPrefix string `json:"keyPrefix" koanf:"keyPrefix"`
+	KeyPrefix string `json:"keyprefix" koanf:"keyprefix"`
 	// DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
-	DenyStatus int `json:"denyStatus" koanf:"denyStatus" default:"429"`
+	DenyStatus int `json:"denystatus" koanf:"denystatus" default:"429"`
 	// DenyMessage customises the error payload when a rate limit is exceeded.
-	DenyMessage string `json:"denyMessage" koanf:"denyMessage" default:"Too many requests"`
+	DenyMessage string `json:"denymessage" koanf:"denymessage" default:"Too many requests"`
 	// SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
-	SendRetryAfterHeader bool `json:"sendRetryAfterHeader" koanf:"sendRetryAfterHeader" default:"true"`
+	SendRetryAfterHeader bool `json:"sendretryafterheader" koanf:"sendretryafterheader" default:"true"`
 	// DryRun enables logging rate limit decisions without blocking requests.
-	DryRun bool `json:"dryRun" koanf:"dryRun" default:"true"`
+	DryRun bool `json:"dryrun" koanf:"dryrun" default:"true"`
 }
 
 // RateLimiterWithConfig returns a middleware function for rate limiting requests with a supplied config.

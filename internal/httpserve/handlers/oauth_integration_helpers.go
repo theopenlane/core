@@ -16,9 +16,9 @@ import (
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations
 type IntegrationOauthProviderConfig struct {
 	// RedirectURL is the base URL for integration OAuth callbacks
-	RedirectURL string `json:"redirectUrl" koanf:"redirectUrl"`
+	RedirectURL string `json:"redirecturl" koanf:"redirecturl"`
 	// SuccessRedirectURL is the URL to redirect to after successful OAuth integration
-	SuccessRedirectURL string `json:"successRedirectUrl" koanf:"successRedirectUrl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
+	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
 	// Github contains the configuration settings for GitHub integrations
 	Github IntegrationProviderConfig `json:"github" koanf:"github"`
 	// Slack contains the configuration settings for Slack integrations
@@ -28,11 +28,11 @@ type IntegrationOauthProviderConfig struct {
 // IntegrationProviderConfig contains OAuth configuration for a specific integration provider
 type IntegrationProviderConfig struct {
 	// ClientID is the OAuth2 client ID
-	ClientID string `json:"clientId" koanf:"clientId"`
+	ClientID string `json:"clientid" koanf:"clientid"`
 	// ClientSecret is the OAuth2 client secret
-	ClientSecret string `json:"clientSecret" koanf:"clientSecret" sensitive:"true"`
+	ClientSecret string `json:"clientsecret" koanf:"clientsecret" sensitive:"true"`
 	// ClientEndpoint is the base URL for the OAuth endpoints
-	ClientEndpoint string `json:"clientEndpoint" koanf:"clientEndpoint" domain:"inherit" domainPrefix:"https://api"`
+	ClientEndpoint string `json:"clientendpoint" koanf:"clientendpoint" domain:"inherit" domainPrefix:"https://api"`
 	// Scopes are the OAuth2 scopes to request
 	Scopes []string `json:"scopes" koanf:"scopes"`
 }

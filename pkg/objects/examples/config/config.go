@@ -74,7 +74,7 @@ type SimpleS3Config struct {
 	// Download is the destination path for downloaded files
 	Download string `json:"download" koanf:"download" default:"output/downloaded-sample.txt"`
 	// PathStyle determines whether to use path-style addressing
-	PathStyle bool `json:"pathStyle" koanf:"pathstyle" default:"true"`
+	PathStyle bool `json:"pathstyle" koanf:"pathstyle" default:"true"`
 }
 
 // New creates a Config with default values applied

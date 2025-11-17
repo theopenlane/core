@@ -22,13 +22,13 @@ type Config struct {
 	Secure bool `json:"secure" koanf:"secure" default:"true"`
 	// SameSite configures the SameSite attribute on the CSRF cookie. Valid
 	// values are "Lax", "Strict", "None" and "Default".
-	SameSite string `json:"sameSite" koanf:"sameSite" default:"Lax"`
+	SameSite string `json:"samesite" koanf:"samesite" default:"Lax"`
 	// CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
-	CookieHTTPOnly bool `json:"cookieHttpOnly" koanf:"cookieHttpOnly" default:"false"`
+	CookieHTTPOnly bool `json:"cookiehttponly" koanf:"cookiehttponly" default:"false"`
 	// CookieDomain specifies the domain for the CSRF cookie, default to no domain
-	CookieDomain string `json:"cookieDomain" koanf:"cookieDomain" default:""`
+	CookieDomain string `json:"cookiedomain" koanf:"cookiedomain" default:""`
 	// CookiePath specifies the path for the CSRF cookie, default to "/"
-	CookiePath string `json:"cookiePath" koanf:"cookiePath" default:"/"`
+	CookiePath string `json:"cookiepath" koanf:"cookiepath" default:"/"`
 }
 
 // NewConfig returns a Config populated with default values.

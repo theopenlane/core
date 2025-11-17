@@ -10,6 +10,7 @@ import (
 
 	"github.com/alicebob/miniredis/v2"
 	"github.com/redis/go-redis/v9"
+	"github.com/redis/go-redis/v9/maintnotifications"
 
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
@@ -25,6 +26,9 @@ func NewRedisClient() *redis.Client {
 	client := redis.NewClient(&redis.Options{
 		Addr:             mr.Addr(),
 		DisableIndentity: true, // # spellcheck:off
+		MaintNotificationsConfig: &maintnotifications.Config{ // compatibility with go-redis v9.16.1
+			Mode: maintnotifications.ModeDisabled,
+		},
 	})
 
 	return client

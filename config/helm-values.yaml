@@ -12,7 +12,7 @@ coreConfiguration:
   # -- Domain provides a global domain value for other modules to inherit
   domain: ""  # @schema type:string
   # -- RefreshInterval determines how often to reload the config
-  refreshInterval: "10m0s"  # @schema type:integer; default:10m
+  refreshinterval: "10m0s"  # @schema type:integer; default:10m
   # -- Server contains the echo server settings
   server:
     # -- Dev enables echo's dev mode options
@@ -20,27 +20,27 @@ coreConfiguration:
     # -- Listen sets the listen address to serve the echo server on
     listen: ":17608"  # @schema type:string; default::17608
     # -- MetricsPort sets the port for the metrics endpoint
-    metricsPort: ":17609"  # @schema type:string; default::17609
+    metricsport: ":17609"  # @schema type:string; default::17609
     # -- ShutdownGracePeriod sets the grace period for in flight requests before shutting down
-    shutdownGracePeriod: "10s"  # @schema type:integer; default:10s
+    shutdowngraceperiod: "10s"  # @schema type:integer; default:10s
     # -- ReadTimeout sets the maximum duration for reading the entire request including the body
-    readTimeout: "15s"  # @schema type:integer; default:15s
+    readtimeout: "15s"  # @schema type:integer; default:15s
     # -- WriteTimeout sets the maximum duration before timing out writes of the response
-    writeTimeout: "15s"  # @schema type:integer; default:15s
+    writetimeout: "15s"  # @schema type:integer; default:15s
     # -- IdleTimeout sets the maximum amount of time to wait for the next request when keep-alives are enabled
-    idleTimeout: "30s"  # @schema type:integer; default:30s
+    idletimeout: "30s"  # @schema type:integer; default:30s
     # -- ReadHeaderTimeout sets the amount of time allowed to read request headers
-    readHeaderTimeout: "2s"  # @schema type:integer; default:2s
+    readheadertimeout: "2s"  # @schema type:integer; default:2s
     # -- TLS contains the tls configuration settings
     tls:
       # -- Enabled turns on TLS settings for the server
       enabled: false  # @schema type:boolean; default:false
       # -- CertFile location for the TLS server
-      certFile: "server.crt"  # @schema type:string; default:server.crt
+      certfile: "server.crt"  # @schema type:string; default:server.crt
       # -- CertKey file location for the TLS server
-      certKey: "server.key"  # @schema type:string; default:server.key
+      certkey: "server.key"  # @schema type:string; default:server.key
       # -- AutoCert generates the cert with letsencrypt, this does not work on localhost
-      autoCert: false  # @schema type:boolean; default:false
+      autocert: false  # @schema type:boolean; default:false
     # -- CORS contains settings to allow cross origin settings and insecure cookies
     cors:
       # -- Enable or disable the CORS middleware
@@ -48,9 +48,9 @@ coreConfiguration:
       # -- Prefixes is a map of prefixes to allowed origins
       prefixes: {}
       # -- AllowOrigins is a list of allowed origins
-      allowOrigins: []
+      alloworigins: []
       # -- CookieInsecure sets the cookie to be insecure
-      cookieInsecure: false  # @schema type:boolean
+      cookieinsecure: false  # @schema type:boolean
     # -- Secure contains settings for the secure middleware
     secure:
       # -- Enabled indicates if the secure middleware should be enabled
@@ -80,34 +80,34 @@ coreConfiguration:
       # -- Code is the HTTP status code to use for the redirect
       code: 0  # @schema type:integer
     # -- CacheControl contains settings for the cache control middleware
-    cacheControl:
+    cachecontrol:
       enabled: true  # @schema type:boolean; default:true
       # -- noCacheHeaders is the header <-> match map pair to match in http for entity headers to remove
-      noCacheHeaders: {}
+      nocacheheaders: {}
       # -- etagHeaders is the string of entity headers to remove
-      etagHeaders: []
+      etagheaders: []
     # -- Mime contains settings for the mime middleware
     mime:
       # -- Enabled indicates if the mime middleware should be enabled
       enabled: true  # @schema type:boolean; default:true
       # -- MimeTypesFile is the file to load mime types from
-      mimeTypesFile: ""  # @schema type:string
+      mimetypesfile: ""  # @schema type:string
       # -- DefaultContentType is the default content type to set if no mime type is found
-      defaultContentType: "application/data"  # @schema type:string; default:application/data
+      defaultcontenttype: "application/data"  # @schema type:string; default:application/data
     # -- GraphPool contains settings for the goroutine pool used by the graph resolvers
-    graphPool:
+    graphpool:
       # -- MaxWorkers is the maximum number of workers in the pool
-      maxWorkers: 100  # @schema type:integer; default:100
+      maxworkers: 100  # @schema type:integer; default:100
     # -- EnableGraphExtensions enables the graph extensions for the graph resolvers
-    enableGraphExtensions: true  # @schema type:boolean; default:true
+    enablegraphextensions: true  # @schema type:boolean; default:true
     # -- EnableGraphSubscriptions enables graphql subscriptions to the server using websockets or sse
-    enableGraphSubscriptions: false  # @schema type:boolean; default:false
+    enablegraphsubscriptions: false  # @schema type:boolean; default:false
     # -- ComplexityLimit sets the maximum complexity allowed for a query
-    complexityLimit: 100  # @schema type:integer; default:100
+    complexitylimit: 100  # @schema type:integer; default:100
     # -- MaxResultLimit sets the maximum number of results allowed for a query
-    maxResultLimit: 100  # @schema type:integer; default:100
+    maxresultlimit: 100  # @schema type:integer; default:100
     # -- CSRFProtection enables CSRF protection for the server
-    csrfProtection:
+    csrfprotection:
       # -- Enabled indicates whether CSRF protection is enabled.
       enabled: false  # @schema type:boolean; default:false
       # -- Header specifies the header name to look for the CSRF token.
@@ -118,26 +118,26 @@ coreConfiguration:
       secure: true  # @schema type:boolean; default:true
       # -- SameSite configures the SameSite attribute on the CSRF cookie. Valid
       # values are "Lax", "Strict", "None" and "Default".
-      sameSite: "Lax"  # @schema type:string; default:Lax
+      samesite: "Lax"  # @schema type:string; default:Lax
       # -- CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
-      cookieHttpOnly: false  # @schema type:boolean; default:false
+      cookiehttponly: false  # @schema type:boolean; default:false
       # -- CookieDomain specifies the domain for the CSRF cookie, default to no domain
-      cookieDomain: ""  # @schema type:string
+      cookiedomain: ""  # @schema type:string
       # -- CookiePath specifies the path for the CSRF cookie, default to "/"
-      cookiePath: "/"  # @schema type:string; default:/
+      cookiepath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
-    defaultTrustCenterDomain: ""  # @schema type:string
+    defaulttrustcenterdomain: ""  # @schema type:string
     # -- FieldLevelEncryption contains the configuration for field level encryption
-    fieldLevelEncryption:
+    fieldlevelencryption:
       # -- Enabled indicates whether Tink encryption is enabled
       enabled: false  # @schema type:boolean; default:false
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
-    trustCenterCnameTarget: ""  # @schema type:string
+    trustcentercnametarget: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
-  entConfig:
+  entconfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
-    entityTypes: []
+    entitytypes: []
     # -- Summarizer contains configuration for text summarization
     summarizer:
       # -- Type specifies the summarization algorithm to use
@@ -149,63 +149,63 @@ coreConfiguration:
         # -- Anthropic contains configuration for Anthropic's API
         anthropic:
           # -- BetaHeader specifies the beta API features to enable
-          betaHeader: ""  # @schema type:string
+          betaheader: ""  # @schema type:string
           # -- LegacyTextCompletion enables legacy text completion API
-          legacyTextCompletion: false  # @schema type:boolean
+          legacytextcompletion: false  # @schema type:boolean
           # -- BaseURL specifies the API endpoint
-          baseURL: ""  # @schema type:string
+          baseurl: ""  # @schema type:string
         # -- Cloudflare contains configuration for Cloudflare's API
         cloudflare:
           # -- AccountID specifies the Cloudflare account ID
-          accountID: ""  # @schema type:string
+          accountid: ""  # @schema type:string
           # -- ServerURL specifies the API endpoint
-          serverURL: ""  # @schema type:string
+          serverurl: ""  # @schema type:string
         # -- OpenAI contains configuration for OpenAI's API
         openai:
           # -- URL specifies the API endpoint
           url: ""  # @schema type:string
           # -- OrganizationID specifies the OpenAI organization ID
-          organizationID: ""  # @schema type:string
+          organizationid: ""  # @schema type:string
       # -- MaximumSentences specifies the maximum number of sentences in the summary
-      maximumSentences: 10  # @schema type:integer; default:10
+      maximumsentences: 10  # @schema type:integer; default:10
     # -- Windmill contains configuration for Windmill workflow automation
     windmill:
       # -- Enabled specifies whether Windmill integration is enabled
       enabled: false  # @schema type:boolean; default:false
       # -- BaseURL is the base URL of the Windmill instance
-      baseURL: "https://app.windmill.dev"  # @schema type:string; default:https://app.windmill.dev
+      baseurl: "https://app.windmill.dev"  # @schema type:string; default:https://app.windmill.dev
       # -- Workspace is the Windmill workspace to use
       workspace: ""  # @schema type:string
       # -- DefaultTimeout is the default timeout for API requests
-      defaultTimeout: "30s"  # @schema type:string; default:30s
+      defaulttimeout: "30s"  # @schema type:string; default:30s
       # -- Timezone for scheduled jobs
       timezone: "UTC"  # @schema type:string; default:UTC
       # -- OnFailureScript script to run when a scheduled job fails
-      onFailureScript: ""  # @schema type:string
+      onfailurescript: ""  # @schema type:string
       # -- OnSuccessScript script to run when a scheduled job succeeds
-      onSuccessScript: ""  # @schema type:string
+      onsuccessscript: ""  # @schema type:string
     # -- MaxPoolSize is the max pond pool workers that can be used by the ent client
-    maxPoolSize: 100  # @schema type:integer; default:100
+    maxpoolsize: 100  # @schema type:integer; default:100
     # -- Modules contains the configuration for the module system
     modules:
       # -- Enabled indicates whether to check and verify module access
       enabled: true  # @schema type:boolean; default:true
       # -- UseSandbox indicates whether to use the sandbox catalog for module access checks
-      useSandbox: false  # @schema type:boolean; default:false
+      usesandbox: false  # @schema type:boolean; default:false
     # -- MaxSchemaImportSize is the maximum size allowed for schema imports in bytes
-    maxSchemaImportSize: 262144  # @schema type:integer; default:262144
+    maxschemaimportsize: 262144  # @schema type:integer; default:262144
     # -- EmailValidation contains configuration for email validation
-    emailValidation:
+    emailvalidation:
       # -- Enabled indicates whether email verification is enabled
       enabled: false  # @schema type:boolean; default:false
       # -- EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses
-      enableAutoUpdateDisposable: true  # @schema type:boolean; default:true
+      enableautoupdatedisposable: true  # @schema type:boolean; default:true
       # -- EnableGravatarCheck indicates whether to check for Gravatar existence
-      enableGravatarCheck: true  # @schema type:boolean; default:true
+      enablegravatarcheck: true  # @schema type:boolean; default:true
       # -- EnableSMTPCheck indicates whether to check email by smtp
-      enableSMTPCheck: false  # @schema type:boolean; default:false
+      enablesmtpcheck: false  # @schema type:boolean; default:false
       # -- AllowedEmailTypes defines the allowed email types for verification
-      allowedEmailTypes:
+      allowedemailtypes:
         # -- Disposable indicates whether disposable email addresses are allowed
         disposable: false  # @schema type:boolean; default:false
         # -- Free indicates whether free email addresses are allowed
@@ -216,10 +216,10 @@ coreConfiguration:
     billing:
       # -- RequirePaymentMethod indicates whether to check if a payment method
       # exists for orgs before they can access some resource
-      requirePaymentMethod: false  # @schema type:boolean
+      requirepaymentmethod: false  # @schema type:boolean
       # -- BypassEmailDomains is a list of domains that should be allowed to bypass
       # the checks if RequirePaymentMethod above is enabled
-      bypassEmailDomains: []
+      bypassemaildomains: []
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable
@@ -228,15 +228,15 @@ coreConfiguration:
     token:
       kid: ""  # @schema type:string
       audience: ""  # @schema type:string
-      refreshAudience: ""  # @schema type:string
+      refreshaudience: ""  # @schema type:string
       issuer: ""  # @schema type:string
-      accessDuration: "1h0m0s"  # @schema type:integer; default:1h
-      refreshDuration: "2h0m0s"  # @schema type:integer; default:2h
-      refreshOverlap: "-15m0s"  # @schema type:integer; default:-15m
-      jwksEndpoint: ""  # @schema type:string
+      accessduration: "1h0m0s"  # @schema type:integer; default:1h
+      refreshduration: "2h0m0s"  # @schema type:integer; default:2h
+      refreshoverlap: "-15m0s"  # @schema type:integer; default:-15m
+      jwksendpoint: ""  # @schema type:string
       keys: {}
-      generateKeys: true  # @schema type:boolean; default:true
-      jwksCacheTTL: "5m0s"  # @schema type:integer; default:5m
+      generatekeys: true  # @schema type:boolean; default:true
+      jwkscachettl: "5m0s"  # @schema type:integer; default:5m
       redis:
         enabled: false  # @schema type:boolean; default:false
         config:
@@ -246,40 +246,47 @@ coreConfiguration:
           username: ""  # @schema type:string
           password: ""  # @schema type:string
           db: 0  # @schema type:integer; default:0
-          dialTimeout: "5s"  # @schema type:integer; default:5s
-          readTimeout: "0s"  # @schema type:integer; default:0
-          writeTimeout: "0s"  # @schema type:integer; default:0
-          maxRetries: 3  # @schema type:integer; default:3
-          minIdleConns: 0  # @schema type:integer; default:0
-          maxIdleConns: 0  # @schema type:integer; default:0
-          maxActiveConns: 0  # @schema type:integer; default:0
-        blacklistPrefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
+          dialtimeout: "5s"  # @schema type:integer; default:5s
+          readtimeout: "0s"  # @schema type:integer; default:0
+          writetimeout: "0s"  # @schema type:integer; default:0
+          maxretries: 3  # @schema type:integer; default:3
+          minidleconns: 0  # @schema type:integer; default:0
+          maxidleconns: 0  # @schema type:integer; default:0
+          maxactiveconns: 0  # @schema type:integer; default:0
+        blacklistprefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
+      apitokens:
+        enabled: false  # @schema type:boolean; default:false
+        envprefix: "IAM_API_TOKEN_KEY_"  # @schema type:string; default:IAM_API_TOKEN_KEY_
+        keys: {}
+        secretsize: 32  # @schema type:integer; default:32
+        delimiter: "."  # @schema type:string; default:.
+        prefix: ""  # @schema type:string
     # -- SupportedProviders are the supported oauth providers that have been configured
-    supportedProviders: []
+    supportedproviders: []
     # -- Providers contains supported oauth2 providers configuration
     providers:
       # -- RedirectURL is the URL that the OAuth2 client will redirect to after authentication is complete
-      redirectUrl: "http://localhost:3001/api/auth/callback/theopenlane"  # @schema type:string; default:http://localhost:3001/api/auth/callback/theopenlane
+      redirecturl: "http://localhost:3001/api/auth/callback/theopenlane"  # @schema type:string; default:http://localhost:3001/api/auth/callback/theopenlane
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
-        clientId: ""  # @schema type:string
-        clientEndpoint: ""  # @schema type:string
+        clientid: ""  # @schema type:string
+        clientendpoint: ""  # @schema type:string
         scopes: []
-        redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
+        redirecturl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
       # -- Google contains the configuration settings for the Google Oauth Provider
       google:
-        clientId: ""  # @schema type:string
-        clientEndpoint: ""  # @schema type:string
+        clientid: ""  # @schema type:string
+        clientendpoint: ""  # @schema type:string
         scopes: []
-        redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
+        redirecturl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
       # -- Webauthn contains the configuration settings for the Webauthn Oauth Provider
       webauthn:
         enabled: true  # @schema type:boolean; default:true
-        displayName: ""  # @schema type:string
-        relyingPartyId: ""  # @schema type:string
-        requestOrigins: []
-        maxDevices: 10  # @schema type:integer; default:10
-        enforceTimeout: true  # @schema type:boolean; default:true
+        displayname: ""  # @schema type:string
+        relyingpartyid: ""  # @schema type:string
+        requestorigins: []
+        maxdevices: 10  # @schema type:integer; default:10
+        enforcetimeout: true  # @schema type:boolean; default:true
         timeout: "1m0s"  # @schema type:integer; default:60s
         debug: false  # @schema type:boolean; default:false
   # -- Authz contains the authorization settings for fine grained access control
@@ -287,21 +294,21 @@ coreConfiguration:
     # -- enables authorization checks with openFGA
     enabled: true  # @schema type:boolean; default:true
     # -- name of openFGA store
-    storeName: "openlane"  # @schema type:string; default:openlane
+    storename: "openlane"  # @schema type:string; default:openlane
     # -- host url with scheme of the openFGA API
-    hostUrl: "https://authz.theopenlane.io"  # @schema type:string; default:https://authz.theopenlane.io
+    hosturl: "https://authz.theopenlane.io"  # @schema type:string; default:https://authz.theopenlane.io
     # -- id of openFGA store
-    storeId: ""  # @schema type:string
+    storeid: ""  # @schema type:string
     # -- id of openFGA model
-    modelId: ""  # @schema type:string
+    modelid: ""  # @schema type:string
     # -- force create a new model
-    createNewModel: false  # @schema type:boolean; default:false
+    createnewmodel: false  # @schema type:boolean; default:false
     # -- path to the fga model file
-    modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
+    modelfile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
     # -- credentials for the openFGA client
     credentials:
       # -- client id for the openFGA client
-      clientId: ""  # @schema type:string
+      clientid: ""  # @schema type:string
       # -- audience for the openFGA client
       audience: ""  # @schema type:string
       # -- issuer for the openFGA client
@@ -313,31 +320,31 @@ coreConfiguration:
     # -- debug enables printing the debug database logs
     debug: false  # @schema type:boolean; default:false
     # -- the name of the database to use with otel tracing
-    databaseName: "openlane"  # @schema type:string; default:openlane
+    databasename: "openlane"  # @schema type:string; default:openlane
     # -- sql driver name
-    driverName: "pgx"  # @schema type:string; default:pgx
+    drivername: "pgx"  # @schema type:string; default:pgx
     # -- enables writing to two databases simultaneously
-    multiWrite: false  # @schema type:boolean; default:false
+    multiwrite: false  # @schema type:boolean; default:false
     # -- cache results for subsequent requests
-    cacheTTL: "1s"  # @schema type:integer; default:1s
+    cachettl: "1s"  # @schema type:integer; default:1s
     # -- run migrations on startup
-    runMigrations: true  # @schema type:boolean; default:true
+    runmigrations: true  # @schema type:boolean; default:true
     # -- migration provider to use for running migrations
-    migrationProvider: "atlas"  # @schema type:string; default:atlas
+    migrationprovider: "atlas"  # @schema type:string; default:atlas
     # -- enable history data to be logged to the database
-    enableHistory: false  # @schema type:boolean; default:false
+    enablehistory: false  # @schema type:boolean; default:false
     # -- maximum number of connections to the database
-    maxConnections: 0  # @schema type:integer; default:0
+    maxconnections: 0  # @schema type:integer; default:0
     # -- maximum number of idle connections to the database
-    maxIdleConnections: 0  # @schema type:integer; default:0
+    maxidleconnections: 0  # @schema type:integer; default:0
   # -- JobQueue contains the configuration for the job queue (river) client
-  jobQueue:
-    runMigrations: false  # @schema type:boolean; default:false
-    riverConf:
+  jobqueue:
+    runmigrations: false  # @schema type:boolean; default:false
+    riverconf:
     metrics:
-      enableMetrics: false  # @schema type:boolean; default:false
-      metricsDurationUnit: "ms"  # @schema type:string; default:ms
-      enableSemanticMetrics: true  # @schema type:boolean; default:true
+      enablemetrics: false  # @schema type:boolean; default:false
+      metricsdurationunit: "ms"  # @schema type:string; default:ms
+      enablesemanticmetrics: true  # @schema type:boolean; default:true
   # -- Redis contains the redis configuration for the key-value store
   redis:
     enabled: true  # @schema type:boolean; default:true
@@ -346,13 +353,13 @@ coreConfiguration:
     username: ""  # @schema type:string
     password: ""  # @schema type:string
     db: 0  # @schema type:integer; default:0
-    dialTimeout: "5s"  # @schema type:integer; default:5s
-    readTimeout: "0s"  # @schema type:integer; default:0
-    writeTimeout: "0s"  # @schema type:integer; default:0
-    maxRetries: 3  # @schema type:integer; default:3
-    minIdleConns: 0  # @schema type:integer; default:0
-    maxIdleConns: 0  # @schema type:integer; default:0
-    maxActiveConns: 0  # @schema type:integer; default:0
+    dialtimeout: "5s"  # @schema type:integer; default:5s
+    readtimeout: "0s"  # @schema type:integer; default:0
+    writetimeout: "0s"  # @schema type:integer; default:0
+    maxretries: 3  # @schema type:integer; default:3
+    minidleconns: 0  # @schema type:integer; default:0
+    maxidleconns: 0  # @schema type:integer; default:0
+    maxactiveconns: 0  # @schema type:integer; default:0
   # -- Tracer contains the tracing config for opentelemetry
   tracer:
     enabled: false  # @schema type:boolean; default:false
@@ -360,7 +367,7 @@ coreConfiguration:
     environment: "development"  # @schema type:string; default:development
     stdout:
       pretty: true  # @schema type:boolean; default:true
-      disableTimestamp: false  # @schema type:boolean; default:false
+      disabletimestamp: false  # @schema type:boolean; default:false
     otlp:
       endpoint: "localhost:4317"  # @schema type:string; default:localhost:4317
       insecure: true  # @schema type:boolean; default:true
@@ -370,13 +377,13 @@ coreConfiguration:
       timeout: "10s"  # @schema type:integer; default:10s
   # -- Email contains email sending configuration for the server
   email:
-    companyName: ""  # @schema type:string
-    companyAddress: ""  # @schema type:string
+    companyname: ""  # @schema type:string
+    companyaddress: ""  # @schema type:string
     corporation: ""  # @schema type:string
     year: 0  # @schema type:integer
-    fromEmail: ""  # @schema type:string
-    supportEmail: ""  # @schema type:string
-    logoURL: ""  # @schema type:string
+    fromemail: ""  # @schema type:string
+    supportemail: ""  # @schema type:string
+    logourl: ""  # @schema type:string
     urls:
       root: ""  # @schema type:string
       product: ""  # @schema type:string
@@ -384,31 +391,32 @@ coreConfiguration:
       verify: ""  # @schema type:string
       invite: ""  # @schema type:string
       reset: ""  # @schema type:string
-      verifySubscriber: ""  # @schema type:string
-      verifyBilling: ""  # @schema type:string
-    templatesPath: ""  # @schema type:string
+      verifysubscriber: ""  # @schema type:string
+      verifybilling: ""  # @schema type:string
+      questionnaire: ""  # @schema type:string
+    templatespath: ""  # @schema type:string
   # -- Sessions config for user sessions and cookies
   sessions:
     domain: ""  # @schema type:string
-    maxAge: 3600  # @schema type:integer; default:3600
+    maxage: 3600  # @schema type:integer; default:3600
     secure: true  # @schema type:boolean; default:true
-    httpOnly: true  # @schema type:boolean; default:true
-    sameSite: "Strict"  # @schema type:string; default:Strict
+    httponly: true  # @schema type:boolean; default:true
+    samesite: "Strict"  # @schema type:string; default:Strict
   # -- TOTP contains the configuration for the TOTP provider
   totp:
     enabled: true  # @schema type:boolean; default:true
-    codeLength: 6  # @schema type:integer; default:6
+    codelength: 6  # @schema type:integer; default:6
     issuer: ""  # @schema type:string
     redis: true  # @schema type:boolean; default:true
-    recoveryCodeCount: 16  # @schema type:integer; default:16
-    recoveryCodeLength: 8  # @schema type:integer; default:8
+    recoverycodecount: 16  # @schema type:integer; default:16
+    recoverycodelength: 8  # @schema type:integer; default:8
   # -- Ratelimit contains the configuration for the rate limiter
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
     # -- Options enables configuring multiple concurrent rate windows that must all pass.
     options:
       - expiration: 0s
-        flushInterval: 0s
+        flushinterval: 0s
         requests: 500
         window: 1m0s
     # -- Headers determines which headers are inspected to determine the origin IP.
@@ -417,34 +425,34 @@ coreConfiguration:
         - True-Client-IP
     # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
     # 0 means the closest client, 1 the proxy behind it, etc.
-    forwardedIndexFromBehind: 0  # @schema type:integer; default:0
+    forwardedindexfrombehind: 0  # @schema type:integer; default:0
     # -- IncludePath appends the request path to the limiter key when true.
-    includePath: false  # @schema type:boolean; default:false
+    includepath: false  # @schema type:boolean; default:false
     # -- IncludeMethod appends the request method to the limiter key when true.
-    includeMethod: false  # @schema type:boolean; default:false
+    includemethod: false  # @schema type:boolean; default:false
     # -- KeyPrefix allows scoping the limiter key space with a static prefix.
-    keyPrefix: ""  # @schema type:string
+    keyprefix: ""  # @schema type:string
     # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
-    denyStatus: 429  # @schema type:integer; default:429
+    denystatus: 429  # @schema type:integer; default:429
     # -- DenyMessage customises the error payload when a rate limit is exceeded.
-    denyMessage: "Too many requests"  # @schema type:string; default:Too many requests
+    denymessage: "Too many requests"  # @schema type:string; default:Too many requests
     # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
-    sendRetryAfterHeader: true  # @schema type:boolean; default:true
+    sendretryafterheader: true  # @schema type:boolean; default:true
     # -- DryRun enables logging rate limit decisions without blocking requests.
-    dryRun: true  # @schema type:boolean; default:true
+    dryrun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
-  objectStorage:
+  objectstorage:
     # -- Enabled indicates if object storage is enabled
     enabled: true  # @schema type:boolean; default:true
     # -- Keys are the form field keys that will be processed for uploads
     keys:
         - uploadFile
     # -- MaxSizeMB is the maximum file size allowed in MB
-    maxSizeMB: 0  # @schema type:integer
+    maxsizemb: 0  # @schema type:integer
     # -- MaxMemoryMB is the maximum memory to use for file uploads in MB
-    maxMemoryMB: 0  # @schema type:integer
+    maxmemorymb: 0  # @schema type:integer
     # -- DevMode enables simple file upload handling for local development and testing
-    devMode: false  # @schema type:boolean; default:false
+    devmode: false  # @schema type:boolean; default:false
     # -- Providers contains configuration for each storage provider
     providers:
       # -- S3 provider configuration
@@ -452,7 +460,7 @@ coreConfiguration:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
-        ensureAvailable: false  # @schema type:boolean; default:false
+        ensureavailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
         region: ""  # @schema type:string
         # -- Bucket name for cloud providers
@@ -460,17 +468,17 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean; default:false
+        proxypresignenabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
       # -- CloudflareR2 provider configuration
-      cloudflareR2:
+      cloudflarer2:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
-        ensureAvailable: false  # @schema type:boolean; default:false
+        ensureavailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
         region: ""  # @schema type:string
         # -- Bucket name for cloud providers
@@ -478,9 +486,9 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean; default:false
+        proxypresignenabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
       # -- GCS provider configuration
@@ -488,7 +496,7 @@ coreConfiguration:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
-        ensureAvailable: false  # @schema type:boolean; default:false
+        ensureavailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
         region: ""  # @schema type:string
         # -- Bucket name for cloud providers
@@ -496,9 +504,9 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean; default:false
+        proxypresignenabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
       # -- Disk provider configuration
@@ -506,7 +514,7 @@ coreConfiguration:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
-        ensureAvailable: false  # @schema type:boolean; default:false
+        ensureavailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
         region: ""  # @schema type:string
         # -- Bucket name for cloud providers
@@ -514,9 +522,9 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean; default:false
+        proxypresignenabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
       # -- Database provider configuration
@@ -524,7 +532,7 @@ coreConfiguration:
         # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
         # -- EnsureAvailable enforces provider availability before completing server startup
-        ensureAvailable: false  # @schema type:boolean; default:false
+        ensureavailable: false  # @schema type:boolean; default:false
         # -- Region for cloud providers
         region: ""  # @schema type:string
         # -- Bucket name for cloud providers
@@ -532,9 +540,9 @@ coreConfiguration:
         # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
         # -- ProxyPresignEnabled toggles proxy-signed download URL generation
-        proxyPresignEnabled: false  # @schema type:boolean; default:false
+        proxypresignenabled: false  # @schema type:boolean; default:false
         # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
-        baseURL: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
+        baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
         # -- Credentials contains the credentials for accessing the provider
         credentials:
   # -- Entitlements contains the configuration for the entitlements service
@@ -542,51 +550,51 @@ coreConfiguration:
     # -- Enabled determines if the entitlements service is enabled
     enabled: false  # @schema type:boolean; default:false
     # -- StripeWebhookURL is the URL for the stripe webhook
-    stripeWebhookURL: "https://api.theopenlane.io/stripe/webhook"  # @schema type:string; default:https://api.theopenlane.io/stripe/webhook
+    stripewebhookurl: "https://api.theopenlane.io/stripe/webhook"  # @schema type:string; default:https://api.theopenlane.io/stripe/webhook
     # -- StripeBillingPortalSuccessURL
-    stripeBillingPortalSuccessURL: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
+    stripebillingportalsuccessurl: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
     # -- StripeCancellationReturnURL is the URL for the stripe cancellation return
-    stripeCancellationReturnURL: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
+    stripecancellationreturnurl: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
     # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
-    stripeWebhookEvents: []
+    stripewebhookevents: []
     # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
-    stripeWebhookAPIVersion: "2025_10_29_CLOVER"  # @schema type:string; default:2025_10_29_CLOVER
+    stripewebhookapiversion: "2025_10_29_CLOVER"  # @schema type:string; default:2025_10_29_CLOVER
     # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
-    stripeWebhookDiscardAPIVersion: ""  # @schema type:string
+    stripewebhookdiscardapiversion: ""  # @schema type:string
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
     # -- Enabled indicates whether the key watcher is enabled
     enabled: false  # @schema type:boolean; default:false
     # -- KeyDir is the path to the directory containing PEM keys for JWT signing
-    keyDir: "./keys"  # @schema type:string; default:./keys
+    keydir: "./keys"  # @schema type:string; default:./keys
     # -- ExternalSecretsIntegration enables integration with external secret management systems (specifically GCP secret manager today)
-    externalSecretsIntegration: false  # @schema type:boolean; default:false
+    externalsecretsintegration: false  # @schema type:boolean; default:false
   # -- Slack contains settings for Slack notifications
   slack:
     # -- NewSubscriberMessageFile is the path to the template used for new subscriber notifications
-    newSubscriberMessageFile: ""  # @schema type:string
+    newsubscribermessagefile: ""  # @schema type:string
     # -- NewUserMessageFile is the path to the template used for new user notifications
-    newUserMessageFile: ""  # @schema type:string
+    newusermessagefile: ""  # @schema type:string
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
-  integrationOauthProvider:
+  integrationoauthprovider:
     # -- RedirectURL is the base URL for integration OAuth callbacks
-    redirectUrl: ""  # @schema type:string
+    redirecturl: ""  # @schema type:string
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration
-    successRedirectUrl: ""  # @schema type:string
+    successredirecturl: ""  # @schema type:string
     # -- Github contains the configuration settings for GitHub integrations
     github:
       # -- ClientID is the OAuth2 client ID
-      clientId: ""  # @schema type:string
+      clientid: ""  # @schema type:string
       # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientEndpoint: ""  # @schema type:string
+      clientendpoint: ""  # @schema type:string
       # -- Scopes are the OAuth2 scopes to request
       scopes: []
     # -- Slack contains the configuration settings for Slack integrations
     slack:
       # -- ClientID is the OAuth2 client ID
-      clientId: ""  # @schema type:string
+      clientid: ""  # @schema type:string
       # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientEndpoint: ""  # @schema type:string
+      clientendpoint: ""  # @schema type:string
       # -- Scopes are the OAuth2 scopes to request
       scopes: []
 
@@ -600,7 +608,7 @@ externalSecrets:
     core-server-secretmanager:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for server.secretManager
+      # -- Environment variable key for server.secretmanager
       secretKey: "CORE_SERVER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-secretmanager"  # @schema type:string
@@ -608,7 +616,7 @@ externalSecrets:
     core-server-fieldlevelencryption-keyset:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for server.fieldLevelEncryption.keyset
+      # -- Environment variable key for server.fieldlevelencryption.keyset
       secretKey: "CORE_SERVER_FIELDLEVELENCRYPTION_KEYSET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-server-fieldlevelencryption-keyset"  # @schema type:string
@@ -616,7 +624,7 @@ externalSecrets:
     core-entconfig-windmill-token:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for entConfig.windmill.token
+      # -- Environment variable key for entconfig.windmill.token
       secretKey: "CORE_ENTCONFIG_WINDMILL_TOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-entconfig-windmill-token"  # @schema type:string
@@ -624,7 +632,7 @@ externalSecrets:
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for auth.providers.github.clientSecret
+      # -- Environment variable key for auth.providers.github.clientsecret
       secretKey: "CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-github-clientsecret"  # @schema type:string
@@ -632,7 +640,7 @@ externalSecrets:
     core-auth-providers-google-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for auth.providers.google.clientSecret
+      # -- Environment variable key for auth.providers.google.clientsecret
       secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
@@ -640,7 +648,7 @@ externalSecrets:
     core-authz-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for authz.credentials.apiToken
+      # -- Environment variable key for authz.credentials.apitoken
       secretKey: "CORE_AUTHZ_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-authz-credentials-apitoken"  # @schema type:string
@@ -648,7 +656,7 @@ externalSecrets:
     core-authz-credentials-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for authz.credentials.clientSecret
+      # -- Environment variable key for authz.credentials.clientsecret
       secretKey: "CORE_AUTHZ_CREDENTIALS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-authz-credentials-clientsecret"  # @schema type:string
@@ -656,7 +664,7 @@ externalSecrets:
     core-db-primarydbsource:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for db.primaryDbSource
+      # -- Environment variable key for db.primarydbsource
       secretKey: "CORE_DB_PRIMARYDBSOURCE"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-db-primarydbsource"  # @schema type:string
@@ -664,7 +672,7 @@ externalSecrets:
     core-db-secondarydbsource:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for db.secondaryDbSource
+      # -- Environment variable key for db.secondarydbsource
       secretKey: "CORE_DB_SECONDARYDBSOURCE"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-db-secondarydbsource"  # @schema type:string
@@ -672,7 +680,7 @@ externalSecrets:
     core-jobqueue-connectionuri:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for jobQueue.connectionURI
+      # -- Environment variable key for jobqueue.connectionuri
       secretKey: "CORE_JOBQUEUE_CONNECTIONURI"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-jobqueue-connectionuri"  # @schema type:string
@@ -680,7 +688,7 @@ externalSecrets:
     core-sessions-signingkey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for sessions.signingKey
+      # -- Environment variable key for sessions.signingkey
       secretKey: "CORE_SESSIONS_SIGNINGKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-sessions-signingkey"  # @schema type:string
@@ -688,7 +696,7 @@ externalSecrets:
     core-sessions-encryptionkey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for sessions.encryptionKey
+      # -- Environment variable key for sessions.encryptionkey
       secretKey: "CORE_SESSIONS_ENCRYPTIONKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-sessions-encryptionkey"  # @schema type:string
@@ -704,7 +712,7 @@ externalSecrets:
     core-objectstorage-providers-s3-credentials-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.s3.credentials.accessKeyID
+      # -- Environment variable key for objectstorage.providers.s3.credentials.accesskeyid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-accesskeyid"  # @schema type:string
@@ -712,7 +720,7 @@ externalSecrets:
     core-objectstorage-providers-s3-credentials-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.s3.credentials.secretAccessKey
+      # -- Environment variable key for objectstorage.providers.s3.credentials.secretaccesskey
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-secretaccesskey"  # @schema type:string
@@ -720,7 +728,7 @@ externalSecrets:
     core-objectstorage-providers-s3-credentials-projectid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.s3.credentials.projectID
+      # -- Environment variable key for objectstorage.providers.s3.credentials.projectid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_PROJECTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-projectid"  # @schema type:string
@@ -728,7 +736,7 @@ externalSecrets:
     core-objectstorage-providers-s3-credentials-accountid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.s3.credentials.accountID
+      # -- Environment variable key for objectstorage.providers.s3.credentials.accountid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-accountid"  # @schema type:string
@@ -736,7 +744,7 @@ externalSecrets:
     core-objectstorage-providers-s3-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.s3.credentials.apiToken
+      # -- Environment variable key for objectstorage.providers.s3.credentials.apitoken
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_S3_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-s3-credentials-apitoken"  # @schema type:string
@@ -744,7 +752,7 @@ externalSecrets:
     core-objectstorage-providers-cloudflarer2-credentials-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.accessKeyID
+      # -- Environment variable key for objectstorage.providers.cloudflarer2.credentials.accesskeyid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-accesskeyid"  # @schema type:string
@@ -752,7 +760,7 @@ externalSecrets:
     core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.secretAccessKey
+      # -- Environment variable key for objectstorage.providers.cloudflarer2.credentials.secretaccesskey
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-secretaccesskey"  # @schema type:string
@@ -760,7 +768,7 @@ externalSecrets:
     core-objectstorage-providers-cloudflarer2-credentials-projectid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.projectID
+      # -- Environment variable key for objectstorage.providers.cloudflarer2.credentials.projectid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_PROJECTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-projectid"  # @schema type:string
@@ -768,7 +776,7 @@ externalSecrets:
     core-objectstorage-providers-cloudflarer2-credentials-accountid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.accountID
+      # -- Environment variable key for objectstorage.providers.cloudflarer2.credentials.accountid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-accountid"  # @schema type:string
@@ -776,7 +784,7 @@ externalSecrets:
     core-objectstorage-providers-cloudflarer2-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.cloudflareR2.credentials.apiToken
+      # -- Environment variable key for objectstorage.providers.cloudflarer2.credentials.apitoken
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_CLOUDFLARER2_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-cloudflarer2-credentials-apitoken"  # @schema type:string
@@ -784,7 +792,7 @@ externalSecrets:
     core-objectstorage-providers-gcs-credentials-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.gcs.credentials.accessKeyID
+      # -- Environment variable key for objectstorage.providers.gcs.credentials.accesskeyid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-accesskeyid"  # @schema type:string
@@ -792,7 +800,7 @@ externalSecrets:
     core-objectstorage-providers-gcs-credentials-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.gcs.credentials.secretAccessKey
+      # -- Environment variable key for objectstorage.providers.gcs.credentials.secretaccesskey
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-secretaccesskey"  # @schema type:string
@@ -800,7 +808,7 @@ externalSecrets:
     core-objectstorage-providers-gcs-credentials-projectid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.gcs.credentials.projectID
+      # -- Environment variable key for objectstorage.providers.gcs.credentials.projectid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_PROJECTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-projectid"  # @schema type:string
@@ -808,7 +816,7 @@ externalSecrets:
     core-objectstorage-providers-gcs-credentials-accountid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.gcs.credentials.accountID
+      # -- Environment variable key for objectstorage.providers.gcs.credentials.accountid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-accountid"  # @schema type:string
@@ -816,7 +824,7 @@ externalSecrets:
     core-objectstorage-providers-gcs-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.gcs.credentials.apiToken
+      # -- Environment variable key for objectstorage.providers.gcs.credentials.apitoken
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_GCS_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-gcs-credentials-apitoken"  # @schema type:string
@@ -824,7 +832,7 @@ externalSecrets:
     core-objectstorage-providers-disk-credentials-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.disk.credentials.accessKeyID
+      # -- Environment variable key for objectstorage.providers.disk.credentials.accesskeyid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-accesskeyid"  # @schema type:string
@@ -832,7 +840,7 @@ externalSecrets:
     core-objectstorage-providers-disk-credentials-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.disk.credentials.secretAccessKey
+      # -- Environment variable key for objectstorage.providers.disk.credentials.secretaccesskey
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-secretaccesskey"  # @schema type:string
@@ -840,7 +848,7 @@ externalSecrets:
     core-objectstorage-providers-disk-credentials-projectid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.disk.credentials.projectID
+      # -- Environment variable key for objectstorage.providers.disk.credentials.projectid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_PROJECTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-projectid"  # @schema type:string
@@ -848,7 +856,7 @@ externalSecrets:
     core-objectstorage-providers-disk-credentials-accountid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.disk.credentials.accountID
+      # -- Environment variable key for objectstorage.providers.disk.credentials.accountid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-accountid"  # @schema type:string
@@ -856,7 +864,7 @@ externalSecrets:
     core-objectstorage-providers-disk-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.disk.credentials.apiToken
+      # -- Environment variable key for objectstorage.providers.disk.credentials.apitoken
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DISK_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-disk-credentials-apitoken"  # @schema type:string
@@ -864,7 +872,7 @@ externalSecrets:
     core-objectstorage-providers-database-credentials-accesskeyid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.database.credentials.accessKeyID
+      # -- Environment variable key for objectstorage.providers.database.credentials.accesskeyid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCESSKEYID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-accesskeyid"  # @schema type:string
@@ -872,7 +880,7 @@ externalSecrets:
     core-objectstorage-providers-database-credentials-secretaccesskey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.database.credentials.secretAccessKey
+      # -- Environment variable key for objectstorage.providers.database.credentials.secretaccesskey
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_SECRETACCESSKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-secretaccesskey"  # @schema type:string
@@ -880,7 +888,7 @@ externalSecrets:
     core-objectstorage-providers-database-credentials-projectid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.database.credentials.projectID
+      # -- Environment variable key for objectstorage.providers.database.credentials.projectid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_PROJECTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-projectid"  # @schema type:string
@@ -888,7 +896,7 @@ externalSecrets:
     core-objectstorage-providers-database-credentials-accountid:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.database.credentials.accountID
+      # -- Environment variable key for objectstorage.providers.database.credentials.accountid
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_ACCOUNTID"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-accountid"  # @schema type:string
@@ -896,7 +904,7 @@ externalSecrets:
     core-objectstorage-providers-database-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for objectStorage.providers.database.credentials.apiToken
+      # -- Environment variable key for objectstorage.providers.database.credentials.apitoken
       secretKey: "CORE_OBJECTSTORAGE_PROVIDERS_DATABASE_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-objectstorage-providers-database-credentials-apitoken"  # @schema type:string
@@ -904,7 +912,7 @@ externalSecrets:
     core-subscription-privatestripekey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.privateStripeKey
+      # -- Environment variable key for subscription.privatestripekey
       secretKey: "CORE_SUBSCRIPTION_PRIVATESTRIPEKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-privatestripekey"  # @schema type:string
@@ -912,7 +920,7 @@ externalSecrets:
     core-subscription-stripewebhooksecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecret
+      # -- Environment variable key for subscription.stripewebhooksecret
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecret"  # @schema type:string
@@ -920,23 +928,15 @@ externalSecrets:
     core-subscription-stripewebhooksecrets:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecrets
+      # -- Environment variable key for subscription.stripewebhooksecrets
       secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-subscription-stripewebhooksecrets"  # @schema type:string
-    # -- core-subscription-stripewebhooksecrets-2025_10_29_clover secret configuration
-    core-subscription-stripewebhooksecrets-2025_10_29_clover:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for subscription.stripeWebhookSecrets.2025_10_29_CLOVER
-      secretKey: "CORE_SUBSCRIPTION_STRIPEWEBHOOKSECRETS_2025_10_29_CLOVER"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-subscription-stripewebhooksecrets-2025_10_29_clover"  # @schema type:string
     # -- core-keywatcher-secretmanager secret configuration
     core-keywatcher-secretmanager:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for keywatcher.secretManager
+      # -- Environment variable key for keywatcher.secretmanager
       secretKey: "CORE_KEYWATCHER_SECRETMANAGER"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-keywatcher-secretmanager"  # @schema type:string
@@ -944,7 +944,7 @@ externalSecrets:
     core-slack-webhookurl:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for slack.webhookURL
+      # -- Environment variable key for slack.webhookurl
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
@@ -952,7 +952,7 @@ externalSecrets:
     core-integrationoauthprovider-github-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationOauthProvider.github.clientSecret
+      # -- Environment variable key for integrationoauthprovider.github.clientsecret
       secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrationoauthprovider-github-clientsecret"  # @schema type:string
@@ -960,7 +960,7 @@ externalSecrets:
     core-integrationoauthprovider-slack-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationOauthProvider.slack.clientSecret
+      # -- Environment variable key for integrationoauthprovider.slack.clientsecret
       secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-integrationoauthprovider-slack-clientsecret"  # @schema type:string
