@@ -7,7 +7,7 @@ type Config struct {
 	// LLM contains configuration for large language model based summarization
 	LLM LLM `json:"llm" koanf:"llm"`
 	// MaximumSentences specifies the maximum number of sentences in the summary
-	MaximumSentences int `json:"maximumSentences" koanf:"maximumSentences" default:"10"`
+	MaximumSentences int `json:"maximumsentences" koanf:"maximumsentences" default:"10"`
 }
 
 // Type defines the type of summarization algorithm
@@ -39,19 +39,19 @@ type GenericLLMConfig struct {
 	Model string `json:"model" koanf:"model"`
 
 	// APIKey contains the authentication key for the service
-	APIKey string `json:"apiKey" koanf:"apiKey" sensitive:"true"`
+	APIKey string `json:"apiKey" koanf:"apikey" sensitive:"true"`
 }
 
 // AnthropicConfig contains Anthropic specific configuration
 type AnthropicConfig struct {
 	// BetaHeader specifies the beta API features to enable
-	BetaHeader string `json:"betaHeader" koanf:"betaHeader"`
+	BetaHeader string `json:"betaheader" koanf:"betaheader"`
 
 	// LegacyTextCompletion enables legacy text completion API
-	LegacyTextCompletion bool `json:"legacyTextCompletion" koanf:"legacyTextCompletion"`
+	LegacyTextCompletion bool `json:"legacytextcompletion" koanf:"legacytextcompletion"`
 
 	// BaseURL specifies the API endpoint
-	BaseURL string `json:"baseURL" koanf:"baseURL"`
+	BaseURL string `json:"baseurl" koanf:"baseurl"`
 
 	GenericLLMConfig
 }
@@ -61,10 +61,10 @@ type CloudflareConfig struct {
 	GenericLLMConfig
 
 	// AccountID specifies the Cloudflare account ID
-	AccountID string `json:"accountID" koanf:"accountID"`
+	AccountID string `json:"accountid" koanf:"accountid"`
 
 	// ServerURL specifies the API endpoint
-	ServerURL string `json:"serverURL" koanf:"serverURL"`
+	ServerURL string `json:"serverurl" koanf:"serverurl"`
 }
 
 // OpenAIConfig contains OpenAI specific configuration
@@ -75,5 +75,5 @@ type OpenAIConfig struct {
 	URL string `json:"url" koanf:"url"`
 
 	// OrganizationID specifies the OpenAI organization ID
-	OrganizationID string `json:"organizationID" koanf:"organizationID"`
+	OrganizationID string `json:"organizationid" koanf:"organizationid"`
 }
