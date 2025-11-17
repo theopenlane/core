@@ -14,7 +14,7 @@ import (
 // This enforces that assessment responses can ONLY be created with a questionnaire JWT (anonymous users)
 func DenyIfMissingQuestionnaireContext() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-		if m.Op() != ent.OpCreate {
+		if m.Op() == ent.OpCreate || m.Op() == ent.OpDeleteOne {
 			return privacy.Skip
 		}
 
