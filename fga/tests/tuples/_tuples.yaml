@@ -59,6 +59,13 @@
 - user: user:ulid-of-member-3
   relation: member
   object: organization:openlane
+# setup assessment response owner user
+- user: user:ulid-response-owner
+  relation: _self
+  object: user:ulid-response-owner
+- user: user:ulid-response-owner
+  relation: member
+  object: organization:openlane
 # setup audit log viewer
 - user: user:ulid-of-audit-log-viewer
   relation: _self

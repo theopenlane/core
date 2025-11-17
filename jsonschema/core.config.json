@@ -441,6 +441,9 @@
         },
         "verifyBilling": {
           "type": "string"
+        },
+        "questionnaire": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -866,6 +869,12 @@
     "map[string]string": {
       "additionalProperties": {
         "type": "string"
+      },
+      "type": "object"
+    },
+    "map[string]tokens.APITokenKeyConfig": {
+      "additionalProperties": {
+        "$ref": "#/$defs/tokens.APITokenKeyConfig"
       },
       "type": "object"
     },
@@ -1505,6 +1514,42 @@
       "type": "object",
       "description": "OpenAIConfig contains OpenAI specific configuration"
     },
+    "tokens.APITokenConfig": {
+      "properties": {
+        "enabled": {
+          "type": "boolean"
+        },
+        "envPrefix": {
+          "type": "string"
+        },
+        "keys": {
+          "$ref": "#/$defs/map[string]tokens.APITokenKeyConfig"
+        },
+        "secretSize": {
+          "type": "integer"
+        },
+        "delimiter": {
+          "type": "string"
+        },
+        "prefix": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
+    "tokens.APITokenKeyConfig": {
+      "properties": {
+        "secret": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object"
+    },
     "tokens.Config": {
       "properties": {
         "kid": {
@@ -1542,6 +1587,9 @@
         },
         "redis": {
           "$ref": "#/$defs/tokens.RedisConfig"
+        },
+        "apiTokens": {
+          "$ref": "#/$defs/tokens.APITokenConfig"
         }
       },
       "additionalProperties": false,

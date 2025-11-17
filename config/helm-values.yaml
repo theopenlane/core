@@ -254,6 +254,13 @@ coreConfiguration:
           maxIdleConns: 0  # @schema type:integer; default:0
           maxActiveConns: 0  # @schema type:integer; default:0
         blacklistPrefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
+      apiTokens:
+        enabled: false  # @schema type:boolean; default:false
+        envPrefix: "IAM_API_TOKEN_KEY_"  # @schema type:string; default:IAM_API_TOKEN_KEY_
+        keys: {}
+        secretSize: 32  # @schema type:integer; default:32
+        delimiter: "."  # @schema type:string; default:.
+        prefix: ""  # @schema type:string
     # -- SupportedProviders are the supported oauth providers that have been configured
     supportedProviders: []
     # -- Providers contains supported oauth2 providers configuration
@@ -386,6 +393,7 @@ coreConfiguration:
       reset: ""  # @schema type:string
       verifySubscriber: ""  # @schema type:string
       verifyBilling: ""  # @schema type:string
+      questionnaire: ""  # @schema type:string
     templatesPath: ""  # @schema type:string
   # -- Sessions config for user sessions and cookies
   sessions:

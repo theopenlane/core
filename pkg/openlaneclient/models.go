@@ -1473,6 +1473,9 @@ type Assessment struct {
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration int64                         `json:"responseDueDuration"`
 	Owner               *Organization                 `json:"owner,omitempty"`
+	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
+	Editors             *GroupConnection              `json:"editors"`
+	Viewers             *GroupConnection              `json:"viewers"`
 	Template            *Template                     `json:"template"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 }
@@ -2377,6 +2380,15 @@ type AssessmentWhereInput struct {
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
+	// blocked_groups edge predicates
+	HasBlockedGroups     *bool              `json:"hasBlockedGroups,omitempty"`
+	HasBlockedGroupsWith []*GroupWhereInput `json:"hasBlockedGroupsWith,omitempty"`
+	// editors edge predicates
+	HasEditors     *bool              `json:"hasEditors,omitempty"`
+	HasEditorsWith []*GroupWhereInput `json:"hasEditorsWith,omitempty"`
+	// viewers edge predicates
+	HasViewers     *bool              `json:"hasViewers,omitempty"`
+	HasViewersWith []*GroupWhereInput `json:"hasViewersWith,omitempty"`
 	// template edge predicates
 	HasTemplate     *bool                 `json:"hasTemplate,omitempty"`
 	HasTemplateWith []*TemplateWhereInput `json:"hasTemplateWith,omitempty"`
@@ -6309,6 +6321,9 @@ type CreateAssessmentInput struct {
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration   *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
+	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
+	EditorIDs             []string `json:"editorIDs,omitempty"`
+	ViewerIDs             []string `json:"viewerIDs,omitempty"`
 	TemplateID            string   `json:"templateID"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 }
@@ -39645,6 +39660,15 @@ type UpdateAssessmentInput struct {
 	ResponseDueDuration         *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID                     *string  `json:"ownerID,omitempty"`
 	ClearOwner                  *bool    `json:"clearOwner,omitempty"`
+	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`
+	RemoveBlockedGroupIDs       []string `json:"removeBlockedGroupIDs,omitempty"`
+	ClearBlockedGroups          *bool    `json:"clearBlockedGroups,omitempty"`
+	AddEditorIDs                []string `json:"addEditorIDs,omitempty"`
+	RemoveEditorIDs             []string `json:"removeEditorIDs,omitempty"`
+	ClearEditors                *bool    `json:"clearEditors,omitempty"`
+	AddViewerIDs                []string `json:"addViewerIDs,omitempty"`
+	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
+	ClearViewers                *bool    `json:"clearViewers,omitempty"`
 	TemplateID                  *string  `json:"templateID,omitempty"`
 	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
 	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`

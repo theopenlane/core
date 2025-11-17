@@ -93,6 +93,12 @@ var (
 	ErrStatusApprovedNotAllowed = errors.New("you must be in the approver group to mark as approved")
 	// ErrInvalidChannel is returned when an invalid notification channel is provided
 	ErrInvalidChannel = errors.New("invalid channel")
+	// ErrTemplateIDRequired is returned when an assessment is created without a template
+	ErrTemplateIDRequired = errors.New("template id required when creating an assessment")
+	// ErrTemplateNotFound is returned when an assessment is created with a non existing template
+	ErrTemplateNotFound = errors.New("template does not exist")
+	// ErrTemplateNotQuestionnaire is returned when an assessment tries to use a wrong template type
+	ErrTemplateNotQuestionnaire = errors.New("template must be a questionnaire")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

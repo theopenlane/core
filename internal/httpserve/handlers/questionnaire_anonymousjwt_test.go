@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/utils/contextx"
 
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/iam/auth"
 )
@@ -30,7 +31,8 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 	template, err := suite.db.Template.Create().
 		SetOwnerID(testUser1.OrganizationID).
 		SetName("Test Template").
-		SetTemplateType("questionnaire").
+		SetTemplateType(enums.Document).
+		SetKind(enums.TemplateKindQuestionnaire).
 		SetJsonconfig(map[string]interface{}{
 			"title": "Sample Questionnaire",
 			"questions": []map[string]interface{}{
@@ -46,6 +48,7 @@ func (suite *HandlerTestSuite) TestCreateQuestionnaireAnonymousJWT() {
 
 	assessment, err := suite.db.Assessment.Create().
 		SetOwnerID(testUser1.OrganizationID).
+		SetName("Test Assessment").
 		SetTemplateID(template.ID).
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)

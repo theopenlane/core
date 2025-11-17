@@ -22,4 +22,3 @@ func registerQuestionnaireAnonymousJWTHandler(router *Router) error {
 
 	return router.AddUnversionedHandlerRoute(config)
 }
-

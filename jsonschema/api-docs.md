@@ -69,6 +69,9 @@ Config contains the configuration for the core server
             "keys": {},
             "redis": {
                 "config": {}
+            },
+            "apiTokens": {
+                "keys": {}
             }
         },
         "providers": {
@@ -674,6 +677,9 @@ Auth settings including oauth2 providers and token configuration
         "keys": {},
         "redis": {
             "config": {}
+        },
+        "apiTokens": {
+            "keys": {}
         }
     },
     "providers": {
@@ -703,6 +709,7 @@ Auth settings including oauth2 providers and token configuration
 |**generateKeys**|`boolean`||no|
 |**jwksCacheTTL**|`integer`||no|
 |[**redis**](#authtokenredis)|`object`||no|
+|[**apiTokens**](#authtokenapitokens)|`object`||no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -712,6 +719,9 @@ Auth settings including oauth2 providers and token configuration
     "keys": {},
     "redis": {
         "config": {}
+    },
+    "apiTokens": {
+        "keys": {}
     }
 }
 ```
@@ -765,6 +775,49 @@ Auth settings including oauth2 providers and token configuration
 |**minIdleConns**|`integer`|||
 |**maxIdleConns**|`integer`|||
 |**maxActiveConns**|`integer`|||
+
+**Additional Properties:** not allowed  
+<a name="authtokenapitokens"></a>
+#### auth\.token\.apiTokens: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**envPrefix**|`string`|||
+|[**keys**](#authtokenapitokenskeys)|`object`|||
+|**secretSize**|`integer`|||
+|**delimiter**|`string`|||
+|**prefix**|`string`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "keys": {}
+}
+```
+
+<a name="authtokenapitokenskeys"></a>
+##### auth\.token\.apiTokens\.keys: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**Additional Properties**](#authtokenapitokenskeysadditionalproperties)|`object`|||
+
+<a name="authtokenapitokenskeysadditionalproperties"></a>
+###### auth\.token\.apiTokens\.keys\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**secret**|`string`|||
+|**status**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="authsupportedproviders"></a>
@@ -1212,6 +1265,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**reset**|`string`|||
 |**verifySubscriber**|`string`|||
 |**verifyBilling**|`string`|||
+|**questionnaire**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="sessions"></a>

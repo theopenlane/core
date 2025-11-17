@@ -453,6 +453,29 @@ data:
           blacklistPrefix: {{ .Values.openlane.coreConfiguration.auth.token.redis.blacklistPrefix | quote }}
           {{- end }}
         {{- end }}
+        {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens }}
+        apiTokens:
+          {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens.enabled }}
+          enabled: {{ .Values.openlane.coreConfiguration.auth.token.apiTokens.enabled }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens.envPrefix }}
+          envPrefix: {{ .Values.openlane.coreConfiguration.auth.token.apiTokens.envPrefix | quote }}
+          {{- end }}
+          {{- $mapValue := (.Values.openlane.coreConfiguration.auth.token.apiTokens.keys | default (dict)) }}
+          {{- if gt (len $mapValue) 0 }}
+          keys:
+          {{- toYaml $mapValue | nindent 12 }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens.secretSize }}
+          secretSize: {{ .Values.openlane.coreConfiguration.auth.token.apiTokens.secretSize }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens.delimiter }}
+          delimiter: {{ .Values.openlane.coreConfiguration.auth.token.apiTokens.delimiter | quote }}
+          {{- end }}
+          {{- if .Values.openlane.coreConfiguration.auth.token.apiTokens.prefix }}
+          prefix: {{ .Values.openlane.coreConfiguration.auth.token.apiTokens.prefix | quote }}
+          {{- end }}
+        {{- end }}
       {{- end }}
       {{- $sliceValue := (.Values.openlane.coreConfiguration.auth.supportedProviders | default (list)) }}
       {{- if gt (len $sliceValue) 0 }}
@@ -810,6 +833,13 @@ data:
         verifyBilling: "https://console.{{ .Values.domain }}/verify-billing"
         {{- else }}
         verifyBilling: ""
+        {{- end }}
+        {{- if .Values.openlane.coreConfiguration.email.urls.questionnaire }}
+        questionnaire: {{ .Values.openlane.coreConfiguration.email.urls.questionnaire | quote }}
+        {{- else if .Values.domain }}
+        questionnaire: "https://console.{{ .Values.domain }}/questionnaire"
+        {{- else }}
+        questionnaire: ""
         {{- end }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.email.templatesPath }}

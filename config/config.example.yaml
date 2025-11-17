@@ -26,6 +26,13 @@ auth:
     supportedProviders: null
     token:
         accessDuration: 3600000000000
+        apiTokens:
+            delimiter: .
+            enabled: false
+            envPrefix: IAM_API_TOKEN_KEY_
+            keys: null
+            prefix: ""
+            secretSize: 32
         audience: ""
         generateKeys: true
         issuer: ""
@@ -94,6 +101,7 @@ email:
         docs: ""
         invite: ""
         product: ""
+        questionnaire: ""
         reset: ""
         root: ""
         verify: ""

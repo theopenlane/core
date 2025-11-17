@@ -291,6 +291,9 @@ func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	}
 
 	conf := authmiddleware.NewAuthOptions(opts...)
+	err := conf.WithLocalValidator()
+	require.NoError(suite.T(), err)
+
 	return authmiddleware.Authenticate(&conf)
 }
 

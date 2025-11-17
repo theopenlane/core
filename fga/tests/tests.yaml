@@ -1050,6 +1050,53 @@ tests:
         object: feature:feature2
         assertions:
           enabled: false
+  - name: assessment responses
+    description: assessment response access controls
+    tuple_file: tuples/assessment_responses.yaml
+    check:
+      - user: user:ulid-response-owner
+        object: assessment_response:response-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: false
+      - user: user:ulid-of-owner
+        object: assessment_response:response-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-admin
+        object: assessment_response:response-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:ulid-of-member
+        object: assessment_response:response-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:ulid-of-owner-foobar
+        object: assessment_response:response-1
+        assertions:
+          can_view: false
+          can_edit: false
+          can_delete: false
+    list_objects:
+      - user: user:ulid-response-owner
+        type: assessment_response
+        assertions:
+          can_view:
+            - assessment_response:response-1
+          can_edit:
+            - assessment_response:response-1
+      - user: user:ulid-of-owner
+        type: assessment_response
+        assertions:
+          can_delete:
+            - assessment_response:response-1
   - name: exports
     description: test export relationships and permissions
     tuple_file: tuples/exports.yaml
