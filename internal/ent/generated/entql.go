@@ -2359,8 +2359,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldUpdatedAt:        {Type: field.TypeTime, Column: notification.FieldUpdatedAt},
 			notification.FieldCreatedBy:        {Type: field.TypeString, Column: notification.FieldCreatedBy},
 			notification.FieldUpdatedBy:        {Type: field.TypeString, Column: notification.FieldUpdatedBy},
-			notification.FieldDeletedAt:        {Type: field.TypeTime, Column: notification.FieldDeletedAt},
-			notification.FieldDeletedBy:        {Type: field.TypeString, Column: notification.FieldDeletedBy},
 			notification.FieldTags:             {Type: field.TypeJSON, Column: notification.FieldTags},
 			notification.FieldOwnerID:          {Type: field.TypeString, Column: notification.FieldOwnerID},
 			notification.FieldUserID:           {Type: field.TypeString, Column: notification.FieldUserID},
@@ -25480,16 +25478,6 @@ func (f *NotificationFilter) WhereCreatedBy(p entql.StringP) {
 // WhereUpdatedBy applies the entql string predicate on the updated_by field.
 func (f *NotificationFilter) WhereUpdatedBy(p entql.StringP) {
 	f.Where(p.Field(notification.FieldUpdatedBy))
-}
-
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *NotificationFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(notification.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NotificationFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(notification.FieldDeletedBy))
 }
 
 // WhereTags applies the entql json.RawMessage predicate on the tags field.

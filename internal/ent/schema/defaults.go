@@ -78,6 +78,16 @@ func (m mixinConfig) getMixins(schema ent.Interface) []ent.Mixin {
 
 	if !m.excludeSoftDelete {
 		mixins = append(mixins, mixin.SoftDeleteMixin{})
+	} else {
+		for i, mixin := range m.additionalMixins {
+			if _, ok := mixin.(ObjectOwnedMixin); ok {
+				// if the ObjectOwnedMixin is present, set the SkipDeletedAt field
+				if o, ok := mixin.(ObjectOwnedMixin); ok {
+					o.SkipDeletedAt = true
+					m.additionalMixins[i] = o
+				}
+			}
+		}
 	}
 
 	// always include the IDMixin, if a prefix is provided it will be used
