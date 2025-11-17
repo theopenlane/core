@@ -444,6 +444,9 @@
         },
         "questionnaire": {
           "type": "string"
+        },
+        "questionnaire": {
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -1519,6 +1522,7 @@
         "enabled": {
           "type": "boolean"
         },
+<<<<<<< HEAD
         "envprefix": {
           "type": "string"
         },
@@ -1526,6 +1530,16 @@
           "$ref": "#/$defs/map[string]tokens.APITokenKeyConfig"
         },
         "secretsize": {
+||||||| parent of a26c932f (extend tests)
+=======
+        "envPrefix": {
+          "type": "string"
+        },
+        "keys": {
+          "$ref": "#/$defs/map[string]tokens.APITokenKeyConfig"
+        },
+        "secretSize": {
+>>>>>>> a26c932f (extend tests)
           "type": "integer"
         },
         "delimiter": {
@@ -1588,7 +1602,12 @@
         "redis": {
           "$ref": "#/$defs/tokens.RedisConfig"
         },
+<<<<<<< HEAD
         "apitokens": {
+||||||| parent of a26c932f (extend tests)
+=======
+        "apiTokens": {
+>>>>>>> a26c932f (extend tests)
           "$ref": "#/$defs/tokens.APITokenConfig"
         }
       },

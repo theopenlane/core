@@ -70,7 +70,12 @@ Config contains the configuration for the core server
             "redis": {
                 "config": {}
             },
+<<<<<<< HEAD
             "apitokens": {
+||||||| parent of a26c932f (extend tests)
+=======
+            "apiTokens": {
+>>>>>>> a26c932f (extend tests)
                 "keys": {}
             }
         },
@@ -678,7 +683,12 @@ Auth settings including oauth2 providers and token configuration
         "redis": {
             "config": {}
         },
+<<<<<<< HEAD
         "apitokens": {
+||||||| parent of a26c932f (extend tests)
+=======
+        "apiTokens": {
+>>>>>>> a26c932f (extend tests)
             "keys": {}
         }
     },
@@ -709,7 +719,12 @@ Auth settings including oauth2 providers and token configuration
 |**generatekeys**|`boolean`||no|
 |**jwkscachettl**|`integer`||no|
 |[**redis**](#authtokenredis)|`object`||no|
+<<<<<<< HEAD
 |[**apitokens**](#authtokenapitokens)|`object`||no|
+||||||| parent of a26c932f (extend tests)
+=======
+|[**apiTokens**](#authtokenapitokens)|`object`||no|
+>>>>>>> a26c932f (extend tests)
 
 **Additional Properties:** not allowed  
 **Example**
@@ -720,7 +735,12 @@ Auth settings including oauth2 providers and token configuration
     "redis": {
         "config": {}
     },
+<<<<<<< HEAD
     "apitokens": {
+||||||| parent of a26c932f (extend tests)
+=======
+    "apiTokens": {
+>>>>>>> a26c932f (extend tests)
         "keys": {}
     }
 }
@@ -811,6 +831,49 @@ Auth settings including oauth2 providers and token configuration
 
 <a name="authtokenapitokenskeysadditionalproperties"></a>
 ###### auth\.token\.apitokens\.keys\.additionalProperties: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**secret**|`string`|||
+|**status**|`string`|||
+
+**Additional Properties:** not allowed  
+<a name="authtokenapitokens"></a>
+#### auth\.token\.apiTokens: object
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**enabled**|`boolean`|||
+|**envPrefix**|`string`|||
+|[**keys**](#authtokenapitokenskeys)|`object`|||
+|**secretSize**|`integer`|||
+|**delimiter**|`string`|||
+|**prefix**|`string`|||
+
+**Additional Properties:** not allowed  
+**Example**
+
+```json
+{
+    "keys": {}
+}
+```
+
+<a name="authtokenapitokenskeys"></a>
+##### auth\.token\.apiTokens\.keys: object
+
+**Additional Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|[**Additional Properties**](#authtokenapitokenskeysadditionalproperties)|`object`|||
+
+<a name="authtokenapitokenskeysadditionalproperties"></a>
+###### auth\.token\.apiTokens\.keys\.additionalProperties: object
 
 **Properties**
 
@@ -1263,8 +1326,16 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**verify**|`string`|||
 |**invite**|`string`|||
 |**reset**|`string`|||
+<<<<<<< HEAD
 |**verifysubscriber**|`string`|||
 |**verifybilling**|`string`|||
+||||||| parent of a26c932f (extend tests)
+|**verifySubscriber**|`string`|||
+|**verifyBilling**|`string`|||
+=======
+|**verifySubscriber**|`string`|||
+|**verifyBilling**|`string`|||
+>>>>>>> a26c932f (extend tests)
 |**questionnaire**|`string`|||
 
 **Additional Properties:** not allowed  

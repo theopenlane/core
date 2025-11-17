@@ -1,6 +1,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 h1:Z1lnTnqdw6Pvpav+YXU1jKlxJdFZ/CDZp24v63HTwnU=
 ||||||| parent of e1d3404b (1:m templates -> assessments)
 h1:cplNKQ9ckf9JczEOUSX5eetICep7NerKoNs5bK/GsY8=
@@ -17,6 +18,11 @@ h1:dR9ozdvH0LNaVu4Sn9YjM//ZYkDn4xM6lx1r4As8qHc=
 =======
 h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
 >>>>>>> 30ad18db (fixes)
+||||||| parent of a26c932f (extend tests)
+h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
+=======
+h1:wEV1QOoXc9tJHv4f5+5YmK6hx2x1smqtiHINyWPELj0=
+>>>>>>> a26c932f (extend tests)
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -110,6 +116,7 @@ h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
 20251109163940_trust_center_analytics_schema.sql h1:IUtkvupXGEQxQtQAXNzg0AHCGlK+RsDyjYjf7MQRQds=
 20251112061033_internal-notifications.sql h1:WhwtUojNAH6SFR3zP77aXQTyuenR07YZEdfV5sAtX9k=
 <<<<<<< HEAD
+<<<<<<< HEAD
 20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
 >>>>>>> e1d3404b (1:m templates -> assessments)
 ||||||| parent of 1a1e6ddf (allow api key not just jwt and send emails)
@@ -125,3 +132,11 @@ h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
 20251113145355_sifhfkf.sql h1:OBWQ25Kt5QULrTlsFdDjo4Rc2v9T8TtL1kMxAfDTifY=
 20251117155928_notifications-schema.sql h1:RraPD+S4//GP4vmU3Lp9qslTOmSezuzjF4JaSSLyRSA=
 >>>>>>> 30ad18db (fixes)
+||||||| parent of a26c932f (extend tests)
+20251112144417_fixes.sql h1:kFX5Kc9XHUF6gyHpRNs1u1OPMu2kbcrSqgqZ+mY3EPw=
+20251113145355_sifhfkf.sql h1:OBWQ25Kt5QULrTlsFdDjo4Rc2v9T8TtL1kMxAfDTifY=
+20251117155928_notifications-schema.sql h1:RraPD+S4//GP4vmU3Lp9qslTOmSezuzjF4JaSSLyRSA=
+=======
+20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
+20251117185237_assessments.sql h1:o43v3/Sjp8aOPoC94WCKBAxBixQeDk9nnNHK7y+hil0=
+>>>>>>> a26c932f (extend tests)

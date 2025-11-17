@@ -104,7 +104,13 @@ require (
 >>>>>>> e4b23f8e (add go.mod)
 	github.com/theopenlane/gqlgen-plugins v0.11.1
 	github.com/theopenlane/httpsling v0.3.0
+<<<<<<< HEAD
 	github.com/theopenlane/iam v0.22.2
+||||||| parent of a26c932f (extend tests)
+	github.com/theopenlane/iam v0.21.0
+=======
+	github.com/theopenlane/iam v0.22.1
+>>>>>>> a26c932f (extend tests)
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.5.0
 	github.com/theopenlane/utils v0.6.1
@@ -137,12 +143,18 @@ require (
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
 <<<<<<< HEAD
+<<<<<<< HEAD
 	google.golang.org/api v0.255.0 // indirect
 ||||||| parent of 317b2fa4 (add http handler to generate the questionnaire jwt)
 	google.golang.org/api v0.253.0 // indirect
 =======
 	google.golang.org/api v0.254.0 // indirect
 >>>>>>> 317b2fa4 (add http handler to generate the questionnaire jwt)
+||||||| parent of a26c932f (extend tests)
+	google.golang.org/api v0.254.0 // indirect
+=======
+	google.golang.org/api v0.255.0 // indirect
+>>>>>>> a26c932f (extend tests)
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
@@ -386,7 +398,7 @@ require (
 	go.uber.org/goleak v1.3.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.3 // indirect
-	golang.org/x/exp v0.0.0-20251023183803-a4bb9ffd2546 // indirect
+	golang.org/x/exp v0.0.0-20251113190631-e25ba8c21ef6 // indirect
 	golang.org/x/net v0.47.0 // indirect
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/time v0.14.0 // indirect

@@ -213,7 +213,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "constraint failed",
+			errorMsg: "template does not exist",
 		},
 		{
 			name: "invalid template_id",
@@ -224,7 +224,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "constraint failed",
+			errorMsg: "template does not exist",
 		},
 		{
 			name: "no access, view only user",
@@ -279,6 +279,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 func TestMutationUpdateAssessment(t *testing.T) {
 	// create assessment to be updated
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	templateIDPtr := lo.ToPtr(assessment.TemplateID)
 
 	testCases := []struct {
 		name     string
@@ -292,7 +293,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path, update name",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name: lo.ToPtr(gofakeit.Company()),
+				Name:       lo.ToPtr(gofakeit.Company()),
+				TemplateID: templateIDPtr,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -301,7 +303,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path, update tags",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Tags: []string{"updated-tag1", "updated-tag2"},
+				Tags:       []string{"updated-tag1", "updated-tag2"},
+				TemplateID: templateIDPtr,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -311,6 +314,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
 				AppendTags: []string{"appended-tag"},
+				TemplateID: templateIDPtr,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -319,7 +323,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "happy path using personal access token",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name: lo.ToPtr(gofakeit.Company()),
+				Name:       lo.ToPtr(gofakeit.Company()),
+				TemplateID: templateIDPtr,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -328,7 +333,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "not found, invalid ID",
 			id:   ulids.New().String(),
 			request: testclient.UpdateAssessmentInput{
-				Name: lo.ToPtr(gofakeit.Company()),
+				Name:       lo.ToPtr(gofakeit.Company()),
+				TemplateID: templateIDPtr,
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
@@ -338,7 +344,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "no access, user of different org",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name: lo.ToPtr(gofakeit.Company()),
+				Name:       lo.ToPtr(gofakeit.Company()),
+				TemplateID: templateIDPtr,
 			},
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
@@ -348,7 +355,8 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			name: "no access, view only user",
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
-				Name: lo.ToPtr(gofakeit.Company()),
+				Name:       lo.ToPtr(gofakeit.Company()),
+				TemplateID: templateIDPtr,
 			},
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,

@@ -25,6 +25,7 @@ auth:
             timeout: 60000000000
     supportedproviders: null
     token:
+<<<<<<< HEAD
         accessduration: 3600000000000
         apitokens:
             delimiter: .
@@ -33,6 +34,18 @@ auth:
             keys: null
             prefix: ""
             secretsize: 32
+||||||| parent of a26c932f (extend tests)
+        accessDuration: 3600000000000
+=======
+        accessDuration: 3600000000000
+        apiTokens:
+            delimiter: .
+            enabled: false
+            envPrefix: IAM_API_TOKEN_KEY_
+            keys: null
+            prefix: ""
+            secretSize: 32
+>>>>>>> a26c932f (extend tests)
         audience: ""
         generatekeys: true
         issuer: ""

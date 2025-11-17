@@ -76,6 +76,12 @@ func (ec *executionContext) fieldContext_AssessmentCreatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Assessment_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Assessment_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Assessment_viewers(ctx, field)
 			case "template":
 				return ec.fieldContext_Assessment_template(ctx, field)
 			case "assessmentResponses":
@@ -164,6 +170,12 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
 				return ec.fieldContext_Assessment_owner(ctx, field)
+			case "blockedGroups":
+				return ec.fieldContext_Assessment_blockedGroups(ctx, field)
+			case "editors":
+				return ec.fieldContext_Assessment_editors(ctx, field)
+			case "viewers":
+				return ec.fieldContext_Assessment_viewers(ctx, field)
 			case "template":
 				return ec.fieldContext_Assessment_template(ctx, field)
 			case "assessmentResponses":

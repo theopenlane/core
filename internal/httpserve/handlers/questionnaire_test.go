@@ -117,14 +117,14 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 			accessToken:    "",
 			expectedStatus: http.StatusUnauthorized,
 			expectSuccess:  false,
-			expectedError:  "unauthorized",
+			expectedError:  "no authorization header",
 		},
 		{
 			name:           "invalid token",
 			accessToken:    "invalid_token",
 			expectedStatus: http.StatusUnauthorized,
 			expectSuccess:  false,
-			expectedError:  "unauthorized",
+			expectedError:  "token is malformed",
 		},
 	}
 
@@ -183,16 +183,42 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 	ec := echocontext.NewTestEchoContext().Request().Context()
 	ctx := privacy.DecisionContext(ec, privacy.Allow)
 
+	templateType := enums.Document
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template Missing",
+		"description": "A test questionnaire template that will be deleted",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
+	template, err := suite.db.Template.Create().
+		SetName("Test Assessment Template Missing").
+		SetTemplateType(templateType).
+		SetJsonconfig(jsonConfig).
+		SetKind(enums.TemplateKindQuestionnaire).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment No Template").
+		SetTemplateID(template.ID).
 		SetAssessmentType(enums.AssessmentTypeExternal).
 		SetOwnerID(testUser1.OrganizationID).
-		Save(ctx)
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	// simulate a missing template by deleting it after the assessment was created
+	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
 	require.NoError(t, err)
 
 	testEmail := "notemplate@example.com"
 
-	// Create an assessment response for the email - need questionnaire context and authenticated user
 	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
 	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
 		SubjectID:      testUser1.ID,
@@ -222,7 +248,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 
 	assert.Equal(t, http.StatusNotFound, recorder.Code)
 
-	// Cleanup
 	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
 }
@@ -268,7 +293,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 	testEmail := "completed-get@example.com"
 	completedAt := time.Now().Add(-1 * time.Hour)
 
-	// Create questionnaire context with anonymous user - needed for both DocumentData and AssessmentResponse
 	anonUser := &auth.AnonymousQuestionnaireUser{
 		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
 		SubjectEmail:   testEmail,
@@ -289,7 +313,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	// Create AssessmentResponse - this will trigger email job insertion
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
@@ -297,7 +320,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	// Verify the email job was inserted
 	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 		[]rivertest.ExpectedJob{
 			{
@@ -306,10 +328,13 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		})
 	require.NotNil(t, job)
 
-	// Update the assessment response to completed status using allowCtx (like the handler does)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+	allowCtx = auth.WithAuthenticatedUser(allowCtx, &auth.AuthenticatedUser{
+		SubjectID:      testUser1.ID,
+		OrganizationID: testUser1.OrganizationID,
+	})
 
 	assessmentResponse, err = suite.db.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
@@ -353,7 +378,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireAlreadyCompleted() {
 		assert.Contains(t, errorMsg, "already been completed")
 	}
 
-	// Cleanup
 	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(ctx)
 	suite.db.DocumentData.DeleteOneID(documentData.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
@@ -423,6 +447,28 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 		AccessToken: accessToken,
 	}
 
+	anonUser := &auth.AnonymousQuestionnaireUser{
+		SubjectID:      anonUserID,
+		SubjectEmail:   testEmail,
+		OrganizationID: assessment.OwnerID,
+		AssessmentID:   assessment.ID,
+	}
+
+	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
+	questionnaireCtx = auth.WithAnonymousQuestionnaireUser(questionnaireCtx, anonUser)
+	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
+		SubjectID:      testUser1.ID,
+		OrganizationID: testUser1.OrganizationID,
+	})
+
+	assessmentResponse, err := suite.db.AssessmentResponse.Create().
+		SetAssessmentID(assessment.ID).
+		SetEmail(testEmail).
+		SetOwnerID(testUser1.OrganizationID).
+		SetStatus(enums.AssessmentResponseStatusSent).
+		Save(questionnaireCtx)
+	require.NoError(t, err)
+
 	submissionData := models.SubmitQuestionnaireRequest{
 		Data: map[string]any{
 			"q1":               "John Doe",
@@ -458,7 +504,7 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 			requestBody:    submissionData,
 			expectedStatus: http.StatusUnauthorized,
 			expectSuccess:  false,
-			expectedError:  "unauthorized",
+			expectedError:  "no authorization header",
 		},
 		{
 			name:        "missing data",
@@ -471,6 +517,8 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 			expectedError:  "missing questionnaire data",
 		},
 	}
+
+	var createdDocumentDataIDs []string
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
@@ -505,14 +553,19 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 					tc.validateJSON(t, out)
 				}
 
-				documentData, err := suite.db.DocumentData.Get(ctx, out.DocumentDataID)
+				documentData, err := suite.db.DocumentData.Get(questionnaireCtx, out.DocumentDataID)
 				require.NoError(t, err)
 				assert.NotNil(t, documentData)
 				assert.Equal(t, template.ID, documentData.TemplateID)
 				assert.Equal(t, assessment.OwnerID, documentData.OwnerID)
 
-				// Note: AssessmentResponse is created by the handler during submission
-				// We don't pre-create it in test setup to avoid triggering email hooks
+				updatedResponse, err := suite.db.AssessmentResponse.Get(questionnaireCtx, assessmentResponse.ID)
+				require.NoError(t, err)
+				assert.Equal(t, enums.AssessmentResponseStatusCompleted, updatedResponse.Status)
+				assert.Equal(t, documentData.ID, updatedResponse.DocumentDataID)
+				assert.NotZero(t, updatedResponse.CompletedAt)
+
+				createdDocumentDataIDs = append(createdDocumentDataIDs, documentData.ID)
 			} else {
 				var errorResp map[string]interface{}
 				err := json.NewDecoder(res.Body).Decode(&errorResp)
@@ -525,8 +578,17 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 		})
 	}
 
-	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
-	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)
+	for _, docID := range createdDocumentDataIDs {
+		err := suite.db.DocumentData.DeleteOneID(docID).Exec(questionnaireCtx)
+		require.NoError(t, err)
+	}
+
+	err = suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(questionnaireCtx)
+	require.NoError(t, err)
+	err = suite.db.Assessment.DeleteOneID(assessment.ID).Exec(questionnaireCtx)
+	require.NoError(t, err)
+	err = suite.db.Template.DeleteOneID(template.ID).Exec(questionnaireCtx)
+	require.NoError(t, err)
 }
 
 func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
@@ -562,7 +624,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	testEmail := "completed@example.com"
 	completedAt := time.Now().Add(-1 * time.Hour)
 
-	// Create questionnaire context with anonymous user - needed for both DocumentData and AssessmentResponse
 	anonUser := &auth.AnonymousQuestionnaireUser{
 		SubjectID:      fmt.Sprintf("anon_questionnaire_%s", uuid.New().String()),
 		SubjectEmail:   testEmail,
@@ -583,7 +644,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	// Create AssessmentResponse - this will trigger email job insertion
 	assessmentResponse, err := suite.db.AssessmentResponse.Create().
 		SetAssessmentID(assessment.ID).
 		SetEmail(testEmail).
@@ -591,7 +651,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		Save(questionnaireCtx)
 	require.NoError(t, err)
 
-	// Verify the email job was inserted
 	job := rivertest.RequireManyInserted(context.Background(), t, riverpgxv5.New(suite.db.Job.GetPool()),
 		[]rivertest.ExpectedJob{
 			{
@@ -600,7 +659,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		})
 	require.NotNil(t, job)
 
-	// Update the assessment response to completed status using allowCtx (like the handler does)
 	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
 	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
@@ -660,13 +718,12 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 		assert.Contains(t, errorMsg, "already been completed")
 	}
 
-	unchangedDocData, err := suite.db.DocumentData.Get(ctx, documentData.ID)
+	unchangedDocData, err := suite.db.DocumentData.Get(allowCtx, documentData.ID)
 	require.NoError(t, err)
 	assert.Equal(t, "previous answer", unchangedDocData.Data["q1"])
 
-	// Cleanup
-	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(ctx)
-	suite.db.DocumentData.DeleteOneID(documentData.ID).Exec(ctx)
-	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
-	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)
+	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(allowCtx)
+	suite.db.DocumentData.DeleteOneID(documentData.ID).Exec(allowCtx)
+	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(allowCtx)
+	suite.db.Template.DeleteOneID(template.ID).Exec(allowCtx)
 }

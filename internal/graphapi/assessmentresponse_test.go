@@ -7,6 +7,7 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -216,6 +217,56 @@ func TestMutationCreateAssessmentResponse(t *testing.T) {
 			}
 		})
 	}
+
+	t.Run("send attempts should increment on duplicate response", func(t *testing.T) {
+		email := gofakeit.Email()
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		firstResponse := resp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(int64(1), firstResponse.SendAttempts))
+		responseIDsOrg1 = append(responseIDsOrg1, firstResponse.ID)
+
+		secondResp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, secondResp != nil)
+
+		updatedResponse := secondResp.CreateAssessmentResponse.AssessmentResponse
+		assert.Check(t, is.Equal(firstResponse.ID, updatedResponse.ID))
+		assert.Check(t, is.Equal(firstResponse.SendAttempts+1, updatedResponse.SendAttempts))
+	})
+
+	t.Run("completed response should not be updated", func(t *testing.T) {
+		email := gofakeit.Email()
+		req := testclient.CreateAssessmentResponseInput{
+			Email:        email,
+			AssessmentID: assessment.ID,
+			OwnerID:      &testUser1.OrganizationID,
+		}
+
+		resp, err := suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+
+		response := resp.CreateAssessmentResponse.AssessmentResponse
+		responseIDsOrg1 = append(responseIDsOrg1, response.ID)
+
+		updateCtx := setContext(testUser1.UserCtx, suite.client.db)
+		_, err = suite.client.db.AssessmentResponse.UpdateOneID(response.ID).
+			SetStatus(enums.AssessmentResponseStatusCompleted).
+			Save(updateCtx)
+		assert.NilError(t, err)
+
+		_, err = suite.client.api.CreateAssessmentResponse(testUser1.UserCtx, req)
+		assert.ErrorContains(t, err, "assessment is already in progress or completed")
+	})
 
 	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg1}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(testUser1.UserCtx, t)

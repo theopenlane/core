@@ -61,7 +61,7 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 		}
 
 		if !assessmentResponseEntity.DueDate.IsZero() && time.Now().After(assessmentResponseEntity.DueDate) {
-			assessmentResponseEntity, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponseEntity.ID).
+			_, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponseEntity.ID).
 				SetStartedAt(assessmentResponseEntity.StartedAt).
 				SetStatus(enums.AssessmentResponseStatusOverdue).
 				Save(allowCtx)

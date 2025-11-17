@@ -27,7 +27,7 @@ tasks:
       STORE_ID:
         sh: fga store list --api-token={{ .FGA_API_TOKEN }} |jq -r '.stores.[0].id'
     cmds:
-      - for: { var: TUPLES, as: TUPLE }
+      - for: {var: TUPLES, as: TUPLE}
         cmd: |
           fga tuple write --file "{{.TUPLE}}" --api-token="{{.FGA_API_TOKEN}}" --store-id="{{.STORE_ID}}"
 
