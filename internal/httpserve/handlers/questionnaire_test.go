@@ -62,7 +62,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
-	// Create a test assessment
 	assessment, err := suite.db.Assessment.Create().
 		SetName("Test Assessment").
 		SetTemplateID(template.ID).
@@ -73,7 +72,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 
 	testEmail := "test@example.com"
 
-	// Create an assessment response for the email - need questionnaire context and authenticated user
 	questionnaireCtx := contextx.With(ctx, auth.QuestionnaireContextKey{})
 	questionnaireCtx = auth.WithAuthenticatedUser(questionnaireCtx, &auth.AuthenticatedUser{
 		SubjectID:      testUser1.ID,
@@ -168,7 +166,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaire() {
 		})
 	}
 
-	// Cleanup
 	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)
 	suite.db.Template.DeleteOneID(template.ID).Exec(ctx)

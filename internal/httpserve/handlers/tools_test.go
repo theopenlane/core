@@ -100,6 +100,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPondPool       *soiree.PondPool
+	sharedAuthMiddleware echo.MiddlewareFunc
 
 	// OpenAPI operations for reuse in tests
 	startImpersonationOp *openapi3.Operation
@@ -249,6 +250,10 @@ func (suite *HandlerTestSuite) SetupTest() {
 	suite.startImpersonationOp = suite.createImpersonationOperation("StartImpersonationHandler", "Test start impersonation")
 	suite.endImpersonationOp = suite.createImpersonationOperation("EndImpersonationHandler", "Test end impersonation")
 
+	// shared auth middleware once per test to avoid JWK cache causing
+	// an infinite hanging
+	suite.sharedAuthMiddleware = suite.createAuthMiddleware()
+
 	suite.setupTestData(ctx)
 }
 
@@ -274,25 +279,30 @@ func (suite *HandlerTestSuite) registerTestHandler(method, path string, operatio
 
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
 func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
-	authmw := suite.createAuthMiddleware()
 	suite.e.Add(method, path, func(c echo.Context) error {
 		return handlerFunc(c, &handlers.OpenAPIContext{
 			Operation: operation,
 			Registry:  suite.router.SchemaRegistry,
 		})
-	}, authmw)
+	}, suite.sharedAuthMiddleware)
 }
 
 // createAuthMiddleware creates authentication middleware for tests
 func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
+	// get keys from the token manager
+	keys, err := suite.db.TokenManager.Keys()
+	require.NoError(suite.T(), err)
+
+	// local validator to avoid JWK cache issues
+	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
+
 	opts := []authmiddleware.Option{
 		authmiddleware.WithDBClient(suite.db),
 		authmiddleware.WithAllowAnonymous(true),
+		authmiddleware.WithValidator(validator),
 	}
 
 	conf := authmiddleware.NewAuthOptions(opts...)
-	err := conf.WithLocalValidator()
-	require.NoError(suite.T(), err)
 
 	return authmiddleware.Authenticate(&conf)
 }

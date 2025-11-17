@@ -125,11 +125,6 @@ func (t Template) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: Assessment{},
 		}),
-		// uniqueEdgeTo(&edgeDefinition{
-		// 	fromSchema: t,
-		// 	name:       "assessment",
-		// 	t:          Assessment.Type,
-		// }),
 	}
 }
 
