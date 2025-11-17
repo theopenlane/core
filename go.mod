@@ -96,7 +96,7 @@ require (
 	github.com/theopenlane/entx v0.15.1
 	github.com/theopenlane/gqlgen-plugins v0.11.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.21.0
+	github.com/theopenlane/iam v0.22.1
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.4.3
 	github.com/theopenlane/utils v0.5.2
@@ -127,7 +127,7 @@ require (
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
-	google.golang.org/api v0.253.0 // indirect
+	google.golang.org/api v0.255.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
@@ -189,7 +189,7 @@ require (
 	github.com/dave/jennifer v1.7.1 // indirect
 	github.com/distribution/reference v0.6.0 // indirect
 	github.com/dnephin/pflag v1.0.7 // indirect
-	github.com/docker/docker v28.5.1+incompatible // indirect
+	github.com/docker/docker v28.5.2+incompatible // indirect
 	github.com/ebitengine/purego v0.9.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
@@ -224,7 +224,7 @@ require (
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/shirou/gopsutil/v4 v4.25.9 // indirect
 	github.com/testcontainers/testcontainers-go v0.40.0
-	github.com/testcontainers/testcontainers-go/modules/openfga v0.39.0 // indirect
+	github.com/testcontainers/testcontainers-go/modules/openfga v0.40.0 // indirect
 	github.com/tklauser/go-sysconf v0.3.15 // indirect
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/ugorji/go/codec v1.3.0 // indirect
@@ -315,8 +315,8 @@ require (
 	github.com/opencontainers/image-spec v1.1.1 // indirect
 	github.com/opencontainers/runc v1.3.3 // indirect
 	github.com/openfga/api/proto v0.0.0-20250909173124-0ac19aac54f2 // indirect
-	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251003203216-7c0d09a1cc5a // indirect
-	github.com/openfga/openfga v1.10.3 // indirect
+	github.com/openfga/language/pkg/go v0.2.0-beta.2.0.20251027165255-0f8f255e5f6c // indirect
+	github.com/openfga/openfga v1.11.0 // indirect
 	github.com/ory/dockertest v3.3.5+incompatible // indirect
 	github.com/pelletier/go-toml/v2 v2.2.4 // indirect
 	github.com/perimeterx/marshmallow v1.1.5 // indirect
@@ -377,7 +377,7 @@ require (
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20251022142026-3a174f9686a8 // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251022142026-3a174f9686a8 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251029180050-ab9386a59fda // indirect
 	google.golang.org/grpc v1.76.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )
