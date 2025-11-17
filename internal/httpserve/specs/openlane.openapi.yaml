@@ -2293,441 +2293,6 @@ paths:
             summary: WebFinger endpoint for federated identity
             tags:
                 - webfinger
-    /Groups:
-        get:
-            description: Returns a list of groups with optional filtering and pagination
-            operationId: listGroups
-            parameters:
-                - $ref: '#/components/parameters/filter'
-                - $ref: '#/components/parameters/startIndex'
-                - $ref: '#/components/parameters/count'
-                - $ref: '#/components/parameters/attributes'
-                - $ref: '#/components/parameters/excludedAttributes'
-            responses:
-                "200":
-                    $ref: '#/components/responses/GroupList'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: List groups
-            tags:
-                - Groups
-        post:
-            description: Creates a new group with the provided attributes
-            operationId: createGroup
-            requestBody:
-                $ref: '#/components/requestBodies/GroupBody'
-            responses:
-                "201":
-                    $ref: '#/components/responses/GroupCreated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "409":
-                    $ref: '#/components/responses/Conflict'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Create a new group
-            tags:
-                - Groups
-    /Groups/{id}:
-        delete:
-            description: Removes a group from the system
-            operationId: deleteGroup
-            parameters:
-                - $ref: '#/components/parameters/groupId'
-            responses:
-                "204":
-                    description: Group deleted successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Delete group
-            tags:
-                - Groups
-        get:
-            description: Retrieves details of a specific group by ID
-            operationId: getGroupById
-            parameters:
-                - $ref: '#/components/parameters/groupId'
-                - $ref: '#/components/parameters/attributes'
-                - $ref: '#/components/parameters/excludedAttributes'
-            responses:
-                "200":
-                    $ref: '#/components/responses/GroupRetrieved'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get group by ID
-            tags:
-                - Groups
-        patch:
-            description: Applies partial modifications to a group using SCIM PATCH operations
-            operationId: patchGroup
-            parameters:
-                - $ref: '#/components/parameters/groupId'
-            requestBody:
-                $ref: '#/components/requestBodies/PatchBody'
-            responses:
-                "200":
-                    $ref: '#/components/responses/GroupUpdated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Update group
-            tags:
-                - Groups
-        put:
-            description: Replaces all attributes of an existing group
-            operationId: replaceGroup
-            parameters:
-                - $ref: '#/components/parameters/groupId'
-            requestBody:
-                $ref: '#/components/requestBodies/GroupBody'
-            responses:
-                "200":
-                    $ref: '#/components/responses/GroupUpdated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Replace group
-            tags:
-                - Groups
-    /ResourceTypes:
-        get:
-            description: Returns available SCIM resource types supported by this service provider
-            operationId: getResourceTypes
-            responses:
-                "200":
-                    content:
-                        application/scim+json:
-                            schema:
-                                properties:
-                                    Resources:
-                                        items:
-                                            $ref: '#/components/schemas/ResourceType'
-                                        type: array
-                                    itemsPerPage:
-                                        $ref: '#/components/schemas/itemsPerPage'
-                                    schemas:
-                                        $ref: '#/components/schemas/listResponseSchemas'
-                                    startIndex:
-                                        $ref: '#/components/schemas/startIndex'
-                                    totalResults:
-                                        $ref: '#/components/schemas/totalResults'
-                                type: object
-                    description: Resource types retrieved successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get resource types
-            tags:
-                - Discovery
-    /ResourceTypes/{name}:
-        get:
-            description: Returns detailed information about a specific resource type
-            operationId: getResourceTypeByName
-            parameters:
-                - description: Name of the resource type (e.g., User, Group)
-                  in: path
-                  name: name
-                  required: true
-                  schema:
-                    enum:
-                        - User
-                        - Group
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/scim+json:
-                            schema:
-                                $ref: '#/components/schemas/ResourceType'
-                    description: Resource type retrieved successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get resource type by name
-            tags:
-                - Discovery
-    /Schemas:
-        get:
-            description: Returns SCIM schemas supported by this service provider
-            operationId: getSchemas
-            responses:
-                "200":
-                    content:
-                        application/scim+json:
-                            schema:
-                                properties:
-                                    Resources:
-                                        items:
-                                            $ref: '#/components/schemas/SchemaDefinition'
-                                        type: array
-                                    itemsPerPage:
-                                        $ref: '#/components/schemas/itemsPerPage'
-                                    schemas:
-                                        $ref: '#/components/schemas/listResponseSchemas'
-                                    startIndex:
-                                        $ref: '#/components/schemas/startIndex'
-                                    totalResults:
-                                        $ref: '#/components/schemas/totalResults'
-                                type: object
-                    description: Schemas retrieved successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get schemas
-            tags:
-                - Discovery
-    /Schemas/{uri}:
-        get:
-            description: Returns detailed schema definition for a specific schema URI
-            operationId: getSchemaByUri
-            parameters:
-                - description: Schema URI (e.g., urn:ietf:params:scim:schemas:core:2.0:User)
-                  in: path
-                  name: uri
-                  required: true
-                  schema:
-                    type: string
-            responses:
-                "200":
-                    content:
-                        application/scim+json:
-                            schema:
-                                $ref: '#/components/schemas/SchemaDefinition'
-                    description: Schema retrieved successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get schema by URI
-            tags:
-                - Discovery
-    /ServiceProviderConfig:
-        get:
-            description: Returns the service provider's configuration, including supported features and authentication schemes
-            operationId: getServiceProviderConfig
-            responses:
-                "200":
-                    content:
-                        application/scim+json:
-                            schema:
-                                $ref: '#/components/schemas/ServiceProviderConfig'
-                    description: Service provider configuration retrieved successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get service provider configuration
-            tags:
-                - Discovery
-    /Users:
-        get:
-            description: Returns a list of users with optional filtering and pagination
-            operationId: listUsers
-            parameters:
-                - $ref: '#/components/parameters/filter'
-                - $ref: '#/components/parameters/startIndex'
-                - $ref: '#/components/parameters/count'
-                - $ref: '#/components/parameters/attributes'
-                - $ref: '#/components/parameters/excludedAttributes'
-            responses:
-                "200":
-                    $ref: '#/components/responses/UserList'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: List users
-            tags:
-                - Users
-        post:
-            description: Creates a new user with the provided attributes
-            operationId: createUser
-            requestBody:
-                $ref: '#/components/requestBodies/UserBody'
-            responses:
-                "201":
-                    $ref: '#/components/responses/UserCreated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "409":
-                    $ref: '#/components/responses/Conflict'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Create a new user
-            tags:
-                - Users
-    /Users/{id}:
-        delete:
-            description: Removes a user from the system
-            operationId: deleteUser
-            parameters:
-                - $ref: '#/components/parameters/userId'
-            responses:
-                "204":
-                    description: User deleted successfully
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Delete user
-            tags:
-                - Users
-        get:
-            description: Retrieves details of a specific user by ID
-            operationId: getUserById
-            parameters:
-                - $ref: '#/components/parameters/userId'
-                - $ref: '#/components/parameters/attributes'
-                - $ref: '#/components/parameters/excludedAttributes'
-            responses:
-                "200":
-                    $ref: '#/components/responses/UserRetrieved'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Get user by ID
-            tags:
-                - Users
-        patch:
-            description: Applies partial modifications to a user using SCIM PATCH operations
-            operationId: patchUser
-            parameters:
-                - $ref: '#/components/parameters/userId'
-            requestBody:
-                $ref: '#/components/requestBodies/PatchBody'
-            responses:
-                "200":
-                    $ref: '#/components/responses/UserUpdated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Update user
-            tags:
-                - Users
-        put:
-            description: Replaces all attributes of an existing user
-            operationId: replaceUser
-            parameters:
-                - $ref: '#/components/parameters/userId'
-            requestBody:
-                $ref: '#/components/requestBodies/UserBody'
-            responses:
-                "200":
-                    $ref: '#/components/responses/UserUpdated'
-                "400":
-                    $ref: '#/components/responses/BadRequest'
-                "401":
-                    $ref: '#/components/responses/Unauthorized'
-                "403":
-                    $ref: '#/components/responses/Forbidden'
-                "404":
-                    $ref: '#/components/responses/NotFound'
-                "500":
-                    $ref: '#/components/responses/InternalServerError'
-            security:
-                - BearerAuth: []
-            summary: Replace user
-            tags:
-                - Users
     /api-docs:
         get:
             description: Get OpenAPI 3.1.1 specification for this API
@@ -2934,7 +2499,7 @@ paths:
                             examples:
                                 error:
                                     value:
-                                        error: 'googleapi: Error 401: Request is missing required authentication credential. Expected OAuth 2 access token, login cookie or other valid authentication credential. See https://developers.google.com/identity/sign-in/web/devconsole-project., unauthorized'
+                                        error: 'Get "https://www.googleapis.com/oauth2/v2/userinfo?alt=json&prettyPrint=false": dial tcp: lookup www.googleapis.com: no such host'
                                         error_code: INVALID_INPUT
                                         success: false
                             schema:
@@ -3135,6 +2700,441 @@ paths:
             summary: Get robots.txt file for web crawlers
             tags:
                 - static
+    /scim/v2/Groups:
+        get:
+            description: Returns a list of groups with optional filtering and pagination
+            operationId: listGroups
+            parameters:
+                - $ref: '#/components/parameters/filter'
+                - $ref: '#/components/parameters/startIndex'
+                - $ref: '#/components/parameters/count'
+                - $ref: '#/components/parameters/attributes'
+                - $ref: '#/components/parameters/excludedAttributes'
+            responses:
+                "200":
+                    $ref: '#/components/responses/GroupList'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: List groups
+            tags:
+                - Groups
+        post:
+            description: Creates a new group with the provided attributes
+            operationId: createGroup
+            requestBody:
+                $ref: '#/components/requestBodies/GroupBody'
+            responses:
+                "201":
+                    $ref: '#/components/responses/GroupCreated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "409":
+                    $ref: '#/components/responses/Conflict'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Create a new group
+            tags:
+                - Groups
+    /scim/v2/Groups/{id}:
+        delete:
+            description: Removes a group from the system
+            operationId: deleteGroup
+            parameters:
+                - $ref: '#/components/parameters/groupId'
+            responses:
+                "204":
+                    description: Group deleted successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Delete group
+            tags:
+                - Groups
+        get:
+            description: Retrieves details of a specific group by ID
+            operationId: getGroupById
+            parameters:
+                - $ref: '#/components/parameters/groupId'
+                - $ref: '#/components/parameters/attributes'
+                - $ref: '#/components/parameters/excludedAttributes'
+            responses:
+                "200":
+                    $ref: '#/components/responses/GroupRetrieved'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get group by ID
+            tags:
+                - Groups
+        patch:
+            description: Applies partial modifications to a group using SCIM PATCH operations
+            operationId: patchGroup
+            parameters:
+                - $ref: '#/components/parameters/groupId'
+            requestBody:
+                $ref: '#/components/requestBodies/PatchBody'
+            responses:
+                "200":
+                    $ref: '#/components/responses/GroupUpdated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Update group
+            tags:
+                - Groups
+        put:
+            description: Replaces all attributes of an existing group
+            operationId: replaceGroup
+            parameters:
+                - $ref: '#/components/parameters/groupId'
+            requestBody:
+                $ref: '#/components/requestBodies/GroupBody'
+            responses:
+                "200":
+                    $ref: '#/components/responses/GroupUpdated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Replace group
+            tags:
+                - Groups
+    /scim/v2/ResourceTypes:
+        get:
+            description: Returns available SCIM resource types supported by this service provider
+            operationId: getResourceTypes
+            responses:
+                "200":
+                    content:
+                        application/scim+json:
+                            schema:
+                                properties:
+                                    Resources:
+                                        items:
+                                            $ref: '#/components/schemas/ResourceType'
+                                        type: array
+                                    itemsPerPage:
+                                        $ref: '#/components/schemas/itemsPerPage'
+                                    schemas:
+                                        $ref: '#/components/schemas/listResponseSchemas'
+                                    startIndex:
+                                        $ref: '#/components/schemas/startIndex'
+                                    totalResults:
+                                        $ref: '#/components/schemas/totalResults'
+                                type: object
+                    description: Resource types retrieved successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get resource types
+            tags:
+                - Discovery
+    /scim/v2/ResourceTypes/{name}:
+        get:
+            description: Returns detailed information about a specific resource type
+            operationId: getResourceTypeByName
+            parameters:
+                - description: Name of the resource type (e.g., User, Group)
+                  in: path
+                  name: name
+                  required: true
+                  schema:
+                    enum:
+                        - User
+                        - Group
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/scim+json:
+                            schema:
+                                $ref: '#/components/schemas/ResourceType'
+                    description: Resource type retrieved successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get resource type by name
+            tags:
+                - Discovery
+    /scim/v2/Schemas:
+        get:
+            description: Returns SCIM schemas supported by this service provider
+            operationId: getSchemas
+            responses:
+                "200":
+                    content:
+                        application/scim+json:
+                            schema:
+                                properties:
+                                    Resources:
+                                        items:
+                                            $ref: '#/components/schemas/SchemaDefinition'
+                                        type: array
+                                    itemsPerPage:
+                                        $ref: '#/components/schemas/itemsPerPage'
+                                    schemas:
+                                        $ref: '#/components/schemas/listResponseSchemas'
+                                    startIndex:
+                                        $ref: '#/components/schemas/startIndex'
+                                    totalResults:
+                                        $ref: '#/components/schemas/totalResults'
+                                type: object
+                    description: Schemas retrieved successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get schemas
+            tags:
+                - Discovery
+    /scim/v2/Schemas/{uri}:
+        get:
+            description: Returns detailed schema definition for a specific schema URI
+            operationId: getSchemaByUri
+            parameters:
+                - description: Schema URI (e.g., urn:ietf:params:scim:schemas:core:2.0:User)
+                  in: path
+                  name: uri
+                  required: true
+                  schema:
+                    type: string
+            responses:
+                "200":
+                    content:
+                        application/scim+json:
+                            schema:
+                                $ref: '#/components/schemas/SchemaDefinition'
+                    description: Schema retrieved successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get schema by URI
+            tags:
+                - Discovery
+    /scim/v2/ServiceProviderConfig:
+        get:
+            description: Returns the service provider's configuration, including supported features and authentication schemes
+            operationId: getServiceProviderConfig
+            responses:
+                "200":
+                    content:
+                        application/scim+json:
+                            schema:
+                                $ref: '#/components/schemas/ServiceProviderConfig'
+                    description: Service provider configuration retrieved successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get service provider configuration
+            tags:
+                - Discovery
+    /scim/v2/Users:
+        get:
+            description: Returns a list of users with optional filtering and pagination
+            operationId: listUsers
+            parameters:
+                - $ref: '#/components/parameters/filter'
+                - $ref: '#/components/parameters/startIndex'
+                - $ref: '#/components/parameters/count'
+                - $ref: '#/components/parameters/attributes'
+                - $ref: '#/components/parameters/excludedAttributes'
+            responses:
+                "200":
+                    $ref: '#/components/responses/UserList'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: List users
+            tags:
+                - Users
+        post:
+            description: Creates a new user with the provided attributes
+            operationId: createUser
+            requestBody:
+                $ref: '#/components/requestBodies/UserBody'
+            responses:
+                "201":
+                    $ref: '#/components/responses/UserCreated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "409":
+                    $ref: '#/components/responses/Conflict'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Create a new user
+            tags:
+                - Users
+    /scim/v2/Users/{id}:
+        delete:
+            description: Removes a user from the system
+            operationId: deleteUser
+            parameters:
+                - $ref: '#/components/parameters/userId'
+            responses:
+                "204":
+                    description: User deleted successfully
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Delete user
+            tags:
+                - Users
+        get:
+            description: Retrieves details of a specific user by ID
+            operationId: getUserById
+            parameters:
+                - $ref: '#/components/parameters/userId'
+                - $ref: '#/components/parameters/attributes'
+                - $ref: '#/components/parameters/excludedAttributes'
+            responses:
+                "200":
+                    $ref: '#/components/responses/UserRetrieved'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Get user by ID
+            tags:
+                - Users
+        patch:
+            description: Applies partial modifications to a user using SCIM PATCH operations
+            operationId: patchUser
+            parameters:
+                - $ref: '#/components/parameters/userId'
+            requestBody:
+                $ref: '#/components/requestBodies/PatchBody'
+            responses:
+                "200":
+                    $ref: '#/components/responses/UserUpdated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Update user
+            tags:
+                - Users
+        put:
+            description: Replaces all attributes of an existing user
+            operationId: replaceUser
+            parameters:
+                - $ref: '#/components/parameters/userId'
+            requestBody:
+                $ref: '#/components/requestBodies/UserBody'
+            responses:
+                "200":
+                    $ref: '#/components/responses/UserUpdated'
+                "400":
+                    $ref: '#/components/responses/BadRequest'
+                "401":
+                    $ref: '#/components/responses/Unauthorized'
+                "403":
+                    $ref: '#/components/responses/Forbidden'
+                "404":
+                    $ref: '#/components/responses/NotFound'
+                "500":
+                    $ref: '#/components/responses/InternalServerError'
+            security:
+                - BearerAuth: []
+            summary: Replace user
+            tags:
+                - Users
     /trustcenter/auth/anonymous:
         post:
             description: Create anonymous JWT token for trust center access

@@ -31,9 +31,9 @@ func TestDeletePirschDomainWorker(t *testing.T) {
 			expectDeleteCall: true,
 		},
 		{
-			name:          "missing pirsch domain id",
+			name:           "missing pirsch domain id",
 			pirschDomainID: "",
-			expectedError: "pirsch_domain_id is required for the delete_pirsch_domain job",
+			expectedError:  "pirsch_domain_id is required for the delete_pirsch_domain job",
 		},
 		{
 			name:              "delete domain fails",
