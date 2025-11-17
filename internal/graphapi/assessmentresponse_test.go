@@ -160,85 +160,70 @@ func TestQueryAssessmentResponses(t *testing.T) {
 
 func TestMutationCreateAssessmentResponse(t *testing.T) {
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 
-	t.Run("Create happy path - with questionnaire context", func(t *testing.T) {
-		// simulate the questionnaire flow where assessment responses are created
-		// by using the QuestionnaireContextKey
-		email := gofakeit.Email()
-		response := (&AssessmentResponseBuilder{
-			client:       suite.client,
-			AssessmentID: assessment.ID,
-			Email:        email,
-			OwnerID:      testUser1.OrganizationID,
-		}).MustNew(testUser1.UserCtx, t)
-
-		assert.Assert(t, response != nil)
-		assert.Check(t, is.Equal(email, response.Email))
-		assert.Check(t, is.Equal(assessment.ID, response.AssessmentID))
-		assert.Check(t, is.Equal(testUser1.OrganizationID, response.OwnerID))
-
-		(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, ID: response.ID}).MustDelete(testUser1.UserCtx, t)
-	})
-
-	// no questionnaire context
-	// denials are returned as "not found"
 	testCases := []struct {
-		name     string
-		request  testclient.CreateAssessmentResponseInput
-		client   *testclient.TestClient
-		ctx      context.Context
-		errorMsg string
+		name    string
+		request testclient.CreateAssessmentResponseInput
+		client  *testclient.TestClient
+		ctx     context.Context
 	}{
 		{
-			name: "denied - cannot create via GraphQL without questionnaire context",
+			name: "success - can create via GraphQL",
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        gofakeit.Email(),
 				AssessmentID: assessment.ID,
 				OwnerID:      &testUser1.OrganizationID,
 			},
-			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
-			errorMsg: "assessmentresponse not found",
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
 		},
 		{
-			name: "denied - cannot create via PAT without questionnaire context",
+			name: "success - can create via PAT",
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        gofakeit.Email(),
 				AssessmentID: assessment.ID,
 			},
-			client:   suite.client.apiWithPAT,
-			ctx:      context.Background(),
-			errorMsg: "assessmentresponse not found",
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
 		},
 		{
-			name: "denied - different org user also cannot create",
+			name: "success - different org user can create",
 			request: testclient.CreateAssessmentResponseInput{
 				Email:        gofakeit.Email(),
-				AssessmentID: assessment.ID,
-				OwnerID:      &testUser1.OrganizationID,
+				AssessmentID: assessment2.ID,
+				OwnerID:      &testUser2.OrganizationID,
 			},
-			client:   suite.client.api,
-			ctx:      testUser2.UserCtx,
-			errorMsg: "assessmentresponse not found",
+			client: suite.client.api,
+			ctx:    testUser2.UserCtx,
 		},
 	}
 
+	var responseIDsOrg1 []string
+	var responseIDsOrg2 []string
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
 			resp, err := tc.client.CreateAssessmentResponse(tc.ctx, tc.request)
 
-			if tc.errorMsg != "" {
-				assert.ErrorContains(t, err, tc.errorMsg)
-				return
-			}
-
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
+			assert.Assert(t, resp.CreateAssessmentResponse.AssessmentResponse.ID != "")
+
+			if tc.ctx == testUser2.UserCtx {
+				responseIDsOrg2 = append(responseIDsOrg2, resp.CreateAssessmentResponse.AssessmentResponse.ID)
+			} else {
+				responseIDsOrg1 = append(responseIDsOrg1, resp.CreateAssessmentResponse.AssessmentResponse.ID)
+			}
 		})
 	}
 
+	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg1}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(testUser1.UserCtx, t)
+
+	(&Cleanup[*generated.AssessmentResponseDeleteOne]{client: suite.client.db.AssessmentResponse, IDs: responseIDsOrg2}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment2.ID}).MustDelete(testUser2.UserCtx, t)
+	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment2.TemplateID}).MustDelete(testUser2.UserCtx, t)
 }
 
 func TestMutationDeleteAssessmentResponse(t *testing.T) {
