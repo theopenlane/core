@@ -2168,9 +2168,17 @@ type Assessment implements Node {
   name: String!
   assessmentType: AssessmentAssessmentType!
   """
-  the template id associated with the assessment
+  the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
   """
-  templateID: ID!
+  templateID: ID
+  """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
@@ -2269,7 +2277,7 @@ type Assessment implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  template: Template!
+  template: Template
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -2362,9 +2370,17 @@ type AssessmentHistory implements Node {
   name: String!
   assessmentType: AssessmentHistoryAssessmentType!
   """
-  the template id associated with the assessment
+  the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
   """
-  templateID: String!
+  templateID: String
+  """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
@@ -2613,6 +2629,8 @@ input AssessmentHistoryWhereInput {
   templateIDContains: String
   templateIDHasPrefix: String
   templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: String
   templateIDContainsFold: String
   """
@@ -3480,6 +3498,8 @@ input AssessmentWhereInput {
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: ID
   templateIDContainsFold: ID
   """
@@ -9846,6 +9866,14 @@ input CreateAssessmentInput {
   name: String!
   assessmentType: AssessmentAssessmentType
   """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
+  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
@@ -9853,7 +9881,7 @@ input CreateAssessmentInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  templateID: ID!
+  templateID: ID
   assessmentResponseIDs: [ID!]
 }
 """
@@ -66752,6 +66780,16 @@ input UpdateAssessmentInput {
   """
   name: String
   """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
@@ -66767,6 +66805,7 @@ input UpdateAssessmentInput {
   removeViewerIDs: [ID!]
   clearViewers: Boolean
   templateID: ID
+  clearTemplate: Boolean
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean

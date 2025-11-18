@@ -871,6 +871,16 @@ func TemplateIDHasSuffix(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldHasSuffix(FieldTemplateID, v))
 }
 
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldTemplateID))
+}
+
 // TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
 func TemplateIDEqualFold(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldEqualFold(FieldTemplateID, v))
@@ -879,6 +889,26 @@ func TemplateIDEqualFold(v string) predicate.AssessmentHistory {
 // TemplateIDContainsFold applies the ContainsFold predicate on the "template_id" field.
 func TemplateIDContainsFold(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldContainsFold(FieldTemplateID, v))
+}
+
+// JsonconfigIsNil applies the IsNil predicate on the "jsonconfig" field.
+func JsonconfigIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldJsonconfig))
+}
+
+// JsonconfigNotNil applies the NotNil predicate on the "jsonconfig" field.
+func JsonconfigNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldJsonconfig))
+}
+
+// UischemaIsNil applies the IsNil predicate on the "uischema" field.
+func UischemaIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldUischema))
+}
+
+// UischemaNotNil applies the NotNil predicate on the "uischema" field.
+func UischemaNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldUischema))
 }
 
 // ResponseDueDurationEQ applies the EQ predicate on the "response_due_duration" field.

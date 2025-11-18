@@ -210,7 +210,6 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 		Save(testUser1.UserCtx)
 	require.NoError(t, err)
 
-	// simulate a missing template by deleting it after the assessment was created
 	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
 	require.NoError(t, err)
 
@@ -243,7 +242,7 @@ func (suite *HandlerTestSuite) TestGetQuestionnaireNoTemplate() {
 	res := recorder.Result()
 	defer res.Body.Close()
 
-	assert.Equal(t, http.StatusNotFound, recorder.Code)
+	assert.Equal(t, http.StatusOK, recorder.Code)
 
 	suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(ctx)
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(ctx)

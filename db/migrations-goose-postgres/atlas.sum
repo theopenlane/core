@@ -1,34 +1,4 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-h1:Z1lnTnqdw6Pvpav+YXU1jKlxJdFZ/CDZp24v63HTwnU=
-||||||| parent of e1d3404b (1:m templates -> assessments)
-h1:cplNKQ9ckf9JczEOUSX5eetICep7NerKoNs5bK/GsY8=
-=======
-h1:g+r/cFn0ioqK11IODes+Q2GMAlBMyLS5awZ+0mBVx3k=
->>>>>>> e1d3404b (1:m templates -> assessments)
-||||||| parent of 1a1e6ddf (allow api key not just jwt and send emails)
-h1:g+r/cFn0ioqK11IODes+Q2GMAlBMyLS5awZ+0mBVx3k=
-=======
-h1:dR9ozdvH0LNaVu4Sn9YjM//ZYkDn4xM6lx1r4As8qHc=
->>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)
-||||||| parent of 30ad18db (fixes)
-h1:dR9ozdvH0LNaVu4Sn9YjM//ZYkDn4xM6lx1r4As8qHc=
-=======
-h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
->>>>>>> 30ad18db (fixes)
-||||||| parent of a26c932f (extend tests)
-h1:cDkovTlc3KXVivPVB2BhC96DZ0q5B2pAifCSCOXy+gs=
-=======
-h1:wEV1QOoXc9tJHv4f5+5YmK6hx2x1smqtiHINyWPELj0=
->>>>>>> a26c932f (extend tests)
-||||||| parent of 40596257 (fix migrations)
-h1:wEV1QOoXc9tJHv4f5+5YmK6hx2x1smqtiHINyWPELj0=
-=======
-h1:0AFdME9+aBUjYZwVXy3j6RtUpIpfm/i5igseko756Mc=
->>>>>>> 40596257 (fix migrations)
+h1:lv65DguK11miYQ3AwyDrelMujRyAHyqoxLLniYV00LU=
 20250414203515_init.sql h1:BeTEtWy9s9mO1t9vLhKE/W3Z/NZS7kklzlmvffjgMys=
 20250418204251_control_objective.sql h1:2zhXUjbVshiTwzY0qh87de8Wh8j2tLDO6KRbn6oohx4=
 20250421141007_aauid_not_unique_per_machine.sql h1:bMzfq+NBG4IFyOf/YintEKVhmQ6ttnQymzRV8/RiuPo=
@@ -105,59 +75,10 @@ h1:0AFdME9+aBUjYZwVXy3j6RtUpIpfm/i5igseko756Mc=
 20251104071836_custom_tags_enums.sql h1:nDOCP3m/ggLbcndhz4GWki4KlWY2ADflnfBYfYWVgtA=
 20251105041529_integrations.sql h1:uoYztu8/uXROIvKlJZIS0CVSzNk/JKpfoTBYibIZ8TI=
 20251107053009_program_owners.sql h1:/eiQy+3pV2zcAtdHQpwxYPdnMkXlSSeZEz2uAzM1V4U=
-<<<<<<< HEAD
-<<<<<<< HEAD
-20251107154433_trust_center_posts.sql h1:If8W40P+s1W3Y/pdKLywWCNQaP7mVwYrvICdb+kuhg8=
-20251109163940_trust_center_analytics_schema.sql h1:csMSAe8hxcMT9hnI6iAASmAw66ed2iRuEjqTe4iwUeY=
-20251112061033_internal-notifications.sql h1:ZAT8+Of05HkDrsrfA54oWQCrRtgxLuxAzwvvmZWnXCY=
-20251117155928_notifications-schema.sql h1:T18ViReLL5LZMvvW5g1vIHQizWtcdF1ih54E7HdV80w=
-20251118055349_notifications-schema.sql h1:diTfYQdUtmP7COxg8D29D/zFEO5PY72s515DSrzpPnU=
-||||||| parent of e1d3404b (1:m templates -> assessments)
-20251107154433_trust_center_posts.sql h1:If8W40P+s1W3Y/pdKLywWCNQaP7mVwYrvICdb+kuhg8=
-20251109163940_trust_center_analytics_schema.sql h1:csMSAe8hxcMT9hnI6iAASmAw66ed2iRuEjqTe4iwUeY=
-20251112061033_internal-notifications.sql h1:ZAT8+Of05HkDrsrfA54oWQCrRtgxLuxAzwvvmZWnXCY=
-20251117155928_notifications-schema.sql h1:T18ViReLL5LZMvvW5g1vIHQizWtcdF1ih54E7HdV80w=
-=======
-20251107154122_assessment_fixes.sql h1:fJDVvOV9l84zM0R/aNrD0P1v/vikzTFiCyCAQSUxTKI=
-20251107154433_trust_center_posts.sql h1:BaPB4/QgoiAWujtgvyZrt2GSRygdJER52FvFtW63/lY=
-20251109163940_trust_center_analytics_schema.sql h1:IUtkvupXGEQxQtQAXNzg0AHCGlK+RsDyjYjf7MQRQds=
-20251112061033_internal-notifications.sql h1:WhwtUojNAH6SFR3zP77aXQTyuenR07YZEdfV5sAtX9k=
-<<<<<<< HEAD
-<<<<<<< HEAD
-20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
->>>>>>> e1d3404b (1:m templates -> assessments)
-||||||| parent of 1a1e6ddf (allow api key not just jwt and send emails)
-20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
-=======
-20251112144417_fixes.sql h1:kFX5Kc9XHUF6gyHpRNs1u1OPMu2kbcrSqgqZ+mY3EPw=
-<<<<<<< HEAD
-20251117155928_notifications-schema.sql h1:62hDB7BbcD9G2ouZUa8NpiYELUdQnBGqfTgrInAX56U=
->>>>>>> 1a1e6ddf (allow api key not just jwt and send emails)
-||||||| parent of 30ad18db (fixes)
-20251117155928_notifications-schema.sql h1:62hDB7BbcD9G2ouZUa8NpiYELUdQnBGqfTgrInAX56U=
-=======
-20251113145355_sifhfkf.sql h1:OBWQ25Kt5QULrTlsFdDjo4Rc2v9T8TtL1kMxAfDTifY=
-20251117155928_notifications-schema.sql h1:RraPD+S4//GP4vmU3Lp9qslTOmSezuzjF4JaSSLyRSA=
->>>>>>> 30ad18db (fixes)
-||||||| parent of a26c932f (extend tests)
-20251112144417_fixes.sql h1:kFX5Kc9XHUF6gyHpRNs1u1OPMu2kbcrSqgqZ+mY3EPw=
-20251113145355_sifhfkf.sql h1:OBWQ25Kt5QULrTlsFdDjo4Rc2v9T8TtL1kMxAfDTifY=
-20251117155928_notifications-schema.sql h1:RraPD+S4//GP4vmU3Lp9qslTOmSezuzjF4JaSSLyRSA=
-=======
-20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
-20251117185237_assessments.sql h1:o43v3/Sjp8aOPoC94WCKBAxBixQeDk9nnNHK7y+hil0=
->>>>>>> a26c932f (extend tests)
-||||||| parent of 40596257 (fix migrations)
-20251107154122_assessment_fixes.sql h1:fJDVvOV9l84zM0R/aNrD0P1v/vikzTFiCyCAQSUxTKI=
-20251107154433_trust_center_posts.sql h1:BaPB4/QgoiAWujtgvyZrt2GSRygdJER52FvFtW63/lY=
-20251109163940_trust_center_analytics_schema.sql h1:IUtkvupXGEQxQtQAXNzg0AHCGlK+RsDyjYjf7MQRQds=
-20251112061033_internal-notifications.sql h1:WhwtUojNAH6SFR3zP77aXQTyuenR07YZEdfV5sAtX9k=
-20251117155928_notifications-schema.sql h1:Ed8r0Uq9BmzK+xHWuDV5HWVubZJVjLQrUQoqXYeTgKI=
-20251117185237_assessments.sql h1:o43v3/Sjp8aOPoC94WCKBAxBixQeDk9nnNHK7y+hil0=
-=======
 20251107154433_trust_center_posts.sql h1:If8W40P+s1W3Y/pdKLywWCNQaP7mVwYrvICdb+kuhg8=
 20251109163940_trust_center_analytics_schema.sql h1:csMSAe8hxcMT9hnI6iAASmAw66ed2iRuEjqTe4iwUeY=
 20251112061033_internal-notifications.sql h1:ZAT8+Of05HkDrsrfA54oWQCrRtgxLuxAzwvvmZWnXCY=
 20251117155928_notifications-schema.sql h1:T18ViReLL5LZMvvW5g1vIHQizWtcdF1ih54E7HdV80w=
 20251117185845_assessments.sql h1:UPVElOjcZREoxxz6QTwf/WmjoOlSGnf3P0N3P8tizOg=
->>>>>>> 40596257 (fix migrations)
+20251118055349_notifications-schema.sql h1:7e1b9qrCmX//O9aimDwK4kaKcn1NH3R2haPUGWCSLVY=
+20251118203327_assessments.sql h1:1tPpQSExNj9wVMletiKmg7QqGHcbilWyXWb8pHOMRWo=

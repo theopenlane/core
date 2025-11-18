@@ -286,6 +286,7 @@ type ComplexityRoot struct {
 		CreatedBy           func(childComplexity int) int
 		Editors             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		ID                  func(childComplexity int) int
+		Jsonconfig          func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Owner               func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
@@ -293,6 +294,7 @@ type ComplexityRoot struct {
 		Tags                func(childComplexity int) int
 		Template            func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
+		Uischema            func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
 		Viewers             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -323,6 +325,7 @@ type ComplexityRoot struct {
 		CreatedBy           func(childComplexity int) int
 		HistoryTime         func(childComplexity int) int
 		ID                  func(childComplexity int) int
+		Jsonconfig          func(childComplexity int) int
 		Name                func(childComplexity int) int
 		Operation           func(childComplexity int) int
 		OwnerID             func(childComplexity int) int
@@ -330,6 +333,7 @@ type ComplexityRoot struct {
 		ResponseDueDuration func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		TemplateID          func(childComplexity int) int
+		Uischema            func(childComplexity int) int
 		UpdatedAt           func(childComplexity int) int
 		UpdatedBy           func(childComplexity int) int
 	}
@@ -7983,6 +7987,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Assessment.ID(childComplexity), true
 
+	case "Assessment.jsonconfig":
+		if e.complexity.Assessment.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.Assessment.Jsonconfig(childComplexity), true
+
 	case "Assessment.name":
 		if e.complexity.Assessment.Name == nil {
 			break
@@ -8031,6 +8042,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Assessment.TemplateID(childComplexity), true
+
+	case "Assessment.uischema":
+		if e.complexity.Assessment.Uischema == nil {
+			break
+		}
+
+		return e.complexity.Assessment.Uischema(childComplexity), true
 
 	case "Assessment.updatedAt":
 		if e.complexity.Assessment.UpdatedAt == nil {
@@ -8142,6 +8160,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.AssessmentHistory.ID(childComplexity), true
 
+	case "AssessmentHistory.jsonconfig":
+		if e.complexity.AssessmentHistory.Jsonconfig == nil {
+			break
+		}
+
+		return e.complexity.AssessmentHistory.Jsonconfig(childComplexity), true
+
 	case "AssessmentHistory.name":
 		if e.complexity.AssessmentHistory.Name == nil {
 			break
@@ -8190,6 +8215,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.AssessmentHistory.TemplateID(childComplexity), true
+
+	case "AssessmentHistory.uischema":
+		if e.complexity.AssessmentHistory.Uischema == nil {
+			break
+		}
+
+		return e.complexity.AssessmentHistory.Uischema(childComplexity), true
 
 	case "AssessmentHistory.updatedAt":
 		if e.complexity.AssessmentHistory.UpdatedAt == nil {
@@ -51028,9 +51060,17 @@ type Assessment implements Node {
   name: String!
   assessmentType: AssessmentAssessmentType!
   """
-  the template id associated with the assessment
+  the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
   """
-  templateID: ID!
+  templateID: ID
+  """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
@@ -51129,7 +51169,7 @@ type Assessment implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  template: Template!
+  template: Template
   assessmentResponses(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -51222,9 +51262,17 @@ type AssessmentHistory implements Node {
   name: String!
   assessmentType: AssessmentHistoryAssessmentType!
   """
-  the template id associated with the assessment
+  the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
   """
-  templateID: String!
+  templateID: String
+  """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
@@ -51473,6 +51521,8 @@ input AssessmentHistoryWhereInput {
   templateIDContains: String
   templateIDHasPrefix: String
   templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: String
   templateIDContainsFold: String
   """
@@ -52340,6 +52390,8 @@ input AssessmentWhereInput {
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: ID
   templateIDContainsFold: ID
   """
@@ -58706,6 +58758,14 @@ input CreateAssessmentInput {
   name: String!
   assessmentType: AssessmentAssessmentType
   """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
+  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
@@ -58713,7 +58773,7 @@ input CreateAssessmentInput {
   blockedGroupIDs: [ID!]
   editorIDs: [ID!]
   viewerIDs: [ID!]
-  templateID: ID!
+  templateID: ID
   assessmentResponseIDs: [ID!]
 }
 """
@@ -115612,6 +115672,16 @@ input UpdateAssessmentInput {
   """
   name: String
   """
+  the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+  """
+  jsonconfig: Map
+  clearJsonconfig: Boolean
+  """
+  the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+  """
+  uischema: Map
+  clearUischema: Boolean
+  """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
@@ -115627,6 +115697,7 @@ input UpdateAssessmentInput {
   removeViewerIDs: [ID!]
   clearViewers: Boolean
   templateID: ID
+  clearTemplate: Boolean
   addAssessmentResponseIDs: [ID!]
   removeAssessmentResponseIDs: [ID!]
   clearAssessmentResponses: Boolean

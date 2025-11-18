@@ -321,7 +321,7 @@ func (_m *Assessment) Template(ctx context.Context) (*Template, error) {
 	if IsNotLoaded(err) {
 		result, err = _m.QueryTemplate().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (_m *Assessment) AssessmentResponses(

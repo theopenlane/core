@@ -1728,42 +1728,10 @@ var ExampleCreateTrustCenterAnonymousJWTResponse = CreateTrustCenterAnonymousJWT
 	},
 }
 
-// QuestionnaireAnonymousJWTRequest is the request to create an anonymous JWT for questionnaire access
-type QuestionnaireAnonymousJWTRequest struct {
-	AssessmentID string `json:"assessment_id" binding:"required"`
-}
-
-// ExampleQuestionnaireAnonymousJWTRequest is an example questionnaire anonymous JWT request for OpenAPI documentation
-var ExampleQuestionnaireAnonymousJWTRequest = QuestionnaireAnonymousJWTRequest{
-	AssessmentID: "assessment_id_here",
-}
-
-// CreateQuestionnaireAnonymousJWTResponse is the response to a request to create a questionnaire anonymous JWT
-type CreateQuestionnaireAnonymousJWTResponse struct {
-	AuthData
-}
-
-// ExampleResponse returns an example CreateQuestionnaireAnonymousJWTResponse for OpenAPI documentation
-func (r *CreateQuestionnaireAnonymousJWTResponse) ExampleResponse() any {
-	return CreateQuestionnaireAnonymousJWTResponse{
-		AuthData: AuthData{
-			AccessToken: "anonymous_jwt_token",
-			TokenType:   "bearer",
-		},
-	}
-}
-
-// ExampleCreateQuestionnaireAnonymousJWTResponse is an example questionnaire anonymous JWT response for OpenAPI documentation
-var ExampleCreateQuestionnaireAnonymousJWTResponse = CreateQuestionnaireAnonymousJWTResponse{
-	AuthData: AuthData{
-		AccessToken:  "access_token_here",
-		RefreshToken: "refresh_token_here",
-	},
-}
-
 // GetQuestionnaireResponse is the response containing the questionnaire template's JSON configuration
 type GetQuestionnaireResponse struct {
-	Jsonconfig map[string]any `json:"jsonconfig"`
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	UISchema   map[string]any `json:"uischema,omitempty"`
 }
 
 // ExampleResponse returns an example GetQuestionnaireResponse for OpenAPI documentation

@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/assessmentresponse"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -45,35 +46,37 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
 
-	assessmentResponseEntity, err := h.DBClient.AssessmentResponse.Query().
+	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
 		Where(
 			assessmentresponse.AssessmentIDEQ(assessmentID),
 			assessmentresponse.EmailEQ(email),
 		).
 		Only(allowCtx)
 	if err != nil && !generated.IsNotFound(err) {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment response")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if assessmentResponseEntity != nil {
-		if assessmentResponseEntity.Status == enums.AssessmentResponseStatusCompleted {
+	if assessmentResponse != nil {
+		if assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
 			return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 		}
 
-		if !assessmentResponseEntity.DueDate.IsZero() && time.Now().After(assessmentResponseEntity.DueDate) {
-			_, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponseEntity.ID).
-				SetStartedAt(assessmentResponseEntity.StartedAt).
+		if !assessmentResponse.DueDate.IsZero() && time.Now().After(assessmentResponse.DueDate) {
+			_, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
+				SetStartedAt(assessmentResponse.StartedAt).
 				SetStatus(enums.AssessmentResponseStatusOverdue).
 				Save(allowCtx)
 			if err != nil {
-				return h.InternalServerError(ctx, err, openapi)
+				logx.FromContext(reqCtx).Err(err).Msg("could not update assessment response due date")
+				return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 			}
 
 			return h.BadRequest(ctx, ErrAssessmentResponseOverdue, openapi)
 		}
 	}
 
-	assessmentEntity, err := h.DBClient.Assessment.Query().
+	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
 		WithTemplate().
 		Only(allowCtx)
@@ -82,15 +85,18 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 			return h.NotFound(ctx, ErrAssessmentNotFound, openapi)
 		}
 
-		return h.InternalServerError(ctx, err, openapi)
-	}
-
-	if assessmentEntity.Edges.Template == nil {
-		return h.NotFound(ctx, ErrTemplateNotFound, openapi)
+		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	response := models.GetQuestionnaireResponse{
-		Jsonconfig: assessmentEntity.Edges.Template.Jsonconfig,
+		Jsonconfig: assessment.Jsonconfig,
+		UISchema:   assessment.Uischema,
+	}
+
+	if assessment.Edges.Template != nil {
+		response.Jsonconfig = assessment.Edges.Template.Jsonconfig
+		response.UISchema = assessment.Edges.Template.Uischema
 	}
 
 	return h.Success(ctx, response, openapi)
@@ -128,7 +134,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
 	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
 
-	assessmentEntity, err := h.DBClient.Assessment.Query().
+	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
 		WithTemplate().
 		WithAssessmentResponses().
@@ -138,10 +144,12 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 			return h.NotFound(ctx, ErrAssessmentNotFound, openapi)
 		}
 
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	if assessmentEntity.Edges.Template == nil {
+	if assessment.Edges.Template == nil {
 		return h.NotFound(ctx, ErrTemplateNotFound, openapi)
 	}
 
@@ -150,45 +158,48 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.BadRequest(ctx, ErrMissingEmail, openapi)
 	}
 
-	var assessmentResponseEntity *generated.AssessmentResponse
-	for _, ar := range assessmentEntity.Edges.AssessmentResponses {
-		if ar.Email == email {
-			assessmentResponseEntity = ar
-			break
-		}
-	}
+	assessmentResponse, err := h.DBClient.AssessmentResponse.Query().
+		Where(assessmentresponse.EmailEqualFold(email),
+			assessmentresponse.AssessmentIDEQ(assessmentID)).
+		Only(allowCtx)
 
-	if assessmentResponseEntity == nil {
+	if generated.IsNotFound(err) {
 		return h.NotFound(ctx, ErrAssessmentResponseNotFound, openapi)
 	}
 
-	if assessmentResponseEntity.Status == enums.AssessmentResponseStatusCompleted {
+	if err != nil {
+		return h.NotFound(ctx, err, openapi)
+	}
+
+	if assessmentResponse.Status == enums.AssessmentResponseStatusCompleted {
 		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 	}
 
 	documentData, err := h.DBClient.DocumentData.Create().
-		SetTemplateID(assessmentEntity.Edges.Template.ID).
-		SetOwnerID(assessmentEntity.OwnerID).
+		SetTemplateID(assessment.Edges.Template.ID).
+		SetOwnerID(assessment.OwnerID).
 		SetData(req.Data).
 		Save(allowCtx)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	completedAt := time.Now()
 
-	updatedResponse, err := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponseEntity.ID).
+	freshResponse, err := h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
 		SetDocumentDataID(documentData.ID).
 		SetStatus(enums.AssessmentResponseStatusCompleted).
 		SetCompletedAt(completedAt).
 		Save(allowCtx)
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapi)
+		logx.FromContext(reqCtx).Err(err).Msg("could not update assessment")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
 	response := models.SubmitQuestionnaireResponse{
 		DocumentDataID: documentData.ID,
-		Status:         updatedResponse.Status.String(),
+		Status:         freshResponse.Status.String(),
 		CompletedAt:    completedAt.Format(time.RFC3339),
 	}
 

@@ -788,12 +788,14 @@ type CreateAssessmentInput struct {
 	Tags                  []string
 	Name                  string
 	AssessmentType        *enums.AssessmentType
+	Jsonconfig            map[string]interface{}
+	Uischema              map[string]interface{}
 	ResponseDueDuration   *int64
 	OwnerID               *string
 	BlockedGroupIDs       []string
 	EditorIDs             []string
 	ViewerIDs             []string
-	TemplateID            string
+	TemplateID            *string
 	AssessmentResponseIDs []string
 }
 
@@ -805,6 +807,12 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	m.SetName(i.Name)
 	if v := i.AssessmentType; v != nil {
 		m.SetAssessmentType(*v)
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
 	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
@@ -821,7 +829,9 @@ func (i *CreateAssessmentInput) Mutate(m *AssessmentMutation) {
 	if v := i.ViewerIDs; len(v) > 0 {
 		m.AddViewerIDs(v...)
 	}
-	m.SetTemplateID(i.TemplateID)
+	if v := i.TemplateID; v != nil {
+		m.SetTemplateID(*v)
+	}
 	if v := i.AssessmentResponseIDs; len(v) > 0 {
 		m.AddAssessmentResponseIDs(v...)
 	}
@@ -839,6 +849,10 @@ type UpdateAssessmentInput struct {
 	Tags                        []string
 	AppendTags                  []string
 	Name                        *string
+	ClearJsonconfig             bool
+	Jsonconfig                  map[string]interface{}
+	ClearUischema               bool
+	Uischema                    map[string]interface{}
 	ResponseDueDuration         *int64
 	ClearOwner                  bool
 	OwnerID                     *string
@@ -851,6 +865,7 @@ type UpdateAssessmentInput struct {
 	ClearViewers                bool
 	AddViewerIDs                []string
 	RemoveViewerIDs             []string
+	ClearTemplate               bool
 	TemplateID                  *string
 	ClearAssessmentResponses    bool
 	AddAssessmentResponseIDs    []string
@@ -870,6 +885,18 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.Name; v != nil {
 		m.SetName(*v)
+	}
+	if i.ClearJsonconfig {
+		m.ClearJsonconfig()
+	}
+	if v := i.Jsonconfig; v != nil {
+		m.SetJsonconfig(v)
+	}
+	if i.ClearUischema {
+		m.ClearUischema()
+	}
+	if v := i.Uischema; v != nil {
+		m.SetUischema(v)
 	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
@@ -906,6 +933,9 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.RemoveViewerIDs; len(v) > 0 {
 		m.RemoveViewerIDs(v...)
+	}
+	if i.ClearTemplate {
+		m.ClearTemplate()
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)

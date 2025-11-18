@@ -77,6 +77,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           templateID
+          jsonconfig
+          uischema
         }
       }
     }

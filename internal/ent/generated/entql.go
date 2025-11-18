@@ -315,6 +315,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessment.FieldName:                {Type: field.TypeString, Column: assessment.FieldName},
 			assessment.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessment.FieldAssessmentType},
 			assessment.FieldTemplateID:          {Type: field.TypeString, Column: assessment.FieldTemplateID},
+			assessment.FieldJsonconfig:          {Type: field.TypeJSON, Column: assessment.FieldJsonconfig},
+			assessment.FieldUischema:            {Type: field.TypeJSON, Column: assessment.FieldUischema},
 			assessment.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessment.FieldResponseDueDuration},
 		},
 	}
@@ -343,6 +345,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			assessmenthistory.FieldName:                {Type: field.TypeString, Column: assessmenthistory.FieldName},
 			assessmenthistory.FieldAssessmentType:      {Type: field.TypeEnum, Column: assessmenthistory.FieldAssessmentType},
 			assessmenthistory.FieldTemplateID:          {Type: field.TypeString, Column: assessmenthistory.FieldTemplateID},
+			assessmenthistory.FieldJsonconfig:          {Type: field.TypeJSON, Column: assessmenthistory.FieldJsonconfig},
+			assessmenthistory.FieldUischema:            {Type: field.TypeJSON, Column: assessmenthistory.FieldUischema},
 			assessmenthistory.FieldResponseDueDuration: {Type: field.TypeInt64, Column: assessmenthistory.FieldResponseDueDuration},
 		},
 	}
@@ -13006,6 +13010,16 @@ func (f *AssessmentFilter) WhereTemplateID(p entql.StringP) {
 	f.Where(p.Field(assessment.FieldTemplateID))
 }
 
+// WhereJsonconfig applies the entql json.RawMessage predicate on the jsonconfig field.
+func (f *AssessmentFilter) WhereJsonconfig(p entql.BytesP) {
+	f.Where(p.Field(assessment.FieldJsonconfig))
+}
+
+// WhereUischema applies the entql json.RawMessage predicate on the uischema field.
+func (f *AssessmentFilter) WhereUischema(p entql.BytesP) {
+	f.Where(p.Field(assessment.FieldUischema))
+}
+
 // WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.
 func (f *AssessmentFilter) WhereResponseDueDuration(p entql.Int64P) {
 	f.Where(p.Field(assessment.FieldResponseDueDuration))
@@ -13203,6 +13217,16 @@ func (f *AssessmentHistoryFilter) WhereAssessmentType(p entql.StringP) {
 // WhereTemplateID applies the entql string predicate on the template_id field.
 func (f *AssessmentHistoryFilter) WhereTemplateID(p entql.StringP) {
 	f.Where(p.Field(assessmenthistory.FieldTemplateID))
+}
+
+// WhereJsonconfig applies the entql json.RawMessage predicate on the jsonconfig field.
+func (f *AssessmentHistoryFilter) WhereJsonconfig(p entql.BytesP) {
+	f.Where(p.Field(assessmenthistory.FieldJsonconfig))
+}
+
+// WhereUischema applies the entql json.RawMessage predicate on the uischema field.
+func (f *AssessmentHistoryFilter) WhereUischema(p entql.BytesP) {
+	f.Where(p.Field(assessmenthistory.FieldUischema))
 }
 
 // WhereResponseDueDuration applies the entql int64 predicate on the response_due_duration field.

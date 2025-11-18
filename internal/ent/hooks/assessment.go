@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 
@@ -16,18 +17,23 @@ import (
 func HookQuestionnaireAssessment() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.AssessmentFunc(func(ctx context.Context, m *generated.AssessmentMutation) (generated.Value, error) {
-			templateID, ok := m.TemplateID()
+
+			id, ok := m.TemplateID()
 			if !ok {
-				return nil, ErrTemplateIDRequired
+				// user provided jsonconfig and uischema directly then
+				// and not trying to be created/cloned from a template
+				return next.Mutate(ctx, m)
 			}
 
-			tmpl, err := m.Client().Template.Query().
-				Where(template.ID(templateID)).
+			// if a template was provided, validate it is a questionnaire type
+			// and inherit the jsonconfig and uischema
+			template, err := m.Client().Template.Query().
+				Where(template.ID(id)).
 				Only(ctx)
 			if err != nil {
 				if generated.IsNotFound(err) {
-					logx.FromContext(ctx).Warn().Str("template_id", templateID).
-						Msg("HookQuestionnaireAssessment: template not found")
+					logx.FromContext(ctx).Warn().Str("template_id", id).
+						Msg("template not found")
 
 					return nil, ErrTemplateNotFound
 				}
@@ -35,14 +41,17 @@ func HookQuestionnaireAssessment() ent.Hook {
 				return nil, err
 			}
 
-			if tmpl.Kind != enums.TemplateKindQuestionnaire {
-				logx.FromContext(ctx).Debug().
-					Str("template_id", templateID).
-					Str("kind", tmpl.Kind.String()).
-					Msg("HookQuestionnaireAssessment: template is not a questionnaire, skipping")
+			if template.Kind != enums.TemplateKindQuestionnaire {
+				logx.FromContext(ctx).
+					Err(errors.New("template is not of type questionnaire")).
+					Str("template_id", id).Str("kind", template.Kind.String()).
+					Msg("template is not a questionnaire type")
 
 				return nil, ErrTemplateNotQuestionnaire
 			}
+
+			m.SetUischema(template.Uischema)
+			m.SetJsonconfig(template.Jsonconfig)
 
 			return next.Mutate(ctx, m)
 		})

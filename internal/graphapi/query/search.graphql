@@ -44,6 +44,7 @@ query GlobalSearch($query: String!) {
       edges {
         node {
           id
+          jsonconfig
           name
           tags
         }

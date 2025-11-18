@@ -51,8 +51,22 @@ func (Assessment) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("assessment_type"),
 			),
+
 		field.String("template_id").
-			Comment("the template id associated with the assessment"),
+			Optional().
+			Comment("the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema"),
+
+		field.JSON("jsonconfig", map[string]any{}).
+			Comment("the jsonschema object of the questionnaire. If not provided it will be inherited from the template.").
+			Optional().
+			Annotations(
+				entx.FieldJSONPathSearchable("$id"),
+			),
+
+		field.JSON("uischema", map[string]any{}).
+			Comment("the uischema for the template to render in the UI. If not provided, it will be inherited from the template").
+			Optional().
+			Annotations(),
 
 		field.Int64("response_due_duration").
 			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
@@ -78,7 +92,6 @@ func (a Assessment) Edges() []ent.Edge {
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
-			required:   true,
 			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},

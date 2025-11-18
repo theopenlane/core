@@ -170,6 +170,36 @@ func (_u *AssessmentHistoryUpdate) SetNillableTemplateID(v *string) *AssessmentH
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *AssessmentHistoryUpdate) ClearTemplateID() *AssessmentHistoryUpdate {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
+// SetJsonconfig sets the "jsonconfig" field.
+func (_u *AssessmentHistoryUpdate) SetJsonconfig(v map[string]interface{}) *AssessmentHistoryUpdate {
+	_u.mutation.SetJsonconfig(v)
+	return _u
+}
+
+// ClearJsonconfig clears the value of the "jsonconfig" field.
+func (_u *AssessmentHistoryUpdate) ClearJsonconfig() *AssessmentHistoryUpdate {
+	_u.mutation.ClearJsonconfig()
+	return _u
+}
+
+// SetUischema sets the "uischema" field.
+func (_u *AssessmentHistoryUpdate) SetUischema(v map[string]interface{}) *AssessmentHistoryUpdate {
+	_u.mutation.SetUischema(v)
+	return _u
+}
+
+// ClearUischema clears the value of the "uischema" field.
+func (_u *AssessmentHistoryUpdate) ClearUischema() *AssessmentHistoryUpdate {
+	_u.mutation.ClearUischema()
+	return _u
+}
+
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_u *AssessmentHistoryUpdate) SetResponseDueDuration(v int64) *AssessmentHistoryUpdate {
 	_u.mutation.ResetResponseDueDuration()
@@ -308,6 +338,21 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.TemplateIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldTemplateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessmenthistory.FieldJsonconfig, field.TypeJSON, value)
+	}
+	if _u.mutation.JsonconfigCleared() {
+		_spec.ClearField(assessmenthistory.FieldJsonconfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Uischema(); ok {
+		_spec.SetField(assessmenthistory.FieldUischema, field.TypeJSON, value)
+	}
+	if _u.mutation.UischemaCleared() {
+		_spec.ClearField(assessmenthistory.FieldUischema, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
@@ -474,6 +519,36 @@ func (_u *AssessmentHistoryUpdateOne) SetNillableTemplateID(v *string) *Assessme
 	if v != nil {
 		_u.SetTemplateID(*v)
 	}
+	return _u
+}
+
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *AssessmentHistoryUpdateOne) ClearTemplateID() *AssessmentHistoryUpdateOne {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
+// SetJsonconfig sets the "jsonconfig" field.
+func (_u *AssessmentHistoryUpdateOne) SetJsonconfig(v map[string]interface{}) *AssessmentHistoryUpdateOne {
+	_u.mutation.SetJsonconfig(v)
+	return _u
+}
+
+// ClearJsonconfig clears the value of the "jsonconfig" field.
+func (_u *AssessmentHistoryUpdateOne) ClearJsonconfig() *AssessmentHistoryUpdateOne {
+	_u.mutation.ClearJsonconfig()
+	return _u
+}
+
+// SetUischema sets the "uischema" field.
+func (_u *AssessmentHistoryUpdateOne) SetUischema(v map[string]interface{}) *AssessmentHistoryUpdateOne {
+	_u.mutation.SetUischema(v)
+	return _u
+}
+
+// ClearUischema clears the value of the "uischema" field.
+func (_u *AssessmentHistoryUpdateOne) ClearUischema() *AssessmentHistoryUpdateOne {
+	_u.mutation.ClearUischema()
 	return _u
 }
 
@@ -645,6 +720,21 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.TemplateIDCleared() {
+		_spec.ClearField(assessmenthistory.FieldTemplateID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessmenthistory.FieldJsonconfig, field.TypeJSON, value)
+	}
+	if _u.mutation.JsonconfigCleared() {
+		_spec.ClearField(assessmenthistory.FieldJsonconfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Uischema(); ok {
+		_spec.SetField(assessmenthistory.FieldUischema, field.TypeJSON, value)
+	}
+	if _u.mutation.UischemaCleared() {
+		_spec.ClearField(assessmenthistory.FieldUischema, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)

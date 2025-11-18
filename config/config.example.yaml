@@ -2,41 +2,29 @@ auth:
     enabled: true
     providers:
         github:
-            clientendpoint: ""
-            clientid: ""
-            clientsecret: ""
-            redirecturl: /v1/github/callback
+            clientEndpoint: ""
+            clientId: ""
+            clientSecret: ""
+            redirectUrl: /v1/github/callback
             scopes: null
         google:
-            clientendpoint: ""
-            clientid: ""
-            clientsecret: ""
-            redirecturl: /v1/google/callback
+            clientEndpoint: ""
+            clientId: ""
+            clientSecret: ""
+            redirectUrl: /v1/google/callback
             scopes: null
         redirecturl: http://localhost:3001/api/auth/callback/theopenlane
         webauthn:
             debug: false
-            displayname: ""
+            displayName: ""
             enabled: true
-            enforcetimeout: true
-            maxdevices: 10
-            relyingpartyid: ""
-            requestorigins: null
+            enforceTimeout: true
+            maxDevices: 10
+            relyingPartyId: ""
+            requestOrigins: null
             timeout: 60000000000
     supportedproviders: null
     token:
-<<<<<<< HEAD
-        accessduration: 3600000000000
-        apitokens:
-            delimiter: .
-            enabled: false
-            envprefix: IAM_API_TOKEN_KEY_
-            keys: null
-            prefix: ""
-            secretsize: 32
-||||||| parent of a26c932f (extend tests)
-        accessDuration: 3600000000000
-=======
         accessDuration: 3600000000000
         apiTokens:
             delimiter: .
@@ -45,71 +33,70 @@ auth:
             keys: null
             prefix: ""
             secretSize: 32
->>>>>>> a26c932f (extend tests)
         audience: ""
-        generatekeys: true
+        generateKeys: true
         issuer: ""
-        jwkscachettl: 300000000000
-        jwksendpoint: ""
+        jwksCacheTTL: 300000000000
+        jwksEndpoint: ""
         keys: null
         kid: ""
         redis:
-            blacklistprefix: 'token:blacklist:'
+            blacklistPrefix: 'token:blacklist:'
             config:
                 address: localhost:6379
                 db: 0
-                dialtimeout: 5000000000
+                dialTimeout: 5000000000
                 enabled: true
-                maxactiveconns: 0
-                maxidleconns: 0
-                maxretries: 3
-                minidleconns: 0
+                maxActiveConns: 0
+                maxIdleConns: 0
+                maxRetries: 3
+                minIdleConns: 0
                 name: ""
                 password: ""
-                readtimeout: 0
+                readTimeout: 0
                 username: ""
-                writetimeout: 0
+                writeTimeout: 0
             enabled: false
-        refreshaudience: ""
-        refreshduration: 7200000000000
-        refreshoverlap: -900000000000
+        refreshAudience: ""
+        refreshDuration: 7200000000000
+        refreshOverlap: -900000000000
 authz:
-    createnewmodel: false
+    createNewModel: false
     credentials:
-        apitoken: ""
+        apiToken: ""
         audience: ""
-        clientid: ""
-        clientsecret: ""
+        clientId: ""
+        clientSecret: ""
         issuer: ""
         scopes: ""
     enabled: true
-    hosturl: https://authz.theopenlane.io
-    modelfile: fga/model/model.fga
-    modelid: ""
-    storeid: ""
-    storename: openlane
+    hostUrl: https://authz.theopenlane.io
+    modelFile: fga/model/model.fga
+    modelId: ""
+    storeId: ""
+    storeName: openlane
 db:
-    cachettl: 1000000000
-    databasename: openlane
+    cacheTTL: 1000000000
+    databaseName: openlane
     debug: false
-    drivername: pgx
-    enablehistory: false
-    maxconnections: 0
-    maxidleconnections: 0
-    migrationprovider: atlas
-    multiwrite: false
-    primarydbsource: postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
-    runmigrations: true
-    secondarydbsource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
+    driverName: pgx
+    enableHistory: false
+    maxConnections: 0
+    maxIdleConnections: 0
+    migrationProvider: atlas
+    multiWrite: false
+    primaryDbSource: postgres://postgres:password@0.0.0.0:5432/core?sslmode=disable
+    runMigrations: true
+    secondaryDbSource: postgres://postgres:password@0.0.0.0:5432/core-secondary?sslmode=disable
 domain: ""
 email:
-    companyaddress: ""
-    companyname: ""
+    companyAddress: ""
+    companyName: ""
     corporation: ""
-    fromemail: ""
-    logourl: ""
-    supportemail: ""
-    templatespath: ""
+    fromEmail: ""
+    logoURL: ""
+    supportEmail: ""
+    templatesPath: ""
     urls:
         docs: ""
         invite: ""
@@ -118,8 +105,8 @@ email:
         reset: ""
         root: ""
         verify: ""
-        verifybilling: ""
-        verifysubscriber: ""
+        verifyBilling: ""
+        verifySubscriber: ""
     year: 0
 entconfig:
     billing:
@@ -184,12 +171,12 @@ integrationoauthprovider:
         scopes: null
     successredirecturl: ""
 jobqueue:
-    connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+    connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:
-        enablemetrics: false
-        enablesemanticmetrics: true
-        metricsdurationunit: ms
-    riverconf:
+        enableMetrics: false
+        enableSemanticMetrics: true
+        metricsDurationUnit: ms
+    riverConf:
         AdvisoryLockPrefix: 0
         CancelledJobRetentionPeriod: 0
         CompletedJobRetentionPeriod: 0
@@ -221,7 +208,7 @@ jobqueue:
         TestOnly: false
         WorkerMiddleware: null
         Workers: null
-    runmigrations: false
+    runMigrations: false
 keywatcher:
     enabled: false
     externalsecretsintegration: false
@@ -325,17 +312,17 @@ ratelimit:
 redis:
     address: localhost:6379
     db: 0
-    dialtimeout: 5000000000
+    dialTimeout: 5000000000
     enabled: true
-    maxactiveconns: 0
-    maxidleconns: 0
-    maxretries: 3
-    minidleconns: 0
+    maxActiveConns: 0
+    maxIdleConns: 0
+    maxRetries: 3
+    minIdleConns: 0
     name: ""
     password: ""
-    readtimeout: 0
+    readTimeout: 0
     username: ""
-    writetimeout: 0
+    writeTimeout: 0
 refreshinterval: 600000000000
 server:
     cachecontrol:
@@ -401,12 +388,12 @@ server:
     writetimeout: 15000000000
 sessions:
     domain: ""
-    encryptionkey: encryptionsecret
-    httponly: true
-    maxage: 3600
-    samesite: Strict
+    encryptionKey: encryptionsecret
+    httpOnly: true
+    maxAge: 3600
+    sameSite: Strict
     secure: true
-    signingkey: my-signing-secret
+    signingKey: my-signing-secret
 slack:
     newsubscribermessagefile: ""
     newusermessagefile: ""
@@ -424,11 +411,11 @@ subscription:
         2025_10_29_CLOVER: ""
     stripewebhookurl: https://api.theopenlane.io/stripe/webhook
 totp:
-    codelength: 6
+    codeLength: 6
     enabled: true
     issuer: ""
-    recoverycodecount: 16
-    recoverycodelength: 8
+    recoveryCodeCount: 16
+    recoveryCodeLength: 8
     redis: true
     secret: ""
 tracer:
@@ -443,5 +430,5 @@ tracer:
         timeout: 10000000000
     provider: stdout
     stdout:
-        disabletimestamp: false
+        disableTimestamp: false
         pretty: true

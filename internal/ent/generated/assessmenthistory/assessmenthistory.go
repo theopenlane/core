@@ -46,6 +46,10 @@ const (
 	FieldAssessmentType = "assessment_type"
 	// FieldTemplateID holds the string denoting the template_id field in the database.
 	FieldTemplateID = "template_id"
+	// FieldJsonconfig holds the string denoting the jsonconfig field in the database.
+	FieldJsonconfig = "jsonconfig"
+	// FieldUischema holds the string denoting the uischema field in the database.
+	FieldUischema = "uischema"
 	// FieldResponseDueDuration holds the string denoting the response_due_duration field in the database.
 	FieldResponseDueDuration = "response_due_duration"
 	// Table holds the table name of the assessmenthistory in the database.
@@ -69,6 +73,8 @@ var Columns = []string{
 	FieldName,
 	FieldAssessmentType,
 	FieldTemplateID,
+	FieldJsonconfig,
+	FieldUischema,
 	FieldResponseDueDuration,
 }
 

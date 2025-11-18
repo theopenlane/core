@@ -652,6 +652,14 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 		create = create.SetTemplateID(templateID)
 	}
 
+	if jsonconfig, exists := m.Jsonconfig(); exists {
+		create = create.SetJsonconfig(jsonconfig)
+	}
+
+	if uischema, exists := m.Uischema(); exists {
+		create = create.SetUischema(uischema)
+	}
+
 	if responseDueDuration, exists := m.ResponseDueDuration(); exists {
 		create = create.SetResponseDueDuration(responseDueDuration)
 	}
@@ -753,6 +761,18 @@ func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error 
 			create = create.SetTemplateID(assessment.TemplateID)
 		}
 
+		if jsonconfig, exists := m.Jsonconfig(); exists {
+			create = create.SetJsonconfig(jsonconfig)
+		} else {
+			create = create.SetJsonconfig(assessment.Jsonconfig)
+		}
+
+		if uischema, exists := m.Uischema(); exists {
+			create = create.SetUischema(uischema)
+		} else {
+			create = create.SetUischema(assessment.Uischema)
+		}
+
 		if responseDueDuration, exists := m.ResponseDueDuration(); exists {
 			create = create.SetResponseDueDuration(responseDueDuration)
 		} else {
@@ -805,6 +825,8 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 			SetName(assessment.Name).
 			SetAssessmentType(assessment.AssessmentType).
 			SetTemplateID(assessment.TemplateID).
+			SetJsonconfig(assessment.Jsonconfig).
+			SetUischema(assessment.Uischema).
 			SetResponseDueDuration(assessment.ResponseDueDuration).
 			Save(ctx)
 		if err != nil {

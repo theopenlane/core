@@ -186,6 +186,26 @@ func (_c *AssessmentHistoryCreate) SetTemplateID(v string) *AssessmentHistoryCre
 	return _c
 }
 
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *AssessmentHistoryCreate) SetNillableTemplateID(v *string) *AssessmentHistoryCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
+	}
+	return _c
+}
+
+// SetJsonconfig sets the "jsonconfig" field.
+func (_c *AssessmentHistoryCreate) SetJsonconfig(v map[string]interface{}) *AssessmentHistoryCreate {
+	_c.mutation.SetJsonconfig(v)
+	return _c
+}
+
+// SetUischema sets the "uischema" field.
+func (_c *AssessmentHistoryCreate) SetUischema(v map[string]interface{}) *AssessmentHistoryCreate {
+	_c.mutation.SetUischema(v)
+	return _c
+}
+
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_c *AssessmentHistoryCreate) SetResponseDueDuration(v int64) *AssessmentHistoryCreate {
 	_c.mutation.SetResponseDueDuration(v)
@@ -318,9 +338,6 @@ func (_c *AssessmentHistoryCreate) check() error {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.TemplateID(); !ok {
-		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "AssessmentHistory.template_id"`)}
-	}
 	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
 		return &ValidationError{Name: "response_due_duration", err: errors.New(`generated: missing required field "AssessmentHistory.response_due_duration"`)}
 	}
@@ -415,6 +432,14 @@ func (_c *AssessmentHistoryCreate) createSpec() (*AssessmentHistory, *sqlgraph.C
 	if value, ok := _c.mutation.TemplateID(); ok {
 		_spec.SetField(assessmenthistory.FieldTemplateID, field.TypeString, value)
 		_node.TemplateID = value
+	}
+	if value, ok := _c.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessmenthistory.FieldJsonconfig, field.TypeJSON, value)
+		_node.Jsonconfig = value
+	}
+	if value, ok := _c.mutation.Uischema(); ok {
+		_spec.SetField(assessmenthistory.FieldUischema, field.TypeJSON, value)
+		_node.Uischema = value
 	}
 	if value, ok := _c.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)

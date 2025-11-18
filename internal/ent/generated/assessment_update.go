@@ -174,6 +174,36 @@ func (_u *AssessmentUpdate) SetNillableTemplateID(v *string) *AssessmentUpdate {
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *AssessmentUpdate) ClearTemplateID() *AssessmentUpdate {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
+// SetJsonconfig sets the "jsonconfig" field.
+func (_u *AssessmentUpdate) SetJsonconfig(v map[string]interface{}) *AssessmentUpdate {
+	_u.mutation.SetJsonconfig(v)
+	return _u
+}
+
+// ClearJsonconfig clears the value of the "jsonconfig" field.
+func (_u *AssessmentUpdate) ClearJsonconfig() *AssessmentUpdate {
+	_u.mutation.ClearJsonconfig()
+	return _u
+}
+
+// SetUischema sets the "uischema" field.
+func (_u *AssessmentUpdate) SetUischema(v map[string]interface{}) *AssessmentUpdate {
+	_u.mutation.SetUischema(v)
+	return _u
+}
+
+// ClearUischema clears the value of the "uischema" field.
+func (_u *AssessmentUpdate) ClearUischema() *AssessmentUpdate {
+	_u.mutation.ClearUischema()
+	return _u
+}
+
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_u *AssessmentUpdate) SetResponseDueDuration(v int64) *AssessmentUpdate {
 	_u.mutation.ResetResponseDueDuration()
@@ -420,9 +450,6 @@ func (_u *AssessmentUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
 		}
 	}
-	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Assessment.template"`)
-	}
 	return nil
 }
 
@@ -487,6 +514,18 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessment.FieldJsonconfig, field.TypeJSON, value)
+	}
+	if _u.mutation.JsonconfigCleared() {
+		_spec.ClearField(assessment.FieldJsonconfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Uischema(); ok {
+		_spec.SetField(assessment.FieldUischema, field.TypeJSON, value)
+	}
+	if _u.mutation.UischemaCleared() {
+		_spec.ClearField(assessment.FieldUischema, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
@@ -910,6 +949,36 @@ func (_u *AssessmentUpdateOne) SetNillableTemplateID(v *string) *AssessmentUpdat
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *AssessmentUpdateOne) ClearTemplateID() *AssessmentUpdateOne {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
+// SetJsonconfig sets the "jsonconfig" field.
+func (_u *AssessmentUpdateOne) SetJsonconfig(v map[string]interface{}) *AssessmentUpdateOne {
+	_u.mutation.SetJsonconfig(v)
+	return _u
+}
+
+// ClearJsonconfig clears the value of the "jsonconfig" field.
+func (_u *AssessmentUpdateOne) ClearJsonconfig() *AssessmentUpdateOne {
+	_u.mutation.ClearJsonconfig()
+	return _u
+}
+
+// SetUischema sets the "uischema" field.
+func (_u *AssessmentUpdateOne) SetUischema(v map[string]interface{}) *AssessmentUpdateOne {
+	_u.mutation.SetUischema(v)
+	return _u
+}
+
+// ClearUischema clears the value of the "uischema" field.
+func (_u *AssessmentUpdateOne) ClearUischema() *AssessmentUpdateOne {
+	_u.mutation.ClearUischema()
+	return _u
+}
+
 // SetResponseDueDuration sets the "response_due_duration" field.
 func (_u *AssessmentUpdateOne) SetResponseDueDuration(v int64) *AssessmentUpdateOne {
 	_u.mutation.ResetResponseDueDuration()
@@ -1169,9 +1238,6 @@ func (_u *AssessmentUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "Assessment.name": %w`, err)}
 		}
 	}
-	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "Assessment.template"`)
-	}
 	return nil
 }
 
@@ -1253,6 +1319,18 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(assessment.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessment.FieldJsonconfig, field.TypeJSON, value)
+	}
+	if _u.mutation.JsonconfigCleared() {
+		_spec.ClearField(assessment.FieldJsonconfig, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Uischema(); ok {
+		_spec.SetField(assessment.FieldUischema, field.TypeJSON, value)
+	}
+	if _u.mutation.UischemaCleared() {
+		_spec.ClearField(assessment.FieldUischema, field.TypeJSON)
 	}
 	if value, ok := _u.mutation.ResponseDueDuration(); ok {
 		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)

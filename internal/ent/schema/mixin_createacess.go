@@ -33,6 +33,7 @@ var createObjectTypes = []string{
 	"scheduled_job",
 	"standard",
 	"template",
+	"assessment",
 }
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity

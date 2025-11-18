@@ -79,9 +79,9 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.16.0
-	github.com/riverqueue/river v0.27.0
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.27.0
-	github.com/riverqueue/river/rivertype v0.27.0
+	github.com/riverqueue/river v0.26.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.26.0
+	github.com/riverqueue/river/rivertype v0.26.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
@@ -89,36 +89,22 @@ require (
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v83 v83.2.1
-	github.com/theopenlane/beacon v0.3.0
+	github.com/theopenlane/beacon v0.2.0
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
-<<<<<<< HEAD
-	github.com/theopenlane/emailtemplates v0.3.0
-	github.com/theopenlane/entx v0.16.0
-||||||| parent of e4b23f8e (add go.mod)
-	github.com/theopenlane/emailtemplates v0.2.6
-	github.com/theopenlane/entx v0.15.1
-=======
 	github.com/theopenlane/emailtemplates v0.2.7
 	github.com/theopenlane/entx v0.15.1
->>>>>>> e4b23f8e (add go.mod)
 	github.com/theopenlane/gqlgen-plugins v0.11.1
 	github.com/theopenlane/httpsling v0.3.0
-<<<<<<< HEAD
-	github.com/theopenlane/iam v0.22.2
-||||||| parent of a26c932f (extend tests)
-	github.com/theopenlane/iam v0.21.0
-=======
 	github.com/theopenlane/iam v0.22.1
->>>>>>> a26c932f (extend tests)
 	github.com/theopenlane/newman v0.2.1
-	github.com/theopenlane/riverboat v0.5.0
-	github.com/theopenlane/utils v0.6.1
+	github.com/theopenlane/riverboat v0.4.3
+	github.com/theopenlane/utils v0.5.2
 	github.com/tink-crypto/tink-go/v2 v2.5.0
 	github.com/tmc/langchaingo v0.1.14
-	github.com/urfave/cli/v3 v3.6.1
+	github.com/urfave/cli/v3 v3.6.0
 	github.com/vektah/gqlparser/v2 v2.5.31
-	github.com/windmill-labs/windmill-go-client v1.578.0
+	github.com/windmill-labs/windmill-go-client v1.576.3
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	gocloud.dev v0.43.0
@@ -134,27 +120,14 @@ require (
 )
 
 require (
-	github.com/clipperhouse/stringish v0.1.1 // indirect
-	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
+	github.com/clipperhouse/uax29/v2 v2.2.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
 	golang.org/x/image v0.32.0 // indirect
-<<<<<<< HEAD
-<<<<<<< HEAD
 	google.golang.org/api v0.255.0 // indirect
-||||||| parent of 317b2fa4 (add http handler to generate the questionnaire jwt)
-	google.golang.org/api v0.253.0 // indirect
-=======
-	google.golang.org/api v0.254.0 // indirect
->>>>>>> 317b2fa4 (add http handler to generate the questionnaire jwt)
-||||||| parent of a26c932f (extend tests)
-	google.golang.org/api v0.254.0 // indirect
-=======
-	google.golang.org/api v0.255.0 // indirect
->>>>>>> a26c932f (extend tests)
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
@@ -256,7 +229,7 @@ require (
 	github.com/tklauser/numcpus v0.10.0 // indirect
 	github.com/ugorji/go/codec v1.3.0 // indirect
 	github.com/urfave/cli/v2 v2.27.7 // indirect
-	github.com/vektra/mockery/v3 v3.6.1 // indirect
+	github.com/vektra/mockery/v3 v3.6.0 // indirect
 	github.com/wk8/go-ordered-map/v2 v2.1.8 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
@@ -351,8 +324,8 @@ require (
 	github.com/prometheus/common v0.67.1 // indirect
 	github.com/prometheus/procfs v0.19.1 // indirect
 	github.com/resend/resend-go/v2 v2.27.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.27.0 // indirect
-	github.com/riverqueue/river/rivershared v0.27.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.26.0 // indirect
+	github.com/riverqueue/river/rivershared v0.26.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.5.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

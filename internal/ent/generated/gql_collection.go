@@ -2289,6 +2289,16 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, assessment.FieldTemplateID)
 				fieldSeen[assessment.FieldTemplateID] = struct{}{}
 			}
+		case "jsonconfig":
+			if _, ok := fieldSeen[assessment.FieldJsonconfig]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldJsonconfig)
+				fieldSeen[assessment.FieldJsonconfig] = struct{}{}
+			}
+		case "uischema":
+			if _, ok := fieldSeen[assessment.FieldUischema]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldUischema)
+				fieldSeen[assessment.FieldUischema] = struct{}{}
+			}
 		case "responseDueDuration":
 			if _, ok := fieldSeen[assessment.FieldResponseDueDuration]; !ok {
 				selectedFields = append(selectedFields, assessment.FieldResponseDueDuration)
@@ -2443,6 +2453,16 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[assessmenthistory.FieldTemplateID]; !ok {
 				selectedFields = append(selectedFields, assessmenthistory.FieldTemplateID)
 				fieldSeen[assessmenthistory.FieldTemplateID] = struct{}{}
+			}
+		case "jsonconfig":
+			if _, ok := fieldSeen[assessmenthistory.FieldJsonconfig]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldJsonconfig)
+				fieldSeen[assessmenthistory.FieldJsonconfig] = struct{}{}
+			}
+		case "uischema":
+			if _, ok := fieldSeen[assessmenthistory.FieldUischema]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldUischema)
+				fieldSeen[assessmenthistory.FieldUischema] = struct{}{}
 			}
 		case "responseDueDuration":
 			if _, ok := fieldSeen[assessmenthistory.FieldResponseDueDuration]; !ok {

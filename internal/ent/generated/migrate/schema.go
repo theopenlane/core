@@ -252,9 +252,11 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentsTable holds the schema information for the "assessments" table.
 	AssessmentsTable = &schema.Table{
@@ -264,22 +266,22 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[11]},
+				Columns:    []*schema.Column{AssessmentsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assessments_templates_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[12]},
+				Columns:    []*schema.Column{AssessmentsColumns[14]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -287,7 +289,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[11]},
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -310,7 +312,9 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
 		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.

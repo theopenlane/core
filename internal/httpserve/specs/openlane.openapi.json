@@ -492,28 +492,6 @@
         },
         "type": "object"
       },
-      "CreateQuestionnaireAnonymousJWTResponse": {
-        "properties": {
-          "access_token": {
-            "description": "The access token to be used for authentication",
-            "type": "string"
-          },
-          "refresh_token": {
-            "description": "The refresh token to be used to refresh the access token after it expires",
-            "type": "string"
-          },
-          "session": {
-            "description": "The short-lived session token required for authentication",
-            "type": "string"
-          },
-          "token_type": {
-            "description": "The type of token being returned",
-            "example": "bearer",
-            "type": "string"
-          }
-        },
-        "type": "object"
-      },
       "CreateTrustCenterAnonymousJWTResponse": {
         "properties": {
           "access_token": {
@@ -675,6 +653,10 @@
       "GetQuestionnaireResponse": {
         "properties": {
           "jsonconfig": {
+            "additionalProperties": {},
+            "type": "object"
+          },
+          "uischema": {
             "additionalProperties": {},
             "type": "object"
           }
@@ -3655,9 +3637,7 @@
               "application/json": {
                 "examples": {
                   "success": {
-                    "value": {
-                      "jsonconfig": {}
-                    }
+                    "value": {}
                   }
                 },
                 "schema": {
@@ -3734,44 +3714,6 @@
         "summary": "Submit questionnaire response data for authenticated anonymous users",
         "tags": [
           "questionnaire"
-        ]
-      }
-    },
-    "/questionnaire/auth/anonymous": {
-      "post": {
-        "description": "Create anonymous JWT token for questionnaire access",
-        "operationId": "QuestionnaireAnonymousJWT",
-        "responses": {
-          "200": {
-            "content": {
-              "application/json": {
-                "examples": {
-                  "success": {
-                    "value": {
-                      "access_token": ""
-                    }
-                  }
-                },
-                "schema": {
-                  "$ref": "#/components/schemas/CreateQuestionnaireAnonymousJWTResponse"
-                }
-              }
-            },
-            "description": "Success"
-          },
-          "default": {
-            "description": ""
-          }
-        },
-        "security": [
-          {
-            "basic": []
-          }
-        ],
-        "summary": "Create anonymous JWT token for questionnaire access",
-        "tags": [
-          "questionnaire",
-          "authentication"
         ]
       }
     },
@@ -7109,7 +7051,7 @@
       "name": "password-reset"
     },
     {
-      "description": "Create anonymous JWT token for questionnaire access",
+      "description": "Get questionnaire template configuration for authenticated anonymous users",
       "name": "questionnaire"
     },
     {

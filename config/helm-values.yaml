@@ -228,15 +228,15 @@ coreConfiguration:
     token:
       kid: ""  # @schema type:string
       audience: ""  # @schema type:string
-      refreshaudience: ""  # @schema type:string
+      refreshAudience: ""  # @schema type:string
       issuer: ""  # @schema type:string
-      accessduration: "1h0m0s"  # @schema type:integer; default:1h
-      refreshduration: "2h0m0s"  # @schema type:integer; default:2h
-      refreshoverlap: "-15m0s"  # @schema type:integer; default:-15m
-      jwksendpoint: ""  # @schema type:string
+      accessDuration: "1h0m0s"  # @schema type:integer; default:1h
+      refreshDuration: "2h0m0s"  # @schema type:integer; default:2h
+      refreshOverlap: "-15m0s"  # @schema type:integer; default:-15m
+      jwksEndpoint: ""  # @schema type:string
       keys: {}
-      generatekeys: true  # @schema type:boolean; default:true
-      jwkscachettl: "5m0s"  # @schema type:integer; default:5m
+      generateKeys: true  # @schema type:boolean; default:true
+      jwksCacheTTL: "5m0s"  # @schema type:integer; default:5m
       redis:
         enabled: false  # @schema type:boolean; default:false
         config:
@@ -246,30 +246,6 @@ coreConfiguration:
           username: ""  # @schema type:string
           password: ""  # @schema type:string
           db: 0  # @schema type:integer; default:0
-<<<<<<< HEAD
-          dialtimeout: "5s"  # @schema type:integer; default:5s
-          readtimeout: "0s"  # @schema type:integer; default:0
-          writetimeout: "0s"  # @schema type:integer; default:0
-          maxretries: 3  # @schema type:integer; default:3
-          minidleconns: 0  # @schema type:integer; default:0
-          maxidleconns: 0  # @schema type:integer; default:0
-          maxactiveconns: 0  # @schema type:integer; default:0
-        blacklistprefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
-      apitokens:
-        enabled: false  # @schema type:boolean; default:false
-        envprefix: "IAM_API_TOKEN_KEY_"  # @schema type:string; default:IAM_API_TOKEN_KEY_
-        keys: {}
-        secretsize: 32  # @schema type:integer; default:32
-||||||| parent of a26c932f (extend tests)
-          dialTimeout: "5s"  # @schema type:integer; default:5s
-          readTimeout: "0s"  # @schema type:integer; default:0
-          writeTimeout: "0s"  # @schema type:integer; default:0
-          maxRetries: 3  # @schema type:integer; default:3
-          minIdleConns: 0  # @schema type:integer; default:0
-          maxIdleConns: 0  # @schema type:integer; default:0
-          maxActiveConns: 0  # @schema type:integer; default:0
-        blacklistPrefix: "token:blacklist:"  # @schema type:string; default:token:blacklist:
-=======
           dialTimeout: "5s"  # @schema type:integer; default:5s
           readTimeout: "0s"  # @schema type:integer; default:0
           writeTimeout: "0s"  # @schema type:integer; default:0
@@ -283,7 +259,6 @@ coreConfiguration:
         envPrefix: "IAM_API_TOKEN_KEY_"  # @schema type:string; default:IAM_API_TOKEN_KEY_
         keys: {}
         secretSize: 32  # @schema type:integer; default:32
->>>>>>> a26c932f (extend tests)
         delimiter: "."  # @schema type:string; default:.
         prefix: ""  # @schema type:string
     # -- SupportedProviders are the supported oauth providers that have been configured
@@ -294,24 +269,24 @@ coreConfiguration:
       redirecturl: "http://localhost:3001/api/auth/callback/theopenlane"  # @schema type:string; default:http://localhost:3001/api/auth/callback/theopenlane
       # -- Github contains the configuration settings for the Github Oauth Provider
       github:
-        clientid: ""  # @schema type:string
-        clientendpoint: ""  # @schema type:string
+        clientId: ""  # @schema type:string
+        clientEndpoint: ""  # @schema type:string
         scopes: []
-        redirecturl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
+        redirectUrl: "/v1/github/callback"  # @schema type:string; default:/v1/github/callback
       # -- Google contains the configuration settings for the Google Oauth Provider
       google:
-        clientid: ""  # @schema type:string
-        clientendpoint: ""  # @schema type:string
+        clientId: ""  # @schema type:string
+        clientEndpoint: ""  # @schema type:string
         scopes: []
-        redirecturl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
+        redirectUrl: "/v1/google/callback"  # @schema type:string; default:/v1/google/callback
       # -- Webauthn contains the configuration settings for the Webauthn Oauth Provider
       webauthn:
         enabled: true  # @schema type:boolean; default:true
-        displayname: ""  # @schema type:string
-        relyingpartyid: ""  # @schema type:string
-        requestorigins: []
-        maxdevices: 10  # @schema type:integer; default:10
-        enforcetimeout: true  # @schema type:boolean; default:true
+        displayName: ""  # @schema type:string
+        relyingPartyId: ""  # @schema type:string
+        requestOrigins: []
+        maxDevices: 10  # @schema type:integer; default:10
+        enforceTimeout: true  # @schema type:boolean; default:true
         timeout: "1m0s"  # @schema type:integer; default:60s
         debug: false  # @schema type:boolean; default:false
   # -- Authz contains the authorization settings for fine grained access control
@@ -319,21 +294,21 @@ coreConfiguration:
     # -- enables authorization checks with openFGA
     enabled: true  # @schema type:boolean; default:true
     # -- name of openFGA store
-    storename: "openlane"  # @schema type:string; default:openlane
+    storeName: "openlane"  # @schema type:string; default:openlane
     # -- host url with scheme of the openFGA API
-    hosturl: "https://authz.theopenlane.io"  # @schema type:string; default:https://authz.theopenlane.io
+    hostUrl: "https://authz.theopenlane.io"  # @schema type:string; default:https://authz.theopenlane.io
     # -- id of openFGA store
-    storeid: ""  # @schema type:string
+    storeId: ""  # @schema type:string
     # -- id of openFGA model
-    modelid: ""  # @schema type:string
+    modelId: ""  # @schema type:string
     # -- force create a new model
-    createnewmodel: false  # @schema type:boolean; default:false
+    createNewModel: false  # @schema type:boolean; default:false
     # -- path to the fga model file
-    modelfile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
+    modelFile: "fga/model/model.fga"  # @schema type:string; default:fga/model/model.fga
     # -- credentials for the openFGA client
     credentials:
       # -- client id for the openFGA client
-      clientid: ""  # @schema type:string
+      clientId: ""  # @schema type:string
       # -- audience for the openFGA client
       audience: ""  # @schema type:string
       # -- issuer for the openFGA client
@@ -345,31 +320,31 @@ coreConfiguration:
     # -- debug enables printing the debug database logs
     debug: false  # @schema type:boolean; default:false
     # -- the name of the database to use with otel tracing
-    databasename: "openlane"  # @schema type:string; default:openlane
+    databaseName: "openlane"  # @schema type:string; default:openlane
     # -- sql driver name
-    drivername: "pgx"  # @schema type:string; default:pgx
+    driverName: "pgx"  # @schema type:string; default:pgx
     # -- enables writing to two databases simultaneously
-    multiwrite: false  # @schema type:boolean; default:false
+    multiWrite: false  # @schema type:boolean; default:false
     # -- cache results for subsequent requests
-    cachettl: "1s"  # @schema type:integer; default:1s
+    cacheTTL: "1s"  # @schema type:integer; default:1s
     # -- run migrations on startup
-    runmigrations: true  # @schema type:boolean; default:true
+    runMigrations: true  # @schema type:boolean; default:true
     # -- migration provider to use for running migrations
-    migrationprovider: "atlas"  # @schema type:string; default:atlas
+    migrationProvider: "atlas"  # @schema type:string; default:atlas
     # -- enable history data to be logged to the database
-    enablehistory: false  # @schema type:boolean; default:false
+    enableHistory: false  # @schema type:boolean; default:false
     # -- maximum number of connections to the database
-    maxconnections: 0  # @schema type:integer; default:0
+    maxConnections: 0  # @schema type:integer; default:0
     # -- maximum number of idle connections to the database
-    maxidleconnections: 0  # @schema type:integer; default:0
+    maxIdleConnections: 0  # @schema type:integer; default:0
   # -- JobQueue contains the configuration for the job queue (river) client
   jobqueue:
-    runmigrations: false  # @schema type:boolean; default:false
-    riverconf:
+    runMigrations: false  # @schema type:boolean; default:false
+    riverConf:
     metrics:
-      enablemetrics: false  # @schema type:boolean; default:false
-      metricsdurationunit: "ms"  # @schema type:string; default:ms
-      enablesemanticmetrics: true  # @schema type:boolean; default:true
+      enableMetrics: false  # @schema type:boolean; default:false
+      metricsDurationUnit: "ms"  # @schema type:string; default:ms
+      enableSemanticMetrics: true  # @schema type:boolean; default:true
   # -- Redis contains the redis configuration for the key-value store
   redis:
     enabled: true  # @schema type:boolean; default:true
@@ -378,13 +353,13 @@ coreConfiguration:
     username: ""  # @schema type:string
     password: ""  # @schema type:string
     db: 0  # @schema type:integer; default:0
-    dialtimeout: "5s"  # @schema type:integer; default:5s
-    readtimeout: "0s"  # @schema type:integer; default:0
-    writetimeout: "0s"  # @schema type:integer; default:0
-    maxretries: 3  # @schema type:integer; default:3
-    minidleconns: 0  # @schema type:integer; default:0
-    maxidleconns: 0  # @schema type:integer; default:0
-    maxactiveconns: 0  # @schema type:integer; default:0
+    dialTimeout: "5s"  # @schema type:integer; default:5s
+    readTimeout: "0s"  # @schema type:integer; default:0
+    writeTimeout: "0s"  # @schema type:integer; default:0
+    maxRetries: 3  # @schema type:integer; default:3
+    minIdleConns: 0  # @schema type:integer; default:0
+    maxIdleConns: 0  # @schema type:integer; default:0
+    maxActiveConns: 0  # @schema type:integer; default:0
   # -- Tracer contains the tracing config for opentelemetry
   tracer:
     enabled: false  # @schema type:boolean; default:false
@@ -392,7 +367,7 @@ coreConfiguration:
     environment: "development"  # @schema type:string; default:development
     stdout:
       pretty: true  # @schema type:boolean; default:true
-      disabletimestamp: false  # @schema type:boolean; default:false
+      disableTimestamp: false  # @schema type:boolean; default:false
     otlp:
       endpoint: "localhost:4317"  # @schema type:string; default:localhost:4317
       insecure: true  # @schema type:boolean; default:true
@@ -402,13 +377,13 @@ coreConfiguration:
       timeout: "10s"  # @schema type:integer; default:10s
   # -- Email contains email sending configuration for the server
   email:
-    companyname: ""  # @schema type:string
-    companyaddress: ""  # @schema type:string
+    companyName: ""  # @schema type:string
+    companyAddress: ""  # @schema type:string
     corporation: ""  # @schema type:string
     year: 0  # @schema type:integer
-    fromemail: ""  # @schema type:string
-    supportemail: ""  # @schema type:string
-    logourl: ""  # @schema type:string
+    fromEmail: ""  # @schema type:string
+    supportEmail: ""  # @schema type:string
+    logoURL: ""  # @schema type:string
     urls:
       root: ""  # @schema type:string
       product: ""  # @schema type:string
@@ -416,36 +391,25 @@ coreConfiguration:
       verify: ""  # @schema type:string
       invite: ""  # @schema type:string
       reset: ""  # @schema type:string
-<<<<<<< HEAD
-      verifysubscriber: ""  # @schema type:string
-      verifybilling: ""  # @schema type:string
-      questionnaire: ""  # @schema type:string
-    templatespath: ""  # @schema type:string
-||||||| parent of a26c932f (extend tests)
-      verifySubscriber: ""  # @schema type:string
-      verifyBilling: ""  # @schema type:string
-    templatesPath: ""  # @schema type:string
-=======
       verifySubscriber: ""  # @schema type:string
       verifyBilling: ""  # @schema type:string
       questionnaire: ""  # @schema type:string
     templatesPath: ""  # @schema type:string
->>>>>>> a26c932f (extend tests)
   # -- Sessions config for user sessions and cookies
   sessions:
     domain: ""  # @schema type:string
-    maxage: 3600  # @schema type:integer; default:3600
+    maxAge: 3600  # @schema type:integer; default:3600
     secure: true  # @schema type:boolean; default:true
-    httponly: true  # @schema type:boolean; default:true
-    samesite: "Strict"  # @schema type:string; default:Strict
+    httpOnly: true  # @schema type:boolean; default:true
+    sameSite: "Strict"  # @schema type:string; default:Strict
   # -- TOTP contains the configuration for the TOTP provider
   totp:
     enabled: true  # @schema type:boolean; default:true
-    codelength: 6  # @schema type:integer; default:6
+    codeLength: 6  # @schema type:integer; default:6
     issuer: ""  # @schema type:string
     redis: true  # @schema type:boolean; default:true
-    recoverycodecount: 16  # @schema type:integer; default:16
-    recoverycodelength: 8  # @schema type:integer; default:8
+    recoveryCodeCount: 16  # @schema type:integer; default:16
+    recoveryCodeLength: 8  # @schema type:integer; default:8
   # -- Ratelimit contains the configuration for the rate limiter
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
@@ -668,7 +632,7 @@ externalSecrets:
     core-auth-providers-github-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for auth.providers.github.clientsecret
+      # -- Environment variable key for auth.providers.github.clientSecret
       secretKey: "CORE_AUTH_PROVIDERS_GITHUB_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-github-clientsecret"  # @schema type:string
@@ -676,7 +640,7 @@ externalSecrets:
     core-auth-providers-google-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for auth.providers.google.clientsecret
+      # -- Environment variable key for auth.providers.google.clientSecret
       secretKey: "CORE_AUTH_PROVIDERS_GOOGLE_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-auth-providers-google-clientsecret"  # @schema type:string
@@ -684,7 +648,7 @@ externalSecrets:
     core-authz-credentials-apitoken:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for authz.credentials.apitoken
+      # -- Environment variable key for authz.credentials.apiToken
       secretKey: "CORE_AUTHZ_CREDENTIALS_APITOKEN"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-authz-credentials-apitoken"  # @schema type:string
@@ -692,7 +656,7 @@ externalSecrets:
     core-authz-credentials-clientsecret:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for authz.credentials.clientsecret
+      # -- Environment variable key for authz.credentials.clientSecret
       secretKey: "CORE_AUTHZ_CREDENTIALS_CLIENTSECRET"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-authz-credentials-clientsecret"  # @schema type:string
@@ -700,7 +664,7 @@ externalSecrets:
     core-db-primarydbsource:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for db.primarydbsource
+      # -- Environment variable key for db.primaryDbSource
       secretKey: "CORE_DB_PRIMARYDBSOURCE"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-db-primarydbsource"  # @schema type:string
@@ -708,7 +672,7 @@ externalSecrets:
     core-db-secondarydbsource:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for db.secondarydbsource
+      # -- Environment variable key for db.secondaryDbSource
       secretKey: "CORE_DB_SECONDARYDBSOURCE"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-db-secondarydbsource"  # @schema type:string
@@ -716,7 +680,7 @@ externalSecrets:
     core-jobqueue-connectionuri:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for jobqueue.connectionuri
+      # -- Environment variable key for jobqueue.connectionURI
       secretKey: "CORE_JOBQUEUE_CONNECTIONURI"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-jobqueue-connectionuri"  # @schema type:string
@@ -724,7 +688,7 @@ externalSecrets:
     core-sessions-signingkey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for sessions.signingkey
+      # -- Environment variable key for sessions.signingKey
       secretKey: "CORE_SESSIONS_SIGNINGKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-sessions-signingkey"  # @schema type:string
@@ -732,7 +696,7 @@ externalSecrets:
     core-sessions-encryptionkey:
       # -- Enable this external secret
       enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for sessions.encryptionkey
+      # -- Environment variable key for sessions.encryptionKey
       secretKey: "CORE_SESSIONS_ENCRYPTIONKEY"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-sessions-encryptionkey"  # @schema type:string

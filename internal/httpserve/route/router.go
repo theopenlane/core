@@ -617,7 +617,6 @@ func RegisterRoutes(router *Router) error {
 		registerSSOTokenAuthorizeHandler,
 		registerSSOTokenCallbackHandler,
 		registerTrustCenterAnonymousJWTHandler,
-		registerQuestionnaireAnonymousJWTHandler,
 		registerQuestionnaireHandler,
 		registerQuestionnaireSubmitHandler,
 		registerStartImpersonationHandler,

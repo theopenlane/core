@@ -16,7 +16,6 @@ import (
 )
 
 func TestQueryAssessment(t *testing.T) {
-	// create assessment1 with test user 1
 	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
@@ -80,14 +79,11 @@ func TestQueryAssessment(t *testing.T) {
 
 			assert.Check(t, is.Equal(tc.expectedResult.ID, resp.Assessment.ID))
 			assert.Check(t, is.Equal(tc.expectedResult.Name, resp.Assessment.Name))
-			assert.Check(t, is.Equal(tc.expectedResult.TemplateID, resp.Assessment.TemplateID))
 			assert.Check(t, is.Equal(string(tc.expectedResult.AssessmentType), string(resp.Assessment.AssessmentType)))
 		})
 	}
 
-	// cleanup
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID}}).MustDelete(testUser1.UserCtx, t)
-	// cleanup templates
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -144,16 +140,13 @@ func TestQueryAssessments(t *testing.T) {
 		assert.Assert(t, resp.Assessments.PageInfo.EndCursor != nil)
 	})
 
-	// cleanup
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment1.ID, assessment2.ID, assessment3.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, IDs: []string{assessment4.ID}}).MustDelete(anotherUser.UserCtx, t)
-	// cleanup templates
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID, assessment3.TemplateID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment4.TemplateID}}).MustDelete(anotherUser.UserCtx, t)
 }
 
 func TestMutationCreateAssessment(t *testing.T) {
-	// create a template to use for assessments
 	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -167,7 +160,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path, minimal fields",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: template.ID,
+				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
 			},
 			client: suite.client.api,
@@ -177,7 +170,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path, all fields",
 			request: testclient.CreateAssessmentInput{
 				Name:                gofakeit.Company(),
-				TemplateID:          template.ID,
+				TemplateID:          lo.ToPtr(template.ID),
 				OwnerID:             &testUser1.OrganizationID,
 				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
@@ -190,7 +183,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "happy path using personal access token",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: template.ID,
+				TemplateID: lo.ToPtr(template.ID),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -198,7 +191,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 		{
 			name: "missing required field - name",
 			request: testclient.CreateAssessmentInput{
-				TemplateID: template.ID,
+				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
 			},
 			client:   suite.client.api,
@@ -206,20 +199,10 @@ func TestMutationCreateAssessment(t *testing.T) {
 			errorMsg: "value is less than the required length",
 		},
 		{
-			name: "missing required field - template_id",
-			request: testclient.CreateAssessmentInput{
-				Name:    gofakeit.Company(),
-				OwnerID: &testUser1.OrganizationID,
-			},
-			client:   suite.client.api,
-			ctx:      testUser1.UserCtx,
-			errorMsg: "template does not exist",
-		},
-		{
 			name: "invalid template_id",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: ulids.New().String(),
+				TemplateID: lo.ToPtr(ulids.New().String()),
 				OwnerID:    &testUser1.OrganizationID,
 			},
 			client:   suite.client.api,
@@ -230,7 +213,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			name: "no access, view only user",
 			request: testclient.CreateAssessmentInput{
 				Name:       gofakeit.Company(),
-				TemplateID: template.ID,
+				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
 			},
 			client:   suite.client.api,
@@ -252,32 +235,23 @@ func TestMutationCreateAssessment(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, is.Equal(tc.request.Name, resp.CreateAssessment.Assessment.Name))
-			assert.Check(t, is.Equal(tc.request.TemplateID, resp.CreateAssessment.Assessment.TemplateID))
 
 			if tc.request.AssessmentType != nil {
 				assert.Check(t, is.Equal(string(*tc.request.AssessmentType), string(resp.CreateAssessment.Assessment.AssessmentType)))
-			}
-
-			if tc.request.ResponseDueDuration != nil {
-				// Note: response_due_duration is not returned in the GraphQL response based on the query
-				// so we can't verify it here unless we update the query
 			}
 
 			if len(tc.request.Tags) > 0 {
 				assert.Check(t, is.Len(resp.CreateAssessment.Assessment.Tags, len(tc.request.Tags)))
 			}
 
-			// cleanup
 			(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(testUser1.UserCtx, t)
 		})
 	}
 
-	// cleanup template
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationUpdateAssessment(t *testing.T) {
-	// create assessment to be updated
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	templateIDPtr := lo.ToPtr(assessment.TemplateID)
 
@@ -387,19 +361,16 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			}
 
 			if len(tc.request.AppendTags) > 0 {
-				// Tags should include the appended tags
 				assert.Check(t, len(resp.UpdateAssessment.Assessment.Tags) >= len(tc.request.AppendTags))
 			}
 		})
 	}
 
-	// cleanup
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment.TemplateID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationDeleteAssessment(t *testing.T) {
-	// create assessments to be deleted
 	assessment1 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	assessment2 := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
@@ -467,28 +438,24 @@ func TestMutationDeleteAssessment(t *testing.T) {
 		})
 	}
 
-	// cleanup templates for deleted assessments
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, IDs: []string{assessment1.TemplateID, assessment2.TemplateID}}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
-	// create first assessment
 	assessment1 := (&AssessmentBuilder{client: suite.client, Name: "Duplicate Test"}).MustNew(testUser1.UserCtx, t)
 
-	// try to create another assessment with the same name in the same org
 	t.Run("duplicate name in same org should fail", func(t *testing.T) {
 		template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
-			TemplateID: template.ID,
+			TemplateID: lo.ToPtr(template.ID),
 			OwnerID:    &testUser1.OrganizationID,
 		}
 
 		_, err := suite.client.api.CreateAssessment(testUser1.UserCtx, request)
 		assert.ErrorContains(t, err, "assessment already exists")
 
-		// cleanup template
 		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
@@ -499,7 +466,7 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 
 		request := testclient.CreateAssessmentInput{
 			Name:       "Duplicate Test",
-			TemplateID: template.ID,
+			TemplateID: lo.ToPtr(template.ID),
 			OwnerID:    &anotherUser.OrganizationID,
 		}
 
@@ -508,12 +475,10 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 		assert.Assert(t, resp != nil)
 		assert.Check(t, is.Equal("Duplicate Test", resp.CreateAssessment.Assessment.Name))
 
-		// cleanup
 		(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: resp.CreateAssessment.Assessment.ID}).MustDelete(anotherUser.UserCtx, t)
 		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(anotherUser.UserCtx, t)
 	})
 
-	// cleanup
 	(&Cleanup[*generated.AssessmentDeleteOne]{client: suite.client.db.Assessment, ID: assessment1.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: assessment1.TemplateID}).MustDelete(testUser1.UserCtx, t)
 }

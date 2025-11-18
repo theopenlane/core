@@ -1468,15 +1468,19 @@ type Assessment struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the template id associated with the assessment
-	TemplateID string `json:"templateID"`
+	// the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
+	TemplateID *string `json:"templateID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration int64                         `json:"responseDueDuration"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
 	Viewers             *GroupConnection              `json:"viewers"`
-	Template            *Template                     `json:"template"`
+	Template            *Template                     `json:"template,omitempty"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 }
 
@@ -1528,8 +1532,12 @@ type AssessmentHistory struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the template id associated with the assessment
-	TemplateID string `json:"templateID"`
+	// the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
+	TemplateID *string `json:"templateID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration int64 `json:"responseDueDuration"`
 }
@@ -1710,6 +1718,8 @@ type AssessmentHistoryWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// response_due_duration field predicates
@@ -2366,6 +2376,8 @@ type AssessmentWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// response_due_duration field predicates
@@ -6318,13 +6330,17 @@ type CreateAssessmentInput struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string                `json:"name"`
 	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration   *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs             []string `json:"editorIDs,omitempty"`
 	ViewerIDs             []string `json:"viewerIDs,omitempty"`
-	TemplateID            string   `json:"templateID"`
+	TemplateID            *string  `json:"templateID,omitempty"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 }
 
@@ -39676,6 +39692,12 @@ type UpdateAssessmentInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name *string `json:"name,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
+	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration         *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID                     *string  `json:"ownerID,omitempty"`
@@ -39690,6 +39712,7 @@ type UpdateAssessmentInput struct {
 	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
 	ClearViewers                *bool    `json:"clearViewers,omitempty"`
 	TemplateID                  *string  `json:"templateID,omitempty"`
+	ClearTemplate               *bool    `json:"clearTemplate,omitempty"`
 	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
 	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
 	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`

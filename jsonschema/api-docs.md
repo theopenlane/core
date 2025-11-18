@@ -70,12 +70,7 @@ Config contains the configuration for the core server
             "redis": {
                 "config": {}
             },
-<<<<<<< HEAD
-            "apitokens": {
-||||||| parent of a26c932f (extend tests)
-=======
             "apiTokens": {
->>>>>>> a26c932f (extend tests)
                 "keys": {}
             }
         },
@@ -90,7 +85,7 @@ Config contains the configuration for the core server
     },
     "db": {},
     "jobqueue": {
-        "riverconf": {
+        "riverConf": {
             "Logger": {},
             "PeriodicJobs": [
                 {}
@@ -683,12 +678,7 @@ Auth settings including oauth2 providers and token configuration
         "redis": {
             "config": {}
         },
-<<<<<<< HEAD
-        "apitokens": {
-||||||| parent of a26c932f (extend tests)
-=======
         "apiTokens": {
->>>>>>> a26c932f (extend tests)
             "keys": {}
         }
     },
@@ -709,22 +699,17 @@ Auth settings including oauth2 providers and token configuration
 |----|----|-----------|--------|
 |**kid**|`string`||yes|
 |**audience**|`string`||yes|
-|**refreshaudience**|`string`||no|
+|**refreshAudience**|`string`||no|
 |**issuer**|`string`||yes|
-|**accessduration**|`integer`||no|
-|**refreshduration**|`integer`||no|
-|**refreshoverlap**|`integer`||no|
-|**jwksendpoint**|`string`||no|
+|**accessDuration**|`integer`||no|
+|**refreshDuration**|`integer`||no|
+|**refreshOverlap**|`integer`||no|
+|**jwksEndpoint**|`string`||no|
 |[**keys**](#authtokenkeys)|`object`||yes|
-|**generatekeys**|`boolean`||no|
-|**jwkscachettl**|`integer`||no|
+|**generateKeys**|`boolean`||no|
+|**jwksCacheTTL**|`integer`||no|
 |[**redis**](#authtokenredis)|`object`||no|
-<<<<<<< HEAD
-|[**apitokens**](#authtokenapitokens)|`object`||no|
-||||||| parent of a26c932f (extend tests)
-=======
 |[**apiTokens**](#authtokenapitokens)|`object`||no|
->>>>>>> a26c932f (extend tests)
 
 **Additional Properties:** not allowed  
 **Example**
@@ -735,12 +720,7 @@ Auth settings including oauth2 providers and token configuration
     "redis": {
         "config": {}
     },
-<<<<<<< HEAD
-    "apitokens": {
-||||||| parent of a26c932f (extend tests)
-=======
     "apiTokens": {
->>>>>>> a26c932f (extend tests)
         "keys": {}
     }
 }
@@ -764,7 +744,7 @@ Auth settings including oauth2 providers and token configuration
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
 |[**config**](#authtokenredisconfig)|`object`|||
-|**blacklistprefix**|`string`|||
+|**blacklistPrefix**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -788,56 +768,13 @@ Auth settings including oauth2 providers and token configuration
 |**username**|`string`|||
 |**password**|`string`|||
 |**db**|`integer`|||
-|**dialtimeout**|`integer`|||
-|**readtimeout**|`integer`|||
-|**writetimeout**|`integer`|||
-|**maxretries**|`integer`|||
-|**minidleconns**|`integer`|||
-|**maxidleconns**|`integer`|||
-|**maxactiveconns**|`integer`|||
-
-**Additional Properties:** not allowed  
-<a name="authtokenapitokens"></a>
-#### auth\.token\.apitokens: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|||
-|**envprefix**|`string`|||
-|[**keys**](#authtokenapitokenskeys)|`object`|||
-|**secretsize**|`integer`|||
-|**delimiter**|`string`|||
-|**prefix**|`string`|||
-
-**Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "keys": {}
-}
-```
-
-<a name="authtokenapitokenskeys"></a>
-##### auth\.token\.apitokens\.keys: object
-
-**Additional Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|[**Additional Properties**](#authtokenapitokenskeysadditionalproperties)|`object`|||
-
-<a name="authtokenapitokenskeysadditionalproperties"></a>
-###### auth\.token\.apitokens\.keys\.additionalProperties: object
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**secret**|`string`|||
-|**status**|`string`|||
+|**dialTimeout**|`integer`|||
+|**readTimeout**|`integer`|||
+|**writeTimeout**|`integer`|||
+|**maxRetries**|`integer`|||
+|**minIdleConns**|`integer`|||
+|**maxIdleConns**|`integer`|||
+|**maxActiveConns**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="authtokenapitokens"></a>
@@ -922,11 +859,11 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`||yes|
-|**clientsecret**|`string`||yes|
-|**clientendpoint**|`string`||no|
+|**clientId**|`string`||yes|
+|**clientSecret**|`string`||yes|
+|**clientEndpoint**|`string`||no|
 |[**scopes**](#authprovidersgithubscopes)|`string[]`||yes|
-|**redirecturl**|`string`||yes|
+|**redirectUrl**|`string`||yes|
 
 **Additional Properties:** not allowed  
 <a name="authprovidersgithubscopes"></a>
@@ -942,11 +879,11 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**clientid**|`string`||yes|
-|**clientsecret**|`string`||yes|
-|**clientendpoint**|`string`||no|
+|**clientId**|`string`||yes|
+|**clientSecret**|`string`||yes|
+|**clientEndpoint**|`string`||no|
 |[**scopes**](#authprovidersgooglescopes)|`string[]`||yes|
-|**redirecturl**|`string`||yes|
+|**redirectUrl**|`string`||yes|
 
 **Additional Properties:** not allowed  
 <a name="authprovidersgooglescopes"></a>
@@ -963,17 +900,17 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`||no|
-|**displayname**|`string`||yes|
-|**relyingpartyid**|`string`||yes|
-|[**requestorigins**](#authproviderswebauthnrequestorigins)|`string[]`||yes|
-|**maxdevices**|`integer`||no|
-|**enforcetimeout**|`boolean`||no|
+|**displayName**|`string`||yes|
+|**relyingPartyId**|`string`||yes|
+|[**requestOrigins**](#authproviderswebauthnrequestorigins)|`string[]`||yes|
+|**maxDevices**|`integer`||no|
+|**enforceTimeout**|`boolean`||no|
 |**timeout**|`integer`||no|
 |**debug**|`boolean`||no|
 
 **Additional Properties:** not allowed  
 <a name="authproviderswebauthnrequestorigins"></a>
-##### auth\.providers\.webauthn\.requestorigins: array
+##### auth\.providers\.webauthn\.requestOrigins: array
 
 **Items**
 
@@ -986,12 +923,12 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|enables authorization checks with openFGA<br/>|no|
-|**storename**|`string`|name of openFGA store<br/>|no|
-|**hosturl**|`string`|host url with scheme of the openFGA API<br/>|yes|
-|**storeid**|`string`|id of openFGA store<br/>|no|
-|**modelid**|`string`|id of openFGA model<br/>|no|
-|**createnewmodel**|`boolean`|force create a new model<br/>|no|
-|**modelfile**|`string`|path to the fga model file<br/>|no|
+|**storeName**|`string`|name of openFGA store<br/>|no|
+|**hostUrl**|`string`|host url with scheme of the openFGA API<br/>|yes|
+|**storeId**|`string`|id of openFGA store<br/>|no|
+|**modelId**|`string`|id of openFGA model<br/>|no|
+|**createNewModel**|`boolean`|force create a new model<br/>|no|
+|**modelFile**|`string`|path to the fga model file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
 
 **Additional Properties:** not allowed  
@@ -1010,9 +947,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**apitoken**|`string`|api token for the openFGA client<br/>||
-|**clientid**|`string`|client id for the openFGA client<br/>||
-|**clientsecret**|`string`|client secret for the openFGA client<br/>||
+|**apiToken**|`string`|api token for the openFGA client<br/>||
+|**clientId**|`string`|client id for the openFGA client<br/>||
+|**clientSecret**|`string`|client secret for the openFGA client<br/>||
 |**audience**|`string`|audience for the openFGA client<br/>||
 |**issuer**|`string`|issuer for the openFGA client<br/>||
 |**scopes**|`string`|scopes for the openFGA client<br/>||
@@ -1026,17 +963,17 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**debug**|`boolean`|debug enables printing the debug database logs<br/>|no|
-|**databasename**|`string`|the name of the database to use with otel tracing<br/>|no|
-|**drivername**|`string`|sql driver name<br/>|no|
-|**multiwrite**|`boolean`|enables writing to two databases simultaneously<br/>|no|
-|**primarydbsource**|`string`|dsn of the primary database<br/>|yes|
-|**secondarydbsource**|`string`|dsn of the secondary database if multi-write is enabled<br/>|no|
-|**cachettl**|`integer`|cache results for subsequent requests<br/>|no|
-|**runmigrations**|`boolean`|run migrations on startup<br/>|no|
-|**migrationprovider**|`string`|migration provider to use for running migrations<br/>|no|
-|**enablehistory**|`boolean`|enable history data to be logged to the database<br/>|no|
-|**maxconnections**|`integer`|maximum number of connections to the database<br/>|no|
-|**maxidleconnections**|`integer`|maximum number of idle connections to the database<br/>|no|
+|**databaseName**|`string`|the name of the database to use with otel tracing<br/>|no|
+|**driverName**|`string`|sql driver name<br/>|no|
+|**multiWrite**|`boolean`|enables writing to two databases simultaneously<br/>|no|
+|**primaryDbSource**|`string`|dsn of the primary database<br/>|yes|
+|**secondaryDbSource**|`string`|dsn of the secondary database if multi-write is enabled<br/>|no|
+|**cacheTTL**|`integer`|cache results for subsequent requests<br/>|no|
+|**runMigrations**|`boolean`|run migrations on startup<br/>|no|
+|**migrationProvider**|`string`|migration provider to use for running migrations<br/>|no|
+|**enableHistory**|`boolean`|enable history data to be logged to the database<br/>|no|
+|**maxConnections**|`integer`|maximum number of connections to the database<br/>|no|
+|**maxIdleConnections**|`integer`|maximum number of idle connections to the database<br/>|no|
 
 **Additional Properties:** not allowed  
 <a name="jobqueue"></a>
@@ -1046,9 +983,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**connectionuri**|`string`|||
-|**runmigrations**|`boolean`|||
-|[**riverconf**](#jobqueueriverconf)|`object`|||
+|**connectionURI**|`string`|||
+|**runMigrations**|`boolean`|||
+|[**riverConf**](#jobqueueriverconf)|`object`|||
 |[**metrics**](#jobqueuemetrics)|`object`|||
 
 **Additional Properties:** not allowed  
@@ -1056,7 +993,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 ```json
 {
-    "riverconf": {
+    "riverConf": {
         "Logger": {},
         "PeriodicJobs": [
             {}
@@ -1070,7 +1007,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 ```
 
 <a name="jobqueueriverconf"></a>
-### jobqueue\.riverconf: object
+### jobqueue\.riverConf: object
 
 **Properties**
 
@@ -1122,28 +1059,28 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 ```
 
 <a name="jobqueueriverconfjobinsertmiddleware"></a>
-#### jobqueue\.riverconf\.JobInsertMiddleware: array
+#### jobqueue\.riverConf\.JobInsertMiddleware: array
 
 **Items**
 
 <a name="jobqueueriverconfhooks"></a>
-#### jobqueue\.riverconf\.Hooks: array
+#### jobqueue\.riverConf\.Hooks: array
 
 **Items**
 
 <a name="jobqueueriverconflogger"></a>
-#### jobqueue\.riverconf\.Logger: object
+#### jobqueue\.riverConf\.Logger: object
 
 **No properties.**
 
 **Additional Properties:** not allowed  
 <a name="jobqueueriverconfmiddleware"></a>
-#### jobqueue\.riverconf\.Middleware: array
+#### jobqueue\.riverConf\.Middleware: array
 
 **Items**
 
 <a name="jobqueueriverconfperiodicjobs"></a>
-#### jobqueue\.riverconf\.PeriodicJobs: array
+#### jobqueue\.riverConf\.PeriodicJobs: array
 
 **Items**
 
@@ -1156,7 +1093,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 ```
 
 <a name="jobqueueriverconfqueues"></a>
-#### jobqueue\.riverconf\.Queues: object
+#### jobqueue\.riverConf\.Queues: object
 
 **Additional Properties**
 
@@ -1165,7 +1102,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |[**Additional Properties**](#jobqueueriverconfqueuesadditionalproperties)|`object`|||
 
 <a name="jobqueueriverconfqueuesadditionalproperties"></a>
-##### jobqueue\.riverconf\.Queues\.additionalProperties: object
+##### jobqueue\.riverConf\.Queues\.additionalProperties: object
 
 **Properties**
 
@@ -1177,7 +1114,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 **Additional Properties:** not allowed  
 <a name="jobqueueriverconftest"></a>
-#### jobqueue\.riverconf\.Test: object
+#### jobqueue\.riverConf\.Test: object
 
 **Properties**
 
@@ -1188,13 +1125,13 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 **Additional Properties:** not allowed  
 <a name="jobqueueriverconfworkers"></a>
-#### jobqueue\.riverconf\.Workers: object
+#### jobqueue\.riverConf\.Workers: object
 
 **No properties.**
 
 **Additional Properties:** not allowed  
 <a name="jobqueueriverconfworkermiddleware"></a>
-#### jobqueue\.riverconf\.WorkerMiddleware: array
+#### jobqueue\.riverConf\.WorkerMiddleware: array
 
 **Items**
 
@@ -1205,9 +1142,9 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enablemetrics**|`boolean`|||
-|**metricsdurationunit**|`string`|||
-|**enablesemanticmetrics**|`boolean`|||
+|**enableMetrics**|`boolean`|||
+|**metricsDurationUnit**|`string`|||
+|**enableSemanticMetrics**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="redis"></a>
@@ -1223,13 +1160,13 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**username**|`string`|||
 |**password**|`string`|||
 |**db**|`integer`|||
-|**dialtimeout**|`integer`|||
-|**readtimeout**|`integer`|||
-|**writetimeout**|`integer`|||
-|**maxretries**|`integer`|||
-|**minidleconns**|`integer`|||
-|**maxidleconns**|`integer`|||
-|**maxactiveconns**|`integer`|||
+|**dialTimeout**|`integer`|||
+|**readTimeout**|`integer`|||
+|**writeTimeout**|`integer`|||
+|**maxRetries**|`integer`|||
+|**minIdleConns**|`integer`|||
+|**maxIdleConns**|`integer`|||
+|**maxActiveConns**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="tracer"></a>
@@ -1263,7 +1200,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**pretty**|`boolean`|||
-|**disabletimestamp**|`boolean`|||
+|**disableTimestamp**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="tracerotlp"></a>
@@ -1294,15 +1231,15 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**companyname**|`string`|||
-|**companyaddress**|`string`|||
+|**companyName**|`string`|||
+|**companyAddress**|`string`|||
 |**corporation**|`string`|||
 |**year**|`integer`|||
-|**fromemail**|`string`|||
-|**supportemail**|`string`|||
-|**logourl**|`string`|||
+|**fromEmail**|`string`|||
+|**supportEmail**|`string`|||
+|**logoURL**|`string`|||
 |[**urls**](#emailurls)|`object`|||
-|**templatespath**|`string`|||
+|**templatesPath**|`string`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1326,16 +1263,8 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**verify**|`string`|||
 |**invite**|`string`|||
 |**reset**|`string`|||
-<<<<<<< HEAD
-|**verifysubscriber**|`string`|||
-|**verifybilling**|`string`|||
-||||||| parent of a26c932f (extend tests)
 |**verifySubscriber**|`string`|||
 |**verifyBilling**|`string`|||
-=======
-|**verifySubscriber**|`string`|||
-|**verifyBilling**|`string`|||
->>>>>>> a26c932f (extend tests)
 |**questionnaire**|`string`|||
 
 **Additional Properties:** not allowed  
@@ -1346,13 +1275,13 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**signingkey**|`string`|||
-|**encryptionkey**|`string`|||
+|**signingKey**|`string`|||
+|**encryptionKey**|`string`|||
 |**domain**|`string`|||
-|**maxage**|`integer`|||
+|**maxAge**|`integer`|||
 |**secure**|`boolean`|||
-|**httponly**|`boolean`|||
-|**samesite**|`string`|||
+|**httpOnly**|`boolean`|||
+|**sameSite**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="totp"></a>
@@ -1363,12 +1292,12 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|||
-|**codelength**|`integer`|||
+|**codeLength**|`integer`|||
 |**issuer**|`string`|||
 |**redis**|`boolean`|||
 |**secret**|`string`|||
-|**recoverycodecount**|`integer`|||
-|**recoverycodelength**|`integer`|||
+|**recoveryCodeCount**|`integer`|||
+|**recoveryCodeLength**|`integer`|||
 
 **Additional Properties:** not allowed  
 <a name="ratelimit"></a>

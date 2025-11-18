@@ -72,6 +72,10 @@ func (ec *executionContext) fieldContext_AssessmentCreatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_assessmentType(ctx, field)
 			case "templateID":
 				return ec.fieldContext_Assessment_templateID(ctx, field)
+			case "jsonconfig":
+				return ec.fieldContext_Assessment_jsonconfig(ctx, field)
+			case "uischema":
+				return ec.fieldContext_Assessment_uischema(ctx, field)
 			case "responseDueDuration":
 				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
@@ -166,6 +170,10 @@ func (ec *executionContext) fieldContext_AssessmentUpdatePayload_assessment(_ co
 				return ec.fieldContext_Assessment_assessmentType(ctx, field)
 			case "templateID":
 				return ec.fieldContext_Assessment_templateID(ctx, field)
+			case "jsonconfig":
+				return ec.fieldContext_Assessment_jsonconfig(ctx, field)
+			case "uischema":
+				return ec.fieldContext_Assessment_uischema(ctx, field)
 			case "responseDueDuration":
 				return ec.fieldContext_Assessment_responseDueDuration(ctx, field)
 			case "owner":
