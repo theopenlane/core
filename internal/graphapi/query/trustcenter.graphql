@@ -102,6 +102,8 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     customDomainID
     id
     ownerID
+    pirschDomainID
+    pirschIdentificationCode
     slug
     tags
     updatedAt
