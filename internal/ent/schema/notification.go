@@ -3,7 +3,6 @@ package schema
 import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
-	"entgo.io/ent/dialect/entsql"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -50,7 +49,7 @@ func (Notification) Fields() []ent.Field {
 			Comment("the type of notification - organization or user").
 			GoType(enums.NotificationType("")),
 		field.String("object_type").
-			Comment("the object type this notification is related to (e.g., taskUpdate, taskCreate)").
+			Comment("the event type this notification is related to (e.g., task.created, control.updated)").
 			NotEmpty(),
 		field.String("title").
 			Comment("the title of the notification").
@@ -69,6 +68,9 @@ func (Notification) Fields() []ent.Field {
 		field.JSON("channels", []enums.Channel{}).
 			Comment("the channels this notification should be sent to (IN_APP, SLACK, EMAIL)").
 			Optional(),
+		field.String("topic").
+			Comment("the topic of the notification").
+			Optional(),
 	}
 }
 
@@ -83,6 +85,7 @@ func (Notification) Hooks() []ent.Hook {
 func (n Notification) Mixin() []ent.Mixin {
 	return mixinConfig{
 		excludeAnnotations: true,
+		excludeSoftDelete:  true,
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(n),
 		},
@@ -108,8 +111,7 @@ func (Notification) Indexes() []ent.Index {
 	return []ent.Index{
 		// Index for common query: "get all users unread notifications"
 		// filters on org, user, and read_at
-		index.Fields("user_id", "read_at", "owner_id").
-			Annotations(entsql.IndexWhere("deleted_at is NULL")),
+		index.Fields("user_id", "read_at", "owner_id"),
 	}
 }
 

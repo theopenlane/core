@@ -25,7 +25,7 @@ type DeleteExportWorkerConfig struct {
 
 	// CutoffDuration defines the tolerance for exports. If you set 30 minutes, all exports older than 30 minutes
 	// at the time of job execution will be deleted
-	CutoffDuration time.Duration `koanf:"cutoffDuration" json:"cutoffDuration" jsonschema:"required,default=30m description=how long do you want exports to exist before they are deleted"`
+	CutoffDuration time.Duration `koanf:"cutoffduration" json:"cutoffduration" jsonschema:"required,default=30m description=how long do you want exports to exist before they are deleted"`
 }
 
 // Kind satisfies the river.Job interface

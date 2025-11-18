@@ -26,10 +26,6 @@ const (
 	FieldCreatedBy = "created_by"
 	// FieldUpdatedBy holds the string denoting the updated_by field in the database.
 	FieldUpdatedBy = "updated_by"
-	// FieldDeletedAt holds the string denoting the deleted_at field in the database.
-	FieldDeletedAt = "deleted_at"
-	// FieldDeletedBy holds the string denoting the deleted_by field in the database.
-	FieldDeletedBy = "deleted_by"
 	// FieldTags holds the string denoting the tags field in the database.
 	FieldTags = "tags"
 	// FieldOwnerID holds the string denoting the owner_id field in the database.
@@ -50,6 +46,8 @@ const (
 	FieldReadAt = "read_at"
 	// FieldChannels holds the string denoting the channels field in the database.
 	FieldChannels = "channels"
+	// FieldTopic holds the string denoting the topic field in the database.
+	FieldTopic = "topic"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeUser holds the string denoting the user edge name in mutations.
@@ -79,8 +77,6 @@ var Columns = []string{
 	FieldUpdatedAt,
 	FieldCreatedBy,
 	FieldUpdatedBy,
-	FieldDeletedAt,
-	FieldDeletedBy,
 	FieldTags,
 	FieldOwnerID,
 	FieldUserID,
@@ -91,6 +87,7 @@ var Columns = []string{
 	FieldData,
 	FieldReadAt,
 	FieldChannels,
+	FieldTopic,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -109,8 +106,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [7]ent.Hook
-	Interceptors [3]ent.Interceptor
+	Hooks        [6]ent.Hook
+	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -170,16 +167,6 @@ func ByUpdatedBy(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldUpdatedBy, opts...).ToFunc()
 }
 
-// ByDeletedAt orders the results by the deleted_at field.
-func ByDeletedAt(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeletedAt, opts...).ToFunc()
-}
-
-// ByDeletedBy orders the results by the deleted_by field.
-func ByDeletedBy(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldDeletedBy, opts...).ToFunc()
-}
-
 // ByOwnerID orders the results by the owner_id field.
 func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldOwnerID, opts...).ToFunc()
@@ -213,6 +200,11 @@ func ByBody(opts ...sql.OrderTermOption) OrderOption {
 // ByReadAt orders the results by the read_at field.
 func ByReadAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReadAt, opts...).ToFunc()
+}
+
+// ByTopic orders the results by the topic field.
+func ByTopic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTopic, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

@@ -17,9 +17,9 @@ type Config struct {
 	// Skipper defines a function to skip middleware
 	Skipper middleware.Skipper `json:"-" koanf:"-"`
 	// MimeTypesFile is the file to load mime types from
-	MimeTypesFile string `json:"mimeTypesFile" koanf:"mimeTypesFile" default:""`
+	MimeTypesFile string `json:"mimetypesfile" koanf:"mimetypesfile" default:""`
 	// DefaultContentType is the default content type to set if no mime type is found
-	DefaultContentType string `json:"defaultContentType" koanf:"defaultContentType" default:"application/data"`
+	DefaultContentType string `json:"defaultcontenttype" koanf:"defaultcontenttype" default:"application/data"`
 }
 
 // DefaultConfig is the default Gzip middleware config.

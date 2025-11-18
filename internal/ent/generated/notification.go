@@ -30,10 +30,6 @@ type Notification struct {
 	CreatedBy string `json:"created_by,omitempty"`
 	// UpdatedBy holds the value of the "updated_by" field.
 	UpdatedBy string `json:"updated_by,omitempty"`
-	// DeletedAt holds the value of the "deleted_at" field.
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	// DeletedBy holds the value of the "deleted_by" field.
-	DeletedBy string `json:"deleted_by,omitempty"`
 	// tags associated with the object
 	Tags []string `json:"tags,omitempty"`
 	// the organization id that owns the object
@@ -42,7 +38,7 @@ type Notification struct {
 	UserID string `json:"user_id,omitempty"`
 	// the type of notification - organization or user
 	NotificationType enums.NotificationType `json:"notification_type,omitempty"`
-	// the object type this notification is related to (e.g., taskUpdate, taskCreate)
+	// the event type this notification is related to (e.g., task.created, control.updated)
 	ObjectType string `json:"object_type,omitempty"`
 	// the title of the notification
 	Title string `json:"title,omitempty"`
@@ -54,6 +50,8 @@ type Notification struct {
 	ReadAt *models.DateTime `json:"read_at,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []enums.Channel `json:"channels,omitempty"`
+	// the topic of the notification
+	Topic string `json:"topic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
 	Edges        NotificationEdges `json:"edges"`
@@ -104,9 +102,9 @@ func (*Notification) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case notification.FieldTags, notification.FieldData, notification.FieldChannels:
 			values[i] = new([]byte)
-		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldDeletedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody:
+		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody, notification.FieldTopic:
 			values[i] = new(sql.NullString)
-		case notification.FieldCreatedAt, notification.FieldUpdatedAt, notification.FieldDeletedAt:
+		case notification.FieldCreatedAt, notification.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -152,18 +150,6 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field updated_by", values[i])
 			} else if value.Valid {
 				_m.UpdatedBy = value.String
-			}
-		case notification.FieldDeletedAt:
-			if value, ok := values[i].(*sql.NullTime); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_at", values[i])
-			} else if value.Valid {
-				_m.DeletedAt = value.Time
-			}
-		case notification.FieldDeletedBy:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field deleted_by", values[i])
-			} else if value.Valid {
-				_m.DeletedBy = value.String
 			}
 		case notification.FieldTags:
 			if value, ok := values[i].(*[]byte); !ok {
@@ -232,6 +218,12 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field channels: %w", err)
 				}
 			}
+		case notification.FieldTopic:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field topic", values[i])
+			} else if value.Valid {
+				_m.Topic = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -290,12 +282,6 @@ func (_m *Notification) String() string {
 	builder.WriteString("updated_by=")
 	builder.WriteString(_m.UpdatedBy)
 	builder.WriteString(", ")
-	builder.WriteString("deleted_at=")
-	builder.WriteString(_m.DeletedAt.Format(time.ANSIC))
-	builder.WriteString(", ")
-	builder.WriteString("deleted_by=")
-	builder.WriteString(_m.DeletedBy)
-	builder.WriteString(", ")
 	builder.WriteString("tags=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Tags))
 	builder.WriteString(", ")
@@ -327,6 +313,9 @@ func (_m *Notification) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("channels=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Channels))
+	builder.WriteString(", ")
+	builder.WriteString("topic=")
+	builder.WriteString(_m.Topic)
 	builder.WriteByte(')')
 	return builder.String()
 }

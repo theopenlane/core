@@ -2359,8 +2359,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldUpdatedAt:        {Type: field.TypeTime, Column: notification.FieldUpdatedAt},
 			notification.FieldCreatedBy:        {Type: field.TypeString, Column: notification.FieldCreatedBy},
 			notification.FieldUpdatedBy:        {Type: field.TypeString, Column: notification.FieldUpdatedBy},
-			notification.FieldDeletedAt:        {Type: field.TypeTime, Column: notification.FieldDeletedAt},
-			notification.FieldDeletedBy:        {Type: field.TypeString, Column: notification.FieldDeletedBy},
 			notification.FieldTags:             {Type: field.TypeJSON, Column: notification.FieldTags},
 			notification.FieldOwnerID:          {Type: field.TypeString, Column: notification.FieldOwnerID},
 			notification.FieldUserID:           {Type: field.TypeString, Column: notification.FieldUserID},
@@ -2371,6 +2369,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldData:             {Type: field.TypeJSON, Column: notification.FieldData},
 			notification.FieldReadAt:           {Type: field.TypeTime, Column: notification.FieldReadAt},
 			notification.FieldChannels:         {Type: field.TypeJSON, Column: notification.FieldChannels},
+			notification.FieldTopic:            {Type: field.TypeString, Column: notification.FieldTopic},
 		},
 	}
 	graph.Nodes[69] = &sqlgraph.Node{
@@ -25482,16 +25481,6 @@ func (f *NotificationFilter) WhereUpdatedBy(p entql.StringP) {
 	f.Where(p.Field(notification.FieldUpdatedBy))
 }
 
-// WhereDeletedAt applies the entql time.Time predicate on the deleted_at field.
-func (f *NotificationFilter) WhereDeletedAt(p entql.TimeP) {
-	f.Where(p.Field(notification.FieldDeletedAt))
-}
-
-// WhereDeletedBy applies the entql string predicate on the deleted_by field.
-func (f *NotificationFilter) WhereDeletedBy(p entql.StringP) {
-	f.Where(p.Field(notification.FieldDeletedBy))
-}
-
 // WhereTags applies the entql json.RawMessage predicate on the tags field.
 func (f *NotificationFilter) WhereTags(p entql.BytesP) {
 	f.Where(p.Field(notification.FieldTags))
@@ -25540,6 +25529,11 @@ func (f *NotificationFilter) WhereReadAt(p entql.TimeP) {
 // WhereChannels applies the entql json.RawMessage predicate on the channels field.
 func (f *NotificationFilter) WhereChannels(p entql.BytesP) {
 	f.Where(p.Field(notification.FieldChannels))
+}
+
+// WhereTopic applies the entql string predicate on the topic field.
+func (f *NotificationFilter) WhereTopic(p entql.StringP) {
+	f.Where(p.Field(notification.FieldTopic))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

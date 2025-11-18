@@ -68,6 +68,9 @@ type ObjectOwnedMixin struct {
 	UseListObjectsFilter bool
 	// OwnerFieldName is the field name for the owner, defaults to "owner_id"
 	OwnerFieldName string
+
+	// SkipDeletedAt indicates if the schema has not included the soft delete mixin
+	SkipDeletedAt bool
 }
 
 type HookFunc func(o ObjectOwnedMixin) ent.Hook
@@ -210,7 +213,7 @@ func withSkipFilterInterceptor(mode interceptors.SkipMode) objectOwnedOption {
 // Indexes of the ObjectOwnedMixin
 func (o ObjectOwnedMixin) Indexes() []ent.Index {
 	// add the organization owner index if the flag is set or the field name is included
-	if o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName) {
+	if !o.SkipDeletedAt && (o.IncludeOrganizationOwner || slices.Contains(o.FieldNames, o.OwnerFieldName)) {
 		return []ent.Index{
 			index.Fields(o.OwnerFieldName).
 				Annotations(entsql.IndexWhere("deleted_at is NULL")),

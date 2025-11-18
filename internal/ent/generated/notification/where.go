@@ -89,16 +89,6 @@ func UpdatedBy(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldUpdatedBy, v))
 }
 
-// DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
-func DeletedAt(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedBy applies equality check predicate on the "deleted_by" field. It's identical to DeletedByEQ.
-func DeletedBy(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldDeletedBy, v))
-}
-
 // OwnerID applies equality check predicate on the "owner_id" field. It's identical to OwnerIDEQ.
 func OwnerID(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldOwnerID, v))
@@ -127,6 +117,11 @@ func Body(v string) predicate.Notification {
 // ReadAt applies equality check predicate on the "read_at" field. It's identical to ReadAtEQ.
 func ReadAt(v models.DateTime) predicate.Notification {
 	return predicate.Notification(sql.FieldEQ(FieldReadAt, v))
+}
+
+// Topic applies equality check predicate on the "topic" field. It's identical to TopicEQ.
+func Topic(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldTopic, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -377,131 +372,6 @@ func UpdatedByEqualFold(v string) predicate.Notification {
 // UpdatedByContainsFold applies the ContainsFold predicate on the "updated_by" field.
 func UpdatedByContainsFold(v string) predicate.Notification {
 	return predicate.Notification(sql.FieldContainsFold(FieldUpdatedBy, v))
-}
-
-// DeletedAtEQ applies the EQ predicate on the "deleted_at" field.
-func DeletedAtEQ(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtNEQ applies the NEQ predicate on the "deleted_at" field.
-func DeletedAtNEQ(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldNEQ(FieldDeletedAt, v))
-}
-
-// DeletedAtIn applies the In predicate on the "deleted_at" field.
-func DeletedAtIn(vs ...time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtNotIn applies the NotIn predicate on the "deleted_at" field.
-func DeletedAtNotIn(vs ...time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldNotIn(FieldDeletedAt, vs...))
-}
-
-// DeletedAtGT applies the GT predicate on the "deleted_at" field.
-func DeletedAtGT(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldGT(FieldDeletedAt, v))
-}
-
-// DeletedAtGTE applies the GTE predicate on the "deleted_at" field.
-func DeletedAtGTE(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldGTE(FieldDeletedAt, v))
-}
-
-// DeletedAtLT applies the LT predicate on the "deleted_at" field.
-func DeletedAtLT(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldLT(FieldDeletedAt, v))
-}
-
-// DeletedAtLTE applies the LTE predicate on the "deleted_at" field.
-func DeletedAtLTE(v time.Time) predicate.Notification {
-	return predicate.Notification(sql.FieldLTE(FieldDeletedAt, v))
-}
-
-// DeletedAtIsNil applies the IsNil predicate on the "deleted_at" field.
-func DeletedAtIsNil() predicate.Notification {
-	return predicate.Notification(sql.FieldIsNull(FieldDeletedAt))
-}
-
-// DeletedAtNotNil applies the NotNil predicate on the "deleted_at" field.
-func DeletedAtNotNil() predicate.Notification {
-	return predicate.Notification(sql.FieldNotNull(FieldDeletedAt))
-}
-
-// DeletedByEQ applies the EQ predicate on the "deleted_by" field.
-func DeletedByEQ(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEQ(FieldDeletedBy, v))
-}
-
-// DeletedByNEQ applies the NEQ predicate on the "deleted_by" field.
-func DeletedByNEQ(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldNEQ(FieldDeletedBy, v))
-}
-
-// DeletedByIn applies the In predicate on the "deleted_by" field.
-func DeletedByIn(vs ...string) predicate.Notification {
-	return predicate.Notification(sql.FieldIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByNotIn applies the NotIn predicate on the "deleted_by" field.
-func DeletedByNotIn(vs ...string) predicate.Notification {
-	return predicate.Notification(sql.FieldNotIn(FieldDeletedBy, vs...))
-}
-
-// DeletedByGT applies the GT predicate on the "deleted_by" field.
-func DeletedByGT(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldGT(FieldDeletedBy, v))
-}
-
-// DeletedByGTE applies the GTE predicate on the "deleted_by" field.
-func DeletedByGTE(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldGTE(FieldDeletedBy, v))
-}
-
-// DeletedByLT applies the LT predicate on the "deleted_by" field.
-func DeletedByLT(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldLT(FieldDeletedBy, v))
-}
-
-// DeletedByLTE applies the LTE predicate on the "deleted_by" field.
-func DeletedByLTE(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldLTE(FieldDeletedBy, v))
-}
-
-// DeletedByContains applies the Contains predicate on the "deleted_by" field.
-func DeletedByContains(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldContains(FieldDeletedBy, v))
-}
-
-// DeletedByHasPrefix applies the HasPrefix predicate on the "deleted_by" field.
-func DeletedByHasPrefix(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldHasPrefix(FieldDeletedBy, v))
-}
-
-// DeletedByHasSuffix applies the HasSuffix predicate on the "deleted_by" field.
-func DeletedByHasSuffix(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldHasSuffix(FieldDeletedBy, v))
-}
-
-// DeletedByIsNil applies the IsNil predicate on the "deleted_by" field.
-func DeletedByIsNil() predicate.Notification {
-	return predicate.Notification(sql.FieldIsNull(FieldDeletedBy))
-}
-
-// DeletedByNotNil applies the NotNil predicate on the "deleted_by" field.
-func DeletedByNotNil() predicate.Notification {
-	return predicate.Notification(sql.FieldNotNull(FieldDeletedBy))
-}
-
-// DeletedByEqualFold applies the EqualFold predicate on the "deleted_by" field.
-func DeletedByEqualFold(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldEqualFold(FieldDeletedBy, v))
-}
-
-// DeletedByContainsFold applies the ContainsFold predicate on the "deleted_by" field.
-func DeletedByContainsFold(v string) predicate.Notification {
-	return predicate.Notification(sql.FieldContainsFold(FieldDeletedBy, v))
 }
 
 // TagsIsNil applies the IsNil predicate on the "tags" field.
@@ -957,6 +827,81 @@ func ChannelsIsNil() predicate.Notification {
 // ChannelsNotNil applies the NotNil predicate on the "channels" field.
 func ChannelsNotNil() predicate.Notification {
 	return predicate.Notification(sql.FieldNotNull(FieldChannels))
+}
+
+// TopicEQ applies the EQ predicate on the "topic" field.
+func TopicEQ(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEQ(FieldTopic, v))
+}
+
+// TopicNEQ applies the NEQ predicate on the "topic" field.
+func TopicNEQ(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldNEQ(FieldTopic, v))
+}
+
+// TopicIn applies the In predicate on the "topic" field.
+func TopicIn(vs ...string) predicate.Notification {
+	return predicate.Notification(sql.FieldIn(FieldTopic, vs...))
+}
+
+// TopicNotIn applies the NotIn predicate on the "topic" field.
+func TopicNotIn(vs ...string) predicate.Notification {
+	return predicate.Notification(sql.FieldNotIn(FieldTopic, vs...))
+}
+
+// TopicGT applies the GT predicate on the "topic" field.
+func TopicGT(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldGT(FieldTopic, v))
+}
+
+// TopicGTE applies the GTE predicate on the "topic" field.
+func TopicGTE(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldGTE(FieldTopic, v))
+}
+
+// TopicLT applies the LT predicate on the "topic" field.
+func TopicLT(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldLT(FieldTopic, v))
+}
+
+// TopicLTE applies the LTE predicate on the "topic" field.
+func TopicLTE(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldLTE(FieldTopic, v))
+}
+
+// TopicContains applies the Contains predicate on the "topic" field.
+func TopicContains(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldContains(FieldTopic, v))
+}
+
+// TopicHasPrefix applies the HasPrefix predicate on the "topic" field.
+func TopicHasPrefix(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldHasPrefix(FieldTopic, v))
+}
+
+// TopicHasSuffix applies the HasSuffix predicate on the "topic" field.
+func TopicHasSuffix(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldHasSuffix(FieldTopic, v))
+}
+
+// TopicIsNil applies the IsNil predicate on the "topic" field.
+func TopicIsNil() predicate.Notification {
+	return predicate.Notification(sql.FieldIsNull(FieldTopic))
+}
+
+// TopicNotNil applies the NotNil predicate on the "topic" field.
+func TopicNotNil() predicate.Notification {
+	return predicate.Notification(sql.FieldNotNull(FieldTopic))
+}
+
+// TopicEqualFold applies the EqualFold predicate on the "topic" field.
+func TopicEqualFold(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldEqualFold(FieldTopic, v))
+}
+
+// TopicContainsFold applies the ContainsFold predicate on the "topic" field.
+func TopicContainsFold(v string) predicate.Notification {
+	return predicate.Notification(sql.FieldContainsFold(FieldTopic, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

@@ -80,34 +80,6 @@ func (_c *NotificationCreate) SetNillableUpdatedBy(v *string) *NotificationCreat
 	return _c
 }
 
-// SetDeletedAt sets the "deleted_at" field.
-func (_c *NotificationCreate) SetDeletedAt(v time.Time) *NotificationCreate {
-	_c.mutation.SetDeletedAt(v)
-	return _c
-}
-
-// SetNillableDeletedAt sets the "deleted_at" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableDeletedAt(v *time.Time) *NotificationCreate {
-	if v != nil {
-		_c.SetDeletedAt(*v)
-	}
-	return _c
-}
-
-// SetDeletedBy sets the "deleted_by" field.
-func (_c *NotificationCreate) SetDeletedBy(v string) *NotificationCreate {
-	_c.mutation.SetDeletedBy(v)
-	return _c
-}
-
-// SetNillableDeletedBy sets the "deleted_by" field if the given value is not nil.
-func (_c *NotificationCreate) SetNillableDeletedBy(v *string) *NotificationCreate {
-	if v != nil {
-		_c.SetDeletedBy(*v)
-	}
-	return _c
-}
-
 // SetTags sets the "tags" field.
 func (_c *NotificationCreate) SetTags(v []string) *NotificationCreate {
 	_c.mutation.SetTags(v)
@@ -189,6 +161,20 @@ func (_c *NotificationCreate) SetNillableReadAt(v *models.DateTime) *Notificatio
 // SetChannels sets the "channels" field.
 func (_c *NotificationCreate) SetChannels(v []enums.Channel) *NotificationCreate {
 	_c.mutation.SetChannels(v)
+	return _c
+}
+
+// SetTopic sets the "topic" field.
+func (_c *NotificationCreate) SetTopic(v string) *NotificationCreate {
+	_c.mutation.SetTopic(v)
+	return _c
+}
+
+// SetNillableTopic sets the "topic" field if the given value is not nil.
+func (_c *NotificationCreate) SetNillableTopic(v *string) *NotificationCreate {
+	if v != nil {
+		_c.SetTopic(*v)
+	}
 	return _c
 }
 
@@ -372,14 +358,6 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 		_spec.SetField(notification.FieldUpdatedBy, field.TypeString, value)
 		_node.UpdatedBy = value
 	}
-	if value, ok := _c.mutation.DeletedAt(); ok {
-		_spec.SetField(notification.FieldDeletedAt, field.TypeTime, value)
-		_node.DeletedAt = value
-	}
-	if value, ok := _c.mutation.DeletedBy(); ok {
-		_spec.SetField(notification.FieldDeletedBy, field.TypeString, value)
-		_node.DeletedBy = value
-	}
 	if value, ok := _c.mutation.Tags(); ok {
 		_spec.SetField(notification.FieldTags, field.TypeJSON, value)
 		_node.Tags = value
@@ -411,6 +389,10 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Channels(); ok {
 		_spec.SetField(notification.FieldChannels, field.TypeJSON, value)
 		_node.Channels = value
+	}
+	if value, ok := _c.mutation.Topic(); ok {
+		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+		_node.Topic = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

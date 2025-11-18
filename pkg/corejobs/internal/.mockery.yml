@@ -7,9 +7,7 @@ log-level: info
 structname: "{{.Mock}}{{.InterfaceName}}"
 pkgname: mocks
 recursive: false
-require-template-schema-exists: true
 template: testify
-template-schema: "{{.Template}}.schema.json"
 packages:
   github.com/theopenlane/core/pkg/corejobs/internal/cloudflare:
     config:
