@@ -21,7 +21,7 @@ Config contains the configuration for the core server
 |[**sessions**](#sessions)|`object`|||
 |[**totp**](#totp)|`object`|||
 |[**ratelimit**](#ratelimit)|`object`|Config defines the configuration settings for the rate limiter middleware.<br/>||
-|[**objectsstorage**](#objectsstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
+|[**objectstorage**](#objectstorage)|`object`|ProviderConfig contains configuration for object storage providers<br/>||
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
@@ -111,7 +111,7 @@ Config contains the configuration for the core server
             {}
         ]
     },
-    "objectsstorage": {
+    "objectstorage": {
         "providers": {
             "s3": {
                 "credentials": {}
@@ -1352,8 +1352,8 @@ Config defines the configuration settings for the rate limiter middleware.
 **Items**
 
 **Item Type:** `string`  
-<a name="objectsstorage"></a>
-## objectsstorage: object
+<a name="objectstorage"></a>
+## objectstorage: object
 
 ProviderConfig contains configuration for object storage providers
 
@@ -1363,11 +1363,11 @@ ProviderConfig contains configuration for object storage providers
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
 |**enabled**|`boolean`|Enabled indicates if object storage is enabled<br/>||
-|[**keys**](#objectsstoragekeys)|`string[]`|||
+|[**keys**](#objectstoragekeys)|`string[]`|||
 |**maxsizemb**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
 |**maxmemorymb**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
 |**devmode**|`boolean`|DevMode enables simple file upload handling for local development and testing<br/>||
-|[**providers**](#objectsstorageproviders)|`object`|||
+|[**providers**](#objectstorageproviders)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1394,24 +1394,24 @@ ProviderConfig contains configuration for object storage providers
 }
 ```
 
-<a name="objectsstoragekeys"></a>
-### objectsstorage\.keys: array
+<a name="objectstoragekeys"></a>
+### objectstorage\.keys: array
 
 **Items**
 
 **Item Type:** `string`  
-<a name="objectsstorageproviders"></a>
-### objectsstorage\.providers: object
+<a name="objectstorageproviders"></a>
+### objectstorage\.providers: object
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|[**s3**](#objectsstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**cloudflarer2**](#objectsstorageproviderscloudflarer2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**gcs**](#objectsstorageprovidersgcs)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**disk**](#objectsstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
-|[**database**](#objectsstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**s3**](#objectstorageproviderss3)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**cloudflarer2**](#objectstorageproviderscloudflarer2)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**gcs**](#objectstorageprovidersgcs)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**disk**](#objectstorageprovidersdisk)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
+|[**database**](#objectstorageprovidersdatabase)|`object`|ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1436,8 +1436,8 @@ ProviderConfig contains configuration for object storage providers
 }
 ```
 
-<a name="objectsstorageproviderss3"></a>
-#### objectsstorage\.providers\.s3: object
+<a name="objectstorageproviderss3"></a>
+#### objectstorage\.providers\.s3: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1453,7 +1453,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectsstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageproviderss3credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1464,8 +1464,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectsstorageproviderss3credentials"></a>
-##### objectsstorage\.providers\.s3\.credentials: object
+<a name="objectstorageproviderss3credentials"></a>
+##### objectstorage\.providers\.s3\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1481,8 +1481,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectsstorageproviderscloudflarer2"></a>
-#### objectsstorage\.providers\.cloudflarer2: object
+<a name="objectstorageproviderscloudflarer2"></a>
+#### objectstorage\.providers\.cloudflarer2: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1498,7 +1498,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectsstorageproviderscloudflarer2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageproviderscloudflarer2credentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1509,8 +1509,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectsstorageproviderscloudflarer2credentials"></a>
-##### objectsstorage\.providers\.cloudflarer2\.credentials: object
+<a name="objectstorageproviderscloudflarer2credentials"></a>
+##### objectstorage\.providers\.cloudflarer2\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1526,8 +1526,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectsstorageprovidersgcs"></a>
-#### objectsstorage\.providers\.gcs: object
+<a name="objectstorageprovidersgcs"></a>
+#### objectstorage\.providers\.gcs: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1543,7 +1543,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectsstorageprovidersgcscredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageprovidersgcscredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1554,8 +1554,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectsstorageprovidersgcscredentials"></a>
-##### objectsstorage\.providers\.gcs\.credentials: object
+<a name="objectstorageprovidersgcscredentials"></a>
+##### objectstorage\.providers\.gcs\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1571,8 +1571,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectsstorageprovidersdisk"></a>
-#### objectsstorage\.providers\.disk: object
+<a name="objectstorageprovidersdisk"></a>
+#### objectstorage\.providers\.disk: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1588,7 +1588,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectsstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageprovidersdiskcredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1599,8 +1599,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectsstorageprovidersdiskcredentials"></a>
-##### objectsstorage\.providers\.disk\.credentials: object
+<a name="objectstorageprovidersdiskcredentials"></a>
+##### objectstorage\.providers\.disk\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 
@@ -1616,8 +1616,8 @@ ProviderCredentials contains credentials for a storage provider
 |**apitoken**|`string`|APIToken for Cloudflare R2<br/>||
 
 **Additional Properties:** not allowed  
-<a name="objectsstorageprovidersdatabase"></a>
-#### objectsstorage\.providers\.database: object
+<a name="objectstorageprovidersdatabase"></a>
+#### objectstorage\.providers\.database: object
 
 ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future
 
@@ -1633,7 +1633,7 @@ ProviderConfigs contains configuration for all storage providers This is structu
 |**endpoint**|`string`|Endpoint for custom endpoints<br/>||
 |**proxypresignenabled**|`boolean`|ProxyPresignEnabled toggles proxy-signed download URL generation<br/>||
 |**baseurl**|`string`|BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).<br/>||
-|[**credentials**](#objectsstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
+|[**credentials**](#objectstorageprovidersdatabasecredentials)|`object`|ProviderCredentials contains credentials for a storage provider<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1644,8 +1644,8 @@ ProviderConfigs contains configuration for all storage providers This is structu
 }
 ```
 
-<a name="objectsstorageprovidersdatabasecredentials"></a>
-##### objectsstorage\.providers\.database\.credentials: object
+<a name="objectstorageprovidersdatabasecredentials"></a>
+##### objectstorage\.providers\.database\.credentials: object
 
 ProviderCredentials contains credentials for a storage provider
 

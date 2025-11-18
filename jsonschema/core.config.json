@@ -1782,7 +1782,7 @@
       "$ref": "#/$defs/ratelimit.Config",
       "description": "Ratelimit contains the configuration for the rate limiter"
     },
-    "objectsstorage": {
+    "objectstorage": {
       "$ref": "#/$defs/storage.ProviderConfig",
       "description": "ObjectStorage contains the configuration for the object storage backend"
     },
