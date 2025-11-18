@@ -194,11 +194,10 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 		{
 			name: "happy path, create trust center doc with PDF file",
 			input: testclient.CreateTrustCenterDocInput{
-				Title:         "Test Document",
-				Category:      "Policy",
-				TrustCenterID: &trustCenter.ID,
-				Tags:          []string{"test", "document"},
-				Visibility:    &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				Title:      "Test Document",
+				Category:   "Policy",
+				Tags:       []string{"test", "document"},
+				Visibility: &enums.TrustCenterDocumentVisibilityPubliclyVisible,
 			},
 			file:   createPDFUpload(),
 			client: suite.client.api,
@@ -263,7 +262,6 @@ func TestMutationCreateTrustCenterDoc(t *testing.T) {
 			input: testclient.CreateTrustCenterDocInput{
 				Title:               "Test Document",
 				Category:            "Policy",
-				TrustCenterID:       &trustCenter.ID,
 				Tags:                []string{"test", "document"},
 				Visibility:          &enums.TrustCenterDocumentVisibilityNotVisible,
 				WatermarkingEnabled: lo.ToPtr(true),

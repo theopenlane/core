@@ -68,7 +68,9 @@ func EmitEventHook(e *Eventer) ent.Hook {
 					return
 				}
 
-				logx.FromContext(ctx).UpdateContext(func(c zerolog.Context) zerolog.Context {
+				// Create a child logger for concurrency safety
+				logger := log.Logger.With().Logger()
+				logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
 					return c.Str("mutation_id", eventID.ID)
 				})
 

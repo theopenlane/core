@@ -11,14 +11,24 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterWatermarkConfig is the resolver for the createTrustCenterWatermarkConfig field.
 func (r *mutationResolver) CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error) {
 	if input.TrustCenterID == nil {
-		return nil, rout.NewMissingRequiredFieldError("trustCenterID")
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcenterwatermarkconfig")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
 	}
+
 	res, err := withTransactionalMutation(ctx).TrustCenterWatermarkConfig.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterwatermarkconfig"})

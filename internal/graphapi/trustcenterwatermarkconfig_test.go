@@ -37,8 +37,7 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 		{
 			name: "happy path, minimal, text",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
-				TrustCenterID: &trustCenter.ID,
-				Text:          lo.ToPtr("Test Text"),
+				Text: lo.ToPtr("Test Text"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -77,12 +76,12 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name: "missing required field, trust center id",
+			name: "missing required field, trust center id, no trust center found for org",
 			input: testclient.CreateTrustCenterWatermarkConfigInput{
 				Text: lo.ToPtr("Test Text"),
 			},
 			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
+			ctx:         testUser2.UserCtx,
 			expectedErr: "trustCenterID is required",
 		},
 		{
@@ -114,7 +113,36 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-			assert.Check(t, is.Equal(*tc.input.TrustCenterID, *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.TrustCenterID))
+			assert.Check(t, resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.ID != "")
+
+			if tc.input.TrustCenterID != nil {
+				assert.Check(t, is.Equal(*tc.input.TrustCenterID, *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.TrustCenterID))
+			}
+
+			if tc.input.Text != nil {
+				assert.Check(t, *tc.input.Text == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.Text)
+			}
+
+			if tc.input.FontSize != nil {
+				assert.Check(t, *tc.input.FontSize == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.FontSize)
+			}
+
+			if tc.input.Opacity != nil {
+				assert.Check(t, *tc.input.Opacity == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.Opacity)
+			}
+
+			if tc.input.Rotation != nil {
+				assert.Check(t, *tc.input.Rotation == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.Rotation)
+			}
+
+			if tc.input.Color != nil {
+				assert.Check(t, *tc.input.Color == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.Color)
+			}
+
+			if tc.input.Font != nil {
+				assert.Check(t, *tc.input.Font == *resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.Font)
+			}
+
 			(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: resp.CreateTrustCenterWatermarkConfig.TrustCenterWatermarkConfig.ID}).MustDelete(tc.ctx, t)
 		})
 	}

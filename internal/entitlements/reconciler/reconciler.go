@@ -216,6 +216,10 @@ func (r *Reconciler) reconcileOrg(ctx context.Context, org *ent.Organization) er
 		if err := r.db.Organization.UpdateOneID(cust.OrganizationID).
 			SetStripeCustomerID(cust.StripeCustomerID).
 			Exec(internalCtx); err != nil {
+
+			// to anyone looking at this later and wondering why test logs have lots of error logs about
+			// pq: duplicate key value violates unique constraint - this is due to the mocked calls
+			// and can safely be ignored in tests
 			return fmt.Errorf("update organization stripe customer id: %w", err)
 		}
 	}

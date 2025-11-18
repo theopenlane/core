@@ -561,8 +561,14 @@ func checkAllowedEmailDomain(email string, orgSetting *generated.OrganizationSet
 		return nil
 	}
 
-	emailDomain := strings.SplitAfter(email, "@")[1]
+	// safety check so we don't panic with an invalid email on user creation before
+	// validation
+	emailParts := strings.SplitAfter(email, "@")
+	if len(emailParts) != 2 {
+		return ErrEmailDomainNotAllowed
+	}
 
+	emailDomain := emailParts[1]
 	if slices.Contains(orgSetting.AllowedEmailDomains, emailDomain) {
 		return nil
 	}
