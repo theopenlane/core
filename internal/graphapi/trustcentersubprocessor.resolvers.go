@@ -17,6 +17,20 @@ import (
 
 // CreateTrustCenterSubprocessor is the resolver for the createTrustCenterSubprocessor field.
 func (r *mutationResolver) CreateTrustCenterSubprocessor(ctx context.Context, input generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorCreatePayload, error) {
+	if input.TrustCenterID == nil {
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcentersubprocessor")
+		if err != nil {
+			return nil, err
+		}
+
+		// set the input in the graphql context
+		// this isn't a required field, but its required by the access checks
+		// so we need to set it early
+		gCtx := graphql.GetFieldContext(ctx)
+		gCtx.Args["input"] = input
+	}
+
 	res, err := withTransactionalMutation(ctx).TrustCenterSubprocessor.Create().SetInput(input).Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentersubprocessor"})

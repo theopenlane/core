@@ -231,7 +231,7 @@ func TestMutationCreateInvite(t *testing.T) {
 			role:        enums.RoleMember,
 			client:      suite.client.api,
 			ctx:         user1Context,
-			expectedErr: "internal system error",
+			expectedErr: "email domain not allowed in organization",
 		},
 		{
 			name:             "happy path, existing user as member",

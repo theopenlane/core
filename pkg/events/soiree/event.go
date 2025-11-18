@@ -159,6 +159,7 @@ func (e *BaseEvent) SetContext(ctx context.Context) {
 	defer e.mu.Unlock()
 
 	logger := log.Logger.With().Logger()
+
 	logger.UpdateContext(func(c zerolog.Context) zerolog.Context {
 		return c.Str("event-topic", e.Topic())
 	})
