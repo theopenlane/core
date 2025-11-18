@@ -164,6 +164,20 @@ func (_c *NotificationCreate) SetChannels(v []enums.Channel) *NotificationCreate
 	return _c
 }
 
+// SetTopic sets the "topic" field.
+func (_c *NotificationCreate) SetTopic(v string) *NotificationCreate {
+	_c.mutation.SetTopic(v)
+	return _c
+}
+
+// SetNillableTopic sets the "topic" field if the given value is not nil.
+func (_c *NotificationCreate) SetNillableTopic(v *string) *NotificationCreate {
+	if v != nil {
+		_c.SetTopic(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *NotificationCreate) SetID(v string) *NotificationCreate {
 	_c.mutation.SetID(v)
@@ -375,6 +389,10 @@ func (_c *NotificationCreate) createSpec() (*Notification, *sqlgraph.CreateSpec)
 	if value, ok := _c.mutation.Channels(); ok {
 		_spec.SetField(notification.FieldChannels, field.TypeJSON, value)
 		_node.Channels = value
+	}
+	if value, ok := _c.mutation.Topic(); ok {
+		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+		_node.Topic = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

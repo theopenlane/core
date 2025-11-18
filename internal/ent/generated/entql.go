@@ -2369,6 +2369,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			notification.FieldData:             {Type: field.TypeJSON, Column: notification.FieldData},
 			notification.FieldReadAt:           {Type: field.TypeTime, Column: notification.FieldReadAt},
 			notification.FieldChannels:         {Type: field.TypeJSON, Column: notification.FieldChannels},
+			notification.FieldTopic:            {Type: field.TypeString, Column: notification.FieldTopic},
 		},
 	}
 	graph.Nodes[69] = &sqlgraph.Node{
@@ -25528,6 +25529,11 @@ func (f *NotificationFilter) WhereReadAt(p entql.TimeP) {
 // WhereChannels applies the entql json.RawMessage predicate on the channels field.
 func (f *NotificationFilter) WhereChannels(p entql.BytesP) {
 	f.Where(p.Field(notification.FieldChannels))
+}
+
+// WhereTopic applies the entql string predicate on the topic field.
+func (f *NotificationFilter) WhereTopic(p entql.StringP) {
+	f.Where(p.Field(notification.FieldTopic))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
