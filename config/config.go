@@ -77,7 +77,7 @@ type Config struct {
 	// Ratelimit contains the configuration for the rate limiter
 	Ratelimit ratelimit.Config `json:"ratelimit" koanf:"ratelimit"`
 	// ObjectStorage contains the configuration for the object storage backend
-	ObjectStorage storage.ProviderConfig `json:"objectstorage" koanf:"objectsstorage"`
+	ObjectStorage storage.ProviderConfig `json:"objectstorage" koanf:"objectstorage"`
 	// Entitlements contains the configuration for the entitlements service
 	Entitlements entitlements.Config `json:"subscription" koanf:"subscription"`
 	// Keywatcher contains the configuration for the key watcher that manages JWT signing keys
