@@ -38,7 +38,7 @@ type Notification struct {
 	UserID string `json:"user_id,omitempty"`
 	// the type of notification - organization or user
 	NotificationType enums.NotificationType `json:"notification_type,omitempty"`
-	// the object type this notification is related to (e.g., taskUpdate, taskCreate)
+	// the event type this notification is related to (e.g., task.created, control.updated)
 	ObjectType string `json:"object_type,omitempty"`
 	// the title of the notification
 	Title string `json:"title,omitempty"`
@@ -50,6 +50,8 @@ type Notification struct {
 	ReadAt *models.DateTime `json:"read_at,omitempty"`
 	// the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
 	Channels []enums.Channel `json:"channels,omitempty"`
+	// the topic of the notification
+	Topic string `json:"topic,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the NotificationQuery when eager-loading is set.
 	Edges        NotificationEdges `json:"edges"`
@@ -100,7 +102,7 @@ func (*Notification) scanValues(columns []string) ([]any, error) {
 			values[i] = &sql.NullScanner{S: new(models.DateTime)}
 		case notification.FieldTags, notification.FieldData, notification.FieldChannels:
 			values[i] = new([]byte)
-		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody:
+		case notification.FieldID, notification.FieldCreatedBy, notification.FieldUpdatedBy, notification.FieldOwnerID, notification.FieldUserID, notification.FieldNotificationType, notification.FieldObjectType, notification.FieldTitle, notification.FieldBody, notification.FieldTopic:
 			values[i] = new(sql.NullString)
 		case notification.FieldCreatedAt, notification.FieldUpdatedAt:
 			values[i] = new(sql.NullTime)
@@ -216,6 +218,12 @@ func (_m *Notification) assignValues(columns []string, values []any) error {
 					return fmt.Errorf("unmarshal field channels: %w", err)
 				}
 			}
+		case notification.FieldTopic:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field topic", values[i])
+			} else if value.Valid {
+				_m.Topic = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -305,6 +313,9 @@ func (_m *Notification) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("channels=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Channels))
+	builder.WriteString(", ")
+	builder.WriteString("topic=")
+	builder.WriteString(_m.Topic)
 	builder.WriteByte(')')
 	return builder.String()
 }

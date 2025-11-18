@@ -46,6 +46,8 @@ const (
 	FieldReadAt = "read_at"
 	// FieldChannels holds the string denoting the channels field in the database.
 	FieldChannels = "channels"
+	// FieldTopic holds the string denoting the topic field in the database.
+	FieldTopic = "topic"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeUser holds the string denoting the user edge name in mutations.
@@ -85,6 +87,7 @@ var Columns = []string{
 	FieldData,
 	FieldReadAt,
 	FieldChannels,
+	FieldTopic,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -197,6 +200,11 @@ func ByBody(opts ...sql.OrderTermOption) OrderOption {
 // ByReadAt orders the results by the read_at field.
 func ByReadAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldReadAt, opts...).ToFunc()
+}
+
+// ByTopic orders the results by the topic field.
+func ByTopic(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTopic, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.

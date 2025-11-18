@@ -232,6 +232,26 @@ func (_u *NotificationUpdate) ClearChannels() *NotificationUpdate {
 	return _u
 }
 
+// SetTopic sets the "topic" field.
+func (_u *NotificationUpdate) SetTopic(v string) *NotificationUpdate {
+	_u.mutation.SetTopic(v)
+	return _u
+}
+
+// SetNillableTopic sets the "topic" field if the given value is not nil.
+func (_u *NotificationUpdate) SetNillableTopic(v *string) *NotificationUpdate {
+	if v != nil {
+		_u.SetTopic(*v)
+	}
+	return _u
+}
+
+// ClearTopic clears the value of the "topic" field.
+func (_u *NotificationUpdate) ClearTopic() *NotificationUpdate {
+	_u.mutation.ClearTopic()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *NotificationUpdate) SetOwner(v *Organization) *NotificationUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -412,6 +432,12 @@ func (_u *NotificationUpdate) sqlSave(ctx context.Context) (_node int, err error
 	}
 	if _u.mutation.ChannelsCleared() {
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Topic(); ok {
+		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+	}
+	if _u.mutation.TopicCleared() {
+		_spec.ClearField(notification.FieldTopic, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -695,6 +721,26 @@ func (_u *NotificationUpdateOne) ClearChannels() *NotificationUpdateOne {
 	return _u
 }
 
+// SetTopic sets the "topic" field.
+func (_u *NotificationUpdateOne) SetTopic(v string) *NotificationUpdateOne {
+	_u.mutation.SetTopic(v)
+	return _u
+}
+
+// SetNillableTopic sets the "topic" field if the given value is not nil.
+func (_u *NotificationUpdateOne) SetNillableTopic(v *string) *NotificationUpdateOne {
+	if v != nil {
+		_u.SetTopic(*v)
+	}
+	return _u
+}
+
+// ClearTopic clears the value of the "topic" field.
+func (_u *NotificationUpdateOne) ClearTopic() *NotificationUpdateOne {
+	_u.mutation.ClearTopic()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *NotificationUpdateOne) SetOwner(v *Organization) *NotificationUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -905,6 +951,12 @@ func (_u *NotificationUpdateOne) sqlSave(ctx context.Context) (_node *Notificati
 	}
 	if _u.mutation.ChannelsCleared() {
 		_spec.ClearField(notification.FieldChannels, field.TypeJSON)
+	}
+	if value, ok := _u.mutation.Topic(); ok {
+		_spec.SetField(notification.FieldTopic, field.TypeString, value)
+	}
+	if _u.mutation.TopicCleared() {
+		_spec.ClearField(notification.FieldTopic, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

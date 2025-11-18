@@ -3843,6 +3843,7 @@ var (
 		{Name: "data", Type: field.TypeJSON, Nullable: true},
 		{Name: "read_at", Type: field.TypeTime, Nullable: true},
 		{Name: "channels", Type: field.TypeJSON, Nullable: true},
+		{Name: "topic", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "user_id", Type: field.TypeString, Nullable: true},
 	}
@@ -3854,13 +3855,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "notifications_organizations_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[13]},
+				Columns:    []*schema.Column{NotificationsColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notifications_users_notifications",
-				Columns:    []*schema.Column{NotificationsColumns[14]},
+				Columns:    []*schema.Column{NotificationsColumns[15]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3869,7 +3870,7 @@ var (
 			{
 				Name:    "notification_user_id_read_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotificationsColumns[14], NotificationsColumns[11], NotificationsColumns[13]},
+				Columns: []*schema.Column{NotificationsColumns[15], NotificationsColumns[11], NotificationsColumns[14]},
 			},
 		},
 	}

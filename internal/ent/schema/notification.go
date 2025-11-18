@@ -49,7 +49,7 @@ func (Notification) Fields() []ent.Field {
 			Comment("the type of notification - organization or user").
 			GoType(enums.NotificationType("")),
 		field.String("object_type").
-			Comment("the object type this notification is related to (e.g., taskUpdate, taskCreate)").
+			Comment("the event type this notification is related to (e.g., task.created, control.updated)").
 			NotEmpty(),
 		field.String("title").
 			Comment("the title of the notification").
@@ -67,6 +67,9 @@ func (Notification) Fields() []ent.Field {
 			Nillable(),
 		field.JSON("channels", []enums.Channel{}).
 			Comment("the channels this notification should be sent to (IN_APP, SLACK, EMAIL)").
+			Optional(),
+		field.String("topic").
+			Comment("the topic of the notification").
 			Optional(),
 	}
 }
