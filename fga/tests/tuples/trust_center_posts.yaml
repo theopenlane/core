@@ -1,0 +1,27 @@
+- user: organization:tc-org-1
+  relation: parent
+  object: trust_center:tc-1
+- user: user:tc-owner-1
+  relation: owner
+  object: organization:tc-org-1
+- user: user:tc-viewer-1
+  relation: member
+  object: organization:tc-org-1
+
+
+- user: organization:tc-org-1#owner
+  relation: editor
+  object: note:tc-note-1
+
+- user: trust_center:tc-1#parent_editor
+  relation: editor
+  object: note:tc-note-1
+
+# Allow public access to trust center posts
+- user: user:*
+  relation: can_view
+  object: note:tc-note-1
+
+- user: trust_center:tc-1
+  relation: parent
+  object: note:tc-note-1

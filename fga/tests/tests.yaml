@@ -1215,3 +1215,32 @@ tests:
           can_view: false
           can_edit: false
           can_delete: false
+
+  - name: "trust_center_notes"
+    description: "test trust center posts and their relationships"
+    tuple_file: tuples/trust_center_posts.yaml
+    check:
+      - user: user:tc-owner-1
+        object: note:tc-note-1
+        assertions:
+          can_view: true
+          can_edit: true
+          can_delete: true
+      - user: user:anon_unsigned-nda
+        object: note:tc-note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:signed-nda
+        object: note:tc-note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false
+      - user: user:tc-viewer-1
+        object: note:tc-note-1
+        assertions:
+          can_view: true
+          can_edit: false
+          can_delete: false

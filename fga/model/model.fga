@@ -437,15 +437,15 @@ type task
     define viewer: can_view from parent
     define editor: [organization#owner] or can_edit from parent
 # notes are associated with a parent object and inherit view access from that object, e.g. task, policy, procedure, etc.
-# do not inherit edit permissions from parent here like we do on other objects, only the original user (and org owner) can edit
+# do not inherit edit permissions from parent here like we do on other objects, only the original user (and org owner) can edit with the exception of trust center notes, which can be edited by any user with trust center edit access
 type note
   relations
-    define can_view: [user, service] or can_edit or can_view from parent
+    define can_view: [user, service, user:*] or can_edit or can_view from parent
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task]
-    define editor: [organization#owner]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk]
+    define editor: [organization#owner, trust_center#parent_editor]
     define owner : [user, service]
 type evidence
   relations

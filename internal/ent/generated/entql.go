@@ -8392,6 +8392,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"trust_center_doc_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"trust_center_subprocessor_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"parent",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -26778,6 +26802,34 @@ func (f *OrganizationFilter) WhereHasTemplateCreators() {
 // WhereHasTemplateCreatorsWith applies a predicate to check if query has an edge template_creators with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasTemplateCreatorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("template_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterDocCreators applies a predicate to check if query has an edge trust_center_doc_creators.
+func (f *OrganizationFilter) WhereHasTrustCenterDocCreators() {
+	f.Where(entql.HasEdge("trust_center_doc_creators"))
+}
+
+// WhereHasTrustCenterDocCreatorsWith applies a predicate to check if query has an edge trust_center_doc_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterDocCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("trust_center_doc_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSubprocessorCreators applies a predicate to check if query has an edge trust_center_subprocessor_creators.
+func (f *OrganizationFilter) WhereHasTrustCenterSubprocessorCreators() {
+	f.Where(entql.HasEdge("trust_center_subprocessor_creators"))
+}
+
+// WhereHasTrustCenterSubprocessorCreatorsWith applies a predicate to check if query has an edge trust_center_subprocessor_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterSubprocessorCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("trust_center_subprocessor_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

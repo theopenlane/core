@@ -2304,6 +2304,8 @@ var (
 		{Name: "organization_scheduled_job_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_standard_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_template_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_trust_center_doc_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_trust_center_subprocessor_creators", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_editors", Type: field.TypeString, Nullable: true},
@@ -2460,62 +2462,74 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_trust_center_doc_creators",
 				Columns:    []*schema.Column{GroupsColumns[42]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_blocked_groups",
+				Symbol:     "groups_organizations_trust_center_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[43]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_editors",
+				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[44]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_viewers",
+				Symbol:     "groups_remediations_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[45]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_blocked_groups",
+				Symbol:     "groups_remediations_editors",
 				Columns:    []*schema.Column{GroupsColumns[46]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_editors",
+				Symbol:     "groups_remediations_viewers",
 				Columns:    []*schema.Column{GroupsColumns[47]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_viewers",
+				Symbol:     "groups_reviews_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[48]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_blocked_groups",
+				Symbol:     "groups_reviews_editors",
 				Columns:    []*schema.Column{GroupsColumns[49]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_reviews_viewers",
+				Columns:    []*schema.Column{GroupsColumns[50]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_vulnerabilities_blocked_groups",
+				Columns:    []*schema.Column{GroupsColumns[51]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_editors",
-				Columns:    []*schema.Column{GroupsColumns[50]},
+				Columns:    []*schema.Column{GroupsColumns[52]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "groups_vulnerabilities_viewers",
-				Columns:    []*schema.Column{GroupsColumns[51]},
+				Columns:    []*schema.Column{GroupsColumns[53]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2524,12 +2538,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[44]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2537,7 +2551,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -4264,7 +4278,7 @@ var (
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_matching_domains_autojoin", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
+		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "MICROSOFT_ENTRA_ID", "GENERIC_OIDC", "NONE"}, Default: "NONE"},
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
@@ -4318,7 +4332,7 @@ var (
 		{Name: "billing_notifications_enabled", Type: field.TypeBool, Default: true},
 		{Name: "allowed_email_domains", Type: field.TypeJSON, Nullable: true},
 		{Name: "allow_matching_domains_autojoin", Type: field.TypeBool, Nullable: true, Default: false},
-		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "NONE"}, Default: "NONE"},
+		{Name: "identity_provider", Type: field.TypeEnum, Nullable: true, Enums: []string{"OKTA", "ONE_LOGIN", "GOOGLE_WORKSPACE", "SLACK", "GITHUB", "MICROSOFT_ENTRA_ID", "GENERIC_OIDC", "NONE"}, Default: "NONE"},
 		{Name: "identity_provider_client_id", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_client_secret", Type: field.TypeString, Nullable: true},
 		{Name: "identity_provider_metadata_endpoint", Type: field.TypeString, Nullable: true},
@@ -10715,15 +10729,17 @@ func init() {
 	GroupsTable.ForeignKeys[21].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[22].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[23].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[24].RefTable = RemediationsTable
-	GroupsTable.ForeignKeys[25].RefTable = RemediationsTable
+	GroupsTable.ForeignKeys[24].RefTable = OrganizationsTable
+	GroupsTable.ForeignKeys[25].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[26].RefTable = RemediationsTable
-	GroupsTable.ForeignKeys[27].RefTable = ReviewsTable
-	GroupsTable.ForeignKeys[28].RefTable = ReviewsTable
+	GroupsTable.ForeignKeys[27].RefTable = RemediationsTable
+	GroupsTable.ForeignKeys[28].RefTable = RemediationsTable
 	GroupsTable.ForeignKeys[29].RefTable = ReviewsTable
-	GroupsTable.ForeignKeys[30].RefTable = VulnerabilitiesTable
-	GroupsTable.ForeignKeys[31].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[30].RefTable = ReviewsTable
+	GroupsTable.ForeignKeys[31].RefTable = ReviewsTable
 	GroupsTable.ForeignKeys[32].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[33].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[34].RefTable = VulnerabilitiesTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}

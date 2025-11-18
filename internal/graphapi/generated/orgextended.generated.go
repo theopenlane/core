@@ -110,6 +110,10 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "trustCenterDocCreators":
+				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
+			case "trustCenterSubprocessorCreators":
+				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":

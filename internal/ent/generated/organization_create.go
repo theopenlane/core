@@ -526,6 +526,36 @@ func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCrea
 	return _c.AddTemplateCreatorIDs(ids...)
 }
 
+// AddTrustCenterDocCreatorIDs adds the "trust_center_doc_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterDocCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterDocCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterDocCreators adds the "trust_center_doc_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterDocCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterDocCreatorIDs(ids...)
+}
+
+// AddTrustCenterSubprocessorCreatorIDs adds the "trust_center_subprocessor_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddTrustCenterSubprocessorCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddTrustCenterSubprocessorCreatorIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterSubprocessorCreators adds the "trust_center_subprocessor_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddTrustCenterSubprocessorCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterSubprocessorCreatorIDs(ids...)
+}
+
 // SetParentID sets the "parent" edge to the Organization entity by ID.
 func (_c *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
 	_c.mutation.SetParentID(id)
@@ -1916,6 +1946,40 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterDocCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
