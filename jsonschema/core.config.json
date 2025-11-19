@@ -1296,7 +1296,7 @@
         },
         "devmode": {
           "type": "boolean",
-          "description": "DevMode enables simple file upload handling for local development and testing"
+          "description": "DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs"
         },
         "providers": {
           "$ref": "#/$defs/storage.Providers",

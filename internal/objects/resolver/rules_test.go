@@ -41,7 +41,8 @@ func TestConfigureProviderRulesDevMode(t *testing.T) {
 	config := storage.ProviderConfig{
 		DevMode: true,
 		Providers: storage.Providers{
-			Disk: storage.ProviderConfigs{Enabled: true},
+			// we build the disk provider even if disabled to ensure dev mode works - so test ensures the builder still constructs
+			Disk: storage.ProviderConfigs{Enabled: false},
 		},
 	}
 
@@ -280,7 +281,7 @@ func TestHandleDevModeOptionClone(t *testing.T) {
 		WithProviderConfig(storage.ProviderConfig{
 			DevMode: true,
 			Providers: storage.Providers{
-				Disk: storage.ProviderConfigs{Enabled: true},
+				Disk: storage.ProviderConfigs{Enabled: false},
 			},
 		}),
 		WithProviderBuilders(providerBuilders{

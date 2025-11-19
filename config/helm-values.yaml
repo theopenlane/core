@@ -451,7 +451,7 @@ coreConfiguration:
     maxsizemb: 0  # @schema type:integer
     # -- MaxMemoryMB is the maximum memory to use for file uploads in MB
     maxmemorymb: 0  # @schema type:integer
-    # -- DevMode enables simple file upload handling for local development and testing
+    # -- DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs
     devmode: false  # @schema type:boolean; default:false
     # -- Providers contains configuration for each storage provider
     providers:
