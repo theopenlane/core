@@ -56,25 +56,25 @@
         "db": {
           "type": "integer"
         },
-        "dialTimeout": {
+        "dialtimeout": {
           "type": "integer"
         },
-        "readTimeout": {
+        "readtimeout": {
           "type": "integer"
         },
-        "writeTimeout": {
+        "writetimeout": {
           "type": "integer"
         },
-        "maxRetries": {
+        "maxretries": {
           "type": "integer"
         },
-        "minIdleConns": {
+        "minidleconns": {
           "type": "integer"
         },
-        "maxIdleConns": {
+        "maxidleconns": {
           "type": "integer"
         },
-        "maxActiveConns": {
+        "maxactiveconns": {
           "type": "integer"
         }
       },
@@ -385,10 +385,10 @@
     },
     "emailtemplates.Config": {
       "properties": {
-        "companyName": {
+        "companyname": {
           "type": "string"
         },
-        "companyAddress": {
+        "companyaddress": {
           "type": "string"
         },
         "corporation": {
@@ -397,19 +397,19 @@
         "year": {
           "type": "integer"
         },
-        "fromEmail": {
+        "fromemail": {
           "type": "string"
         },
-        "supportEmail": {
+        "supportemail": {
           "type": "string"
         },
-        "logoURL": {
+        "logourl": {
           "type": "string"
         },
         "urls": {
           "$ref": "#/$defs/emailtemplates.URLConfig"
         },
-        "templatesPath": {
+        "templatespath": {
           "type": "string"
         }
       },
@@ -436,10 +436,10 @@
         "reset": {
           "type": "string"
         },
-        "verifySubscriber": {
+        "verifysubscriber": {
           "type": "string"
         },
-        "verifyBilling": {
+        "verifybilling": {
           "type": "string"
         },
         "questionnaire": {
@@ -609,47 +609,47 @@
           "type": "boolean",
           "description": "debug enables printing the debug database logs"
         },
-        "databaseName": {
+        "databasename": {
           "type": "string",
           "description": "the name of the database to use with otel tracing"
         },
-        "driverName": {
+        "drivername": {
           "type": "string",
           "description": "sql driver name"
         },
-        "multiWrite": {
+        "multiwrite": {
           "type": "boolean",
           "description": "enables writing to two databases simultaneously"
         },
-        "primaryDbSource": {
+        "primarydbsource": {
           "type": "string",
           "description": "dsn of the primary database"
         },
-        "secondaryDbSource": {
+        "secondarydbsource": {
           "type": "string",
           "description": "dsn of the secondary database if multi-write is enabled"
         },
-        "cacheTTL": {
+        "cachettl": {
           "type": "integer",
           "description": "cache results for subsequent requests"
         },
-        "runMigrations": {
+        "runmigrations": {
           "type": "boolean",
           "description": "run migrations on startup"
         },
-        "migrationProvider": {
+        "migrationprovider": {
           "type": "string",
           "description": "migration provider to use for running migrations"
         },
-        "enableHistory": {
+        "enablehistory": {
           "type": "boolean",
           "description": "enable history data to be logged to the database"
         },
-        "maxConnections": {
+        "maxconnections": {
           "type": "integer",
           "description": "maximum number of connections to the database"
         },
-        "maxIdleConnections": {
+        "maxidleconnections": {
           "type": "integer",
           "description": "maximum number of idle connections to the database"
         }
@@ -657,7 +657,7 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "primaryDbSource"
+        "primarydbsource"
       ]
     },
     "fgax.Config": {
@@ -666,27 +666,27 @@
           "type": "boolean",
           "description": "enables authorization checks with openFGA"
         },
-        "storeName": {
+        "storename": {
           "type": "string",
           "description": "name of openFGA store"
         },
-        "hostUrl": {
+        "hosturl": {
           "type": "string",
           "description": "host url with scheme of the openFGA API"
         },
-        "storeId": {
+        "storeid": {
           "type": "string",
           "description": "id of openFGA store"
         },
-        "modelId": {
+        "modelid": {
           "type": "string",
           "description": "id of openFGA model"
         },
-        "createNewModel": {
+        "createnewmodel": {
           "type": "boolean",
           "description": "force create a new model"
         },
-        "modelFile": {
+        "modelfile": {
           "type": "string",
           "description": "path to the fga model file"
         },
@@ -698,20 +698,20 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "hostUrl"
+        "hosturl"
       ]
     },
     "fgax.Credentials": {
       "properties": {
-        "apiToken": {
+        "apitoken": {
           "type": "string",
           "description": "api token for the openFGA client"
         },
-        "clientId": {
+        "clientid": {
           "type": "string",
           "description": "client id for the openFGA client"
         },
-        "clientSecret": {
+        "clientsecret": {
           "type": "string",
           "description": "client secret for the openFGA client"
         },
@@ -733,56 +733,56 @@
     },
     "github.ProviderConfig": {
       "properties": {
-        "clientId": {
+        "clientid": {
           "type": "string"
         },
-        "clientSecret": {
+        "clientsecret": {
           "type": "string"
         },
-        "clientEndpoint": {
+        "clientendpoint": {
           "type": "string"
         },
         "scopes": {
           "$ref": "#/$defs/[]string"
         },
-        "redirectUrl": {
+        "redirecturl": {
           "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "clientId",
-        "clientSecret",
+        "clientid",
+        "clientsecret",
         "scopes",
-        "redirectUrl"
+        "redirecturl"
       ]
     },
     "google.ProviderConfig": {
       "properties": {
-        "clientId": {
+        "clientid": {
           "type": "string"
         },
-        "clientSecret": {
+        "clientsecret": {
           "type": "string"
         },
-        "clientEndpoint": {
+        "clientendpoint": {
           "type": "string"
         },
         "scopes": {
           "$ref": "#/$defs/[]string"
         },
-        "redirectUrl": {
+        "redirecturl": {
           "type": "string"
         }
       },
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "clientId",
-        "clientSecret",
+        "clientid",
+        "clientsecret",
         "scopes",
-        "redirectUrl"
+        "redirecturl"
       ]
     },
     "handlers.IntegrationOauthProviderConfig": {
@@ -947,7 +947,7 @@
         "pretty": {
           "type": "boolean"
         },
-        "disableTimestamp": {
+        "disabletimestamp": {
           "type": "boolean"
         }
       },
@@ -1170,13 +1170,13 @@
     },
     "riverqueue.Config": {
       "properties": {
-        "connectionURI": {
+        "connectionuri": {
           "type": "string"
         },
-        "runMigrations": {
+        "runmigrations": {
           "type": "boolean"
         },
-        "riverConf": {
+        "riverconf": {
           "$ref": "#/$defs/river.Config"
         },
         "metrics": {
@@ -1188,13 +1188,13 @@
     },
     "riverqueue.MetricsConfig": {
       "properties": {
-        "enableMetrics": {
+        "enablemetrics": {
           "type": "boolean"
         },
-        "metricsDurationUnit": {
+        "metricsdurationunit": {
           "type": "string"
         },
-        "enableSemanticMetrics": {
+        "enablesemanticmetrics": {
           "type": "boolean"
         }
       },
@@ -1246,25 +1246,25 @@
     },
     "sessions.Config": {
       "properties": {
-        "signingKey": {
+        "signingkey": {
           "type": "string"
         },
-        "encryptionKey": {
+        "encryptionkey": {
           "type": "string"
         },
         "domain": {
           "type": "string"
         },
-        "maxAge": {
+        "maxage": {
           "type": "integer"
         },
         "secure": {
           "type": "boolean"
         },
-        "httpOnly": {
+        "httponly": {
           "type": "boolean"
         },
-        "sameSite": {
+        "samesite": {
           "type": "string"
         }
       },
@@ -1519,13 +1519,13 @@
         "enabled": {
           "type": "boolean"
         },
-        "envPrefix": {
+        "envprefix": {
           "type": "string"
         },
         "keys": {
           "$ref": "#/$defs/map[string]tokens.APITokenKeyConfig"
         },
-        "secretSize": {
+        "secretsize": {
           "type": "integer"
         },
         "delimiter": {
@@ -1558,37 +1558,37 @@
         "audience": {
           "type": "string"
         },
-        "refreshAudience": {
+        "refreshaudience": {
           "type": "string"
         },
         "issuer": {
           "type": "string"
         },
-        "accessDuration": {
+        "accessduration": {
           "type": "integer"
         },
-        "refreshDuration": {
+        "refreshduration": {
           "type": "integer"
         },
-        "refreshOverlap": {
+        "refreshoverlap": {
           "type": "integer"
         },
-        "jwksEndpoint": {
+        "jwksendpoint": {
           "type": "string"
         },
         "keys": {
           "$ref": "#/$defs/map[string]string"
         },
-        "generateKeys": {
+        "generatekeys": {
           "type": "boolean"
         },
-        "jwksCacheTTL": {
+        "jwkscachettl": {
           "type": "integer"
         },
         "redis": {
           "$ref": "#/$defs/tokens.RedisConfig"
         },
-        "apiTokens": {
+        "apitokens": {
           "$ref": "#/$defs/tokens.APITokenConfig"
         }
       },
@@ -1609,7 +1609,7 @@
         "config": {
           "$ref": "#/$defs/cache.Config"
         },
-        "blacklistPrefix": {
+        "blacklistprefix": {
           "type": "string"
         }
       },
@@ -1621,7 +1621,7 @@
         "enabled": {
           "type": "boolean"
         },
-        "codeLength": {
+        "codelength": {
           "type": "integer"
         },
         "issuer": {
@@ -1633,10 +1633,10 @@
         "secret": {
           "type": "string"
         },
-        "recoveryCodeCount": {
+        "recoverycodecount": {
           "type": "integer"
         },
-        "recoveryCodeLength": {
+        "recoverycodelength": {
           "type": "integer"
         }
       },
@@ -1694,19 +1694,19 @@
         "enabled": {
           "type": "boolean"
         },
-        "displayName": {
+        "displayname": {
           "type": "string"
         },
-        "relyingPartyId": {
+        "relyingpartyid": {
           "type": "string"
         },
-        "requestOrigins": {
+        "requestorigins": {
           "$ref": "#/$defs/[]string"
         },
-        "maxDevices": {
+        "maxdevices": {
           "type": "integer"
         },
-        "enforceTimeout": {
+        "enforcetimeout": {
           "type": "boolean"
         },
         "timeout": {
@@ -1719,9 +1719,9 @@
       "additionalProperties": false,
       "type": "object",
       "required": [
-        "displayName",
-        "relyingPartyId",
-        "requestOrigins"
+        "displayname",
+        "relyingpartyid",
+        "requestorigins"
       ]
     }
   },
