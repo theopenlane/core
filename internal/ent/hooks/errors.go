@@ -34,6 +34,8 @@ var (
 	ErrMaxAttempts = errors.New("too many attempts to resend org invitation")
 	// ErrMaxSubscriptionAttempts is returned when a user has reached the max attempts to subscribe to an org
 	ErrMaxSubscriptionAttempts = errors.New("too many attempts to resend org subscription email")
+	// ErrAssessmentInProgress is returned when attempting to resend an email for an assessment that is already in progress
+	ErrAssessmentInProgress = errors.New("assessment is already in progress or completed")
 	// ErrMissingRecipientEmail is returned when an email is required but not provided
 	ErrMissingRecipientEmail = errors.New("recipient email is required but not provided")
 	// ErrMissingRequiredName is returned when a name is required but not provided
@@ -91,6 +93,12 @@ var (
 	ErrStatusApprovedNotAllowed = errors.New("you must be in the approver group to mark as approved")
 	// ErrInvalidChannel is returned when an invalid notification channel is provided
 	ErrInvalidChannel = errors.New("invalid channel")
+	// ErrTemplateIDRequired is returned when an assessment is created without a template
+	ErrTemplateIDRequired = errors.New("template id required when creating an assessment")
+	// ErrTemplateNotFound is returned when an assessment is created with a non existing template
+	ErrTemplateNotFound = errors.New("template does not exist")
+	// ErrTemplateNotQuestionnaire is returned when an assessment tries to use a wrong template type
+	ErrTemplateNotQuestionnaire = errors.New("template must be a questionnaire")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

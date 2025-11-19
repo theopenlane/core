@@ -4,18 +4,18 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
@@ -50,12 +50,29 @@ func (Assessment) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("assessment_type"),
 			),
+
 		field.String("template_id").
-			Comment("the template id associated with the assessment"),
-		field.String("assessment_owner_id").
 			Optional().
-			Unique().
-			Comment("the id of the group that owns the assessment"),
+			Comment("the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema"),
+
+		field.JSON("jsonconfig", map[string]any{}).
+			Comment("the jsonschema object of the questionnaire. If not provided it will be inherited from the template.").
+			Optional().
+			Annotations(
+				entx.FieldJSONPathSearchable("$id"),
+			),
+
+		field.JSON("uischema", map[string]any{}).
+			Comment("the uischema for the template to render in the UI. If not provided, it will be inherited from the template").
+			Optional().
+			Annotations(),
+
+		field.Int64("response_due_duration").
+			Optional().
+			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
+			Annotations(
+				entgql.OrderField("response_due_duration"),
+			),
 	}
 }
 
@@ -70,11 +87,13 @@ func (a Assessment) Mixin() []ent.Mixin {
 
 func (a Assessment) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeTo(&edgeDefinition{
+		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
-			required:   true,
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Template{}.Name()),
+			},
 		}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}
@@ -82,9 +101,12 @@ func (a Assessment) Edges() []ent.Edge {
 
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
+		policy.WithOnMutationRules(
+			ent.OpDelete|ent.OpDeleteOne,
 			policy.CheckOrgWriteAccess(),
+		),
+		policy.WithMutationRules(
+			privacy.AlwaysAllowRule(),
 		),
 	)
 }
@@ -106,18 +128,17 @@ func (Assessment) Indexes() []ent.Index {
 
 // Interceptors of the Assessment
 func (Assessment) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{
-		interceptors.FilterQueryResults[generated.Assessment](),
-	}
+	return []ent.Interceptor{}
 }
 
 func (Assessment) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hooks.HookQuestionnaireAssessment(),
 		hook.On(
 			hooks.HookRelationTuples(map[string]string{
 				"assessment_owner": "group",
 			}, "owner"),
-			ent.OpCreate|ent.OpUpdateOne|ent.OpUpdateOne,
+			ent.OpCreate|ent.OpUpdateOne,
 		),
 	}
 }

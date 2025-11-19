@@ -127,12 +127,25 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 						return unauthorized(c, ErrAnonymousAccessNotAllowed, conf, validator)
 					}
 
-					an, err := createAnonymousTrustCenterUserFromClaims(reqCtx, conf.DBClient, claims, auth.JWTAuthentication)
-					if err != nil {
-						return unauthorized(c, err, conf, validator)
-					}
+					switch strings.HasPrefix(claims.UserID, "anon_questionnaire") {
 
-					auth.SetAnonymousTrustCenterUserContext(c, an)
+					case true:
+						an, err := createAnonymousQuestionnaireFromClaims(claims, auth.JWTAuthentication)
+						if err != nil {
+							return unauthorized(c, err, conf, validator)
+						}
+
+						auth.SetAnonymousQuestionnaireUserContext(c, an)
+
+					default:
+
+						an, err := createAnonymousTrustCenterUserFromClaims(claims, auth.JWTAuthentication)
+						if err != nil {
+							return unauthorized(c, err, conf, validator)
+						}
+
+						auth.SetAnonymousTrustCenterUserContext(c, an)
+					}
 
 					// Record anonymous JWT authentication
 					metrics.RecordAuthentication(metrics.AuthTypeJWTAnonymous)
@@ -275,7 +288,18 @@ func createAuthenticatedUserFromClaims(ctx context.Context, dbClient *ent.Client
 	}, nil
 }
 
-func createAnonymousTrustCenterUserFromClaims(_ context.Context, _ *ent.Client, claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
+func createAnonymousQuestionnaireFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousQuestionnaireUser, error) {
+	return &auth.AnonymousQuestionnaireUser{
+		SubjectID:          claims.UserID,
+		SubjectName:        "Anonymous User",
+		OrganizationID:     claims.OrgID,
+		AuthenticationType: authType,
+		SubjectEmail:       claims.Email,
+		AssessmentID:       claims.AssessmentID,
+	}, nil
+}
+
+func createAnonymousTrustCenterUserFromClaims(claims *tokens.Claims, authType auth.AuthenticationType) (*auth.AnonymousTrustCenterUser, error) {
 	return &auth.AnonymousTrustCenterUser{
 		SubjectID:          claims.UserID,
 		SubjectName:        "Anonymous User",

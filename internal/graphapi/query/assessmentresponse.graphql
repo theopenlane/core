@@ -107,24 +107,3 @@ query GetAssessmentResponses($first: Int, $last: Int, $where: AssessmentResponse
     }
   }
 }
-mutation UpdateAssessmentResponse($updateAssessmentResponseId: ID!, $input: UpdateAssessmentResponseInput!) {
-  updateAssessmentResponse(id: $updateAssessmentResponseId, input: $input) {
-    assessmentResponse {
-      assessmentID
-      assignedAt
-      completedAt
-      createdAt
-      createdBy
-      documentDataID
-      dueDate
-      email
-      id
-      ownerID
-      sendAttempts
-      startedAt
-      status
-      updatedAt
-      updatedBy
-    }
-  }
-}

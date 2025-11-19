@@ -7,6 +7,7 @@ import (
 	"encoding/json"
 	"os"
 
+	"github.com/samber/lo"
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
@@ -31,10 +32,12 @@ func init() {
 
 // createValidation validates the required fields for the command
 func createValidation() (input openlaneclient.CreateDocumentDataInput, err error) {
-	input.TemplateID = cmd.Config.String("template-id")
-	if input.TemplateID == "" {
+	templateID := cmd.Config.String("template-id")
+	if templateID == "" {
 		return input, cmd.NewRequiredFieldMissingError("template id")
 	}
+
+	input.TemplateID = lo.ToPtr(templateID)
 
 	dataFile := cmd.Config.String("data")
 	if dataFile == "" {

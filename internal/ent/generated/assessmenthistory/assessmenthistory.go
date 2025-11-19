@@ -46,8 +46,12 @@ const (
 	FieldAssessmentType = "assessment_type"
 	// FieldTemplateID holds the string denoting the template_id field in the database.
 	FieldTemplateID = "template_id"
-	// FieldAssessmentOwnerID holds the string denoting the assessment_owner_id field in the database.
-	FieldAssessmentOwnerID = "assessment_owner_id"
+	// FieldJsonconfig holds the string denoting the jsonconfig field in the database.
+	FieldJsonconfig = "jsonconfig"
+	// FieldUischema holds the string denoting the uischema field in the database.
+	FieldUischema = "uischema"
+	// FieldResponseDueDuration holds the string denoting the response_due_duration field in the database.
+	FieldResponseDueDuration = "response_due_duration"
 	// Table holds the table name of the assessmenthistory in the database.
 	Table = "assessment_history"
 )
@@ -69,7 +73,9 @@ var Columns = []string{
 	FieldName,
 	FieldAssessmentType,
 	FieldTemplateID,
-	FieldAssessmentOwnerID,
+	FieldJsonconfig,
+	FieldUischema,
+	FieldResponseDueDuration,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -200,9 +206,9 @@ func ByTemplateID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTemplateID, opts...).ToFunc()
 }
 
-// ByAssessmentOwnerID orders the results by the assessment_owner_id field.
-func ByAssessmentOwnerID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldAssessmentOwnerID, opts...).ToFunc()
+// ByResponseDueDuration orders the results by the response_due_duration field.
+func ByResponseDueDuration(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldResponseDueDuration, opts...).ToFunc()
 }
 
 var (

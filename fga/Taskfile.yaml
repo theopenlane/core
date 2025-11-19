@@ -31,7 +31,6 @@ tasks:
         cmd: |
           fga tuple write --file "{{.TUPLE}}" --api-token="{{.FGA_API_TOKEN}}" --store-id="{{.STORE_ID}}"
 
-
   add:admin:
     desc: Add a user to the system:openlane admin group, if no USER_ID is provided, the logged in user will be used
     vars:

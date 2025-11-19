@@ -134,6 +134,14 @@ func (_c *DocumentDataCreate) SetTemplateID(v string) *DocumentDataCreate {
 	return _c
 }
 
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *DocumentDataCreate) SetNillableTemplateID(v *string) *DocumentDataCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
+	}
+	return _c
+}
+
 // SetData sets the "data" field.
 func (_c *DocumentDataCreate) SetData(v map[string]interface{}) *DocumentDataCreate {
 	_c.mutation.SetData(v)
@@ -266,14 +274,8 @@ func (_c *DocumentDataCreate) check() error {
 			return &ValidationError{Name: "owner_id", err: fmt.Errorf(`generated: validator failed for field "DocumentData.owner_id": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.TemplateID(); !ok {
-		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "DocumentData.template_id"`)}
-	}
 	if _, ok := _c.mutation.Data(); !ok {
 		return &ValidationError{Name: "data", err: errors.New(`generated: missing required field "DocumentData.data"`)}
-	}
-	if len(_c.mutation.TemplateIDs()) == 0 {
-		return &ValidationError{Name: "template", err: errors.New(`generated: missing required edge "DocumentData.template"`)}
 	}
 	return nil
 }

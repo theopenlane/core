@@ -1,0 +1,33 @@
+#  assessment to parent organization
+- user: organization:openlane
+  relation: parent
+  object: assessment:assessment-1
+
+#  owner and edit access for the assessment
+- user: user:ulid-of-owner
+  relation: owner
+  object: assessment:assessment-1
+- user: user:ulid-of-admin
+  relation: editor
+  object: assessment:assessment-1
+- user: user:ulid-of-member
+  relation: viewer
+  object: assessment:assessment-1
+
+# aassessment response to the organization and parent assessment
+- user: organization:openlane
+  relation: parent
+  object: assessment_response:response-1
+- user: assessment:assessment-1
+  relation: parent
+  object: assessment_response:response-1
+
+# response owner
+- user: user:ulid-response-owner
+  relation: response_owner
+  object: assessment_response:response-1
+
+# admin viewer
+- user: user:ulid-of-admin
+  relation: audit_log_viewer
+  object: assessment_response:response-1

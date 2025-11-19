@@ -13,6 +13,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
@@ -640,7 +641,7 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
-	anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,

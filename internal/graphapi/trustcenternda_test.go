@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
@@ -39,7 +40,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	require.NotNil(t, trustCenterNDA)
 
 	// Create anonymous trust center context helper
-	anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
@@ -98,7 +99,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 
 	// Create anonymous trust center context helper
 	createAnonymousTrustCenterContext := func(trustCenterID, organizationID string) context.Context {
-		anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 		anonUser := &auth.AnonymousTrustCenterUser{
 			SubjectID:          anonUserID,
@@ -133,7 +134,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 
 		// Create a user who has already signed the NDA
 		testEmail := gofakeit.Email()
-		anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
+		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 		anonUser := &auth.AnonymousTrustCenterUser{
 			SubjectID:          anonUserID,
 			SubjectName:        "Anonymous User",
@@ -509,8 +510,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	require.Nil(t, err)
 	require.NotNil(t, trustCenterNDA)
 
-	anonUserID := fmt.Sprintf("anon_%s", ulids.New().String())
-	anonUserID2 := fmt.Sprintf("anon_%s", ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,

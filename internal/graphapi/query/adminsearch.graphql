@@ -77,7 +77,8 @@ query AdminSearch($query: String!) {
           ownerID
           name
           templateID
-          assessmentOwnerID
+          jsonconfig
+          uischema
         }
       }
     }
@@ -95,7 +96,6 @@ query AdminSearch($query: String!) {
           ownerID
           assessmentID
           email
-          documentDataID
         }
       }
     }

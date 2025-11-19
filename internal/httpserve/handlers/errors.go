@@ -95,6 +95,24 @@ var (
 	ErrMissingSlugInPath = errors.New("slug is required in the path for default trust center domain")
 	// ErrTrustCenterNotFound is returned when the trust center is not found
 	ErrTrustCenterNotFound = errors.New("trust center not found")
+	// ErrAssessmentNotFound is returned when the assessment is not found
+	ErrAssessmentNotFound = errors.New("assessment not found")
+	// ErrTemplateNotFound is returned when the template is not found
+	ErrTemplateNotFound = errors.New("template not found")
+	// ErrMissingQuestionnaireContext is returned when the questionnaire context is missing
+	ErrMissingQuestionnaireContext = errors.New("missing questionnaire context")
+	// ErrMissingAssessmentID is returned when the assessment ID is missing from the context
+	ErrMissingAssessmentID = errors.New("missing assessment ID")
+	// ErrMissingQuestionnaireData is returned when the questionnaire data is missing from the request
+	ErrMissingQuestionnaireData = errors.New("missing questionnaire data")
+	// ErrMissingEmail is returned when the email is missing from the context
+	ErrMissingEmail = errors.New("missing email")
+	// ErrAssessmentResponseNotFound is returned when the assessment response is not found
+	ErrAssessmentResponseNotFound = errors.New("assessment response not found")
+	// ErrAssessmentResponseAlreadyCompleted is returned when trying to submit a questionnaire that has already been completed
+	ErrAssessmentResponseAlreadyCompleted = errors.New("assessment response has already been completed")
+	// ErrAssessmentResponseOverdue is returned when trying to access or submit a questionnaire that is past due
+	ErrAssessmentResponseOverdue = errors.New("assessment response is overdue")
 	// ErrAuthenticationRequired indicates that the user must be authenticated to perform this action
 	ErrAuthenticationRequired = errors.New("authentication required")
 	// ErrNoActiveImpersonationSession indicates that there is no active impersonation session

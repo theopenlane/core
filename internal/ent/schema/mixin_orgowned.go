@@ -295,6 +295,10 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
+	if _, questionnaireAnonAuth := contextx.From[auth.QuestionnaireContextKey](ctx); questionnaireAnonAuth {
+		return true
+	}
+
 	// skip interceptor if the context has the managed group key
 	if _, managedGroup := contextx.From[hooks.ManagedContextKey](ctx); managedGroup {
 		return true

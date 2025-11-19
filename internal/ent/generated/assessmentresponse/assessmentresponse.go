@@ -52,10 +52,10 @@ const (
 	FieldDocumentDataID = "document_data_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeDocument holds the string denoting the document edge name in mutations.
-	EdgeDocument = "document"
 	// EdgeAssessment holds the string denoting the assessment edge name in mutations.
 	EdgeAssessment = "assessment"
+	// EdgeDocument holds the string denoting the document edge name in mutations.
+	EdgeDocument = "document"
 	// Table holds the table name of the assessmentresponse in the database.
 	Table = "assessment_responses"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -65,13 +65,6 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// DocumentTable is the table that holds the document relation/edge.
-	DocumentTable = "assessment_responses"
-	// DocumentInverseTable is the table name for the DocumentData entity.
-	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
-	DocumentInverseTable = "document_data"
-	// DocumentColumn is the table column denoting the document relation/edge.
-	DocumentColumn = "document_data_id"
 	// AssessmentTable is the table that holds the assessment relation/edge.
 	AssessmentTable = "assessment_responses"
 	// AssessmentInverseTable is the table name for the Assessment entity.
@@ -79,6 +72,13 @@ const (
 	AssessmentInverseTable = "assessments"
 	// AssessmentColumn is the table column denoting the assessment relation/edge.
 	AssessmentColumn = "assessment_id"
+	// DocumentTable is the table that holds the document relation/edge.
+	DocumentTable = "assessment_responses"
+	// DocumentInverseTable is the table name for the DocumentData entity.
+	// It exists in this package in order to avoid circular dependency with the "documentdata" package.
+	DocumentInverseTable = "document_data"
+	// DocumentColumn is the table column denoting the document relation/edge.
+	DocumentColumn = "document_data_id"
 )
 
 // Columns holds all SQL columns for assessmentresponse fields.
@@ -118,8 +118,8 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [6]ent.Hook
-	Interceptors [5]ent.Interceptor
+	Hooks        [8]ent.Hook
+	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
@@ -135,18 +135,20 @@ var (
 	EmailValidator func(string) error
 	// DefaultSendAttempts holds the default value on creation for the "send_attempts" field.
 	DefaultSendAttempts int
+	// DefaultAssignedAt holds the default value on creation for the "assigned_at" field.
+	DefaultAssignedAt func() time.Time
 	// DefaultStartedAt holds the default value on creation for the "started_at" field.
 	DefaultStartedAt time.Time
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
 
-const DefaultStatus enums.AssessmentResponseStatus = "NOT_STARTED"
+const DefaultStatus enums.AssessmentResponseStatus = "SENT"
 
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.AssessmentResponseStatus) error {
 	switch s.String() {
-	case "NOT_STARTED", "COMPLETED", "OVERDUE":
+	case "NOT_STARTED", "SENT", "COMPLETED", "OVERDUE":
 		return nil
 	default:
 		return fmt.Errorf("assessmentresponse: invalid enum value for status field: %q", s)
@@ -248,17 +250,17 @@ func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByDocumentField orders the results by document field.
-func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
-	}
-}
-
 // ByAssessmentField orders the results by assessment field.
 func ByAssessmentField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newAssessmentStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByDocumentField orders the results by document field.
+func ByDocumentField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDocumentStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newOwnerStep() *sqlgraph.Step {
@@ -268,18 +270,18 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
 	)
 }
-func newDocumentStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(DocumentInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
-	)
-}
 func newAssessmentStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(AssessmentInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, AssessmentTable, AssessmentColumn),
+	)
+}
+func newDocumentStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DocumentInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
 	)
 }
 

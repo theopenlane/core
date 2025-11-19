@@ -113,9 +113,9 @@ func TemplateID(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldEQ(FieldTemplateID, v))
 }
 
-// AssessmentOwnerID applies equality check predicate on the "assessment_owner_id" field. It's identical to AssessmentOwnerIDEQ.
-func AssessmentOwnerID(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEQ(FieldAssessmentOwnerID, v))
+// ResponseDueDuration applies equality check predicate on the "response_due_duration" field. It's identical to ResponseDueDurationEQ.
+func ResponseDueDuration(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldResponseDueDuration, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -728,6 +728,16 @@ func TemplateIDHasSuffix(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldHasSuffix(FieldTemplateID, v))
 }
 
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldTemplateID))
+}
+
 // TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
 func TemplateIDEqualFold(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldEqualFold(FieldTemplateID, v))
@@ -738,79 +748,74 @@ func TemplateIDContainsFold(v string) predicate.Assessment {
 	return predicate.Assessment(sql.FieldContainsFold(FieldTemplateID, v))
 }
 
-// AssessmentOwnerIDEQ applies the EQ predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDEQ(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEQ(FieldAssessmentOwnerID, v))
+// JsonconfigIsNil applies the IsNil predicate on the "jsonconfig" field.
+func JsonconfigIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldJsonconfig))
 }
 
-// AssessmentOwnerIDNEQ applies the NEQ predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNEQ(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldNEQ(FieldAssessmentOwnerID, v))
+// JsonconfigNotNil applies the NotNil predicate on the "jsonconfig" field.
+func JsonconfigNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldJsonconfig))
 }
 
-// AssessmentOwnerIDIn applies the In predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDIn(vs ...string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldIn(FieldAssessmentOwnerID, vs...))
+// UischemaIsNil applies the IsNil predicate on the "uischema" field.
+func UischemaIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldUischema))
 }
 
-// AssessmentOwnerIDNotIn applies the NotIn predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNotIn(vs ...string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldNotIn(FieldAssessmentOwnerID, vs...))
+// UischemaNotNil applies the NotNil predicate on the "uischema" field.
+func UischemaNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldUischema))
 }
 
-// AssessmentOwnerIDGT applies the GT predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDGT(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldGT(FieldAssessmentOwnerID, v))
+// ResponseDueDurationEQ applies the EQ predicate on the "response_due_duration" field.
+func ResponseDueDurationEQ(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldEQ(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDGTE applies the GTE predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDGTE(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldGTE(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNEQ applies the NEQ predicate on the "response_due_duration" field.
+func ResponseDueDurationNEQ(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNEQ(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDLT applies the LT predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDLT(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldLT(FieldAssessmentOwnerID, v))
+// ResponseDueDurationIn applies the In predicate on the "response_due_duration" field.
+func ResponseDueDurationIn(vs ...int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldIn(FieldResponseDueDuration, vs...))
 }
 
-// AssessmentOwnerIDLTE applies the LTE predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDLTE(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldLTE(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNotIn applies the NotIn predicate on the "response_due_duration" field.
+func ResponseDueDurationNotIn(vs ...int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotIn(FieldResponseDueDuration, vs...))
 }
 
-// AssessmentOwnerIDContains applies the Contains predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDContains(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldContains(FieldAssessmentOwnerID, v))
+// ResponseDueDurationGT applies the GT predicate on the "response_due_duration" field.
+func ResponseDueDurationGT(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGT(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDHasPrefix applies the HasPrefix predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDHasPrefix(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldHasPrefix(FieldAssessmentOwnerID, v))
+// ResponseDueDurationGTE applies the GTE predicate on the "response_due_duration" field.
+func ResponseDueDurationGTE(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldGTE(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDHasSuffix applies the HasSuffix predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDHasSuffix(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldHasSuffix(FieldAssessmentOwnerID, v))
+// ResponseDueDurationLT applies the LT predicate on the "response_due_duration" field.
+func ResponseDueDurationLT(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLT(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDIsNil applies the IsNil predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDIsNil() predicate.Assessment {
-	return predicate.Assessment(sql.FieldIsNull(FieldAssessmentOwnerID))
+// ResponseDueDurationLTE applies the LTE predicate on the "response_due_duration" field.
+func ResponseDueDurationLTE(v int64) predicate.Assessment {
+	return predicate.Assessment(sql.FieldLTE(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDNotNil applies the NotNil predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNotNil() predicate.Assessment {
-	return predicate.Assessment(sql.FieldNotNull(FieldAssessmentOwnerID))
+// ResponseDueDurationIsNil applies the IsNil predicate on the "response_due_duration" field.
+func ResponseDueDurationIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldResponseDueDuration))
 }
 
-// AssessmentOwnerIDEqualFold applies the EqualFold predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDEqualFold(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldEqualFold(FieldAssessmentOwnerID, v))
-}
-
-// AssessmentOwnerIDContainsFold applies the ContainsFold predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDContainsFold(v string) predicate.Assessment {
-	return predicate.Assessment(sql.FieldContainsFold(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNotNil applies the NotNil predicate on the "response_due_duration" field.
+func ResponseDueDurationNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldResponseDueDuration))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -934,7 +939,7 @@ func HasTemplate() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, TemplateTable, TemplateColumn),
+			sqlgraph.Edge(sqlgraph.M2O, true, TemplateTable, TemplateColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Template

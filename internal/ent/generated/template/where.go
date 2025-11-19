@@ -1174,6 +1174,35 @@ func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.Template {
 	})
 }
 
+// HasAssessments applies the HasEdge predicate on the "assessments" edge.
+func HasAssessments() predicate.Template {
+	return predicate.Template(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentsTable, AssessmentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssessmentsWith applies the HasEdge predicate on the "assessments" edge with a given conditions (other predicates).
+func HasAssessmentsWith(preds ...predicate.Assessment) predicate.Template {
+	return predicate.Template(func(s *sql.Selector) {
+		step := newAssessmentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.Template) predicate.Template {
 	return predicate.Template(sql.AndPredicates(predicates...))

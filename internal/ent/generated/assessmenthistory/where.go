@@ -121,9 +121,9 @@ func TemplateID(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldEQ(FieldTemplateID, v))
 }
 
-// AssessmentOwnerID applies equality check predicate on the "assessment_owner_id" field. It's identical to AssessmentOwnerIDEQ.
-func AssessmentOwnerID(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldEQ(FieldAssessmentOwnerID, v))
+// ResponseDueDuration applies equality check predicate on the "response_due_duration" field. It's identical to ResponseDueDurationEQ.
+func ResponseDueDuration(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldEQ(FieldResponseDueDuration, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -871,6 +871,16 @@ func TemplateIDHasSuffix(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldHasSuffix(FieldTemplateID, v))
 }
 
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldTemplateID))
+}
+
 // TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
 func TemplateIDEqualFold(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldEqualFold(FieldTemplateID, v))
@@ -881,79 +891,74 @@ func TemplateIDContainsFold(v string) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldContainsFold(FieldTemplateID, v))
 }
 
-// AssessmentOwnerIDEQ applies the EQ predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDEQ(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldEQ(FieldAssessmentOwnerID, v))
+// JsonconfigIsNil applies the IsNil predicate on the "jsonconfig" field.
+func JsonconfigIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldJsonconfig))
 }
 
-// AssessmentOwnerIDNEQ applies the NEQ predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNEQ(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldNEQ(FieldAssessmentOwnerID, v))
+// JsonconfigNotNil applies the NotNil predicate on the "jsonconfig" field.
+func JsonconfigNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldJsonconfig))
 }
 
-// AssessmentOwnerIDIn applies the In predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDIn(vs ...string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldIn(FieldAssessmentOwnerID, vs...))
+// UischemaIsNil applies the IsNil predicate on the "uischema" field.
+func UischemaIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldUischema))
 }
 
-// AssessmentOwnerIDNotIn applies the NotIn predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNotIn(vs ...string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldNotIn(FieldAssessmentOwnerID, vs...))
+// UischemaNotNil applies the NotNil predicate on the "uischema" field.
+func UischemaNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldUischema))
 }
 
-// AssessmentOwnerIDGT applies the GT predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDGT(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldGT(FieldAssessmentOwnerID, v))
+// ResponseDueDurationEQ applies the EQ predicate on the "response_due_duration" field.
+func ResponseDueDurationEQ(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldEQ(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDGTE applies the GTE predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDGTE(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldGTE(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNEQ applies the NEQ predicate on the "response_due_duration" field.
+func ResponseDueDurationNEQ(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNEQ(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDLT applies the LT predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDLT(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldLT(FieldAssessmentOwnerID, v))
+// ResponseDueDurationIn applies the In predicate on the "response_due_duration" field.
+func ResponseDueDurationIn(vs ...int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIn(FieldResponseDueDuration, vs...))
 }
 
-// AssessmentOwnerIDLTE applies the LTE predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDLTE(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldLTE(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNotIn applies the NotIn predicate on the "response_due_duration" field.
+func ResponseDueDurationNotIn(vs ...int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotIn(FieldResponseDueDuration, vs...))
 }
 
-// AssessmentOwnerIDContains applies the Contains predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDContains(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldContains(FieldAssessmentOwnerID, v))
+// ResponseDueDurationGT applies the GT predicate on the "response_due_duration" field.
+func ResponseDueDurationGT(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldGT(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDHasPrefix applies the HasPrefix predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDHasPrefix(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldHasPrefix(FieldAssessmentOwnerID, v))
+// ResponseDueDurationGTE applies the GTE predicate on the "response_due_duration" field.
+func ResponseDueDurationGTE(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldGTE(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDHasSuffix applies the HasSuffix predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDHasSuffix(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldHasSuffix(FieldAssessmentOwnerID, v))
+// ResponseDueDurationLT applies the LT predicate on the "response_due_duration" field.
+func ResponseDueDurationLT(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldLT(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDIsNil applies the IsNil predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDIsNil() predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldIsNull(FieldAssessmentOwnerID))
+// ResponseDueDurationLTE applies the LTE predicate on the "response_due_duration" field.
+func ResponseDueDurationLTE(v int64) predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldLTE(FieldResponseDueDuration, v))
 }
 
-// AssessmentOwnerIDNotNil applies the NotNil predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDNotNil() predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldNotNull(FieldAssessmentOwnerID))
+// ResponseDueDurationIsNil applies the IsNil predicate on the "response_due_duration" field.
+func ResponseDueDurationIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldResponseDueDuration))
 }
 
-// AssessmentOwnerIDEqualFold applies the EqualFold predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDEqualFold(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldEqualFold(FieldAssessmentOwnerID, v))
-}
-
-// AssessmentOwnerIDContainsFold applies the ContainsFold predicate on the "assessment_owner_id" field.
-func AssessmentOwnerIDContainsFold(v string) predicate.AssessmentHistory {
-	return predicate.AssessmentHistory(sql.FieldContainsFold(FieldAssessmentOwnerID, v))
+// ResponseDueDurationNotNil applies the NotNil predicate on the "response_due_duration" field.
+func ResponseDueDurationNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldResponseDueDuration))
 }
 
 // And groups predicates with the AND operator between them.

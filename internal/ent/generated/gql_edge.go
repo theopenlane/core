@@ -321,7 +321,7 @@ func (_m *Assessment) Template(ctx context.Context) (*Template, error) {
 	if IsNotLoaded(err) {
 		result, err = _m.QueryTemplate().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (_m *Assessment) AssessmentResponses(
@@ -353,20 +353,20 @@ func (_m *AssessmentResponse) Owner(ctx context.Context) (*Organization, error) 
 	return result, MaskNotFound(err)
 }
 
-func (_m *AssessmentResponse) Document(ctx context.Context) (*DocumentData, error) {
-	result, err := _m.Edges.DocumentOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryDocument().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *AssessmentResponse) Assessment(ctx context.Context) (*Assessment, error) {
 	result, err := _m.Edges.AssessmentOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryAssessment().Only(ctx)
 	}
 	return result, err
+}
+
+func (_m *AssessmentResponse) Document(ctx context.Context) (*DocumentData, error) {
+	result, err := _m.Edges.DocumentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDocument().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }
 
 func (_m *Asset) Owner(ctx context.Context) (*Organization, error) {
@@ -1657,7 +1657,7 @@ func (_m *DocumentData) Template(ctx context.Context) (*Template, error) {
 	if IsNotLoaded(err) {
 		result, err = _m.QueryTemplate().Only(ctx)
 	}
-	return result, err
+	return result, MaskNotFound(err)
 }
 
 func (_m *DocumentData) Entities(
@@ -9312,6 +9312,27 @@ func (_m *Template) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 		result, err = _m.QueryTrustCenter().Only(ctx)
 	}
 	return result, MaskNotFound(err)
+}
+
+func (_m *Template) Assessments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssessmentOrder, where *AssessmentWhereInput,
+) (*AssessmentConnection, error) {
+	opts := []AssessmentPaginateOption{
+		WithAssessmentOrder(orderBy),
+		WithAssessmentFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedAssessments(alias); err == nil || hasTotalCount {
+		pager, err := newAssessmentPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssessmentConnection{Edges: []*AssessmentEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssessments().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *TrustCenter) Owner(ctx context.Context) (*Organization, error) {

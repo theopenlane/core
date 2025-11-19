@@ -2289,10 +2289,20 @@ func (_q *AssessmentQuery) collectField(ctx context.Context, oneNode bool, opCtx
 				selectedFields = append(selectedFields, assessment.FieldTemplateID)
 				fieldSeen[assessment.FieldTemplateID] = struct{}{}
 			}
-		case "assessmentOwnerID":
-			if _, ok := fieldSeen[assessment.FieldAssessmentOwnerID]; !ok {
-				selectedFields = append(selectedFields, assessment.FieldAssessmentOwnerID)
-				fieldSeen[assessment.FieldAssessmentOwnerID] = struct{}{}
+		case "jsonconfig":
+			if _, ok := fieldSeen[assessment.FieldJsonconfig]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldJsonconfig)
+				fieldSeen[assessment.FieldJsonconfig] = struct{}{}
+			}
+		case "uischema":
+			if _, ok := fieldSeen[assessment.FieldUischema]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldUischema)
+				fieldSeen[assessment.FieldUischema] = struct{}{}
+			}
+		case "responseDueDuration":
+			if _, ok := fieldSeen[assessment.FieldResponseDueDuration]; !ok {
+				selectedFields = append(selectedFields, assessment.FieldResponseDueDuration)
+				fieldSeen[assessment.FieldResponseDueDuration] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2444,10 +2454,20 @@ func (_q *AssessmentHistoryQuery) collectField(ctx context.Context, oneNode bool
 				selectedFields = append(selectedFields, assessmenthistory.FieldTemplateID)
 				fieldSeen[assessmenthistory.FieldTemplateID] = struct{}{}
 			}
-		case "assessmentOwnerID":
-			if _, ok := fieldSeen[assessmenthistory.FieldAssessmentOwnerID]; !ok {
-				selectedFields = append(selectedFields, assessmenthistory.FieldAssessmentOwnerID)
-				fieldSeen[assessmenthistory.FieldAssessmentOwnerID] = struct{}{}
+		case "jsonconfig":
+			if _, ok := fieldSeen[assessmenthistory.FieldJsonconfig]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldJsonconfig)
+				fieldSeen[assessmenthistory.FieldJsonconfig] = struct{}{}
+			}
+		case "uischema":
+			if _, ok := fieldSeen[assessmenthistory.FieldUischema]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldUischema)
+				fieldSeen[assessmenthistory.FieldUischema] = struct{}{}
+			}
+		case "responseDueDuration":
+			if _, ok := fieldSeen[assessmenthistory.FieldResponseDueDuration]; !ok {
+				selectedFields = append(selectedFields, assessmenthistory.FieldResponseDueDuration)
+				fieldSeen[assessmenthistory.FieldResponseDueDuration] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -2549,21 +2569,6 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 				fieldSeen[assessmentresponse.FieldOwnerID] = struct{}{}
 			}
 
-		case "document":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&DocumentDataClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
-				return err
-			}
-			_q.withDocument = query
-			if _, ok := fieldSeen[assessmentresponse.FieldDocumentDataID]; !ok {
-				selectedFields = append(selectedFields, assessmentresponse.FieldDocumentDataID)
-				fieldSeen[assessmentresponse.FieldDocumentDataID] = struct{}{}
-			}
-
 		case "assessment":
 			var (
 				alias = field.Alias
@@ -2577,6 +2582,21 @@ func (_q *AssessmentResponseQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[assessmentresponse.FieldAssessmentID]; !ok {
 				selectedFields = append(selectedFields, assessmentresponse.FieldAssessmentID)
 				fieldSeen[assessmentresponse.FieldAssessmentID] = struct{}{}
+			}
+
+		case "document":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DocumentDataClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, documentdataImplementors)...); err != nil {
+				return err
+			}
+			_q.withDocument = query
+			if _, ok := fieldSeen[assessmentresponse.FieldDocumentDataID]; !ok {
+				selectedFields = append(selectedFields, assessmentresponse.FieldDocumentDataID)
+				fieldSeen[assessmentresponse.FieldDocumentDataID] = struct{}{}
 			}
 		case "createdAt":
 			if _, ok := fieldSeen[assessmentresponse.FieldCreatedAt]; !ok {
@@ -56120,6 +56140,95 @@ func (_q *TemplateQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 				selectedFields = append(selectedFields, template.FieldTrustCenterID)
 				fieldSeen[template.FieldTrustCenterID] = struct{}{}
 			}
+
+		case "assessments":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&AssessmentClient{config: _q.config}).Query()
+			)
+			args := newAssessmentPaginateArgs(fieldArgs(ctx, new(AssessmentWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newAssessmentPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Template) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"template_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(template.AssessmentsColumn), ids...))
+						})
+						if err := query.GroupBy(template.AssessmentsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Template) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Assessments)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, assessmentImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(template.AssessmentsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedAssessments(alias, func(wq *AssessmentQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[template.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, template.FieldCreatedAt)

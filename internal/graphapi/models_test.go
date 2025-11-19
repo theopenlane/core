@@ -32,6 +32,7 @@ import (
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -361,6 +362,28 @@ type TemplateBuilder struct {
 	TemplateType enums.DocumentType
 	JSONConfig   map[string]any
 	UISchema     map[string]any
+}
+
+type AssessmentBuilder struct {
+	client *client
+
+	// Fields
+	Name                string
+	AssessmentType      enums.AssessmentType
+	TemplateID          string
+	ResponseDueDuration int64
+	Tags                []string
+}
+
+type AssessmentResponseBuilder struct {
+	client *client
+
+	// Fields
+	AssessmentID   string
+	Email          string
+	OwnerID        string
+	DueDate        *time.Time
+	DocumentDataID string
 }
 
 type TagDefinitionBuilder struct {
@@ -2106,6 +2129,104 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 	requireNoError(err)
 
 	return template
+}
+
+// MustNew assessment builder is used to create, without authz checks, assessments in the database
+func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Assessment {
+
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template Missing",
+		"description": "A test questionnaire template that will be deleted",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
+	ctx = setContext(ctx, ab.client.db)
+
+	if ab.Name == "" {
+		ab.Name = gofakeit.Company() + "-" + ulids.New().String()
+	}
+
+	if ab.TemplateID == "" {
+		template := (&TemplateBuilder{client: ab.client}).MustNew(ctx, t)
+		ab.TemplateID = template.ID
+	}
+
+	mutation := ab.client.db.Assessment.Create().
+		SetName(ab.Name).
+		SetTemplateID(ab.TemplateID)
+
+	if ab.AssessmentType != "" {
+		mutation.SetAssessmentType(ab.AssessmentType)
+	}
+
+	if ab.ResponseDueDuration > 0 {
+		mutation.SetResponseDueDuration(ab.ResponseDueDuration)
+	}
+
+	if len(ab.Tags) > 0 {
+		mutation.SetTags(ab.Tags)
+	}
+
+	mutation.SetJsonconfig(jsonConfig)
+
+	assessment, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return assessment
+}
+
+// MustNew assessment response builder creates responses without authz checks
+// This uses the QuestionnaireContextKey to bypass auth, simulating anonymous user creation
+func (arb *AssessmentResponseBuilder) MustNew(ctx context.Context, t *testing.T) *ent.AssessmentResponse {
+	ctx = setContext(ctx, arb.client.db)
+
+	var assessment *ent.Assessment
+
+	if arb.AssessmentID == "" {
+		assessment = (&AssessmentBuilder{client: arb.client}).MustNew(ctx, t)
+		arb.AssessmentID = assessment.ID
+	}
+
+	if arb.Email == "" {
+		arb.Email = gofakeit.Email()
+	}
+
+	if arb.OwnerID == "" {
+		if assessment == nil {
+			var err error
+			assessment, err = arb.client.db.Assessment.Get(ctx, arb.AssessmentID)
+			requireNoError(err)
+		}
+		arb.OwnerID = assessment.OwnerID
+	}
+
+	// Use QuestionnaireContextKey to bypass auth checks (simulates anonymous JWT)
+	allowCtx := privacy.DecisionContext(ctx, privacy.Allow)
+	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+
+	mutation := arb.client.db.AssessmentResponse.Create().
+		SetAssessmentID(arb.AssessmentID).
+		SetEmail(arb.Email).
+		SetOwnerID(arb.OwnerID)
+
+	if arb.DueDate != nil {
+		mutation.SetDueDate(*arb.DueDate)
+	}
+
+	if arb.DocumentDataID != "" {
+		mutation.SetDocumentDataID(arb.DocumentDataID)
+	}
+
+	response, err := mutation.Save(allowCtx)
+	requireNoError(err)
+
+	return response
 }
 
 // TrustCenterWatermarkConfigBuilder is used to create trust center watermark configs
