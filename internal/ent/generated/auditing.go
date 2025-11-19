@@ -426,8 +426,14 @@ func (_m *AssessmentHistory) changes(new *AssessmentHistory) []Change {
 	if !reflect.DeepEqual(_m.TemplateID, new.TemplateID) {
 		changes = append(changes, NewChange(assessmenthistory.FieldTemplateID, _m.TemplateID, new.TemplateID))
 	}
-	if !reflect.DeepEqual(_m.AssessmentOwnerID, new.AssessmentOwnerID) {
-		changes = append(changes, NewChange(assessmenthistory.FieldAssessmentOwnerID, _m.AssessmentOwnerID, new.AssessmentOwnerID))
+	if !reflect.DeepEqual(_m.Jsonconfig, new.Jsonconfig) {
+		changes = append(changes, NewChange(assessmenthistory.FieldJsonconfig, _m.Jsonconfig, new.Jsonconfig))
+	}
+	if !reflect.DeepEqual(_m.Uischema, new.Uischema) {
+		changes = append(changes, NewChange(assessmenthistory.FieldUischema, _m.Uischema, new.Uischema))
+	}
+	if !reflect.DeepEqual(_m.ResponseDueDuration, new.ResponseDueDuration) {
+		changes = append(changes, NewChange(assessmenthistory.FieldResponseDueDuration, _m.ResponseDueDuration, new.ResponseDueDuration))
 	}
 	return changes
 }

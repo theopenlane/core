@@ -155,16 +155,36 @@ func (_c *AssessmentCreate) SetTemplateID(v string) *AssessmentCreate {
 	return _c
 }
 
-// SetAssessmentOwnerID sets the "assessment_owner_id" field.
-func (_c *AssessmentCreate) SetAssessmentOwnerID(v string) *AssessmentCreate {
-	_c.mutation.SetAssessmentOwnerID(v)
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *AssessmentCreate) SetNillableTemplateID(v *string) *AssessmentCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
+	}
 	return _c
 }
 
-// SetNillableAssessmentOwnerID sets the "assessment_owner_id" field if the given value is not nil.
-func (_c *AssessmentCreate) SetNillableAssessmentOwnerID(v *string) *AssessmentCreate {
+// SetJsonconfig sets the "jsonconfig" field.
+func (_c *AssessmentCreate) SetJsonconfig(v map[string]interface{}) *AssessmentCreate {
+	_c.mutation.SetJsonconfig(v)
+	return _c
+}
+
+// SetUischema sets the "uischema" field.
+func (_c *AssessmentCreate) SetUischema(v map[string]interface{}) *AssessmentCreate {
+	_c.mutation.SetUischema(v)
+	return _c
+}
+
+// SetResponseDueDuration sets the "response_due_duration" field.
+func (_c *AssessmentCreate) SetResponseDueDuration(v int64) *AssessmentCreate {
+	_c.mutation.SetResponseDueDuration(v)
+	return _c
+}
+
+// SetNillableResponseDueDuration sets the "response_due_duration" field if the given value is not nil.
+func (_c *AssessmentCreate) SetNillableResponseDueDuration(v *int64) *AssessmentCreate {
 	if v != nil {
-		_c.SetAssessmentOwnerID(*v)
+		_c.SetResponseDueDuration(*v)
 	}
 	return _c
 }
@@ -345,12 +365,6 @@ func (_c *AssessmentCreate) check() error {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.TemplateID(); !ok {
-		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "Assessment.template_id"`)}
-	}
-	if len(_c.mutation.TemplateIDs()) == 0 {
-		return &ValidationError{Name: "template", err: errors.New(`generated: missing required edge "Assessment.template"`)}
-	}
 	return nil
 }
 
@@ -423,9 +437,17 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 		_spec.SetField(assessment.FieldAssessmentType, field.TypeEnum, value)
 		_node.AssessmentType = value
 	}
-	if value, ok := _c.mutation.AssessmentOwnerID(); ok {
-		_spec.SetField(assessment.FieldAssessmentOwnerID, field.TypeString, value)
-		_node.AssessmentOwnerID = value
+	if value, ok := _c.mutation.Jsonconfig(); ok {
+		_spec.SetField(assessment.FieldJsonconfig, field.TypeJSON, value)
+		_node.Jsonconfig = value
+	}
+	if value, ok := _c.mutation.Uischema(); ok {
+		_spec.SetField(assessment.FieldUischema, field.TypeJSON, value)
+		_node.Uischema = value
+	}
+	if value, ok := _c.mutation.ResponseDueDuration(); ok {
+		_spec.SetField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
+		_node.ResponseDueDuration = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -499,7 +521,7 @@ func (_c *AssessmentCreate) createSpec() (*Assessment, *sqlgraph.CreateSpec) {
 	if nodes := _c.mutation.TemplateIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
-			Inverse: false,
+			Inverse: true,
 			Table:   assessment.TemplateTable,
 			Columns: []string{assessment.TemplateColumn},
 			Bidi:    false,

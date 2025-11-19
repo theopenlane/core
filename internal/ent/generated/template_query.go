@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/assessment"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -26,18 +27,20 @@ import (
 // TemplateQuery is the builder for querying Template entities.
 type TemplateQuery struct {
 	config
-	ctx                *QueryContext
-	order              []template.OrderOption
-	inters             []Interceptor
-	predicates         []predicate.Template
-	withOwner          *OrganizationQuery
-	withDocuments      *DocumentDataQuery
-	withFiles          *FileQuery
-	withTrustCenter    *TrustCenterQuery
-	loadTotal          []func(context.Context, []*Template) error
-	modifiers          []func(*sql.Selector)
-	withNamedDocuments map[string]*DocumentDataQuery
-	withNamedFiles     map[string]*FileQuery
+	ctx                  *QueryContext
+	order                []template.OrderOption
+	inters               []Interceptor
+	predicates           []predicate.Template
+	withOwner            *OrganizationQuery
+	withDocuments        *DocumentDataQuery
+	withFiles            *FileQuery
+	withTrustCenter      *TrustCenterQuery
+	withAssessments      *AssessmentQuery
+	loadTotal            []func(context.Context, []*Template) error
+	modifiers            []func(*sql.Selector)
+	withNamedDocuments   map[string]*DocumentDataQuery
+	withNamedFiles       map[string]*FileQuery
+	withNamedAssessments map[string]*AssessmentQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -168,6 +171,31 @@ func (_q *TemplateQuery) QueryTrustCenter() *TrustCenterQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
 		step.Edge.Schema = schemaConfig.Template
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssessments chains the current query on the "assessments" edge.
+func (_q *TemplateQuery) QueryAssessments() *AssessmentQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(template.Table, template.FieldID, selector),
+			sqlgraph.To(assessment.Table, assessment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, template.AssessmentsTable, template.AssessmentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.Assessment
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -370,6 +398,7 @@ func (_q *TemplateQuery) Clone() *TemplateQuery {
 		withDocuments:   _q.withDocuments.Clone(),
 		withFiles:       _q.withFiles.Clone(),
 		withTrustCenter: _q.withTrustCenter.Clone(),
+		withAssessments: _q.withAssessments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -418,6 +447,17 @@ func (_q *TemplateQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *Templ
 		opt(query)
 	}
 	_q.withTrustCenter = query
+	return _q
+}
+
+// WithAssessments tells the query-builder to eager-load the nodes that are connected to
+// the "assessments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithAssessments(opts ...func(*AssessmentQuery)) *TemplateQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssessments = query
 	return _q
 }
 
@@ -505,11 +545,12 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 	var (
 		nodes       = []*Template{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [5]bool{
 			_q.withOwner != nil,
 			_q.withDocuments != nil,
 			_q.withFiles != nil,
 			_q.withTrustCenter != nil,
+			_q.withAssessments != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -561,6 +602,13 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 			return nil, err
 		}
 	}
+	if query := _q.withAssessments; query != nil {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Template) { n.Edges.Assessments = []*Assessment{} },
+			func(n *Template, e *Assessment) { n.Edges.Assessments = append(n.Edges.Assessments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedDocuments {
 		if err := _q.loadDocuments(ctx, query, nodes,
 			func(n *Template) { n.appendNamedDocuments(name) },
@@ -572,6 +620,13 @@ func (_q *TemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Tem
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Template) { n.appendNamedFiles(name) },
 			func(n *Template, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssessments {
+		if err := _q.loadAssessments(ctx, query, nodes,
+			func(n *Template) { n.appendNamedAssessments(name) },
+			func(n *Template, e *Assessment) { n.appendNamedAssessments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -733,6 +788,36 @@ func (_q *TemplateQuery) loadTrustCenter(ctx context.Context, query *TrustCenter
 	}
 	return nil
 }
+func (_q *TemplateQuery) loadAssessments(ctx context.Context, query *AssessmentQuery, nodes []*Template, init func(*Template), assign func(*Template, *Assessment)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Template)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(assessment.FieldTemplateID)
+	}
+	query.Where(predicate.Assessment(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(template.AssessmentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.TemplateID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "template_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *TemplateQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -863,6 +948,20 @@ func (_q *TemplateQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedAssessments tells the query-builder to eager-load the nodes that are connected to the "assessments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *TemplateQuery) WithNamedAssessments(name string, opts ...func(*AssessmentQuery)) *TemplateQuery {
+	query := (&AssessmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssessments == nil {
+		_q.withNamedAssessments = make(map[string]*AssessmentQuery)
+	}
+	_q.withNamedAssessments[name] = query
 	return _q
 }
 

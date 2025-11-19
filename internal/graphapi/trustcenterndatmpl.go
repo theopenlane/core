@@ -14,12 +14,14 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
@@ -199,7 +201,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		}
 
 		anonymousUser = &auth.AnonymousTrustCenterUser{
-			SubjectID:          fmt.Sprintf("anon_%s", uuid.New().String()),
+			SubjectID:          fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, uuid.New().String()),
 			SubjectName:        "Anonymous User",
 			AuthenticationType: auth.JWTAuthentication,
 			TrustCenterID:      input.TrustCenterID,
@@ -347,7 +349,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 
 	res, err := withTransactionalMutation(allowCtx).DocumentData.Create().SetInput(
 		generated.CreateDocumentDataInput{
-			TemplateID: input.TemplateID,
+			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,
 		},
 	).Save(allowCtx)

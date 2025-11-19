@@ -252,9 +252,11 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
-		{Name: "assessment_owner_id", Type: field.TypeString, Unique: true, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "response_due_duration", Type: field.TypeInt64, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
 	// AssessmentsTable holds the schema information for the "assessments" table.
 	AssessmentsTable = &schema.Table{
@@ -263,15 +265,15 @@ var (
 		PrimaryKey: []*schema.Column{AssessmentsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "assessments_templates_template",
-				Columns:    []*schema.Column{AssessmentsColumns[11]},
-				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
+				Symbol:     "assessments_organizations_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assessments_organizations_assessments",
-				Columns:    []*schema.Column{AssessmentsColumns[12]},
-				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				Symbol:     "assessments_templates_assessments",
+				Columns:    []*schema.Column{AssessmentsColumns[14]},
+				RefColumns: []*schema.Column{TemplatesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -279,7 +281,7 @@ var (
 			{
 				Name:    "assessment_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssessmentsColumns[12]},
+				Columns: []*schema.Column{AssessmentsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -287,7 +289,7 @@ var (
 			{
 				Name:    "assessment_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[12]},
+				Columns: []*schema.Column{AssessmentsColumns[8], AssessmentsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -310,8 +312,10 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "name", Type: field.TypeString},
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
-		{Name: "template_id", Type: field.TypeString},
-		{Name: "assessment_owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
+		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
+		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
+		{Name: "response_due_duration", Type: field.TypeInt64, Nullable: true},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
 	AssessmentHistoryTable = &schema.Table{
@@ -337,7 +341,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "email", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
@@ -426,7 +430,7 @@ var (
 		{Name: "assessment_id", Type: field.TypeString},
 		{Name: "email", Type: field.TypeString},
 		{Name: "send_attempts", Type: field.TypeInt, Default: 1},
-		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "COMPLETED", "OVERDUE"}, Default: "NOT_STARTED"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"NOT_STARTED", "SENT", "COMPLETED", "OVERDUE"}, Default: "SENT"},
 		{Name: "assigned_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
@@ -1334,7 +1338,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
 	// DocumentDataTable holds the schema information for the "document_data" table.
 	DocumentDataTable = &schema.Table{
@@ -1352,7 +1356,7 @@ var (
 				Symbol:     "document_data_templates_documents",
 				Columns:    []*schema.Column{DocumentDataColumns[10]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -1380,7 +1384,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
 	}
 	// DocumentDataHistoryTable holds the schema information for the "document_data_history" table.
@@ -10626,8 +10630,8 @@ func init() {
 	ActionPlanHistoryTable.Annotation = &entsql.Annotation{
 		Table: "action_plan_history",
 	}
-	AssessmentsTable.ForeignKeys[0].RefTable = TemplatesTable
-	AssessmentsTable.ForeignKeys[1].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	AssessmentsTable.ForeignKeys[1].RefTable = TemplatesTable
 	AssessmentHistoryTable.Annotation = &entsql.Annotation{
 		Table: "assessment_history",
 	}

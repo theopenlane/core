@@ -489,14 +489,14 @@ func init() {
 	assessment.Hooks[8] = assessmentMixinHooks7[2]
 
 	assessment.Hooks[9] = assessmentHooks[0]
+
+	assessment.Hooks[10] = assessmentHooks[1]
 	assessmentMixinInters1 := assessmentMixin[1].Interceptors()
 	assessmentMixinInters2 := assessmentMixin[2].Interceptors()
 	assessmentMixinInters6 := assessmentMixin[6].Interceptors()
-	assessmentInters := schema.Assessment{}.Interceptors()
 	assessment.Interceptors[0] = assessmentMixinInters1[0]
 	assessment.Interceptors[1] = assessmentMixinInters2[0]
 	assessment.Interceptors[2] = assessmentMixinInters6[0]
-	assessment.Interceptors[3] = assessmentInters[0]
 	assessmentMixinFields0 := assessmentMixin[0].Fields()
 	_ = assessmentMixinFields0
 	assessmentMixinFields3 := assessmentMixin[3].Fields()
@@ -582,6 +582,7 @@ func init() {
 	assessmentresponseMixinHooks1 := assessmentresponseMixin[1].Hooks()
 	assessmentresponseMixinHooks2 := assessmentresponseMixin[2].Hooks()
 	assessmentresponseMixinHooks5 := assessmentresponseMixin[5].Hooks()
+	assessmentresponseHooks := schema.AssessmentResponse{}.Hooks()
 
 	assessmentresponse.Hooks[1] = assessmentresponseMixinHooks0[0]
 
@@ -592,15 +593,17 @@ func init() {
 	assessmentresponse.Hooks[4] = assessmentresponseMixinHooks5[0]
 
 	assessmentresponse.Hooks[5] = assessmentresponseMixinHooks5[1]
+
+	assessmentresponse.Hooks[6] = assessmentresponseHooks[0]
+
+	assessmentresponse.Hooks[7] = assessmentresponseHooks[1]
 	assessmentresponseMixinInters1 := assessmentresponseMixin[1].Interceptors()
 	assessmentresponseMixinInters2 := assessmentresponseMixin[2].Interceptors()
 	assessmentresponseMixinInters5 := assessmentresponseMixin[5].Interceptors()
-	assessmentresponseInters := schema.AssessmentResponse{}.Interceptors()
 	assessmentresponse.Interceptors[0] = assessmentresponseMixinInters1[0]
 	assessmentresponse.Interceptors[1] = assessmentresponseMixinInters2[0]
 	assessmentresponse.Interceptors[2] = assessmentresponseMixinInters5[0]
 	assessmentresponse.Interceptors[3] = assessmentresponseMixinInters5[1]
-	assessmentresponse.Interceptors[4] = assessmentresponseInters[0]
 	assessmentresponseMixinFields0 := assessmentresponseMixin[0].Fields()
 	_ = assessmentresponseMixinFields0
 	assessmentresponseMixinFields3 := assessmentresponseMixin[3].Fields()
@@ -635,6 +638,10 @@ func init() {
 	assessmentresponseDescSendAttempts := assessmentresponseFields[2].Descriptor()
 	// assessmentresponse.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponse.DefaultSendAttempts = assessmentresponseDescSendAttempts.Default.(int)
+	// assessmentresponseDescAssignedAt is the schema descriptor for assigned_at field.
+	assessmentresponseDescAssignedAt := assessmentresponseFields[4].Descriptor()
+	// assessmentresponse.DefaultAssignedAt holds the default value on creation for the assigned_at field.
+	assessmentresponse.DefaultAssignedAt = assessmentresponseDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponseDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponseDescStartedAt := assessmentresponseFields[5].Descriptor()
 	// assessmentresponse.DefaultStartedAt holds the default value on creation for the started_at field.
@@ -674,6 +681,10 @@ func init() {
 	assessmentresponsehistoryDescSendAttempts := assessmentresponsehistoryFields[13].Descriptor()
 	// assessmentresponsehistory.DefaultSendAttempts holds the default value on creation for the send_attempts field.
 	assessmentresponsehistory.DefaultSendAttempts = assessmentresponsehistoryDescSendAttempts.Default.(int)
+	// assessmentresponsehistoryDescAssignedAt is the schema descriptor for assigned_at field.
+	assessmentresponsehistoryDescAssignedAt := assessmentresponsehistoryFields[15].Descriptor()
+	// assessmentresponsehistory.DefaultAssignedAt holds the default value on creation for the assigned_at field.
+	assessmentresponsehistory.DefaultAssignedAt = assessmentresponsehistoryDescAssignedAt.Default.(func() time.Time)
 	// assessmentresponsehistoryDescStartedAt is the schema descriptor for started_at field.
 	assessmentresponsehistoryDescStartedAt := assessmentresponsehistoryFields[16].Descriptor()
 	// assessmentresponsehistory.DefaultStartedAt holds the default value on creation for the started_at field.

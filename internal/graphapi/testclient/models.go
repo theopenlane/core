@@ -1468,15 +1468,19 @@ type Assessment struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the template id associated with the assessment
-	TemplateID string `json:"templateID"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID   *string                       `json:"assessmentOwnerID,omitempty"`
+	// the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
+	TemplateID *string `json:"templateID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration *int64                        `json:"responseDueDuration,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
 	Viewers             *GroupConnection              `json:"viewers"`
-	Template            *Template                     `json:"template"`
+	Template            *Template                     `json:"template,omitempty"`
 	AssessmentResponses *AssessmentResponseConnection `json:"assessmentResponses"`
 }
 
@@ -1528,10 +1532,14 @@ type AssessmentHistory struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string               `json:"name"`
 	AssessmentType enums.AssessmentType `json:"assessmentType"`
-	// the template id associated with the assessment
-	TemplateID string `json:"templateID"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID *string `json:"assessmentOwnerID,omitempty"`
+	// the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
+	TemplateID *string `json:"templateID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration *int64 `json:"responseDueDuration,omitempty"`
 }
 
 func (AssessmentHistory) IsNode() {}
@@ -1710,24 +1718,21 @@ type AssessmentHistoryWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
-	// assessment_owner_id field predicates
-	AssessmentOwnerID             *string  `json:"assessmentOwnerID,omitempty"`
-	AssessmentOwnerIdneq          *string  `json:"assessmentOwnerIDNEQ,omitempty"`
-	AssessmentOwnerIDIn           []string `json:"assessmentOwnerIDIn,omitempty"`
-	AssessmentOwnerIDNotIn        []string `json:"assessmentOwnerIDNotIn,omitempty"`
-	AssessmentOwnerIdgt           *string  `json:"assessmentOwnerIDGT,omitempty"`
-	AssessmentOwnerIdgte          *string  `json:"assessmentOwnerIDGTE,omitempty"`
-	AssessmentOwnerIdlt           *string  `json:"assessmentOwnerIDLT,omitempty"`
-	AssessmentOwnerIdlte          *string  `json:"assessmentOwnerIDLTE,omitempty"`
-	AssessmentOwnerIDContains     *string  `json:"assessmentOwnerIDContains,omitempty"`
-	AssessmentOwnerIDHasPrefix    *string  `json:"assessmentOwnerIDHasPrefix,omitempty"`
-	AssessmentOwnerIDHasSuffix    *string  `json:"assessmentOwnerIDHasSuffix,omitempty"`
-	AssessmentOwnerIDIsNil        *bool    `json:"assessmentOwnerIDIsNil,omitempty"`
-	AssessmentOwnerIDNotNil       *bool    `json:"assessmentOwnerIDNotNil,omitempty"`
-	AssessmentOwnerIDEqualFold    *string  `json:"assessmentOwnerIDEqualFold,omitempty"`
-	AssessmentOwnerIDContainsFold *string  `json:"assessmentOwnerIDContainsFold,omitempty"`
+	// response_due_duration field predicates
+	ResponseDueDuration       *int64  `json:"responseDueDuration,omitempty"`
+	ResponseDueDurationNeq    *int64  `json:"responseDueDurationNEQ,omitempty"`
+	ResponseDueDurationIn     []int64 `json:"responseDueDurationIn,omitempty"`
+	ResponseDueDurationNotIn  []int64 `json:"responseDueDurationNotIn,omitempty"`
+	ResponseDueDurationGt     *int64  `json:"responseDueDurationGT,omitempty"`
+	ResponseDueDurationGte    *int64  `json:"responseDueDurationGTE,omitempty"`
+	ResponseDueDurationLt     *int64  `json:"responseDueDurationLT,omitempty"`
+	ResponseDueDurationLte    *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDurationIsNil  *bool   `json:"responseDueDurationIsNil,omitempty"`
+	ResponseDueDurationNotNil *bool   `json:"responseDueDurationNotNil,omitempty"`
 }
 
 // Ordering options for Assessment connections
@@ -1760,23 +1765,16 @@ type AssessmentResponse struct {
 	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID *string       `json:"documentDataID,omitempty"`
 	Owner          *Organization `json:"owner,omitempty"`
-	// the document containing the user's response data
-	Document   *DocumentData `json:"document,omitempty"`
-	Assessment *Assessment   `json:"assessment"`
+	Assessment     *Assessment   `json:"assessment"`
+	Document       *DocumentData `json:"document,omitempty"`
 }
 
 func (AssessmentResponse) IsNode() {}
-
-// Return response for createBulkAssessmentResponse mutation
-type AssessmentResponseBulkCreatePayload struct {
-	// Created assessmentResponses
-	AssessmentResponses []*AssessmentResponse `json:"assessmentResponses,omitempty"`
-}
 
 // A connection to a list of items.
 type AssessmentResponseConnection struct {
@@ -1833,7 +1831,7 @@ type AssessmentResponseHistory struct {
 	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID *string `json:"documentDataID,omitempty"`
@@ -2066,22 +2064,6 @@ type AssessmentResponseHistoryWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
-	// document_data_id field predicates
-	DocumentDataID             *string  `json:"documentDataID,omitempty"`
-	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
-	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
-	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
-	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
-	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
-	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
-	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
-	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
-	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
-	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
-	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
-	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
-	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
-	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 }
 
 // Ordering options for AssessmentResponse connections
@@ -2090,12 +2072,6 @@ type AssessmentResponseOrder struct {
 	Direction OrderDirection `json:"direction"`
 	// The field by which to order AssessmentResponses.
 	Field AssessmentResponseOrderField `json:"field"`
-}
-
-// Return response for updateAssessmentResponse mutation
-type AssessmentResponseUpdatePayload struct {
-	// Updated assessmentResponse
-	AssessmentResponse *AssessmentResponse `json:"assessmentResponse"`
 }
 
 // AssessmentResponseWhereInput is used for filtering AssessmentResponse objects.
@@ -2267,31 +2243,15 @@ type AssessmentResponseWhereInput struct {
 	DueDateLte    *time.Time   `json:"dueDateLTE,omitempty"`
 	DueDateIsNil  *bool        `json:"dueDateIsNil,omitempty"`
 	DueDateNotNil *bool        `json:"dueDateNotNil,omitempty"`
-	// document_data_id field predicates
-	DocumentDataID             *string  `json:"documentDataID,omitempty"`
-	DocumentDataIdneq          *string  `json:"documentDataIDNEQ,omitempty"`
-	DocumentDataIDIn           []string `json:"documentDataIDIn,omitempty"`
-	DocumentDataIDNotIn        []string `json:"documentDataIDNotIn,omitempty"`
-	DocumentDataIdgt           *string  `json:"documentDataIDGT,omitempty"`
-	DocumentDataIdgte          *string  `json:"documentDataIDGTE,omitempty"`
-	DocumentDataIdlt           *string  `json:"documentDataIDLT,omitempty"`
-	DocumentDataIdlte          *string  `json:"documentDataIDLTE,omitempty"`
-	DocumentDataIDContains     *string  `json:"documentDataIDContains,omitempty"`
-	DocumentDataIDHasPrefix    *string  `json:"documentDataIDHasPrefix,omitempty"`
-	DocumentDataIDHasSuffix    *string  `json:"documentDataIDHasSuffix,omitempty"`
-	DocumentDataIDIsNil        *bool    `json:"documentDataIDIsNil,omitempty"`
-	DocumentDataIDNotNil       *bool    `json:"documentDataIDNotNil,omitempty"`
-	DocumentDataIDEqualFold    *string  `json:"documentDataIDEqualFold,omitempty"`
-	DocumentDataIDContainsFold *string  `json:"documentDataIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// document edge predicates
-	HasDocument     *bool                     `json:"hasDocument,omitempty"`
-	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 	// assessment edge predicates
 	HasAssessment     *bool                   `json:"hasAssessment,omitempty"`
 	HasAssessmentWith []*AssessmentWhereInput `json:"hasAssessmentWith,omitempty"`
+	// document edge predicates
+	HasDocument     *bool                     `json:"hasDocument,omitempty"`
+	HasDocumentWith []*DocumentDataWhereInput `json:"hasDocumentWith,omitempty"`
 }
 
 // Return response for updateAssessment mutation
@@ -2418,24 +2378,21 @@ type AssessmentWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
-	// assessment_owner_id field predicates
-	AssessmentOwnerID             *string  `json:"assessmentOwnerID,omitempty"`
-	AssessmentOwnerIdneq          *string  `json:"assessmentOwnerIDNEQ,omitempty"`
-	AssessmentOwnerIDIn           []string `json:"assessmentOwnerIDIn,omitempty"`
-	AssessmentOwnerIDNotIn        []string `json:"assessmentOwnerIDNotIn,omitempty"`
-	AssessmentOwnerIdgt           *string  `json:"assessmentOwnerIDGT,omitempty"`
-	AssessmentOwnerIdgte          *string  `json:"assessmentOwnerIDGTE,omitempty"`
-	AssessmentOwnerIdlt           *string  `json:"assessmentOwnerIDLT,omitempty"`
-	AssessmentOwnerIdlte          *string  `json:"assessmentOwnerIDLTE,omitempty"`
-	AssessmentOwnerIDContains     *string  `json:"assessmentOwnerIDContains,omitempty"`
-	AssessmentOwnerIDHasPrefix    *string  `json:"assessmentOwnerIDHasPrefix,omitempty"`
-	AssessmentOwnerIDHasSuffix    *string  `json:"assessmentOwnerIDHasSuffix,omitempty"`
-	AssessmentOwnerIDIsNil        *bool    `json:"assessmentOwnerIDIsNil,omitempty"`
-	AssessmentOwnerIDNotNil       *bool    `json:"assessmentOwnerIDNotNil,omitempty"`
-	AssessmentOwnerIDEqualFold    *string  `json:"assessmentOwnerIDEqualFold,omitempty"`
-	AssessmentOwnerIDContainsFold *string  `json:"assessmentOwnerIDContainsFold,omitempty"`
+	// response_due_duration field predicates
+	ResponseDueDuration       *int64  `json:"responseDueDuration,omitempty"`
+	ResponseDueDurationNeq    *int64  `json:"responseDueDurationNEQ,omitempty"`
+	ResponseDueDurationIn     []int64 `json:"responseDueDurationIn,omitempty"`
+	ResponseDueDurationNotIn  []int64 `json:"responseDueDurationNotIn,omitempty"`
+	ResponseDueDurationGt     *int64  `json:"responseDueDurationGT,omitempty"`
+	ResponseDueDurationGte    *int64  `json:"responseDueDurationGTE,omitempty"`
+	ResponseDueDurationLt     *int64  `json:"responseDueDurationLT,omitempty"`
+	ResponseDueDurationLte    *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDurationIsNil  *bool   `json:"responseDueDurationIsNil,omitempty"`
+	ResponseDueDurationNotNil *bool   `json:"responseDueDurationNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -6377,13 +6334,17 @@ type CreateAssessmentInput struct {
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name           string                `json:"name"`
 	AssessmentType *enums.AssessmentType `json:"assessmentType,omitempty"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID     *string  `json:"assessmentOwnerID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]any `json:"uischema,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration   *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
 	BlockedGroupIDs       []string `json:"blockedGroupIDs,omitempty"`
 	EditorIDs             []string `json:"editorIDs,omitempty"`
 	ViewerIDs             []string `json:"viewerIDs,omitempty"`
-	TemplateID            string   `json:"templateID"`
+	TemplateID            *string  `json:"templateID,omitempty"`
 	AssessmentResponseIDs []string `json:"assessmentResponseIDs,omitempty"`
 }
 
@@ -6392,19 +6353,11 @@ type CreateAssessmentInput struct {
 type CreateAssessmentResponseInput struct {
 	// the email address of the recipient
 	Email string `json:"email"`
-	// the current status of the assessment for this user
-	Status *enums.AssessmentResponseStatus `json:"status,omitempty"`
-	// when the assessment was assigned to the user
-	AssignedAt time.Time `json:"assignedAt"`
-	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
-	// when the user completed the assessment
-	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	OwnerID      *string    `json:"ownerID,omitempty"`
-	DocumentID   *string    `json:"documentID,omitempty"`
 	AssessmentID string     `json:"assessmentID"`
+	DocumentID   *string    `json:"documentID,omitempty"`
 }
 
 // CreateAssetInput is used for create Asset object.
@@ -6692,7 +6645,7 @@ type CreateDocumentDataInput struct {
 	// the json data of the document
 	Data       map[string]any `json:"data"`
 	OwnerID    *string        `json:"ownerID,omitempty"`
-	TemplateID string         `json:"templateID"`
+	TemplateID *string        `json:"templateID,omitempty"`
 	EntityIDs  []string       `json:"entityIDs,omitempty"`
 	FileIDs    []string       `json:"fileIDs,omitempty"`
 }
@@ -8185,6 +8138,7 @@ type CreateTemplateInput struct {
 	DocumentIDs   []string       `json:"documentIDs,omitempty"`
 	FileIDs       []string       `json:"fileIDs,omitempty"`
 	TrustCenterID *string        `json:"trustCenterID,omitempty"`
+	AssessmentIDs []string       `json:"assessmentIDs,omitempty"`
 }
 
 // CreateTrustCenterComplianceInput is used for create TrustCenterCompliance object.
@@ -9926,11 +9880,11 @@ type DocumentData struct {
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
-	TemplateID string `json:"templateID"`
+	TemplateID *string `json:"templateID,omitempty"`
 	// the json data of the document
 	Data     map[string]any    `json:"data"`
 	Owner    *Organization     `json:"owner,omitempty"`
-	Template *Template         `json:"template"`
+	Template *Template         `json:"template,omitempty"`
 	Entities *EntityConnection `json:"entities"`
 	Files    *FileConnection   `json:"files"`
 }
@@ -9993,7 +9947,7 @@ type DocumentDataHistory struct {
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
-	TemplateID string `json:"templateID"`
+	TemplateID *string `json:"templateID,omitempty"`
 	// the json data of the document
 	Data map[string]any `json:"data"`
 }
@@ -10155,6 +10109,8 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 }
@@ -10272,6 +10228,8 @@ type DocumentDataWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// owner edge predicates
@@ -35866,6 +35824,7 @@ type Template struct {
 	Documents     *DocumentDataConnection `json:"documents"`
 	Files         *FileConnection         `json:"files"`
 	TrustCenter   *TrustCenter            `json:"trustCenter,omitempty"`
+	Assessments   *AssessmentConnection   `json:"assessments"`
 }
 
 func (Template) IsNode() {}
@@ -36397,6 +36356,9 @@ type TemplateWhereInput struct {
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// assessments edge predicates
+	HasAssessments     *bool                   `json:"hasAssessments,omitempty"`
+	HasAssessmentsWith []*AssessmentWhereInput `json:"hasAssessmentsWith,omitempty"`
 }
 
 type TrustCenter struct {
@@ -39738,9 +39700,15 @@ type UpdateAssessmentInput struct {
 	ClearTags  *bool    `json:"clearTags,omitempty"`
 	// the name of the assessment, e.g. cloud providers, marketing team
 	Name *string `json:"name,omitempty"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID           *string  `json:"assessmentOwnerID,omitempty"`
-	ClearAssessmentOwnerID      *bool    `json:"clearAssessmentOwnerID,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
+	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration         *int64   `json:"responseDueDuration,omitempty"`
+	ClearResponseDueDuration    *bool    `json:"clearResponseDueDuration,omitempty"`
 	OwnerID                     *string  `json:"ownerID,omitempty"`
 	ClearOwner                  *bool    `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`
@@ -39753,27 +39721,10 @@ type UpdateAssessmentInput struct {
 	RemoveViewerIDs             []string `json:"removeViewerIDs,omitempty"`
 	ClearViewers                *bool    `json:"clearViewers,omitempty"`
 	TemplateID                  *string  `json:"templateID,omitempty"`
+	ClearTemplate               *bool    `json:"clearTemplate,omitempty"`
 	AddAssessmentResponseIDs    []string `json:"addAssessmentResponseIDs,omitempty"`
 	RemoveAssessmentResponseIDs []string `json:"removeAssessmentResponseIDs,omitempty"`
 	ClearAssessmentResponses    *bool    `json:"clearAssessmentResponses,omitempty"`
-}
-
-// UpdateAssessmentResponseInput is used for update AssessmentResponse object.
-// Input was generated by ent.
-type UpdateAssessmentResponseInput struct {
-	// the current status of the assessment for this user
-	Status *enums.AssessmentResponseStatus `json:"status,omitempty"`
-	// when the user started the assessment
-	StartedAt *time.Time `json:"startedAt,omitempty"`
-	// when the user completed the assessment
-	CompletedAt      *time.Time `json:"completedAt,omitempty"`
-	ClearCompletedAt *bool      `json:"clearCompletedAt,omitempty"`
-	// when the assessment is due
-	DueDate       *time.Time `json:"dueDate,omitempty"`
-	ClearDueDate  *bool      `json:"clearDueDate,omitempty"`
-	DocumentID    *string    `json:"documentID,omitempty"`
-	ClearDocument *bool      `json:"clearDocument,omitempty"`
-	AssessmentID  *string    `json:"assessmentID,omitempty"`
 }
 
 // UpdateAssetInput is used for update Asset object.
@@ -40251,6 +40202,7 @@ type UpdateDocumentDataInput struct {
 	// the json data of the document
 	Data            map[string]any `json:"data,omitempty"`
 	TemplateID      *string        `json:"templateID,omitempty"`
+	ClearTemplate   *bool          `json:"clearTemplate,omitempty"`
 	AddEntityIDs    []string       `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs []string       `json:"removeEntityIDs,omitempty"`
 	ClearEntities   *bool          `json:"clearEntities,omitempty"`
@@ -42743,16 +42695,19 @@ type UpdateTemplateInput struct {
 	// the jsonschema object of the template
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI
-	Uischema          map[string]any `json:"uischema,omitempty"`
-	ClearUischema     *bool          `json:"clearUischema,omitempty"`
-	AddDocumentIDs    []string       `json:"addDocumentIDs,omitempty"`
-	RemoveDocumentIDs []string       `json:"removeDocumentIDs,omitempty"`
-	ClearDocuments    *bool          `json:"clearDocuments,omitempty"`
-	AddFileIDs        []string       `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string       `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool          `json:"clearFiles,omitempty"`
-	TrustCenterID     *string        `json:"trustCenterID,omitempty"`
-	ClearTrustCenter  *bool          `json:"clearTrustCenter,omitempty"`
+	Uischema            map[string]any `json:"uischema,omitempty"`
+	ClearUischema       *bool          `json:"clearUischema,omitempty"`
+	AddDocumentIDs      []string       `json:"addDocumentIDs,omitempty"`
+	RemoveDocumentIDs   []string       `json:"removeDocumentIDs,omitempty"`
+	ClearDocuments      *bool          `json:"clearDocuments,omitempty"`
+	AddFileIDs          []string       `json:"addFileIDs,omitempty"`
+	RemoveFileIDs       []string       `json:"removeFileIDs,omitempty"`
+	ClearFiles          *bool          `json:"clearFiles,omitempty"`
+	TrustCenterID       *string        `json:"trustCenterID,omitempty"`
+	ClearTrustCenter    *bool          `json:"clearTrustCenter,omitempty"`
+	AddAssessmentIDs    []string       `json:"addAssessmentIDs,omitempty"`
+	RemoveAssessmentIDs []string       `json:"removeAssessmentIDs,omitempty"`
+	ClearAssessments    *bool          `json:"clearAssessments,omitempty"`
 }
 
 // UpdateTrustCenterComplianceInput is used for update TrustCenterCompliance object.
@@ -46119,11 +46074,12 @@ func (e ActionPlanOrderField) MarshalJSON() ([]byte, error) {
 type AssessmentHistoryOrderField string
 
 const (
-	AssessmentHistoryOrderFieldHistoryTime    AssessmentHistoryOrderField = "history_time"
-	AssessmentHistoryOrderFieldCreatedAt      AssessmentHistoryOrderField = "created_at"
-	AssessmentHistoryOrderFieldUpdatedAt      AssessmentHistoryOrderField = "updated_at"
-	AssessmentHistoryOrderFieldName           AssessmentHistoryOrderField = "name"
-	AssessmentHistoryOrderFieldAssessmentType AssessmentHistoryOrderField = "assessment_type"
+	AssessmentHistoryOrderFieldHistoryTime         AssessmentHistoryOrderField = "history_time"
+	AssessmentHistoryOrderFieldCreatedAt           AssessmentHistoryOrderField = "created_at"
+	AssessmentHistoryOrderFieldUpdatedAt           AssessmentHistoryOrderField = "updated_at"
+	AssessmentHistoryOrderFieldName                AssessmentHistoryOrderField = "name"
+	AssessmentHistoryOrderFieldAssessmentType      AssessmentHistoryOrderField = "assessment_type"
+	AssessmentHistoryOrderFieldResponseDueDuration AssessmentHistoryOrderField = "response_due_duration"
 )
 
 var AllAssessmentHistoryOrderField = []AssessmentHistoryOrderField{
@@ -46132,11 +46088,12 @@ var AllAssessmentHistoryOrderField = []AssessmentHistoryOrderField{
 	AssessmentHistoryOrderFieldUpdatedAt,
 	AssessmentHistoryOrderFieldName,
 	AssessmentHistoryOrderFieldAssessmentType,
+	AssessmentHistoryOrderFieldResponseDueDuration,
 }
 
 func (e AssessmentHistoryOrderField) IsValid() bool {
 	switch e {
-	case AssessmentHistoryOrderFieldHistoryTime, AssessmentHistoryOrderFieldCreatedAt, AssessmentHistoryOrderFieldUpdatedAt, AssessmentHistoryOrderFieldName, AssessmentHistoryOrderFieldAssessmentType:
+	case AssessmentHistoryOrderFieldHistoryTime, AssessmentHistoryOrderFieldCreatedAt, AssessmentHistoryOrderFieldUpdatedAt, AssessmentHistoryOrderFieldName, AssessmentHistoryOrderFieldAssessmentType, AssessmentHistoryOrderFieldResponseDueDuration:
 		return true
 	}
 	return false
@@ -46181,10 +46138,11 @@ func (e AssessmentHistoryOrderField) MarshalJSON() ([]byte, error) {
 type AssessmentOrderField string
 
 const (
-	AssessmentOrderFieldCreatedAt      AssessmentOrderField = "created_at"
-	AssessmentOrderFieldUpdatedAt      AssessmentOrderField = "updated_at"
-	AssessmentOrderFieldName           AssessmentOrderField = "name"
-	AssessmentOrderFieldAssessmentType AssessmentOrderField = "assessment_type"
+	AssessmentOrderFieldCreatedAt           AssessmentOrderField = "created_at"
+	AssessmentOrderFieldUpdatedAt           AssessmentOrderField = "updated_at"
+	AssessmentOrderFieldName                AssessmentOrderField = "name"
+	AssessmentOrderFieldAssessmentType      AssessmentOrderField = "assessment_type"
+	AssessmentOrderFieldResponseDueDuration AssessmentOrderField = "response_due_duration"
 )
 
 var AllAssessmentOrderField = []AssessmentOrderField{
@@ -46192,11 +46150,12 @@ var AllAssessmentOrderField = []AssessmentOrderField{
 	AssessmentOrderFieldUpdatedAt,
 	AssessmentOrderFieldName,
 	AssessmentOrderFieldAssessmentType,
+	AssessmentOrderFieldResponseDueDuration,
 }
 
 func (e AssessmentOrderField) IsValid() bool {
 	switch e {
-	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssessmentType:
+	case AssessmentOrderFieldCreatedAt, AssessmentOrderFieldUpdatedAt, AssessmentOrderFieldName, AssessmentOrderFieldAssessmentType, AssessmentOrderFieldResponseDueDuration:
 		return true
 	}
 	return false
@@ -46244,18 +46203,20 @@ const (
 	AssessmentResponseHistoryOrderFieldHistoryTime  AssessmentResponseHistoryOrderField = "history_time"
 	AssessmentResponseHistoryOrderFieldCreatedAt    AssessmentResponseHistoryOrderField = "created_at"
 	AssessmentResponseHistoryOrderFieldUpdatedAt    AssessmentResponseHistoryOrderField = "updated_at"
+	AssessmentResponseHistoryOrderFieldEmail        AssessmentResponseHistoryOrderField = "email"
 	AssessmentResponseHistoryOrderFieldSendAttempts AssessmentResponseHistoryOrderField = "send_attempts"
 	AssessmentResponseHistoryOrderFieldStatus       AssessmentResponseHistoryOrderField = "status"
-	AssessmentResponseHistoryOrderFieldAssignedAt   AssessmentResponseHistoryOrderField = "ASSIGNED_AT"
-	AssessmentResponseHistoryOrderFieldStartedAt    AssessmentResponseHistoryOrderField = "STARTED_AT"
-	AssessmentResponseHistoryOrderFieldCompletedAt  AssessmentResponseHistoryOrderField = "COMPLETED_AT"
-	AssessmentResponseHistoryOrderFieldDueDate      AssessmentResponseHistoryOrderField = "DUE_DATE"
+	AssessmentResponseHistoryOrderFieldAssignedAt   AssessmentResponseHistoryOrderField = "assigned_at"
+	AssessmentResponseHistoryOrderFieldStartedAt    AssessmentResponseHistoryOrderField = "started_at"
+	AssessmentResponseHistoryOrderFieldCompletedAt  AssessmentResponseHistoryOrderField = "completed_at"
+	AssessmentResponseHistoryOrderFieldDueDate      AssessmentResponseHistoryOrderField = "due_date"
 )
 
 var AllAssessmentResponseHistoryOrderField = []AssessmentResponseHistoryOrderField{
 	AssessmentResponseHistoryOrderFieldHistoryTime,
 	AssessmentResponseHistoryOrderFieldCreatedAt,
 	AssessmentResponseHistoryOrderFieldUpdatedAt,
+	AssessmentResponseHistoryOrderFieldEmail,
 	AssessmentResponseHistoryOrderFieldSendAttempts,
 	AssessmentResponseHistoryOrderFieldStatus,
 	AssessmentResponseHistoryOrderFieldAssignedAt,
@@ -46266,7 +46227,7 @@ var AllAssessmentResponseHistoryOrderField = []AssessmentResponseHistoryOrderFie
 
 func (e AssessmentResponseHistoryOrderField) IsValid() bool {
 	switch e {
-	case AssessmentResponseHistoryOrderFieldHistoryTime, AssessmentResponseHistoryOrderFieldCreatedAt, AssessmentResponseHistoryOrderFieldUpdatedAt, AssessmentResponseHistoryOrderFieldSendAttempts, AssessmentResponseHistoryOrderFieldStatus, AssessmentResponseHistoryOrderFieldAssignedAt, AssessmentResponseHistoryOrderFieldStartedAt, AssessmentResponseHistoryOrderFieldCompletedAt, AssessmentResponseHistoryOrderFieldDueDate:
+	case AssessmentResponseHistoryOrderFieldHistoryTime, AssessmentResponseHistoryOrderFieldCreatedAt, AssessmentResponseHistoryOrderFieldUpdatedAt, AssessmentResponseHistoryOrderFieldEmail, AssessmentResponseHistoryOrderFieldSendAttempts, AssessmentResponseHistoryOrderFieldStatus, AssessmentResponseHistoryOrderFieldAssignedAt, AssessmentResponseHistoryOrderFieldStartedAt, AssessmentResponseHistoryOrderFieldCompletedAt, AssessmentResponseHistoryOrderFieldDueDate:
 		return true
 	}
 	return false
@@ -46313,17 +46274,19 @@ type AssessmentResponseOrderField string
 const (
 	AssessmentResponseOrderFieldCreatedAt    AssessmentResponseOrderField = "created_at"
 	AssessmentResponseOrderFieldUpdatedAt    AssessmentResponseOrderField = "updated_at"
+	AssessmentResponseOrderFieldEmail        AssessmentResponseOrderField = "email"
 	AssessmentResponseOrderFieldSendAttempts AssessmentResponseOrderField = "send_attempts"
 	AssessmentResponseOrderFieldStatus       AssessmentResponseOrderField = "status"
-	AssessmentResponseOrderFieldAssignedAt   AssessmentResponseOrderField = "ASSIGNED_AT"
-	AssessmentResponseOrderFieldStartedAt    AssessmentResponseOrderField = "STARTED_AT"
-	AssessmentResponseOrderFieldCompletedAt  AssessmentResponseOrderField = "COMPLETED_AT"
-	AssessmentResponseOrderFieldDueDate      AssessmentResponseOrderField = "DUE_DATE"
+	AssessmentResponseOrderFieldAssignedAt   AssessmentResponseOrderField = "assigned_at"
+	AssessmentResponseOrderFieldStartedAt    AssessmentResponseOrderField = "started_at"
+	AssessmentResponseOrderFieldCompletedAt  AssessmentResponseOrderField = "completed_at"
+	AssessmentResponseOrderFieldDueDate      AssessmentResponseOrderField = "due_date"
 )
 
 var AllAssessmentResponseOrderField = []AssessmentResponseOrderField{
 	AssessmentResponseOrderFieldCreatedAt,
 	AssessmentResponseOrderFieldUpdatedAt,
+	AssessmentResponseOrderFieldEmail,
 	AssessmentResponseOrderFieldSendAttempts,
 	AssessmentResponseOrderFieldStatus,
 	AssessmentResponseOrderFieldAssignedAt,
@@ -46334,7 +46297,7 @@ var AllAssessmentResponseOrderField = []AssessmentResponseOrderField{
 
 func (e AssessmentResponseOrderField) IsValid() bool {
 	switch e {
-	case AssessmentResponseOrderFieldCreatedAt, AssessmentResponseOrderFieldUpdatedAt, AssessmentResponseOrderFieldSendAttempts, AssessmentResponseOrderFieldStatus, AssessmentResponseOrderFieldAssignedAt, AssessmentResponseOrderFieldStartedAt, AssessmentResponseOrderFieldCompletedAt, AssessmentResponseOrderFieldDueDate:
+	case AssessmentResponseOrderFieldCreatedAt, AssessmentResponseOrderFieldUpdatedAt, AssessmentResponseOrderFieldEmail, AssessmentResponseOrderFieldSendAttempts, AssessmentResponseOrderFieldStatus, AssessmentResponseOrderFieldAssignedAt, AssessmentResponseOrderFieldStartedAt, AssessmentResponseOrderFieldCompletedAt, AssessmentResponseOrderFieldDueDate:
 		return true
 	}
 	return false

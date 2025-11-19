@@ -1728,6 +1728,76 @@ var ExampleCreateTrustCenterAnonymousJWTResponse = CreateTrustCenterAnonymousJWT
 	},
 }
 
+// GetQuestionnaireResponse is the response containing the questionnaire template's JSON configuration
+type GetQuestionnaireResponse struct {
+	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
+	UISchema   map[string]any `json:"uischema,omitempty"`
+}
+
+// ExampleResponse returns an example GetQuestionnaireResponse for OpenAPI documentation
+func (r *GetQuestionnaireResponse) ExampleResponse() any {
+	return GetQuestionnaireResponse{
+		Jsonconfig: map[string]any{
+			"title":       "Sample Questionnaire",
+			"description": "A sample questionnaire template",
+			"questions": []map[string]any{
+				{
+					"id":       "q1",
+					"question": "Sample question",
+					"type":     "text",
+				},
+			},
+		},
+	}
+}
+
+// ExampleGetQuestionnaireResponse is an example questionnaire response for OpenAPI documentation
+var ExampleGetQuestionnaireResponse = GetQuestionnaireResponse{
+	Jsonconfig: map[string]any{
+		"title":       "Sample Questionnaire",
+		"description": "A sample questionnaire template",
+	},
+}
+
+// SubmitQuestionnaireRequest is the request to submit questionnaire response data
+type SubmitQuestionnaireRequest struct {
+	Data map[string]any `json:"data" binding:"required"`
+}
+
+// ExampleSubmitQuestionnaireRequest is an example questionnaire submission request for OpenAPI documentation
+var ExampleSubmitQuestionnaireRequest = SubmitQuestionnaireRequest{
+	Data: map[string]any{
+		"q1": "Answer to question 1",
+		"q2": "Answer to question 2",
+		"q3": map[string]any{
+			"nested": "data",
+		},
+	},
+}
+
+// SubmitQuestionnaireResponse is the response after successfully submitting questionnaire data
+type SubmitQuestionnaireResponse struct {
+	DocumentDataID string `json:"document_data_id"`
+	Status         string `json:"status"`
+	CompletedAt    string `json:"completed_at"`
+}
+
+// ExampleResponse returns an example SubmitQuestionnaireResponse for OpenAPI documentation
+func (r *SubmitQuestionnaireResponse) ExampleResponse() any {
+	return SubmitQuestionnaireResponse{
+		DocumentDataID: "document_data_id_here",
+		Status:         "COMPLETED",
+		CompletedAt:    "2024-01-01T00:00:00Z",
+	}
+}
+
+// ExampleSubmitQuestionnaireResponse is an example questionnaire submission response for OpenAPI documentation
+var ExampleSubmitQuestionnaireResponse = SubmitQuestionnaireResponse{
+	DocumentDataID: "01JCQR8Z9X1A2B3C4D5E6F7G8H",
+	Status:         "COMPLETED",
+	CompletedAt:    "2024-01-01T12:00:00Z",
+}
+
 // =================
 // IMPERSONATION
 // =================

@@ -208,11 +208,16 @@ func searchAssessments(ctx context.Context, query string, after *entgql.Cursor[s
 	request := withTransactionalMutation(ctx).Assessment.Query().
 		Where(
 			assessment.Or(
-				assessment.ID(query),               // search equal to ID
+				assessment.ID(query), // search equal to ID
+				func(s *sql.Selector) {
+					s.Where(
+						sqljson.StringContains(assessment.FieldJsonconfig, query, sqljson.Path("$id")), // search by Jsonconfig at $id
+					)
+				},
 				assessment.NameContainsFold(query), // search by Name
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
-					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+					s.Where(sql.ExprP("(tags)::text LIKE $4", likeQuery)) // search by Tags
 				},
 			),
 		)
@@ -230,10 +235,18 @@ func adminSearchAssessments(ctx context.Context, query string, after *entgql.Cur
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
 				},
-				assessment.OwnerIDContainsFold(query),           // search by OwnerID
-				assessment.NameContainsFold(query),              // search by Name
-				assessment.TemplateIDContainsFold(query),        // search by TemplateID
-				assessment.AssessmentOwnerIDContainsFold(query), // search by AssessmentOwnerID
+				assessment.OwnerIDContainsFold(query),    // search by OwnerID
+				assessment.NameContainsFold(query),       // search by Name
+				assessment.TemplateIDContainsFold(query), // search by TemplateID
+				func(s *sql.Selector) {
+					s.Where(
+						sqljson.StringContains(assessment.FieldJsonconfig, query, sqljson.Path("$id")), // search by Jsonconfig at $id
+					)
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(uischema)::text LIKE $7", likeQuery)) // search by Uischema
+				},
 			),
 		)
 
@@ -258,11 +271,10 @@ func adminSearchAssessmentResponses(ctx context.Context, query string, after *en
 	request := withTransactionalMutation(ctx).AssessmentResponse.Query().
 		Where(
 			assessmentresponse.Or(
-				assessmentresponse.ID(query),                         // search equal to ID
-				assessmentresponse.OwnerIDContainsFold(query),        // search by OwnerID
-				assessmentresponse.AssessmentIDContainsFold(query),   // search by AssessmentID
-				assessmentresponse.EmailContainsFold(query),          // search by Email
-				assessmentresponse.DocumentDataIDContainsFold(query), // search by DocumentDataID
+				assessmentresponse.ID(query),                       // search equal to ID
+				assessmentresponse.OwnerIDContainsFold(query),      // search by OwnerID
+				assessmentresponse.AssessmentIDContainsFold(query), // search by AssessmentID
+				assessmentresponse.EmailContainsFold(query),        // search by Email
 			),
 		)
 

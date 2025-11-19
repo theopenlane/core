@@ -41,10 +41,14 @@ type Assessment struct {
 	Name string `json:"name,omitempty"`
 	// AssessmentType holds the value of the "assessment_type" field.
 	AssessmentType enums.AssessmentType `json:"assessment_type,omitempty"`
-	// the template id associated with the assessment
+	// the template id associated with this assessment. You can either provide this alone or provide both the jsonconfig and uischema
 	TemplateID string `json:"template_id,omitempty"`
-	// the id of the group that owns the assessment
-	AssessmentOwnerID string `json:"assessment_owner_id,omitempty"`
+	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
+	Jsonconfig map[string]interface{} `json:"jsonconfig,omitempty"`
+	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
+	Uischema map[string]interface{} `json:"uischema,omitempty"`
+	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
+	ResponseDueDuration int64 `json:"response_due_duration,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the AssessmentQuery when eager-loading is set.
 	Edges        AssessmentEdges `json:"edges"`
@@ -140,9 +144,11 @@ func (*Assessment) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case assessment.FieldTags:
+		case assessment.FieldTags, assessment.FieldJsonconfig, assessment.FieldUischema:
 			values[i] = new([]byte)
-		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID, assessment.FieldAssessmentOwnerID:
+		case assessment.FieldResponseDueDuration:
+			values[i] = new(sql.NullInt64)
+		case assessment.FieldID, assessment.FieldCreatedBy, assessment.FieldUpdatedBy, assessment.FieldDeletedBy, assessment.FieldOwnerID, assessment.FieldName, assessment.FieldAssessmentType, assessment.FieldTemplateID:
 			values[i] = new(sql.NullString)
 		case assessment.FieldCreatedAt, assessment.FieldUpdatedAt, assessment.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -235,11 +241,27 @@ func (_m *Assessment) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.TemplateID = value.String
 			}
-		case assessment.FieldAssessmentOwnerID:
-			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field assessment_owner_id", values[i])
+		case assessment.FieldJsonconfig:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field jsonconfig", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Jsonconfig); err != nil {
+					return fmt.Errorf("unmarshal field jsonconfig: %w", err)
+				}
+			}
+		case assessment.FieldUischema:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field uischema", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Uischema); err != nil {
+					return fmt.Errorf("unmarshal field uischema: %w", err)
+				}
+			}
+		case assessment.FieldResponseDueDuration:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field response_due_duration", values[i])
 			} else if value.Valid {
-				_m.AssessmentOwnerID = value.String
+				_m.ResponseDueDuration = value.Int64
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -340,8 +362,14 @@ func (_m *Assessment) String() string {
 	builder.WriteString("template_id=")
 	builder.WriteString(_m.TemplateID)
 	builder.WriteString(", ")
-	builder.WriteString("assessment_owner_id=")
-	builder.WriteString(_m.AssessmentOwnerID)
+	builder.WriteString("jsonconfig=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Jsonconfig))
+	builder.WriteString(", ")
+	builder.WriteString("uischema=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Uischema))
+	builder.WriteString(", ")
+	builder.WriteString("response_due_duration=")
+	builder.WriteString(fmt.Sprintf("%v", _m.ResponseDueDuration))
 	builder.WriteByte(')')
 	return builder.String()
 }

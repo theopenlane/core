@@ -248,6 +248,10 @@ func ShouldSkipFeatureCheck(ctx context.Context) bool {
 		return true
 	}
 
+	if _, ok := auth.AnonymousQuestionnaireUserFromContext(ctx); ok {
+		return true
+	}
+
 	skipTokenType := []token.PrivacyToken{
 		&token.OauthTooToken{},
 		&token.VerifyToken{},

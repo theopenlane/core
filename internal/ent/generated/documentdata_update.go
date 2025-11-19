@@ -139,6 +139,12 @@ func (_u *DocumentDataUpdate) SetNillableTemplateID(v *string) *DocumentDataUpda
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *DocumentDataUpdate) ClearTemplateID() *DocumentDataUpdate {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
 // SetData sets the "data" field.
 func (_u *DocumentDataUpdate) SetData(v map[string]interface{}) *DocumentDataUpdate {
 	_u.mutation.SetData(v)
@@ -275,14 +281,6 @@ func (_u *DocumentDataUpdate) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (_u *DocumentDataUpdate) check() error {
-	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *DocumentDataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -290,9 +288,6 @@ func (_u *DocumentDataUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *D
 }
 
 func (_u *DocumentDataUpdate) sqlSave(ctx context.Context) (_node int, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(documentdata.Table, documentdata.Columns, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -600,6 +595,12 @@ func (_u *DocumentDataUpdateOne) SetNillableTemplateID(v *string) *DocumentDataU
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *DocumentDataUpdateOne) ClearTemplateID() *DocumentDataUpdateOne {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
 // SetData sets the "data" field.
 func (_u *DocumentDataUpdateOne) SetData(v map[string]interface{}) *DocumentDataUpdateOne {
 	_u.mutation.SetData(v)
@@ -749,14 +750,6 @@ func (_u *DocumentDataUpdateOne) defaults() error {
 	return nil
 }
 
-// check runs all checks and user-defined validators on the builder.
-func (_u *DocumentDataUpdateOne) check() error {
-	if _u.mutation.TemplateCleared() && len(_u.mutation.TemplateIDs()) > 0 {
-		return errors.New(`generated: clearing a required unique edge "DocumentData.template"`)
-	}
-	return nil
-}
-
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *DocumentDataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *DocumentDataUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -764,9 +757,6 @@ func (_u *DocumentDataUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder))
 }
 
 func (_u *DocumentDataUpdateOne) sqlSave(ctx context.Context) (_node *DocumentData, err error) {
-	if err := _u.check(); err != nil {
-		return _node, err
-	}
 	_spec := sqlgraph.NewUpdateSpec(documentdata.Table, documentdata.Columns, sqlgraph.NewFieldSpec(documentdata.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {

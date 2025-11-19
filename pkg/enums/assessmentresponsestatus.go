@@ -12,6 +12,8 @@ type AssessmentResponseStatus string
 var (
 	// AssessmentResponseStatusNotStarted indicates the not started.
 	AssessmentResponseStatusNotStarted AssessmentResponseStatus = "NOT_STARTED"
+	// AssessmentResponseStatusSent indicates the sent.
+	AssessmentResponseStatusSent AssessmentResponseStatus = "SENT"
 	// AssessmentResponseStatusCompleted indicates the completed.
 	AssessmentResponseStatusCompleted AssessmentResponseStatus = "COMPLETED"
 	// AssessmentResponseStatusOverdue indicates the overdue.
@@ -24,6 +26,7 @@ var (
 func (AssessmentResponseStatus) Values() []string {
 	return []string{
 		string(AssessmentResponseStatusNotStarted),
+		string(AssessmentResponseStatusSent),
 		string(AssessmentResponseStatusCompleted),
 		string(AssessmentResponseStatusOverdue),
 	}
@@ -39,6 +42,8 @@ func ToAssessmentResponseStatus(r string) *AssessmentResponseStatus {
 	switch strings.ToUpper(r) {
 	case AssessmentResponseStatusNotStarted.String():
 		return &AssessmentResponseStatusNotStarted
+	case AssessmentResponseStatusSent.String():
+		return &AssessmentResponseStatusSent
 	case AssessmentResponseStatusCompleted.String():
 		return &AssessmentResponseStatusCompleted
 	case AssessmentResponseStatusOverdue.String():

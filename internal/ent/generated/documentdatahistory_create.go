@@ -165,6 +165,14 @@ func (_c *DocumentDataHistoryCreate) SetTemplateID(v string) *DocumentDataHistor
 	return _c
 }
 
+// SetNillableTemplateID sets the "template_id" field if the given value is not nil.
+func (_c *DocumentDataHistoryCreate) SetNillableTemplateID(v *string) *DocumentDataHistoryCreate {
+	if v != nil {
+		_c.SetTemplateID(*v)
+	}
+	return _c
+}
+
 // SetData sets the "data" field.
 func (_c *DocumentDataHistoryCreate) SetData(v map[string]interface{}) *DocumentDataHistoryCreate {
 	_c.mutation.SetData(v)
@@ -269,9 +277,6 @@ func (_c *DocumentDataHistoryCreate) check() error {
 		if err := documentdatahistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "DocumentDataHistory.operation": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.TemplateID(); !ok {
-		return &ValidationError{Name: "template_id", err: errors.New(`generated: missing required field "DocumentDataHistory.template_id"`)}
 	}
 	if _, ok := _c.mutation.Data(); !ok {
 		return &ValidationError{Name: "data", err: errors.New(`generated: missing required field "DocumentDataHistory.data"`)}

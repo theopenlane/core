@@ -33,33 +33,6 @@ func (r *mutationResolver) CreateAssessmentResponse(ctx context.Context, input g
 	}, nil
 }
 
-// UpdateAssessmentResponse is the resolver for the updateAssessmentResponse field.
-func (r *mutationResolver) UpdateAssessmentResponse(ctx context.Context, id string, input generated.UpdateAssessmentResponseInput) (*model.AssessmentResponseUpdatePayload, error) {
-	res, err := withTransactionalMutation(ctx).AssessmentResponse.Get(ctx, id)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessmentresponse"})
-	}
-
-	// set the organization in the auth context if its not done for us
-	if err := setOrganizationInAuthContext(ctx, &res.OwnerID); err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
-
-		return nil, rout.ErrPermissionDenied
-	}
-
-	// setup update request
-	req := res.Update().SetInput(input)
-
-	res, err = req.Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "assessmentresponse"})
-	}
-
-	return &model.AssessmentResponseUpdatePayload{
-		AssessmentResponse: res,
-	}, nil
-}
-
 // DeleteAssessmentResponse is the resolver for the deleteAssessmentResponse field.
 func (r *mutationResolver) DeleteAssessmentResponse(ctx context.Context, id string) (*model.AssessmentResponseDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).AssessmentResponse.DeleteOneID(id).Exec(ctx); err != nil {

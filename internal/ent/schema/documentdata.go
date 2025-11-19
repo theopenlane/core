@@ -6,12 +6,12 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // DocumentData holds the schema definition for the DocumentData entity
@@ -43,6 +43,7 @@ func (DocumentData) PluralName() string {
 func (DocumentData) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("template_id").
+			Optional().
 			Comment("the template id of the document"),
 		field.JSON("data", map[string]any{}).
 			Comment("the json data of the document"),
@@ -67,7 +68,6 @@ func (d DocumentData) Edges() []ent.Edge {
 			fromSchema: d,
 			edgeSchema: Template{},
 			field:      "template_id",
-			required:   true,
 		}),
 		defaultEdgeFromWithPagination(d, Entity{}),
 		defaultEdgeToWithPagination(d, File{}),

@@ -11,7 +11,6 @@ query GetAllAssessmentHistories {
     }
     edges {
       node {
-        assessmentOwnerID
         assessmentType
         createdAt
         createdBy
@@ -41,7 +40,6 @@ query GetAssessmentHistories($first: Int, $last: Int, $where: AssessmentHistoryW
     }
     edges {
       node {
-        assessmentOwnerID
         assessmentType
         createdAt
         createdBy

@@ -34,6 +34,15 @@ func HookDocumentDataTrustCenterNDA() ent.Hook {
 		return hook.DocumentDataFunc(func(ctx context.Context, m *generated.DocumentDataMutation) (generated.Value, error) {
 			templateID, _ := m.TemplateID()
 			if templateID == "" {
+				// verify anonymous questionnaire user context
+				// assessments do not require a template id to be there
+				// because not all assessments are tied to a template,
+				// some are created from scratch
+				_, ok := auth.AnonymousQuestionnaireUserFromContext(ctx)
+				if ok {
+					return next.Mutate(ctx, m)
+				}
+
 				return nil, errMissingTemplate
 			}
 

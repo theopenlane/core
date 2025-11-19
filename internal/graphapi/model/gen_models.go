@@ -100,12 +100,6 @@ type AssessmentDeletePayload struct {
 	DeletedID string `json:"deletedID"`
 }
 
-// Return response for createBulkAssessmentResponse mutation
-type AssessmentResponseBulkCreatePayload struct {
-	// Created assessmentResponses
-	AssessmentResponses []*generated.AssessmentResponse `json:"assessmentResponses,omitempty"`
-}
-
 // Return response for createAssessmentResponse mutation
 type AssessmentResponseCreatePayload struct {
 	// Created assessmentResponse
@@ -116,12 +110,6 @@ type AssessmentResponseCreatePayload struct {
 type AssessmentResponseDeletePayload struct {
 	// Deleted assessmentResponse ID
 	DeletedID string `json:"deletedID"`
-}
-
-// Return response for updateAssessmentResponse mutation
-type AssessmentResponseUpdatePayload struct {
-	// Updated assessmentResponse
-	AssessmentResponse *generated.AssessmentResponse `json:"assessmentResponse"`
 }
 
 // Return response for updateAssessment mutation

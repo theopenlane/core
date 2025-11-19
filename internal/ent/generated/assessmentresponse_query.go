@@ -29,8 +29,8 @@ type AssessmentResponseQuery struct {
 	inters         []Interceptor
 	predicates     []predicate.AssessmentResponse
 	withOwner      *OrganizationQuery
-	withDocument   *DocumentDataQuery
 	withAssessment *AssessmentQuery
+	withDocument   *DocumentDataQuery
 	loadTotal      []func(context.Context, []*AssessmentResponse) error
 	modifiers      []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -94,31 +94,6 @@ func (_q *AssessmentResponseQuery) QueryOwner() *OrganizationQuery {
 	return query
 }
 
-// QueryDocument chains the current query on the "document" edge.
-func (_q *AssessmentResponseQuery) QueryDocument() *DocumentDataQuery {
-	query := (&DocumentDataClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
-			sqlgraph.To(documentdata.Table, documentdata.FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.AssessmentResponse
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
 // QueryAssessment chains the current query on the "assessment" edge.
 func (_q *AssessmentResponseQuery) QueryAssessment() *AssessmentQuery {
 	query := (&AssessmentClient{config: _q.config}).Query()
@@ -137,6 +112,31 @@ func (_q *AssessmentResponseQuery) QueryAssessment() *AssessmentQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDocument chains the current query on the "document" edge.
+func (_q *AssessmentResponseQuery) QueryDocument() *DocumentDataQuery {
+	query := (&DocumentDataClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(assessmentresponse.Table, assessmentresponse.FieldID, selector),
+			sqlgraph.To(documentdata.Table, documentdata.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, assessmentresponse.DocumentTable, assessmentresponse.DocumentColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -337,8 +337,8 @@ func (_q *AssessmentResponseQuery) Clone() *AssessmentResponseQuery {
 		inters:         append([]Interceptor{}, _q.inters...),
 		predicates:     append([]predicate.AssessmentResponse{}, _q.predicates...),
 		withOwner:      _q.withOwner.Clone(),
-		withDocument:   _q.withDocument.Clone(),
 		withAssessment: _q.withAssessment.Clone(),
+		withDocument:   _q.withDocument.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -357,17 +357,6 @@ func (_q *AssessmentResponseQuery) WithOwner(opts ...func(*OrganizationQuery)) *
 	return _q
 }
 
-// WithDocument tells the query-builder to eager-load the nodes that are connected to
-// the "document" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *AssessmentResponseQuery) WithDocument(opts ...func(*DocumentDataQuery)) *AssessmentResponseQuery {
-	query := (&DocumentDataClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withDocument = query
-	return _q
-}
-
 // WithAssessment tells the query-builder to eager-load the nodes that are connected to
 // the "assessment" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *AssessmentResponseQuery) WithAssessment(opts ...func(*AssessmentQuery)) *AssessmentResponseQuery {
@@ -376,6 +365,17 @@ func (_q *AssessmentResponseQuery) WithAssessment(opts ...func(*AssessmentQuery)
 		opt(query)
 	}
 	_q.withAssessment = query
+	return _q
+}
+
+// WithDocument tells the query-builder to eager-load the nodes that are connected to
+// the "document" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *AssessmentResponseQuery) WithDocument(opts ...func(*DocumentDataQuery)) *AssessmentResponseQuery {
+	query := (&DocumentDataClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDocument = query
 	return _q
 }
 
@@ -465,8 +465,8 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
 			_q.withOwner != nil,
-			_q.withDocument != nil,
 			_q.withAssessment != nil,
+			_q.withDocument != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -498,15 +498,15 @@ func (_q *AssessmentResponseQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 			return nil, err
 		}
 	}
-	if query := _q.withDocument; query != nil {
-		if err := _q.loadDocument(ctx, query, nodes, nil,
-			func(n *AssessmentResponse, e *DocumentData) { n.Edges.Document = e }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withAssessment; query != nil {
 		if err := _q.loadAssessment(ctx, query, nodes, nil,
 			func(n *AssessmentResponse, e *Assessment) { n.Edges.Assessment = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDocument; query != nil {
+		if err := _q.loadDocument(ctx, query, nodes, nil,
+			func(n *AssessmentResponse, e *DocumentData) { n.Edges.Document = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -547,35 +547,6 @@ func (_q *AssessmentResponseQuery) loadOwner(ctx context.Context, query *Organiz
 	}
 	return nil
 }
-func (_q *AssessmentResponseQuery) loadDocument(ctx context.Context, query *DocumentDataQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *DocumentData)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*AssessmentResponse)
-	for i := range nodes {
-		fk := nodes[i].DocumentDataID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(documentdata.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "document_data_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
 func (_q *AssessmentResponseQuery) loadAssessment(ctx context.Context, query *AssessmentQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *Assessment)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*AssessmentResponse)
@@ -598,6 +569,35 @@ func (_q *AssessmentResponseQuery) loadAssessment(ctx context.Context, query *As
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "assessment_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *AssessmentResponseQuery) loadDocument(ctx context.Context, query *DocumentDataQuery, nodes []*AssessmentResponse, init func(*AssessmentResponse), assign func(*AssessmentResponse, *DocumentData)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*AssessmentResponse)
+	for i := range nodes {
+		fk := nodes[i].DocumentDataID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(documentdata.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "document_data_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -639,11 +639,11 @@ func (_q *AssessmentResponseQuery) querySpec() *sqlgraph.QuerySpec {
 		if _q.withOwner != nil {
 			_spec.Node.AddColumnOnce(assessmentresponse.FieldOwnerID)
 		}
-		if _q.withDocument != nil {
-			_spec.Node.AddColumnOnce(assessmentresponse.FieldDocumentDataID)
-		}
 		if _q.withAssessment != nil {
 			_spec.Node.AddColumnOnce(assessmentresponse.FieldAssessmentID)
+		}
+		if _q.withDocument != nil {
+			_spec.Node.AddColumnOnce(assessmentresponse.FieldDocumentDataID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

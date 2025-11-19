@@ -1077,35 +1077,6 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.AssessmentResponse 
 	})
 }
 
-// HasDocument applies the HasEdge predicate on the "document" edge.
-func HasDocument() predicate.AssessmentResponse {
-	return predicate.AssessmentResponse(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.AssessmentResponse
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasDocumentWith applies the HasEdge predicate on the "document" edge with a given conditions (other predicates).
-func HasDocumentWith(preds ...predicate.DocumentData) predicate.AssessmentResponse {
-	return predicate.AssessmentResponse(func(s *sql.Selector) {
-		step := newDocumentStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.DocumentData
-		step.Edge.Schema = schemaConfig.AssessmentResponse
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasAssessment applies the HasEdge predicate on the "assessment" edge.
 func HasAssessment() predicate.AssessmentResponse {
 	return predicate.AssessmentResponse(func(s *sql.Selector) {
@@ -1126,6 +1097,35 @@ func HasAssessmentWith(preds ...predicate.Assessment) predicate.AssessmentRespon
 		step := newAssessmentStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Assessment
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDocument applies the HasEdge predicate on the "document" edge.
+func HasDocument() predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, DocumentTable, DocumentColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
+		step.Edge.Schema = schemaConfig.AssessmentResponse
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDocumentWith applies the HasEdge predicate on the "document" edge with a given conditions (other predicates).
+func HasDocumentWith(preds ...predicate.DocumentData) predicate.AssessmentResponse {
+	return predicate.AssessmentResponse(func(s *sql.Selector) {
+		step := newDocumentStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DocumentData
 		step.Edge.Schema = schemaConfig.AssessmentResponse
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

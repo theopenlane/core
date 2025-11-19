@@ -463,6 +463,15 @@ components:
                     example: jsnow@example.com
                     type: string
             type: object
+        GetQuestionnaireResponse:
+            properties:
+                jsonconfig:
+                    additionalProperties: {}
+                    type: object
+                uischema:
+                    additionalProperties: {}
+                    type: object
+            type: object
         Group:
             description: |
                 SCIM Group resource as defined in RFC 7643 Section 4.2.
@@ -1508,6 +1517,15 @@ components:
                     type: string
                 type:
                     description: The type of impersonation (support, job, admin)
+                    type: string
+            type: object
+        SubmitQuestionnaireResponse:
+            properties:
+                completed_at:
+                    type: string
+                document_data_id:
+                    type: string
+                status:
                     type: string
             type: object
         SwitchOrganizationReply:
@@ -2582,6 +2600,56 @@ paths:
             summary: GraphQL Endpoint
             tags:
                 - graphql
+    /questionnaire:
+        get:
+            description: Get questionnaire template configuration for authenticated anonymous users
+            operationId: GetQuestionnaire
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value: {}
+                            schema:
+                                $ref: '#/components/schemas/GetQuestionnaireResponse'
+                    description: Success
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Get questionnaire template configuration for authenticated anonymous users
+            tags:
+                - questionnaire
+        post:
+            description: Submit questionnaire response data for authenticated anonymous users
+            operationId: SubmitQuestionnaire
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        completed_at: ""
+                                        document_data_id: ""
+                                        status: ""
+                            schema:
+                                $ref: '#/components/schemas/SubmitQuestionnaireResponse'
+                    description: Success
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Submit questionnaire response data for authenticated anonymous users
+            tags:
+                - questionnaire
     /ready:
         get:
             description: Readiness check endpoint to verify the service is ready to accept traffic
@@ -4671,6 +4739,8 @@ tags:
       name: organization
     - description: ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned
       name: password-reset
+    - description: Get questionnaire template configuration for authenticated anonymous users
+      name: questionnaire
     - description: The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.
       name: refresh
     - description: Resends an email verification email to the user (only valid if the email is not already verified)

@@ -136,6 +136,12 @@ func (_u *DocumentDataHistoryUpdate) SetNillableTemplateID(v *string) *DocumentD
 	return _u
 }
 
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *DocumentDataHistoryUpdate) ClearTemplateID() *DocumentDataHistoryUpdate {
+	_u.mutation.ClearTemplateID()
+	return _u
+}
+
 // SetData sets the "data" field.
 func (_u *DocumentDataHistoryUpdate) SetData(v map[string]interface{}) *DocumentDataHistoryUpdate {
 	_u.mutation.SetData(v)
@@ -253,6 +259,9 @@ func (_u *DocumentDataHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.TemplateIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldTemplateID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdatahistory.FieldData, field.TypeJSON, value)
@@ -382,6 +391,12 @@ func (_u *DocumentDataHistoryUpdateOne) SetNillableTemplateID(v *string) *Docume
 	if v != nil {
 		_u.SetTemplateID(*v)
 	}
+	return _u
+}
+
+// ClearTemplateID clears the value of the "template_id" field.
+func (_u *DocumentDataHistoryUpdateOne) ClearTemplateID() *DocumentDataHistoryUpdateOne {
+	_u.mutation.ClearTemplateID()
 	return _u
 }
 
@@ -532,6 +547,9 @@ func (_u *DocumentDataHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Doc
 	}
 	if value, ok := _u.mutation.TemplateID(); ok {
 		_spec.SetField(documentdatahistory.FieldTemplateID, field.TypeString, value)
+	}
+	if _u.mutation.TemplateIDCleared() {
+		_spec.ClearField(documentdatahistory.FieldTemplateID, field.TypeString)
 	}
 	if value, ok := _u.mutation.Data(); ok {
 		_spec.SetField(documentdatahistory.FieldData, field.TypeJSON, value)

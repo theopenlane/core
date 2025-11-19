@@ -53,7 +53,7 @@ type AssessmentResponseHistory struct {
 	StartedAt time.Time `json:"started_at,omitempty"`
 	// when the user completed the assessment
 	CompletedAt time.Time `json:"completed_at,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate time.Time `json:"due_date,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID string `json:"document_data_id,omitempty"`

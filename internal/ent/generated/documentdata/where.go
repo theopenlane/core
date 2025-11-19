@@ -622,6 +622,16 @@ func TemplateIDHasSuffix(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldHasSuffix(FieldTemplateID, v))
 }
 
+// TemplateIDIsNil applies the IsNil predicate on the "template_id" field.
+func TemplateIDIsNil() predicate.DocumentData {
+	return predicate.DocumentData(sql.FieldIsNull(FieldTemplateID))
+}
+
+// TemplateIDNotNil applies the NotNil predicate on the "template_id" field.
+func TemplateIDNotNil() predicate.DocumentData {
+	return predicate.DocumentData(sql.FieldNotNull(FieldTemplateID))
+}
+
 // TemplateIDEqualFold applies the EqualFold predicate on the "template_id" field.
 func TemplateIDEqualFold(v string) predicate.DocumentData {
 	return predicate.DocumentData(sql.FieldEqualFold(FieldTemplateID, v))

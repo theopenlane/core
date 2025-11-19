@@ -119,6 +119,9 @@ type organization
     define group_manager: [service]
     define can_manage_groups: owner or group_manager
 
+    define assessment_creator: [user,group#member]
+    define can_create_assessment: can_edit or assessment_creator
+
     # additional relations
     define user_in_context: [user]
 
@@ -598,6 +601,36 @@ type subprocessor
     define viewer: [user, service] or editor
     define editor: [user, service]
     define parent: [organization]
+
+type assessment
+  relations
+    define can_view: [user] or can_edit or (viewer but not blocked)
+    define can_edit: [user] or owner or delegate or (editor but not blocked)  
+    define can_delete: [user] or owner or (editor but not blocked)
+    define parent: [organization]
+    # allow users or groups to be assigned edit/view permissions directly
+    define editor: [user, group#member] or admin from parent or owner from parent
+    define viewer: [user, group#member] or editor
+    # allow users or groups to be blocked from view + edit access
+    define blocked: [user, group#member]
+    # owner is the user or group that is responsible for the assessment, they will have full access to the assessment
+    define owner: [user, group#member]
+    # delegate is a user or group that is given temporary access to the assessment, they will have edit but not delete access
+    define delegate: [user, group#member]
+
+type assessment_response
+  relations
+    define can_view: [user] or response_owner or admin_viewer or viewer
+    define can_delete: admin_viewer
+    define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define parent: [user, service, organization, assessment]
+    # the user who filled out the assessment response - they can view their own response
+    define response_owner: [user]
+    # org admins and owners can view all responses for oversight/management
+    define admin_viewer: admin from parent or owner from parent
+    # editor and viewer relations for organization-level permissions
+    define editor: [organization#owner] or can_edit from parent
+    define viewer: [organization#owner] or editor or can_view from parent
 
 ## Conditions
 # Public groups access; affects the view access of users in the organization
