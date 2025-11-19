@@ -951,6 +951,16 @@ func ResponseDueDurationLTE(v int64) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.FieldLTE(FieldResponseDueDuration, v))
 }
 
+// ResponseDueDurationIsNil applies the IsNil predicate on the "response_due_duration" field.
+func ResponseDueDurationIsNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldIsNull(FieldResponseDueDuration))
+}
+
+// ResponseDueDurationNotNil applies the NotNil predicate on the "response_due_duration" field.
+func ResponseDueDurationNotNil() predicate.AssessmentHistory {
+	return predicate.AssessmentHistory(sql.FieldNotNull(FieldResponseDueDuration))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.AssessmentHistory) predicate.AssessmentHistory {
 	return predicate.AssessmentHistory(sql.AndPredicates(predicates...))

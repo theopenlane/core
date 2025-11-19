@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
+	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
@@ -348,7 +349,7 @@ func submitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCe
 
 	res, err := withTransactionalMutation(allowCtx).DocumentData.Create().SetInput(
 		generated.CreateDocumentDataInput{
-			TemplateID: input.TemplateID,
+			TemplateID: lo.ToPtr(input.TemplateID),
 			Data:       input.Response,
 		},
 	).Save(allowCtx)

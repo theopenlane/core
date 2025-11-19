@@ -10,7 +10,6 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -27,8 +26,6 @@ type Assessment struct {
 }
 
 const SchemaAssessment = "assessment"
-
-const DefaultResponseDueDuration = 604800
 
 func (Assessment) Name() string       { return SchemaAssessment }
 func (Assessment) GetType() any       { return Assessment.Type }
@@ -69,8 +66,8 @@ func (Assessment) Fields() []ent.Field {
 			Annotations(),
 
 		field.Int64("response_due_duration").
+			Optional().
 			Comment("the duration in seconds that the user has to complete the assessment response, defaults to 7 days").
-			Default(DefaultResponseDueDuration).
 			Annotations(
 				entgql.OrderField("response_due_duration"),
 			),
@@ -92,9 +89,6 @@ func (a Assessment) Edges() []ent.Edge {
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
-			},
 		}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}

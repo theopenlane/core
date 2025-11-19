@@ -99,7 +99,7 @@ func (AssessmentResponse) Fields() []ent.Field {
 				entgql.Skip(entgql.SkipMutationCreateInput|entgql.SkipMutationUpdateInput),
 			),
 		field.Time("due_date").
-			Comment("when the assessment is due").
+			Comment("when the assessment response is due").
 			Optional().
 			Annotations(
 				entgql.OrderField("due_date"),
@@ -152,7 +152,6 @@ func (ar AssessmentResponse) Edges() []ent.Edge {
 func (AssessmentResponse) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),
 	)

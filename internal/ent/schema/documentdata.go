@@ -43,6 +43,7 @@ func (DocumentData) PluralName() string {
 func (DocumentData) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("template_id").
+			Optional().
 			Comment("the template id of the document"),
 		field.JSON("data", map[string]any{}).
 			Comment("the json data of the document"),
@@ -67,7 +68,6 @@ func (d DocumentData) Edges() []ent.Edge {
 			fromSchema: d,
 			edgeSchema: Template{},
 			field:      "template_id",
-			required:   true,
 		}),
 		defaultEdgeFromWithPagination(d, Entity{}),
 		defaultEdgeToWithPagination(d, File{}),
@@ -101,6 +101,5 @@ func (d DocumentData) Policy() ent.Policy {
 func (d DocumentData) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookDocumentDataTrustCenterNDA(),
-		hooks.HookDocumentDataQuestionnaire(),
 	}
 }

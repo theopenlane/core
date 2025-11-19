@@ -853,6 +853,7 @@ type UpdateAssessmentInput struct {
 	Jsonconfig                  map[string]interface{}
 	ClearUischema               bool
 	Uischema                    map[string]interface{}
+	ClearResponseDueDuration    bool
 	ResponseDueDuration         *int64
 	ClearOwner                  bool
 	OwnerID                     *string
@@ -897,6 +898,9 @@ func (i *UpdateAssessmentInput) Mutate(m *AssessmentMutation) {
 	}
 	if v := i.Uischema; v != nil {
 		m.SetUischema(v)
+	}
+	if i.ClearResponseDueDuration {
+		m.ClearResponseDueDuration()
 	}
 	if v := i.ResponseDueDuration; v != nil {
 		m.SetResponseDueDuration(*v)
@@ -3232,7 +3236,7 @@ type CreateDocumentDataInput struct {
 	Tags       []string
 	Data       map[string]interface{}
 	OwnerID    *string
-	TemplateID string
+	TemplateID *string
 	EntityIDs  []string
 	FileIDs    []string
 }
@@ -3248,7 +3252,9 @@ func (i *CreateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
-	m.SetTemplateID(i.TemplateID)
+	if v := i.TemplateID; v != nil {
+		m.SetTemplateID(*v)
+	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
 	}
@@ -3269,6 +3275,7 @@ type UpdateDocumentDataInput struct {
 	Tags            []string
 	AppendTags      []string
 	Data            map[string]interface{}
+	ClearTemplate   bool
 	TemplateID      *string
 	ClearEntities   bool
 	AddEntityIDs    []string
@@ -3291,6 +3298,9 @@ func (i *UpdateDocumentDataInput) Mutate(m *DocumentDataMutation) {
 	}
 	if v := i.Data; v != nil {
 		m.SetData(v)
+	}
+	if i.ClearTemplate {
+		m.ClearTemplate()
 	}
 	if v := i.TemplateID; v != nil {
 		m.SetTemplateID(*v)
@@ -8927,6 +8937,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string
 	StandardCreatorIDs              []string
 	TemplateCreatorIDs              []string
+	AssessmentCreatorIDs            []string
 	ParentID                        *string
 	SettingID                       *string
 	PersonalAccessTokenIDs          []string
@@ -9051,6 +9062,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.TemplateCreatorIDs; len(v) > 0 {
 		m.AddTemplateCreatorIDs(v...)
+	}
+	if v := i.AssessmentCreatorIDs; len(v) > 0 {
+		m.AddAssessmentCreatorIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -9286,6 +9300,9 @@ type UpdateOrganizationInput struct {
 	ClearTemplateCreators                 bool
 	AddTemplateCreatorIDs                 []string
 	RemoveTemplateCreatorIDs              []string
+	ClearAssessmentCreators               bool
+	AddAssessmentCreatorIDs               []string
+	RemoveAssessmentCreatorIDs            []string
 	ClearSetting                          bool
 	SettingID                             *string
 	ClearPersonalAccessTokens             bool
@@ -9614,6 +9631,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
 		m.RemoveTemplateCreatorIDs(v...)
+	}
+	if i.ClearAssessmentCreators {
+		m.ClearAssessmentCreators()
+	}
+	if v := i.AddAssessmentCreatorIDs; len(v) > 0 {
+		m.AddAssessmentCreatorIDs(v...)
+	}
+	if v := i.RemoveAssessmentCreatorIDs; len(v) > 0 {
+		m.RemoveAssessmentCreatorIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()

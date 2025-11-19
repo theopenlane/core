@@ -221,6 +221,12 @@ func (_u *AssessmentHistoryUpdate) AddResponseDueDuration(v int64) *AssessmentHi
 	return _u
 }
 
+// ClearResponseDueDuration clears the value of the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdate) ClearResponseDueDuration() *AssessmentHistoryUpdate {
+	_u.mutation.ClearResponseDueDuration()
+	return _u
+}
+
 // Mutation returns the AssessmentHistoryMutation object of the builder.
 func (_u *AssessmentHistoryUpdate) Mutation() *AssessmentHistoryMutation {
 	return _u.mutation
@@ -359,6 +365,9 @@ func (_u *AssessmentHistoryUpdate) sqlSave(ctx context.Context) (_node int, err 
 	}
 	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
 		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if _u.mutation.ResponseDueDurationCleared() {
+		_spec.ClearField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -573,6 +582,12 @@ func (_u *AssessmentHistoryUpdateOne) AddResponseDueDuration(v int64) *Assessmen
 	return _u
 }
 
+// ClearResponseDueDuration clears the value of the "response_due_duration" field.
+func (_u *AssessmentHistoryUpdateOne) ClearResponseDueDuration() *AssessmentHistoryUpdateOne {
+	_u.mutation.ClearResponseDueDuration()
+	return _u
+}
+
 // Mutation returns the AssessmentHistoryMutation object of the builder.
 func (_u *AssessmentHistoryUpdateOne) Mutation() *AssessmentHistoryMutation {
 	return _u.mutation
@@ -741,6 +756,9 @@ func (_u *AssessmentHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Asses
 	}
 	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
 		_spec.AddField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if _u.mutation.ResponseDueDurationCleared() {
+		_spec.ClearField(assessmenthistory.FieldResponseDueDuration, field.TypeInt64)
 	}
 	_spec.Node.Schema = _u.schemaConfig.AssessmentHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

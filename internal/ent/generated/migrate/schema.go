@@ -254,7 +254,7 @@ var (
 		{Name: "assessment_type", Type: field.TypeEnum, Enums: []string{"INTERNAL", "EXTERNAL"}, Default: "INTERNAL"},
 		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
-		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
+		{Name: "response_due_duration", Type: field.TypeInt64, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
@@ -315,7 +315,7 @@ var (
 		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "jsonconfig", Type: field.TypeJSON, Nullable: true},
 		{Name: "uischema", Type: field.TypeJSON, Nullable: true},
-		{Name: "response_due_duration", Type: field.TypeInt64, Default: 604800},
+		{Name: "response_due_duration", Type: field.TypeInt64, Nullable: true},
 	}
 	// AssessmentHistoryTable holds the schema information for the "assessment_history" table.
 	AssessmentHistoryTable = &schema.Table{
@@ -1338,7 +1338,7 @@ var (
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 	}
 	// DocumentDataTable holds the schema information for the "document_data" table.
 	DocumentDataTable = &schema.Table{
@@ -1356,7 +1356,7 @@ var (
 				Symbol:     "document_data_templates_documents",
 				Columns:    []*schema.Column{DocumentDataColumns[10]},
 				RefColumns: []*schema.Column{TemplatesColumns[0]},
-				OnDelete:   schema.NoAction,
+				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
@@ -1384,7 +1384,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "tags", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "template_id", Type: field.TypeString},
+		{Name: "template_id", Type: field.TypeString, Nullable: true},
 		{Name: "data", Type: field.TypeJSON},
 	}
 	// DocumentDataHistoryTable holds the schema information for the "document_data_history" table.
@@ -2308,6 +2308,7 @@ var (
 		{Name: "organization_scheduled_job_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_standard_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_template_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_assessment_creators", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_editors", Type: field.TypeString, Nullable: true},
@@ -2464,62 +2465,68 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_assessment_creators",
 				Columns:    []*schema.Column{GroupsColumns[42]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_blocked_groups",
+				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[43]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_editors",
+				Symbol:     "groups_remediations_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[44]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_viewers",
+				Symbol:     "groups_remediations_editors",
 				Columns:    []*schema.Column{GroupsColumns[45]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_blocked_groups",
+				Symbol:     "groups_remediations_viewers",
 				Columns:    []*schema.Column{GroupsColumns[46]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_editors",
+				Symbol:     "groups_reviews_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[47]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_viewers",
+				Symbol:     "groups_reviews_editors",
 				Columns:    []*schema.Column{GroupsColumns[48]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_blocked_groups",
+				Symbol:     "groups_reviews_viewers",
 				Columns:    []*schema.Column{GroupsColumns[49]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_editors",
+				Symbol:     "groups_vulnerabilities_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[50]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_viewers",
+				Symbol:     "groups_vulnerabilities_editors",
 				Columns:    []*schema.Column{GroupsColumns[51]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_vulnerabilities_viewers",
+				Columns:    []*schema.Column{GroupsColumns[52]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2528,12 +2535,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[43]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2541,7 +2548,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -10766,15 +10773,16 @@ func init() {
 	GroupsTable.ForeignKeys[21].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[22].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[23].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[24].RefTable = RemediationsTable
+	GroupsTable.ForeignKeys[24].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[25].RefTable = RemediationsTable
 	GroupsTable.ForeignKeys[26].RefTable = RemediationsTable
-	GroupsTable.ForeignKeys[27].RefTable = ReviewsTable
+	GroupsTable.ForeignKeys[27].RefTable = RemediationsTable
 	GroupsTable.ForeignKeys[28].RefTable = ReviewsTable
 	GroupsTable.ForeignKeys[29].RefTable = ReviewsTable
-	GroupsTable.ForeignKeys[30].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[30].RefTable = ReviewsTable
 	GroupsTable.ForeignKeys[31].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[32].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[33].RefTable = VulnerabilitiesTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}

@@ -808,6 +808,16 @@ func ResponseDueDurationLTE(v int64) predicate.Assessment {
 	return predicate.Assessment(sql.FieldLTE(FieldResponseDueDuration, v))
 }
 
+// ResponseDueDurationIsNil applies the IsNil predicate on the "response_due_duration" field.
+func ResponseDueDurationIsNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldIsNull(FieldResponseDueDuration))
+}
+
+// ResponseDueDurationNotNil applies the NotNil predicate on the "response_due_duration" field.
+func ResponseDueDurationNotNil() predicate.Assessment {
+	return predicate.Assessment(sql.FieldNotNull(FieldResponseDueDuration))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Assessment {
 	return predicate.Assessment(func(s *sql.Selector) {

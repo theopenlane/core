@@ -332,10 +332,6 @@ func (_c *AssessmentCreate) defaults() error {
 		v := assessment.DefaultAssessmentType
 		_c.mutation.SetAssessmentType(v)
 	}
-	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
-		v := assessment.DefaultResponseDueDuration
-		_c.mutation.SetResponseDueDuration(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assessment.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assessment.DefaultID (forgotten import generated/runtime?)")
@@ -368,9 +364,6 @@ func (_c *AssessmentCreate) check() error {
 		if err := assessment.AssessmentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "Assessment.assessment_type": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
-		return &ValidationError{Name: "response_due_duration", err: errors.New(`generated: missing required field "Assessment.response_due_duration"`)}
 	}
 	return nil
 }

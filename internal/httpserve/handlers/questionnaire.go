@@ -64,7 +64,6 @@ func (h *Handler) GetQuestionnaire(ctx echo.Context, openapi *OpenAPIContext) er
 
 		if !assessmentResponse.DueDate.IsZero() && time.Now().After(assessmentResponse.DueDate) {
 			_, err = h.DBClient.AssessmentResponse.UpdateOneID(assessmentResponse.ID).
-				SetStartedAt(assessmentResponse.StartedAt).
 				SetStatus(enums.AssessmentResponseStatusOverdue).
 				Save(allowCtx)
 			if err != nil {
@@ -136,7 +135,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
-		WithTemplate().
 		WithAssessmentResponses().
 		Only(allowCtx)
 	if err != nil {
@@ -147,10 +145,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		logx.FromContext(reqCtx).Err(err).Msg("could not fetch assessment")
 
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
-	}
-
-	if assessment.Edges.Template == nil {
-		return h.NotFound(ctx, ErrTemplateNotFound, openapi)
 	}
 
 	email := anonUser.SubjectEmail
@@ -176,7 +170,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	}
 
 	documentData, err := h.DBClient.DocumentData.Create().
-		SetTemplateID(assessment.Edges.Template.ID).
 		SetOwnerID(assessment.OwnerID).
 		SetData(req.Data).
 		Save(allowCtx)

@@ -8449,6 +8449,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"assessment_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentCreatorsTable,
+			Columns: []string{organization.AssessmentCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"parent",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -27034,6 +27046,20 @@ func (f *OrganizationFilter) WhereHasTemplateCreators() {
 // WhereHasTemplateCreatorsWith applies a predicate to check if query has an edge template_creators with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasTemplateCreatorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("template_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssessmentCreators applies a predicate to check if query has an edge assessment_creators.
+func (f *OrganizationFilter) WhereHasAssessmentCreators() {
+	f.Where(entql.HasEdge("assessment_creators"))
+}
+
+// WhereHasAssessmentCreatorsWith applies a predicate to check if query has an edge assessment_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasAssessmentCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("assessment_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

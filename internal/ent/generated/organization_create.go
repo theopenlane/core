@@ -527,6 +527,21 @@ func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCrea
 	return _c.AddTemplateCreatorIDs(ids...)
 }
 
+// AddAssessmentCreatorIDs adds the "assessment_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddAssessmentCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddAssessmentCreatorIDs(ids...)
+	return _c
+}
+
+// AddAssessmentCreators adds the "assessment_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddAssessmentCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssessmentCreatorIDs(ids...)
+}
+
 // SetParentID sets the "parent" edge to the Organization entity by ID.
 func (_c *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
 	_c.mutation.SetParentID(id)
@@ -1932,6 +1947,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssessmentCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.AssessmentCreatorsTable,
+			Columns: []string{organization.AssessmentCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

@@ -300,10 +300,6 @@ func (_c *AssessmentHistoryCreate) defaults() error {
 		v := assessmenthistory.DefaultAssessmentType
 		_c.mutation.SetAssessmentType(v)
 	}
-	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
-		v := assessmenthistory.DefaultResponseDueDuration
-		_c.mutation.SetResponseDueDuration(v)
-	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if assessmenthistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized assessmenthistory.DefaultID (forgotten import generated/runtime?)")
@@ -337,9 +333,6 @@ func (_c *AssessmentHistoryCreate) check() error {
 		if err := assessmenthistory.AssessmentTypeValidator(v); err != nil {
 			return &ValidationError{Name: "assessment_type", err: fmt.Errorf(`generated: validator failed for field "AssessmentHistory.assessment_type": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.ResponseDueDuration(); !ok {
-		return &ValidationError{Name: "response_due_duration", err: errors.New(`generated: missing required field "AssessmentHistory.response_due_duration"`)}
 	}
 	return nil
 }

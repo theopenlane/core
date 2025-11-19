@@ -43,7 +43,7 @@ func HookQuestionnaireAssessment() ent.Hook {
 
 			if template.Kind != enums.TemplateKindQuestionnaire {
 				logx.FromContext(ctx).
-					Err(errors.New("template is not of type questionnaire")).
+					Err(errors.New("template is not of type questionnaire")). //nolint:err113
 					Str("template_id", id).Str("kind", template.Kind.String()).
 					Msg("template is not a questionnaire type")
 

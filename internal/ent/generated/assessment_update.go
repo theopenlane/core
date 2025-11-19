@@ -225,6 +225,12 @@ func (_u *AssessmentUpdate) AddResponseDueDuration(v int64) *AssessmentUpdate {
 	return _u
 }
 
+// ClearResponseDueDuration clears the value of the "response_due_duration" field.
+func (_u *AssessmentUpdate) ClearResponseDueDuration() *AssessmentUpdate {
+	_u.mutation.ClearResponseDueDuration()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentUpdate) SetOwner(v *Organization) *AssessmentUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -532,6 +538,9 @@ func (_u *AssessmentUpdate) sqlSave(ctx context.Context) (_node int, err error) 
 	}
 	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
 		_spec.AddField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if _u.mutation.ResponseDueDurationCleared() {
+		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1000,6 +1009,12 @@ func (_u *AssessmentUpdateOne) AddResponseDueDuration(v int64) *AssessmentUpdate
 	return _u
 }
 
+// ClearResponseDueDuration clears the value of the "response_due_duration" field.
+func (_u *AssessmentUpdateOne) ClearResponseDueDuration() *AssessmentUpdateOne {
+	_u.mutation.ClearResponseDueDuration()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *AssessmentUpdateOne) SetOwner(v *Organization) *AssessmentUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1337,6 +1352,9 @@ func (_u *AssessmentUpdateOne) sqlSave(ctx context.Context) (_node *Assessment, 
 	}
 	if value, ok := _u.mutation.AddedResponseDueDuration(); ok {
 		_spec.AddField(assessment.FieldResponseDueDuration, field.TypeInt64, value)
+	}
+	if _u.mutation.ResponseDueDurationCleared() {
+		_spec.ClearField(assessment.FieldResponseDueDuration, field.TypeInt64)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

@@ -552,7 +552,6 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaire() {
 				documentData, err := suite.db.DocumentData.Get(questionnaireCtx, out.DocumentDataID)
 				require.NoError(t, err)
 				assert.NotNil(t, documentData)
-				assert.Equal(t, template.ID, documentData.TemplateID)
 				assert.Equal(t, assessment.OwnerID, documentData.OwnerID)
 
 				updatedResponse, err := suite.db.AssessmentResponse.Get(questionnaireCtx, assessmentResponse.ID)

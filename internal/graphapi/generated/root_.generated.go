@@ -3709,6 +3709,7 @@ type ComplexityRoot struct {
 	Organization struct {
 		APITokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
 		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssessmentCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		AssessmentResponses           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		Assessments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -26999,6 +27000,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
+
+	case "Organization.assessmentCreators":
+		if e.complexity.Organization.AssessmentCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_assessmentCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.AssessmentCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.assessmentResponses":
 		if e.complexity.Organization.AssessmentResponses == nil {
@@ -51074,7 +51087,7 @@ type Assessment implements Node {
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
-  responseDueDuration: Int!
+  responseDueDuration: Int
   owner: Organization
   blockedGroups(
     """
@@ -51276,7 +51289,7 @@ type AssessmentHistory implements Node {
   """
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
-  responseDueDuration: Int!
+  responseDueDuration: Int
 }
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
@@ -51536,6 +51549,8 @@ input AssessmentHistoryWhereInput {
   responseDueDurationGTE: Int
   responseDueDurationLT: Int
   responseDueDurationLTE: Int
+  responseDueDurationIsNil: Boolean
+  responseDueDurationNotNil: Boolean
 }
 """
 Ordering options for Assessment connections
@@ -51599,7 +51614,7 @@ type AssessmentResponse implements Node {
   """
   completedAt: Time
   """
-  when the assessment is due
+  when the assessment response is due
   """
   dueDate: Time
   """
@@ -51691,7 +51706,7 @@ type AssessmentResponseHistory implements Node {
   """
   completedAt: Time
   """
-  when the assessment is due
+  when the assessment response is due
   """
   dueDate: Time
   """
@@ -52405,6 +52420,8 @@ input AssessmentWhereInput {
   responseDueDurationGTE: Int
   responseDueDurationLT: Int
   responseDueDurationLTE: Int
+  responseDueDurationIsNil: Boolean
+  responseDueDurationNotNil: Boolean
   """
   owner edge predicates
   """
@@ -58786,7 +58803,7 @@ input CreateAssessmentResponseInput {
   """
   email: String!
   """
-  when the assessment is due
+  when the assessment response is due
   """
   dueDate: Time
   ownerID: ID
@@ -59249,7 +59266,7 @@ input CreateDocumentDataInput {
   """
   data: Map!
   ownerID: ID
-  templateID: ID!
+  templateID: ID
   entityIDs: [ID!]
   fileIDs: [ID!]
 }
@@ -60400,6 +60417,7 @@ input CreateOrganizationInput {
   scheduledJobCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
+  assessmentCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -64181,13 +64199,13 @@ type DocumentData implements Node {
   """
   the template id of the document
   """
-  templateID: ID!
+  templateID: ID
   """
   the json data of the document
   """
   data: Map!
   owner: Organization
-  template: Template!
+  template: Template
   entities(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -64301,7 +64319,7 @@ type DocumentDataHistory implements Node {
   """
   the template id of the document
   """
-  templateID: String!
+  templateID: String
   """
   the json data of the document
   """
@@ -64517,6 +64535,8 @@ input DocumentDataHistoryWhereInput {
   templateIDContains: String
   templateIDHasPrefix: String
   templateIDHasSuffix: String
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: String
   templateIDContainsFold: String
 }
@@ -64655,6 +64675,8 @@ input DocumentDataWhereInput {
   templateIDContains: ID
   templateIDHasPrefix: ID
   templateIDHasSuffix: ID
+  templateIDIsNil: Boolean
+  templateIDNotNil: Boolean
   templateIDEqualFold: ID
   templateIDContainsFold: ID
   """
@@ -85853,6 +85875,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  assessmentCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   parent: Organization
   children(
     """
@@ -89399,6 +89452,11 @@ input OrganizationWhereInput {
   """
   hasTemplateCreators: Boolean
   hasTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  assessment_creators edge predicates
+  """
+  hasAssessmentCreators: Boolean
+  hasAssessmentCreatorsWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -115685,6 +115743,7 @@ input UpdateAssessmentInput {
   the duration in seconds that the user has to complete the assessment response, defaults to 7 days
   """
   responseDueDuration: Int
+  clearResponseDueDuration: Boolean
   ownerID: ID
   clearOwner: Boolean
   addBlockedGroupIDs: [ID!]
@@ -116342,6 +116401,7 @@ input UpdateDocumentDataInput {
   """
   data: Map
   templateID: ID
+  clearTemplate: Boolean
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntities: Boolean
@@ -117911,6 +117971,9 @@ input UpdateOrganizationInput {
   addTemplateCreatorIDs: [ID!]
   removeTemplateCreatorIDs: [ID!]
   clearTemplateCreators: Boolean
+  addAssessmentCreatorIDs: [ID!]
+  removeAssessmentCreatorIDs: [ID!]
+  clearAssessmentCreators: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]

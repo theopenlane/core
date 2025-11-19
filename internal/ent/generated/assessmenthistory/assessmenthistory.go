@@ -107,8 +107,6 @@ var (
 	UpdateDefaultUpdatedAt func() time.Time
 	// DefaultTags holds the default value on creation for the "tags" field.
 	DefaultTags []string
-	// DefaultResponseDueDuration holds the default value on creation for the "response_due_duration" field.
-	DefaultResponseDueDuration int64
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

@@ -154,8 +154,6 @@ var (
 	OwnerIDValidator func(string) error
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// DefaultResponseDueDuration holds the default value on creation for the "response_due_duration" field.
-	DefaultResponseDueDuration int64
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )

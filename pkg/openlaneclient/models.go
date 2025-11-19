@@ -1473,9 +1473,9 @@ type Assessment struct {
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
-	Uischema map[string]any `json:"uischema"`
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
-	ResponseDueDuration int64                         `json:"responseDueDuration"`
+	ResponseDueDuration *int64                        `json:"responseDueDuration,omitempty"`
 	Owner               *Organization                 `json:"owner,omitempty"`
 	BlockedGroups       *GroupConnection              `json:"blockedGroups"`
 	Editors             *GroupConnection              `json:"editors"`
@@ -1537,9 +1537,9 @@ type AssessmentHistory struct {
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
-	Uischema map[string]any `json:"uischema"`
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
-	ResponseDueDuration int64 `json:"responseDueDuration"`
+	ResponseDueDuration *int64 `json:"responseDueDuration,omitempty"`
 }
 
 func (AssessmentHistory) IsNode() {}
@@ -1723,14 +1723,16 @@ type AssessmentHistoryWhereInput struct {
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// response_due_duration field predicates
-	ResponseDueDuration      *int64  `json:"responseDueDuration,omitempty"`
-	ResponseDueDurationNeq   *int64  `json:"responseDueDurationNEQ,omitempty"`
-	ResponseDueDurationIn    []int64 `json:"responseDueDurationIn,omitempty"`
-	ResponseDueDurationNotIn []int64 `json:"responseDueDurationNotIn,omitempty"`
-	ResponseDueDurationGt    *int64  `json:"responseDueDurationGT,omitempty"`
-	ResponseDueDurationGte   *int64  `json:"responseDueDurationGTE,omitempty"`
-	ResponseDueDurationLt    *int64  `json:"responseDueDurationLT,omitempty"`
-	ResponseDueDurationLte   *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDuration       *int64  `json:"responseDueDuration,omitempty"`
+	ResponseDueDurationNeq    *int64  `json:"responseDueDurationNEQ,omitempty"`
+	ResponseDueDurationIn     []int64 `json:"responseDueDurationIn,omitempty"`
+	ResponseDueDurationNotIn  []int64 `json:"responseDueDurationNotIn,omitempty"`
+	ResponseDueDurationGt     *int64  `json:"responseDueDurationGT,omitempty"`
+	ResponseDueDurationGte    *int64  `json:"responseDueDurationGTE,omitempty"`
+	ResponseDueDurationLt     *int64  `json:"responseDueDurationLT,omitempty"`
+	ResponseDueDurationLte    *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDurationIsNil  *bool   `json:"responseDueDurationIsNil,omitempty"`
+	ResponseDueDurationNotNil *bool   `json:"responseDueDurationNotNil,omitempty"`
 }
 
 // Ordering options for Assessment connections
@@ -1763,7 +1765,7 @@ type AssessmentResponse struct {
 	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID *string       `json:"documentDataID,omitempty"`
@@ -1829,7 +1831,7 @@ type AssessmentResponseHistory struct {
 	StartedAt time.Time `json:"startedAt"`
 	// when the user completed the assessment
 	CompletedAt *time.Time `json:"completedAt,omitempty"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate *time.Time `json:"dueDate,omitempty"`
 	// the document containing the user's response data
 	DocumentDataID *string `json:"documentDataID,omitempty"`
@@ -2381,14 +2383,16 @@ type AssessmentWhereInput struct {
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// response_due_duration field predicates
-	ResponseDueDuration      *int64  `json:"responseDueDuration,omitempty"`
-	ResponseDueDurationNeq   *int64  `json:"responseDueDurationNEQ,omitempty"`
-	ResponseDueDurationIn    []int64 `json:"responseDueDurationIn,omitempty"`
-	ResponseDueDurationNotIn []int64 `json:"responseDueDurationNotIn,omitempty"`
-	ResponseDueDurationGt    *int64  `json:"responseDueDurationGT,omitempty"`
-	ResponseDueDurationGte   *int64  `json:"responseDueDurationGTE,omitempty"`
-	ResponseDueDurationLt    *int64  `json:"responseDueDurationLT,omitempty"`
-	ResponseDueDurationLte   *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDuration       *int64  `json:"responseDueDuration,omitempty"`
+	ResponseDueDurationNeq    *int64  `json:"responseDueDurationNEQ,omitempty"`
+	ResponseDueDurationIn     []int64 `json:"responseDueDurationIn,omitempty"`
+	ResponseDueDurationNotIn  []int64 `json:"responseDueDurationNotIn,omitempty"`
+	ResponseDueDurationGt     *int64  `json:"responseDueDurationGT,omitempty"`
+	ResponseDueDurationGte    *int64  `json:"responseDueDurationGTE,omitempty"`
+	ResponseDueDurationLt     *int64  `json:"responseDueDurationLT,omitempty"`
+	ResponseDueDurationLte    *int64  `json:"responseDueDurationLTE,omitempty"`
+	ResponseDueDurationIsNil  *bool   `json:"responseDueDurationIsNil,omitempty"`
+	ResponseDueDurationNotNil *bool   `json:"responseDueDurationNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -6333,7 +6337,7 @@ type CreateAssessmentInput struct {
 	// the jsonschema object of the questionnaire. If not provided it will be inherited from the template.
 	Jsonconfig map[string]any `json:"jsonconfig,omitempty"`
 	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
-	Uischema map[string]any `json:"uischema"`
+	Uischema map[string]any `json:"uischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration   *int64   `json:"responseDueDuration,omitempty"`
 	OwnerID               *string  `json:"ownerID,omitempty"`
@@ -6349,7 +6353,7 @@ type CreateAssessmentInput struct {
 type CreateAssessmentResponseInput struct {
 	// the email address of the recipient
 	Email string `json:"email"`
-	// when the assessment is due
+	// when the assessment response is due
 	DueDate      *time.Time `json:"dueDate,omitempty"`
 	OwnerID      *string    `json:"ownerID,omitempty"`
 	AssessmentID string     `json:"assessmentID"`
@@ -6641,7 +6645,7 @@ type CreateDocumentDataInput struct {
 	// the json data of the document
 	Data       map[string]any `json:"data"`
 	OwnerID    *string        `json:"ownerID,omitempty"`
-	TemplateID string         `json:"templateID"`
+	TemplateID *string        `json:"templateID,omitempty"`
 	EntityIDs  []string       `json:"entityIDs,omitempty"`
 	FileIDs    []string       `json:"fileIDs,omitempty"`
 }
@@ -7395,6 +7399,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string                        `json:"scheduledJobCreatorIDs,omitempty"`
 	StandardCreatorIDs              []string                        `json:"standardCreatorIDs,omitempty"`
 	TemplateCreatorIDs              []string                        `json:"templateCreatorIDs,omitempty"`
+	AssessmentCreatorIDs            []string                        `json:"assessmentCreatorIDs,omitempty"`
 	ParentID                        *string                         `json:"parentID,omitempty"`
 	SettingID                       *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs          []string                        `json:"personalAccessTokenIDs,omitempty"`
@@ -9876,11 +9881,11 @@ type DocumentData struct {
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
-	TemplateID string `json:"templateID"`
+	TemplateID *string `json:"templateID,omitempty"`
 	// the json data of the document
 	Data     map[string]any    `json:"data"`
 	Owner    *Organization     `json:"owner,omitempty"`
-	Template *Template         `json:"template"`
+	Template *Template         `json:"template,omitempty"`
 	Entities *EntityConnection `json:"entities"`
 	Files    *FileConnection   `json:"files"`
 }
@@ -9943,7 +9948,7 @@ type DocumentDataHistory struct {
 	// the ID of the organization owner of the object
 	OwnerID *string `json:"ownerID,omitempty"`
 	// the template id of the document
-	TemplateID string `json:"templateID"`
+	TemplateID *string `json:"templateID,omitempty"`
 	// the json data of the document
 	Data map[string]any `json:"data"`
 }
@@ -10105,6 +10110,8 @@ type DocumentDataHistoryWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 }
@@ -10222,6 +10229,8 @@ type DocumentDataWhereInput struct {
 	TemplateIDContains     *string  `json:"templateIDContains,omitempty"`
 	TemplateIDHasPrefix    *string  `json:"templateIDHasPrefix,omitempty"`
 	TemplateIDHasSuffix    *string  `json:"templateIDHasSuffix,omitempty"`
+	TemplateIDIsNil        *bool    `json:"templateIDIsNil,omitempty"`
+	TemplateIDNotNil       *bool    `json:"templateIDNotNil,omitempty"`
 	TemplateIDEqualFold    *string  `json:"templateIDEqualFold,omitempty"`
 	TemplateIDContainsFold *string  `json:"templateIDContainsFold,omitempty"`
 	// owner edge predicates
@@ -23462,6 +23471,7 @@ type Organization struct {
 	ScheduledJobCreators          *GroupConnection                      `json:"scheduledJobCreators"`
 	StandardCreators              *GroupConnection                      `json:"standardCreators"`
 	TemplateCreators              *GroupConnection                      `json:"templateCreators"`
+	AssessmentCreators            *GroupConnection                      `json:"assessmentCreators"`
 	Parent                        *Organization                         `json:"parent,omitempty"`
 	Children                      *OrganizationConnection               `json:"children"`
 	Setting                       *OrganizationSetting                  `json:"setting,omitempty"`
@@ -24921,6 +24931,9 @@ type OrganizationWhereInput struct {
 	// template_creators edge predicates
 	HasTemplateCreators     *bool              `json:"hasTemplateCreators,omitempty"`
 	HasTemplateCreatorsWith []*GroupWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
+	// assessment_creators edge predicates
+	HasAssessmentCreators     *bool              `json:"hasAssessmentCreators,omitempty"`
+	HasAssessmentCreatorsWith []*GroupWhereInput `json:"hasAssessmentCreatorsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -39676,9 +39689,11 @@ type UpdateAssessmentInput struct {
 	Jsonconfig      map[string]any `json:"jsonconfig,omitempty"`
 	ClearJsonconfig *bool          `json:"clearJsonconfig,omitempty"`
 	// the uischema for the template to render in the UI. If not provided, it will be inherited from the template
-	Uischema map[string]any `json:"uischema,omitempty"`
+	Uischema      map[string]any `json:"uischema,omitempty"`
+	ClearUischema *bool          `json:"clearUischema,omitempty"`
 	// the duration in seconds that the user has to complete the assessment response, defaults to 7 days
 	ResponseDueDuration         *int64   `json:"responseDueDuration,omitempty"`
+	ClearResponseDueDuration    *bool    `json:"clearResponseDueDuration,omitempty"`
 	OwnerID                     *string  `json:"ownerID,omitempty"`
 	ClearOwner                  *bool    `json:"clearOwner,omitempty"`
 	AddBlockedGroupIDs          []string `json:"addBlockedGroupIDs,omitempty"`
@@ -40172,6 +40187,7 @@ type UpdateDocumentDataInput struct {
 	// the json data of the document
 	Data            map[string]any `json:"data,omitempty"`
 	TemplateID      *string        `json:"templateID,omitempty"`
+	ClearTemplate   *bool          `json:"clearTemplate,omitempty"`
 	AddEntityIDs    []string       `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs []string       `json:"removeEntityIDs,omitempty"`
 	ClearEntities   *bool          `json:"clearEntities,omitempty"`
@@ -41370,6 +41386,9 @@ type UpdateOrganizationInput struct {
 	AddTemplateCreatorIDs                 []string                        `json:"addTemplateCreatorIDs,omitempty"`
 	RemoveTemplateCreatorIDs              []string                        `json:"removeTemplateCreatorIDs,omitempty"`
 	ClearTemplateCreators                 *bool                           `json:"clearTemplateCreators,omitempty"`
+	AddAssessmentCreatorIDs               []string                        `json:"addAssessmentCreatorIDs,omitempty"`
+	RemoveAssessmentCreatorIDs            []string                        `json:"removeAssessmentCreatorIDs,omitempty"`
+	ClearAssessmentCreators               *bool                           `json:"clearAssessmentCreators,omitempty"`
 	SettingID                             *string                         `json:"settingID,omitempty"`
 	ClearSetting                          *bool                           `json:"clearSetting,omitempty"`
 	AddPersonalAccessTokenIDs             []string                        `json:"addPersonalAccessTokenIDs,omitempty"`

@@ -75,7 +75,7 @@ func HookCreateAssessmentResponse() ent.Hook {
 			if newAttempts > maxAttempts {
 				return nil, gqlerrors.NewCustomError(
 					gqlerrors.MaxAttemptsErrorCode,
-					"max attempts reached for this email, please delete the invite and try again",
+					"max attempts reached for this email, please delete the questionnaire request and try again",
 					ErrMaxAttempts)
 			}
 
@@ -182,34 +182,35 @@ func HookUpdateAssessmentResponse() ent.Hook {
 
 // validateAndSetDueDate validates the due_date field and sets it based on the assessment's response_due_duration if not provided
 func validateAndSetDueDate(ctx context.Context, m *generated.AssessmentResponseMutation) error {
-	dueDate, dueDateExists := m.DueDate()
+	dueDate, ok := m.DueDate()
 
 	// if due_date is provided, validate it's not in the past
-	if dueDateExists {
+	if ok {
 		if dueDate.Before(time.Now()) {
 			return ErrPastTimeNotAllowed
 		}
 		return nil
 	}
 
-	// if due_date is not provided, calculate it from the assessment's response_due_duration
-	assessmentID, ok := m.AssessmentID()
+	// if due date is not provided, calculate it from the parent assessment
+	id, ok := m.AssessmentID()
 	if !ok {
 		return nil
 	}
 
-	assessmentData, err := m.Client().Assessment.Query().
-		Where(assessment.ID(assessmentID)).
+	assessmentDB, err := m.Client().Assessment.Query().
+		Where(assessment.ID(id)).
 		Select(assessment.FieldResponseDueDuration).
 		Only(ctx)
 	if err != nil {
 		return err
 	}
 
-	duration := time.Duration(assessmentData.ResponseDueDuration) * time.Second
-	calculatedDueDate := time.Now().Add(duration)
-
-	m.SetDueDate(calculatedDueDate)
+	if assessmentDB.ResponseDueDuration > 0 {
+		duration := time.Duration(assessmentDB.ResponseDueDuration) * time.Second
+		calculatedDueDate := time.Now().Add(duration)
+		m.SetDueDate(calculatedDueDate)
+	}
 
 	return nil
 }
