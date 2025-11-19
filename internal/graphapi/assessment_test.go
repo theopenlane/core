@@ -207,7 +207,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
-			errorMsg: "template does not exist",
+			errorMsg: "do not have permission to perform this action",
 		},
 		{
 			name: "no access, view only user",
