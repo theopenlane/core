@@ -101,6 +101,10 @@ func (a Assessment) Edges() []ent.Edge {
 
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
+		policy.WithOnMutationRules(
+			ent.OpDelete|ent.OpDeleteOne,
+			policy.CheckOrgWriteAccess(),
+		),
 		policy.WithMutationRules(
 			privacy.AlwaysAllowRule(),
 		),

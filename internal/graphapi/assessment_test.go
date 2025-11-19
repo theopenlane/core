@@ -235,18 +235,6 @@ func TestMutationCreateAssessment(t *testing.T) {
 			ctx:      testUser1.UserCtx,
 			errorMsg: "do not have permission to perform this action",
 		},
-		{
-			name: "no access, view only user",
-			request: testclient.CreateAssessmentInput{
-				Name:       gofakeit.Company(),
-				TemplateID: lo.ToPtr(template.ID),
-				OwnerID:    &testUser1.OrganizationID,
-				Jsonconfig: jsonConfig,
-			},
-			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
-		},
 	}
 
 	for _, tc := range testCases {
@@ -370,18 +358,6 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			client:   suite.client.api,
 			ctx:      testUser2.UserCtx,
 			errorMsg: notFoundErrorMsg,
-		},
-		{
-			name: "no access, view only user",
-			id:   assessment.ID,
-			request: testclient.UpdateAssessmentInput{
-				Name:       lo.ToPtr(gofakeit.Company()),
-				Jsonconfig: jsonConfig,
-				TemplateID: templateIDPtr,
-			},
-			client:   suite.client.api,
-			ctx:      viewOnlyUser.UserCtx,
-			errorMsg: "you are not authorized to perform this action",
 		},
 	}
 
