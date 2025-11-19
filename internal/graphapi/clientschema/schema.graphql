@@ -12235,7 +12235,6 @@ input CreateOrganizationInput {
 	scheduledJobCreatorIDs: [ID!]
 	standardCreatorIDs: [ID!]
 	templateCreatorIDs: [ID!]
-	assessmentCreatorIDs: [ID!]
 	parentID: ID
 	settingID: ID
 	personalAccessTokenIDs: [ID!]
@@ -42797,37 +42796,6 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
-	assessmentCreators(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Groups returned from the connection.
-		"""
-		orderBy: [GroupOrder!]
-
-		"""
-		Filtering options for Groups returned from the connection.
-		"""
-		where: GroupWhereInput
-	): GroupConnection!
 	parent: Organization
 	children(
 		"""
@@ -46468,11 +46436,6 @@ input OrganizationWhereInput {
 	"""
 	hasTemplateCreators: Boolean
 	hasTemplateCreatorsWith: [GroupWhereInput!]
-	"""
-	assessment_creators edge predicates
-	"""
-	hasAssessmentCreators: Boolean
-	hasAssessmentCreatorsWith: [GroupWhereInput!]
 	"""
 	parent edge predicates
 	"""
@@ -80097,9 +80060,6 @@ input UpdateOrganizationInput {
 	addTemplateCreatorIDs: [ID!]
 	removeTemplateCreatorIDs: [ID!]
 	clearTemplateCreators: Boolean
-	addAssessmentCreatorIDs: [ID!]
-	removeAssessmentCreatorIDs: [ID!]
-	clearAssessmentCreators: Boolean
 	settingID: ID
 	clearSetting: Boolean
 	addPersonalAccessTokenIDs: [ID!]

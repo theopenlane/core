@@ -1523,35 +1523,6 @@ func HasTemplateCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
-// HasAssessmentCreators applies the HasEdge predicate on the "assessment_creators" edge.
-func HasAssessmentCreators() predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, AssessmentCreatorsTable, AssessmentCreatorsColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasAssessmentCreatorsWith applies the HasEdge predicate on the "assessment_creators" edge with a given conditions (other predicates).
-func HasAssessmentCreatorsWith(preds ...predicate.Group) predicate.Organization {
-	return predicate.Organization(func(s *sql.Selector) {
-		step := newAssessmentCreatorsStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasParent applies the HasEdge predicate on the "parent" edge.
 func HasParent() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

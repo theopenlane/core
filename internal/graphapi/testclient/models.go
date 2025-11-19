@@ -7399,7 +7399,6 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string                        `json:"scheduledJobCreatorIDs,omitempty"`
 	StandardCreatorIDs              []string                        `json:"standardCreatorIDs,omitempty"`
 	TemplateCreatorIDs              []string                        `json:"templateCreatorIDs,omitempty"`
-	AssessmentCreatorIDs            []string                        `json:"assessmentCreatorIDs,omitempty"`
 	ParentID                        *string                         `json:"parentID,omitempty"`
 	SettingID                       *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs          []string                        `json:"personalAccessTokenIDs,omitempty"`
@@ -23471,7 +23470,6 @@ type Organization struct {
 	ScheduledJobCreators          *GroupConnection                      `json:"scheduledJobCreators"`
 	StandardCreators              *GroupConnection                      `json:"standardCreators"`
 	TemplateCreators              *GroupConnection                      `json:"templateCreators"`
-	AssessmentCreators            *GroupConnection                      `json:"assessmentCreators"`
 	Parent                        *Organization                         `json:"parent,omitempty"`
 	Children                      *OrganizationConnection               `json:"children"`
 	Setting                       *OrganizationSetting                  `json:"setting,omitempty"`
@@ -24931,9 +24929,6 @@ type OrganizationWhereInput struct {
 	// template_creators edge predicates
 	HasTemplateCreators     *bool              `json:"hasTemplateCreators,omitempty"`
 	HasTemplateCreatorsWith []*GroupWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
-	// assessment_creators edge predicates
-	HasAssessmentCreators     *bool              `json:"hasAssessmentCreators,omitempty"`
-	HasAssessmentCreatorsWith []*GroupWhereInput `json:"hasAssessmentCreatorsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -41406,9 +41401,6 @@ type UpdateOrganizationInput struct {
 	AddTemplateCreatorIDs                 []string                        `json:"addTemplateCreatorIDs,omitempty"`
 	RemoveTemplateCreatorIDs              []string                        `json:"removeTemplateCreatorIDs,omitempty"`
 	ClearTemplateCreators                 *bool                           `json:"clearTemplateCreators,omitempty"`
-	AddAssessmentCreatorIDs               []string                        `json:"addAssessmentCreatorIDs,omitempty"`
-	RemoveAssessmentCreatorIDs            []string                        `json:"removeAssessmentCreatorIDs,omitempty"`
-	ClearAssessmentCreators               *bool                           `json:"clearAssessmentCreators,omitempty"`
 	SettingID                             *string                         `json:"settingID,omitempty"`
 	ClearSetting                          *bool                           `json:"clearSetting,omitempty"`
 	AddPersonalAccessTokenIDs             []string                        `json:"addPersonalAccessTokenIDs,omitempty"`

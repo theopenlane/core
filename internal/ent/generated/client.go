@@ -18303,25 +18303,6 @@ func (c *OrganizationClient) QueryTemplateCreators(_m *Organization) *GroupQuery
 	return query
 }
 
-// QueryAssessmentCreators queries the assessment_creators edge of a Organization.
-func (c *OrganizationClient) QueryAssessmentCreators(_m *Organization) *GroupQuery {
-	query := (&GroupClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(organization.Table, organization.FieldID, id),
-			sqlgraph.To(group.Table, group.FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, organization.AssessmentCreatorsTable, organization.AssessmentCreatorsColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.Group
-		step.Edge.Schema = schemaConfig.Group
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
-}
-
 // QueryParent queries the parent edge of a Organization.
 func (c *OrganizationClient) QueryParent(_m *Organization) *OrganizationQuery {
 	query := (&OrganizationClient{config: c.config}).Query()

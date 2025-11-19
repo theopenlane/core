@@ -3,6 +3,7 @@ package hooks
 import (
 	"context"
 	"errors"
+	"fmt"
 
 	"entgo.io/ent"
 
@@ -22,6 +23,12 @@ func HookQuestionnaireAssessment() ent.Hook {
 			if !ok {
 				// user provided jsonconfig and uischema directly then
 				// and not trying to be created/cloned from a template
+				//
+				// but at least the jsonconfig needs to be provided
+				_, ok := m.Jsonconfig()
+				if !ok {
+					return nil, fmt.Errorf("jsonconfig is required if you do not create an assessment from a template") // nolint:err113
+				}
 				return next.Mutate(ctx, m)
 			}
 

@@ -2133,6 +2133,19 @@ func (tb *TemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Templ
 
 // MustNew assessment builder is used to create, without authz checks, assessments in the database
 func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Assessment {
+
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template Missing",
+		"description": "A test questionnaire template that will be deleted",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
 	ctx = setContext(ctx, ab.client.db)
 
 	if ab.Name == "" {
@@ -2159,6 +2172,8 @@ func (ab *AssessmentBuilder) MustNew(ctx context.Context, t *testing.T) *ent.Ass
 	if len(ab.Tags) > 0 {
 		mutation.SetTags(ab.Tags)
 	}
+
+	mutation.SetJsonconfig(jsonConfig)
 
 	assessment, err := mutation.Save(ctx)
 	requireNoError(err)

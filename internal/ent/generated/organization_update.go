@@ -527,21 +527,6 @@ func (_u *OrganizationUpdate) AddTemplateCreators(v ...*Group) *OrganizationUpda
 	return _u.AddTemplateCreatorIDs(ids...)
 }
 
-// AddAssessmentCreatorIDs adds the "assessment_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdate) AddAssessmentCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.AddAssessmentCreatorIDs(ids...)
-	return _u
-}
-
-// AddAssessmentCreators adds the "assessment_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) AddAssessmentCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAssessmentCreatorIDs(ids...)
-}
-
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdate) AddChildIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddChildIDs(ids...)
@@ -1792,27 +1777,6 @@ func (_u *OrganizationUpdate) RemoveTemplateCreators(v ...*Group) *OrganizationU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTemplateCreatorIDs(ids...)
-}
-
-// ClearAssessmentCreators clears all "assessment_creators" edges to the Group entity.
-func (_u *OrganizationUpdate) ClearAssessmentCreators() *OrganizationUpdate {
-	_u.mutation.ClearAssessmentCreators()
-	return _u
-}
-
-// RemoveAssessmentCreatorIDs removes the "assessment_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdate) RemoveAssessmentCreatorIDs(ids ...string) *OrganizationUpdate {
-	_u.mutation.RemoveAssessmentCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveAssessmentCreators removes "assessment_creators" edges to Group entities.
-func (_u *OrganizationUpdate) RemoveAssessmentCreators(v ...*Group) *OrganizationUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAssessmentCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -3933,54 +3897,6 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.AssessmentCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAssessmentCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AssessmentCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -7461,21 +7377,6 @@ func (_u *OrganizationUpdateOne) AddTemplateCreators(v ...*Group) *OrganizationU
 	return _u.AddTemplateCreatorIDs(ids...)
 }
 
-// AddAssessmentCreatorIDs adds the "assessment_creators" edge to the Group entity by IDs.
-func (_u *OrganizationUpdateOne) AddAssessmentCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.AddAssessmentCreatorIDs(ids...)
-	return _u
-}
-
-// AddAssessmentCreators adds the "assessment_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) AddAssessmentCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddAssessmentCreatorIDs(ids...)
-}
-
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdateOne) AddChildIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddChildIDs(ids...)
@@ -8726,27 +8627,6 @@ func (_u *OrganizationUpdateOne) RemoveTemplateCreators(v ...*Group) *Organizati
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTemplateCreatorIDs(ids...)
-}
-
-// ClearAssessmentCreators clears all "assessment_creators" edges to the Group entity.
-func (_u *OrganizationUpdateOne) ClearAssessmentCreators() *OrganizationUpdateOne {
-	_u.mutation.ClearAssessmentCreators()
-	return _u
-}
-
-// RemoveAssessmentCreatorIDs removes the "assessment_creators" edge to Group entities by IDs.
-func (_u *OrganizationUpdateOne) RemoveAssessmentCreatorIDs(ids ...string) *OrganizationUpdateOne {
-	_u.mutation.RemoveAssessmentCreatorIDs(ids...)
-	return _u
-}
-
-// RemoveAssessmentCreators removes "assessment_creators" edges to Group entities.
-func (_u *OrganizationUpdateOne) RemoveAssessmentCreators(v ...*Group) *OrganizationUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveAssessmentCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -10897,54 +10777,6 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.AssessmentCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedAssessmentCreatorsIDs(); len(nodes) > 0 && !_u.mutation.AssessmentCreatorsCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.Group
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.AssessmentCreatorsIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2M,
-			Inverse: false,
-			Table:   organization.AssessmentCreatorsTable,
-			Columns: []string{organization.AssessmentCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

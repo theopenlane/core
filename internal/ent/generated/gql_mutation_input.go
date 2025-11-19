@@ -8937,7 +8937,6 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string
 	StandardCreatorIDs              []string
 	TemplateCreatorIDs              []string
-	AssessmentCreatorIDs            []string
 	ParentID                        *string
 	SettingID                       *string
 	PersonalAccessTokenIDs          []string
@@ -9062,9 +9061,6 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.TemplateCreatorIDs; len(v) > 0 {
 		m.AddTemplateCreatorIDs(v...)
-	}
-	if v := i.AssessmentCreatorIDs; len(v) > 0 {
-		m.AddAssessmentCreatorIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -9300,9 +9296,6 @@ type UpdateOrganizationInput struct {
 	ClearTemplateCreators                 bool
 	AddTemplateCreatorIDs                 []string
 	RemoveTemplateCreatorIDs              []string
-	ClearAssessmentCreators               bool
-	AddAssessmentCreatorIDs               []string
-	RemoveAssessmentCreatorIDs            []string
 	ClearSetting                          bool
 	SettingID                             *string
 	ClearPersonalAccessTokens             bool
@@ -9631,15 +9624,6 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
 		m.RemoveTemplateCreatorIDs(v...)
-	}
-	if i.ClearAssessmentCreators {
-		m.ClearAssessmentCreators()
-	}
-	if v := i.AddAssessmentCreatorIDs; len(v) > 0 {
-		m.AddAssessmentCreatorIDs(v...)
-	}
-	if v := i.RemoveAssessmentCreatorIDs; len(v) > 0 {
-		m.RemoveAssessmentCreatorIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()

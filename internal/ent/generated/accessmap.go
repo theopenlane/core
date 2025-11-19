@@ -91,8 +91,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: true,
 }, "template": {
 	ObjectType:      "template",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "assessment_responses": {
 	ObjectType:      "assessment_response",
 	SkipEditCheck:   false,
@@ -1375,10 +1375,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "template_creators": {
-	ObjectType:      "group",
-	SkipEditCheck:   true,
-	CheckViewAccess: true,
-}, "assessment_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,

@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -89,6 +90,9 @@ func (a Assessment) Edges() []ent.Edge {
 			fromSchema: a,
 			edgeSchema: Template{},
 			field:      "template_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Template{}.Name()),
+			},
 		}),
 		defaultEdgeToWithPagination(a, AssessmentResponse{}),
 	}

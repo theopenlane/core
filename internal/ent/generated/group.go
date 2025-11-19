@@ -84,7 +84,6 @@ type Group struct {
 	organization_scheduled_job_creators          *string
 	organization_standard_creators               *string
 	organization_template_creators               *string
-	organization_assessment_creators             *string
 	remediation_blocked_groups                   *string
 	remediation_editors                          *string
 	remediation_viewers                          *string
@@ -624,25 +623,23 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[22]: // organization_template_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[23]: // organization_assessment_creators
+		case group.ForeignKeys[23]: // remediation_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[24]: // remediation_blocked_groups
+		case group.ForeignKeys[24]: // remediation_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[25]: // remediation_editors
+		case group.ForeignKeys[25]: // remediation_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[26]: // remediation_viewers
+		case group.ForeignKeys[26]: // review_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[27]: // review_blocked_groups
+		case group.ForeignKeys[27]: // review_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[28]: // review_editors
+		case group.ForeignKeys[28]: // review_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[29]: // review_viewers
+		case group.ForeignKeys[29]: // vulnerability_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[30]: // vulnerability_blocked_groups
+		case group.ForeignKeys[30]: // vulnerability_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[31]: // vulnerability_editors
-			values[i] = new(sql.NullString)
-		case group.ForeignKeys[32]: // vulnerability_viewers
+		case group.ForeignKeys[31]: // vulnerability_viewers
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -947,68 +944,61 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[23]:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field organization_assessment_creators", values[i])
-			} else if value.Valid {
-				_m.organization_assessment_creators = new(string)
-				*_m.organization_assessment_creators = value.String
-			}
-		case group.ForeignKeys[24]:
-			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.remediation_blocked_groups = new(string)
 				*_m.remediation_blocked_groups = value.String
 			}
-		case group.ForeignKeys[25]:
+		case group.ForeignKeys[24]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_editors", values[i])
 			} else if value.Valid {
 				_m.remediation_editors = new(string)
 				*_m.remediation_editors = value.String
 			}
-		case group.ForeignKeys[26]:
+		case group.ForeignKeys[25]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_viewers", values[i])
 			} else if value.Valid {
 				_m.remediation_viewers = new(string)
 				*_m.remediation_viewers = value.String
 			}
-		case group.ForeignKeys[27]:
+		case group.ForeignKeys[26]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.review_blocked_groups = new(string)
 				*_m.review_blocked_groups = value.String
 			}
-		case group.ForeignKeys[28]:
+		case group.ForeignKeys[27]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_editors", values[i])
 			} else if value.Valid {
 				_m.review_editors = new(string)
 				*_m.review_editors = value.String
 			}
-		case group.ForeignKeys[29]:
+		case group.ForeignKeys[28]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_viewers", values[i])
 			} else if value.Valid {
 				_m.review_viewers = new(string)
 				*_m.review_viewers = value.String
 			}
-		case group.ForeignKeys[30]:
+		case group.ForeignKeys[29]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.vulnerability_blocked_groups = new(string)
 				*_m.vulnerability_blocked_groups = value.String
 			}
-		case group.ForeignKeys[31]:
+		case group.ForeignKeys[30]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_editors", values[i])
 			} else if value.Valid {
 				_m.vulnerability_editors = new(string)
 				*_m.vulnerability_editors = value.String
 			}
-		case group.ForeignKeys[32]:
+		case group.ForeignKeys[31]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_viewers", values[i])
 			} else if value.Valid {

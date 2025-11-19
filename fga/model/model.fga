@@ -621,7 +621,6 @@ type assessment
 type assessment_response
   relations
     define can_view: [user] or response_owner or admin_viewer or viewer
-    define can_edit: response_owner
     define can_delete: admin_viewer
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
     define parent: [user, service, organization, assessment]

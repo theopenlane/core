@@ -3709,7 +3709,6 @@ type ComplexityRoot struct {
 	Organization struct {
 		APITokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
 		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AssessmentCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		AssessmentResponses           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
 		Assessments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
 		Assets                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
@@ -27000,18 +26999,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
-
-	case "Organization.assessmentCreators":
-		if e.complexity.Organization.AssessmentCreators == nil {
-			break
-		}
-
-		args, err := ec.field_Organization_assessmentCreators_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Organization.AssessmentCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.assessmentResponses":
 		if e.complexity.Organization.AssessmentResponses == nil {
@@ -60417,7 +60404,6 @@ input CreateOrganizationInput {
   scheduledJobCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
-  assessmentCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -85875,37 +85861,6 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
-  assessmentCreators(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Groups returned from the connection.
-    """
-    orderBy: [GroupOrder!]
-
-    """
-    Filtering options for Groups returned from the connection.
-    """
-    where: GroupWhereInput
-  ): GroupConnection!
   parent: Organization
   children(
     """
@@ -89452,11 +89407,6 @@ input OrganizationWhereInput {
   """
   hasTemplateCreators: Boolean
   hasTemplateCreatorsWith: [GroupWhereInput!]
-  """
-  assessment_creators edge predicates
-  """
-  hasAssessmentCreators: Boolean
-  hasAssessmentCreatorsWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -117971,9 +117921,6 @@ input UpdateOrganizationInput {
   addTemplateCreatorIDs: [ID!]
   removeTemplateCreatorIDs: [ID!]
   clearTemplateCreators: Boolean
-  addAssessmentCreatorIDs: [ID!]
-  removeAssessmentCreatorIDs: [ID!]
-  clearAssessmentCreators: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]

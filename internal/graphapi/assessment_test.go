@@ -149,6 +149,18 @@ func TestQueryAssessments(t *testing.T) {
 func TestMutationCreateAssessment(t *testing.T) {
 	template := (&TemplateBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template Missing",
+		"description": "A test questionnaire template that will be deleted",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
 	testCases := []struct {
 		name     string
 		request  testclient.CreateAssessmentInput
@@ -162,6 +174,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
+				Jsonconfig: jsonConfig,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -175,6 +188,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 				AssessmentType:      lo.ToPtr(enums.AssessmentTypeInternal),
 				Tags:                []string{"tag1", "tag2"},
 				ResponseDueDuration: lo.ToPtr(int64(86400)), // 1 day
+				Jsonconfig:          jsonConfig,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -189,10 +203,21 @@ func TestMutationCreateAssessment(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "missing required field - jsonconfig",
+			request: testclient.CreateAssessmentInput{
+				OwnerID: &testUser1.OrganizationID,
+				Name:    "another assessment",
+			},
+			client:   suite.client.api,
+			ctx:      testUser1.UserCtx,
+			errorMsg: "jsonconfig is required",
+		},
+		{
 			name: "missing required field - name",
 			request: testclient.CreateAssessmentInput{
 				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
+				Jsonconfig: jsonConfig,
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
@@ -204,6 +229,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(ulids.New().String()),
 				OwnerID:    &testUser1.OrganizationID,
+				Jsonconfig: jsonConfig,
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
@@ -215,6 +241,7 @@ func TestMutationCreateAssessment(t *testing.T) {
 				Name:       gofakeit.Company(),
 				TemplateID: lo.ToPtr(template.ID),
 				OwnerID:    &testUser1.OrganizationID,
+				Jsonconfig: jsonConfig,
 			},
 			client:   suite.client.api,
 			ctx:      viewOnlyUser.UserCtx,
@@ -252,6 +279,19 @@ func TestMutationCreateAssessment(t *testing.T) {
 }
 
 func TestMutationUpdateAssessment(t *testing.T) {
+
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template Missing",
+		"description": "A test questionnaire template that will be deleted",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
 	assessment := (&AssessmentBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	templateIDPtr := lo.ToPtr(assessment.TemplateID)
 
@@ -269,6 +309,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				Name:       lo.ToPtr(gofakeit.Company()),
 				TemplateID: templateIDPtr,
+				Jsonconfig: jsonConfig,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -279,6 +320,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				Tags:       []string{"updated-tag1", "updated-tag2"},
 				TemplateID: templateIDPtr,
+				Jsonconfig: jsonConfig,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -289,6 +331,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				AppendTags: []string{"appended-tag"},
 				TemplateID: templateIDPtr,
+				Jsonconfig: jsonConfig,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -299,6 +342,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				Name:       lo.ToPtr(gofakeit.Company()),
 				TemplateID: templateIDPtr,
+				Jsonconfig: jsonConfig,
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -309,6 +353,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			request: testclient.UpdateAssessmentInput{
 				Name:       lo.ToPtr(gofakeit.Company()),
 				TemplateID: templateIDPtr,
+				Jsonconfig: jsonConfig,
 			},
 			client:   suite.client.api,
 			ctx:      testUser1.UserCtx,
@@ -319,6 +364,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
 				Name:       lo.ToPtr(gofakeit.Company()),
+				Jsonconfig: jsonConfig,
 				TemplateID: templateIDPtr,
 			},
 			client:   suite.client.api,
@@ -330,6 +376,7 @@ func TestMutationUpdateAssessment(t *testing.T) {
 			id:   assessment.ID,
 			request: testclient.UpdateAssessmentInput{
 				Name:       lo.ToPtr(gofakeit.Company()),
+				Jsonconfig: jsonConfig,
 				TemplateID: templateIDPtr,
 			},
 			client:   suite.client.api,
@@ -442,6 +489,7 @@ func TestMutationDeleteAssessment(t *testing.T) {
 }
 
 func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
+
 	assessment1 := (&AssessmentBuilder{client: suite.client, Name: "Duplicate Test"}).MustNew(testUser1.UserCtx, t)
 
 	t.Run("duplicate name in same org should fail", func(t *testing.T) {
@@ -459,7 +507,7 @@ func TestMutationCreateAssessmentWithDuplicateName(t *testing.T) {
 		(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: template.ID}).MustDelete(testUser1.UserCtx, t)
 	})
 
-	// create assessment with same name in different org should succeed
+	// assessment with same name in different org should succeed
 	t.Run("duplicate name in different org should succeed", func(t *testing.T) {
 		anotherUser := suite.userBuilder(context.Background(), t)
 		template := (&TemplateBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
