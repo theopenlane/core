@@ -1256,7 +1256,6 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 }
 
 func TestTrustCenterDoc_NotVisible(t *testing.T) {
-	t.Parallel()
 
 	t.Run("doc without file should set to NOT_VISIBLE", func(t *testing.T) {
 
