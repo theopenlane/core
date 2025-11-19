@@ -154,7 +154,7 @@ entConfig:
     onsuccessscript: ""
 
 objectstorage:
-  devmode: true
+  devmode: true # when enabled, a local disk storage provider is automatically configured and other providers are ignored
   enabled: true
   providers:
       disk:

@@ -93,7 +93,7 @@ type ProviderConfig struct {
 	MaxSizeMB int64 `json:"maxsizemb" koanf:"maxsizemb"`
 	// MaxMemoryMB is the maximum memory to use for file uploads in MB
 	MaxMemoryMB int64 `json:"maxmemorymb" koanf:"maxmemorymb"`
-	// DevMode enables simple file upload handling for local development and testing
+	// DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs
 	DevMode bool `json:"devmode" koanf:"devmode" default:"false"`
 	// Providers contains configuration for each storage provider
 	Providers Providers `json:"providers" koanf:"providers"`

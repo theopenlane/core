@@ -103,22 +103,24 @@ func (rc *ruleCoordinator) getBuilder(provider storage.ProviderType) providerBui
 	}
 }
 
+func devModeOptions() *storage.ProviderOptions {
+	return storage.NewProviderOptions(
+		storage.WithBucket(objects.DefaultDevStorageBucket),
+		storage.WithBasePath(objects.DefaultDevStorageBucket),
+		storage.WithProxyPresignEnabled(true),
+		storage.WithEndpoint("http://localhost:17608/v1/files"),
+		storage.WithProxyPresignConfig(&storage.ProxyPresignConfig{
+			BaseURL: "http://localhost:17608/v1/files",
+		}),
+		storage.WithExtra("dev_mode", true),
+	)
+}
+
 // handleDevMode adds a dev-only disk rule when configured and returns true if handled
 func (rc *ruleCoordinator) handleDevMode() bool {
 	if !rc.config.DevMode {
 		return false
 	}
-
-	bucket := rc.config.Providers.Disk.Bucket
-	if bucket == "" {
-		bucket = objects.DefaultDevStorageBucket
-	}
-
-	options := storage.NewProviderOptions(
-		storage.WithBucket(bucket),
-		storage.WithBasePath(bucket),
-		storage.WithExtra("dev_mode", true),
-	)
 
 	devRule := &helpers.ConditionalRule[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 		Predicate: func(_ context.Context) bool {
@@ -128,7 +130,7 @@ func (rc *ruleCoordinator) handleDevMode() bool {
 			return &eddy.ResolvedProvider[storage.Provider, storage.ProviderCredentials, *storage.ProviderOptions]{
 				Builder: rc.builders.disk,
 				Output:  storage.ProviderCredentials{},
-				Config:  options.Clone(),
+				Config:  devModeOptions().Clone(),
 			}, nil
 		},
 	}

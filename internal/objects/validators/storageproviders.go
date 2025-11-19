@@ -13,6 +13,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	disk "github.com/theopenlane/core/pkg/objects/storage/providers/disk"
 	r2provider "github.com/theopenlane/core/pkg/objects/storage/providers/r2"
@@ -28,57 +29,9 @@ const (
 var (
 	// ErrBucketNotFound is returned when a provider does not contain the expected bucket
 	ErrBucketNotFound = errors.New("bucket not found")
+	// ErrUnableToCreateBucket is returned when the local bucket could not be created and the directory does not exist
+	ErrUnableToCreateBucket = errors.New("unable to create bucket directory")
 )
-
-// ValidateConfiguredStorageProviders checks connectivity and configuration of all enabled storage providers
-func ValidateConfiguredStorageProviders(ctx context.Context, cfg storage.ProviderConfig) []error {
-	if !cfg.Enabled {
-		log.Info().Msg("object storage disabled; skipping validation")
-		return nil
-	}
-
-	if deadline, ok := ctx.Deadline(); !ok || time.Until(deadline) <= 0 {
-		var cancel context.CancelFunc
-		ctx, cancel = context.WithTimeout(ctx, StorageValidationTimeout)
-		defer cancel()
-	}
-
-	if cfg.DevMode {
-		if cfg.Providers.Disk.Enabled {
-			bucket := cfg.Providers.Disk.Bucket
-			if bucket == "" {
-				bucket = objects.DefaultDevStorageBucket
-			}
-
-			if err := ensureDirectoryExists(bucket); err != nil {
-				return []error{fmt.Errorf("ensure dev storage directory %s: %w", bucket, err)}
-			}
-		}
-
-		return nil
-	}
-
-	var errs []error
-
-	if err := validateDiskProvider(ctx, cfg.Providers.Disk); err != nil {
-		errs = append(errs, err)
-	}
-	if err := validateS3Provider(ctx, cfg.Providers.S3); err != nil {
-		errs = append(errs, err)
-	}
-	if err := validateR2Provider(ctx, cfg.Providers.CloudflareR2); err != nil {
-		errs = append(errs, err)
-	}
-	if err := validateDatabaseProvider(ctx, cfg.Providers.Database); err != nil {
-		errs = append(errs, err)
-	}
-
-	if cfg.Providers.GCS.Enabled {
-		log.Warn().Msg("skipping GCS provider validation (not implemented)")
-	}
-
-	return errs
-}
 
 // ValidateAvailabilityByProvider validates only providers that have EnsureAvailable enabled.
 // This allows per-provider strict availability enforcement instead of a global setting.
@@ -90,15 +43,21 @@ func ValidateAvailabilityByProvider(ctx context.Context, cfg storage.ProviderCon
 	if deadline, ok := ctx.Deadline(); !ok || time.Until(deadline) <= 0 {
 		var cancel context.CancelFunc
 		ctx, cancel = context.WithTimeout(ctx, StorageValidationTimeout)
+
 		defer cancel()
 	}
 
-	// In dev mode we don't strictly enforce availability
-	if cfg.DevMode {
-		return nil
-	}
-
 	var errs []error
+
+	if cfg.DevMode {
+		if err := ensureDirectoryExists(objects.DefaultDevStorageBucket); err != nil {
+			errs = append(errs, ErrUnableToCreateBucket)
+		}
+
+		logx.FromContext(ctx).Info().Msg("storage provider validation skipped in dev mode - disable dev mode to configure individual providers")
+
+		return errs
+	}
 
 	if cfg.Providers.Disk.Enabled && cfg.Providers.Disk.EnsureAvailable {
 		if err := validateDiskProvider(ctx, cfg.Providers.Disk); err != nil {
@@ -165,10 +124,12 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	if cfg.Bucket != "" {
 		options.Apply(storage.WithBucket(cfg.Bucket))
 	}
+
 	region := cfg.Region
 	if region == "" {
 		region = objects.DefaultS3Region
 	}
+
 	options.Apply(storage.WithRegion(region))
 	if cfg.Endpoint != "" {
 		options.Apply(storage.WithEndpoint(cfg.Endpoint))
@@ -178,6 +139,7 @@ func validateS3Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	if err != nil {
 		return fmt.Errorf("s3 provider initialization: %w", err)
 	}
+
 	defer provider.Close()
 
 	return validateBuckets("s3", provider, cfg.Bucket)
@@ -193,6 +155,7 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	if cfg.Bucket != "" {
 		options.Apply(storage.WithBucket(cfg.Bucket))
 	}
+
 	if cfg.Endpoint != "" {
 		options.Apply(storage.WithEndpoint(cfg.Endpoint))
 	}
@@ -201,6 +164,7 @@ func validateR2Provider(ctx context.Context, cfg storage.ProviderConfigs) error 
 	if err != nil {
 		return fmt.Errorf("r2 provider initialization: %w", err)
 	}
+
 	defer provider.Close()
 
 	return validateBuckets("r2", provider, cfg.Bucket)
@@ -254,7 +218,7 @@ func ensureDirectoryExists(path string) error {
 // StorageAvailabilityCheck returns a handlers.CheckFunc that validates storage provider availability
 func StorageAvailabilityCheck(cfgProvider func() storage.ProviderConfig) handlers.CheckFunc {
 	return func(ctx context.Context) error {
-		errs := ValidateConfiguredStorageProviders(ctx, cfgProvider())
+		errs := ValidateAvailabilityByProvider(ctx, cfgProvider())
 		if len(errs) == 0 {
 			return nil
 		}

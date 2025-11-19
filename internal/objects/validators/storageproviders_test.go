@@ -10,16 +10,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 )
-
-func TestValidateConfiguredStorageProvidersDisabled(t *testing.T) {
-	errs := ValidateConfiguredStorageProviders(context.Background(), storage.ProviderConfig{
-		Enabled: false,
-	})
-	require.Empty(t, errs)
-}
 
 func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {
 	t.Parallel()
@@ -32,16 +26,17 @@ func TestValidateConfiguredStorageProvidersDevModeDisk(t *testing.T) {
 		DevMode: true,
 		Providers: storage.Providers{
 			Disk: storage.ProviderConfigs{
-				Enabled: true,
+				Enabled: false,
 				Bucket:  bucket,
 			},
 		},
 	}
 
-	errs := ValidateConfiguredStorageProviders(context.Background(), cfg)
+	errs := ValidateAvailabilityByProvider(context.Background(), cfg)
 	require.Empty(t, errs)
 
-	_, err := os.Stat(bucket)
+	// devMode uses the defaultDevStorageBucket - so even if Disk provider is created, this is the directory we want to ensure exists
+	_, err := os.Stat(objects.DefaultDevStorageBucket)
 	require.NoError(t, err, "expected dev-mode validation to create bucket directory")
 }
 
@@ -50,9 +45,10 @@ func TestValidateAvailabilityByProviderDevMode(t *testing.T) {
 		Enabled: true,
 		DevMode: true,
 		Providers: storage.Providers{
+			// devmode should work regardless of individual disk configuration being on / off
 			Disk: storage.ProviderConfigs{
-				Enabled:         true,
-				EnsureAvailable: true,
+				Enabled:         false,
+				EnsureAvailable: false,
 			},
 		},
 	}

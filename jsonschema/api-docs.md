@@ -1366,7 +1366,7 @@ ProviderConfig contains configuration for object storage providers
 |[**keys**](#objectstoragekeys)|`string[]`|||
 |**maxsizemb**|`integer`|MaxSizeMB is the maximum file size allowed in MB<br/>||
 |**maxmemorymb**|`integer`|MaxMemoryMB is the maximum memory to use for file uploads in MB<br/>||
-|**devmode**|`boolean`|DevMode enables simple file upload handling for local development and testing<br/>||
+|**devmode**|`boolean`|DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs<br/>||
 |[**providers**](#objectstorageproviders)|`object`|||
 
 **Additional Properties:** not allowed  

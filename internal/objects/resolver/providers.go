@@ -54,8 +54,6 @@ func providerOptionsFromConfig(provider storage.ProviderType, config storage.Pro
 		providerCfg = config.Providers.S3
 	case storage.R2Provider:
 		providerCfg = config.Providers.CloudflareR2
-	case storage.GCSProvider:
-		providerCfg = config.Providers.GCS
 	case storage.DiskProvider:
 		providerCfg = config.Providers.Disk
 	case storage.DatabaseProvider:
@@ -104,7 +102,7 @@ func providerOptionsFromConfig(provider storage.ProviderType, config storage.Pro
 		if providerCfg.Endpoint != "" {
 			options.Apply(storage.WithEndpoint(providerCfg.Endpoint))
 		}
-	case storage.R2Provider, storage.GCSProvider:
+	case storage.R2Provider:
 		if providerCfg.Bucket != "" {
 			options.Apply(storage.WithBucket(providerCfg.Bucket))
 		}

@@ -476,13 +476,6 @@ func WithObjectStorage() ServerOption {
 		s.Config.StorageService = storageService
 		s.Config.Handler.ObjectStore = storageService
 
-		errs := validators.ValidateConfiguredStorageProviders(context.Background(), cfg)
-		if len(errs) > 0 {
-			for _, err := range errs {
-				log.Warn().Err(err).Msg("object storage validation warning")
-			}
-		}
-
 		// Strict availability check for providers with ensureAvailable=true
 		strictErrs := validators.ValidateAvailabilityByProvider(context.Background(), cfg)
 		if len(strictErrs) > 0 {
