@@ -37,7 +37,6 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			name: "happy path - org owner can create trust center subprocessor",
 			request: testclient.CreateTrustCenterSubprocessorInput{
 				SubprocessorID: subprocessor1.ID,
-				TrustCenterID:  &trustCenter.ID,
 				Category:       "Data Processing",
 				Countries:      []string{"US", "CA"},
 			},
@@ -116,7 +115,9 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
 			assert.Check(t, resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.ID != "")
-			assert.Check(t, is.Equal(*tc.request.TrustCenterID, *resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.TrustCenterID))
+			if tc.request.TrustCenterID != nil {
+				assert.Check(t, is.Equal(*tc.request.TrustCenterID, *resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.TrustCenterID))
+			}
 			assert.Check(t, is.Equal(tc.request.Category, resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.Category))
 			assert.Check(t, is.DeepEqual(tc.request.Countries, resp.CreateTrustCenterSubprocessor.TrustCenterSubprocessor.Countries))
 
@@ -336,7 +337,6 @@ func TestMutationUpdateTrustCenterSubprocessor(t *testing.T) {
 			setupFunc: func() string {
 				createResp, err := suite.client.api.CreateTrustCenterSubprocessor(testUser.UserCtx, testclient.CreateTrustCenterSubprocessorInput{
 					SubprocessorID: subprocessor1.ID,
-					TrustCenterID:  &trustCenter.ID,
 					Category:       "Data Processing",
 					Countries:      []string{"US"},
 				})

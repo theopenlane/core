@@ -20,6 +20,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 	if cnameTarget == "" {
 		return nil, parseRequestError(ctx, ErrMissingTrustCenterCnameTarget, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
+
 	transactionCtx := withTransactionalMutation(ctx)
 
 	mappableDomainID, err := transactionCtx.MappableDomain.Query().Where(mappabledomain.Name(cnameTarget)).FirstID(ctx)
@@ -27,9 +28,18 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 
-	trustCenter, err := transactionCtx.TrustCenter.Get(ctx, input.TrustCenterID)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
+	var trustCenter *generated.TrustCenter
+
+	if input.TrustCenterID != "" {
+		trustCenter, err = transactionCtx.TrustCenter.Get(ctx, input.TrustCenterID)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
+		}
+	} else {
+		trustCenter, err = transactionCtx.TrustCenter.Query().Only(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcenterdomain"})
+		}
 	}
 
 	if trustCenter.CustomDomainID != "" {

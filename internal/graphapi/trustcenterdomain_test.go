@@ -17,11 +17,10 @@ func TestMutationCreateTrustCenterDomain(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	mappableDomain := (&MappableDomainBuilder{client: suite.client, Name: testutils.TrustCenterCnameTarget}).MustNew(systemAdminUser.UserCtx, t)
 
-	t.Run("happy path", func(t *testing.T) {
+	t.Run("happy path, do not require TrustCenterID", func(t *testing.T) {
 		domain := gofakeit.DomainName()
 		resp, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
-			CnameRecord:   domain,
-			TrustCenterID: trustCenter.ID,
+			CnameRecord: domain,
 		})
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)

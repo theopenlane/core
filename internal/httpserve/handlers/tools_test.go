@@ -2,6 +2,7 @@ package handlers_test
 
 import (
 	"context"
+	"encoding/json"
 	"testing"
 	"time"
 
@@ -436,16 +437,19 @@ var mockProduct = &stripe.Product{
 
 // orgSubscriptionMocks mocks the stripe calls for org subscription during the webhook tests
 func (suite *HandlerTestSuite) orgSubscriptionMocks() {
-	// setup mocks for search
-	suite.stripeMockBackend.On("CallRaw", context.Background(), mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.CustomerSearchResult")).Run(func(args mock.Arguments) {
-		mockCustomerSearchResult := args.Get(4).(*stripe.CustomerSearchResult)
+	// mock customer search
+	suite.stripeMockBackend.On("CallRaw", mock.Anything, mock.Anything, mock.Anything, mock.AnythingOfType("*stripe.Params"), mock.AnythingOfType("*stripe.v1SearchPage[*github.com/stripe/stripe-go/v83.Customer]")).Run(func(args mock.Arguments) {
+		out := args.Get(4) // this is *v1SearchPage[*stripe.Customer] now, but unexported
 
-		data := []*stripe.Customer{}
-		data = append(data, mockCustomer)
-		*mockCustomerSearchResult = stripe.CustomerSearchResult{
-			Data: data,
+		// Build a payload that matches Stripe search response shape
+		payload := map[string]any{
+			"object":   "search_result",
+			"data":     []*stripe.Customer{mockCustomer},
+			"has_more": false,
 		}
 
+		b, _ := json.Marshal(payload)
+		_ = json.Unmarshal(b, out)
 	}).Return(nil)
 
 	// setup mocks for get customer by id

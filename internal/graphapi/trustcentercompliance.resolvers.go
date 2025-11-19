@@ -18,19 +18,11 @@ import (
 // CreateTrustCenterCompliance is the resolver for the createTrustCenterCompliance field.
 func (r *mutationResolver) CreateTrustCenterCompliance(ctx context.Context, input generated.CreateTrustCenterComplianceInput) (*model.TrustCenterComplianceCreatePayload, error) {
 	if input.TrustCenterID == nil {
-		// check if the organization has a trust center and set the id
-		trustCenterID, err := withTransactionalMutation(ctx).TrustCenter.Query().OnlyID(ctx)
+		var err error
+		input.TrustCenterID, err = getTrustCenterID(ctx, input.TrustCenterID, "trustcentercompliance")
 		if err != nil {
-			return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "trustcentercompliance"})
+			return nil, err
 		}
-
-		if trustCenterID == "" {
-			return nil, rout.NewMissingRequiredFieldError("trustCenterID")
-		}
-
-		logx.FromContext(ctx).Warn().Str("trust center id", trustCenterID).Msg("trustCenterID not provided, using organization's trust center")
-
-		input.TrustCenterID = &trustCenterID
 
 		// set the input in the graphql context
 		// this isn't a required field, but its required by the access checks
