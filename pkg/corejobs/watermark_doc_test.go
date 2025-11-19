@@ -117,6 +117,8 @@ It lacks proper PDF structure and will cause parsing errors.
 %%EOF`)
 	sampleImageContent := []byte("fake-image-content")
 
+	sampleValidDocxContent := []byte("PK\x03\x04\x14\x00\x06\x00\x08\x00\x00\x00!\x00")
+
 	testCases := []struct {
 		name                            string
 		input                           corejobs.WatermarkDocArgs
@@ -132,7 +134,59 @@ It lacks proper PDF structure and will cause parsing errors.
 		expectGetWatermarkConfigs       bool
 		expectUpdateTrustCenterDocCalls int
 		expectedFinalWatermarkStatus    *enums.WatermarkStatus
+		// whether file upload is expected when the job succeeds
+		// for pdf files that require watermarking, a file upload will follow unlike others
+		expectFileUploadOnSuccess bool
 	}{
+		{
+			name: "non-PDF document - skip watermarking",
+			input: corejobs.WatermarkDocArgs{
+				TrustCenterDocumentID: docID,
+			},
+			mockFileServerResponses: map[string][]byte{
+				"/original-file": sampleValidDocxContent,
+			},
+			getTrustCenterDocResponse: &openlaneclient.GetTrustCenterDocByID{
+				TrustCenterDoc: openlaneclient.GetTrustCenterDocByID_TrustCenterDoc{
+					ID:            docID,
+					FileID:        &fileID,
+					TrustCenterID: &trustCenterID,
+					OriginalFile: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_OriginalFile{
+						ID:               originalFileID,
+						ProvidedFileName: "test.docx",
+						PresignedURL:     stringPtr("/original-file"),
+					},
+					File: &openlaneclient.GetTrustCenterDocByID_TrustCenterDoc_File{
+						PresignedURL: stringPtr("/original-file"),
+					},
+				},
+			},
+			getWatermarkConfigsResponse: &openlaneclient.GetTrustCenterWatermarkConfigs{
+				TrustCenterWatermarkConfigs: openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs{
+					Edges: []*openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges{
+						{
+							Node: &openlaneclient.GetTrustCenterWatermarkConfigs_TrustCenterWatermarkConfigs_Edges_Node{
+								ID:            watermarkConfigID,
+								TrustCenterID: &trustCenterID,
+								Text:          stringPtr("CONFIDENTIAL"),
+								FontSize:      float64Ptr(12.0),
+								Opacity:       float64Ptr(0.5),
+								Rotation:      float64Ptr(45.0),
+								Color:         stringPtr("red"),
+							},
+						},
+					},
+				},
+			},
+			updateTrustCenterDocResponses: []*openlaneclient.UpdateTrustCenterDoc{
+				{},
+				{},
+			},
+			expectGetTrustCenterDoc:         true,
+			expectGetWatermarkConfigs:       true,
+			expectUpdateTrustCenterDocCalls: 2,
+			expectedFinalWatermarkStatus:    &enums.WatermarkStatusSuccess,
+		},
 		{
 			name: "text watermark - success",
 			input: corejobs.WatermarkDocArgs{
@@ -181,6 +235,7 @@ It lacks proper PDF structure and will cause parsing errors.
 			expectGetWatermarkConfigs:       true,
 			expectUpdateTrustCenterDocCalls: 2,
 			expectedFinalWatermarkStatus:    &enums.WatermarkStatusSuccess,
+			expectFileUploadOnSuccess:       true,
 		},
 		{
 			name: "image watermark - fails due to invalid image",
@@ -706,7 +761,7 @@ It lacks proper PDF structure and will cause parsing errors.
 					response = &openlaneclient.UpdateTrustCenterDoc{}
 				}
 
-				if expectedStatus == enums.WatermarkStatusSuccess {
+				if expectedStatus == enums.WatermarkStatusSuccess && tc.expectFileUploadOnSuccess {
 					// Success call should include a file upload
 					olMock.EXPECT().UpdateTrustCenterDoc(
 						mock.MatchedBy(func(ctx context.Context) bool { return ctx != nil }),

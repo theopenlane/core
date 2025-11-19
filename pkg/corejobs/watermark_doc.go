@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/pdfcpu/pdfcpu/pkg/api"
 	"github.com/riverqueue/river"
+	"github.com/samber/lo"
 
 	"github.com/pdfcpu/pdfcpu/pkg/pdfcpu/types"
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -18,6 +19,10 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+)
+
+const (
+	pdfMimeType = "application/pdf"
 )
 
 var (
@@ -131,6 +136,19 @@ func (w *WatermarkDocWorker) Work(ctx context.Context, job *river.Job[WatermarkD
 		logger.Error().Err(err).Msg("failed to download original document")
 		w.setWatermarkStatus(ctx, job.Args.TrustCenterDocumentID, enums.WatermarkStatusFailed)
 		return fmt.Errorf("failed to download original document: %w", err)
+	}
+
+	contentType := http.DetectContentType(originalDocBytes)
+	if contentType != pdfMimeType {
+		_, err = w.olClient.UpdateTrustCenterDoc(ctx, job.Args.TrustCenterDocumentID, openlaneclient.UpdateTrustCenterDocInput{
+			WatermarkStatus: lo.ToPtr(enums.WatermarkStatusSuccess),
+		}, nil, nil)
+		if err != nil {
+			logger.Error().Err(err).Str("mimetype", contentType).
+				Msg("failed to update status for document")
+			return fmt.Errorf("failed to update status for non-PDF document: %w", err)
+		}
+		return nil
 	}
 
 	// Create a buffer for the watermarked document
