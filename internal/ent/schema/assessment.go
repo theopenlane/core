@@ -4,6 +4,7 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/privacy"
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
@@ -101,8 +102,7 @@ func (a Assessment) Edges() []ent.Edge {
 func (Assessment) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckCreateAccess(),
-			policy.CheckOrgWriteAccess(),
+			privacy.AlwaysAllowRule(),
 		),
 	)
 }

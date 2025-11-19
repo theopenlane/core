@@ -124,13 +124,9 @@ require (
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
-	github.com/go-chi/chi/v5 v5.2.3 // indirect
-	github.com/grafana/regexp v0.0.0-20250905093917-f7b3be9d1853 // indirect
-	github.com/prometheus/otlptranslator v1.0.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	go.opentelemetry.io/otel/exporters/prometheus v0.60.0 // indirect
 	golang.org/x/image v0.33.0 // indirect
 	google.golang.org/api v0.256.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
