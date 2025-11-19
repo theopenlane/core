@@ -215,10 +215,14 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 				}
 			}
 
-			var fileIDsToUpdate = []string{*trustCenterDoc.OriginalFileID}
+			var fileIDsToUpdate []string
 
-			if trustCenterDoc.OriginalFileID != nil && trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
-				fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
+			if trustCenterDoc.OriginalFileID != nil {
+				fileIDsToUpdate = []string{*trustCenterDoc.OriginalFileID}
+
+				if trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
+					fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
+				}
 			}
 
 			// only update visibility tuples if it was explicitly changed
