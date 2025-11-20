@@ -148,8 +148,8 @@ func (j JobRunnerRegistrationToken) Interceptors() []ent.Interceptor {
 func (j JobRunnerRegistrationToken) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			rule.AllowIfContextHasPrivacyTokenOfType[*token.JobRunnerRegistrationToken](),
-			rule.AllowIfContextAllowRule(),
+			rule.AllowMutationIfSystemAdmin(),
+			// Allow org owners/members with create permission to mint registration tokens directly.
 			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
 		),

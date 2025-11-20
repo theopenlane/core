@@ -351,6 +351,15 @@ func setOrganizationInAuthContext(ctx context.Context, inputOrgID *string) error
 		return nil
 	}
 
+	// If no input provided, fallback to a single authorized org (e.g., API token with one org).
+	if inputOrgID == nil {
+		if au, err := auth.GetAuthenticatedUserFromContext(ctx); err == nil {
+			if len(au.OrganizationIDs) == 1 && au.OrganizationIDs[0] != "" {
+				return auth.SetOrganizationIDInAuthContext(ctx, au.OrganizationIDs[0])
+			}
+		}
+	}
+
 	return setOrgFromInputInContext(ctx, inputOrgID)
 }
 
