@@ -72,6 +72,9 @@ func (JobRunner) Fields() []ent.Field {
 		field.String("os").
 			Comment("the operating system of the runner").
 			Optional(),
+		field.JSON("metadata", map[string]any{}).
+			Comment("raw metadata payload for the remediation from the source system").
+			Optional(),
 	}
 }
 

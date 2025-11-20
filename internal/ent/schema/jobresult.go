@@ -46,8 +46,11 @@ func (JobResult) PluralName() string {
 func (JobResult) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("scheduled_job_id").
-			Comment("the job this result belongs to"),
-
+			Comment("the job this result belongs to").
+			Optional(),
+		field.String("compliance_job_id").
+			Comment("the job this result belongs to").
+			Optional(),
 		field.Enum("status").
 			GoType(enums.JobExecutionStatus("")).
 			Comment("the status of this job. did it fail? did it succeed?").
@@ -93,6 +96,9 @@ func (JobResult) Fields() []ent.Field {
 			Comment("the log output from the job").
 			Optional().
 			Nillable(),
+		field.JSON("metadata", map[string]any{}).
+			Comment("raw metadata payload for the remediation from the source system").
+			Optional(),
 	}
 }
 
@@ -113,7 +119,7 @@ func (j JobResult) Edges() []ent.Edge {
 			fromSchema: j,
 			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
-			required:   true,
+			required:   false,
 		}),
 
 		uniqueEdgeTo(&edgeDefinition{
@@ -122,6 +128,16 @@ func (j JobResult) Edges() []ent.Edge {
 			field:      "file_id",
 			required:   true,
 		}),
+		defaultEdgeToWithPagination(j, Evidence{}),
+		defaultEdgeToWithPagination(j, Finding{}),
+		defaultEdgeToWithPagination(j, Risk{}),
+		defaultEdgeToWithPagination(j, Control{}),
+		defaultEdgeToWithPagination(j, Standard{}),
+		defaultEdgeToWithPagination(j, Vulnerability{}),
+		defaultEdgeToWithPagination(j, Asset{}),
+		defaultEdgeToWithPagination(j, Contact{}),
+		defaultEdgeToWithPagination(j, Entity{}),
+		defaultEdgeToWithPagination(j, Task{}),
 	}
 }
 

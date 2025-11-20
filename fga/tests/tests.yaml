@@ -34,6 +34,8 @@ tests:
           can_create_standard: true
           can_create_template: true
           can_create_evidence: true
+          can_create_job_runner_registration_token: true
+          can_create_job_runner_token: true
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -62,6 +64,8 @@ tests:
           can_create_standard: false
           can_create_template: false
           can_create_evidence: true # group tuple set to allow
+          can_create_job_runner_registration_token: false
+          can_create_job_runner_token: false
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -137,6 +141,8 @@ tests:
           can_create_standard: true
           can_create_scheduled_job: true
           can_create_evidence: true
+          can_create_job_runner_registration_token: true
+          can_create_job_runner_token: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         context:

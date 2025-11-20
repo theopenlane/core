@@ -116,6 +116,12 @@ type organization
     define evidence_creator: [group#member]
     define can_create_evidence: can_edit or evidence_creator
 
+    define job_runner_registration_token_creator: [user, group#member]
+    define can_create_job_runner_registration_token: can_edit or job_runner_registration_token_creator
+
+    define job_runner_token_creator: [user, group#member]
+    define can_create_job_runner_token: can_edit or job_runner_token_creator
+
     define group_manager: [service]
     define can_manage_groups: owner or group_manager
 

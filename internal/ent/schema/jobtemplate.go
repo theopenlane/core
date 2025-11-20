@@ -63,7 +63,10 @@ func (JobTemplate) Fields() []ent.Field {
 			Annotations(
 				entgql.OrderField("PLATFORM"),
 			).
-			Comment("the platform to use to execute this job, e.g. golang, typescript, python, etc."),
+			Comment("the code language golang, typescript, python, etc."),
+		field.String("runtime_platform").
+			Comment("the code language golang, typescript, python, etc.").
+			Optional(),
 		field.String("windmill_path").
 			Annotations(
 				entgql.Skip(
@@ -72,6 +75,9 @@ func (JobTemplate) Fields() []ent.Field {
 			).
 			Optional().
 			Comment("windmill path used to execute the job"),
+		field.String("script_path").
+			Optional().
+			Comment("path used to execute the check"),
 		field.String("download_url").
 			Annotations(
 				entgql.Skip(
@@ -79,7 +85,8 @@ func (JobTemplate) Fields() []ent.Field {
 						entgql.SkipWhereInput,
 				),
 			).
-			Comment("the url from where to download the script from"),
+			Comment("the url from where to download the script from").
+			Optional(),
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
 			Annotations(
@@ -105,6 +112,9 @@ func (JobTemplate) Fields() []ent.Field {
 			}).
 			Optional().
 			Nillable(),
+		field.JSON("metadata", map[string]any{}).
+			Comment("raw metadata payload for the remediation from the source system").
+			Optional(),
 	}
 }
 
@@ -114,9 +124,6 @@ func (j JobTemplate) Mixin() []ent.Mixin {
 		prefix: "JBT",
 		additionalMixins: []ent.Mixin{
 			newOrgOwnedMixin(j),
-			// TODO: this was added but public access tuples are not
-			// yet implemented; so users cannot access job templates
-			// created by system admins
 			mixin.NewSystemOwnedMixin(),
 		},
 	}.getMixins(j)
@@ -132,7 +139,6 @@ func (JobTemplate) Annotations() []schema.Annotation {
 // Hooks of the JobTemplate
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookJobTemplate(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
@@ -143,9 +149,6 @@ func (JobTemplate) Hooks() []ent.Hook {
 // Edges of the JobTemplate
 func (j JobTemplate) Edges() []ent.Edge {
 	return []ent.Edge{
-		// ensure we cascade delete scheduled jobs when a job template is deleted
-		// TODO: if a job template is system owned, we should look into protection to prevent deletion
-		// if there are schedule jobs linked
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema:    j,
 			edgeSchema:    ScheduledJob{},
@@ -154,6 +157,16 @@ func (j JobTemplate) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipMutationCreateInput),
 			},
 		}),
+		defaultEdgeToWithPagination(j, Evidence{}),
+		defaultEdgeToWithPagination(j, Finding{}),
+		defaultEdgeToWithPagination(j, Risk{}),
+		defaultEdgeToWithPagination(j, Control{}),
+		defaultEdgeToWithPagination(j, Standard{}),
+		defaultEdgeToWithPagination(j, Vulnerability{}),
+		defaultEdgeToWithPagination(j, Asset{}),
+		defaultEdgeToWithPagination(j, Contact{}),
+		defaultEdgeToWithPagination(j, Entity{}),
+		defaultEdgeToWithPagination(j, Task{}),
 	}
 }
 

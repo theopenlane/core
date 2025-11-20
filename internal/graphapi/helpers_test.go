@@ -1,6 +1,7 @@
 package graphapi
 
 import (
+	"context"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -11,6 +12,8 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
 )
 
 func TestStripOperation(t *testing.T) {
@@ -301,6 +304,94 @@ func TestGetBulkUploadOwnerInput(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Check(t, is.DeepEqual(tt.expected, result))
+		})
+	}
+}
+
+func TestSetOrganizationForUploads(t *testing.T) {
+	t.Parallel()
+
+	primaryOrg := ulids.New().String()
+	secondaryOrg := ulids.New().String()
+
+	tests := []struct {
+		name        string
+		authUser    *auth.AuthenticatedUser
+		variables   map[string]any
+		inputKey    string
+		expectedOrg string
+		expectedErr error
+	}{
+		{
+			name: "Org already set in context",
+			authUser: &auth.AuthenticatedUser{
+				OrganizationID:     primaryOrg,
+				AuthenticationType: auth.PATAuthentication,
+			},
+			variables:   map[string]any{},
+			inputKey:    "input",
+			expectedOrg: primaryOrg,
+		},
+		{
+			name: "PAT requires explicit owner",
+			authUser: &auth.AuthenticatedUser{
+				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
+				AuthenticationType: auth.PATAuthentication,
+			},
+			variables: map[string]any{
+				"input": map[string]any{
+					"ownerID": primaryOrg,
+				},
+			},
+			inputKey:    "input",
+			expectedOrg: primaryOrg,
+		},
+		{
+			name: "PAT missing owner errors",
+			authUser: &auth.AuthenticatedUser{
+				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
+				AuthenticationType: auth.PATAuthentication,
+			},
+			variables:   nil,
+			inputKey:    "input",
+			expectedErr: ErrNoOrganizationID,
+		},
+		{
+			name: "Non-PAT single authorized org fallback",
+			authUser: &auth.AuthenticatedUser{
+				OrganizationIDs:    []string{primaryOrg},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+			variables:   nil,
+			inputKey:    "input",
+			expectedOrg: primaryOrg,
+		},
+		{
+			name: "Non-PAT multiple orgs require owner input",
+			authUser: &auth.AuthenticatedUser{
+				OrganizationIDs:    []string{primaryOrg, secondaryOrg},
+				AuthenticationType: auth.APITokenAuthentication,
+			},
+			variables:   nil,
+			inputKey:    "input",
+			expectedErr: ErrNoOrganizationID,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			ctx := auth.WithAuthenticatedUser(context.Background(), tt.authUser)
+
+			err := setOrganizationForUploads(ctx, tt.variables, tt.inputKey)
+			if tt.expectedErr != nil {
+				assert.ErrorIs(t, err, tt.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			assert.NilError(t, err)
+			assert.Check(t, is.Equal(tt.expectedOrg, orgID))
 		})
 	}
 }

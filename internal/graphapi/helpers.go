@@ -114,6 +114,12 @@ func injectFileUploader(u *objects.Service) graphql.FieldMiddleware {
 			return next(ctx)
 		}
 
+		if err := setOrganizationForUploads(ctx, op.Variables, inputKey); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context for uploads")
+
+			return nil, err
+		}
+
 		// Clean up any temporary files created by multipart form parser
 		ec, err := echocontext.EchoContextFromContext(ctx)
 		if err == nil && ec.Request().MultipartForm != nil {
@@ -288,6 +294,52 @@ func getBulkUploadOwnerInput[T any](input []*T) (*string, error) {
 	}
 
 	return ownerID, nil
+}
+
+// setOrganizationForUploads ensures an organization is present in the auth context
+// we want this for token-authenticated requests where the active org is not pre-selected (e.g., PATs)
+func setOrganizationForUploads(ctx context.Context, variables map[string]any, inputKey string) error {
+	if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil && orgID != "" {
+		return nil
+	}
+
+	ownerID, err := getOwnerIDFromVariables(variables, inputKey)
+	if err != nil {
+		return err
+	}
+
+	return setOrganizationInAuthContext(ctx, ownerID)
+}
+
+// getOwnerIDFromVariables attempts to extract an owner/organization ID from the GraphQL variables map
+func getOwnerIDFromVariables(variables map[string]any, inputKey string) (*string, error) {
+	// Prefer the primary input payload (e.g., "input") if available
+	if inputKey != "" {
+		if rawInput, ok := variables[inputKey]; ok && rawInput != nil {
+			inputBytes, err := json.Marshal(rawInput)
+			if err != nil {
+				return nil, err
+			}
+
+			var owner inputWithOwnerID
+			if err := json.Unmarshal(inputBytes, &owner); err != nil {
+				return nil, err
+			}
+
+			if owner.OwnerID != nil && *owner.OwnerID != "" {
+				return owner.OwnerID, nil
+			}
+		}
+	}
+
+	// Also handle cases where ownerID is passed as a top-level variable
+	if rawOwner, ok := variables["ownerID"]; ok {
+		if ownerStr, ok := rawOwner.(string); ok && ownerStr != "" {
+			return &ownerStr, nil
+		}
+	}
+
+	return nil, nil
 }
 
 // setOrganizationInAuthContext sets the organization in the auth context based on the input if it is not already set

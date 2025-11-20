@@ -59,14 +59,10 @@ func (ScheduledJobRun) Fields() []ent.Field {
 
 		field.String("script").
 			Immutable().
-			// The script in the job allows for templating so you
-			// can do something like {{ .URL }}
-			// Then when the job is being scheduled, it would replace with actual values
-			// using text/template .
-			//
-			// This complete value is what can be executed with all required inputs
-			Comment(`the script that will be executed by the agent.
-This script will be templated with the values from the configuration on the job`),
+			Comment(`the script that will be executed by the agent. This script will be templated with the values from the configuration on the job`),
+		field.JSON("metadata", map[string]any{}).
+			Comment("raw metadata payload for the remediation from the source system").
+			Optional(),
 	}
 }
 

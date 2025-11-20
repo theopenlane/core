@@ -1,10 +1,9 @@
 //go:build cli
 
-package jobrunnertoken
+package jobrunnerregistrationtoken
 
 import (
 	"context"
-	"time"
 
 	"github.com/samber/lo"
 	"github.com/spf13/cobra"
@@ -15,7 +14,7 @@ import (
 
 var createCmd = &cobra.Command{
 	Use:   "create",
-	Short: "create a new jobrunnertoken",
+	Short: "create a new job runner registration token",
 	Run: func(cmd *cobra.Command, args []string) {
 		err := create(cmd.Context())
 		cobra.CheckErr(err)
@@ -25,43 +24,27 @@ var createCmd = &cobra.Command{
 func init() {
 	command.AddCommand(createCmd)
 
-	createCmd.Flags().StringP("owner-id", "o", "", "organization ID for the job runner token")
-	createCmd.Flags().StringP("jobrunner-id", "j", "", "job runner ID to attach the token to")
-	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags for the job runner token")
-	createCmd.Flags().DurationP("expiration", "e", 0, "duration until the token expires (leave empty for no expiry)")
-	createCmd.Flags().BoolP("inactive", "i", false, "create the token in an inactive state")
+	createCmd.Flags().StringP("owner-id", "o", "", "organization ID for the runner registration token")
+	createCmd.Flags().StringSliceP("tags", "t", []string{}, "tags for the runner registration token")
 }
 
 // createValidation validates the required fields for the command
-func createValidation() (input openlaneclient.CreateJobRunnerTokenInput, err error) {
+func createValidation() (input openlaneclient.CreateJobRunnerRegistrationTokenInput, err error) {
 	owner := cmd.Config.String("owner-id")
 	if owner == "" {
 		return input, cmd.NewRequiredFieldMissingError("owner-id")
 	}
 	input.OwnerID = lo.ToPtr(owner)
 
-	jobRunnerID := cmd.Config.String("jobrunner-id")
-	if jobRunnerID != "" {
-		input.JobRunnerIDs = []string{jobRunnerID}
-	}
-
 	tags := cmd.Config.Strings("tags")
 	if len(tags) > 0 {
 		input.Tags = tags
 	}
 
-	if exp := cmd.Config.Duration("expiration"); exp > 0 {
-		input.ExpiresAt = lo.ToPtr(time.Now().Add(exp))
-	}
-
-	if cmd.Config.Bool("inactive") {
-		input.IsActive = lo.ToPtr(false)
-	}
-
 	return input, nil
 }
 
-// create a new jobrunnertoken
+// create a new job runner registration token
 func create(ctx context.Context) error {
 	// attempt to setup with token, otherwise fall back to JWT with session
 	client, err := cmd.TokenAuth(ctx, cmd.Config)
@@ -75,7 +58,7 @@ func create(ctx context.Context) error {
 	input, err := createValidation()
 	cobra.CheckErr(err)
 
-	o, err := client.CreateJobRunnerToken(ctx, input)
+	o, err := client.CreateJobRunnerRegistrationToken(ctx, input)
 	cobra.CheckErr(err)
 
 	return consoleOutput(o)

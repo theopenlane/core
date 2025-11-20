@@ -112,6 +112,7 @@ tasks:
       - task: program:create
       - task: token:create
       - task: pat:create
+      - task: jobrunner:token:create
       - task: orgsub:get
 
   user:all:admin:
@@ -127,6 +128,7 @@ tasks:
           ORG_NAME: admin-org
       - task: token:create
       - task: pat:create
+      - task: jobrunner:token:create
 
   # === Login ===
   login:creds:
@@ -176,6 +178,23 @@ tasks:
     vars:
       ORG_ID:
         sh: task org:get
+
+  jobrunner:registration-token:create:
+    desc: create a job runner registration token for agent registration and store it locally
+    vars:
+      ORG_ID:
+        sh: task org:get
+    cmds:
+      - go run -tags cli main.go jobrunnerregistrationtoken create -o {{.ORG_ID}} -z json | jq -r '.createJobRunnerRegistrationToken.jobRunnerRegistrationToken.token' | tee .env-jobrunner-registration-token
+
+  jobrunner:token:create:
+    desc: create a long-lived job runner token for an org runner and store it locally
+    vars:
+      ORG_ID:
+        sh: task org:get
+      JOBRUNNER_ID: ""
+    cmds:
+      - go run -tags cli main.go jobrunnertoken create -o {{.ORG_ID}} {{- if .JOBRUNNER_ID }} -j {{.JOBRUNNER_ID}}{{ end }} -z json | jq -r '.createJobRunnerToken.jobRunnerToken.token' | tee .env-jobrunner-token
 
   admin:grant:fga:
     desc: grant system admin FGA privileges

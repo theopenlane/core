@@ -77,9 +77,9 @@ func (ScheduledJob) Fields() []ent.Field {
 		field.String("job_runner_id").
 			Optional().
 			Comment("the runner that this job will run on. If not set, it will scheduled on a general runner instead"),
-		// TODO: we should consider adding a hook that will round-robin the orgs runners
-		// or instead of setting a runner, say "org_runner" so we know they are using their own runner vs. a potentially
-		// openlane shared runner; we shouldn't have to have the user (or UI) look up this ID every time to create a job
+		field.JSON("metadata", map[string]any{}).
+			Comment("raw metadata payload for the remediation from the source system").
+			Optional(),
 	}
 }
 
@@ -113,6 +113,15 @@ func (c ScheduledJob) Edges() []ent.Edge {
 
 		defaultEdgeToWithPagination(c, Control{}),
 		defaultEdgeToWithPagination(c, Subcontrol{}),
+		defaultEdgeToWithPagination(c, Evidence{}),
+		defaultEdgeToWithPagination(c, Finding{}),
+		defaultEdgeToWithPagination(c, Risk{}),
+		defaultEdgeToWithPagination(c, Standard{}),
+		defaultEdgeToWithPagination(c, Vulnerability{}),
+		defaultEdgeToWithPagination(c, Asset{}),
+		defaultEdgeToWithPagination(c, Contact{}),
+		defaultEdgeToWithPagination(c, Entity{}),
+		defaultEdgeToWithPagination(c, Task{}),
 
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,
