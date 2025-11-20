@@ -1198,6 +1198,46 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risks": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "standards": {
+	ObjectType:      "standard",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "contacts": {
+	ObjectType:      "contact",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "job_runner": {"owner": {
 	ObjectType:      "owner",
@@ -1232,6 +1272,46 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "scheduled_jobs": {
 	ObjectType:      "scheduled_job",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risks": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "controls": {
+	ObjectType:      "control",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "standards": {
+	ObjectType:      "standard",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "contacts": {
+	ObjectType:      "contact",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -2243,6 +2323,42 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "subcontrols": {
 	ObjectType:      "subcontrol",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "findings": {
+	ObjectType:      "finding",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "risks": {
+	ObjectType:      "risk",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "standards": {
+	ObjectType:      "standard",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "vulnerabilities": {
+	ObjectType:      "vulnerability",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "assets": {
+	ObjectType:      "asset",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "contacts": {
+	ObjectType:      "contact",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entities": {
+	ObjectType:      "entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "tasks": {
+	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "job_runner": {

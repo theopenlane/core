@@ -214,6 +214,12 @@ func (_c *ScheduledJobHistoryCreate) SetNillableJobRunnerID(v *string) *Schedule
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *ScheduledJobHistoryCreate) SetMetadata(v map[string]interface{}) *ScheduledJobHistoryCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ScheduledJobHistoryCreate) SetID(v string) *ScheduledJobHistoryCreate {
 	_c.mutation.SetID(v)
@@ -426,6 +432,10 @@ func (_c *ScheduledJobHistoryCreate) createSpec() (*ScheduledJobHistory, *sqlgra
 	if value, ok := _c.mutation.JobRunnerID(); ok {
 		_spec.SetField(scheduledjobhistory.FieldJobRunnerID, field.TypeString, value)
 		_node.JobRunnerID = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobhistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	return _node, _spec
 }

@@ -56,6 +56,8 @@ type JobRunner struct {
 	Version string `json:"version,omitempty"`
 	// the operating system of the runner
 	Os string `json:"os,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobRunnerQuery when eager-loading is set.
 	Edges        JobRunnerEdges `json:"edges"`
@@ -102,7 +104,7 @@ func (*JobRunner) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case jobrunner.FieldTags:
+		case jobrunner.FieldTags, jobrunner.FieldMetadata:
 			values[i] = new([]byte)
 		case jobrunner.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
@@ -243,6 +245,14 @@ func (_m *JobRunner) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Os = value.String
 			}
+		case jobrunner.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -346,6 +356,9 @@ func (_m *JobRunner) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("os=")
 	builder.WriteString(_m.Os)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

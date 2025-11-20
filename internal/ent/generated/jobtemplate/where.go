@@ -134,9 +134,19 @@ func Description(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldEQ(FieldDescription, v))
 }
 
+// RuntimePlatform applies equality check predicate on the "runtime_platform" field. It's identical to RuntimePlatformEQ.
+func RuntimePlatform(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEQ(FieldRuntimePlatform, v))
+}
+
 // WindmillPath applies equality check predicate on the "windmill_path" field. It's identical to WindmillPathEQ.
 func WindmillPath(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldEQ(FieldWindmillPath, v))
+}
+
+// ScriptPath applies equality check predicate on the "script_path" field. It's identical to ScriptPathEQ.
+func ScriptPath(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEQ(FieldScriptPath, v))
 }
 
 // DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
@@ -1014,6 +1024,81 @@ func PlatformNotIn(vs ...enums.JobPlatformType) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldNotIn(FieldPlatform, v...))
 }
 
+// RuntimePlatformEQ applies the EQ predicate on the "runtime_platform" field.
+func RuntimePlatformEQ(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEQ(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformNEQ applies the NEQ predicate on the "runtime_platform" field.
+func RuntimePlatformNEQ(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNEQ(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformIn applies the In predicate on the "runtime_platform" field.
+func RuntimePlatformIn(vs ...string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIn(FieldRuntimePlatform, vs...))
+}
+
+// RuntimePlatformNotIn applies the NotIn predicate on the "runtime_platform" field.
+func RuntimePlatformNotIn(vs ...string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotIn(FieldRuntimePlatform, vs...))
+}
+
+// RuntimePlatformGT applies the GT predicate on the "runtime_platform" field.
+func RuntimePlatformGT(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldGT(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformGTE applies the GTE predicate on the "runtime_platform" field.
+func RuntimePlatformGTE(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldGTE(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformLT applies the LT predicate on the "runtime_platform" field.
+func RuntimePlatformLT(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldLT(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformLTE applies the LTE predicate on the "runtime_platform" field.
+func RuntimePlatformLTE(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldLTE(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformContains applies the Contains predicate on the "runtime_platform" field.
+func RuntimePlatformContains(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldContains(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformHasPrefix applies the HasPrefix predicate on the "runtime_platform" field.
+func RuntimePlatformHasPrefix(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldHasPrefix(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformHasSuffix applies the HasSuffix predicate on the "runtime_platform" field.
+func RuntimePlatformHasSuffix(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldHasSuffix(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformIsNil applies the IsNil predicate on the "runtime_platform" field.
+func RuntimePlatformIsNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIsNull(FieldRuntimePlatform))
+}
+
+// RuntimePlatformNotNil applies the NotNil predicate on the "runtime_platform" field.
+func RuntimePlatformNotNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotNull(FieldRuntimePlatform))
+}
+
+// RuntimePlatformEqualFold applies the EqualFold predicate on the "runtime_platform" field.
+func RuntimePlatformEqualFold(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEqualFold(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformContainsFold applies the ContainsFold predicate on the "runtime_platform" field.
+func RuntimePlatformContainsFold(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldContainsFold(FieldRuntimePlatform, v))
+}
+
 // WindmillPathEQ applies the EQ predicate on the "windmill_path" field.
 func WindmillPathEQ(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldEQ(FieldWindmillPath, v))
@@ -1089,6 +1174,81 @@ func WindmillPathContainsFold(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldContainsFold(FieldWindmillPath, v))
 }
 
+// ScriptPathEQ applies the EQ predicate on the "script_path" field.
+func ScriptPathEQ(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEQ(FieldScriptPath, v))
+}
+
+// ScriptPathNEQ applies the NEQ predicate on the "script_path" field.
+func ScriptPathNEQ(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNEQ(FieldScriptPath, v))
+}
+
+// ScriptPathIn applies the In predicate on the "script_path" field.
+func ScriptPathIn(vs ...string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIn(FieldScriptPath, vs...))
+}
+
+// ScriptPathNotIn applies the NotIn predicate on the "script_path" field.
+func ScriptPathNotIn(vs ...string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotIn(FieldScriptPath, vs...))
+}
+
+// ScriptPathGT applies the GT predicate on the "script_path" field.
+func ScriptPathGT(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldGT(FieldScriptPath, v))
+}
+
+// ScriptPathGTE applies the GTE predicate on the "script_path" field.
+func ScriptPathGTE(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldGTE(FieldScriptPath, v))
+}
+
+// ScriptPathLT applies the LT predicate on the "script_path" field.
+func ScriptPathLT(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldLT(FieldScriptPath, v))
+}
+
+// ScriptPathLTE applies the LTE predicate on the "script_path" field.
+func ScriptPathLTE(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldLTE(FieldScriptPath, v))
+}
+
+// ScriptPathContains applies the Contains predicate on the "script_path" field.
+func ScriptPathContains(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldContains(FieldScriptPath, v))
+}
+
+// ScriptPathHasPrefix applies the HasPrefix predicate on the "script_path" field.
+func ScriptPathHasPrefix(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldHasPrefix(FieldScriptPath, v))
+}
+
+// ScriptPathHasSuffix applies the HasSuffix predicate on the "script_path" field.
+func ScriptPathHasSuffix(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldHasSuffix(FieldScriptPath, v))
+}
+
+// ScriptPathIsNil applies the IsNil predicate on the "script_path" field.
+func ScriptPathIsNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIsNull(FieldScriptPath))
+}
+
+// ScriptPathNotNil applies the NotNil predicate on the "script_path" field.
+func ScriptPathNotNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotNull(FieldScriptPath))
+}
+
+// ScriptPathEqualFold applies the EqualFold predicate on the "script_path" field.
+func ScriptPathEqualFold(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldEqualFold(FieldScriptPath, v))
+}
+
+// ScriptPathContainsFold applies the ContainsFold predicate on the "script_path" field.
+func ScriptPathContainsFold(v string) predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldContainsFold(FieldScriptPath, v))
+}
+
 // DownloadURLEQ applies the EQ predicate on the "download_url" field.
 func DownloadURLEQ(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldEQ(FieldDownloadURL, v))
@@ -1142,6 +1302,16 @@ func DownloadURLHasPrefix(v string) predicate.JobTemplate {
 // DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
 func DownloadURLHasSuffix(v string) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldHasSuffix(FieldDownloadURL, v))
+}
+
+// DownloadURLIsNil applies the IsNil predicate on the "download_url" field.
+func DownloadURLIsNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIsNull(FieldDownloadURL))
+}
+
+// DownloadURLNotNil applies the NotNil predicate on the "download_url" field.
+func DownloadURLNotNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotNull(FieldDownloadURL))
 }
 
 // DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
@@ -1244,6 +1414,16 @@ func CronContainsFold(v models.Cron) predicate.JobTemplate {
 	return predicate.JobTemplate(sql.FieldContainsFold(FieldCron, vc))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.JobTemplate {
+	return predicate.JobTemplate(sql.FieldNotNull(FieldMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.JobTemplate {
 	return predicate.JobTemplate(func(s *sql.Selector) {
@@ -1294,6 +1474,296 @@ func HasScheduledJobsWith(preds ...predicate.ScheduledJob) predicate.JobTemplate
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.ScheduledJob
 		step.Edge.Schema = schemaConfig.ScheduledJob
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EvidenceTable, EvidenceColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newRisksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStandards applies the HasEdge predicate on the "standards" edge.
+func HasStandards() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardsWith applies the HasEdge predicate on the "standards" edge with a given conditions (other predicates).
+func HasStandardsWith(preds ...predicate.Standard) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newStandardsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasContacts applies the HasEdge predicate on the "contacts" edge.
+func HasContacts() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ContactsTable, ContactsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContactsWith applies the HasEdge predicate on the "contacts" edge with a given conditions (other predicates).
+func HasContactsWith(preds ...predicate.Contact) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newContactsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newEntitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTasks applies the HasEdge predicate on the "tasks" edge.
+func HasTasks() predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTasksWith applies the HasEdge predicate on the "tasks" edge with a given conditions (other predicates).
+func HasTasksWith(preds ...predicate.Task) predicate.JobTemplate {
+	return predicate.JobTemplate(func(s *sql.Selector) {
+		step := newTasksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

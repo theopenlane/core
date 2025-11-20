@@ -646,6 +646,7 @@ query AdminSearch($query: String!) {
           ipAddress
           version
           os
+          metadata
         }
       }
     }
@@ -702,6 +703,9 @@ query AdminSearch($query: String!) {
           systemInternalID
           title
           description
+          runtimePlatform
+          scriptPath
+          metadata
         }
       }
     }

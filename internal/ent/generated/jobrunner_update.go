@@ -293,6 +293,18 @@ func (_u *JobRunnerUpdate) ClearOs() *JobRunnerUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *JobRunnerUpdate) SetMetadata(v map[string]interface{}) *JobRunnerUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *JobRunnerUpdate) ClearMetadata() *JobRunnerUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *JobRunnerUpdate) SetOwner(v *Organization) *JobRunnerUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -500,6 +512,12 @@ func (_u *JobRunnerUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if _u.mutation.OsCleared() {
 		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(jobrunner.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(jobrunner.FieldMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -862,6 +880,18 @@ func (_u *JobRunnerUpdateOne) ClearOs() *JobRunnerUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *JobRunnerUpdateOne) SetMetadata(v map[string]interface{}) *JobRunnerUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *JobRunnerUpdateOne) ClearMetadata() *JobRunnerUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *JobRunnerUpdateOne) SetOwner(v *Organization) *JobRunnerUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1099,6 +1129,12 @@ func (_u *JobRunnerUpdateOne) sqlSave(ctx context.Context) (_node *JobRunner, er
 	}
 	if _u.mutation.OsCleared() {
 		_spec.ClearField(jobrunner.FieldOs, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(jobrunner.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(jobrunner.FieldMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

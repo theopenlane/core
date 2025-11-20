@@ -101,7 +101,7 @@ func createValidation(cobraCmd *cobra.Command) (input openlaneclient.CreateJobRe
 	// Build input struct with required fields
 	input = openlaneclient.CreateJobResultInput{
 		Status:         status,
-		ExitCode:       exitCode,
+		ExitCode:       &exitCode,
 		ScheduledJobID: scheduledJobID,
 		FileID:         fileID,
 	}

@@ -2238,20 +2238,22 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		Type: "JobResult",
 		Fields: map[string]*sqlgraph.FieldSpec{
-			jobresult.FieldCreatedAt:      {Type: field.TypeTime, Column: jobresult.FieldCreatedAt},
-			jobresult.FieldUpdatedAt:      {Type: field.TypeTime, Column: jobresult.FieldUpdatedAt},
-			jobresult.FieldCreatedBy:      {Type: field.TypeString, Column: jobresult.FieldCreatedBy},
-			jobresult.FieldUpdatedBy:      {Type: field.TypeString, Column: jobresult.FieldUpdatedBy},
-			jobresult.FieldDeletedAt:      {Type: field.TypeTime, Column: jobresult.FieldDeletedAt},
-			jobresult.FieldDeletedBy:      {Type: field.TypeString, Column: jobresult.FieldDeletedBy},
-			jobresult.FieldOwnerID:        {Type: field.TypeString, Column: jobresult.FieldOwnerID},
-			jobresult.FieldScheduledJobID: {Type: field.TypeString, Column: jobresult.FieldScheduledJobID},
-			jobresult.FieldStatus:         {Type: field.TypeEnum, Column: jobresult.FieldStatus},
-			jobresult.FieldExitCode:       {Type: field.TypeInt, Column: jobresult.FieldExitCode},
-			jobresult.FieldFinishedAt:     {Type: field.TypeTime, Column: jobresult.FieldFinishedAt},
-			jobresult.FieldStartedAt:      {Type: field.TypeTime, Column: jobresult.FieldStartedAt},
-			jobresult.FieldFileID:         {Type: field.TypeString, Column: jobresult.FieldFileID},
-			jobresult.FieldLog:            {Type: field.TypeString, Column: jobresult.FieldLog},
+			jobresult.FieldCreatedAt:       {Type: field.TypeTime, Column: jobresult.FieldCreatedAt},
+			jobresult.FieldUpdatedAt:       {Type: field.TypeTime, Column: jobresult.FieldUpdatedAt},
+			jobresult.FieldCreatedBy:       {Type: field.TypeString, Column: jobresult.FieldCreatedBy},
+			jobresult.FieldUpdatedBy:       {Type: field.TypeString, Column: jobresult.FieldUpdatedBy},
+			jobresult.FieldDeletedAt:       {Type: field.TypeTime, Column: jobresult.FieldDeletedAt},
+			jobresult.FieldDeletedBy:       {Type: field.TypeString, Column: jobresult.FieldDeletedBy},
+			jobresult.FieldOwnerID:         {Type: field.TypeString, Column: jobresult.FieldOwnerID},
+			jobresult.FieldScheduledJobID:  {Type: field.TypeString, Column: jobresult.FieldScheduledJobID},
+			jobresult.FieldComplianceJobID: {Type: field.TypeString, Column: jobresult.FieldComplianceJobID},
+			jobresult.FieldStatus:          {Type: field.TypeEnum, Column: jobresult.FieldStatus},
+			jobresult.FieldExitCode:        {Type: field.TypeInt, Column: jobresult.FieldExitCode},
+			jobresult.FieldFinishedAt:      {Type: field.TypeTime, Column: jobresult.FieldFinishedAt},
+			jobresult.FieldStartedAt:       {Type: field.TypeTime, Column: jobresult.FieldStartedAt},
+			jobresult.FieldFileID:          {Type: field.TypeString, Column: jobresult.FieldFileID},
+			jobresult.FieldLog:             {Type: field.TypeString, Column: jobresult.FieldLog},
+			jobresult.FieldMetadata:        {Type: field.TypeJSON, Column: jobresult.FieldMetadata},
 		},
 	}
 	graph.Nodes[62] = &sqlgraph.Node{
@@ -2283,6 +2285,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobrunner.FieldLastSeen:         {Type: field.TypeTime, Column: jobrunner.FieldLastSeen},
 			jobrunner.FieldVersion:          {Type: field.TypeString, Column: jobrunner.FieldVersion},
 			jobrunner.FieldOs:               {Type: field.TypeString, Column: jobrunner.FieldOs},
+			jobrunner.FieldMetadata:         {Type: field.TypeJSON, Column: jobrunner.FieldMetadata},
 		},
 	}
 	graph.Nodes[63] = &sqlgraph.Node{
@@ -2364,10 +2367,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobtemplate.FieldTitle:            {Type: field.TypeString, Column: jobtemplate.FieldTitle},
 			jobtemplate.FieldDescription:      {Type: field.TypeString, Column: jobtemplate.FieldDescription},
 			jobtemplate.FieldPlatform:         {Type: field.TypeEnum, Column: jobtemplate.FieldPlatform},
+			jobtemplate.FieldRuntimePlatform:  {Type: field.TypeString, Column: jobtemplate.FieldRuntimePlatform},
 			jobtemplate.FieldWindmillPath:     {Type: field.TypeString, Column: jobtemplate.FieldWindmillPath},
+			jobtemplate.FieldScriptPath:       {Type: field.TypeString, Column: jobtemplate.FieldScriptPath},
 			jobtemplate.FieldDownloadURL:      {Type: field.TypeString, Column: jobtemplate.FieldDownloadURL},
 			jobtemplate.FieldConfiguration:    {Type: field.TypeJSON, Column: jobtemplate.FieldConfiguration},
 			jobtemplate.FieldCron:             {Type: field.TypeString, Column: jobtemplate.FieldCron},
+			jobtemplate.FieldMetadata:         {Type: field.TypeJSON, Column: jobtemplate.FieldMetadata},
 		},
 	}
 	graph.Nodes[66] = &sqlgraph.Node{
@@ -2399,10 +2405,13 @@ var schemaGraph = func() *sqlgraph.Schema {
 			jobtemplatehistory.FieldTitle:            {Type: field.TypeString, Column: jobtemplatehistory.FieldTitle},
 			jobtemplatehistory.FieldDescription:      {Type: field.TypeString, Column: jobtemplatehistory.FieldDescription},
 			jobtemplatehistory.FieldPlatform:         {Type: field.TypeEnum, Column: jobtemplatehistory.FieldPlatform},
+			jobtemplatehistory.FieldRuntimePlatform:  {Type: field.TypeString, Column: jobtemplatehistory.FieldRuntimePlatform},
 			jobtemplatehistory.FieldWindmillPath:     {Type: field.TypeString, Column: jobtemplatehistory.FieldWindmillPath},
+			jobtemplatehistory.FieldScriptPath:       {Type: field.TypeString, Column: jobtemplatehistory.FieldScriptPath},
 			jobtemplatehistory.FieldDownloadURL:      {Type: field.TypeString, Column: jobtemplatehistory.FieldDownloadURL},
 			jobtemplatehistory.FieldConfiguration:    {Type: field.TypeJSON, Column: jobtemplatehistory.FieldConfiguration},
 			jobtemplatehistory.FieldCron:             {Type: field.TypeString, Column: jobtemplatehistory.FieldCron},
+			jobtemplatehistory.FieldMetadata:         {Type: field.TypeJSON, Column: jobtemplatehistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[67] = &sqlgraph.Node{
@@ -3613,6 +3622,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjob.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjob.FieldConfiguration},
 			scheduledjob.FieldCron:          {Type: field.TypeString, Column: scheduledjob.FieldCron},
 			scheduledjob.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjob.FieldJobRunnerID},
+			scheduledjob.FieldMetadata:      {Type: field.TypeJSON, Column: scheduledjob.FieldMetadata},
 		},
 	}
 	graph.Nodes[105] = &sqlgraph.Node{
@@ -3642,6 +3652,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobhistory.FieldConfiguration: {Type: field.TypeJSON, Column: scheduledjobhistory.FieldConfiguration},
 			scheduledjobhistory.FieldCron:          {Type: field.TypeString, Column: scheduledjobhistory.FieldCron},
 			scheduledjobhistory.FieldJobRunnerID:   {Type: field.TypeString, Column: scheduledjobhistory.FieldJobRunnerID},
+			scheduledjobhistory.FieldMetadata:      {Type: field.TypeJSON, Column: scheduledjobhistory.FieldMetadata},
 		},
 	}
 	graph.Nodes[106] = &sqlgraph.Node{
@@ -3667,6 +3678,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			scheduledjobrun.FieldScheduledJobID:        {Type: field.TypeString, Column: scheduledjobrun.FieldScheduledJobID},
 			scheduledjobrun.FieldExpectedExecutionTime: {Type: field.TypeTime, Column: scheduledjobrun.FieldExpectedExecutionTime},
 			scheduledjobrun.FieldScript:                {Type: field.TypeString, Column: scheduledjobrun.FieldScript},
+			scheduledjobrun.FieldMetadata:              {Type: field.TypeJSON, Column: scheduledjobrun.FieldMetadata},
 		},
 	}
 	graph.Nodes[107] = &sqlgraph.Node{
@@ -8588,6 +8600,126 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.EvidenceTable,
+			Columns: []string{jobresult.EvidenceColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Evidence",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.FindingsTable,
+			Columns: []string{jobresult.FindingsColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Finding",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.RisksTable,
+			Columns: []string{jobresult.RisksColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Risk",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.ControlsTable,
+			Columns: []string{jobresult.ControlsColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Control",
+	)
+	graph.MustAddE(
+		"standards",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.StandardsTable,
+			Columns: []string{jobresult.StandardsColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Standard",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.VulnerabilitiesTable,
+			Columns: []string{jobresult.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.AssetsTable,
+			Columns: []string{jobresult.AssetsColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Asset",
+	)
+	graph.MustAddE(
+		"contacts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.ContactsTable,
+			Columns: []string{jobresult.ContactsColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Contact",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.EntitiesTable,
+			Columns: []string{jobresult.EntitiesColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Entity",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobresult.TasksTable,
+			Columns: []string{jobresult.TasksColumn},
+			Bidi:    false,
+		},
+		"JobResult",
+		"Task",
+	)
+	graph.MustAddE(
 		"owner",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -8682,6 +8814,126 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"JobTemplate",
 		"ScheduledJob",
+	)
+	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.EvidenceTable,
+			Columns: []string{jobtemplate.EvidenceColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Evidence",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.FindingsTable,
+			Columns: []string{jobtemplate.FindingsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Finding",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.RisksTable,
+			Columns: []string{jobtemplate.RisksColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Risk",
+	)
+	graph.MustAddE(
+		"controls",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ControlsTable,
+			Columns: []string{jobtemplate.ControlsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Control",
+	)
+	graph.MustAddE(
+		"standards",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.StandardsTable,
+			Columns: []string{jobtemplate.StandardsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Standard",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.VulnerabilitiesTable,
+			Columns: []string{jobtemplate.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.AssetsTable,
+			Columns: []string{jobtemplate.AssetsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Asset",
+	)
+	graph.MustAddE(
+		"contacts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ContactsTable,
+			Columns: []string{jobtemplate.ContactsColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Contact",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.EntitiesTable,
+			Columns: []string{jobtemplate.EntitiesColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Entity",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.TasksTable,
+			Columns: []string{jobtemplate.TasksColumn},
+			Bidi:    false,
+		},
+		"JobTemplate",
+		"Task",
 	)
 	graph.MustAddE(
 		"custom_domains",
@@ -11646,6 +11898,114 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"ScheduledJob",
 		"Subcontrol",
+	)
+	graph.MustAddE(
+		"evidence",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Evidence",
+	)
+	graph.MustAddE(
+		"findings",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Finding",
+	)
+	graph.MustAddE(
+		"risks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Risk",
+	)
+	graph.MustAddE(
+		"standards",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Standard",
+	)
+	graph.MustAddE(
+		"vulnerabilities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Vulnerability",
+	)
+	graph.MustAddE(
+		"assets",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Asset",
+	)
+	graph.MustAddE(
+		"contacts",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Contact",
+	)
+	graph.MustAddE(
+		"entities",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Entity",
+	)
+	graph.MustAddE(
+		"tasks",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+		},
+		"ScheduledJob",
+		"Task",
 	)
 	graph.MustAddE(
 		"job_runner",
@@ -26323,6 +26683,11 @@ func (f *JobResultFilter) WhereScheduledJobID(p entql.StringP) {
 	f.Where(p.Field(jobresult.FieldScheduledJobID))
 }
 
+// WhereComplianceJobID applies the entql string predicate on the compliance_job_id field.
+func (f *JobResultFilter) WhereComplianceJobID(p entql.StringP) {
+	f.Where(p.Field(jobresult.FieldComplianceJobID))
+}
+
 // WhereStatus applies the entql string predicate on the status field.
 func (f *JobResultFilter) WhereStatus(p entql.StringP) {
 	f.Where(p.Field(jobresult.FieldStatus))
@@ -26351,6 +26716,11 @@ func (f *JobResultFilter) WhereFileID(p entql.StringP) {
 // WhereLog applies the entql string predicate on the log field.
 func (f *JobResultFilter) WhereLog(p entql.StringP) {
 	f.Where(p.Field(jobresult.FieldLog))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *JobResultFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(jobresult.FieldMetadata))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -26389,6 +26759,146 @@ func (f *JobResultFilter) WhereHasFile() {
 // WhereHasFileWith applies a predicate to check if query has an edge file with a given conditions (other predicates).
 func (f *JobResultFilter) WhereHasFileWith(preds ...predicate.File) {
 	f.Where(entql.HasEdgeWith("file", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *JobResultFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *JobResultFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *JobResultFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *JobResultFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandards applies a predicate to check if query has an edge standards.
+func (f *JobResultFilter) WhereHasStandards() {
+	f.Where(entql.HasEdge("standards"))
+}
+
+// WhereHasStandardsWith applies a predicate to check if query has an edge standards with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasStandardsWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standards", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *JobResultFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *JobResultFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasContacts applies a predicate to check if query has an edge contacts.
+func (f *JobResultFilter) WhereHasContacts() {
+	f.Where(entql.HasEdge("contacts"))
+}
+
+// WhereHasContactsWith applies a predicate to check if query has an edge contacts with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasContactsWith(preds ...predicate.Contact) {
+	f.Where(entql.HasEdgeWith("contacts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *JobResultFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *JobResultFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *JobResultFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -26523,6 +27033,11 @@ func (f *JobRunnerFilter) WhereVersion(p entql.StringP) {
 // WhereOs applies the entql string predicate on the os field.
 func (f *JobRunnerFilter) WhereOs(p entql.StringP) {
 	f.Where(p.Field(jobrunner.FieldOs))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *JobRunnerFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(jobrunner.FieldMetadata))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -26939,9 +27454,19 @@ func (f *JobTemplateFilter) WherePlatform(p entql.StringP) {
 	f.Where(p.Field(jobtemplate.FieldPlatform))
 }
 
+// WhereRuntimePlatform applies the entql string predicate on the runtime_platform field.
+func (f *JobTemplateFilter) WhereRuntimePlatform(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldRuntimePlatform))
+}
+
 // WhereWindmillPath applies the entql string predicate on the windmill_path field.
 func (f *JobTemplateFilter) WhereWindmillPath(p entql.StringP) {
 	f.Where(p.Field(jobtemplate.FieldWindmillPath))
+}
+
+// WhereScriptPath applies the entql string predicate on the script_path field.
+func (f *JobTemplateFilter) WhereScriptPath(p entql.StringP) {
+	f.Where(p.Field(jobtemplate.FieldScriptPath))
 }
 
 // WhereDownloadURL applies the entql string predicate on the download_url field.
@@ -26957,6 +27482,11 @@ func (f *JobTemplateFilter) WhereConfiguration(p entql.BytesP) {
 // WhereCron applies the entql string predicate on the cron field.
 func (f *JobTemplateFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(jobtemplate.FieldCron))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *JobTemplateFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(jobtemplate.FieldMetadata))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -26981,6 +27511,146 @@ func (f *JobTemplateFilter) WhereHasScheduledJobs() {
 // WhereHasScheduledJobsWith applies a predicate to check if query has an edge scheduled_jobs with a given conditions (other predicates).
 func (f *JobTemplateFilter) WhereHasScheduledJobsWith(preds ...predicate.ScheduledJob) {
 	f.Where(entql.HasEdgeWith("scheduled_jobs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *JobTemplateFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *JobTemplateFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *JobTemplateFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasControls applies a predicate to check if query has an edge controls.
+func (f *JobTemplateFilter) WhereHasControls() {
+	f.Where(entql.HasEdge("controls"))
+}
+
+// WhereHasControlsWith applies a predicate to check if query has an edge controls with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasControlsWith(preds ...predicate.Control) {
+	f.Where(entql.HasEdgeWith("controls", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandards applies a predicate to check if query has an edge standards.
+func (f *JobTemplateFilter) WhereHasStandards() {
+	f.Where(entql.HasEdge("standards"))
+}
+
+// WhereHasStandardsWith applies a predicate to check if query has an edge standards with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasStandardsWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standards", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *JobTemplateFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *JobTemplateFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasContacts applies a predicate to check if query has an edge contacts.
+func (f *JobTemplateFilter) WhereHasContacts() {
+	f.Where(entql.HasEdge("contacts"))
+}
+
+// WhereHasContactsWith applies a predicate to check if query has an edge contacts with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasContactsWith(preds ...predicate.Contact) {
+	f.Where(entql.HasEdgeWith("contacts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *JobTemplateFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *JobTemplateFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *JobTemplateFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -27117,9 +27787,19 @@ func (f *JobTemplateHistoryFilter) WherePlatform(p entql.StringP) {
 	f.Where(p.Field(jobtemplatehistory.FieldPlatform))
 }
 
+// WhereRuntimePlatform applies the entql string predicate on the runtime_platform field.
+func (f *JobTemplateHistoryFilter) WhereRuntimePlatform(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldRuntimePlatform))
+}
+
 // WhereWindmillPath applies the entql string predicate on the windmill_path field.
 func (f *JobTemplateHistoryFilter) WhereWindmillPath(p entql.StringP) {
 	f.Where(p.Field(jobtemplatehistory.FieldWindmillPath))
+}
+
+// WhereScriptPath applies the entql string predicate on the script_path field.
+func (f *JobTemplateHistoryFilter) WhereScriptPath(p entql.StringP) {
+	f.Where(p.Field(jobtemplatehistory.FieldScriptPath))
 }
 
 // WhereDownloadURL applies the entql string predicate on the download_url field.
@@ -27135,6 +27815,11 @@ func (f *JobTemplateHistoryFilter) WhereConfiguration(p entql.BytesP) {
 // WhereCron applies the entql string predicate on the cron field.
 func (f *JobTemplateHistoryFilter) WhereCron(p entql.StringP) {
 	f.Where(p.Field(jobtemplatehistory.FieldCron))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *JobTemplateHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(jobtemplatehistory.FieldMetadata))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -35639,6 +36324,11 @@ func (f *ScheduledJobFilter) WhereJobRunnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjob.FieldJobRunnerID))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ScheduledJobFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(scheduledjob.FieldMetadata))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *ScheduledJobFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -35689,6 +36379,132 @@ func (f *ScheduledJobFilter) WhereHasSubcontrols() {
 // WhereHasSubcontrolsWith applies a predicate to check if query has an edge subcontrols with a given conditions (other predicates).
 func (f *ScheduledJobFilter) WhereHasSubcontrolsWith(preds ...predicate.Subcontrol) {
 	f.Where(entql.HasEdgeWith("subcontrols", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEvidence applies a predicate to check if query has an edge evidence.
+func (f *ScheduledJobFilter) WhereHasEvidence() {
+	f.Where(entql.HasEdge("evidence"))
+}
+
+// WhereHasEvidenceWith applies a predicate to check if query has an edge evidence with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasEvidenceWith(preds ...predicate.Evidence) {
+	f.Where(entql.HasEdgeWith("evidence", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasFindings applies a predicate to check if query has an edge findings.
+func (f *ScheduledJobFilter) WhereHasFindings() {
+	f.Where(entql.HasEdge("findings"))
+}
+
+// WhereHasFindingsWith applies a predicate to check if query has an edge findings with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasFindingsWith(preds ...predicate.Finding) {
+	f.Where(entql.HasEdgeWith("findings", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasRisks applies a predicate to check if query has an edge risks.
+func (f *ScheduledJobFilter) WhereHasRisks() {
+	f.Where(entql.HasEdge("risks"))
+}
+
+// WhereHasRisksWith applies a predicate to check if query has an edge risks with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasRisksWith(preds ...predicate.Risk) {
+	f.Where(entql.HasEdgeWith("risks", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandards applies a predicate to check if query has an edge standards.
+func (f *ScheduledJobFilter) WhereHasStandards() {
+	f.Where(entql.HasEdge("standards"))
+}
+
+// WhereHasStandardsWith applies a predicate to check if query has an edge standards with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasStandardsWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standards", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasVulnerabilities applies a predicate to check if query has an edge vulnerabilities.
+func (f *ScheduledJobFilter) WhereHasVulnerabilities() {
+	f.Where(entql.HasEdge("vulnerabilities"))
+}
+
+// WhereHasVulnerabilitiesWith applies a predicate to check if query has an edge vulnerabilities with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasVulnerabilitiesWith(preds ...predicate.Vulnerability) {
+	f.Where(entql.HasEdgeWith("vulnerabilities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasAssets applies a predicate to check if query has an edge assets.
+func (f *ScheduledJobFilter) WhereHasAssets() {
+	f.Where(entql.HasEdge("assets"))
+}
+
+// WhereHasAssetsWith applies a predicate to check if query has an edge assets with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasAssetsWith(preds ...predicate.Asset) {
+	f.Where(entql.HasEdgeWith("assets", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasContacts applies a predicate to check if query has an edge contacts.
+func (f *ScheduledJobFilter) WhereHasContacts() {
+	f.Where(entql.HasEdge("contacts"))
+}
+
+// WhereHasContactsWith applies a predicate to check if query has an edge contacts with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasContactsWith(preds ...predicate.Contact) {
+	f.Where(entql.HasEdgeWith("contacts", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasEntities applies a predicate to check if query has an edge entities.
+func (f *ScheduledJobFilter) WhereHasEntities() {
+	f.Where(entql.HasEdge("entities"))
+}
+
+// WhereHasEntitiesWith applies a predicate to check if query has an edge entities with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasEntitiesWith(preds ...predicate.Entity) {
+	f.Where(entql.HasEdgeWith("entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTasks applies a predicate to check if query has an edge tasks.
+func (f *ScheduledJobFilter) WhereHasTasks() {
+	f.Where(entql.HasEdge("tasks"))
+}
+
+// WhereHasTasksWith applies a predicate to check if query has an edge tasks with a given conditions (other predicates).
+func (f *ScheduledJobFilter) WhereHasTasksWith(preds ...predicate.Task) {
+	f.Where(entql.HasEdgeWith("tasks", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -35829,6 +36645,11 @@ func (f *ScheduledJobHistoryFilter) WhereJobRunnerID(p entql.StringP) {
 	f.Where(p.Field(scheduledjobhistory.FieldJobRunnerID))
 }
 
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ScheduledJobHistoryFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(scheduledjobhistory.FieldMetadata))
+}
+
 // addPredicate implements the predicateAdder interface.
 func (_q *ScheduledJobRunQuery) addPredicate(pred func(s *sql.Selector)) {
 	_q.predicates = append(_q.predicates, pred)
@@ -35927,6 +36748,11 @@ func (f *ScheduledJobRunFilter) WhereExpectedExecutionTime(p entql.TimeP) {
 // WhereScript applies the entql string predicate on the script field.
 func (f *ScheduledJobRunFilter) WhereScript(p entql.StringP) {
 	f.Where(p.Field(scheduledjobrun.FieldScript))
+}
+
+// WhereMetadata applies the entql json.RawMessage predicate on the metadata field.
+func (f *ScheduledJobRunFilter) WhereMetadata(p entql.BytesP) {
+	f.Where(p.Field(scheduledjobrun.FieldMetadata))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.

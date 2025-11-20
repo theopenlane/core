@@ -8349,20 +8349,37 @@ func (c *InviteUpdateOne) SetInput(i UpdateInviteInput) *InviteUpdateOne {
 
 // CreateJobResultInput represents a mutation input for creating jobresults.
 type CreateJobResultInput struct {
-	Status         enums.JobExecutionStatus
-	ExitCode       int
-	FinishedAt     *time.Time
-	StartedAt      *time.Time
-	Log            *string
-	OwnerID        *string
-	ScheduledJobID string
-	FileID         string
+	ComplianceJobID  *string
+	Status           enums.JobExecutionStatus
+	ExitCode         *int
+	FinishedAt       *time.Time
+	StartedAt        *time.Time
+	Log              *string
+	Metadata         map[string]interface{}
+	OwnerID          *string
+	ScheduledJobID   string
+	FileID           string
+	EvidenceIDs      []string
+	FindingIDs       []string
+	RiskIDs          []string
+	ControlIDs       []string
+	StandardIDs      []string
+	VulnerabilityIDs []string
+	AssetIDs         []string
+	ContactIDs       []string
+	EntityIDs        []string
+	TaskIDs          []string
 }
 
 // Mutate applies the CreateJobResultInput on the JobResultMutation builder.
 func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
+	if v := i.ComplianceJobID; v != nil {
+		m.SetComplianceJobID(*v)
+	}
 	m.SetStatus(i.Status)
-	m.SetExitCode(i.ExitCode)
+	if v := i.ExitCode; v != nil {
+		m.SetExitCode(*v)
+	}
 	if v := i.FinishedAt; v != nil {
 		m.SetFinishedAt(*v)
 	}
@@ -8372,11 +8389,44 @@ func (i *CreateJobResultInput) Mutate(m *JobResultMutation) {
 	if v := i.Log; v != nil {
 		m.SetLog(*v)
 	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
 	m.SetScheduledJobID(i.ScheduledJobID)
 	m.SetFileID(i.FileID)
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateJobResultInput on the JobResultCreate builder.
@@ -8387,17 +8437,57 @@ func (c *JobResultCreate) SetInput(i CreateJobResultInput) *JobResultCreate {
 
 // UpdateJobResultInput represents a mutation input for updating jobresults.
 type UpdateJobResultInput struct {
-	Status         *enums.JobExecutionStatus
-	ClearLog       bool
-	Log            *string
-	ClearOwner     bool
-	OwnerID        *string
-	ScheduledJobID *string
-	FileID         *string
+	ClearComplianceJobID   bool
+	ComplianceJobID        *string
+	Status                 *enums.JobExecutionStatus
+	ClearLog               bool
+	Log                    *string
+	ClearMetadata          bool
+	Metadata               map[string]interface{}
+	ClearOwner             bool
+	OwnerID                *string
+	ScheduledJobID         *string
+	FileID                 *string
+	ClearEvidence          bool
+	AddEvidenceIDs         []string
+	RemoveEvidenceIDs      []string
+	ClearFindings          bool
+	AddFindingIDs          []string
+	RemoveFindingIDs       []string
+	ClearRisks             bool
+	AddRiskIDs             []string
+	RemoveRiskIDs          []string
+	ClearControls          bool
+	AddControlIDs          []string
+	RemoveControlIDs       []string
+	ClearStandards         bool
+	AddStandardIDs         []string
+	RemoveStandardIDs      []string
+	ClearVulnerabilities   bool
+	AddVulnerabilityIDs    []string
+	RemoveVulnerabilityIDs []string
+	ClearAssets            bool
+	AddAssetIDs            []string
+	RemoveAssetIDs         []string
+	ClearContacts          bool
+	AddContactIDs          []string
+	RemoveContactIDs       []string
+	ClearEntities          bool
+	AddEntityIDs           []string
+	RemoveEntityIDs        []string
+	ClearTasks             bool
+	AddTaskIDs             []string
+	RemoveTaskIDs          []string
 }
 
 // Mutate applies the UpdateJobResultInput on the JobResultMutation builder.
 func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
+	if i.ClearComplianceJobID {
+		m.ClearComplianceJobID()
+	}
+	if v := i.ComplianceJobID; v != nil {
+		m.SetComplianceJobID(*v)
+	}
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
 	}
@@ -8406,6 +8496,12 @@ func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
 	}
 	if v := i.Log; v != nil {
 		m.SetLog(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -8418,6 +8514,96 @@ func (i *UpdateJobResultInput) Mutate(m *JobResultMutation) {
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearStandards {
+		m.ClearStandards()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearContacts {
+		m.ClearContacts()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 }
 
@@ -8443,6 +8629,7 @@ type CreateJobRunnerInput struct {
 	LastSeen          *time.Time
 	Version           *string
 	Os                *string
+	Metadata          map[string]interface{}
 	OwnerID           *string
 	JobRunnerTokenIDs []string
 }
@@ -8470,6 +8657,9 @@ func (i *CreateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.Os; v != nil {
 		m.SetOs(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -8503,6 +8693,8 @@ type UpdateJobRunnerInput struct {
 	Version                 *string
 	ClearOs                 bool
 	Os                      *string
+	ClearMetadata           bool
+	Metadata                map[string]interface{}
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearJobRunnerTokens    bool
@@ -8559,6 +8751,12 @@ func (i *UpdateJobRunnerInput) Mutate(m *JobRunnerMutation) {
 	}
 	if v := i.Os; v != nil {
 		m.SetOs(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -8825,10 +9023,23 @@ type CreateJobTemplateInput struct {
 	Title            string
 	Description      *string
 	Platform         enums.JobPlatformType
-	DownloadURL      string
+	RuntimePlatform  *string
+	ScriptPath       *string
+	DownloadURL      *string
 	Configuration    models.JobConfiguration
 	Cron             *models.Cron
+	Metadata         map[string]interface{}
 	OwnerID          *string
+	EvidenceIDs      []string
+	FindingIDs       []string
+	RiskIDs          []string
+	ControlIDs       []string
+	StandardIDs      []string
+	VulnerabilityIDs []string
+	AssetIDs         []string
+	ContactIDs       []string
+	EntityIDs        []string
+	TaskIDs          []string
 }
 
 // Mutate applies the CreateJobTemplateInput on the JobTemplateMutation builder.
@@ -8847,15 +9058,56 @@ func (i *CreateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 		m.SetDescription(*v)
 	}
 	m.SetPlatform(i.Platform)
-	m.SetDownloadURL(i.DownloadURL)
+	if v := i.RuntimePlatform; v != nil {
+		m.SetRuntimePlatform(*v)
+	}
+	if v := i.ScriptPath; v != nil {
+		m.SetScriptPath(*v)
+	}
+	if v := i.DownloadURL; v != nil {
+		m.SetDownloadURL(*v)
+	}
 	if v := i.Configuration; v != nil {
 		m.SetConfiguration(v)
 	}
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
 	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.ControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
 	}
 }
 
@@ -8867,27 +9119,64 @@ func (c *JobTemplateCreate) SetInput(i CreateJobTemplateInput) *JobTemplateCreat
 
 // UpdateJobTemplateInput represents a mutation input for updating jobtemplates.
 type UpdateJobTemplateInput struct {
-	ClearTags             bool
-	Tags                  []string
-	AppendTags            []string
-	ClearInternalNotes    bool
-	InternalNotes         *string
-	ClearSystemInternalID bool
-	SystemInternalID      *string
-	Title                 *string
-	ClearDescription      bool
-	Description           *string
-	DownloadURL           *string
-	ClearConfiguration    bool
-	Configuration         models.JobConfiguration
-	AppendConfiguration   models.JobConfiguration
-	ClearCron             bool
-	Cron                  *models.Cron
-	ClearOwner            bool
-	OwnerID               *string
-	ClearScheduledJobs    bool
-	AddScheduledJobIDs    []string
-	RemoveScheduledJobIDs []string
+	ClearTags              bool
+	Tags                   []string
+	AppendTags             []string
+	ClearInternalNotes     bool
+	InternalNotes          *string
+	ClearSystemInternalID  bool
+	SystemInternalID       *string
+	Title                  *string
+	ClearDescription       bool
+	Description            *string
+	ClearRuntimePlatform   bool
+	RuntimePlatform        *string
+	ClearScriptPath        bool
+	ScriptPath             *string
+	ClearDownloadURL       bool
+	DownloadURL            *string
+	ClearConfiguration     bool
+	Configuration          models.JobConfiguration
+	AppendConfiguration    models.JobConfiguration
+	ClearCron              bool
+	Cron                   *models.Cron
+	ClearMetadata          bool
+	Metadata               map[string]interface{}
+	ClearOwner             bool
+	OwnerID                *string
+	ClearScheduledJobs     bool
+	AddScheduledJobIDs     []string
+	RemoveScheduledJobIDs  []string
+	ClearEvidence          bool
+	AddEvidenceIDs         []string
+	RemoveEvidenceIDs      []string
+	ClearFindings          bool
+	AddFindingIDs          []string
+	RemoveFindingIDs       []string
+	ClearRisks             bool
+	AddRiskIDs             []string
+	RemoveRiskIDs          []string
+	ClearControls          bool
+	AddControlIDs          []string
+	RemoveControlIDs       []string
+	ClearStandards         bool
+	AddStandardIDs         []string
+	RemoveStandardIDs      []string
+	ClearVulnerabilities   bool
+	AddVulnerabilityIDs    []string
+	RemoveVulnerabilityIDs []string
+	ClearAssets            bool
+	AddAssetIDs            []string
+	RemoveAssetIDs         []string
+	ClearContacts          bool
+	AddContactIDs          []string
+	RemoveContactIDs       []string
+	ClearEntities          bool
+	AddEntityIDs           []string
+	RemoveEntityIDs        []string
+	ClearTasks             bool
+	AddTaskIDs             []string
+	RemoveTaskIDs          []string
 }
 
 // Mutate applies the UpdateJobTemplateInput on the JobTemplateMutation builder.
@@ -8922,6 +9211,21 @@ func (i *UpdateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 	if v := i.Description; v != nil {
 		m.SetDescription(*v)
 	}
+	if i.ClearRuntimePlatform {
+		m.ClearRuntimePlatform()
+	}
+	if v := i.RuntimePlatform; v != nil {
+		m.SetRuntimePlatform(*v)
+	}
+	if i.ClearScriptPath {
+		m.ClearScriptPath()
+	}
+	if v := i.ScriptPath; v != nil {
+		m.SetScriptPath(*v)
+	}
+	if i.ClearDownloadURL {
+		m.ClearDownloadURL()
+	}
 	if v := i.DownloadURL; v != nil {
 		m.SetDownloadURL(*v)
 	}
@@ -8940,6 +9244,12 @@ func (i *UpdateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
 	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if i.ClearOwner {
 		m.ClearOwner()
 	}
@@ -8954,6 +9264,96 @@ func (i *UpdateJobTemplateInput) Mutate(m *JobTemplateMutation) {
 	}
 	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
 		m.RemoveScheduledJobIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearControls {
+		m.ClearControls()
+	}
+	if v := i.AddControlIDs; len(v) > 0 {
+		m.AddControlIDs(v...)
+	}
+	if v := i.RemoveControlIDs; len(v) > 0 {
+		m.RemoveControlIDs(v...)
+	}
+	if i.ClearStandards {
+		m.ClearStandards()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearContacts {
+		m.ClearContacts()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 }
 
@@ -14403,14 +14803,24 @@ func (c *ScanUpdateOne) SetInput(i UpdateScanInput) *ScanUpdateOne {
 
 // CreateScheduledJobInput represents a mutation input for creating scheduledjobs.
 type CreateScheduledJobInput struct {
-	Active        *bool
-	Configuration models.JobConfiguration
-	Cron          *models.Cron
-	OwnerID       *string
-	JobTemplateID string
-	ControlIDs    []string
-	SubcontrolIDs []string
-	JobRunnerID   *string
+	Active           *bool
+	Configuration    models.JobConfiguration
+	Cron             *models.Cron
+	Metadata         map[string]interface{}
+	OwnerID          *string
+	JobTemplateID    string
+	ControlIDs       []string
+	SubcontrolIDs    []string
+	EvidenceIDs      []string
+	FindingIDs       []string
+	RiskIDs          []string
+	StandardIDs      []string
+	VulnerabilityIDs []string
+	AssetIDs         []string
+	ContactIDs       []string
+	EntityIDs        []string
+	TaskIDs          []string
+	JobRunnerID      *string
 }
 
 // Mutate applies the CreateScheduledJobInput on the ScheduledJobMutation builder.
@@ -14424,6 +14834,9 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
 	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -14433,6 +14846,33 @@ func (i *CreateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.SubcontrolIDs; len(v) > 0 {
 		m.AddSubcontrolIDs(v...)
+	}
+	if v := i.EvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.FindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.StandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.VulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.AssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.ContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.EntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.TaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
 	}
 	if v := i.JobRunnerID; v != nil {
 		m.SetJobRunnerID(*v)
@@ -14447,21 +14887,50 @@ func (c *ScheduledJobCreate) SetInput(i CreateScheduledJobInput) *ScheduledJobCr
 
 // UpdateScheduledJobInput represents a mutation input for updating scheduledjobs.
 type UpdateScheduledJobInput struct {
-	Active              *bool
-	ClearConfiguration  bool
-	Configuration       models.JobConfiguration
-	AppendConfiguration models.JobConfiguration
-	ClearCron           bool
-	Cron                *models.Cron
-	JobTemplateID       *string
-	ClearControls       bool
-	AddControlIDs       []string
-	RemoveControlIDs    []string
-	ClearSubcontrols    bool
-	AddSubcontrolIDs    []string
-	RemoveSubcontrolIDs []string
-	ClearJobRunner      bool
-	JobRunnerID         *string
+	Active                 *bool
+	ClearConfiguration     bool
+	Configuration          models.JobConfiguration
+	AppendConfiguration    models.JobConfiguration
+	ClearCron              bool
+	Cron                   *models.Cron
+	ClearMetadata          bool
+	Metadata               map[string]interface{}
+	JobTemplateID          *string
+	ClearControls          bool
+	AddControlIDs          []string
+	RemoveControlIDs       []string
+	ClearSubcontrols       bool
+	AddSubcontrolIDs       []string
+	RemoveSubcontrolIDs    []string
+	ClearEvidence          bool
+	AddEvidenceIDs         []string
+	RemoveEvidenceIDs      []string
+	ClearFindings          bool
+	AddFindingIDs          []string
+	RemoveFindingIDs       []string
+	ClearRisks             bool
+	AddRiskIDs             []string
+	RemoveRiskIDs          []string
+	ClearStandards         bool
+	AddStandardIDs         []string
+	RemoveStandardIDs      []string
+	ClearVulnerabilities   bool
+	AddVulnerabilityIDs    []string
+	RemoveVulnerabilityIDs []string
+	ClearAssets            bool
+	AddAssetIDs            []string
+	RemoveAssetIDs         []string
+	ClearContacts          bool
+	AddContactIDs          []string
+	RemoveContactIDs       []string
+	ClearEntities          bool
+	AddEntityIDs           []string
+	RemoveEntityIDs        []string
+	ClearTasks             bool
+	AddTaskIDs             []string
+	RemoveTaskIDs          []string
+	ClearJobRunner         bool
+	JobRunnerID            *string
 }
 
 // Mutate applies the UpdateScheduledJobInput on the ScheduledJobMutation builder.
@@ -14484,6 +14953,12 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	if v := i.Cron; v != nil {
 		m.SetCron(*v)
 	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.JobTemplateID; v != nil {
 		m.SetJobTemplateID(*v)
 	}
@@ -14504,6 +14979,87 @@ func (i *UpdateScheduledJobInput) Mutate(m *ScheduledJobMutation) {
 	}
 	if v := i.RemoveSubcontrolIDs; len(v) > 0 {
 		m.RemoveSubcontrolIDs(v...)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.AddEvidenceIDs; len(v) > 0 {
+		m.AddEvidenceIDs(v...)
+	}
+	if v := i.RemoveEvidenceIDs; len(v) > 0 {
+		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearFindings {
+		m.ClearFindings()
+	}
+	if v := i.AddFindingIDs; len(v) > 0 {
+		m.AddFindingIDs(v...)
+	}
+	if v := i.RemoveFindingIDs; len(v) > 0 {
+		m.RemoveFindingIDs(v...)
+	}
+	if i.ClearRisks {
+		m.ClearRisks()
+	}
+	if v := i.AddRiskIDs; len(v) > 0 {
+		m.AddRiskIDs(v...)
+	}
+	if v := i.RemoveRiskIDs; len(v) > 0 {
+		m.RemoveRiskIDs(v...)
+	}
+	if i.ClearStandards {
+		m.ClearStandards()
+	}
+	if v := i.AddStandardIDs; len(v) > 0 {
+		m.AddStandardIDs(v...)
+	}
+	if v := i.RemoveStandardIDs; len(v) > 0 {
+		m.RemoveStandardIDs(v...)
+	}
+	if i.ClearVulnerabilities {
+		m.ClearVulnerabilities()
+	}
+	if v := i.AddVulnerabilityIDs; len(v) > 0 {
+		m.AddVulnerabilityIDs(v...)
+	}
+	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
+		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearAssets {
+		m.ClearAssets()
+	}
+	if v := i.AddAssetIDs; len(v) > 0 {
+		m.AddAssetIDs(v...)
+	}
+	if v := i.RemoveAssetIDs; len(v) > 0 {
+		m.RemoveAssetIDs(v...)
+	}
+	if i.ClearContacts {
+		m.ClearContacts()
+	}
+	if v := i.AddContactIDs; len(v) > 0 {
+		m.AddContactIDs(v...)
+	}
+	if v := i.RemoveContactIDs; len(v) > 0 {
+		m.RemoveContactIDs(v...)
+	}
+	if i.ClearEntities {
+		m.ClearEntities()
+	}
+	if v := i.AddEntityIDs; len(v) > 0 {
+		m.AddEntityIDs(v...)
+	}
+	if v := i.RemoveEntityIDs; len(v) > 0 {
+		m.RemoveEntityIDs(v...)
+	}
+	if i.ClearTasks {
+		m.ClearTasks()
+	}
+	if v := i.AddTaskIDs; len(v) > 0 {
+		m.AddTaskIDs(v...)
+	}
+	if v := i.RemoveTaskIDs; len(v) > 0 {
+		m.RemoveTaskIDs(v...)
 	}
 	if i.ClearJobRunner {
 		m.ClearJobRunner()
@@ -14530,6 +15086,7 @@ type CreateScheduledJobRunInput struct {
 	Status                *enums.ScheduledJobRunStatus
 	ExpectedExecutionTime time.Time
 	Script                string
+	Metadata              map[string]interface{}
 	OwnerID               *string
 	ScheduledJobID        string
 	JobRunnerID           string
@@ -14542,6 +15099,9 @@ func (i *CreateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
 	}
 	m.SetExpectedExecutionTime(i.ExpectedExecutionTime)
 	m.SetScript(i.Script)
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
 	}
@@ -14558,6 +15118,8 @@ func (c *ScheduledJobRunCreate) SetInput(i CreateScheduledJobRunInput) *Schedule
 // UpdateScheduledJobRunInput represents a mutation input for updating scheduledjobruns.
 type UpdateScheduledJobRunInput struct {
 	Status         *enums.ScheduledJobRunStatus
+	ClearMetadata  bool
+	Metadata       map[string]interface{}
 	ClearOwner     bool
 	OwnerID        *string
 	ScheduledJobID *string
@@ -14568,6 +15130,12 @@ type UpdateScheduledJobRunInput struct {
 func (i *UpdateScheduledJobRunInput) Mutate(m *ScheduledJobRunMutation) {
 	if v := i.Status; v != nil {
 		m.SetStatus(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

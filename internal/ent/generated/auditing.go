@@ -2586,8 +2586,14 @@ func (_m *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
 	if !reflect.DeepEqual(_m.Platform, new.Platform) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldPlatform, _m.Platform, new.Platform))
 	}
+	if !reflect.DeepEqual(_m.RuntimePlatform, new.RuntimePlatform) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldRuntimePlatform, _m.RuntimePlatform, new.RuntimePlatform))
+	}
 	if !reflect.DeepEqual(_m.WindmillPath, new.WindmillPath) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldWindmillPath, _m.WindmillPath, new.WindmillPath))
+	}
+	if !reflect.DeepEqual(_m.ScriptPath, new.ScriptPath) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldScriptPath, _m.ScriptPath, new.ScriptPath))
 	}
 	if !reflect.DeepEqual(_m.DownloadURL, new.DownloadURL) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldDownloadURL, _m.DownloadURL, new.DownloadURL))
@@ -2597,6 +2603,9 @@ func (_m *JobTemplateHistory) changes(new *JobTemplateHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.Cron, new.Cron) {
 		changes = append(changes, NewChange(jobtemplatehistory.FieldCron, _m.Cron, new.Cron))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(jobtemplatehistory.FieldMetadata, _m.Metadata, new.Metadata))
 	}
 	return changes
 }
@@ -3908,6 +3917,9 @@ func (_m *ScheduledJobHistory) changes(new *ScheduledJobHistory) []Change {
 	}
 	if !reflect.DeepEqual(_m.JobRunnerID, new.JobRunnerID) {
 		changes = append(changes, NewChange(scheduledjobhistory.FieldJobRunnerID, _m.JobRunnerID, new.JobRunnerID))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(scheduledjobhistory.FieldMetadata, _m.Metadata, new.Metadata))
 	}
 	return changes
 }

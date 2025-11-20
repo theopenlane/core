@@ -3000,22 +3000,34 @@ type ComplexityRoot struct {
 	}
 
 	JobResult struct {
-		CreatedAt      func(childComplexity int) int
-		CreatedBy      func(childComplexity int) int
-		ExitCode       func(childComplexity int) int
-		File           func(childComplexity int) int
-		FileID         func(childComplexity int) int
-		FinishedAt     func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Log            func(childComplexity int) int
-		Owner          func(childComplexity int) int
-		OwnerID        func(childComplexity int) int
-		ScheduledJob   func(childComplexity int) int
-		ScheduledJobID func(childComplexity int) int
-		StartedAt      func(childComplexity int) int
-		Status         func(childComplexity int) int
-		UpdatedAt      func(childComplexity int) int
-		UpdatedBy      func(childComplexity int) int
+		Assets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		ComplianceJobID func(childComplexity int) int
+		Contacts        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Controls        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Evidence        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		ExitCode        func(childComplexity int) int
+		File            func(childComplexity int) int
+		FileID          func(childComplexity int) int
+		Findings        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		FinishedAt      func(childComplexity int) int
+		ID              func(childComplexity int) int
+		Log             func(childComplexity int) int
+		Metadata        func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Risks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		ScheduledJob    func(childComplexity int) int
+		ScheduledJobID  func(childComplexity int) int
+		Standards       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		StartedAt       func(childComplexity int) int
+		Status          func(childComplexity int) int
+		Tasks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+		Vulnerabilities func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	JobResultConnection struct {
@@ -3050,6 +3062,7 @@ type ComplexityRoot struct {
 		InternalNotes    func(childComplexity int) int
 		JobRunnerTokens  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
 		LastSeen         func(childComplexity int) int
+		Metadata         func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Os               func(childComplexity int) int
 		Owner            func(childComplexity int) int
@@ -3168,25 +3181,38 @@ type ComplexityRoot struct {
 	}
 
 	JobTemplate struct {
+		Assets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
 		Configuration    func(childComplexity int) int
+		Contacts         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Controls         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
 		CreatedAt        func(childComplexity int) int
 		CreatedBy        func(childComplexity int) int
 		Cron             func(childComplexity int) int
 		Description      func(childComplexity int) int
 		DisplayID        func(childComplexity int) int
 		DownloadURL      func(childComplexity int) int
+		Entities         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Evidence         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
 		ID               func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
 		Owner            func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Platform         func(childComplexity int) int
+		Risks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		RuntimePlatform  func(childComplexity int) int
 		ScheduledJobs    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		ScriptPath       func(childComplexity int) int
+		Standards        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
+		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
 		Title            func(childComplexity int) int
 		UpdatedAt        func(childComplexity int) int
 		UpdatedBy        func(childComplexity int) int
+		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	JobTemplateBulkCreatePayload struct {
@@ -3227,10 +3253,13 @@ type ComplexityRoot struct {
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
+		Metadata         func(childComplexity int) int
 		Operation        func(childComplexity int) int
 		OwnerID          func(childComplexity int) int
 		Platform         func(childComplexity int) int
 		Ref              func(childComplexity int) int
+		RuntimePlatform  func(childComplexity int) int
+		ScriptPath       func(childComplexity int) int
 		SystemInternalID func(childComplexity int) int
 		SystemOwned      func(childComplexity int) int
 		Tags             func(childComplexity int) int
@@ -5584,23 +5613,33 @@ type ComplexityRoot struct {
 	}
 
 	ScheduledJob struct {
-		Active        func(childComplexity int) int
-		Configuration func(childComplexity int) int
-		Controls      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt     func(childComplexity int) int
-		CreatedBy     func(childComplexity int) int
-		Cron          func(childComplexity int) int
-		DisplayID     func(childComplexity int) int
-		ID            func(childComplexity int) int
-		JobID         func(childComplexity int) int
-		JobRunner     func(childComplexity int) int
-		JobRunnerID   func(childComplexity int) int
-		JobTemplate   func(childComplexity int) int
-		Owner         func(childComplexity int) int
-		OwnerID       func(childComplexity int) int
-		Subcontrols   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		UpdatedAt     func(childComplexity int) int
-		UpdatedBy     func(childComplexity int) int
+		Active          func(childComplexity int) int
+		Assets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		Configuration   func(childComplexity int) int
+		Contacts        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Controls        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt       func(childComplexity int) int
+		CreatedBy       func(childComplexity int) int
+		Cron            func(childComplexity int) int
+		DisplayID       func(childComplexity int) int
+		Entities        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Evidence        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Findings        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID              func(childComplexity int) int
+		JobID           func(childComplexity int) int
+		JobRunner       func(childComplexity int) int
+		JobRunnerID     func(childComplexity int) int
+		JobTemplate     func(childComplexity int) int
+		Metadata        func(childComplexity int) int
+		Owner           func(childComplexity int) int
+		OwnerID         func(childComplexity int) int
+		Risks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Standards       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrols     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Tasks           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt       func(childComplexity int) int
+		UpdatedBy       func(childComplexity int) int
+		Vulnerabilities func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	ScheduledJobBulkCreatePayload struct {
@@ -5641,6 +5680,7 @@ type ComplexityRoot struct {
 		ID            func(childComplexity int) int
 		JobID         func(childComplexity int) int
 		JobRunnerID   func(childComplexity int) int
+		Metadata      func(childComplexity int) int
 		Operation     func(childComplexity int) int
 		OwnerID       func(childComplexity int) int
 		Ref           func(childComplexity int) int
@@ -5666,6 +5706,7 @@ type ComplexityRoot struct {
 		ID                    func(childComplexity int) int
 		JobRunner             func(childComplexity int) int
 		JobRunnerID           func(childComplexity int) int
+		Metadata              func(childComplexity int) int
 		Owner                 func(childComplexity int) int
 		OwnerID               func(childComplexity int) int
 		ScheduledJob          func(childComplexity int) int
@@ -22407,6 +22448,49 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.InviteUpdatePayload.Invite(childComplexity), true
 
+	case "JobResult.assets":
+		if e.complexity.JobResult.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
+	case "JobResult.complianceJobID":
+		if e.complexity.JobResult.ComplianceJobID == nil {
+			break
+		}
+
+		return e.complexity.JobResult.ComplianceJobID(childComplexity), true
+
+	case "JobResult.contacts":
+		if e.complexity.JobResult.Contacts == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_contacts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
+
+	case "JobResult.controls":
+		if e.complexity.JobResult.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
+
 	case "JobResult.createdAt":
 		if e.complexity.JobResult.CreatedAt == nil {
 			break
@@ -22420,6 +22504,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResult.CreatedBy(childComplexity), true
+
+	case "JobResult.entities":
+		if e.complexity.JobResult.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "JobResult.evidence":
+		if e.complexity.JobResult.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_evidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
 
 	case "JobResult.exitCode":
 		if e.complexity.JobResult.ExitCode == nil {
@@ -22442,6 +22550,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.FileID(childComplexity), true
 
+	case "JobResult.findings":
+		if e.complexity.JobResult.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "JobResult.finishedAt":
 		if e.complexity.JobResult.FinishedAt == nil {
 			break
@@ -22463,6 +22583,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.Log(childComplexity), true
 
+	case "JobResult.metadata":
+		if e.complexity.JobResult.Metadata == nil {
+			break
+		}
+
+		return e.complexity.JobResult.Metadata(childComplexity), true
+
 	case "JobResult.owner":
 		if e.complexity.JobResult.Owner == nil {
 			break
@@ -22476,6 +22603,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResult.OwnerID(childComplexity), true
+
+	case "JobResult.risks":
+		if e.complexity.JobResult.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
 
 	case "JobResult.scheduledJob":
 		if e.complexity.JobResult.ScheduledJob == nil {
@@ -22491,6 +22630,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.ScheduledJobID(childComplexity), true
 
+	case "JobResult.standards":
+		if e.complexity.JobResult.Standards == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_standards_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
+
 	case "JobResult.startedAt":
 		if e.complexity.JobResult.StartedAt == nil {
 			break
@@ -22505,6 +22656,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobResult.Status(childComplexity), true
 
+	case "JobResult.tasks":
+		if e.complexity.JobResult.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
 	case "JobResult.updatedAt":
 		if e.complexity.JobResult.UpdatedAt == nil {
 			break
@@ -22518,6 +22681,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobResult.UpdatedBy(childComplexity), true
+
+	case "JobResult.vulnerabilities":
+		if e.complexity.JobResult.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_JobResult_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobResult.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "JobResultConnection.edges":
 		if e.complexity.JobResultConnection.Edges == nil {
@@ -22635,6 +22810,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobRunner.LastSeen(childComplexity), true
+
+	case "JobRunner.metadata":
+		if e.complexity.JobRunner.Metadata == nil {
+			break
+		}
+
+		return e.complexity.JobRunner.Metadata(childComplexity), true
 
 	case "JobRunner.name":
 		if e.complexity.JobRunner.Name == nil {
@@ -23089,12 +23271,48 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobRunnerUpdatePayload.JobRunner(childComplexity), true
 
+	case "JobTemplate.assets":
+		if e.complexity.JobTemplate.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "JobTemplate.configuration":
 		if e.complexity.JobTemplate.Configuration == nil {
 			break
 		}
 
 		return e.complexity.JobTemplate.Configuration(childComplexity), true
+
+	case "JobTemplate.contacts":
+		if e.complexity.JobTemplate.Contacts == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_contacts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
+
+	case "JobTemplate.controls":
+		if e.complexity.JobTemplate.Controls == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_controls_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Controls(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ControlOrder), args["where"].(*generated.ControlWhereInput)), true
 
 	case "JobTemplate.createdAt":
 		if e.complexity.JobTemplate.CreatedAt == nil {
@@ -23138,6 +23356,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplate.DownloadURL(childComplexity), true
 
+	case "JobTemplate.entities":
+		if e.complexity.JobTemplate.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "JobTemplate.evidence":
+		if e.complexity.JobTemplate.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_evidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "JobTemplate.findings":
+		if e.complexity.JobTemplate.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "JobTemplate.id":
 		if e.complexity.JobTemplate.ID == nil {
 			break
@@ -23151,6 +23405,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.InternalNotes(childComplexity), true
+
+	case "JobTemplate.metadata":
+		if e.complexity.JobTemplate.Metadata == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.Metadata(childComplexity), true
 
 	case "JobTemplate.owner":
 		if e.complexity.JobTemplate.Owner == nil {
@@ -23173,6 +23434,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplate.Platform(childComplexity), true
 
+	case "JobTemplate.risks":
+		if e.complexity.JobTemplate.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "JobTemplate.runtimePlatform":
+		if e.complexity.JobTemplate.RuntimePlatform == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.RuntimePlatform(childComplexity), true
+
 	case "JobTemplate.scheduledJobs":
 		if e.complexity.JobTemplate.ScheduledJobs == nil {
 			break
@@ -23184,6 +23464,25 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.ScheduledJobs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ScheduledJobOrder), args["where"].(*generated.ScheduledJobWhereInput)), true
+
+	case "JobTemplate.scriptPath":
+		if e.complexity.JobTemplate.ScriptPath == nil {
+			break
+		}
+
+		return e.complexity.JobTemplate.ScriptPath(childComplexity), true
+
+	case "JobTemplate.standards":
+		if e.complexity.JobTemplate.Standards == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_standards_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
 
 	case "JobTemplate.systemInternalID":
 		if e.complexity.JobTemplate.SystemInternalID == nil {
@@ -23206,6 +23505,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplate.Tags(childComplexity), true
 
+	case "JobTemplate.tasks":
+		if e.complexity.JobTemplate.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
+
 	case "JobTemplate.title":
 		if e.complexity.JobTemplate.Title == nil {
 			break
@@ -23226,6 +23537,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplate.UpdatedBy(childComplexity), true
+
+	case "JobTemplate.vulnerabilities":
+		if e.complexity.JobTemplate.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_JobTemplate_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.JobTemplate.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "JobTemplateBulkCreatePayload.jobTemplates":
 		if e.complexity.JobTemplateBulkCreatePayload.JobTemplates == nil {
@@ -23360,6 +23683,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.JobTemplateHistory.InternalNotes(childComplexity), true
 
+	case "JobTemplateHistory.metadata":
+		if e.complexity.JobTemplateHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.Metadata(childComplexity), true
+
 	case "JobTemplateHistory.operation":
 		if e.complexity.JobTemplateHistory.Operation == nil {
 			break
@@ -23387,6 +23717,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.JobTemplateHistory.Ref(childComplexity), true
+
+	case "JobTemplateHistory.runtimePlatform":
+		if e.complexity.JobTemplateHistory.RuntimePlatform == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.RuntimePlatform(childComplexity), true
+
+	case "JobTemplateHistory.scriptPath":
+		if e.complexity.JobTemplateHistory.ScriptPath == nil {
+			break
+		}
+
+		return e.complexity.JobTemplateHistory.ScriptPath(childComplexity), true
 
 	case "JobTemplateHistory.systemInternalID":
 		if e.complexity.JobTemplateHistory.SystemInternalID == nil {
@@ -40928,12 +41272,36 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.Active(childComplexity), true
 
+	case "ScheduledJob.assets":
+		if e.complexity.ScheduledJob.Assets == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_assets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Assets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.AssetOrder), args["where"].(*generated.AssetWhereInput)), true
+
 	case "ScheduledJob.configuration":
 		if e.complexity.ScheduledJob.Configuration == nil {
 			break
 		}
 
 		return e.complexity.ScheduledJob.Configuration(childComplexity), true
+
+	case "ScheduledJob.contacts":
+		if e.complexity.ScheduledJob.Contacts == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_contacts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Contacts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ContactOrder), args["where"].(*generated.ContactWhereInput)), true
 
 	case "ScheduledJob.controls":
 		if e.complexity.ScheduledJob.Controls == nil {
@@ -40975,6 +41343,42 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.DisplayID(childComplexity), true
 
+	case "ScheduledJob.entities":
+		if e.complexity.ScheduledJob.Entities == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_entities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Entities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EntityOrder), args["where"].(*generated.EntityWhereInput)), true
+
+	case "ScheduledJob.evidence":
+		if e.complexity.ScheduledJob.Evidence == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_evidence_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Evidence(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EvidenceOrder), args["where"].(*generated.EvidenceWhereInput)), true
+
+	case "ScheduledJob.findings":
+		if e.complexity.ScheduledJob.Findings == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_findings_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Findings(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FindingOrder), args["where"].(*generated.FindingWhereInput)), true
+
 	case "ScheduledJob.id":
 		if e.complexity.ScheduledJob.ID == nil {
 			break
@@ -41010,6 +41414,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.JobTemplate(childComplexity), true
 
+	case "ScheduledJob.metadata":
+		if e.complexity.ScheduledJob.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJob.Metadata(childComplexity), true
+
 	case "ScheduledJob.owner":
 		if e.complexity.ScheduledJob.Owner == nil {
 			break
@@ -41024,6 +41435,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJob.OwnerID(childComplexity), true
 
+	case "ScheduledJob.risks":
+		if e.complexity.ScheduledJob.Risks == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_risks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Risks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.RiskOrder), args["where"].(*generated.RiskWhereInput)), true
+
+	case "ScheduledJob.standards":
+		if e.complexity.ScheduledJob.Standards == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_standards_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Standards(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.StandardOrder), args["where"].(*generated.StandardWhereInput)), true
+
 	case "ScheduledJob.subcontrols":
 		if e.complexity.ScheduledJob.Subcontrols == nil {
 			break
@@ -41035,6 +41470,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
+
+	case "ScheduledJob.tasks":
+		if e.complexity.ScheduledJob.Tasks == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_tasks_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Tasks(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TaskOrder), args["where"].(*generated.TaskWhereInput)), true
 
 	case "ScheduledJob.updatedAt":
 		if e.complexity.ScheduledJob.UpdatedAt == nil {
@@ -41049,6 +41496,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJob.UpdatedBy(childComplexity), true
+
+	case "ScheduledJob.vulnerabilities":
+		if e.complexity.ScheduledJob.Vulnerabilities == nil {
+			break
+		}
+
+		args, err := ec.field_ScheduledJob_vulnerabilities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.ScheduledJob.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
 	case "ScheduledJobBulkCreatePayload.scheduledJobs":
 		if e.complexity.ScheduledJobBulkCreatePayload.ScheduledJobs == nil {
@@ -41183,6 +41642,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.ScheduledJobHistory.JobRunnerID(childComplexity), true
 
+	case "ScheduledJobHistory.metadata":
+		if e.complexity.ScheduledJobHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobHistory.Metadata(childComplexity), true
+
 	case "ScheduledJobHistory.operation":
 		if e.complexity.ScheduledJobHistory.Operation == nil {
 			break
@@ -41294,6 +41760,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.ScheduledJobRun.JobRunnerID(childComplexity), true
+
+	case "ScheduledJobRun.metadata":
+		if e.complexity.ScheduledJobRun.Metadata == nil {
+			break
+		}
+
+		return e.complexity.ScheduledJobRun.Metadata(childComplexity), true
 
 	case "ScheduledJobRun.owner":
 		if e.complexity.ScheduledJobRun.Owner == nil {
@@ -67293,13 +67766,17 @@ Input was generated by ent.
 """
 input CreateJobResultInput {
   """
+  the job this result belongs to
+  """
+  complianceJobID: String
+  """
   the status of this job. did it fail? did it succeed?
   """
   status: JobResultJobExecutionStatus!
   """
   the exit code from the script that was executed
   """
-  exitCode: Int!
+  exitCode: Int
   """
   The time the job finished it's execution. This is different from the db insertion time
   """
@@ -67312,9 +67789,23 @@ input CreateJobResultInput {
   the log output from the job
   """
   log: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   ownerID: ID
   scheduledJobID: ID!
   fileID: ID!
+  evidenceIDs: [ID!]
+  findingIDs: [ID!]
+  riskIDs: [ID!]
+  controlIDs: [ID!]
+  standardIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  assetIDs: [ID!]
+  contactIDs: [ID!]
+  entityIDs: [ID!]
+  taskIDs: [ID!]
 }
 """
 CreateJobRunnerInput is used for create JobRunner object.
@@ -67353,6 +67844,10 @@ input CreateJobRunnerInput {
   the operating system of the runner
   """
   os: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   ownerID: ID
   jobRunnerTokenIDs: [ID!]
 }
@@ -67428,13 +67923,21 @@ input CreateJobTemplateInput {
   """
   description: String
   """
-  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  the code language golang, typescript, python, etc.
   """
   platform: JobTemplateJobPlatformType!
   """
+  the code language golang, typescript, python, etc.
+  """
+  runtimePlatform: String
+  """
+  path used to execute the check
+  """
+  scriptPath: String
+  """
   the url from where to download the script from
   """
-  downloadURL: String!
+  downloadURL: String
   """
   the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
@@ -67443,7 +67946,21 @@ input CreateJobTemplateInput {
   cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   ownerID: ID
+  evidenceIDs: [ID!]
+  findingIDs: [ID!]
+  riskIDs: [ID!]
+  controlIDs: [ID!]
+  standardIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  assetIDs: [ID!]
+  contactIDs: [ID!]
+  entityIDs: [ID!]
+  taskIDs: [ID!]
 }
 """
 CreateMappableDomainInput is used for create MappableDomain object.
@@ -68381,10 +68898,23 @@ input CreateScheduledJobInput {
   cron 6-field syntax, defaults to the job template's cron if not provided
   """
   cron: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   ownerID: ID
   jobTemplateID: ID!
   controlIDs: [ID!]
   subcontrolIDs: [ID!]
+  evidenceIDs: [ID!]
+  findingIDs: [ID!]
+  riskIDs: [ID!]
+  standardIDs: [ID!]
+  vulnerabilityIDs: [ID!]
+  assetIDs: [ID!]
+  contactIDs: [ID!]
+  entityIDs: [ID!]
+  taskIDs: [ID!]
   jobRunnerID: ID
 }
 """
@@ -68402,10 +68932,13 @@ input CreateScheduledJobRunInput {
   """
   expectedExecutionTime: Time!
   """
-  the script that will be executed by the agent.
-  This script will be templated with the values from the configuration on the job
+  the script that will be executed by the agent. This script will be templated with the values from the configuration on the job
   """
   script: String!
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   ownerID: ID
   scheduledJobID: ID!
   jobRunnerID: ID!
@@ -90780,13 +91313,17 @@ type JobResult implements Node {
   """
   scheduledJobID: ID!
   """
+  the job this result belongs to
+  """
+  complianceJobID: String
+  """
   the status of this job. did it fail? did it succeed?
   """
   status: JobResultJobExecutionStatus!
   """
   the exit code from the script that was executed
   """
-  exitCode: Int!
+  exitCode: Int
   """
   The time the job finished it's execution. This is different from the db insertion time
   """
@@ -90800,9 +91337,323 @@ type JobResult implements Node {
   the log output from the job
   """
   log: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   owner: Organization
   scheduledJob: ScheduledJob!
   file: File!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  standards(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -90985,6 +91836,24 @@ input JobResultWhereInput {
   scheduledJobIDEqualFold: ID
   scheduledJobIDContainsFold: ID
   """
+  compliance_job_id field predicates
+  """
+  complianceJobID: String
+  complianceJobIDNEQ: String
+  complianceJobIDIn: [String!]
+  complianceJobIDNotIn: [String!]
+  complianceJobIDGT: String
+  complianceJobIDGTE: String
+  complianceJobIDLT: String
+  complianceJobIDLTE: String
+  complianceJobIDContains: String
+  complianceJobIDHasPrefix: String
+  complianceJobIDHasSuffix: String
+  complianceJobIDIsNil: Boolean
+  complianceJobIDNotNil: Boolean
+  complianceJobIDEqualFold: String
+  complianceJobIDContainsFold: String
+  """
   status field predicates
   """
   status: JobResultJobExecutionStatus
@@ -91002,6 +91871,8 @@ input JobResultWhereInput {
   exitCodeGTE: Int
   exitCodeLT: Int
   exitCodeLTE: Int
+  exitCodeIsNil: Boolean
+  exitCodeNotNil: Boolean
   """
   finished_at field predicates
   """
@@ -91073,6 +91944,56 @@ input JobResultWhereInput {
   """
   hasFile: Boolean
   hasFileWith: [FileWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  standards edge predicates
+  """
+  hasStandards: Boolean
+  hasStandardsWith: [StandardWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  contacts edge predicates
+  """
+  hasContacts: Boolean
+  hasContactsWith: [ContactWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
 }
 type JobRunner implements Node {
   id: ID!
@@ -91128,6 +92049,10 @@ type JobRunner implements Node {
   the operating system of the runner
   """
   os: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   owner: Organization
   jobRunnerTokens(
     """
@@ -92055,13 +92980,21 @@ type JobTemplate implements Node {
   """
   description: String
   """
-  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  the code language golang, typescript, python, etc.
   """
   platform: JobTemplateJobPlatformType!
   """
+  the code language golang, typescript, python, etc.
+  """
+  runtimePlatform: String
+  """
+  path used to execute the check
+  """
+  scriptPath: String
+  """
   the url from where to download the script from
   """
-  downloadURL: String!
+  downloadURL: String
   """
   the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
@@ -92070,6 +93003,10 @@ type JobTemplate implements Node {
   cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   owner: Organization
   scheduledJobs(
     """
@@ -92102,6 +93039,316 @@ type JobTemplate implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  controls(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Controls returned from the connection.
+    """
+    orderBy: [ControlOrder!]
+
+    """
+    Filtering options for Controls returned from the connection.
+    """
+    where: ControlWhereInput
+  ): ControlConnection!
+  standards(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
 }
 """
 A connection to a list of items.
@@ -92175,13 +93422,21 @@ type JobTemplateHistory implements Node {
   """
   description: String
   """
-  the platform to use to execute this job, e.g. golang, typescript, python, etc.
+  the code language golang, typescript, python, etc.
   """
   platform: JobTemplateHistoryJobPlatformType!
   """
+  the code language golang, typescript, python, etc.
+  """
+  runtimePlatform: String
+  """
+  path used to execute the check
+  """
+  scriptPath: String
+  """
   the url from where to download the script from
   """
-  downloadURL: String!
+  downloadURL: String
   """
   the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
@@ -92190,6 +93445,10 @@ type JobTemplateHistory implements Node {
   cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
   """
   cron: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
 }
 """
 A connection to a list of items.
@@ -92496,6 +93755,42 @@ input JobTemplateHistoryWhereInput {
   platformNEQ: JobTemplateHistoryJobPlatformType
   platformIn: [JobTemplateHistoryJobPlatformType!]
   platformNotIn: [JobTemplateHistoryJobPlatformType!]
+  """
+  runtime_platform field predicates
+  """
+  runtimePlatform: String
+  runtimePlatformNEQ: String
+  runtimePlatformIn: [String!]
+  runtimePlatformNotIn: [String!]
+  runtimePlatformGT: String
+  runtimePlatformGTE: String
+  runtimePlatformLT: String
+  runtimePlatformLTE: String
+  runtimePlatformContains: String
+  runtimePlatformHasPrefix: String
+  runtimePlatformHasSuffix: String
+  runtimePlatformIsNil: Boolean
+  runtimePlatformNotNil: Boolean
+  runtimePlatformEqualFold: String
+  runtimePlatformContainsFold: String
+  """
+  script_path field predicates
+  """
+  scriptPath: String
+  scriptPathNEQ: String
+  scriptPathIn: [String!]
+  scriptPathNotIn: [String!]
+  scriptPathGT: String
+  scriptPathGTE: String
+  scriptPathLT: String
+  scriptPathLTE: String
+  scriptPathContains: String
+  scriptPathHasPrefix: String
+  scriptPathHasSuffix: String
+  scriptPathIsNil: Boolean
+  scriptPathNotNil: Boolean
+  scriptPathEqualFold: String
+  scriptPathContainsFold: String
 }
 """
 JobTemplateJobPlatformType is enum for the field platform
@@ -92728,6 +94023,42 @@ input JobTemplateWhereInput {
   platformIn: [JobTemplateJobPlatformType!]
   platformNotIn: [JobTemplateJobPlatformType!]
   """
+  runtime_platform field predicates
+  """
+  runtimePlatform: String
+  runtimePlatformNEQ: String
+  runtimePlatformIn: [String!]
+  runtimePlatformNotIn: [String!]
+  runtimePlatformGT: String
+  runtimePlatformGTE: String
+  runtimePlatformLT: String
+  runtimePlatformLTE: String
+  runtimePlatformContains: String
+  runtimePlatformHasPrefix: String
+  runtimePlatformHasSuffix: String
+  runtimePlatformIsNil: Boolean
+  runtimePlatformNotNil: Boolean
+  runtimePlatformEqualFold: String
+  runtimePlatformContainsFold: String
+  """
+  script_path field predicates
+  """
+  scriptPath: String
+  scriptPathNEQ: String
+  scriptPathIn: [String!]
+  scriptPathNotIn: [String!]
+  scriptPathGT: String
+  scriptPathGTE: String
+  scriptPathLT: String
+  scriptPathLTE: String
+  scriptPathContains: String
+  scriptPathHasPrefix: String
+  scriptPathHasSuffix: String
+  scriptPathIsNil: Boolean
+  scriptPathNotNil: Boolean
+  scriptPathEqualFold: String
+  scriptPathContainsFold: String
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -92737,6 +94068,56 @@ input JobTemplateWhereInput {
   """
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  controls edge predicates
+  """
+  hasControls: Boolean
+  hasControlsWith: [ControlWhereInput!]
+  """
+  standards edge predicates
+  """
+  hasStandards: Boolean
+  hasStandardsWith: [StandardWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  contacts edge predicates
+  """
+  hasContacts: Boolean
+  hasContactsWith: [ContactWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
 }
 """
 The builtin Map type
@@ -116005,6 +117386,10 @@ type ScheduledJob implements Node {
   the runner that this job will run on. If not set, it will scheduled on a general runner instead
   """
   jobRunnerID: ID
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   owner: Organization
   jobTemplate: JobTemplate!
   controls(
@@ -116069,6 +117454,285 @@ type ScheduledJob implements Node {
     """
     where: SubcontrolWhereInput
   ): SubcontrolConnection!
+  evidence(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Evidences returned from the connection.
+    """
+    orderBy: [EvidenceOrder!]
+
+    """
+    Filtering options for Evidences returned from the connection.
+    """
+    where: EvidenceWhereInput
+  ): EvidenceConnection!
+  findings(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Findings returned from the connection.
+    """
+    orderBy: [FindingOrder!]
+
+    """
+    Filtering options for Findings returned from the connection.
+    """
+    where: FindingWhereInput
+  ): FindingConnection!
+  risks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Risks returned from the connection.
+    """
+    orderBy: [RiskOrder!]
+
+    """
+    Filtering options for Risks returned from the connection.
+    """
+    where: RiskWhereInput
+  ): RiskConnection!
+  standards(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Standards returned from the connection.
+    """
+    orderBy: [StandardOrder!]
+
+    """
+    Filtering options for Standards returned from the connection.
+    """
+    where: StandardWhereInput
+  ): StandardConnection!
+  vulnerabilities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Vulnerabilities returned from the connection.
+    """
+    orderBy: [VulnerabilityOrder!]
+
+    """
+    Filtering options for Vulnerabilities returned from the connection.
+    """
+    where: VulnerabilityWhereInput
+  ): VulnerabilityConnection!
+  assets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Assets returned from the connection.
+    """
+    orderBy: [AssetOrder!]
+
+    """
+    Filtering options for Assets returned from the connection.
+    """
+    where: AssetWhereInput
+  ): AssetConnection!
+  contacts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Contacts returned from the connection.
+    """
+    orderBy: [ContactOrder!]
+
+    """
+    Filtering options for Contacts returned from the connection.
+    """
+    where: ContactWhereInput
+  ): ContactConnection!
+  entities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Entities returned from the connection.
+    """
+    orderBy: [EntityOrder!]
+
+    """
+    Filtering options for Entities returned from the connection.
+    """
+    where: EntityWhereInput
+  ): EntityConnection!
+  tasks(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Tasks returned from the connection.
+    """
+    orderBy: [TaskOrder!]
+
+    """
+    Filtering options for Tasks returned from the connection.
+    """
+    where: TaskWhereInput
+  ): TaskConnection!
   jobRunner: JobRunner
 }
 """
@@ -116138,6 +117802,10 @@ type ScheduledJobHistory implements Node {
   the runner that this job will run on. If not set, it will scheduled on a general runner instead
   """
   jobRunnerID: String
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
 }
 """
 A connection to a list of items.
@@ -116439,10 +118107,13 @@ type ScheduledJobRun implements Node {
   """
   expectedExecutionTime: Time!
   """
-  the script that will be executed by the agent.
-  This script will be templated with the values from the configuration on the job
+  the script that will be executed by the agent. This script will be templated with the values from the configuration on the job
   """
   script: String!
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
   owner: Organization
   scheduledJob: ScheduledJob!
   jobRunner: JobRunner!
@@ -116863,6 +118534,51 @@ input ScheduledJobWhereInput {
   """
   hasSubcontrols: Boolean
   hasSubcontrolsWith: [SubcontrolWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  findings edge predicates
+  """
+  hasFindings: Boolean
+  hasFindingsWith: [FindingWhereInput!]
+  """
+  risks edge predicates
+  """
+  hasRisks: Boolean
+  hasRisksWith: [RiskWhereInput!]
+  """
+  standards edge predicates
+  """
+  hasStandards: Boolean
+  hasStandardsWith: [StandardWhereInput!]
+  """
+  vulnerabilities edge predicates
+  """
+  hasVulnerabilities: Boolean
+  hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  assets edge predicates
+  """
+  hasAssets: Boolean
+  hasAssetsWith: [AssetWhereInput!]
+  """
+  contacts edge predicates
+  """
+  hasContacts: Boolean
+  hasContactsWith: [ContactWhereInput!]
+  """
+  entities edge predicates
+  """
+  hasEntities: Boolean
+  hasEntitiesWith: [EntityWhereInput!]
+  """
+  tasks edge predicates
+  """
+  hasTasks: Boolean
+  hasTasksWith: [TaskWhereInput!]
   """
   job_runner edge predicates
   """
@@ -130097,6 +131813,11 @@ Input was generated by ent.
 """
 input UpdateJobResultInput {
   """
+  the job this result belongs to
+  """
+  complianceJobID: String
+  clearComplianceJobID: Boolean
+  """
   the status of this job. did it fail? did it succeed?
   """
   status: JobResultJobExecutionStatus
@@ -130105,10 +131826,45 @@ input UpdateJobResultInput {
   """
   log: String
   clearLog: Boolean
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID
   fileID: ID
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addStandardIDs: [ID!]
+  removeStandardIDs: [ID!]
+  clearStandards: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addContactIDs: [ID!]
+  removeContactIDs: [ID!]
+  clearContacts: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
 }
 """
 UpdateJobRunnerInput is used for update JobRunner object.
@@ -130155,6 +131911,11 @@ input UpdateJobRunnerInput {
   """
   os: String
   clearOs: Boolean
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   addJobRunnerTokenIDs: [ID!]
@@ -130249,9 +132010,20 @@ input UpdateJobTemplateInput {
   description: String
   clearDescription: Boolean
   """
+  the code language golang, typescript, python, etc.
+  """
+  runtimePlatform: String
+  clearRuntimePlatform: Boolean
+  """
+  path used to execute the check
+  """
+  scriptPath: String
+  clearScriptPath: Boolean
+  """
   the url from where to download the script from
   """
   downloadURL: String
+  clearDownloadURL: Boolean
   """
   the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
   """
@@ -130263,11 +132035,46 @@ input UpdateJobTemplateInput {
   """
   cron: String
   clearCron: Boolean
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addControlIDs: [ID!]
+  removeControlIDs: [ID!]
+  clearControls: Boolean
+  addStandardIDs: [ID!]
+  removeStandardIDs: [ID!]
+  clearStandards: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addContactIDs: [ID!]
+  removeContactIDs: [ID!]
+  clearContacts: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
 }
 """
 UpdateMappableDomainInput is used for update MappableDomain object.
@@ -131676,6 +133483,11 @@ input UpdateScheduledJobInput {
   """
   cron: String
   clearCron: Boolean
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
   jobTemplateID: ID
   addControlIDs: [ID!]
   removeControlIDs: [ID!]
@@ -131683,6 +133495,33 @@ input UpdateScheduledJobInput {
   addSubcontrolIDs: [ID!]
   removeSubcontrolIDs: [ID!]
   clearSubcontrols: Boolean
+  addEvidenceIDs: [ID!]
+  removeEvidenceIDs: [ID!]
+  clearEvidence: Boolean
+  addFindingIDs: [ID!]
+  removeFindingIDs: [ID!]
+  clearFindings: Boolean
+  addRiskIDs: [ID!]
+  removeRiskIDs: [ID!]
+  clearRisks: Boolean
+  addStandardIDs: [ID!]
+  removeStandardIDs: [ID!]
+  clearStandards: Boolean
+  addVulnerabilityIDs: [ID!]
+  removeVulnerabilityIDs: [ID!]
+  clearVulnerabilities: Boolean
+  addAssetIDs: [ID!]
+  removeAssetIDs: [ID!]
+  clearAssets: Boolean
+  addContactIDs: [ID!]
+  removeContactIDs: [ID!]
+  clearContacts: Boolean
+  addEntityIDs: [ID!]
+  removeEntityIDs: [ID!]
+  clearEntities: Boolean
+  addTaskIDs: [ID!]
+  removeTaskIDs: [ID!]
+  clearTasks: Boolean
   jobRunnerID: ID
   clearJobRunner: Boolean
 }
@@ -131696,6 +133535,11 @@ input UpdateScheduledJobRunInput {
   			scheduled on a runner, this will change to acquired.
   """
   status: ScheduledJobRunScheduledJobRunStatus
+  """
+  raw metadata payload for the remediation from the source system
+  """
+  metadata: Map
+  clearMetadata: Boolean
   ownerID: ID
   clearOwner: Boolean
   scheduledJobID: ID

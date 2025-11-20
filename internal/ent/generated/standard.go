@@ -72,8 +72,11 @@ type Standard struct {
 	Version string `json:"version,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StandardQuery when eager-loading is set.
-	Edges        StandardEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                   StandardEdges `json:"edges"`
+	job_result_standards    *string
+	job_template_standards  *string
+	scheduled_job_standards *string
+	selectValues            sql.SelectValues
 }
 
 // StandardEdges holds the relations/edges for other nodes in the graph.
@@ -136,6 +139,12 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case standard.ForeignKeys[0]: // job_result_standards
+			values[i] = new(sql.NullString)
+		case standard.ForeignKeys[1]: // job_template_standards
+			values[i] = new(sql.NullString)
+		case standard.ForeignKeys[2]: // scheduled_job_standards
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -312,6 +321,27 @@ func (_m *Standard) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field version", values[i])
 			} else if value.Valid {
 				_m.Version = value.String
+			}
+		case standard.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_standards", values[i])
+			} else if value.Valid {
+				_m.job_result_standards = new(string)
+				*_m.job_result_standards = value.String
+			}
+		case standard.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_standards", values[i])
+			} else if value.Valid {
+				_m.job_template_standards = new(string)
+				*_m.job_template_standards = value.String
+			}
+		case standard.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_standards", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_standards = new(string)
+				*_m.scheduled_job_standards = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

@@ -42,6 +42,7 @@ type EvidenceQuery struct {
 	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	withTasks                       *TaskQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Evidence) error
 	modifiers                       []func(*sql.Selector)
 	withNamedControls               map[string]*ControlQuery
@@ -665,6 +666,7 @@ func (_q *EvidenceQuery) prepareQuery(ctx context.Context) error {
 func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evidence, error) {
 	var (
 		nodes       = []*Evidence{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [8]bool{
 			_q.withOwner != nil,
@@ -677,6 +679,9 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			_q.withTasks != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, evidence.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Evidence).scanValues(nil, columns)
 	}

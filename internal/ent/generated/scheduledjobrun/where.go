@@ -838,6 +838,16 @@ func ScriptContainsFold(v string) predicate.ScheduledJobRun {
 	return predicate.ScheduledJobRun(sql.FieldContainsFold(FieldScript, v))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.ScheduledJobRun {
+	return predicate.ScheduledJobRun(sql.FieldNotNull(FieldMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.ScheduledJobRun {
 	return predicate.ScheduledJobRun(func(s *sql.Selector) {

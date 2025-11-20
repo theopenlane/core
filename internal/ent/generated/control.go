@@ -107,6 +107,8 @@ type Control struct {
 	// The values are being populated by the ControlQuery when eager-loading is set.
 	Edges                     ControlEdges `json:"edges"`
 	custom_type_enum_controls *string
+	job_result_controls       *string
+	job_template_controls     *string
 	remediation_controls      *string
 	review_controls           *string
 	vulnerability_controls    *string
@@ -480,11 +482,15 @@ func (*Control) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case control.ForeignKeys[0]: // custom_type_enum_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[1]: // remediation_controls
+		case control.ForeignKeys[1]: // job_result_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[2]: // review_controls
+		case control.ForeignKeys[2]: // job_template_controls
 			values[i] = new(sql.NullString)
-		case control.ForeignKeys[3]: // vulnerability_controls
+		case control.ForeignKeys[3]: // remediation_controls
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[4]: // review_controls
+			values[i] = new(sql.NullString)
+		case control.ForeignKeys[5]: // vulnerability_controls
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -773,19 +779,33 @@ func (_m *Control) assignValues(columns []string, values []any) error {
 			}
 		case control.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_controls", values[i])
+			} else if value.Valid {
+				_m.job_result_controls = new(string)
+				*_m.job_result_controls = value.String
+			}
+		case control.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_controls", values[i])
+			} else if value.Valid {
+				_m.job_template_controls = new(string)
+				*_m.job_template_controls = value.String
+			}
+		case control.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_controls", values[i])
 			} else if value.Valid {
 				_m.remediation_controls = new(string)
 				*_m.remediation_controls = value.String
 			}
-		case control.ForeignKeys[2]:
+		case control.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_controls", values[i])
 			} else if value.Valid {
 				_m.review_controls = new(string)
 				*_m.review_controls = value.String
 			}
-		case control.ForeignKeys[3]:
+		case control.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_controls", values[i])
 			} else if value.Valid {

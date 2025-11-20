@@ -142,9 +142,19 @@ func Description(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldEQ(FieldDescription, v))
 }
 
+// RuntimePlatform applies equality check predicate on the "runtime_platform" field. It's identical to RuntimePlatformEQ.
+func RuntimePlatform(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEQ(FieldRuntimePlatform, v))
+}
+
 // WindmillPath applies equality check predicate on the "windmill_path" field. It's identical to WindmillPathEQ.
 func WindmillPath(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldEQ(FieldWindmillPath, v))
+}
+
+// ScriptPath applies equality check predicate on the "script_path" field. It's identical to ScriptPathEQ.
+func ScriptPath(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEQ(FieldScriptPath, v))
 }
 
 // DownloadURL applies equality check predicate on the "download_url" field. It's identical to DownloadURLEQ.
@@ -1157,6 +1167,81 @@ func PlatformNotIn(vs ...enums.JobPlatformType) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldNotIn(FieldPlatform, v...))
 }
 
+// RuntimePlatformEQ applies the EQ predicate on the "runtime_platform" field.
+func RuntimePlatformEQ(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEQ(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformNEQ applies the NEQ predicate on the "runtime_platform" field.
+func RuntimePlatformNEQ(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNEQ(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformIn applies the In predicate on the "runtime_platform" field.
+func RuntimePlatformIn(vs ...string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIn(FieldRuntimePlatform, vs...))
+}
+
+// RuntimePlatformNotIn applies the NotIn predicate on the "runtime_platform" field.
+func RuntimePlatformNotIn(vs ...string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotIn(FieldRuntimePlatform, vs...))
+}
+
+// RuntimePlatformGT applies the GT predicate on the "runtime_platform" field.
+func RuntimePlatformGT(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldGT(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformGTE applies the GTE predicate on the "runtime_platform" field.
+func RuntimePlatformGTE(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldGTE(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformLT applies the LT predicate on the "runtime_platform" field.
+func RuntimePlatformLT(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldLT(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformLTE applies the LTE predicate on the "runtime_platform" field.
+func RuntimePlatformLTE(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldLTE(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformContains applies the Contains predicate on the "runtime_platform" field.
+func RuntimePlatformContains(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldContains(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformHasPrefix applies the HasPrefix predicate on the "runtime_platform" field.
+func RuntimePlatformHasPrefix(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldHasPrefix(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformHasSuffix applies the HasSuffix predicate on the "runtime_platform" field.
+func RuntimePlatformHasSuffix(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldHasSuffix(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformIsNil applies the IsNil predicate on the "runtime_platform" field.
+func RuntimePlatformIsNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIsNull(FieldRuntimePlatform))
+}
+
+// RuntimePlatformNotNil applies the NotNil predicate on the "runtime_platform" field.
+func RuntimePlatformNotNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotNull(FieldRuntimePlatform))
+}
+
+// RuntimePlatformEqualFold applies the EqualFold predicate on the "runtime_platform" field.
+func RuntimePlatformEqualFold(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEqualFold(FieldRuntimePlatform, v))
+}
+
+// RuntimePlatformContainsFold applies the ContainsFold predicate on the "runtime_platform" field.
+func RuntimePlatformContainsFold(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldContainsFold(FieldRuntimePlatform, v))
+}
+
 // WindmillPathEQ applies the EQ predicate on the "windmill_path" field.
 func WindmillPathEQ(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldEQ(FieldWindmillPath, v))
@@ -1232,6 +1317,81 @@ func WindmillPathContainsFold(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldContainsFold(FieldWindmillPath, v))
 }
 
+// ScriptPathEQ applies the EQ predicate on the "script_path" field.
+func ScriptPathEQ(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEQ(FieldScriptPath, v))
+}
+
+// ScriptPathNEQ applies the NEQ predicate on the "script_path" field.
+func ScriptPathNEQ(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNEQ(FieldScriptPath, v))
+}
+
+// ScriptPathIn applies the In predicate on the "script_path" field.
+func ScriptPathIn(vs ...string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIn(FieldScriptPath, vs...))
+}
+
+// ScriptPathNotIn applies the NotIn predicate on the "script_path" field.
+func ScriptPathNotIn(vs ...string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotIn(FieldScriptPath, vs...))
+}
+
+// ScriptPathGT applies the GT predicate on the "script_path" field.
+func ScriptPathGT(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldGT(FieldScriptPath, v))
+}
+
+// ScriptPathGTE applies the GTE predicate on the "script_path" field.
+func ScriptPathGTE(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldGTE(FieldScriptPath, v))
+}
+
+// ScriptPathLT applies the LT predicate on the "script_path" field.
+func ScriptPathLT(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldLT(FieldScriptPath, v))
+}
+
+// ScriptPathLTE applies the LTE predicate on the "script_path" field.
+func ScriptPathLTE(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldLTE(FieldScriptPath, v))
+}
+
+// ScriptPathContains applies the Contains predicate on the "script_path" field.
+func ScriptPathContains(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldContains(FieldScriptPath, v))
+}
+
+// ScriptPathHasPrefix applies the HasPrefix predicate on the "script_path" field.
+func ScriptPathHasPrefix(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldHasPrefix(FieldScriptPath, v))
+}
+
+// ScriptPathHasSuffix applies the HasSuffix predicate on the "script_path" field.
+func ScriptPathHasSuffix(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldHasSuffix(FieldScriptPath, v))
+}
+
+// ScriptPathIsNil applies the IsNil predicate on the "script_path" field.
+func ScriptPathIsNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIsNull(FieldScriptPath))
+}
+
+// ScriptPathNotNil applies the NotNil predicate on the "script_path" field.
+func ScriptPathNotNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotNull(FieldScriptPath))
+}
+
+// ScriptPathEqualFold applies the EqualFold predicate on the "script_path" field.
+func ScriptPathEqualFold(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldEqualFold(FieldScriptPath, v))
+}
+
+// ScriptPathContainsFold applies the ContainsFold predicate on the "script_path" field.
+func ScriptPathContainsFold(v string) predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldContainsFold(FieldScriptPath, v))
+}
+
 // DownloadURLEQ applies the EQ predicate on the "download_url" field.
 func DownloadURLEQ(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldEQ(FieldDownloadURL, v))
@@ -1285,6 +1445,16 @@ func DownloadURLHasPrefix(v string) predicate.JobTemplateHistory {
 // DownloadURLHasSuffix applies the HasSuffix predicate on the "download_url" field.
 func DownloadURLHasSuffix(v string) predicate.JobTemplateHistory {
 	return predicate.JobTemplateHistory(sql.FieldHasSuffix(FieldDownloadURL, v))
+}
+
+// DownloadURLIsNil applies the IsNil predicate on the "download_url" field.
+func DownloadURLIsNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIsNull(FieldDownloadURL))
+}
+
+// DownloadURLNotNil applies the NotNil predicate on the "download_url" field.
+func DownloadURLNotNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotNull(FieldDownloadURL))
 }
 
 // DownloadURLEqualFold applies the EqualFold predicate on the "download_url" field.
@@ -1385,6 +1555,16 @@ func CronEqualFold(v models.Cron) predicate.JobTemplateHistory {
 func CronContainsFold(v models.Cron) predicate.JobTemplateHistory {
 	vc := string(v)
 	return predicate.JobTemplateHistory(sql.FieldContainsFold(FieldCron, vc))
+}
+
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.JobTemplateHistory {
+	return predicate.JobTemplateHistory(sql.FieldNotNull(FieldMetadata))
 }
 
 // And groups predicates with the AND operator between them.

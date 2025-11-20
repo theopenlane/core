@@ -160,6 +160,12 @@ func (_c *ScheduledJobRunCreate) SetScript(v string) *ScheduledJobRunCreate {
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *ScheduledJobRunCreate) SetMetadata(v map[string]interface{}) *ScheduledJobRunCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *ScheduledJobRunCreate) SetID(v string) *ScheduledJobRunCreate {
 	_c.mutation.SetID(v)
@@ -358,6 +364,10 @@ func (_c *ScheduledJobRunCreate) createSpec() (*ScheduledJobRun, *sqlgraph.Creat
 	if value, ok := _c.mutation.Script(); ok {
 		_spec.SetField(scheduledjobrun.FieldScript, field.TypeString, value)
 		_node.Script = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobrun.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

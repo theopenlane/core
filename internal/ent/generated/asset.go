@@ -60,9 +60,12 @@ type Asset struct {
 	// The values are being populated by the AssetQuery when eager-loading is set.
 	Edges                AssetEdges `json:"edges"`
 	finding_assets       *string
+	job_result_assets    *string
+	job_template_assets  *string
 	remediation_assets   *string
 	review_assets        *string
 	risk_assets          *string
+	scheduled_job_assets *string
 	vulnerability_assets *string
 	selectValues         sql.SelectValues
 }
@@ -177,13 +180,19 @@ func (*Asset) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullTime)
 		case asset.ForeignKeys[0]: // finding_assets
 			values[i] = new(sql.NullString)
-		case asset.ForeignKeys[1]: // remediation_assets
+		case asset.ForeignKeys[1]: // job_result_assets
 			values[i] = new(sql.NullString)
-		case asset.ForeignKeys[2]: // review_assets
+		case asset.ForeignKeys[2]: // job_template_assets
 			values[i] = new(sql.NullString)
-		case asset.ForeignKeys[3]: // risk_assets
+		case asset.ForeignKeys[3]: // remediation_assets
 			values[i] = new(sql.NullString)
-		case asset.ForeignKeys[4]: // vulnerability_assets
+		case asset.ForeignKeys[4]: // review_assets
+			values[i] = new(sql.NullString)
+		case asset.ForeignKeys[5]: // risk_assets
+			values[i] = new(sql.NullString)
+		case asset.ForeignKeys[6]: // scheduled_job_assets
+			values[i] = new(sql.NullString)
+		case asset.ForeignKeys[7]: // vulnerability_assets
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -329,26 +338,47 @@ func (_m *Asset) assignValues(columns []string, values []any) error {
 			}
 		case asset.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_assets", values[i])
+			} else if value.Valid {
+				_m.job_result_assets = new(string)
+				*_m.job_result_assets = value.String
+			}
+		case asset.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_assets", values[i])
+			} else if value.Valid {
+				_m.job_template_assets = new(string)
+				*_m.job_template_assets = value.String
+			}
+		case asset.ForeignKeys[3]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_assets", values[i])
 			} else if value.Valid {
 				_m.remediation_assets = new(string)
 				*_m.remediation_assets = value.String
 			}
-		case asset.ForeignKeys[2]:
+		case asset.ForeignKeys[4]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_assets", values[i])
 			} else if value.Valid {
 				_m.review_assets = new(string)
 				*_m.review_assets = value.String
 			}
-		case asset.ForeignKeys[3]:
+		case asset.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field risk_assets", values[i])
 			} else if value.Valid {
 				_m.risk_assets = new(string)
 				*_m.risk_assets = value.String
 			}
-		case asset.ForeignKeys[4]:
+		case asset.ForeignKeys[6]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_assets", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_assets = new(string)
+				*_m.scheduled_job_assets = value.String
+			}
+		case asset.ForeignKeys[7]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_assets", values[i])
 			} else if value.Valid {

@@ -235,6 +235,20 @@ func (_c *JobTemplateHistoryCreate) SetPlatform(v enums.JobPlatformType) *JobTem
 	return _c
 }
 
+// SetRuntimePlatform sets the "runtime_platform" field.
+func (_c *JobTemplateHistoryCreate) SetRuntimePlatform(v string) *JobTemplateHistoryCreate {
+	_c.mutation.SetRuntimePlatform(v)
+	return _c
+}
+
+// SetNillableRuntimePlatform sets the "runtime_platform" field if the given value is not nil.
+func (_c *JobTemplateHistoryCreate) SetNillableRuntimePlatform(v *string) *JobTemplateHistoryCreate {
+	if v != nil {
+		_c.SetRuntimePlatform(*v)
+	}
+	return _c
+}
+
 // SetWindmillPath sets the "windmill_path" field.
 func (_c *JobTemplateHistoryCreate) SetWindmillPath(v string) *JobTemplateHistoryCreate {
 	_c.mutation.SetWindmillPath(v)
@@ -249,9 +263,31 @@ func (_c *JobTemplateHistoryCreate) SetNillableWindmillPath(v *string) *JobTempl
 	return _c
 }
 
+// SetScriptPath sets the "script_path" field.
+func (_c *JobTemplateHistoryCreate) SetScriptPath(v string) *JobTemplateHistoryCreate {
+	_c.mutation.SetScriptPath(v)
+	return _c
+}
+
+// SetNillableScriptPath sets the "script_path" field if the given value is not nil.
+func (_c *JobTemplateHistoryCreate) SetNillableScriptPath(v *string) *JobTemplateHistoryCreate {
+	if v != nil {
+		_c.SetScriptPath(*v)
+	}
+	return _c
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (_c *JobTemplateHistoryCreate) SetDownloadURL(v string) *JobTemplateHistoryCreate {
 	_c.mutation.SetDownloadURL(v)
+	return _c
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (_c *JobTemplateHistoryCreate) SetNillableDownloadURL(v *string) *JobTemplateHistoryCreate {
+	if v != nil {
+		_c.SetDownloadURL(*v)
+	}
 	return _c
 }
 
@@ -272,6 +308,12 @@ func (_c *JobTemplateHistoryCreate) SetNillableCron(v *models.Cron) *JobTemplate
 	if v != nil {
 		_c.SetCron(*v)
 	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *JobTemplateHistoryCreate) SetMetadata(v map[string]interface{}) *JobTemplateHistoryCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -392,9 +434,6 @@ func (_c *JobTemplateHistoryCreate) check() error {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplateHistory.platform": %w`, err)}
 		}
 	}
-	if _, ok := _c.mutation.DownloadURL(); !ok {
-		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplateHistory.download_url"`)}
-	}
 	if v, ok := _c.mutation.Cron(); ok {
 		if err := v.Validate(); err != nil {
 			return &ValidationError{Name: "cron", err: fmt.Errorf(`generated: validator failed for field "JobTemplateHistory.cron": %w`, err)}
@@ -508,9 +547,17 @@ func (_c *JobTemplateHistoryCreate) createSpec() (*JobTemplateHistory, *sqlgraph
 		_spec.SetField(jobtemplatehistory.FieldPlatform, field.TypeEnum, value)
 		_node.Platform = value
 	}
+	if value, ok := _c.mutation.RuntimePlatform(); ok {
+		_spec.SetField(jobtemplatehistory.FieldRuntimePlatform, field.TypeString, value)
+		_node.RuntimePlatform = value
+	}
 	if value, ok := _c.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
 		_node.WindmillPath = value
+	}
+	if value, ok := _c.mutation.ScriptPath(); ok {
+		_spec.SetField(jobtemplatehistory.FieldScriptPath, field.TypeString, value)
+		_node.ScriptPath = value
 	}
 	if value, ok := _c.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
@@ -523,6 +570,10 @@ func (_c *JobTemplateHistoryCreate) createSpec() (*JobTemplateHistory, *sqlgraph
 	if value, ok := _c.mutation.Cron(); ok {
 		_spec.SetField(jobtemplatehistory.FieldCron, field.TypeString, value)
 		_node.Cron = &value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(jobtemplatehistory.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	return _node, _spec
 }

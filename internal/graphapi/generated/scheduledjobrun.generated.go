@@ -74,6 +74,8 @@ func (ec *executionContext) fieldContext_ScheduledJobRunCreatePayload_scheduledJ
 				return ec.fieldContext_ScheduledJobRun_expectedExecutionTime(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJobRun_script(ctx, field)
+			case "metadata":
+				return ec.fieldContext_ScheduledJobRun_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJobRun_owner(ctx, field)
 			case "scheduledJob":
@@ -162,6 +164,8 @@ func (ec *executionContext) fieldContext_ScheduledJobRunUpdatePayload_scheduledJ
 				return ec.fieldContext_ScheduledJobRun_expectedExecutionTime(ctx, field)
 			case "script":
 				return ec.fieldContext_ScheduledJobRun_script(ctx, field)
+			case "metadata":
+				return ec.fieldContext_ScheduledJobRun_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJobRun_owner(ctx, field)
 			case "scheduledJob":

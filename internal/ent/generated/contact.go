@@ -52,8 +52,11 @@ type Contact struct {
 	Status enums.UserStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ContactQuery when eager-loading is set.
-	Edges        ContactEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                  ContactEdges `json:"edges"`
+	job_result_contacts    *string
+	job_template_contacts  *string
+	scheduled_job_contacts *string
+	selectValues           sql.SelectValues
 }
 
 // ContactEdges holds the relations/edges for other nodes in the graph.
@@ -114,6 +117,12 @@ func (*Contact) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case contact.FieldCreatedAt, contact.FieldUpdatedAt, contact.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case contact.ForeignKeys[0]: // job_result_contacts
+			values[i] = new(sql.NullString)
+		case contact.ForeignKeys[1]: // job_template_contacts
+			values[i] = new(sql.NullString)
+		case contact.ForeignKeys[2]: // scheduled_job_contacts
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -226,6 +235,27 @@ func (_m *Contact) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.UserStatus(value.String)
+			}
+		case contact.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_contacts", values[i])
+			} else if value.Valid {
+				_m.job_result_contacts = new(string)
+				*_m.job_result_contacts = value.String
+			}
+		case contact.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_contacts", values[i])
+			} else if value.Valid {
+				_m.job_template_contacts = new(string)
+				*_m.job_template_contacts = value.String
+			}
+		case contact.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_contacts", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_contacts = new(string)
+				*_m.scheduled_job_contacts = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

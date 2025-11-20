@@ -13,10 +13,20 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -24,15 +34,35 @@ import (
 // JobTemplateQuery is the builder for querying JobTemplate entities.
 type JobTemplateQuery struct {
 	config
-	ctx                    *QueryContext
-	order                  []jobtemplate.OrderOption
-	inters                 []Interceptor
-	predicates             []predicate.JobTemplate
-	withOwner              *OrganizationQuery
-	withScheduledJobs      *ScheduledJobQuery
-	loadTotal              []func(context.Context, []*JobTemplate) error
-	modifiers              []func(*sql.Selector)
-	withNamedScheduledJobs map[string]*ScheduledJobQuery
+	ctx                      *QueryContext
+	order                    []jobtemplate.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.JobTemplate
+	withOwner                *OrganizationQuery
+	withScheduledJobs        *ScheduledJobQuery
+	withEvidence             *EvidenceQuery
+	withFindings             *FindingQuery
+	withRisks                *RiskQuery
+	withControls             *ControlQuery
+	withStandards            *StandardQuery
+	withVulnerabilities      *VulnerabilityQuery
+	withAssets               *AssetQuery
+	withContacts             *ContactQuery
+	withEntities             *EntityQuery
+	withTasks                *TaskQuery
+	loadTotal                []func(context.Context, []*JobTemplate) error
+	modifiers                []func(*sql.Selector)
+	withNamedScheduledJobs   map[string]*ScheduledJobQuery
+	withNamedEvidence        map[string]*EvidenceQuery
+	withNamedFindings        map[string]*FindingQuery
+	withNamedRisks           map[string]*RiskQuery
+	withNamedControls        map[string]*ControlQuery
+	withNamedStandards       map[string]*StandardQuery
+	withNamedVulnerabilities map[string]*VulnerabilityQuery
+	withNamedAssets          map[string]*AssetQuery
+	withNamedContacts        map[string]*ContactQuery
+	withNamedEntities        map[string]*EntityQuery
+	withNamedTasks           map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -113,6 +143,256 @@ func (_q *JobTemplateQuery) QueryScheduledJobs() *ScheduledJobQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.ScheduledJob
 		step.Edge.Schema = schemaConfig.ScheduledJob
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *JobTemplateQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.EvidenceTable, jobtemplate.EvidenceColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *JobTemplateQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.FindingsTable, jobtemplate.FindingsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRisks chains the current query on the "risks" edge.
+func (_q *JobTemplateQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.RisksTable, jobtemplate.RisksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryControls chains the current query on the "controls" edge.
+func (_q *JobTemplateQuery) QueryControls() *ControlQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.ControlsTable, jobtemplate.ControlsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStandards chains the current query on the "standards" edge.
+func (_q *JobTemplateQuery) QueryStandards() *StandardQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.StandardsTable, jobtemplate.StandardsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *JobTemplateQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.VulnerabilitiesTable, jobtemplate.VulnerabilitiesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *JobTemplateQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.AssetsTable, jobtemplate.AssetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryContacts chains the current query on the "contacts" edge.
+func (_q *JobTemplateQuery) QueryContacts() *ContactQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.ContactsTable, jobtemplate.ContactsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *JobTemplateQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.EntitiesTable, jobtemplate.EntitiesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *JobTemplateQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(jobtemplate.Table, jobtemplate.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, jobtemplate.TasksTable, jobtemplate.TasksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -306,13 +586,23 @@ func (_q *JobTemplateQuery) Clone() *JobTemplateQuery {
 		return nil
 	}
 	return &JobTemplateQuery{
-		config:            _q.config,
-		ctx:               _q.ctx.Clone(),
-		order:             append([]jobtemplate.OrderOption{}, _q.order...),
-		inters:            append([]Interceptor{}, _q.inters...),
-		predicates:        append([]predicate.JobTemplate{}, _q.predicates...),
-		withOwner:         _q.withOwner.Clone(),
-		withScheduledJobs: _q.withScheduledJobs.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]jobtemplate.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.JobTemplate{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withScheduledJobs:   _q.withScheduledJobs.Clone(),
+		withEvidence:        _q.withEvidence.Clone(),
+		withFindings:        _q.withFindings.Clone(),
+		withRisks:           _q.withRisks.Clone(),
+		withControls:        _q.withControls.Clone(),
+		withStandards:       _q.withStandards.Clone(),
+		withVulnerabilities: _q.withVulnerabilities.Clone(),
+		withAssets:          _q.withAssets.Clone(),
+		withContacts:        _q.withContacts.Clone(),
+		withEntities:        _q.withEntities.Clone(),
+		withTasks:           _q.withTasks.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -339,6 +629,116 @@ func (_q *JobTemplateQuery) WithScheduledJobs(opts ...func(*ScheduledJobQuery)) 
 		opt(query)
 	}
 	_q.withScheduledJobs = query
+	return _q
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithEvidence(opts ...func(*EvidenceQuery)) *JobTemplateQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithFindings(opts ...func(*FindingQuery)) *JobTemplateQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithRisks(opts ...func(*RiskQuery)) *JobTemplateQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRisks = query
+	return _q
+}
+
+// WithControls tells the query-builder to eager-load the nodes that are connected to
+// the "controls" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithControls(opts ...func(*ControlQuery)) *JobTemplateQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withControls = query
+	return _q
+}
+
+// WithStandards tells the query-builder to eager-load the nodes that are connected to
+// the "standards" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithStandards(opts ...func(*StandardQuery)) *JobTemplateQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStandards = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *JobTemplateQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithAssets(opts ...func(*AssetQuery)) *JobTemplateQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssets = query
+	return _q
+}
+
+// WithContacts tells the query-builder to eager-load the nodes that are connected to
+// the "contacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithContacts(opts ...func(*ContactQuery)) *JobTemplateQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withContacts = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithEntities(opts ...func(*EntityQuery)) *JobTemplateQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithTasks(opts ...func(*TaskQuery)) *JobTemplateQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
 	return _q
 }
 
@@ -426,9 +826,19 @@ func (_q *JobTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	var (
 		nodes       = []*JobTemplate{}
 		_spec       = _q.querySpec()
-		loadedTypes = [2]bool{
+		loadedTypes = [12]bool{
 			_q.withOwner != nil,
 			_q.withScheduledJobs != nil,
+			_q.withEvidence != nil,
+			_q.withFindings != nil,
+			_q.withRisks != nil,
+			_q.withControls != nil,
+			_q.withStandards != nil,
+			_q.withVulnerabilities != nil,
+			_q.withAssets != nil,
+			_q.withContacts != nil,
+			_q.withEntities != nil,
+			_q.withTasks != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -467,10 +877,150 @@ func (_q *JobTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Evidence = []*Evidence{} },
+			func(n *JobTemplate, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Findings = []*Finding{} },
+			func(n *JobTemplate, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Risks = []*Risk{} },
+			func(n *JobTemplate, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withControls; query != nil {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Controls = []*Control{} },
+			func(n *JobTemplate, e *Control) { n.Edges.Controls = append(n.Edges.Controls, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStandards; query != nil {
+		if err := _q.loadStandards(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Standards = []*Standard{} },
+			func(n *JobTemplate, e *Standard) { n.Edges.Standards = append(n.Edges.Standards, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *JobTemplate, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Assets = []*Asset{} },
+			func(n *JobTemplate, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withContacts; query != nil {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Contacts = []*Contact{} },
+			func(n *JobTemplate, e *Contact) { n.Edges.Contacts = append(n.Edges.Contacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Entities = []*Entity{} },
+			func(n *JobTemplate, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *JobTemplate) { n.Edges.Tasks = []*Task{} },
+			func(n *JobTemplate, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedScheduledJobs {
 		if err := _q.loadScheduledJobs(ctx, query, nodes,
 			func(n *JobTemplate) { n.appendNamedScheduledJobs(name) },
 			func(n *JobTemplate, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEvidence {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedEvidence(name) },
+			func(n *JobTemplate, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedFindings(name) },
+			func(n *JobTemplate, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedRisks(name) },
+			func(n *JobTemplate, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedControls {
+		if err := _q.loadControls(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedControls(name) },
+			func(n *JobTemplate, e *Control) { n.appendNamedControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedStandards {
+		if err := _q.loadStandards(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedStandards(name) },
+			func(n *JobTemplate, e *Standard) { n.appendNamedStandards(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedVulnerabilities(name) },
+			func(n *JobTemplate, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedAssets(name) },
+			func(n *JobTemplate, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedContacts {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedContacts(name) },
+			func(n *JobTemplate, e *Contact) { n.appendNamedContacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedEntities(name) },
+			func(n *JobTemplate, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *JobTemplate) { n.appendNamedTasks(name) },
+			func(n *JobTemplate, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -536,6 +1086,316 @@ func (_q *JobTemplateQuery) loadScheduledJobs(ctx context.Context, query *Schedu
 		node, ok := nodeids[fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "job_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Evidence)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Evidence(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.EvidenceColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_evidence
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_evidence" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_evidence" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Finding)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Finding(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.FindingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_findings
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_findings" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_findings" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Risk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Risk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.RisksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_risks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_risks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_risks" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadControls(ctx context.Context, query *ControlQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Control)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Control(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.ControlsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_controls
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_controls" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_controls" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadStandards(ctx context.Context, query *StandardQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Standard)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Standard(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.StandardsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_standards
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_standards" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_standards" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Vulnerability)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Vulnerability(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.VulnerabilitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_vulnerabilities
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_vulnerabilities" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_vulnerabilities" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Asset)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Asset(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.AssetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_assets
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_assets" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_assets" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadContacts(ctx context.Context, query *ContactQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Contact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.ContactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_contacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_contacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_contacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Entity)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Entity(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.EntitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_entities
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_entities" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_entities" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *JobTemplateQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*JobTemplate, init func(*JobTemplate), assign func(*JobTemplate, *Task)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*JobTemplate)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(jobtemplate.TasksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.job_template_tasks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "job_template_tasks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "job_template_tasks" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -654,6 +1514,146 @@ func (_q *JobTemplateQuery) WithNamedScheduledJobs(name string, opts ...func(*Sc
 		_q.withNamedScheduledJobs = make(map[string]*ScheduledJobQuery)
 	}
 	_q.withNamedScheduledJobs[name] = query
+	return _q
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *JobTemplateQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEvidence == nil {
+		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	_q.withNamedEvidence[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *JobTemplateQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *JobTemplateQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	_q.withNamedRisks[name] = query
+	return _q
+}
+
+// WithNamedControls tells the query-builder to eager-load the nodes that are connected to the "controls"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedControls(name string, opts ...func(*ControlQuery)) *JobTemplateQuery {
+	query := (&ControlClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedControls == nil {
+		_q.withNamedControls = make(map[string]*ControlQuery)
+	}
+	_q.withNamedControls[name] = query
+	return _q
+}
+
+// WithNamedStandards tells the query-builder to eager-load the nodes that are connected to the "standards"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedStandards(name string, opts ...func(*StandardQuery)) *JobTemplateQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedStandards == nil {
+		_q.withNamedStandards = make(map[string]*StandardQuery)
+	}
+	_q.withNamedStandards[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *JobTemplateQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *JobTemplateQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
+	return _q
+}
+
+// WithNamedContacts tells the query-builder to eager-load the nodes that are connected to the "contacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedContacts(name string, opts ...func(*ContactQuery)) *JobTemplateQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedContacts == nil {
+		_q.withNamedContacts = make(map[string]*ContactQuery)
+	}
+	_q.withNamedContacts[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *JobTemplateQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *JobTemplateQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *JobTemplateQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
 	return _q
 }
 

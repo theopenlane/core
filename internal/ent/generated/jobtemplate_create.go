@@ -10,9 +10,19 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
+	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -202,6 +212,20 @@ func (_c *JobTemplateCreate) SetPlatform(v enums.JobPlatformType) *JobTemplateCr
 	return _c
 }
 
+// SetRuntimePlatform sets the "runtime_platform" field.
+func (_c *JobTemplateCreate) SetRuntimePlatform(v string) *JobTemplateCreate {
+	_c.mutation.SetRuntimePlatform(v)
+	return _c
+}
+
+// SetNillableRuntimePlatform sets the "runtime_platform" field if the given value is not nil.
+func (_c *JobTemplateCreate) SetNillableRuntimePlatform(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetRuntimePlatform(*v)
+	}
+	return _c
+}
+
 // SetWindmillPath sets the "windmill_path" field.
 func (_c *JobTemplateCreate) SetWindmillPath(v string) *JobTemplateCreate {
 	_c.mutation.SetWindmillPath(v)
@@ -216,9 +240,31 @@ func (_c *JobTemplateCreate) SetNillableWindmillPath(v *string) *JobTemplateCrea
 	return _c
 }
 
+// SetScriptPath sets the "script_path" field.
+func (_c *JobTemplateCreate) SetScriptPath(v string) *JobTemplateCreate {
+	_c.mutation.SetScriptPath(v)
+	return _c
+}
+
+// SetNillableScriptPath sets the "script_path" field if the given value is not nil.
+func (_c *JobTemplateCreate) SetNillableScriptPath(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetScriptPath(*v)
+	}
+	return _c
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (_c *JobTemplateCreate) SetDownloadURL(v string) *JobTemplateCreate {
 	_c.mutation.SetDownloadURL(v)
+	return _c
+}
+
+// SetNillableDownloadURL sets the "download_url" field if the given value is not nil.
+func (_c *JobTemplateCreate) SetNillableDownloadURL(v *string) *JobTemplateCreate {
+	if v != nil {
+		_c.SetDownloadURL(*v)
+	}
 	return _c
 }
 
@@ -239,6 +285,12 @@ func (_c *JobTemplateCreate) SetNillableCron(v *models.Cron) *JobTemplateCreate 
 	if v != nil {
 		_c.SetCron(*v)
 	}
+	return _c
+}
+
+// SetMetadata sets the "metadata" field.
+func (_c *JobTemplateCreate) SetMetadata(v map[string]interface{}) *JobTemplateCreate {
+	_c.mutation.SetMetadata(v)
 	return _c
 }
 
@@ -274,6 +326,156 @@ func (_c *JobTemplateCreate) AddScheduledJobs(v ...*ScheduledJob) *JobTemplateCr
 		ids[i] = v[i].ID
 	}
 	return _c.AddScheduledJobIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_c *JobTemplateCreate) AddEvidenceIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddEvidenceIDs(ids...)
+	return _c
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_c *JobTemplateCreate) AddEvidence(v ...*Evidence) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEvidenceIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_c *JobTemplateCreate) AddFindingIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddFindingIDs(ids...)
+	return _c
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_c *JobTemplateCreate) AddFindings(v ...*Finding) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddFindingIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_c *JobTemplateCreate) AddRiskIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddRiskIDs(ids...)
+	return _c
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_c *JobTemplateCreate) AddRisks(v ...*Risk) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddRiskIDs(ids...)
+}
+
+// AddControlIDs adds the "controls" edge to the Control entity by IDs.
+func (_c *JobTemplateCreate) AddControlIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddControlIDs(ids...)
+	return _c
+}
+
+// AddControls adds the "controls" edges to the Control entity.
+func (_c *JobTemplateCreate) AddControls(v ...*Control) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddControlIDs(ids...)
+}
+
+// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
+func (_c *JobTemplateCreate) AddStandardIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddStandardIDs(ids...)
+	return _c
+}
+
+// AddStandards adds the "standards" edges to the Standard entity.
+func (_c *JobTemplateCreate) AddStandards(v ...*Standard) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddStandardIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_c *JobTemplateCreate) AddVulnerabilityIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddVulnerabilityIDs(ids...)
+	return _c
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_c *JobTemplateCreate) AddVulnerabilities(v ...*Vulnerability) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddVulnerabilityIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_c *JobTemplateCreate) AddAssetIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddAssetIDs(ids...)
+	return _c
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_c *JobTemplateCreate) AddAssets(v ...*Asset) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddAssetIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_c *JobTemplateCreate) AddContactIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddContactIDs(ids...)
+	return _c
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_c *JobTemplateCreate) AddContacts(v ...*Contact) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddContactIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_c *JobTemplateCreate) AddEntityIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddEntityIDs(ids...)
+	return _c
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_c *JobTemplateCreate) AddEntities(v ...*Entity) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddEntityIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_c *JobTemplateCreate) AddTaskIDs(ids ...string) *JobTemplateCreate {
+	_c.mutation.AddTaskIDs(ids...)
+	return _c
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_c *JobTemplateCreate) AddTasks(v ...*Task) *JobTemplateCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTaskIDs(ids...)
 }
 
 // Mutation returns the JobTemplateMutation object of the builder.
@@ -370,9 +572,6 @@ func (_c *JobTemplateCreate) check() error {
 		if err := jobtemplate.PlatformValidator(v); err != nil {
 			return &ValidationError{Name: "platform", err: fmt.Errorf(`generated: validator failed for field "JobTemplate.platform": %w`, err)}
 		}
-	}
-	if _, ok := _c.mutation.DownloadURL(); !ok {
-		return &ValidationError{Name: "download_url", err: errors.New(`generated: missing required field "JobTemplate.download_url"`)}
 	}
 	if v, ok := _c.mutation.Cron(); ok {
 		if err := jobtemplate.CronValidator(string(v)); err != nil {
@@ -471,9 +670,17 @@ func (_c *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
 		_spec.SetField(jobtemplate.FieldPlatform, field.TypeEnum, value)
 		_node.Platform = value
 	}
+	if value, ok := _c.mutation.RuntimePlatform(); ok {
+		_spec.SetField(jobtemplate.FieldRuntimePlatform, field.TypeString, value)
+		_node.RuntimePlatform = value
+	}
 	if value, ok := _c.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplate.FieldWindmillPath, field.TypeString, value)
 		_node.WindmillPath = value
+	}
+	if value, ok := _c.mutation.ScriptPath(); ok {
+		_spec.SetField(jobtemplate.FieldScriptPath, field.TypeString, value)
+		_node.ScriptPath = value
 	}
 	if value, ok := _c.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplate.FieldDownloadURL, field.TypeString, value)
@@ -486,6 +693,10 @@ func (_c *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Cron(); ok {
 		_spec.SetField(jobtemplate.FieldCron, field.TypeString, value)
 		_node.Cron = &value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(jobtemplate.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
@@ -517,6 +728,176 @@ func (_c *JobTemplateCreate) createSpec() (*JobTemplate, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.ScheduledJob
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.EvidenceTable,
+			Columns: []string{jobtemplate.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.FindingsTable,
+			Columns: []string{jobtemplate.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.RisksTable,
+			Columns: []string{jobtemplate.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ControlsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ControlsTable,
+			Columns: []string{jobtemplate.ControlsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(control.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Control
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StandardsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.StandardsTable,
+			Columns: []string{jobtemplate.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.VulnerabilitiesTable,
+			Columns: []string{jobtemplate.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.AssetsTable,
+			Columns: []string{jobtemplate.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.ContactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.ContactsTable,
+			Columns: []string{jobtemplate.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.EntitiesTable,
+			Columns: []string{jobtemplate.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   jobtemplate.TasksTable,
+			Columns: []string{jobtemplate.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

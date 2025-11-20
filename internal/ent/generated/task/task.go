@@ -230,8 +230,11 @@ var ForeignKeys = []string{
 	"custom_type_enum_tasks",
 	"finding_tasks",
 	"integration_tasks",
+	"job_result_tasks",
+	"job_template_tasks",
 	"remediation_tasks",
 	"review_tasks",
+	"scheduled_job_tasks",
 	"vulnerability_tasks",
 }
 

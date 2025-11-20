@@ -42,6 +42,8 @@ const (
 	FieldExpectedExecutionTime = "expected_execution_time"
 	// FieldScript holds the string denoting the script field in the database.
 	FieldScript = "script"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJob holds the string denoting the scheduled_job edge name in mutations.
@@ -88,6 +90,7 @@ var Columns = []string{
 	FieldScheduledJobID,
 	FieldExpectedExecutionTime,
 	FieldScript,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

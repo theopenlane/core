@@ -169,6 +169,18 @@ func (_u *ScheduledJobRunUpdate) SetNillableScheduledJobID(v *string) *Scheduled
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobRunUpdate) SetMetadata(v map[string]interface{}) *ScheduledJobRunUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobRunUpdate) ClearMetadata() *ScheduledJobRunUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ScheduledJobRunUpdate) SetOwner(v *Organization) *ScheduledJobRunUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -320,6 +332,12 @@ func (_u *ScheduledJobRunUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobrun.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjobrun.FieldMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -572,6 +590,18 @@ func (_u *ScheduledJobRunUpdateOne) SetNillableScheduledJobID(v *string) *Schedu
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobRunUpdateOne) SetMetadata(v map[string]interface{}) *ScheduledJobRunUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobRunUpdateOne) ClearMetadata() *ScheduledJobRunUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *ScheduledJobRunUpdateOne) SetOwner(v *Organization) *ScheduledJobRunUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -753,6 +783,12 @@ func (_u *ScheduledJobRunUpdateOne) sqlSave(ctx context.Context) (_node *Schedul
 	}
 	if value, ok := _u.mutation.Status(); ok {
 		_spec.SetField(scheduledjobrun.FieldStatus, field.TypeEnum, value)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobrun.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjobrun.FieldMetadata, field.TypeJSON)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

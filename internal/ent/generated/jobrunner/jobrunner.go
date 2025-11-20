@@ -54,6 +54,8 @@ const (
 	FieldVersion = "version"
 	// FieldOs holds the string denoting the os field in the database.
 	FieldOs = "os"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeJobRunnerTokens holds the string denoting the job_runner_tokens edge name in mutations.
@@ -95,6 +97,7 @@ var Columns = []string{
 	FieldLastSeen,
 	FieldVersion,
 	FieldOs,
+	FieldMetadata,
 }
 
 var (

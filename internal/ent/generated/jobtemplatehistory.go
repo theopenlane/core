@@ -55,16 +55,22 @@ type JobTemplateHistory struct {
 	Title string `json:"title,omitempty"`
 	// the short description of the job and what it does
 	Description string `json:"description,omitempty"`
-	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
+	// the code language golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform,omitempty"`
+	// the code language golang, typescript, python, etc.
+	RuntimePlatform string `json:"runtime_platform,omitempty"`
 	// windmill path used to execute the job
 	WindmillPath string `json:"windmill_path,omitempty"`
+	// path used to execute the check
+	ScriptPath string `json:"script_path,omitempty"`
 	// the url from where to download the script from
 	DownloadURL string `json:"download_url,omitempty"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
-	Cron         *models.Cron `json:"cron,omitempty"`
+	Cron *models.Cron `json:"cron,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -75,13 +81,13 @@ func (*JobTemplateHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case jobtemplatehistory.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case jobtemplatehistory.FieldTags, jobtemplatehistory.FieldConfiguration:
+		case jobtemplatehistory.FieldTags, jobtemplatehistory.FieldConfiguration, jobtemplatehistory.FieldMetadata:
 			values[i] = new([]byte)
 		case jobtemplatehistory.FieldOperation:
 			values[i] = new(history.OpType)
 		case jobtemplatehistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case jobtemplatehistory.FieldID, jobtemplatehistory.FieldRef, jobtemplatehistory.FieldCreatedBy, jobtemplatehistory.FieldUpdatedBy, jobtemplatehistory.FieldDeletedBy, jobtemplatehistory.FieldDisplayID, jobtemplatehistory.FieldOwnerID, jobtemplatehistory.FieldInternalNotes, jobtemplatehistory.FieldSystemInternalID, jobtemplatehistory.FieldTitle, jobtemplatehistory.FieldDescription, jobtemplatehistory.FieldPlatform, jobtemplatehistory.FieldWindmillPath, jobtemplatehistory.FieldDownloadURL:
+		case jobtemplatehistory.FieldID, jobtemplatehistory.FieldRef, jobtemplatehistory.FieldCreatedBy, jobtemplatehistory.FieldUpdatedBy, jobtemplatehistory.FieldDeletedBy, jobtemplatehistory.FieldDisplayID, jobtemplatehistory.FieldOwnerID, jobtemplatehistory.FieldInternalNotes, jobtemplatehistory.FieldSystemInternalID, jobtemplatehistory.FieldTitle, jobtemplatehistory.FieldDescription, jobtemplatehistory.FieldPlatform, jobtemplatehistory.FieldRuntimePlatform, jobtemplatehistory.FieldWindmillPath, jobtemplatehistory.FieldScriptPath, jobtemplatehistory.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case jobtemplatehistory.FieldHistoryTime, jobtemplatehistory.FieldCreatedAt, jobtemplatehistory.FieldUpdatedAt, jobtemplatehistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -218,11 +224,23 @@ func (_m *JobTemplateHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Platform = enums.JobPlatformType(value.String)
 			}
+		case jobtemplatehistory.FieldRuntimePlatform:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field runtime_platform", values[i])
+			} else if value.Valid {
+				_m.RuntimePlatform = value.String
+			}
 		case jobtemplatehistory.FieldWindmillPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
 			} else if value.Valid {
 				_m.WindmillPath = value.String
+			}
+		case jobtemplatehistory.FieldScriptPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field script_path", values[i])
+			} else if value.Valid {
+				_m.ScriptPath = value.String
 			}
 		case jobtemplatehistory.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -244,6 +262,14 @@ func (_m *JobTemplateHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.Cron = new(models.Cron)
 				*_m.Cron = *value.S.(*models.Cron)
+			}
+		case jobtemplatehistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -339,8 +365,14 @@ func (_m *JobTemplateHistory) String() string {
 	builder.WriteString("platform=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Platform))
 	builder.WriteString(", ")
+	builder.WriteString("runtime_platform=")
+	builder.WriteString(_m.RuntimePlatform)
+	builder.WriteString(", ")
 	builder.WriteString("windmill_path=")
 	builder.WriteString(_m.WindmillPath)
+	builder.WriteString(", ")
+	builder.WriteString("script_path=")
+	builder.WriteString(_m.ScriptPath)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
 	builder.WriteString(_m.DownloadURL)
@@ -352,6 +384,9 @@ func (_m *JobTemplateHistory) String() string {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

@@ -357,8 +357,11 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "findings"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"job_result_findings",
+	"job_template_findings",
 	"remediation_findings",
 	"review_findings",
+	"scheduled_job_findings",
 	"vulnerability_findings",
 }
 

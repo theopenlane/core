@@ -49,6 +49,8 @@ const (
 	FieldCron = "cron"
 	// FieldJobRunnerID holds the string denoting the job_runner_id field in the database.
 	FieldJobRunnerID = "job_runner_id"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// Table holds the table name of the scheduledjobhistory in the database.
 	Table = "scheduled_job_history"
 )
@@ -72,6 +74,7 @@ var Columns = []string{
 	FieldConfiguration,
 	FieldCron,
 	FieldJobRunnerID,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

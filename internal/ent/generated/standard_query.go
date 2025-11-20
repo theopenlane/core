@@ -32,6 +32,7 @@ type StandardQuery struct {
 	withOwner                       *OrganizationQuery
 	withControls                    *ControlQuery
 	withTrustCenterCompliances      *TrustCenterComplianceQuery
+	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Standard) error
 	modifiers                       []func(*sql.Selector)
 	withNamedControls               map[string]*ControlQuery
@@ -465,6 +466,7 @@ func (_q *StandardQuery) prepareQuery(ctx context.Context) error {
 func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Standard, error) {
 	var (
 		nodes       = []*Standard{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
 			_q.withOwner != nil,
@@ -472,6 +474,9 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 			_q.withTrustCenterCompliances != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, standard.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Standard).scanValues(nil, columns)
 	}

@@ -80,16 +80,42 @@ func (ec *executionContext) fieldContext_JobTemplateBulkCreatePayload_jobTemplat
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
+			case "runtimePlatform":
+				return ec.fieldContext_JobTemplate_runtimePlatform(ctx, field)
+			case "scriptPath":
+				return ec.fieldContext_JobTemplate_scriptPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobTemplate_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_JobTemplate_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_JobTemplate_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_JobTemplate_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_JobTemplate_controls(ctx, field)
+			case "standards":
+				return ec.fieldContext_JobTemplate_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_JobTemplate_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_JobTemplate_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_JobTemplate_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_JobTemplate_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_JobTemplate_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},
@@ -178,16 +204,42 @@ func (ec *executionContext) fieldContext_JobTemplateCreatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
+			case "runtimePlatform":
+				return ec.fieldContext_JobTemplate_runtimePlatform(ctx, field)
+			case "scriptPath":
+				return ec.fieldContext_JobTemplate_scriptPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobTemplate_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_JobTemplate_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_JobTemplate_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_JobTemplate_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_JobTemplate_controls(ctx, field)
+			case "standards":
+				return ec.fieldContext_JobTemplate_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_JobTemplate_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_JobTemplate_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_JobTemplate_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_JobTemplate_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_JobTemplate_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},
@@ -276,16 +328,42 @@ func (ec *executionContext) fieldContext_JobTemplateUpdatePayload_jobTemplate(_ 
 				return ec.fieldContext_JobTemplate_description(ctx, field)
 			case "platform":
 				return ec.fieldContext_JobTemplate_platform(ctx, field)
+			case "runtimePlatform":
+				return ec.fieldContext_JobTemplate_runtimePlatform(ctx, field)
+			case "scriptPath":
+				return ec.fieldContext_JobTemplate_scriptPath(ctx, field)
 			case "downloadURL":
 				return ec.fieldContext_JobTemplate_downloadURL(ctx, field)
 			case "configuration":
 				return ec.fieldContext_JobTemplate_configuration(ctx, field)
 			case "cron":
 				return ec.fieldContext_JobTemplate_cron(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobTemplate_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobTemplate_owner(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_JobTemplate_scheduledJobs(ctx, field)
+			case "evidence":
+				return ec.fieldContext_JobTemplate_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_JobTemplate_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_JobTemplate_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_JobTemplate_controls(ctx, field)
+			case "standards":
+				return ec.fieldContext_JobTemplate_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_JobTemplate_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_JobTemplate_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_JobTemplate_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_JobTemplate_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_JobTemplate_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobTemplate", field.Name)
 		},

@@ -151,7 +151,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -163,7 +163,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Description: lo.ToPtr("Test Description"),
 				Cron:        lo.ToPtr("0 0 * * * *"),
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -173,7 +173,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 				OwnerID:     lo.ToPtr(testUser1.OrganizationID),
 			},
 			client: suite.client.apiWithPAT,
@@ -184,7 +184,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -194,7 +194,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -204,7 +204,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			name: "missing required field, title",
 			request: testclient.CreateJobTemplateInput{
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -214,7 +214,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			name: "missing required field, platform",
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -234,7 +234,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: testScriptURL,
+				DownloadURL: lo.ToPtr(testScriptURL),
 				Cron:        lo.ToPtr("0 0 * * * a"),
 			},
 			client:      suite.client.api,

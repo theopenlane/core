@@ -51,7 +51,9 @@ type ScheduledJobHistory struct {
 	// cron 6-field syntax, defaults to the job template's cron if not provided
 	Cron *models.Cron `json:"cron,omitempty"`
 	// the runner that this job will run on. If not set, it will scheduled on a general runner instead
-	JobRunnerID  string `json:"job_runner_id,omitempty"`
+	JobRunnerID string `json:"job_runner_id,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata     map[string]interface{} `json:"metadata,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -62,7 +64,7 @@ func (*ScheduledJobHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case scheduledjobhistory.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case scheduledjobhistory.FieldConfiguration:
+		case scheduledjobhistory.FieldConfiguration, scheduledjobhistory.FieldMetadata:
 			values[i] = new([]byte)
 		case scheduledjobhistory.FieldOperation:
 			values[i] = new(history.OpType)
@@ -192,6 +194,14 @@ func (_m *ScheduledJobHistory) assignValues(columns []string, values []any) erro
 			} else if value.Valid {
 				_m.JobRunnerID = value.String
 			}
+		case scheduledjobhistory.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -277,6 +287,9 @@ func (_m *ScheduledJobHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("job_runner_id=")
 	builder.WriteString(_m.JobRunnerID)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

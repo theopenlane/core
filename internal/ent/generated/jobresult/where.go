@@ -108,6 +108,11 @@ func ScheduledJobID(v string) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldScheduledJobID, v))
 }
 
+// ComplianceJobID applies equality check predicate on the "compliance_job_id" field. It's identical to ComplianceJobIDEQ.
+func ComplianceJobID(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldComplianceJobID, v))
+}
+
 // ExitCode applies equality check predicate on the "exit_code" field. It's identical to ExitCodeEQ.
 func ExitCode(v int) predicate.JobResult {
 	return predicate.JobResult(sql.FieldEQ(FieldExitCode, v))
@@ -648,6 +653,81 @@ func ScheduledJobIDContainsFold(v string) predicate.JobResult {
 	return predicate.JobResult(sql.FieldContainsFold(FieldScheduledJobID, v))
 }
 
+// ComplianceJobIDEQ applies the EQ predicate on the "compliance_job_id" field.
+func ComplianceJobIDEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEQ(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDNEQ applies the NEQ predicate on the "compliance_job_id" field.
+func ComplianceJobIDNEQ(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNEQ(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDIn applies the In predicate on the "compliance_job_id" field.
+func ComplianceJobIDIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldIn(FieldComplianceJobID, vs...))
+}
+
+// ComplianceJobIDNotIn applies the NotIn predicate on the "compliance_job_id" field.
+func ComplianceJobIDNotIn(vs ...string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotIn(FieldComplianceJobID, vs...))
+}
+
+// ComplianceJobIDGT applies the GT predicate on the "compliance_job_id" field.
+func ComplianceJobIDGT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGT(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDGTE applies the GTE predicate on the "compliance_job_id" field.
+func ComplianceJobIDGTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldGTE(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDLT applies the LT predicate on the "compliance_job_id" field.
+func ComplianceJobIDLT(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLT(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDLTE applies the LTE predicate on the "compliance_job_id" field.
+func ComplianceJobIDLTE(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldLTE(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDContains applies the Contains predicate on the "compliance_job_id" field.
+func ComplianceJobIDContains(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContains(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDHasPrefix applies the HasPrefix predicate on the "compliance_job_id" field.
+func ComplianceJobIDHasPrefix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasPrefix(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDHasSuffix applies the HasSuffix predicate on the "compliance_job_id" field.
+func ComplianceJobIDHasSuffix(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldHasSuffix(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDIsNil applies the IsNil predicate on the "compliance_job_id" field.
+func ComplianceJobIDIsNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldIsNull(FieldComplianceJobID))
+}
+
+// ComplianceJobIDNotNil applies the NotNil predicate on the "compliance_job_id" field.
+func ComplianceJobIDNotNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotNull(FieldComplianceJobID))
+}
+
+// ComplianceJobIDEqualFold applies the EqualFold predicate on the "compliance_job_id" field.
+func ComplianceJobIDEqualFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldEqualFold(FieldComplianceJobID, v))
+}
+
+// ComplianceJobIDContainsFold applies the ContainsFold predicate on the "compliance_job_id" field.
+func ComplianceJobIDContainsFold(v string) predicate.JobResult {
+	return predicate.JobResult(sql.FieldContainsFold(FieldComplianceJobID, v))
+}
+
 // StatusEQ applies the EQ predicate on the "status" field.
 func StatusEQ(v enums.JobExecutionStatus) predicate.JobResult {
 	vc := v
@@ -716,6 +796,16 @@ func ExitCodeLT(v int) predicate.JobResult {
 // ExitCodeLTE applies the LTE predicate on the "exit_code" field.
 func ExitCodeLTE(v int) predicate.JobResult {
 	return predicate.JobResult(sql.FieldLTE(FieldExitCode, v))
+}
+
+// ExitCodeIsNil applies the IsNil predicate on the "exit_code" field.
+func ExitCodeIsNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldIsNull(FieldExitCode))
+}
+
+// ExitCodeNotNil applies the NotNil predicate on the "exit_code" field.
+func ExitCodeNotNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotNull(FieldExitCode))
 }
 
 // FinishedAtEQ applies the EQ predicate on the "finished_at" field.
@@ -938,6 +1028,16 @@ func LogContainsFold(v string) predicate.JobResult {
 	return predicate.JobResult(sql.FieldContainsFold(FieldLog, v))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.JobResult {
+	return predicate.JobResult(sql.FieldNotNull(FieldMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.JobResult {
 	return predicate.JobResult(func(s *sql.Selector) {
@@ -1017,6 +1117,296 @@ func HasFileWith(preds ...predicate.File) predicate.JobResult {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.File
 		step.Edge.Schema = schemaConfig.JobResult
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEvidence applies the HasEdge predicate on the "evidence" edge.
+func HasEvidence() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EvidenceTable, EvidenceColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEvidenceWith applies the HasEdge predicate on the "evidence" edge with a given conditions (other predicates).
+func HasEvidenceWith(preds ...predicate.Evidence) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newEvidenceStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasFindings applies the HasEdge predicate on the "findings" edge.
+func HasFindings() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasFindingsWith applies the HasEdge predicate on the "findings" edge with a given conditions (other predicates).
+func HasFindingsWith(preds ...predicate.Finding) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newFindingsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasRisks applies the HasEdge predicate on the "risks" edge.
+func HasRisks() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasRisksWith applies the HasEdge predicate on the "risks" edge with a given conditions (other predicates).
+func HasRisksWith(preds ...predicate.Risk) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newRisksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasControls applies the HasEdge predicate on the "controls" edge.
+func HasControls() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasControlsWith applies the HasEdge predicate on the "controls" edge with a given conditions (other predicates).
+func HasControlsWith(preds ...predicate.Control) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newControlsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.Control
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStandards applies the HasEdge predicate on the "standards" edge.
+func HasStandards() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardsWith applies the HasEdge predicate on the "standards" edge with a given conditions (other predicates).
+func HasStandardsWith(preds ...predicate.Standard) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newStandardsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasVulnerabilities applies the HasEdge predicate on the "vulnerabilities" edge.
+func HasVulnerabilities() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasVulnerabilitiesWith applies the HasEdge predicate on the "vulnerabilities" edge with a given conditions (other predicates).
+func HasVulnerabilitiesWith(preds ...predicate.Vulnerability) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newVulnerabilitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasAssets applies the HasEdge predicate on the "assets" edge.
+func HasAssets() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasAssetsWith applies the HasEdge predicate on the "assets" edge with a given conditions (other predicates).
+func HasAssetsWith(preds ...predicate.Asset) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newAssetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasContacts applies the HasEdge predicate on the "contacts" edge.
+func HasContacts() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, ContactsTable, ContactsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasContactsWith applies the HasEdge predicate on the "contacts" edge with a given conditions (other predicates).
+func HasContactsWith(preds ...predicate.Contact) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newContactsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasEntities applies the HasEdge predicate on the "entities" edge.
+func HasEntities() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasEntitiesWith applies the HasEdge predicate on the "entities" edge with a given conditions (other predicates).
+func HasEntitiesWith(preds ...predicate.Entity) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newEntitiesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTasks applies the HasEdge predicate on the "tasks" edge.
+func HasTasks() predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTasksWith applies the HasEdge predicate on the "tasks" edge with a given conditions (other predicates).
+func HasTasksWith(preds ...predicate.Task) predicate.JobResult {
+	return predicate.JobResult(func(s *sql.Selector) {
+		step := newTasksStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

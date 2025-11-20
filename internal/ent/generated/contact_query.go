@@ -32,6 +32,7 @@ type ContactQuery struct {
 	withOwner         *OrganizationQuery
 	withEntities      *EntityQuery
 	withFiles         *FileQuery
+	withFKs           bool
 	loadTotal         []func(context.Context, []*Contact) error
 	modifiers         []func(*sql.Selector)
 	withNamedEntities map[string]*EntityQuery
@@ -465,6 +466,7 @@ func (_q *ContactQuery) prepareQuery(ctx context.Context) error {
 func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Contact, error) {
 	var (
 		nodes       = []*Contact{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [3]bool{
 			_q.withOwner != nil,
@@ -472,6 +474,9 @@ func (_q *ContactQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withFiles != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, contact.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Contact).scanValues(nil, columns)
 	}

@@ -12,12 +12,21 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -195,6 +204,18 @@ func (_u *ScheduledJobUpdate) ClearJobRunnerID() *ScheduledJobUpdate {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobUpdate) SetMetadata(v map[string]interface{}) *ScheduledJobUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobUpdate) ClearMetadata() *ScheduledJobUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
 func (_u *ScheduledJobUpdate) SetJobTemplateID(id string) *ScheduledJobUpdate {
 	_u.mutation.SetJobTemplateID(id)
@@ -234,6 +255,141 @@ func (_u *ScheduledJobUpdate) AddSubcontrols(v ...*Subcontrol) *ScheduledJobUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubcontrolIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_u *ScheduledJobUpdate) AddEvidenceIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_u *ScheduledJobUpdate) AddEvidence(v ...*Evidence) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScheduledJobUpdate) AddFindingIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScheduledJobUpdate) AddFindings(v ...*Finding) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *ScheduledJobUpdate) AddRiskIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *ScheduledJobUpdate) AddRisks(v ...*Risk) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
+// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
+func (_u *ScheduledJobUpdate) AddStandardIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddStandardIDs(ids...)
+	return _u
+}
+
+// AddStandards adds the "standards" edges to the Standard entity.
+func (_u *ScheduledJobUpdate) AddStandards(v ...*Standard) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddStandardIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ScheduledJobUpdate) AddVulnerabilityIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScheduledJobUpdate) AddVulnerabilities(v ...*Vulnerability) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *ScheduledJobUpdate) AddAssetIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *ScheduledJobUpdate) AddAssets(v ...*Asset) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_u *ScheduledJobUpdate) AddContactIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_u *ScheduledJobUpdate) AddContacts(v ...*Contact) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddContactIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *ScheduledJobUpdate) AddEntityIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *ScheduledJobUpdate) AddEntities(v ...*Entity) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ScheduledJobUpdate) AddTaskIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ScheduledJobUpdate) AddTasks(v ...*Task) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
@@ -292,6 +448,195 @@ func (_u *ScheduledJobUpdate) RemoveSubcontrols(v ...*Subcontrol) *ScheduledJobU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (_u *ScheduledJobUpdate) ClearEvidence() *ScheduledJobUpdate {
+	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveEvidenceIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (_u *ScheduledJobUpdate) RemoveEvidence(v ...*Evidence) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScheduledJobUpdate) ClearFindings() *ScheduledJobUpdate {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveFindingIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScheduledJobUpdate) RemoveFindings(v ...*Finding) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *ScheduledJobUpdate) ClearRisks() *ScheduledJobUpdate {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveRiskIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *ScheduledJobUpdate) RemoveRisks(v ...*Risk) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearStandards clears all "standards" edges to the Standard entity.
+func (_u *ScheduledJobUpdate) ClearStandards() *ScheduledJobUpdate {
+	_u.mutation.ClearStandards()
+	return _u
+}
+
+// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveStandardIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveStandardIDs(ids...)
+	return _u
+}
+
+// RemoveStandards removes "standards" edges to Standard entities.
+func (_u *ScheduledJobUpdate) RemoveStandards(v ...*Standard) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveStandardIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScheduledJobUpdate) ClearVulnerabilities() *ScheduledJobUpdate {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveVulnerabilityIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ScheduledJobUpdate) RemoveVulnerabilities(v ...*Vulnerability) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *ScheduledJobUpdate) ClearAssets() *ScheduledJobUpdate {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveAssetIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *ScheduledJobUpdate) RemoveAssets(v ...*Asset) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearContacts clears all "contacts" edges to the Contact entity.
+func (_u *ScheduledJobUpdate) ClearContacts() *ScheduledJobUpdate {
+	_u.mutation.ClearContacts()
+	return _u
+}
+
+// RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveContactIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
+}
+
+// RemoveContacts removes "contacts" edges to Contact entities.
+func (_u *ScheduledJobUpdate) RemoveContacts(v ...*Contact) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveContactIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *ScheduledJobUpdate) ClearEntities() *ScheduledJobUpdate {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveEntityIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *ScheduledJobUpdate) RemoveEntities(v ...*Entity) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ScheduledJobUpdate) ClearTasks() *ScheduledJobUpdate {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ScheduledJobUpdate) RemoveTaskIDs(ids ...string) *ScheduledJobUpdate {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ScheduledJobUpdate) RemoveTasks(v ...*Task) *ScheduledJobUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
@@ -428,6 +773,12 @@ func (_u *ScheduledJobUpdate) sqlSave(ctx context.Context) (_node int, err error
 	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjob.FieldCron, field.TypeString)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjob.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjob.FieldMetadata, field.TypeJSON)
+	}
 	if _u.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -550,6 +901,438 @@ func (_u *ScheduledJobUpdate) sqlSave(ctx context.Context) (_node int, err error
 			},
 		}
 		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StandardsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ContactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -768,6 +1551,18 @@ func (_u *ScheduledJobUpdateOne) ClearJobRunnerID() *ScheduledJobUpdateOne {
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobUpdateOne) SetMetadata(v map[string]interface{}) *ScheduledJobUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobUpdateOne) ClearMetadata() *ScheduledJobUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // SetJobTemplateID sets the "job_template" edge to the JobTemplate entity by ID.
 func (_u *ScheduledJobUpdateOne) SetJobTemplateID(id string) *ScheduledJobUpdateOne {
 	_u.mutation.SetJobTemplateID(id)
@@ -807,6 +1602,141 @@ func (_u *ScheduledJobUpdateOne) AddSubcontrols(v ...*Subcontrol) *ScheduledJobU
 		ids[i] = v[i].ID
 	}
 	return _u.AddSubcontrolIDs(ids...)
+}
+
+// AddEvidenceIDs adds the "evidence" edge to the Evidence entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddEvidenceIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddEvidenceIDs(ids...)
+	return _u
+}
+
+// AddEvidence adds the "evidence" edges to the Evidence entity.
+func (_u *ScheduledJobUpdateOne) AddEvidence(v ...*Evidence) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEvidenceIDs(ids...)
+}
+
+// AddFindingIDs adds the "findings" edge to the Finding entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddFindingIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddFindingIDs(ids...)
+	return _u
+}
+
+// AddFindings adds the "findings" edges to the Finding entity.
+func (_u *ScheduledJobUpdateOne) AddFindings(v ...*Finding) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddFindingIDs(ids...)
+}
+
+// AddRiskIDs adds the "risks" edge to the Risk entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddRiskIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddRiskIDs(ids...)
+	return _u
+}
+
+// AddRisks adds the "risks" edges to the Risk entity.
+func (_u *ScheduledJobUpdateOne) AddRisks(v ...*Risk) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddRiskIDs(ids...)
+}
+
+// AddStandardIDs adds the "standards" edge to the Standard entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddStandardIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddStandardIDs(ids...)
+	return _u
+}
+
+// AddStandards adds the "standards" edges to the Standard entity.
+func (_u *ScheduledJobUpdateOne) AddStandards(v ...*Standard) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddStandardIDs(ids...)
+}
+
+// AddVulnerabilityIDs adds the "vulnerabilities" edge to the Vulnerability entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddVulnerabilityIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddVulnerabilityIDs(ids...)
+	return _u
+}
+
+// AddVulnerabilities adds the "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScheduledJobUpdateOne) AddVulnerabilities(v ...*Vulnerability) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddVulnerabilityIDs(ids...)
+}
+
+// AddAssetIDs adds the "assets" edge to the Asset entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddAssetIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddAssetIDs(ids...)
+	return _u
+}
+
+// AddAssets adds the "assets" edges to the Asset entity.
+func (_u *ScheduledJobUpdateOne) AddAssets(v ...*Asset) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddAssetIDs(ids...)
+}
+
+// AddContactIDs adds the "contacts" edge to the Contact entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddContactIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddContactIDs(ids...)
+	return _u
+}
+
+// AddContacts adds the "contacts" edges to the Contact entity.
+func (_u *ScheduledJobUpdateOne) AddContacts(v ...*Contact) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddContactIDs(ids...)
+}
+
+// AddEntityIDs adds the "entities" edge to the Entity entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddEntityIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddEntityIDs(ids...)
+	return _u
+}
+
+// AddEntities adds the "entities" edges to the Entity entity.
+func (_u *ScheduledJobUpdateOne) AddEntities(v ...*Entity) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddEntityIDs(ids...)
+}
+
+// AddTaskIDs adds the "tasks" edge to the Task entity by IDs.
+func (_u *ScheduledJobUpdateOne) AddTaskIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.AddTaskIDs(ids...)
+	return _u
+}
+
+// AddTasks adds the "tasks" edges to the Task entity.
+func (_u *ScheduledJobUpdateOne) AddTasks(v ...*Task) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTaskIDs(ids...)
 }
 
 // SetJobRunner sets the "job_runner" edge to the JobRunner entity.
@@ -865,6 +1795,195 @@ func (_u *ScheduledJobUpdateOne) RemoveSubcontrols(v ...*Subcontrol) *ScheduledJ
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubcontrolIDs(ids...)
+}
+
+// ClearEvidence clears all "evidence" edges to the Evidence entity.
+func (_u *ScheduledJobUpdateOne) ClearEvidence() *ScheduledJobUpdateOne {
+	_u.mutation.ClearEvidence()
+	return _u
+}
+
+// RemoveEvidenceIDs removes the "evidence" edge to Evidence entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveEvidenceIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveEvidenceIDs(ids...)
+	return _u
+}
+
+// RemoveEvidence removes "evidence" edges to Evidence entities.
+func (_u *ScheduledJobUpdateOne) RemoveEvidence(v ...*Evidence) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEvidenceIDs(ids...)
+}
+
+// ClearFindings clears all "findings" edges to the Finding entity.
+func (_u *ScheduledJobUpdateOne) ClearFindings() *ScheduledJobUpdateOne {
+	_u.mutation.ClearFindings()
+	return _u
+}
+
+// RemoveFindingIDs removes the "findings" edge to Finding entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveFindingIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveFindingIDs(ids...)
+	return _u
+}
+
+// RemoveFindings removes "findings" edges to Finding entities.
+func (_u *ScheduledJobUpdateOne) RemoveFindings(v ...*Finding) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveFindingIDs(ids...)
+}
+
+// ClearRisks clears all "risks" edges to the Risk entity.
+func (_u *ScheduledJobUpdateOne) ClearRisks() *ScheduledJobUpdateOne {
+	_u.mutation.ClearRisks()
+	return _u
+}
+
+// RemoveRiskIDs removes the "risks" edge to Risk entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveRiskIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveRiskIDs(ids...)
+	return _u
+}
+
+// RemoveRisks removes "risks" edges to Risk entities.
+func (_u *ScheduledJobUpdateOne) RemoveRisks(v ...*Risk) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveRiskIDs(ids...)
+}
+
+// ClearStandards clears all "standards" edges to the Standard entity.
+func (_u *ScheduledJobUpdateOne) ClearStandards() *ScheduledJobUpdateOne {
+	_u.mutation.ClearStandards()
+	return _u
+}
+
+// RemoveStandardIDs removes the "standards" edge to Standard entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveStandardIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveStandardIDs(ids...)
+	return _u
+}
+
+// RemoveStandards removes "standards" edges to Standard entities.
+func (_u *ScheduledJobUpdateOne) RemoveStandards(v ...*Standard) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveStandardIDs(ids...)
+}
+
+// ClearVulnerabilities clears all "vulnerabilities" edges to the Vulnerability entity.
+func (_u *ScheduledJobUpdateOne) ClearVulnerabilities() *ScheduledJobUpdateOne {
+	_u.mutation.ClearVulnerabilities()
+	return _u
+}
+
+// RemoveVulnerabilityIDs removes the "vulnerabilities" edge to Vulnerability entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveVulnerabilityIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveVulnerabilityIDs(ids...)
+	return _u
+}
+
+// RemoveVulnerabilities removes "vulnerabilities" edges to Vulnerability entities.
+func (_u *ScheduledJobUpdateOne) RemoveVulnerabilities(v ...*Vulnerability) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveVulnerabilityIDs(ids...)
+}
+
+// ClearAssets clears all "assets" edges to the Asset entity.
+func (_u *ScheduledJobUpdateOne) ClearAssets() *ScheduledJobUpdateOne {
+	_u.mutation.ClearAssets()
+	return _u
+}
+
+// RemoveAssetIDs removes the "assets" edge to Asset entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveAssetIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveAssetIDs(ids...)
+	return _u
+}
+
+// RemoveAssets removes "assets" edges to Asset entities.
+func (_u *ScheduledJobUpdateOne) RemoveAssets(v ...*Asset) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveAssetIDs(ids...)
+}
+
+// ClearContacts clears all "contacts" edges to the Contact entity.
+func (_u *ScheduledJobUpdateOne) ClearContacts() *ScheduledJobUpdateOne {
+	_u.mutation.ClearContacts()
+	return _u
+}
+
+// RemoveContactIDs removes the "contacts" edge to Contact entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveContactIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveContactIDs(ids...)
+	return _u
+}
+
+// RemoveContacts removes "contacts" edges to Contact entities.
+func (_u *ScheduledJobUpdateOne) RemoveContacts(v ...*Contact) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveContactIDs(ids...)
+}
+
+// ClearEntities clears all "entities" edges to the Entity entity.
+func (_u *ScheduledJobUpdateOne) ClearEntities() *ScheduledJobUpdateOne {
+	_u.mutation.ClearEntities()
+	return _u
+}
+
+// RemoveEntityIDs removes the "entities" edge to Entity entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveEntityIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveEntityIDs(ids...)
+	return _u
+}
+
+// RemoveEntities removes "entities" edges to Entity entities.
+func (_u *ScheduledJobUpdateOne) RemoveEntities(v ...*Entity) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveEntityIDs(ids...)
+}
+
+// ClearTasks clears all "tasks" edges to the Task entity.
+func (_u *ScheduledJobUpdateOne) ClearTasks() *ScheduledJobUpdateOne {
+	_u.mutation.ClearTasks()
+	return _u
+}
+
+// RemoveTaskIDs removes the "tasks" edge to Task entities by IDs.
+func (_u *ScheduledJobUpdateOne) RemoveTaskIDs(ids ...string) *ScheduledJobUpdateOne {
+	_u.mutation.RemoveTaskIDs(ids...)
+	return _u
+}
+
+// RemoveTasks removes "tasks" edges to Task entities.
+func (_u *ScheduledJobUpdateOne) RemoveTasks(v ...*Task) *ScheduledJobUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTaskIDs(ids...)
 }
 
 // ClearJobRunner clears the "job_runner" edge to the JobRunner entity.
@@ -1031,6 +2150,12 @@ func (_u *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJ
 	if _u.mutation.CronCleared() {
 		_spec.ClearField(scheduledjob.FieldCron, field.TypeString)
 	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjob.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjob.FieldMetadata, field.TypeJSON)
+	}
 	if _u.mutation.JobTemplateCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1153,6 +2278,438 @@ func (_u *ScheduledJobUpdateOne) sqlSave(ctx context.Context) (_node *ScheduledJ
 			},
 		}
 		edge.Schema = _u.schemaConfig.ScheduledJobSubcontrols
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEvidenceIDs(); len(nodes) > 0 && !_u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EvidenceTable,
+			Columns: []string{scheduledjob.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Evidence
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedFindingsIDs(); len(nodes) > 0 && !_u.mutation.FindingsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.FindingsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.FindingsTable,
+			Columns: []string{scheduledjob.FindingsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(finding.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Finding
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedRisksIDs(); len(nodes) > 0 && !_u.mutation.RisksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RisksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.RisksTable,
+			Columns: []string{scheduledjob.RisksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(risk.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Risk
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedStandardsIDs(); len(nodes) > 0 && !_u.mutation.StandardsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.StandardsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.StandardsTable,
+			Columns: []string{scheduledjob.StandardsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedVulnerabilitiesIDs(); len(nodes) > 0 && !_u.mutation.VulnerabilitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.VulnerabilitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.VulnerabilitiesTable,
+			Columns: []string{scheduledjob.VulnerabilitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(vulnerability.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Vulnerability
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedAssetsIDs(); len(nodes) > 0 && !_u.mutation.AssetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.AssetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.AssetsTable,
+			Columns: []string{scheduledjob.AssetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(asset.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Asset
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.ContactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedContactsIDs(); len(nodes) > 0 && !_u.mutation.ContactsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.ContactsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.ContactsTable,
+			Columns: []string{scheduledjob.ContactsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(contact.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Contact
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedEntitiesIDs(); len(nodes) > 0 && !_u.mutation.EntitiesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.EntitiesTable,
+			Columns: []string{scheduledjob.EntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(entity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Entity
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTasksIDs(); len(nodes) > 0 && !_u.mutation.TasksCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TasksIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   scheduledjob.TasksTable,
+			Columns: []string{scheduledjob.TasksColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(task.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Task
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

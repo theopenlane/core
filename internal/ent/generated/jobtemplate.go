@@ -49,16 +49,22 @@ type JobTemplate struct {
 	Title string `json:"title,omitempty"`
 	// the short description of the job and what it does
 	Description string `json:"description,omitempty"`
-	// the platform to use to execute this job, e.g. golang, typescript, python, etc.
+	// the code language golang, typescript, python, etc.
 	Platform enums.JobPlatformType `json:"platform,omitempty"`
+	// the code language golang, typescript, python, etc.
+	RuntimePlatform string `json:"runtime_platform,omitempty"`
 	// windmill path used to execute the job
 	WindmillPath string `json:"windmill_path,omitempty"`
+	// path used to execute the check
+	ScriptPath string `json:"script_path,omitempty"`
 	// the url from where to download the script from
 	DownloadURL string `json:"download_url,omitempty"`
 	// the json configuration to run this job, which could be used to template a job, e.g. { "account_name": "my-account" }
 	Configuration models.JobConfiguration `json:"configuration,omitempty"`
 	// cron schedule to run the job in cron 6-field syntax, e.g. 0 0 0 * * *
 	Cron *models.Cron `json:"cron,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the JobTemplateQuery when eager-loading is set.
 	Edges        JobTemplateEdges `json:"edges"`
@@ -71,13 +77,43 @@ type JobTemplateEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// ScheduledJobs holds the value of the scheduled_jobs edge.
 	ScheduledJobs []*ScheduledJob `json:"scheduled_jobs,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence []*Evidence `json:"evidence,omitempty"`
+	// Findings holds the value of the findings edge.
+	Findings []*Finding `json:"findings,omitempty"`
+	// Risks holds the value of the risks edge.
+	Risks []*Risk `json:"risks,omitempty"`
+	// Controls holds the value of the controls edge.
+	Controls []*Control `json:"controls,omitempty"`
+	// Standards holds the value of the standards edge.
+	Standards []*Standard `json:"standards,omitempty"`
+	// Vulnerabilities holds the value of the vulnerabilities edge.
+	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
+	// Assets holds the value of the assets edge.
+	Assets []*Asset `json:"assets,omitempty"`
+	// Contacts holds the value of the contacts edge.
+	Contacts []*Contact `json:"contacts,omitempty"`
+	// Entities holds the value of the entities edge.
+	Entities []*Entity `json:"entities,omitempty"`
+	// Tasks holds the value of the tasks edge.
+	Tasks []*Task `json:"tasks,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [2]bool
+	loadedTypes [12]bool
 	// totalCount holds the count of the edges above.
-	totalCount [2]map[string]int
+	totalCount [12]map[string]int
 
-	namedScheduledJobs map[string][]*ScheduledJob
+	namedScheduledJobs   map[string][]*ScheduledJob
+	namedEvidence        map[string][]*Evidence
+	namedFindings        map[string][]*Finding
+	namedRisks           map[string][]*Risk
+	namedControls        map[string][]*Control
+	namedStandards       map[string][]*Standard
+	namedVulnerabilities map[string][]*Vulnerability
+	namedAssets          map[string][]*Asset
+	namedContacts        map[string][]*Contact
+	namedEntities        map[string][]*Entity
+	namedTasks           map[string][]*Task
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -100,6 +136,96 @@ func (e JobTemplateEdges) ScheduledJobsOrErr() ([]*ScheduledJob, error) {
 	return nil, &NotLoadedError{edge: "scheduled_jobs"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) EvidenceOrErr() ([]*Evidence, error) {
+	if e.loadedTypes[2] {
+		return e.Evidence, nil
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// FindingsOrErr returns the Findings value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) FindingsOrErr() ([]*Finding, error) {
+	if e.loadedTypes[3] {
+		return e.Findings, nil
+	}
+	return nil, &NotLoadedError{edge: "findings"}
+}
+
+// RisksOrErr returns the Risks value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) RisksOrErr() ([]*Risk, error) {
+	if e.loadedTypes[4] {
+		return e.Risks, nil
+	}
+	return nil, &NotLoadedError{edge: "risks"}
+}
+
+// ControlsOrErr returns the Controls value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) ControlsOrErr() ([]*Control, error) {
+	if e.loadedTypes[5] {
+		return e.Controls, nil
+	}
+	return nil, &NotLoadedError{edge: "controls"}
+}
+
+// StandardsOrErr returns the Standards value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) StandardsOrErr() ([]*Standard, error) {
+	if e.loadedTypes[6] {
+		return e.Standards, nil
+	}
+	return nil, &NotLoadedError{edge: "standards"}
+}
+
+// VulnerabilitiesOrErr returns the Vulnerabilities value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) VulnerabilitiesOrErr() ([]*Vulnerability, error) {
+	if e.loadedTypes[7] {
+		return e.Vulnerabilities, nil
+	}
+	return nil, &NotLoadedError{edge: "vulnerabilities"}
+}
+
+// AssetsOrErr returns the Assets value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) AssetsOrErr() ([]*Asset, error) {
+	if e.loadedTypes[8] {
+		return e.Assets, nil
+	}
+	return nil, &NotLoadedError{edge: "assets"}
+}
+
+// ContactsOrErr returns the Contacts value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) ContactsOrErr() ([]*Contact, error) {
+	if e.loadedTypes[9] {
+		return e.Contacts, nil
+	}
+	return nil, &NotLoadedError{edge: "contacts"}
+}
+
+// EntitiesOrErr returns the Entities value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) EntitiesOrErr() ([]*Entity, error) {
+	if e.loadedTypes[10] {
+		return e.Entities, nil
+	}
+	return nil, &NotLoadedError{edge: "entities"}
+}
+
+// TasksOrErr returns the Tasks value or an error if the edge
+// was not loaded in eager-loading.
+func (e JobTemplateEdges) TasksOrErr() ([]*Task, error) {
+	if e.loadedTypes[11] {
+		return e.Tasks, nil
+	}
+	return nil, &NotLoadedError{edge: "tasks"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*JobTemplate) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -107,11 +233,11 @@ func (*JobTemplate) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case jobtemplate.FieldCron:
 			values[i] = &sql.NullScanner{S: new(models.Cron)}
-		case jobtemplate.FieldTags, jobtemplate.FieldConfiguration:
+		case jobtemplate.FieldTags, jobtemplate.FieldConfiguration, jobtemplate.FieldMetadata:
 			values[i] = new([]byte)
 		case jobtemplate.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case jobtemplate.FieldID, jobtemplate.FieldCreatedBy, jobtemplate.FieldUpdatedBy, jobtemplate.FieldDeletedBy, jobtemplate.FieldDisplayID, jobtemplate.FieldOwnerID, jobtemplate.FieldInternalNotes, jobtemplate.FieldSystemInternalID, jobtemplate.FieldTitle, jobtemplate.FieldDescription, jobtemplate.FieldPlatform, jobtemplate.FieldWindmillPath, jobtemplate.FieldDownloadURL:
+		case jobtemplate.FieldID, jobtemplate.FieldCreatedBy, jobtemplate.FieldUpdatedBy, jobtemplate.FieldDeletedBy, jobtemplate.FieldDisplayID, jobtemplate.FieldOwnerID, jobtemplate.FieldInternalNotes, jobtemplate.FieldSystemInternalID, jobtemplate.FieldTitle, jobtemplate.FieldDescription, jobtemplate.FieldPlatform, jobtemplate.FieldRuntimePlatform, jobtemplate.FieldWindmillPath, jobtemplate.FieldScriptPath, jobtemplate.FieldDownloadURL:
 			values[i] = new(sql.NullString)
 		case jobtemplate.FieldCreatedAt, jobtemplate.FieldUpdatedAt, jobtemplate.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -230,11 +356,23 @@ func (_m *JobTemplate) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Platform = enums.JobPlatformType(value.String)
 			}
+		case jobtemplate.FieldRuntimePlatform:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field runtime_platform", values[i])
+			} else if value.Valid {
+				_m.RuntimePlatform = value.String
+			}
 		case jobtemplate.FieldWindmillPath:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field windmill_path", values[i])
 			} else if value.Valid {
 				_m.WindmillPath = value.String
+			}
+		case jobtemplate.FieldScriptPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field script_path", values[i])
+			} else if value.Valid {
+				_m.ScriptPath = value.String
 			}
 		case jobtemplate.FieldDownloadURL:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -257,6 +395,14 @@ func (_m *JobTemplate) assignValues(columns []string, values []any) error {
 				_m.Cron = new(models.Cron)
 				*_m.Cron = *value.S.(*models.Cron)
 			}
+		case jobtemplate.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -278,6 +424,56 @@ func (_m *JobTemplate) QueryOwner() *OrganizationQuery {
 // QueryScheduledJobs queries the "scheduled_jobs" edge of the JobTemplate entity.
 func (_m *JobTemplate) QueryScheduledJobs() *ScheduledJobQuery {
 	return NewJobTemplateClient(_m.config).QueryScheduledJobs(_m)
+}
+
+// QueryEvidence queries the "evidence" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryEvidence() *EvidenceQuery {
+	return NewJobTemplateClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryFindings queries the "findings" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryFindings() *FindingQuery {
+	return NewJobTemplateClient(_m.config).QueryFindings(_m)
+}
+
+// QueryRisks queries the "risks" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryRisks() *RiskQuery {
+	return NewJobTemplateClient(_m.config).QueryRisks(_m)
+}
+
+// QueryControls queries the "controls" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryControls() *ControlQuery {
+	return NewJobTemplateClient(_m.config).QueryControls(_m)
+}
+
+// QueryStandards queries the "standards" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryStandards() *StandardQuery {
+	return NewJobTemplateClient(_m.config).QueryStandards(_m)
+}
+
+// QueryVulnerabilities queries the "vulnerabilities" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryVulnerabilities() *VulnerabilityQuery {
+	return NewJobTemplateClient(_m.config).QueryVulnerabilities(_m)
+}
+
+// QueryAssets queries the "assets" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryAssets() *AssetQuery {
+	return NewJobTemplateClient(_m.config).QueryAssets(_m)
+}
+
+// QueryContacts queries the "contacts" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryContacts() *ContactQuery {
+	return NewJobTemplateClient(_m.config).QueryContacts(_m)
+}
+
+// QueryEntities queries the "entities" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryEntities() *EntityQuery {
+	return NewJobTemplateClient(_m.config).QueryEntities(_m)
+}
+
+// QueryTasks queries the "tasks" edge of the JobTemplate entity.
+func (_m *JobTemplate) QueryTasks() *TaskQuery {
+	return NewJobTemplateClient(_m.config).QueryTasks(_m)
 }
 
 // Update returns a builder for updating this JobTemplate.
@@ -352,8 +548,14 @@ func (_m *JobTemplate) String() string {
 	builder.WriteString("platform=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Platform))
 	builder.WriteString(", ")
+	builder.WriteString("runtime_platform=")
+	builder.WriteString(_m.RuntimePlatform)
+	builder.WriteString(", ")
 	builder.WriteString("windmill_path=")
 	builder.WriteString(_m.WindmillPath)
+	builder.WriteString(", ")
+	builder.WriteString("script_path=")
+	builder.WriteString(_m.ScriptPath)
 	builder.WriteString(", ")
 	builder.WriteString("download_url=")
 	builder.WriteString(_m.DownloadURL)
@@ -365,6 +567,9 @@ func (_m *JobTemplate) String() string {
 		builder.WriteString("cron=")
 		builder.WriteString(fmt.Sprintf("%v", *v))
 	}
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }
@@ -390,6 +595,246 @@ func (_m *JobTemplate) appendNamedScheduledJobs(name string, edges ...*Scheduled
 		_m.Edges.namedScheduledJobs[name] = []*ScheduledJob{}
 	} else {
 		_m.Edges.namedScheduledJobs[name] = append(_m.Edges.namedScheduledJobs[name], edges...)
+	}
+}
+
+// NamedEvidence returns the Evidence named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedEvidence(name string) ([]*Evidence, error) {
+	if _m.Edges.namedEvidence == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEvidence[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedEvidence(name string, edges ...*Evidence) {
+	if _m.Edges.namedEvidence == nil {
+		_m.Edges.namedEvidence = make(map[string][]*Evidence)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEvidence[name] = []*Evidence{}
+	} else {
+		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedFindings returns the Findings named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedFindings(name string) ([]*Finding, error) {
+	if _m.Edges.namedFindings == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedFindings[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedFindings(name string, edges ...*Finding) {
+	if _m.Edges.namedFindings == nil {
+		_m.Edges.namedFindings = make(map[string][]*Finding)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedFindings[name] = []*Finding{}
+	} else {
+		_m.Edges.namedFindings[name] = append(_m.Edges.namedFindings[name], edges...)
+	}
+}
+
+// NamedRisks returns the Risks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedRisks(name string) ([]*Risk, error) {
+	if _m.Edges.namedRisks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedRisks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedRisks(name string, edges ...*Risk) {
+	if _m.Edges.namedRisks == nil {
+		_m.Edges.namedRisks = make(map[string][]*Risk)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedRisks[name] = []*Risk{}
+	} else {
+		_m.Edges.namedRisks[name] = append(_m.Edges.namedRisks[name], edges...)
+	}
+}
+
+// NamedControls returns the Controls named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedControls(name string) ([]*Control, error) {
+	if _m.Edges.namedControls == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedControls[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedControls(name string, edges ...*Control) {
+	if _m.Edges.namedControls == nil {
+		_m.Edges.namedControls = make(map[string][]*Control)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedControls[name] = []*Control{}
+	} else {
+		_m.Edges.namedControls[name] = append(_m.Edges.namedControls[name], edges...)
+	}
+}
+
+// NamedStandards returns the Standards named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedStandards(name string) ([]*Standard, error) {
+	if _m.Edges.namedStandards == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedStandards[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedStandards(name string, edges ...*Standard) {
+	if _m.Edges.namedStandards == nil {
+		_m.Edges.namedStandards = make(map[string][]*Standard)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedStandards[name] = []*Standard{}
+	} else {
+		_m.Edges.namedStandards[name] = append(_m.Edges.namedStandards[name], edges...)
+	}
+}
+
+// NamedVulnerabilities returns the Vulnerabilities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedVulnerabilities(name string) ([]*Vulnerability, error) {
+	if _m.Edges.namedVulnerabilities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedVulnerabilities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedVulnerabilities(name string, edges ...*Vulnerability) {
+	if _m.Edges.namedVulnerabilities == nil {
+		_m.Edges.namedVulnerabilities = make(map[string][]*Vulnerability)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedVulnerabilities[name] = []*Vulnerability{}
+	} else {
+		_m.Edges.namedVulnerabilities[name] = append(_m.Edges.namedVulnerabilities[name], edges...)
+	}
+}
+
+// NamedAssets returns the Assets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedAssets(name string) ([]*Asset, error) {
+	if _m.Edges.namedAssets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedAssets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedAssets(name string, edges ...*Asset) {
+	if _m.Edges.namedAssets == nil {
+		_m.Edges.namedAssets = make(map[string][]*Asset)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedAssets[name] = []*Asset{}
+	} else {
+		_m.Edges.namedAssets[name] = append(_m.Edges.namedAssets[name], edges...)
+	}
+}
+
+// NamedContacts returns the Contacts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedContacts(name string) ([]*Contact, error) {
+	if _m.Edges.namedContacts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedContacts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedContacts(name string, edges ...*Contact) {
+	if _m.Edges.namedContacts == nil {
+		_m.Edges.namedContacts = make(map[string][]*Contact)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedContacts[name] = []*Contact{}
+	} else {
+		_m.Edges.namedContacts[name] = append(_m.Edges.namedContacts[name], edges...)
+	}
+}
+
+// NamedEntities returns the Entities named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedEntities(name string) ([]*Entity, error) {
+	if _m.Edges.namedEntities == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedEntities[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedEntities(name string, edges ...*Entity) {
+	if _m.Edges.namedEntities == nil {
+		_m.Edges.namedEntities = make(map[string][]*Entity)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedEntities[name] = []*Entity{}
+	} else {
+		_m.Edges.namedEntities[name] = append(_m.Edges.namedEntities[name], edges...)
+	}
+}
+
+// NamedTasks returns the Tasks named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *JobTemplate) NamedTasks(name string) ([]*Task, error) {
+	if _m.Edges.namedTasks == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTasks[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *JobTemplate) appendNamedTasks(name string, edges ...*Task) {
+	if _m.Edges.namedTasks == nil {
+		_m.Edges.namedTasks = make(map[string][]*Task)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTasks[name] = []*Task{}
+	} else {
+		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
 	}
 }
 

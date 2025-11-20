@@ -4261,15 +4261,15 @@ func init() {
 	// jobresult.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
 	jobresult.OwnerIDValidator = jobresultDescOwnerID.Validators[0].(func(string) error)
 	// jobresultDescExitCode is the schema descriptor for exit_code field.
-	jobresultDescExitCode := jobresultFields[2].Descriptor()
+	jobresultDescExitCode := jobresultFields[3].Descriptor()
 	// jobresult.ExitCodeValidator is a validator for the "exit_code" field. It is called by the builders before save.
 	jobresult.ExitCodeValidator = jobresultDescExitCode.Validators[0].(func(int) error)
 	// jobresultDescFinishedAt is the schema descriptor for finished_at field.
-	jobresultDescFinishedAt := jobresultFields[3].Descriptor()
+	jobresultDescFinishedAt := jobresultFields[4].Descriptor()
 	// jobresult.DefaultFinishedAt holds the default value on creation for the finished_at field.
 	jobresult.DefaultFinishedAt = jobresultDescFinishedAt.Default.(func() time.Time)
 	// jobresultDescStartedAt is the schema descriptor for started_at field.
-	jobresultDescStartedAt := jobresultFields[4].Descriptor()
+	jobresultDescStartedAt := jobresultFields[5].Descriptor()
 	// jobresult.DefaultStartedAt holds the default value on creation for the started_at field.
 	jobresult.DefaultStartedAt = jobresultDescStartedAt.Default.(func() time.Time)
 	// jobresultDescID is the schema descriptor for id field.
@@ -4537,8 +4537,6 @@ func init() {
 	jobtemplate.Hooks[7] = jobtemplateMixinHooks7[0]
 
 	jobtemplate.Hooks[8] = jobtemplateHooks[0]
-
-	jobtemplate.Hooks[9] = jobtemplateHooks[1]
 	jobtemplateMixinInters1 := jobtemplateMixin[1].Interceptors()
 	jobtemplateMixinInters2 := jobtemplateMixin[2].Interceptors()
 	jobtemplateMixinInters6 := jobtemplateMixin[6].Interceptors()
@@ -4582,7 +4580,7 @@ func init() {
 	// jobtemplate.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	jobtemplate.TitleValidator = jobtemplateDescTitle.Validators[0].(func(string) error)
 	// jobtemplateDescCron is the schema descriptor for cron field.
-	jobtemplateDescCron := jobtemplateFields[6].Descriptor()
+	jobtemplateDescCron := jobtemplateFields[8].Descriptor()
 	// jobtemplate.CronValidator is a validator for the "cron" field. It is called by the builders before save.
 	jobtemplate.CronValidator = jobtemplateDescCron.Validators[0].(func(string) error)
 	// jobtemplateDescID is the schema descriptor for id field.

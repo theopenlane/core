@@ -3,6 +3,7 @@
 package generated
 
 import (
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -44,9 +45,10 @@ type ScheduledJobRun struct {
 	ScheduledJobID string `json:"scheduled_job_id,omitempty"`
 	// When should this job execute on the agent. Since we might potentially schedule a few minutes before
 	ExpectedExecutionTime time.Time `json:"expected_execution_time,omitempty"`
-	// the script that will be executed by the agent.
-	// This script will be templated with the values from the configuration on the job
+	// the script that will be executed by the agent. This script will be templated with the values from the configuration on the job
 	Script string `json:"script,omitempty"`
+	// raw metadata payload for the remediation from the source system
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ScheduledJobRunQuery when eager-loading is set.
 	Edges        ScheduledJobRunEdges `json:"edges"`
@@ -106,6 +108,8 @@ func (*ScheduledJobRun) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case scheduledjobrun.FieldMetadata:
+			values[i] = new([]byte)
 		case scheduledjobrun.FieldID, scheduledjobrun.FieldCreatedBy, scheduledjobrun.FieldUpdatedBy, scheduledjobrun.FieldDeletedBy, scheduledjobrun.FieldOwnerID, scheduledjobrun.FieldJobRunnerID, scheduledjobrun.FieldStatus, scheduledjobrun.FieldScheduledJobID, scheduledjobrun.FieldScript:
 			values[i] = new(sql.NullString)
 		case scheduledjobrun.FieldCreatedAt, scheduledjobrun.FieldUpdatedAt, scheduledjobrun.FieldDeletedAt, scheduledjobrun.FieldExpectedExecutionTime:
@@ -203,6 +207,14 @@ func (_m *ScheduledJobRun) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Script = value.String
 			}
+		case scheduledjobrun.FieldMetadata:
+			if value, ok := values[i].(*[]byte); !ok {
+				return fmt.Errorf("unexpected type %T for field metadata", values[i])
+			} else if value != nil && len(*value) > 0 {
+				if err := json.Unmarshal(*value, &_m.Metadata); err != nil {
+					return fmt.Errorf("unmarshal field metadata: %w", err)
+				}
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -289,6 +301,9 @@ func (_m *ScheduledJobRun) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("script=")
 	builder.WriteString(_m.Script)
+	builder.WriteString(", ")
+	builder.WriteString("metadata=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Metadata))
 	builder.WriteByte(')')
 	return builder.String()
 }

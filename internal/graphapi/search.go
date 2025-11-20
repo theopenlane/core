@@ -1322,6 +1322,10 @@ func adminSearchJobRunners(ctx context.Context, query string, after *entgql.Curs
 				jobrunner.IPAddressContainsFold(query),        // search by IPAddress
 				jobrunner.VersionContainsFold(query),          // search by Version
 				jobrunner.OsContainsFold(query),               // search by Os
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $11", likeQuery)) // search by Metadata
+				},
 			),
 		)
 
@@ -1432,6 +1436,12 @@ func adminSearchJobTemplates(ctx context.Context, query string, after *entgql.Cu
 				jobtemplate.SystemInternalIDContainsFold(query), // search by SystemInternalID
 				jobtemplate.TitleContainsFold(query),            // search by Title
 				jobtemplate.DescriptionContainsFold(query),      // search by Description
+				jobtemplate.RuntimePlatformContainsFold(query),  // search by RuntimePlatform
+				jobtemplate.ScriptPathContainsFold(query),       // search by ScriptPath
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $11", likeQuery)) // search by Metadata
+				},
 			),
 		)
 

@@ -13,13 +13,22 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/asset"
+	"github.com/theopenlane/core/internal/ent/generated/contact"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/entity"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/finding"
 	"github.com/theopenlane/core/internal/ent/generated/jobrunner"
 	"github.com/theopenlane/core/internal/ent/generated/jobtemplate"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/scheduledjob"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
+	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -27,19 +36,37 @@ import (
 // ScheduledJobQuery is the builder for querying ScheduledJob entities.
 type ScheduledJobQuery struct {
 	config
-	ctx                  *QueryContext
-	order                []scheduledjob.OrderOption
-	inters               []Interceptor
-	predicates           []predicate.ScheduledJob
-	withOwner            *OrganizationQuery
-	withJobTemplate      *JobTemplateQuery
-	withControls         *ControlQuery
-	withSubcontrols      *SubcontrolQuery
-	withJobRunner        *JobRunnerQuery
-	loadTotal            []func(context.Context, []*ScheduledJob) error
-	modifiers            []func(*sql.Selector)
-	withNamedControls    map[string]*ControlQuery
-	withNamedSubcontrols map[string]*SubcontrolQuery
+	ctx                      *QueryContext
+	order                    []scheduledjob.OrderOption
+	inters                   []Interceptor
+	predicates               []predicate.ScheduledJob
+	withOwner                *OrganizationQuery
+	withJobTemplate          *JobTemplateQuery
+	withControls             *ControlQuery
+	withSubcontrols          *SubcontrolQuery
+	withEvidence             *EvidenceQuery
+	withFindings             *FindingQuery
+	withRisks                *RiskQuery
+	withStandards            *StandardQuery
+	withVulnerabilities      *VulnerabilityQuery
+	withAssets               *AssetQuery
+	withContacts             *ContactQuery
+	withEntities             *EntityQuery
+	withTasks                *TaskQuery
+	withJobRunner            *JobRunnerQuery
+	loadTotal                []func(context.Context, []*ScheduledJob) error
+	modifiers                []func(*sql.Selector)
+	withNamedControls        map[string]*ControlQuery
+	withNamedSubcontrols     map[string]*SubcontrolQuery
+	withNamedEvidence        map[string]*EvidenceQuery
+	withNamedFindings        map[string]*FindingQuery
+	withNamedRisks           map[string]*RiskQuery
+	withNamedStandards       map[string]*StandardQuery
+	withNamedVulnerabilities map[string]*VulnerabilityQuery
+	withNamedAssets          map[string]*AssetQuery
+	withNamedContacts        map[string]*ContactQuery
+	withNamedEntities        map[string]*EntityQuery
+	withNamedTasks           map[string]*TaskQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -170,6 +197,231 @@ func (_q *ScheduledJobQuery) QuerySubcontrols() *SubcontrolQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Subcontrol
 		step.Edge.Schema = schemaConfig.ScheduledJobSubcontrols
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *ScheduledJobQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.EvidenceTable, scheduledjob.EvidenceColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Evidence
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryFindings chains the current query on the "findings" edge.
+func (_q *ScheduledJobQuery) QueryFindings() *FindingQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.FindingsTable, scheduledjob.FindingsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.Finding
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryRisks chains the current query on the "risks" edge.
+func (_q *ScheduledJobQuery) QueryRisks() *RiskQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(risk.Table, risk.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.RisksTable, scheduledjob.RisksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Risk
+		step.Edge.Schema = schemaConfig.Risk
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStandards chains the current query on the "standards" edge.
+func (_q *ScheduledJobQuery) QueryStandards() *StandardQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.StandardsTable, scheduledjob.StandardsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.Standard
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryVulnerabilities chains the current query on the "vulnerabilities" edge.
+func (_q *ScheduledJobQuery) QueryVulnerabilities() *VulnerabilityQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(vulnerability.Table, vulnerability.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.VulnerabilitiesTable, scheduledjob.VulnerabilitiesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Vulnerability
+		step.Edge.Schema = schemaConfig.Vulnerability
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssets chains the current query on the "assets" edge.
+func (_q *ScheduledJobQuery) QueryAssets() *AssetQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(asset.Table, asset.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.AssetsTable, scheduledjob.AssetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Asset
+		step.Edge.Schema = schemaConfig.Asset
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryContacts chains the current query on the "contacts" edge.
+func (_q *ScheduledJobQuery) QueryContacts() *ContactQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(contact.Table, contact.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.ContactsTable, scheduledjob.ContactsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Contact
+		step.Edge.Schema = schemaConfig.Contact
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEntities chains the current query on the "entities" edge.
+func (_q *ScheduledJobQuery) QueryEntities() *EntityQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(entity.Table, entity.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.EntitiesTable, scheduledjob.EntitiesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Entity
+		step.Edge.Schema = schemaConfig.Entity
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryTasks chains the current query on the "tasks" edge.
+func (_q *ScheduledJobQuery) QueryTasks() *TaskQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(scheduledjob.Table, scheduledjob.FieldID, selector),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, scheduledjob.TasksTable, scheduledjob.TasksColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.Task
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -388,16 +640,25 @@ func (_q *ScheduledJobQuery) Clone() *ScheduledJobQuery {
 		return nil
 	}
 	return &ScheduledJobQuery{
-		config:          _q.config,
-		ctx:             _q.ctx.Clone(),
-		order:           append([]scheduledjob.OrderOption{}, _q.order...),
-		inters:          append([]Interceptor{}, _q.inters...),
-		predicates:      append([]predicate.ScheduledJob{}, _q.predicates...),
-		withOwner:       _q.withOwner.Clone(),
-		withJobTemplate: _q.withJobTemplate.Clone(),
-		withControls:    _q.withControls.Clone(),
-		withSubcontrols: _q.withSubcontrols.Clone(),
-		withJobRunner:   _q.withJobRunner.Clone(),
+		config:              _q.config,
+		ctx:                 _q.ctx.Clone(),
+		order:               append([]scheduledjob.OrderOption{}, _q.order...),
+		inters:              append([]Interceptor{}, _q.inters...),
+		predicates:          append([]predicate.ScheduledJob{}, _q.predicates...),
+		withOwner:           _q.withOwner.Clone(),
+		withJobTemplate:     _q.withJobTemplate.Clone(),
+		withControls:        _q.withControls.Clone(),
+		withSubcontrols:     _q.withSubcontrols.Clone(),
+		withEvidence:        _q.withEvidence.Clone(),
+		withFindings:        _q.withFindings.Clone(),
+		withRisks:           _q.withRisks.Clone(),
+		withStandards:       _q.withStandards.Clone(),
+		withVulnerabilities: _q.withVulnerabilities.Clone(),
+		withAssets:          _q.withAssets.Clone(),
+		withContacts:        _q.withContacts.Clone(),
+		withEntities:        _q.withEntities.Clone(),
+		withTasks:           _q.withTasks.Clone(),
+		withJobRunner:       _q.withJobRunner.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -446,6 +707,105 @@ func (_q *ScheduledJobQuery) WithSubcontrols(opts ...func(*SubcontrolQuery)) *Sc
 		opt(query)
 	}
 	_q.withSubcontrols = query
+	return _q
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithEvidence(opts ...func(*EvidenceQuery)) *ScheduledJobQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
+	return _q
+}
+
+// WithFindings tells the query-builder to eager-load the nodes that are connected to
+// the "findings" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithFindings(opts ...func(*FindingQuery)) *ScheduledJobQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withFindings = query
+	return _q
+}
+
+// WithRisks tells the query-builder to eager-load the nodes that are connected to
+// the "risks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithRisks(opts ...func(*RiskQuery)) *ScheduledJobQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withRisks = query
+	return _q
+}
+
+// WithStandards tells the query-builder to eager-load the nodes that are connected to
+// the "standards" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithStandards(opts ...func(*StandardQuery)) *ScheduledJobQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStandards = query
+	return _q
+}
+
+// WithVulnerabilities tells the query-builder to eager-load the nodes that are connected to
+// the "vulnerabilities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithVulnerabilities(opts ...func(*VulnerabilityQuery)) *ScheduledJobQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withVulnerabilities = query
+	return _q
+}
+
+// WithAssets tells the query-builder to eager-load the nodes that are connected to
+// the "assets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithAssets(opts ...func(*AssetQuery)) *ScheduledJobQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withAssets = query
+	return _q
+}
+
+// WithContacts tells the query-builder to eager-load the nodes that are connected to
+// the "contacts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithContacts(opts ...func(*ContactQuery)) *ScheduledJobQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withContacts = query
+	return _q
+}
+
+// WithEntities tells the query-builder to eager-load the nodes that are connected to
+// the "entities" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithEntities(opts ...func(*EntityQuery)) *ScheduledJobQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEntities = query
+	return _q
+}
+
+// WithTasks tells the query-builder to eager-load the nodes that are connected to
+// the "tasks" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithTasks(opts ...func(*TaskQuery)) *ScheduledJobQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTasks = query
 	return _q
 }
 
@@ -544,11 +904,20 @@ func (_q *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*ScheduledJob{}
 		_spec       = _q.querySpec()
-		loadedTypes = [5]bool{
+		loadedTypes = [14]bool{
 			_q.withOwner != nil,
 			_q.withJobTemplate != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
+			_q.withEvidence != nil,
+			_q.withFindings != nil,
+			_q.withRisks != nil,
+			_q.withStandards != nil,
+			_q.withVulnerabilities != nil,
+			_q.withAssets != nil,
+			_q.withContacts != nil,
+			_q.withEntities != nil,
+			_q.withTasks != nil,
 			_q.withJobRunner != nil,
 		}
 	)
@@ -601,6 +970,69 @@ func (_q *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Evidence = []*Evidence{} },
+			func(n *ScheduledJob, e *Evidence) { n.Edges.Evidence = append(n.Edges.Evidence, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withFindings; query != nil {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Findings = []*Finding{} },
+			func(n *ScheduledJob, e *Finding) { n.Edges.Findings = append(n.Edges.Findings, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withRisks; query != nil {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Risks = []*Risk{} },
+			func(n *ScheduledJob, e *Risk) { n.Edges.Risks = append(n.Edges.Risks, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStandards; query != nil {
+		if err := _q.loadStandards(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Standards = []*Standard{} },
+			func(n *ScheduledJob, e *Standard) { n.Edges.Standards = append(n.Edges.Standards, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withVulnerabilities; query != nil {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Vulnerabilities = []*Vulnerability{} },
+			func(n *ScheduledJob, e *Vulnerability) { n.Edges.Vulnerabilities = append(n.Edges.Vulnerabilities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withAssets; query != nil {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Assets = []*Asset{} },
+			func(n *ScheduledJob, e *Asset) { n.Edges.Assets = append(n.Edges.Assets, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withContacts; query != nil {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Contacts = []*Contact{} },
+			func(n *ScheduledJob, e *Contact) { n.Edges.Contacts = append(n.Edges.Contacts, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEntities; query != nil {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Entities = []*Entity{} },
+			func(n *ScheduledJob, e *Entity) { n.Edges.Entities = append(n.Edges.Entities, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withTasks; query != nil {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ScheduledJob) { n.Edges.Tasks = []*Task{} },
+			func(n *ScheduledJob, e *Task) { n.Edges.Tasks = append(n.Edges.Tasks, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withJobRunner; query != nil {
 		if err := _q.loadJobRunner(ctx, query, nodes, nil,
 			func(n *ScheduledJob, e *JobRunner) { n.Edges.JobRunner = e }); err != nil {
@@ -618,6 +1050,69 @@ func (_q *ScheduledJobQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *ScheduledJob) { n.appendNamedSubcontrols(name) },
 			func(n *ScheduledJob, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEvidence {
+		if err := _q.loadEvidence(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedEvidence(name) },
+			func(n *ScheduledJob, e *Evidence) { n.appendNamedEvidence(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedFindings {
+		if err := _q.loadFindings(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedFindings(name) },
+			func(n *ScheduledJob, e *Finding) { n.appendNamedFindings(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedRisks {
+		if err := _q.loadRisks(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedRisks(name) },
+			func(n *ScheduledJob, e *Risk) { n.appendNamedRisks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedStandards {
+		if err := _q.loadStandards(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedStandards(name) },
+			func(n *ScheduledJob, e *Standard) { n.appendNamedStandards(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedVulnerabilities {
+		if err := _q.loadVulnerabilities(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedVulnerabilities(name) },
+			func(n *ScheduledJob, e *Vulnerability) { n.appendNamedVulnerabilities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedAssets {
+		if err := _q.loadAssets(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedAssets(name) },
+			func(n *ScheduledJob, e *Asset) { n.appendNamedAssets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedContacts {
+		if err := _q.loadContacts(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedContacts(name) },
+			func(n *ScheduledJob, e *Contact) { n.appendNamedContacts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedEntities {
+		if err := _q.loadEntities(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedEntities(name) },
+			func(n *ScheduledJob, e *Entity) { n.appendNamedEntities(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTasks {
+		if err := _q.loadTasks(ctx, query, nodes,
+			func(n *ScheduledJob) { n.appendNamedTasks(name) },
+			func(n *ScheduledJob, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -811,6 +1306,285 @@ func (_q *ScheduledJobQuery) loadSubcontrols(ctx context.Context, query *Subcont
 	}
 	return nil
 }
+func (_q *ScheduledJobQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Evidence)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Evidence(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.EvidenceColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_evidence
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_evidence" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_evidence" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadFindings(ctx context.Context, query *FindingQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Finding)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Finding(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.FindingsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_findings
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_findings" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_findings" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadRisks(ctx context.Context, query *RiskQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Risk)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Risk(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.RisksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_risks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_risks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_risks" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadStandards(ctx context.Context, query *StandardQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Standard)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Standard(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.StandardsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_standards
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_standards" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_standards" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadVulnerabilities(ctx context.Context, query *VulnerabilityQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Vulnerability)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Vulnerability(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.VulnerabilitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_vulnerabilities
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_vulnerabilities" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_vulnerabilities" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadAssets(ctx context.Context, query *AssetQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Asset)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Asset(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.AssetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_assets
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_assets" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_assets" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadContacts(ctx context.Context, query *ContactQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Contact)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Contact(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.ContactsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_contacts
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_contacts" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_contacts" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadEntities(ctx context.Context, query *EntityQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Entity)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Entity(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.EntitiesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_entities
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_entities" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_entities" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *ScheduledJobQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *Task)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*ScheduledJob)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Task(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(scheduledjob.TasksColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.scheduled_job_tasks
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "scheduled_job_tasks" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "scheduled_job_tasks" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ScheduledJobQuery) loadJobRunner(ctx context.Context, query *JobRunnerQuery, nodes []*ScheduledJob, init func(*ScheduledJob), assign func(*ScheduledJob, *JobRunner)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*ScheduledJob)
@@ -973,6 +1747,132 @@ func (_q *ScheduledJobQuery) WithNamedSubcontrols(name string, opts ...func(*Sub
 		_q.withNamedSubcontrols = make(map[string]*SubcontrolQuery)
 	}
 	_q.withNamedSubcontrols[name] = query
+	return _q
+}
+
+// WithNamedEvidence tells the query-builder to eager-load the nodes that are connected to the "evidence"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedEvidence(name string, opts ...func(*EvidenceQuery)) *ScheduledJobQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEvidence == nil {
+		_q.withNamedEvidence = make(map[string]*EvidenceQuery)
+	}
+	_q.withNamedEvidence[name] = query
+	return _q
+}
+
+// WithNamedFindings tells the query-builder to eager-load the nodes that are connected to the "findings"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedFindings(name string, opts ...func(*FindingQuery)) *ScheduledJobQuery {
+	query := (&FindingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedFindings == nil {
+		_q.withNamedFindings = make(map[string]*FindingQuery)
+	}
+	_q.withNamedFindings[name] = query
+	return _q
+}
+
+// WithNamedRisks tells the query-builder to eager-load the nodes that are connected to the "risks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedRisks(name string, opts ...func(*RiskQuery)) *ScheduledJobQuery {
+	query := (&RiskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedRisks == nil {
+		_q.withNamedRisks = make(map[string]*RiskQuery)
+	}
+	_q.withNamedRisks[name] = query
+	return _q
+}
+
+// WithNamedStandards tells the query-builder to eager-load the nodes that are connected to the "standards"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedStandards(name string, opts ...func(*StandardQuery)) *ScheduledJobQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedStandards == nil {
+		_q.withNamedStandards = make(map[string]*StandardQuery)
+	}
+	_q.withNamedStandards[name] = query
+	return _q
+}
+
+// WithNamedVulnerabilities tells the query-builder to eager-load the nodes that are connected to the "vulnerabilities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedVulnerabilities(name string, opts ...func(*VulnerabilityQuery)) *ScheduledJobQuery {
+	query := (&VulnerabilityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedVulnerabilities == nil {
+		_q.withNamedVulnerabilities = make(map[string]*VulnerabilityQuery)
+	}
+	_q.withNamedVulnerabilities[name] = query
+	return _q
+}
+
+// WithNamedAssets tells the query-builder to eager-load the nodes that are connected to the "assets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedAssets(name string, opts ...func(*AssetQuery)) *ScheduledJobQuery {
+	query := (&AssetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedAssets == nil {
+		_q.withNamedAssets = make(map[string]*AssetQuery)
+	}
+	_q.withNamedAssets[name] = query
+	return _q
+}
+
+// WithNamedContacts tells the query-builder to eager-load the nodes that are connected to the "contacts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedContacts(name string, opts ...func(*ContactQuery)) *ScheduledJobQuery {
+	query := (&ContactClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedContacts == nil {
+		_q.withNamedContacts = make(map[string]*ContactQuery)
+	}
+	_q.withNamedContacts[name] = query
+	return _q
+}
+
+// WithNamedEntities tells the query-builder to eager-load the nodes that are connected to the "entities"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedEntities(name string, opts ...func(*EntityQuery)) *ScheduledJobQuery {
+	query := (&EntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedEntities == nil {
+		_q.withNamedEntities = make(map[string]*EntityQuery)
+	}
+	_q.withNamedEntities[name] = query
+	return _q
+}
+
+// WithNamedTasks tells the query-builder to eager-load the nodes that are connected to the "tasks"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ScheduledJobQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *ScheduledJobQuery {
+	query := (&TaskClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTasks == nil {
+		_q.withNamedTasks = make(map[string]*TaskQuery)
+	}
+	_q.withNamedTasks[name] = query
 	return _q
 }
 

@@ -165,10 +165,13 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"entity_type_entities",
 	"finding_entities",
+	"job_result_entities",
+	"job_template_entities",
 	"remediation_entities",
 	"review_entities",
 	"risk_entities",
 	"scan_entities",
+	"scheduled_job_entities",
 	"vulnerability_entities",
 }
 

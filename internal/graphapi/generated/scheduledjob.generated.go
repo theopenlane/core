@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
 			case "jobRunnerID":
 				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
+			case "metadata":
+				return ec.fieldContext_ScheduledJob_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "jobTemplate":
@@ -84,6 +86,24 @@ func (ec *executionContext) fieldContext_ScheduledJobBulkCreatePayload_scheduled
 				return ec.fieldContext_ScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ScheduledJob_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_ScheduledJob_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_ScheduledJob_risks(ctx, field)
+			case "standards":
+				return ec.fieldContext_ScheduledJob_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_ScheduledJob_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_ScheduledJob_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_ScheduledJob_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_ScheduledJob_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ScheduledJob_tasks(ctx, field)
 			case "jobRunner":
 				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}
@@ -170,6 +190,8 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
 			case "jobRunnerID":
 				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
+			case "metadata":
+				return ec.fieldContext_ScheduledJob_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "jobTemplate":
@@ -178,6 +200,24 @@ func (ec *executionContext) fieldContext_ScheduledJobCreatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ScheduledJob_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_ScheduledJob_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_ScheduledJob_risks(ctx, field)
+			case "standards":
+				return ec.fieldContext_ScheduledJob_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_ScheduledJob_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_ScheduledJob_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_ScheduledJob_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_ScheduledJob_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ScheduledJob_tasks(ctx, field)
 			case "jobRunner":
 				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}
@@ -264,6 +304,8 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_cron(ctx, field)
 			case "jobRunnerID":
 				return ec.fieldContext_ScheduledJob_jobRunnerID(ctx, field)
+			case "metadata":
+				return ec.fieldContext_ScheduledJob_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_ScheduledJob_owner(ctx, field)
 			case "jobTemplate":
@@ -272,6 +314,24 @@ func (ec *executionContext) fieldContext_ScheduledJobUpdatePayload_scheduledJob(
 				return ec.fieldContext_ScheduledJob_controls(ctx, field)
 			case "subcontrols":
 				return ec.fieldContext_ScheduledJob_subcontrols(ctx, field)
+			case "evidence":
+				return ec.fieldContext_ScheduledJob_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_ScheduledJob_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_ScheduledJob_risks(ctx, field)
+			case "standards":
+				return ec.fieldContext_ScheduledJob_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_ScheduledJob_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_ScheduledJob_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_ScheduledJob_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_ScheduledJob_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_ScheduledJob_tasks(ctx, field)
 			case "jobRunner":
 				return ec.fieldContext_ScheduledJob_jobRunner(ctx, field)
 			}

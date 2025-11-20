@@ -6551,6 +6551,7 @@ func (_q *OrganizationQuery) loadContacts(ctx context.Context, query *ContactQue
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(contact.FieldOwnerID)
 	}
@@ -6951,6 +6952,7 @@ func (_q *OrganizationQuery) loadEvidence(ctx context.Context, query *EvidenceQu
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(evidence.FieldOwnerID)
 	}
@@ -6981,6 +6983,7 @@ func (_q *OrganizationQuery) loadStandards(ctx context.Context, query *StandardQ
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(standard.FieldOwnerID)
 	}

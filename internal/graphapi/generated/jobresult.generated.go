@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_JobResultCreatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_ownerID(ctx, field)
 			case "scheduledJobID":
 				return ec.fieldContext_JobResult_scheduledJobID(ctx, field)
+			case "complianceJobID":
+				return ec.fieldContext_JobResult_complianceJobID(ctx, field)
 			case "status":
 				return ec.fieldContext_JobResult_status(ctx, field)
 			case "exitCode":
@@ -78,12 +80,34 @@ func (ec *executionContext) fieldContext_JobResultCreatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_fileID(ctx, field)
 			case "log":
 				return ec.fieldContext_JobResult_log(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobResult_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
 				return ec.fieldContext_JobResult_scheduledJob(ctx, field)
 			case "file":
 				return ec.fieldContext_JobResult_file(ctx, field)
+			case "evidence":
+				return ec.fieldContext_JobResult_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_JobResult_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_JobResult_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_JobResult_controls(ctx, field)
+			case "standards":
+				return ec.fieldContext_JobResult_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_JobResult_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_JobResult_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_JobResult_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_JobResult_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_JobResult_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
 		},
@@ -158,6 +182,8 @@ func (ec *executionContext) fieldContext_JobResultUpdatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_ownerID(ctx, field)
 			case "scheduledJobID":
 				return ec.fieldContext_JobResult_scheduledJobID(ctx, field)
+			case "complianceJobID":
+				return ec.fieldContext_JobResult_complianceJobID(ctx, field)
 			case "status":
 				return ec.fieldContext_JobResult_status(ctx, field)
 			case "exitCode":
@@ -170,12 +196,34 @@ func (ec *executionContext) fieldContext_JobResultUpdatePayload_jobResult(_ cont
 				return ec.fieldContext_JobResult_fileID(ctx, field)
 			case "log":
 				return ec.fieldContext_JobResult_log(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobResult_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobResult_owner(ctx, field)
 			case "scheduledJob":
 				return ec.fieldContext_JobResult_scheduledJob(ctx, field)
 			case "file":
 				return ec.fieldContext_JobResult_file(ctx, field)
+			case "evidence":
+				return ec.fieldContext_JobResult_evidence(ctx, field)
+			case "findings":
+				return ec.fieldContext_JobResult_findings(ctx, field)
+			case "risks":
+				return ec.fieldContext_JobResult_risks(ctx, field)
+			case "controls":
+				return ec.fieldContext_JobResult_controls(ctx, field)
+			case "standards":
+				return ec.fieldContext_JobResult_standards(ctx, field)
+			case "vulnerabilities":
+				return ec.fieldContext_JobResult_vulnerabilities(ctx, field)
+			case "assets":
+				return ec.fieldContext_JobResult_assets(ctx, field)
+			case "contacts":
+				return ec.fieldContext_JobResult_contacts(ctx, field)
+			case "entities":
+				return ec.fieldContext_JobResult_entities(ctx, field)
+			case "tasks":
+				return ec.fieldContext_JobResult_tasks(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type JobResult", field.Name)
 		},

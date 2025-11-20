@@ -54,14 +54,20 @@ const (
 	FieldDescription = "description"
 	// FieldPlatform holds the string denoting the platform field in the database.
 	FieldPlatform = "platform"
+	// FieldRuntimePlatform holds the string denoting the runtime_platform field in the database.
+	FieldRuntimePlatform = "runtime_platform"
 	// FieldWindmillPath holds the string denoting the windmill_path field in the database.
 	FieldWindmillPath = "windmill_path"
+	// FieldScriptPath holds the string denoting the script_path field in the database.
+	FieldScriptPath = "script_path"
 	// FieldDownloadURL holds the string denoting the download_url field in the database.
 	FieldDownloadURL = "download_url"
 	// FieldConfiguration holds the string denoting the configuration field in the database.
 	FieldConfiguration = "configuration"
 	// FieldCron holds the string denoting the cron field in the database.
 	FieldCron = "cron"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// Table holds the table name of the jobtemplatehistory in the database.
 	Table = "job_template_history"
 )
@@ -87,10 +93,13 @@ var Columns = []string{
 	FieldTitle,
 	FieldDescription,
 	FieldPlatform,
+	FieldRuntimePlatform,
 	FieldWindmillPath,
+	FieldScriptPath,
 	FieldDownloadURL,
 	FieldConfiguration,
 	FieldCron,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -241,9 +250,19 @@ func ByPlatform(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPlatform, opts...).ToFunc()
 }
 
+// ByRuntimePlatform orders the results by the runtime_platform field.
+func ByRuntimePlatform(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldRuntimePlatform, opts...).ToFunc()
+}
+
 // ByWindmillPath orders the results by the windmill_path field.
 func ByWindmillPath(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldWindmillPath, opts...).ToFunc()
+}
+
+// ByScriptPath orders the results by the script_path field.
+func ByScriptPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldScriptPath, opts...).ToFunc()
 }
 
 // ByDownloadURL orders the results by the download_url field.

@@ -191,6 +191,18 @@ func (_u *ScheduledJobHistoryUpdate) ClearJobRunnerID() *ScheduledJobHistoryUpda
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobHistoryUpdate) SetMetadata(v map[string]interface{}) *ScheduledJobHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobHistoryUpdate) ClearMetadata() *ScheduledJobHistoryUpdate {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
 func (_u *ScheduledJobHistoryUpdate) Mutation() *ScheduledJobHistoryMutation {
 	return _u.mutation
@@ -317,6 +329,12 @@ func (_u *ScheduledJobHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if _u.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldJobRunnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -500,6 +518,18 @@ func (_u *ScheduledJobHistoryUpdateOne) ClearJobRunnerID() *ScheduledJobHistoryU
 	return _u
 }
 
+// SetMetadata sets the "metadata" field.
+func (_u *ScheduledJobHistoryUpdateOne) SetMetadata(v map[string]interface{}) *ScheduledJobHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *ScheduledJobHistoryUpdateOne) ClearMetadata() *ScheduledJobHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
+	return _u
+}
+
 // Mutation returns the ScheduledJobHistoryMutation object of the builder.
 func (_u *ScheduledJobHistoryUpdateOne) Mutation() *ScheduledJobHistoryMutation {
 	return _u.mutation
@@ -656,6 +686,12 @@ func (_u *ScheduledJobHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sch
 	}
 	if _u.mutation.JobRunnerIDCleared() {
 		_spec.ClearField(scheduledjobhistory.FieldJobRunnerID, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(scheduledjobhistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(scheduledjobhistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.ScheduledJobHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

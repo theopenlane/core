@@ -251,6 +251,12 @@ func (_c *JobRunnerCreate) SetNillableOs(v *string) *JobRunnerCreate {
 	return _c
 }
 
+// SetMetadata sets the "metadata" field.
+func (_c *JobRunnerCreate) SetMetadata(v map[string]interface{}) *JobRunnerCreate {
+	_c.mutation.SetMetadata(v)
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *JobRunnerCreate) SetID(v string) *JobRunnerCreate {
 	_c.mutation.SetID(v)
@@ -482,6 +488,10 @@ func (_c *JobRunnerCreate) createSpec() (*JobRunner, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Os(); ok {
 		_spec.SetField(jobrunner.FieldOs, field.TypeString, value)
 		_node.Os = value
+	}
+	if value, ok := _c.mutation.Metadata(); ok {
+		_spec.SetField(jobrunner.FieldMetadata, field.TypeJSON, value)
+		_node.Metadata = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

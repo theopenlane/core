@@ -217,6 +217,26 @@ func (_u *JobTemplateHistoryUpdate) ClearDescription() *JobTemplateHistoryUpdate
 	return _u
 }
 
+// SetRuntimePlatform sets the "runtime_platform" field.
+func (_u *JobTemplateHistoryUpdate) SetRuntimePlatform(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetRuntimePlatform(v)
+	return _u
+}
+
+// SetNillableRuntimePlatform sets the "runtime_platform" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdate) SetNillableRuntimePlatform(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetRuntimePlatform(*v)
+	}
+	return _u
+}
+
+// ClearRuntimePlatform clears the value of the "runtime_platform" field.
+func (_u *JobTemplateHistoryUpdate) ClearRuntimePlatform() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearRuntimePlatform()
+	return _u
+}
+
 // SetWindmillPath sets the "windmill_path" field.
 func (_u *JobTemplateHistoryUpdate) SetWindmillPath(v string) *JobTemplateHistoryUpdate {
 	_u.mutation.SetWindmillPath(v)
@@ -237,6 +257,26 @@ func (_u *JobTemplateHistoryUpdate) ClearWindmillPath() *JobTemplateHistoryUpdat
 	return _u
 }
 
+// SetScriptPath sets the "script_path" field.
+func (_u *JobTemplateHistoryUpdate) SetScriptPath(v string) *JobTemplateHistoryUpdate {
+	_u.mutation.SetScriptPath(v)
+	return _u
+}
+
+// SetNillableScriptPath sets the "script_path" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdate) SetNillableScriptPath(v *string) *JobTemplateHistoryUpdate {
+	if v != nil {
+		_u.SetScriptPath(*v)
+	}
+	return _u
+}
+
+// ClearScriptPath clears the value of the "script_path" field.
+func (_u *JobTemplateHistoryUpdate) ClearScriptPath() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearScriptPath()
+	return _u
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (_u *JobTemplateHistoryUpdate) SetDownloadURL(v string) *JobTemplateHistoryUpdate {
 	_u.mutation.SetDownloadURL(v)
@@ -248,6 +288,12 @@ func (_u *JobTemplateHistoryUpdate) SetNillableDownloadURL(v *string) *JobTempla
 	if v != nil {
 		_u.SetDownloadURL(*v)
 	}
+	return _u
+}
+
+// ClearDownloadURL clears the value of the "download_url" field.
+func (_u *JobTemplateHistoryUpdate) ClearDownloadURL() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearDownloadURL()
 	return _u
 }
 
@@ -286,6 +332,18 @@ func (_u *JobTemplateHistoryUpdate) SetNillableCron(v *models.Cron) *JobTemplate
 // ClearCron clears the value of the "cron" field.
 func (_u *JobTemplateHistoryUpdate) ClearCron() *JobTemplateHistoryUpdate {
 	_u.mutation.ClearCron()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *JobTemplateHistoryUpdate) SetMetadata(v map[string]interface{}) *JobTemplateHistoryUpdate {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *JobTemplateHistoryUpdate) ClearMetadata() *JobTemplateHistoryUpdate {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -425,14 +483,29 @@ func (_u *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.RuntimePlatform(); ok {
+		_spec.SetField(jobtemplatehistory.FieldRuntimePlatform, field.TypeString, value)
+	}
+	if _u.mutation.RuntimePlatformCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldRuntimePlatform, field.TypeString)
+	}
 	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
 	}
 	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
+	if value, ok := _u.mutation.ScriptPath(); ok {
+		_spec.SetField(jobtemplatehistory.FieldScriptPath, field.TypeString, value)
+	}
+	if _u.mutation.ScriptPathCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldScriptPath, field.TypeString)
+	}
 	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
+	}
+	if _u.mutation.DownloadURLCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldDownloadURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplatehistory.FieldConfiguration, field.TypeJSON, value)
@@ -450,6 +523,12 @@ func (_u *JobTemplateHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCron, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(jobtemplatehistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.JobTemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -659,6 +738,26 @@ func (_u *JobTemplateHistoryUpdateOne) ClearDescription() *JobTemplateHistoryUpd
 	return _u
 }
 
+// SetRuntimePlatform sets the "runtime_platform" field.
+func (_u *JobTemplateHistoryUpdateOne) SetRuntimePlatform(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetRuntimePlatform(v)
+	return _u
+}
+
+// SetNillableRuntimePlatform sets the "runtime_platform" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdateOne) SetNillableRuntimePlatform(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetRuntimePlatform(*v)
+	}
+	return _u
+}
+
+// ClearRuntimePlatform clears the value of the "runtime_platform" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearRuntimePlatform() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearRuntimePlatform()
+	return _u
+}
+
 // SetWindmillPath sets the "windmill_path" field.
 func (_u *JobTemplateHistoryUpdateOne) SetWindmillPath(v string) *JobTemplateHistoryUpdateOne {
 	_u.mutation.SetWindmillPath(v)
@@ -679,6 +778,26 @@ func (_u *JobTemplateHistoryUpdateOne) ClearWindmillPath() *JobTemplateHistoryUp
 	return _u
 }
 
+// SetScriptPath sets the "script_path" field.
+func (_u *JobTemplateHistoryUpdateOne) SetScriptPath(v string) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetScriptPath(v)
+	return _u
+}
+
+// SetNillableScriptPath sets the "script_path" field if the given value is not nil.
+func (_u *JobTemplateHistoryUpdateOne) SetNillableScriptPath(v *string) *JobTemplateHistoryUpdateOne {
+	if v != nil {
+		_u.SetScriptPath(*v)
+	}
+	return _u
+}
+
+// ClearScriptPath clears the value of the "script_path" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearScriptPath() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearScriptPath()
+	return _u
+}
+
 // SetDownloadURL sets the "download_url" field.
 func (_u *JobTemplateHistoryUpdateOne) SetDownloadURL(v string) *JobTemplateHistoryUpdateOne {
 	_u.mutation.SetDownloadURL(v)
@@ -690,6 +809,12 @@ func (_u *JobTemplateHistoryUpdateOne) SetNillableDownloadURL(v *string) *JobTem
 	if v != nil {
 		_u.SetDownloadURL(*v)
 	}
+	return _u
+}
+
+// ClearDownloadURL clears the value of the "download_url" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearDownloadURL() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearDownloadURL()
 	return _u
 }
 
@@ -728,6 +853,18 @@ func (_u *JobTemplateHistoryUpdateOne) SetNillableCron(v *models.Cron) *JobTempl
 // ClearCron clears the value of the "cron" field.
 func (_u *JobTemplateHistoryUpdateOne) ClearCron() *JobTemplateHistoryUpdateOne {
 	_u.mutation.ClearCron()
+	return _u
+}
+
+// SetMetadata sets the "metadata" field.
+func (_u *JobTemplateHistoryUpdateOne) SetMetadata(v map[string]interface{}) *JobTemplateHistoryUpdateOne {
+	_u.mutation.SetMetadata(v)
+	return _u
+}
+
+// ClearMetadata clears the value of the "metadata" field.
+func (_u *JobTemplateHistoryUpdateOne) ClearMetadata() *JobTemplateHistoryUpdateOne {
+	_u.mutation.ClearMetadata()
 	return _u
 }
 
@@ -897,14 +1034,29 @@ func (_u *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *JobT
 	if _u.mutation.DescriptionCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldDescription, field.TypeString)
 	}
+	if value, ok := _u.mutation.RuntimePlatform(); ok {
+		_spec.SetField(jobtemplatehistory.FieldRuntimePlatform, field.TypeString, value)
+	}
+	if _u.mutation.RuntimePlatformCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldRuntimePlatform, field.TypeString)
+	}
 	if value, ok := _u.mutation.WindmillPath(); ok {
 		_spec.SetField(jobtemplatehistory.FieldWindmillPath, field.TypeString, value)
 	}
 	if _u.mutation.WindmillPathCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldWindmillPath, field.TypeString)
 	}
+	if value, ok := _u.mutation.ScriptPath(); ok {
+		_spec.SetField(jobtemplatehistory.FieldScriptPath, field.TypeString, value)
+	}
+	if _u.mutation.ScriptPathCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldScriptPath, field.TypeString)
+	}
 	if value, ok := _u.mutation.DownloadURL(); ok {
 		_spec.SetField(jobtemplatehistory.FieldDownloadURL, field.TypeString, value)
+	}
+	if _u.mutation.DownloadURLCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldDownloadURL, field.TypeString)
 	}
 	if value, ok := _u.mutation.Configuration(); ok {
 		_spec.SetField(jobtemplatehistory.FieldConfiguration, field.TypeJSON, value)
@@ -922,6 +1074,12 @@ func (_u *JobTemplateHistoryUpdateOne) sqlSave(ctx context.Context) (_node *JobT
 	}
 	if _u.mutation.CronCleared() {
 		_spec.ClearField(jobtemplatehistory.FieldCron, field.TypeString)
+	}
+	if value, ok := _u.mutation.Metadata(); ok {
+		_spec.SetField(jobtemplatehistory.FieldMetadata, field.TypeJSON, value)
+	}
+	if _u.mutation.MetadataCleared() {
+		_spec.ClearField(jobtemplatehistory.FieldMetadata, field.TypeJSON)
 	}
 	_spec.Node.Schema = _u.schemaConfig.JobTemplateHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

@@ -471,10 +471,13 @@ var (
 		{Name: "cpe", Type: field.TypeString, Nullable: true},
 		{Name: "categories", Type: field.TypeJSON, Nullable: true},
 		{Name: "finding_assets", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_assets", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_assets", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_assets", Type: field.TypeString, Nullable: true},
 		{Name: "review_assets", Type: field.TypeString, Nullable: true},
 		{Name: "risk_assets", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_assets", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_assets", Type: field.TypeString, Nullable: true},
 	}
 	// AssetsTable holds the schema information for the "assets" table.
@@ -490,32 +493,50 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "assets_organizations_assets",
+				Symbol:     "assets_job_results_assets",
 				Columns:    []*schema.Column{AssetsColumns[19]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_job_templates_assets",
+				Columns:    []*schema.Column{AssetsColumns[20]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "assets_organizations_assets",
+				Columns:    []*schema.Column{AssetsColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_remediations_assets",
-				Columns:    []*schema.Column{AssetsColumns[20]},
+				Columns:    []*schema.Column{AssetsColumns[22]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_reviews_assets",
-				Columns:    []*schema.Column{AssetsColumns[21]},
+				Columns:    []*schema.Column{AssetsColumns[23]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "assets_risks_assets",
-				Columns:    []*schema.Column{AssetsColumns[22]},
+				Columns:    []*schema.Column{AssetsColumns[24]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "assets_scheduled_jobs_assets",
+				Columns:    []*schema.Column{AssetsColumns[25]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "assets_vulnerabilities_assets",
-				Columns:    []*schema.Column{AssetsColumns[23]},
+				Columns:    []*schema.Column{AssetsColumns[26]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -524,7 +545,7 @@ var (
 			{
 				Name:    "asset_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{AssetsColumns[19]},
+				Columns: []*schema.Column{AssetsColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -532,7 +553,7 @@ var (
 			{
 				Name:    "asset_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{AssetsColumns[12], AssetsColumns[19]},
+				Columns: []*schema.Column{AssetsColumns[12], AssetsColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -594,7 +615,10 @@ var (
 		{Name: "phone_number", Type: field.TypeString, Nullable: true},
 		{Name: "address", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DEACTIVATED", "SUSPENDED", "ONBOARDING"}, Default: "ACTIVE"},
+		{Name: "job_result_contacts", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_contacts", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_contacts", Type: field.TypeString, Nullable: true},
 	}
 	// ContactsTable holds the schema information for the "contacts" table.
 	ContactsTable = &schema.Table{
@@ -603,9 +627,27 @@ var (
 		PrimaryKey: []*schema.Column{ContactsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "contacts_organizations_contacts",
+				Symbol:     "contacts_job_results_contacts",
 				Columns:    []*schema.Column{ContactsColumns[15]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_job_templates_contacts",
+				Columns:    []*schema.Column{ContactsColumns[16]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_organizations_contacts",
+				Columns:    []*schema.Column{ContactsColumns[17]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "contacts_scheduled_jobs_contacts",
+				Columns:    []*schema.Column{ContactsColumns[18]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -613,7 +655,7 @@ var (
 			{
 				Name:    "contact_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ContactsColumns[15]},
+				Columns: []*schema.Column{ContactsColumns[17]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -696,6 +738,8 @@ var (
 		{Name: "responsible_party_id", Type: field.TypeString, Nullable: true},
 		{Name: "control_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_controls", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_controls", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_controls", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_controls", Type: field.TypeString, Nullable: true},
 		{Name: "review_controls", Type: field.TypeString, Nullable: true},
@@ -739,32 +783,44 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "controls_organizations_controls",
+				Symbol:     "controls_job_results_controls",
 				Columns:    []*schema.Column{ControlsColumns[39]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_job_templates_controls",
+				Columns:    []*schema.Column{ControlsColumns[40]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "controls_organizations_controls",
+				Columns:    []*schema.Column{ControlsColumns[41]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_remediations_controls",
-				Columns:    []*schema.Column{ControlsColumns[40]},
+				Columns:    []*schema.Column{ControlsColumns[42]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_reviews_controls",
-				Columns:    []*schema.Column{ControlsColumns[41]},
+				Columns:    []*schema.Column{ControlsColumns[43]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_standards_controls",
-				Columns:    []*schema.Column{ControlsColumns[42]},
+				Columns:    []*schema.Column{ControlsColumns[44]},
 				RefColumns: []*schema.Column{StandardsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "controls_vulnerabilities_controls",
-				Columns:    []*schema.Column{ControlsColumns[43]},
+				Columns:    []*schema.Column{ControlsColumns[45]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -773,12 +829,12 @@ var (
 			{
 				Name:    "control_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[7], ControlsColumns[41]},
 			},
 			{
 				Name:    "control_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[41]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -786,7 +842,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[33]},
+				Columns: []*schema.Column{ControlsColumns[44], ControlsColumns[33]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is NULL",
 				},
@@ -794,7 +850,7 @@ var (
 			{
 				Name:    "control_standard_id_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[33], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[44], ControlsColumns[33], ControlsColumns[41]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is not NULL",
 				},
@@ -802,7 +858,7 @@ var (
 			{
 				Name:    "control_ref_code_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ControlsColumns[33], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[33], ControlsColumns[41]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL AND owner_id is not NULL and standard_id is NULL",
 				},
@@ -810,17 +866,17 @@ var (
 			{
 				Name:    "control_standard_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[42], ControlsColumns[5], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[44], ControlsColumns[5], ControlsColumns[41]},
 			},
 			{
 				Name:    "control_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[12], ControlsColumns[5], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[12], ControlsColumns[5], ControlsColumns[41]},
 			},
 			{
 				Name:    "control_auditor_reference_id_deleted_at_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ControlsColumns[13], ControlsColumns[5], ControlsColumns[39]},
+				Columns: []*schema.Column{ControlsColumns[13], ControlsColumns[5], ControlsColumns[41]},
 			},
 		},
 	}
@@ -1938,11 +1994,14 @@ var (
 		{Name: "entity_type_id", Type: field.TypeString, Nullable: true},
 		{Name: "entity_type_entities", Type: field.TypeString, Nullable: true},
 		{Name: "finding_entities", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_entities", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_entities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_entities", Type: field.TypeString, Nullable: true},
 		{Name: "review_entities", Type: field.TypeString, Nullable: true},
 		{Name: "risk_entities", Type: field.TypeString, Nullable: true},
 		{Name: "scan_entities", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_entities", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_entities", Type: field.TypeString, Nullable: true},
 	}
 	// EntitiesTable holds the schema information for the "entities" table.
@@ -1970,38 +2029,56 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "entities_organizations_entities",
+				Symbol:     "entities_job_results_entities",
 				Columns:    []*schema.Column{EntitiesColumns[19]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_job_templates_entities",
+				Columns:    []*schema.Column{EntitiesColumns[20]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "entities_organizations_entities",
+				Columns:    []*schema.Column{EntitiesColumns[21]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_remediations_entities",
-				Columns:    []*schema.Column{EntitiesColumns[20]},
+				Columns:    []*schema.Column{EntitiesColumns[22]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_reviews_entities",
-				Columns:    []*schema.Column{EntitiesColumns[21]},
+				Columns:    []*schema.Column{EntitiesColumns[23]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_risks_entities",
-				Columns:    []*schema.Column{EntitiesColumns[22]},
+				Columns:    []*schema.Column{EntitiesColumns[24]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "entities_scans_entities",
-				Columns:    []*schema.Column{EntitiesColumns[23]},
+				Columns:    []*schema.Column{EntitiesColumns[25]},
 				RefColumns: []*schema.Column{ScansColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "entities_scheduled_jobs_entities",
+				Columns:    []*schema.Column{EntitiesColumns[26]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "entities_vulnerabilities_entities",
-				Columns:    []*schema.Column{EntitiesColumns[24]},
+				Columns:    []*schema.Column{EntitiesColumns[27]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2010,7 +2087,7 @@ var (
 			{
 				Name:    "entity_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EntitiesColumns[19]},
+				Columns: []*schema.Column{EntitiesColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2018,7 +2095,7 @@ var (
 			{
 				Name:    "entity_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EntitiesColumns[11], EntitiesColumns[19]},
+				Columns: []*schema.Column{EntitiesColumns[11], EntitiesColumns[21]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2197,7 +2274,10 @@ var (
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "SUBMITTED"},
+		{Name: "job_result_evidence", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_evidence", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_evidence", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
 	EvidencesTable = &schema.Table{
@@ -2206,9 +2286,27 @@ var (
 		PrimaryKey: []*schema.Column{EvidencesColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "evidences_organizations_evidence",
+				Symbol:     "evidences_job_results_evidence",
 				Columns:    []*schema.Column{EvidencesColumns[18]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "evidences_job_templates_evidence",
+				Columns:    []*schema.Column{EvidencesColumns[19]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "evidences_organizations_evidence",
+				Columns:    []*schema.Column{EvidencesColumns[20]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "evidences_scheduled_jobs_evidence",
+				Columns:    []*schema.Column{EvidencesColumns[21]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -2216,12 +2314,12 @@ var (
 			{
 				Name:    "evidence_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{EvidencesColumns[7], EvidencesColumns[18]},
+				Columns: []*schema.Column{EvidencesColumns[7], EvidencesColumns[20]},
 			},
 			{
 				Name:    "evidence_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{EvidencesColumns[18]},
+				Columns: []*schema.Column{EvidencesColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2537,9 +2635,12 @@ var (
 		{Name: "external_uri", Type: field.TypeString, Nullable: true},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
+		{Name: "job_result_findings", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_findings", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_findings", Type: field.TypeString, Nullable: true},
 		{Name: "review_findings", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_findings", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_findings", Type: field.TypeString, Nullable: true},
 	}
 	// FindingsTable holds the schema information for the "findings" table.
@@ -2549,26 +2650,44 @@ var (
 		PrimaryKey: []*schema.Column{FindingsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "findings_organizations_findings",
+				Symbol:     "findings_job_results_findings",
 				Columns:    []*schema.Column{FindingsColumns[49]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_job_templates_findings",
+				Columns:    []*schema.Column{FindingsColumns[50]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "findings_organizations_findings",
+				Columns:    []*schema.Column{FindingsColumns[51]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_remediations_findings",
-				Columns:    []*schema.Column{FindingsColumns[50]},
+				Columns:    []*schema.Column{FindingsColumns[52]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "findings_reviews_findings",
-				Columns:    []*schema.Column{FindingsColumns[51]},
+				Columns:    []*schema.Column{FindingsColumns[53]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "findings_scheduled_jobs_findings",
+				Columns:    []*schema.Column{FindingsColumns[54]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "findings_vulnerabilities_findings",
-				Columns:    []*schema.Column{FindingsColumns[52]},
+				Columns:    []*schema.Column{FindingsColumns[55]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -2577,12 +2696,12 @@ var (
 			{
 				Name:    "finding_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[7], FindingsColumns[49]},
+				Columns: []*schema.Column{FindingsColumns[7], FindingsColumns[51]},
 			},
 			{
 				Name:    "finding_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{FindingsColumns[49]},
+				Columns: []*schema.Column{FindingsColumns[51]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -2590,7 +2709,7 @@ var (
 			{
 				Name:    "finding_external_id_external_owner_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{FindingsColumns[12], FindingsColumns[13], FindingsColumns[49]},
+				Columns: []*schema.Column{FindingsColumns[12], FindingsColumns[13], FindingsColumns[51]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3655,11 +3774,13 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "compliance_job_id", Type: field.TypeString, Nullable: true},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"CANCELED", "SUCCESS", "PENDING", "FAILED"}},
-		{Name: "exit_code", Type: field.TypeInt},
+		{Name: "exit_code", Type: field.TypeInt, Nullable: true},
 		{Name: "finished_at", Type: field.TypeTime},
 		{Name: "started_at", Type: field.TypeTime},
 		{Name: "log", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "scheduled_job_id", Type: field.TypeString},
 		{Name: "file_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -3672,19 +3793,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_results_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{JobResultsColumns[12]},
+				Columns:    []*schema.Column{JobResultsColumns[14]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "job_results_files_file",
-				Columns:    []*schema.Column{JobResultsColumns[13]},
+				Columns:    []*schema.Column{JobResultsColumns[15]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "job_results_organizations_job_results",
-				Columns:    []*schema.Column{JobResultsColumns[14]},
+				Columns:    []*schema.Column{JobResultsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3693,7 +3814,7 @@ var (
 			{
 				Name:    "jobresult_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobResultsColumns[14]},
+				Columns: []*schema.Column{JobResultsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3720,6 +3841,7 @@ var (
 		{Name: "last_seen", Type: field.TypeTime, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "os", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobRunnersTable holds the schema information for the "job_runners" table.
@@ -3730,7 +3852,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_runners_organizations_job_runners",
-				Columns:    []*schema.Column{JobRunnersColumns[18]},
+				Columns:    []*schema.Column{JobRunnersColumns[19]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3739,12 +3861,12 @@ var (
 			{
 				Name:    "jobrunner_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[18]},
+				Columns: []*schema.Column{JobRunnersColumns[7], JobRunnersColumns[19]},
 			},
 			{
 				Name:    "jobrunner_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobRunnersColumns[18]},
+				Columns: []*schema.Column{JobRunnersColumns[19]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3862,10 +3984,13 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
+		{Name: "runtime_platform", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
-		{Name: "download_url", Type: field.TypeString},
+		{Name: "script_path", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString, Nullable: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// JobTemplatesTable holds the schema information for the "job_templates" table.
@@ -3876,7 +4001,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "job_templates_organizations_job_templates",
-				Columns:    []*schema.Column{JobTemplatesColumns[19]},
+				Columns:    []*schema.Column{JobTemplatesColumns[22]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -3885,12 +4010,12 @@ var (
 			{
 				Name:    "jobtemplate_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{JobTemplatesColumns[7], JobTemplatesColumns[19]},
+				Columns: []*schema.Column{JobTemplatesColumns[7], JobTemplatesColumns[22]},
 			},
 			{
 				Name:    "jobtemplate_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{JobTemplatesColumns[19]},
+				Columns: []*schema.Column{JobTemplatesColumns[22]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3918,10 +4043,13 @@ var (
 		{Name: "title", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "platform", Type: field.TypeEnum, Enums: []string{"GO", "TS"}},
+		{Name: "runtime_platform", Type: field.TypeString, Nullable: true},
 		{Name: "windmill_path", Type: field.TypeString, Nullable: true},
-		{Name: "download_url", Type: field.TypeString},
+		{Name: "script_path", Type: field.TypeString, Nullable: true},
+		{Name: "download_url", Type: field.TypeString, Nullable: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}
 	// JobTemplateHistoryTable holds the schema information for the "job_template_history" table.
 	JobTemplateHistoryTable = &schema.Table{
@@ -5669,6 +5797,8 @@ var (
 		{Name: "custom_type_enum_risks", Type: field.TypeString, Nullable: true},
 		{Name: "custom_type_enum_risk_categories", Type: field.TypeString, Nullable: true},
 		{Name: "finding_risks", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_risks", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_risks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_risks", Type: field.TypeString, Nullable: true},
 		{Name: "review_risks", Type: field.TypeString, Nullable: true},
@@ -5676,6 +5806,7 @@ var (
 		{Name: "risk_category_id", Type: field.TypeString, Nullable: true},
 		{Name: "stakeholder_id", Type: field.TypeString, Nullable: true},
 		{Name: "delegate_id", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_risks", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_risks", Type: field.TypeString, Nullable: true},
 	}
 	// RisksTable holds the schema information for the "risks" table.
@@ -5709,50 +5840,68 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "risks_organizations_risks",
+				Symbol:     "risks_job_results_risks",
 				Columns:    []*schema.Column{RisksColumns[25]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_job_templates_risks",
+				Columns:    []*schema.Column{RisksColumns[26]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "risks_organizations_risks",
+				Columns:    []*schema.Column{RisksColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_remediations_risks",
-				Columns:    []*schema.Column{RisksColumns[26]},
+				Columns:    []*schema.Column{RisksColumns[28]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_reviews_risks",
-				Columns:    []*schema.Column{RisksColumns[27]},
+				Columns:    []*schema.Column{RisksColumns[29]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risk_kind",
-				Columns:    []*schema.Column{RisksColumns[28]},
+				Columns:    []*schema.Column{RisksColumns[30]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_custom_type_enums_risk_category",
-				Columns:    []*schema.Column{RisksColumns[29]},
+				Columns:    []*schema.Column{RisksColumns[31]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_stakeholder",
-				Columns:    []*schema.Column{RisksColumns[30]},
+				Columns:    []*schema.Column{RisksColumns[32]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "risks_groups_delegate",
-				Columns:    []*schema.Column{RisksColumns[31]},
+				Columns:    []*schema.Column{RisksColumns[33]},
 				RefColumns: []*schema.Column{GroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "risks_scheduled_jobs_risks",
+				Columns:    []*schema.Column{RisksColumns[34]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "risks_vulnerabilities_risks",
-				Columns:    []*schema.Column{RisksColumns[32]},
+				Columns:    []*schema.Column{RisksColumns[35]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5761,12 +5910,12 @@ var (
 			{
 				Name:    "risk_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{RisksColumns[7], RisksColumns[25]},
+				Columns: []*schema.Column{RisksColumns[7], RisksColumns[27]},
 			},
 			{
 				Name:    "risk_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{RisksColumns[25]},
+				Columns: []*schema.Column{RisksColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -5938,6 +6087,7 @@ var (
 		{Name: "active", Type: field.TypeBool, Default: true},
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "job_id", Type: field.TypeString},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
@@ -5950,19 +6100,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_jobs_job_templates_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[11]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[12]},
 				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "scheduled_jobs_organizations_scheduled_jobs",
-				Columns:    []*schema.Column{ScheduledJobsColumns[12]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[13]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scheduled_jobs_job_runners_job_runner",
-				Columns:    []*schema.Column{ScheduledJobsColumns[13]},
+				Columns:    []*schema.Column{ScheduledJobsColumns[14]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -5971,12 +6121,12 @@ var (
 			{
 				Name:    "scheduledjob_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[12]},
+				Columns: []*schema.Column{ScheduledJobsColumns[7], ScheduledJobsColumns[13]},
 			},
 			{
 				Name:    "scheduledjob_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobsColumns[12]},
+				Columns: []*schema.Column{ScheduledJobsColumns[13]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6002,6 +6152,7 @@ var (
 		{Name: "configuration", Type: field.TypeJSON, Nullable: true},
 		{Name: "cron", Type: field.TypeString, Nullable: true},
 		{Name: "job_runner_id", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 	}
 	// ScheduledJobHistoryTable holds the schema information for the "scheduled_job_history" table.
 	ScheduledJobHistoryTable = &schema.Table{
@@ -6028,6 +6179,7 @@ var (
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "ACQUIRED"}, Default: "PENDING"},
 		{Name: "expected_execution_time", Type: field.TypeTime},
 		{Name: "script", Type: field.TypeString},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "scheduled_job_id", Type: field.TypeString},
 		{Name: "job_runner_id", Type: field.TypeString},
@@ -6040,19 +6192,19 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "scheduled_job_runs_organizations_scheduled_job_runs",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[10]},
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[11]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "scheduled_job_runs_scheduled_jobs_scheduled_job",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[11]},
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[12]},
 				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
 			{
 				Symbol:     "scheduled_job_runs_job_runners_job_runner",
-				Columns:    []*schema.Column{ScheduledJobRunsColumns[12]},
+				Columns:    []*schema.Column{ScheduledJobRunsColumns[13]},
 				RefColumns: []*schema.Column{JobRunnersColumns[0]},
 				OnDelete:   schema.NoAction,
 			},
@@ -6061,7 +6213,7 @@ var (
 			{
 				Name:    "scheduledjobrun_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{ScheduledJobRunsColumns[10]},
+				Columns: []*schema.Column{ScheduledJobRunsColumns[11]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6095,7 +6247,10 @@ var (
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_standards", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_standards", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_standards", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
@@ -6104,9 +6259,27 @@ var (
 		PrimaryKey: []*schema.Column{StandardsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "standards_organizations_standards",
+				Symbol:     "standards_job_results_standards",
 				Columns:    []*schema.Column{StandardsColumns[25]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_job_templates_standards",
+				Columns:    []*schema.Column{StandardsColumns[26]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_organizations_standards",
+				Columns:    []*schema.Column{StandardsColumns[27]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_scheduled_jobs_standards",
+				Columns:    []*schema.Column{StandardsColumns[28]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6114,7 +6287,7 @@ var (
 			{
 				Name:    "standard_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{StandardsColumns[25]},
+				Columns: []*schema.Column{StandardsColumns[27]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6679,9 +6852,12 @@ var (
 		{Name: "custom_type_enum_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "finding_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "integration_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "review_tasks", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_tasks", Type: field.TypeString, Nullable: true},
 		{Name: "task_kind_id", Type: field.TypeString, Nullable: true},
 		{Name: "assigner_id", Type: field.TypeString, Nullable: true},
 		{Name: "assignee_id", Type: field.TypeString, Nullable: true},
@@ -6712,44 +6888,62 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "tasks_organizations_tasks",
+				Symbol:     "tasks_job_results_tasks",
 				Columns:    []*schema.Column{TasksColumns[22]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_job_templates_tasks",
+				Columns:    []*schema.Column{TasksColumns[23]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tasks_organizations_tasks",
+				Columns:    []*schema.Column{TasksColumns[24]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_remediations_tasks",
-				Columns:    []*schema.Column{TasksColumns[23]},
+				Columns:    []*schema.Column{TasksColumns[25]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_reviews_tasks",
-				Columns:    []*schema.Column{TasksColumns[24]},
+				Columns:    []*schema.Column{TasksColumns[26]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
+				Symbol:     "tasks_scheduled_jobs_tasks",
+				Columns:    []*schema.Column{TasksColumns[27]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
 				Symbol:     "tasks_custom_type_enums_task_kind",
-				Columns:    []*schema.Column{TasksColumns[25]},
+				Columns:    []*schema.Column{TasksColumns[28]},
 				RefColumns: []*schema.Column{CustomTypeEnumsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assigner_tasks",
-				Columns:    []*schema.Column{TasksColumns[26]},
+				Columns:    []*schema.Column{TasksColumns[29]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_users_assignee_tasks",
-				Columns:    []*schema.Column{TasksColumns[27]},
+				Columns:    []*schema.Column{TasksColumns[30]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "tasks_vulnerabilities_tasks",
-				Columns:    []*schema.Column{TasksColumns[28]},
+				Columns:    []*schema.Column{TasksColumns[31]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6758,12 +6952,12 @@ var (
 			{
 				Name:    "task_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{TasksColumns[7], TasksColumns[22]},
+				Columns: []*schema.Column{TasksColumns[7], TasksColumns[24]},
 			},
 			{
 				Name:    "task_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TasksColumns[22]},
+				Columns: []*schema.Column{TasksColumns[24]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7652,9 +7846,12 @@ var (
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
 		{Name: "raw_payload", Type: field.TypeJSON, Nullable: true},
 		{Name: "finding_vulnerabilities", Type: field.TypeString, Nullable: true},
+		{Name: "job_result_vulnerabilities", Type: field.TypeString, Nullable: true},
+		{Name: "job_template_vulnerabilities", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_vulnerabilities", Type: field.TypeString, Nullable: true},
 		{Name: "review_vulnerabilities", Type: field.TypeString, Nullable: true},
+		{Name: "scheduled_job_vulnerabilities", Type: field.TypeString, Nullable: true},
 	}
 	// VulnerabilitiesTable holds the schema information for the "vulnerabilities" table.
 	VulnerabilitiesTable = &schema.Table{
@@ -7669,21 +7866,39 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "vulnerabilities_organizations_vulnerabilities",
+				Symbol:     "vulnerabilities_job_results_vulnerabilities",
 				Columns:    []*schema.Column{VulnerabilitiesColumns[42]},
+				RefColumns: []*schema.Column{JobResultsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_job_templates_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[43]},
+				RefColumns: []*schema.Column{JobTemplatesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_organizations_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[44]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_remediations_vulnerabilities",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[43]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[45]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "vulnerabilities_reviews_vulnerabilities",
-				Columns:    []*schema.Column{VulnerabilitiesColumns[44]},
+				Columns:    []*schema.Column{VulnerabilitiesColumns[46]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "vulnerabilities_scheduled_jobs_vulnerabilities",
+				Columns:    []*schema.Column{VulnerabilitiesColumns[47]},
+				RefColumns: []*schema.Column{ScheduledJobsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -7691,12 +7906,12 @@ var (
 			{
 				Name:    "vulnerability_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[42]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[7], VulnerabilitiesColumns[44]},
 			},
 			{
 				Name:    "vulnerability_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{VulnerabilitiesColumns[42]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7704,7 +7919,7 @@ var (
 			{
 				Name:    "vulnerability_external_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[13], VulnerabilitiesColumns[42]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[13], VulnerabilitiesColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7712,7 +7927,7 @@ var (
 			{
 				Name:    "vulnerability_cve_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{VulnerabilitiesColumns[14], VulnerabilitiesColumns[42]},
+				Columns: []*schema.Column{VulnerabilitiesColumns[14], VulnerabilitiesColumns[44]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -11787,15 +12002,21 @@ func init() {
 		Table: "assessment_response_history",
 	}
 	AssetsTable.ForeignKeys[0].RefTable = FindingsTable
-	AssetsTable.ForeignKeys[1].RefTable = OrganizationsTable
-	AssetsTable.ForeignKeys[2].RefTable = RemediationsTable
-	AssetsTable.ForeignKeys[3].RefTable = ReviewsTable
-	AssetsTable.ForeignKeys[4].RefTable = RisksTable
-	AssetsTable.ForeignKeys[5].RefTable = VulnerabilitiesTable
+	AssetsTable.ForeignKeys[1].RefTable = JobResultsTable
+	AssetsTable.ForeignKeys[2].RefTable = JobTemplatesTable
+	AssetsTable.ForeignKeys[3].RefTable = OrganizationsTable
+	AssetsTable.ForeignKeys[4].RefTable = RemediationsTable
+	AssetsTable.ForeignKeys[5].RefTable = ReviewsTable
+	AssetsTable.ForeignKeys[6].RefTable = RisksTable
+	AssetsTable.ForeignKeys[7].RefTable = ScheduledJobsTable
+	AssetsTable.ForeignKeys[8].RefTable = VulnerabilitiesTable
 	AssetHistoryTable.Annotation = &entsql.Annotation{
 		Table: "asset_history",
 	}
-	ContactsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	ContactsTable.ForeignKeys[0].RefTable = JobResultsTable
+	ContactsTable.ForeignKeys[1].RefTable = JobTemplatesTable
+	ContactsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	ContactsTable.ForeignKeys[3].RefTable = ScheduledJobsTable
 	ContactHistoryTable.Annotation = &entsql.Annotation{
 		Table: "contact_history",
 	}
@@ -11804,11 +12025,13 @@ func init() {
 	ControlsTable.ForeignKeys[2].RefTable = EntitiesTable
 	ControlsTable.ForeignKeys[3].RefTable = CustomTypeEnumsTable
 	ControlsTable.ForeignKeys[4].RefTable = CustomTypeEnumsTable
-	ControlsTable.ForeignKeys[5].RefTable = OrganizationsTable
-	ControlsTable.ForeignKeys[6].RefTable = RemediationsTable
-	ControlsTable.ForeignKeys[7].RefTable = ReviewsTable
-	ControlsTable.ForeignKeys[8].RefTable = StandardsTable
-	ControlsTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
+	ControlsTable.ForeignKeys[5].RefTable = JobResultsTable
+	ControlsTable.ForeignKeys[6].RefTable = JobTemplatesTable
+	ControlsTable.ForeignKeys[7].RefTable = OrganizationsTable
+	ControlsTable.ForeignKeys[8].RefTable = RemediationsTable
+	ControlsTable.ForeignKeys[9].RefTable = ReviewsTable
+	ControlsTable.ForeignKeys[10].RefTable = StandardsTable
+	ControlsTable.ForeignKeys[11].RefTable = VulnerabilitiesTable
 	ControlHistoryTable.Annotation = &entsql.Annotation{
 		Table: "control_history",
 	}
@@ -11873,12 +12096,15 @@ func init() {
 	EntitiesTable.ForeignKeys[0].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[1].RefTable = EntityTypesTable
 	EntitiesTable.ForeignKeys[2].RefTable = FindingsTable
-	EntitiesTable.ForeignKeys[3].RefTable = OrganizationsTable
-	EntitiesTable.ForeignKeys[4].RefTable = RemediationsTable
-	EntitiesTable.ForeignKeys[5].RefTable = ReviewsTable
-	EntitiesTable.ForeignKeys[6].RefTable = RisksTable
-	EntitiesTable.ForeignKeys[7].RefTable = ScansTable
-	EntitiesTable.ForeignKeys[8].RefTable = VulnerabilitiesTable
+	EntitiesTable.ForeignKeys[3].RefTable = JobResultsTable
+	EntitiesTable.ForeignKeys[4].RefTable = JobTemplatesTable
+	EntitiesTable.ForeignKeys[5].RefTable = OrganizationsTable
+	EntitiesTable.ForeignKeys[6].RefTable = RemediationsTable
+	EntitiesTable.ForeignKeys[7].RefTable = ReviewsTable
+	EntitiesTable.ForeignKeys[8].RefTable = RisksTable
+	EntitiesTable.ForeignKeys[9].RefTable = ScansTable
+	EntitiesTable.ForeignKeys[10].RefTable = ScheduledJobsTable
+	EntitiesTable.ForeignKeys[11].RefTable = VulnerabilitiesTable
 	EntityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_history",
 	}
@@ -11888,7 +12114,10 @@ func init() {
 	}
 	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
 	EventsTable.ForeignKeys[1].RefTable = ExportsTable
-	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	EvidencesTable.ForeignKeys[0].RefTable = JobResultsTable
+	EvidencesTable.ForeignKeys[1].RefTable = JobTemplatesTable
+	EvidencesTable.ForeignKeys[2].RefTable = OrganizationsTable
+	EvidencesTable.ForeignKeys[3].RefTable = ScheduledJobsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
 	}
@@ -11904,10 +12133,13 @@ func init() {
 	FileHistoryTable.Annotation = &entsql.Annotation{
 		Table: "file_history",
 	}
-	FindingsTable.ForeignKeys[0].RefTable = OrganizationsTable
-	FindingsTable.ForeignKeys[1].RefTable = RemediationsTable
-	FindingsTable.ForeignKeys[2].RefTable = ReviewsTable
-	FindingsTable.ForeignKeys[3].RefTable = VulnerabilitiesTable
+	FindingsTable.ForeignKeys[0].RefTable = JobResultsTable
+	FindingsTable.ForeignKeys[1].RefTable = JobTemplatesTable
+	FindingsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	FindingsTable.ForeignKeys[3].RefTable = RemediationsTable
+	FindingsTable.ForeignKeys[4].RefTable = ReviewsTable
+	FindingsTable.ForeignKeys[5].RefTable = ScheduledJobsTable
+	FindingsTable.ForeignKeys[6].RefTable = VulnerabilitiesTable
 	FindingControlsTable.ForeignKeys[0].RefTable = FindingsTable
 	FindingControlsTable.ForeignKeys[1].RefTable = ControlsTable
 	FindingControlsTable.ForeignKeys[2].RefTable = StandardsTable
@@ -12106,14 +12338,17 @@ func init() {
 	RisksTable.ForeignKeys[1].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[2].RefTable = CustomTypeEnumsTable
 	RisksTable.ForeignKeys[3].RefTable = FindingsTable
-	RisksTable.ForeignKeys[4].RefTable = OrganizationsTable
-	RisksTable.ForeignKeys[5].RefTable = RemediationsTable
-	RisksTable.ForeignKeys[6].RefTable = ReviewsTable
-	RisksTable.ForeignKeys[7].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[8].RefTable = CustomTypeEnumsTable
-	RisksTable.ForeignKeys[9].RefTable = GroupsTable
-	RisksTable.ForeignKeys[10].RefTable = GroupsTable
-	RisksTable.ForeignKeys[11].RefTable = VulnerabilitiesTable
+	RisksTable.ForeignKeys[4].RefTable = JobResultsTable
+	RisksTable.ForeignKeys[5].RefTable = JobTemplatesTable
+	RisksTable.ForeignKeys[6].RefTable = OrganizationsTable
+	RisksTable.ForeignKeys[7].RefTable = RemediationsTable
+	RisksTable.ForeignKeys[8].RefTable = ReviewsTable
+	RisksTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
+	RisksTable.ForeignKeys[10].RefTable = CustomTypeEnumsTable
+	RisksTable.ForeignKeys[11].RefTable = GroupsTable
+	RisksTable.ForeignKeys[12].RefTable = GroupsTable
+	RisksTable.ForeignKeys[13].RefTable = ScheduledJobsTable
+	RisksTable.ForeignKeys[14].RefTable = VulnerabilitiesTable
 	RiskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "risk_history",
 	}
@@ -12135,7 +12370,10 @@ func init() {
 	ScheduledJobRunsTable.ForeignKeys[0].RefTable = OrganizationsTable
 	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ScheduledJobsTable
 	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
-	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	StandardsTable.ForeignKeys[0].RefTable = JobResultsTable
+	StandardsTable.ForeignKeys[1].RefTable = JobTemplatesTable
+	StandardsTable.ForeignKeys[2].RefTable = OrganizationsTable
+	StandardsTable.ForeignKeys[3].RefTable = ScheduledJobsTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
@@ -12167,13 +12405,16 @@ func init() {
 	TasksTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	TasksTable.ForeignKeys[1].RefTable = FindingsTable
 	TasksTable.ForeignKeys[2].RefTable = IntegrationsTable
-	TasksTable.ForeignKeys[3].RefTable = OrganizationsTable
-	TasksTable.ForeignKeys[4].RefTable = RemediationsTable
-	TasksTable.ForeignKeys[5].RefTable = ReviewsTable
-	TasksTable.ForeignKeys[6].RefTable = CustomTypeEnumsTable
-	TasksTable.ForeignKeys[7].RefTable = UsersTable
-	TasksTable.ForeignKeys[8].RefTable = UsersTable
-	TasksTable.ForeignKeys[9].RefTable = VulnerabilitiesTable
+	TasksTable.ForeignKeys[3].RefTable = JobResultsTable
+	TasksTable.ForeignKeys[4].RefTable = JobTemplatesTable
+	TasksTable.ForeignKeys[5].RefTable = OrganizationsTable
+	TasksTable.ForeignKeys[6].RefTable = RemediationsTable
+	TasksTable.ForeignKeys[7].RefTable = ReviewsTable
+	TasksTable.ForeignKeys[8].RefTable = ScheduledJobsTable
+	TasksTable.ForeignKeys[9].RefTable = CustomTypeEnumsTable
+	TasksTable.ForeignKeys[10].RefTable = UsersTable
+	TasksTable.ForeignKeys[11].RefTable = UsersTable
+	TasksTable.ForeignKeys[12].RefTable = VulnerabilitiesTable
 	TaskHistoryTable.Annotation = &entsql.Annotation{
 		Table: "task_history",
 	}
@@ -12232,9 +12473,12 @@ func init() {
 		Table: "user_setting_history",
 	}
 	VulnerabilitiesTable.ForeignKeys[0].RefTable = FindingsTable
-	VulnerabilitiesTable.ForeignKeys[1].RefTable = OrganizationsTable
-	VulnerabilitiesTable.ForeignKeys[2].RefTable = RemediationsTable
-	VulnerabilitiesTable.ForeignKeys[3].RefTable = ReviewsTable
+	VulnerabilitiesTable.ForeignKeys[1].RefTable = JobResultsTable
+	VulnerabilitiesTable.ForeignKeys[2].RefTable = JobTemplatesTable
+	VulnerabilitiesTable.ForeignKeys[3].RefTable = OrganizationsTable
+	VulnerabilitiesTable.ForeignKeys[4].RefTable = RemediationsTable
+	VulnerabilitiesTable.ForeignKeys[5].RefTable = ReviewsTable
+	VulnerabilitiesTable.ForeignKeys[6].RefTable = ScheduledJobsTable
 	VulnerabilityHistoryTable.Annotation = &entsql.Annotation{
 		Table: "vulnerability_history",
 	}

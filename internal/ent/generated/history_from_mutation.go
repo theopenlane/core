@@ -8311,8 +8311,16 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPlatform(platform)
 	}
 
+	if runtimePlatform, exists := m.RuntimePlatform(); exists {
+		create = create.SetRuntimePlatform(runtimePlatform)
+	}
+
 	if windmillPath, exists := m.WindmillPath(); exists {
 		create = create.SetWindmillPath(windmillPath)
+	}
+
+	if scriptPath, exists := m.ScriptPath(); exists {
+		create = create.SetScriptPath(scriptPath)
 	}
 
 	if downloadURL, exists := m.DownloadURL(); exists {
@@ -8325,6 +8333,10 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 
 	if cron, exists := m.Cron(); exists {
 		create = create.SetNillableCron(&cron)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
 	}
 
 	_, err := create.Save(ctx)
@@ -8448,10 +8460,22 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPlatform(jobtemplate.Platform)
 		}
 
+		if runtimePlatform, exists := m.RuntimePlatform(); exists {
+			create = create.SetRuntimePlatform(runtimePlatform)
+		} else {
+			create = create.SetRuntimePlatform(jobtemplate.RuntimePlatform)
+		}
+
 		if windmillPath, exists := m.WindmillPath(); exists {
 			create = create.SetWindmillPath(windmillPath)
 		} else {
 			create = create.SetWindmillPath(jobtemplate.WindmillPath)
+		}
+
+		if scriptPath, exists := m.ScriptPath(); exists {
+			create = create.SetScriptPath(scriptPath)
+		} else {
+			create = create.SetScriptPath(jobtemplate.ScriptPath)
 		}
 
 		if downloadURL, exists := m.DownloadURL(); exists {
@@ -8470,6 +8494,12 @@ func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetNillableCron(&cron)
 		} else {
 			create = create.SetNillableCron(jobtemplate.Cron)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(jobtemplate.Metadata)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -8522,10 +8552,13 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetTitle(jobtemplate.Title).
 			SetDescription(jobtemplate.Description).
 			SetPlatform(jobtemplate.Platform).
+			SetRuntimePlatform(jobtemplate.RuntimePlatform).
 			SetWindmillPath(jobtemplate.WindmillPath).
+			SetScriptPath(jobtemplate.ScriptPath).
 			SetDownloadURL(jobtemplate.DownloadURL).
 			SetConfiguration(jobtemplate.Configuration).
 			SetNillableCron(jobtemplate.Cron).
+			SetMetadata(jobtemplate.Metadata).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -13048,6 +13081,10 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 		create = create.SetJobRunnerID(jobRunnerID)
 	}
 
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -13157,6 +13194,12 @@ func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) erro
 			create = create.SetJobRunnerID(scheduledjob.JobRunnerID)
 		}
 
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(scheduledjob.Metadata)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -13205,6 +13248,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 			SetConfiguration(scheduledjob.Configuration).
 			SetNillableCron(scheduledjob.Cron).
 			SetJobRunnerID(scheduledjob.JobRunnerID).
+			SetMetadata(scheduledjob.Metadata).
 			Save(ctx)
 		if err != nil {
 			return err

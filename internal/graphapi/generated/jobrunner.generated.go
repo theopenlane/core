@@ -86,6 +86,8 @@ func (ec *executionContext) fieldContext_JobRunnerCreatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_version(ctx, field)
 			case "os":
 				return ec.fieldContext_JobRunner_os(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobRunner_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":
@@ -184,6 +186,8 @@ func (ec *executionContext) fieldContext_JobRunnerUpdatePayload_jobRunner(_ cont
 				return ec.fieldContext_JobRunner_version(ctx, field)
 			case "os":
 				return ec.fieldContext_JobRunner_os(ctx, field)
+			case "metadata":
+				return ec.fieldContext_JobRunner_metadata(ctx, field)
 			case "owner":
 				return ec.fieldContext_JobRunner_owner(ctx, field)
 			case "jobRunnerTokens":

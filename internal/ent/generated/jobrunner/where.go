@@ -1213,6 +1213,16 @@ func OsContainsFold(v string) predicate.JobRunner {
 	return predicate.JobRunner(sql.FieldContainsFold(FieldOs, v))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.JobRunner {
+	return predicate.JobRunner(sql.FieldNotNull(FieldMetadata))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.JobRunner {
 	return predicate.JobRunner(func(s *sql.Selector) {

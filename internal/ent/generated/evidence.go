@@ -58,8 +58,11 @@ type Evidence struct {
 	Status enums.EvidenceStatus `json:"status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the EvidenceQuery when eager-loading is set.
-	Edges        EvidenceEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                  EvidenceEdges `json:"edges"`
+	job_result_evidence    *string
+	job_template_evidence  *string
+	scheduled_job_evidence *string
+	selectValues           sql.SelectValues
 }
 
 // EvidenceEdges holds the relations/edges for other nodes in the graph.
@@ -182,6 +185,12 @@ func (*Evidence) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case evidence.FieldCreatedAt, evidence.FieldUpdatedAt, evidence.FieldDeletedAt, evidence.FieldCreationDate, evidence.FieldRenewalDate:
 			values[i] = new(sql.NullTime)
+		case evidence.ForeignKeys[0]: // job_result_evidence
+			values[i] = new(sql.NullString)
+		case evidence.ForeignKeys[1]: // job_template_evidence
+			values[i] = new(sql.NullString)
+		case evidence.ForeignKeys[2]: // scheduled_job_evidence
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -312,6 +321,27 @@ func (_m *Evidence) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field status", values[i])
 			} else if value.Valid {
 				_m.Status = enums.EvidenceStatus(value.String)
+			}
+		case evidence.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_evidence", values[i])
+			} else if value.Valid {
+				_m.job_result_evidence = new(string)
+				*_m.job_result_evidence = value.String
+			}
+		case evidence.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_evidence", values[i])
+			} else if value.Valid {
+				_m.job_template_evidence = new(string)
+				*_m.job_template_evidence = value.String
+			}
+		case evidence.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_evidence", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_evidence = new(string)
+				*_m.scheduled_job_evidence = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

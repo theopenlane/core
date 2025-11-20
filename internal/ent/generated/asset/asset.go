@@ -142,9 +142,12 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"finding_assets",
+	"job_result_assets",
+	"job_template_assets",
 	"remediation_assets",
 	"review_assets",
 	"risk_assets",
+	"scheduled_job_assets",
 	"vulnerability_assets",
 }
 

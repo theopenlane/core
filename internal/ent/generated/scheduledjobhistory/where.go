@@ -1026,6 +1026,16 @@ func JobRunnerIDContainsFold(v string) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.FieldContainsFold(FieldJobRunnerID, v))
 }
 
+// MetadataIsNil applies the IsNil predicate on the "metadata" field.
+func MetadataIsNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldIsNull(FieldMetadata))
+}
+
+// MetadataNotNil applies the NotNil predicate on the "metadata" field.
+func MetadataNotNil() predicate.ScheduledJobHistory {
+	return predicate.ScheduledJobHistory(sql.FieldNotNull(FieldMetadata))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.ScheduledJobHistory) predicate.ScheduledJobHistory {
 	return predicate.ScheduledJobHistory(sql.AndPredicates(predicates...))

@@ -4928,6 +4928,216 @@ func (_m *JobResult) File(ctx context.Context) (*File, error) {
 	return result, err
 }
 
+func (_m *JobResult) Evidence(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
+) (*EvidenceConnection, error) {
+	opts := []EvidencePaginateOption{
+		WithEvidenceOrder(orderBy),
+		WithEvidenceFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedEvidence(alias); err == nil || hasTotalCount {
+		pager, err := newEvidencePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EvidenceConnection{Edges: []*EvidenceEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEvidence().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Risks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RiskOrder, where *RiskWhereInput,
+) (*RiskConnection, error) {
+	opts := []RiskPaginateOption{
+		WithRiskOrder(orderBy),
+		WithRiskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedRisks(alias); err == nil || hasTotalCount {
+		pager, err := newRiskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RiskConnection{Edges: []*RiskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Controls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
+) (*ControlConnection, error) {
+	opts := []ControlPaginateOption{
+		WithControlOrder(orderBy),
+		WithControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedControls(alias); err == nil || hasTotalCount {
+		pager, err := newControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Standards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*StandardOrder, where *StandardWhereInput,
+) (*StandardConnection, error) {
+	opts := []StandardPaginateOption{
+		WithStandardOrder(orderBy),
+		WithStandardFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	if nodes, err := _m.NamedStandards(alias); err == nil || hasTotalCount {
+		pager, err := newStandardPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &StandardConnection{Edges: []*StandardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryStandards().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Assets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssetOrder, where *AssetWhereInput,
+) (*AssetConnection, error) {
+	opts := []AssetPaginateOption{
+		WithAssetOrder(orderBy),
+		WithAssetFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	if nodes, err := _m.NamedAssets(alias); err == nil || hasTotalCount {
+		pager, err := newAssetPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssetConnection{Edges: []*AssetEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssets().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Contacts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ContactOrder, where *ContactWhereInput,
+) (*ContactConnection, error) {
+	opts := []ContactPaginateOption{
+		WithContactOrder(orderBy),
+		WithContactFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	if nodes, err := _m.NamedContacts(alias); err == nil || hasTotalCount {
+		pager, err := newContactPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ContactConnection{Edges: []*ContactEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryContacts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Entities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	if nodes, err := _m.NamedEntities(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEntities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobResult) Tasks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TaskOrder, where *TaskWhereInput,
+) (*TaskConnection, error) {
+	opts := []TaskPaginateOption{
+		WithTaskOrder(orderBy),
+		WithTaskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	if nodes, err := _m.NamedTasks(alias); err == nil || hasTotalCount {
+		pager, err := newTaskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TaskConnection{Edges: []*TaskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *JobRunner) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -5029,6 +5239,216 @@ func (_m *JobTemplate) ScheduledJobs(
 		return conn, nil
 	}
 	return _m.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Evidence(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
+) (*EvidenceConnection, error) {
+	opts := []EvidencePaginateOption{
+		WithEvidenceOrder(orderBy),
+		WithEvidenceFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedEvidence(alias); err == nil || hasTotalCount {
+		pager, err := newEvidencePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EvidenceConnection{Edges: []*EvidenceEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEvidence().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Risks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RiskOrder, where *RiskWhereInput,
+) (*RiskConnection, error) {
+	opts := []RiskPaginateOption{
+		WithRiskOrder(orderBy),
+		WithRiskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedRisks(alias); err == nil || hasTotalCount {
+		pager, err := newRiskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RiskConnection{Edges: []*RiskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Controls(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ControlOrder, where *ControlWhereInput,
+) (*ControlConnection, error) {
+	opts := []ControlPaginateOption{
+		WithControlOrder(orderBy),
+		WithControlFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedControls(alias); err == nil || hasTotalCount {
+		pager, err := newControlPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ControlConnection{Edges: []*ControlEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryControls().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Standards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*StandardOrder, where *StandardWhereInput,
+) (*StandardConnection, error) {
+	opts := []StandardPaginateOption{
+		WithStandardOrder(orderBy),
+		WithStandardFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedStandards(alias); err == nil || hasTotalCount {
+		pager, err := newStandardPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &StandardConnection{Edges: []*StandardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryStandards().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Assets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssetOrder, where *AssetWhereInput,
+) (*AssetConnection, error) {
+	opts := []AssetPaginateOption{
+		WithAssetOrder(orderBy),
+		WithAssetFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedAssets(alias); err == nil || hasTotalCount {
+		pager, err := newAssetPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssetConnection{Edges: []*AssetEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssets().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Contacts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ContactOrder, where *ContactWhereInput,
+) (*ContactConnection, error) {
+	opts := []ContactPaginateOption{
+		WithContactOrder(orderBy),
+		WithContactFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	if nodes, err := _m.NamedContacts(alias); err == nil || hasTotalCount {
+		pager, err := newContactPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ContactConnection{Edges: []*ContactEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryContacts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Entities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	if nodes, err := _m.NamedEntities(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEntities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *JobTemplate) Tasks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TaskOrder, where *TaskWhereInput,
+) (*TaskConnection, error) {
+	opts := []TaskPaginateOption{
+		WithTaskOrder(orderBy),
+		WithTaskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	if nodes, err := _m.NamedTasks(alias); err == nil || hasTotalCount {
+		pager, err := newTaskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TaskConnection{Edges: []*TaskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *MappableDomain) CustomDomains(
@@ -9183,6 +9603,195 @@ func (_m *ScheduledJob) Subcontrols(
 		return conn, nil
 	}
 	return _m.QuerySubcontrols().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Evidence(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
+) (*EvidenceConnection, error) {
+	opts := []EvidencePaginateOption{
+		WithEvidenceOrder(orderBy),
+		WithEvidenceFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedEvidence(alias); err == nil || hasTotalCount {
+		pager, err := newEvidencePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EvidenceConnection{Edges: []*EvidenceEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEvidence().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Findings(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingOrder, where *FindingWhereInput,
+) (*FindingConnection, error) {
+	opts := []FindingPaginateOption{
+		WithFindingOrder(orderBy),
+		WithFindingFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedFindings(alias); err == nil || hasTotalCount {
+		pager, err := newFindingPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &FindingConnection{Edges: []*FindingEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryFindings().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Risks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*RiskOrder, where *RiskWhereInput,
+) (*RiskConnection, error) {
+	opts := []RiskPaginateOption{
+		WithRiskOrder(orderBy),
+		WithRiskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedRisks(alias); err == nil || hasTotalCount {
+		pager, err := newRiskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &RiskConnection{Edges: []*RiskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryRisks().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Standards(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*StandardOrder, where *StandardWhereInput,
+) (*StandardConnection, error) {
+	opts := []StandardPaginateOption{
+		WithStandardOrder(orderBy),
+		WithStandardFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	if nodes, err := _m.NamedStandards(alias); err == nil || hasTotalCount {
+		pager, err := newStandardPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &StandardConnection{Edges: []*StandardEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryStandards().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Vulnerabilities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*VulnerabilityOrder, where *VulnerabilityWhereInput,
+) (*VulnerabilityConnection, error) {
+	opts := []VulnerabilityPaginateOption{
+		WithVulnerabilityOrder(orderBy),
+		WithVulnerabilityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedVulnerabilities(alias); err == nil || hasTotalCount {
+		pager, err := newVulnerabilityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &VulnerabilityConnection{Edges: []*VulnerabilityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Assets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*AssetOrder, where *AssetWhereInput,
+) (*AssetConnection, error) {
+	opts := []AssetPaginateOption{
+		WithAssetOrder(orderBy),
+		WithAssetFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
+	if nodes, err := _m.NamedAssets(alias); err == nil || hasTotalCount {
+		pager, err := newAssetPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &AssetConnection{Edges: []*AssetEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAssets().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Contacts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*ContactOrder, where *ContactWhereInput,
+) (*ContactConnection, error) {
+	opts := []ContactPaginateOption{
+		WithContactOrder(orderBy),
+		WithContactFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	if nodes, err := _m.NamedContacts(alias); err == nil || hasTotalCount {
+		pager, err := newContactPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &ContactConnection{Edges: []*ContactEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryContacts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Entities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EntityOrder, where *EntityWhereInput,
+) (*EntityConnection, error) {
+	opts := []EntityPaginateOption{
+		WithEntityOrder(orderBy),
+		WithEntityFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	if nodes, err := _m.NamedEntities(alias); err == nil || hasTotalCount {
+		pager, err := newEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EntityConnection{Edges: []*EntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEntities().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *ScheduledJob) Tasks(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TaskOrder, where *TaskWhereInput,
+) (*TaskConnection, error) {
+	opts := []TaskPaginateOption{
+		WithTaskOrder(orderBy),
+		WithTaskFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	if nodes, err := _m.NamedTasks(alias); err == nil || hasTotalCount {
+		pager, err := newTaskPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TaskConnection{Edges: []*TaskEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *ScheduledJob) JobRunner(ctx context.Context) (*JobRunner, error) {

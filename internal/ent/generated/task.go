@@ -73,8 +73,11 @@ type Task struct {
 	custom_type_enum_tasks *string
 	finding_tasks          *string
 	integration_tasks      *string
+	job_result_tasks       *string
+	job_template_tasks     *string
 	remediation_tasks      *string
 	review_tasks           *string
+	scheduled_job_tasks    *string
 	vulnerability_tasks    *string
 	selectValues           sql.SelectValues
 }
@@ -318,11 +321,17 @@ func (*Task) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case task.ForeignKeys[2]: // integration_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[3]: // remediation_tasks
+		case task.ForeignKeys[3]: // job_result_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[4]: // review_tasks
+		case task.ForeignKeys[4]: // job_template_tasks
 			values[i] = new(sql.NullString)
-		case task.ForeignKeys[5]: // vulnerability_tasks
+		case task.ForeignKeys[5]: // remediation_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[6]: // review_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[7]: // scheduled_job_tasks
+			values[i] = new(sql.NullString)
+		case task.ForeignKeys[8]: // vulnerability_tasks
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -506,19 +515,40 @@ func (_m *Task) assignValues(columns []string, values []any) error {
 			}
 		case task.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_tasks", values[i])
+			} else if value.Valid {
+				_m.job_result_tasks = new(string)
+				*_m.job_result_tasks = value.String
+			}
+		case task.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_tasks", values[i])
+			} else if value.Valid {
+				_m.job_template_tasks = new(string)
+				*_m.job_template_tasks = value.String
+			}
+		case task.ForeignKeys[5]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_tasks", values[i])
 			} else if value.Valid {
 				_m.remediation_tasks = new(string)
 				*_m.remediation_tasks = value.String
 			}
-		case task.ForeignKeys[4]:
+		case task.ForeignKeys[6]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_tasks", values[i])
 			} else if value.Valid {
 				_m.review_tasks = new(string)
 				*_m.review_tasks = value.String
 			}
-		case task.ForeignKeys[5]:
+		case task.ForeignKeys[7]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_tasks", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_tasks = new(string)
+				*_m.scheduled_job_tasks = value.String
+			}
+		case task.ForeignKeys[8]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_tasks", values[i])
 			} else if value.Valid {

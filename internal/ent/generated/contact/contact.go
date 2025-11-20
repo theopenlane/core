@@ -95,6 +95,14 @@ var Columns = []string{
 	FieldStatus,
 }
 
+// ForeignKeys holds the SQL foreign-keys that are owned by the "contacts"
+// table and are not defined as standalone fields in the schema.
+var ForeignKeys = []string{
+	"job_result_contacts",
+	"job_template_contacts",
+	"scheduled_job_contacts",
+}
+
 var (
 	// EntitiesPrimaryKey and EntitiesColumn2 are the table columns denoting the
 	// primary key for the entities relation (M2M).
@@ -108,6 +116,11 @@ var (
 func ValidColumn(column string) bool {
 	for i := range Columns {
 		if column == Columns[i] {
+			return true
+		}
+	}
+	for i := range ForeignKeys {
+		if column == ForeignKeys[i] {
 			return true
 		}
 	}

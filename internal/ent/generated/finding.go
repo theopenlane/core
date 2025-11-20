@@ -121,8 +121,11 @@ type Finding struct {
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the FindingQuery when eager-loading is set.
 	Edges                  FindingEdges `json:"edges"`
+	job_result_findings    *string
+	job_template_findings  *string
 	remediation_findings   *string
 	review_findings        *string
+	scheduled_job_findings *string
 	vulnerability_findings *string
 	selectValues           sql.SelectValues
 }
@@ -409,11 +412,17 @@ func (*Finding) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case finding.FieldCreatedAt, finding.FieldUpdatedAt, finding.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case finding.ForeignKeys[0]: // remediation_findings
+		case finding.ForeignKeys[0]: // job_result_findings
 			values[i] = new(sql.NullString)
-		case finding.ForeignKeys[1]: // review_findings
+		case finding.ForeignKeys[1]: // job_template_findings
 			values[i] = new(sql.NullString)
-		case finding.ForeignKeys[2]: // vulnerability_findings
+		case finding.ForeignKeys[2]: // remediation_findings
+			values[i] = new(sql.NullString)
+		case finding.ForeignKeys[3]: // review_findings
+			values[i] = new(sql.NullString)
+		case finding.ForeignKeys[4]: // scheduled_job_findings
+			values[i] = new(sql.NullString)
+		case finding.ForeignKeys[5]: // vulnerability_findings
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -753,19 +762,40 @@ func (_m *Finding) assignValues(columns []string, values []any) error {
 			}
 		case finding.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_result_findings", values[i])
+			} else if value.Valid {
+				_m.job_result_findings = new(string)
+				*_m.job_result_findings = value.String
+			}
+		case finding.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field job_template_findings", values[i])
+			} else if value.Valid {
+				_m.job_template_findings = new(string)
+				*_m.job_template_findings = value.String
+			}
+		case finding.ForeignKeys[2]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_findings", values[i])
 			} else if value.Valid {
 				_m.remediation_findings = new(string)
 				*_m.remediation_findings = value.String
 			}
-		case finding.ForeignKeys[1]:
+		case finding.ForeignKeys[3]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_findings", values[i])
 			} else if value.Valid {
 				_m.review_findings = new(string)
 				*_m.review_findings = value.String
 			}
-		case finding.ForeignKeys[2]:
+		case finding.ForeignKeys[4]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field scheduled_job_findings", values[i])
+			} else if value.Valid {
+				_m.scheduled_job_findings = new(string)
+				*_m.scheduled_job_findings = value.String
+			}
+		case finding.ForeignKeys[5]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_findings", values[i])
 			} else if value.Valid {

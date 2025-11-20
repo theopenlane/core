@@ -34,6 +34,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldScheduledJobID holds the string denoting the scheduled_job_id field in the database.
 	FieldScheduledJobID = "scheduled_job_id"
+	// FieldComplianceJobID holds the string denoting the compliance_job_id field in the database.
+	FieldComplianceJobID = "compliance_job_id"
 	// FieldStatus holds the string denoting the status field in the database.
 	FieldStatus = "status"
 	// FieldExitCode holds the string denoting the exit_code field in the database.
@@ -46,12 +48,34 @@ const (
 	FieldFileID = "file_id"
 	// FieldLog holds the string denoting the log field in the database.
 	FieldLog = "log"
+	// FieldMetadata holds the string denoting the metadata field in the database.
+	FieldMetadata = "metadata"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeScheduledJob holds the string denoting the scheduled_job edge name in mutations.
 	EdgeScheduledJob = "scheduled_job"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
+	// EdgeFindings holds the string denoting the findings edge name in mutations.
+	EdgeFindings = "findings"
+	// EdgeRisks holds the string denoting the risks edge name in mutations.
+	EdgeRisks = "risks"
+	// EdgeControls holds the string denoting the controls edge name in mutations.
+	EdgeControls = "controls"
+	// EdgeStandards holds the string denoting the standards edge name in mutations.
+	EdgeStandards = "standards"
+	// EdgeVulnerabilities holds the string denoting the vulnerabilities edge name in mutations.
+	EdgeVulnerabilities = "vulnerabilities"
+	// EdgeAssets holds the string denoting the assets edge name in mutations.
+	EdgeAssets = "assets"
+	// EdgeContacts holds the string denoting the contacts edge name in mutations.
+	EdgeContacts = "contacts"
+	// EdgeEntities holds the string denoting the entities edge name in mutations.
+	EdgeEntities = "entities"
+	// EdgeTasks holds the string denoting the tasks edge name in mutations.
+	EdgeTasks = "tasks"
 	// Table holds the table name of the jobresult in the database.
 	Table = "job_results"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -75,6 +99,76 @@ const (
 	FileInverseTable = "files"
 	// FileColumn is the table column denoting the file relation/edge.
 	FileColumn = "file_id"
+	// EvidenceTable is the table that holds the evidence relation/edge.
+	EvidenceTable = "evidences"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// EvidenceColumn is the table column denoting the evidence relation/edge.
+	EvidenceColumn = "job_result_evidence"
+	// FindingsTable is the table that holds the findings relation/edge.
+	FindingsTable = "findings"
+	// FindingsInverseTable is the table name for the Finding entity.
+	// It exists in this package in order to avoid circular dependency with the "finding" package.
+	FindingsInverseTable = "findings"
+	// FindingsColumn is the table column denoting the findings relation/edge.
+	FindingsColumn = "job_result_findings"
+	// RisksTable is the table that holds the risks relation/edge.
+	RisksTable = "risks"
+	// RisksInverseTable is the table name for the Risk entity.
+	// It exists in this package in order to avoid circular dependency with the "risk" package.
+	RisksInverseTable = "risks"
+	// RisksColumn is the table column denoting the risks relation/edge.
+	RisksColumn = "job_result_risks"
+	// ControlsTable is the table that holds the controls relation/edge.
+	ControlsTable = "controls"
+	// ControlsInverseTable is the table name for the Control entity.
+	// It exists in this package in order to avoid circular dependency with the "control" package.
+	ControlsInverseTable = "controls"
+	// ControlsColumn is the table column denoting the controls relation/edge.
+	ControlsColumn = "job_result_controls"
+	// StandardsTable is the table that holds the standards relation/edge.
+	StandardsTable = "standards"
+	// StandardsInverseTable is the table name for the Standard entity.
+	// It exists in this package in order to avoid circular dependency with the "standard" package.
+	StandardsInverseTable = "standards"
+	// StandardsColumn is the table column denoting the standards relation/edge.
+	StandardsColumn = "job_result_standards"
+	// VulnerabilitiesTable is the table that holds the vulnerabilities relation/edge.
+	VulnerabilitiesTable = "vulnerabilities"
+	// VulnerabilitiesInverseTable is the table name for the Vulnerability entity.
+	// It exists in this package in order to avoid circular dependency with the "vulnerability" package.
+	VulnerabilitiesInverseTable = "vulnerabilities"
+	// VulnerabilitiesColumn is the table column denoting the vulnerabilities relation/edge.
+	VulnerabilitiesColumn = "job_result_vulnerabilities"
+	// AssetsTable is the table that holds the assets relation/edge.
+	AssetsTable = "assets"
+	// AssetsInverseTable is the table name for the Asset entity.
+	// It exists in this package in order to avoid circular dependency with the "asset" package.
+	AssetsInverseTable = "assets"
+	// AssetsColumn is the table column denoting the assets relation/edge.
+	AssetsColumn = "job_result_assets"
+	// ContactsTable is the table that holds the contacts relation/edge.
+	ContactsTable = "contacts"
+	// ContactsInverseTable is the table name for the Contact entity.
+	// It exists in this package in order to avoid circular dependency with the "contact" package.
+	ContactsInverseTable = "contacts"
+	// ContactsColumn is the table column denoting the contacts relation/edge.
+	ContactsColumn = "job_result_contacts"
+	// EntitiesTable is the table that holds the entities relation/edge.
+	EntitiesTable = "entities"
+	// EntitiesInverseTable is the table name for the Entity entity.
+	// It exists in this package in order to avoid circular dependency with the "entity" package.
+	EntitiesInverseTable = "entities"
+	// EntitiesColumn is the table column denoting the entities relation/edge.
+	EntitiesColumn = "job_result_entities"
+	// TasksTable is the table that holds the tasks relation/edge.
+	TasksTable = "tasks"
+	// TasksInverseTable is the table name for the Task entity.
+	// It exists in this package in order to avoid circular dependency with the "task" package.
+	TasksInverseTable = "tasks"
+	// TasksColumn is the table column denoting the tasks relation/edge.
+	TasksColumn = "job_result_tasks"
 )
 
 // Columns holds all SQL columns for jobresult fields.
@@ -88,12 +182,14 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldScheduledJobID,
+	FieldComplianceJobID,
 	FieldStatus,
 	FieldExitCode,
 	FieldFinishedAt,
 	FieldStartedAt,
 	FieldFileID,
 	FieldLog,
+	FieldMetadata,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -191,6 +287,11 @@ func ByScheduledJobID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldScheduledJobID, opts...).ToFunc()
 }
 
+// ByComplianceJobID orders the results by the compliance_job_id field.
+func ByComplianceJobID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldComplianceJobID, opts...).ToFunc()
+}
+
 // ByStatus orders the results by the status field.
 func ByStatus(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldStatus, opts...).ToFunc()
@@ -241,6 +342,146 @@ func ByFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFileStep(), sql.OrderByField(field, opts...))
 	}
 }
+
+// ByEvidenceCount orders the results by evidence count.
+func ByEvidenceCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEvidenceStep(), opts...)
+	}
+}
+
+// ByEvidence orders the results by evidence terms.
+func ByEvidence(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByFindingsCount orders the results by findings count.
+func ByFindingsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newFindingsStep(), opts...)
+	}
+}
+
+// ByFindings orders the results by findings terms.
+func ByFindings(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newFindingsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByRisksCount orders the results by risks count.
+func ByRisksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newRisksStep(), opts...)
+	}
+}
+
+// ByRisks orders the results by risks terms.
+func ByRisks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newRisksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByControlsCount orders the results by controls count.
+func ByControlsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newControlsStep(), opts...)
+	}
+}
+
+// ByControls orders the results by controls terms.
+func ByControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newControlsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByStandardsCount orders the results by standards count.
+func ByStandardsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newStandardsStep(), opts...)
+	}
+}
+
+// ByStandards orders the results by standards terms.
+func ByStandards(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByVulnerabilitiesCount orders the results by vulnerabilities count.
+func ByVulnerabilitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newVulnerabilitiesStep(), opts...)
+	}
+}
+
+// ByVulnerabilities orders the results by vulnerabilities terms.
+func ByVulnerabilities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newVulnerabilitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssetsCount orders the results by assets count.
+func ByAssetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetsStep(), opts...)
+	}
+}
+
+// ByAssets orders the results by assets terms.
+func ByAssets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByContactsCount orders the results by contacts count.
+func ByContactsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newContactsStep(), opts...)
+	}
+}
+
+// ByContacts orders the results by contacts terms.
+func ByContacts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newContactsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByEntitiesCount orders the results by entities count.
+func ByEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newEntitiesStep(), opts...)
+	}
+}
+
+// ByEntities orders the results by entities terms.
+func ByEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTasksCount orders the results by tasks count.
+func ByTasksCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTasksStep(), opts...)
+	}
+}
+
+// ByTasks orders the results by tasks terms.
+func ByTasks(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTasksStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -260,6 +501,76 @@ func newFileStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(FileInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, FileTable, FileColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EvidenceTable, EvidenceColumn),
+	)
+}
+func newFindingsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(FindingsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, FindingsTable, FindingsColumn),
+	)
+}
+func newRisksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(RisksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, RisksTable, RisksColumn),
+	)
+}
+func newControlsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ControlsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ControlsTable, ControlsColumn),
+	)
+}
+func newStandardsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, StandardsTable, StandardsColumn),
+	)
+}
+func newVulnerabilitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(VulnerabilitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, VulnerabilitiesTable, VulnerabilitiesColumn),
+	)
+}
+func newAssetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssetsTable, AssetsColumn),
+	)
+}
+func newContactsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(ContactsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, ContactsTable, ContactsColumn),
+	)
+}
+func newEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, EntitiesTable, EntitiesColumn),
+	)
+}
+func newTasksStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TasksInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TasksTable, TasksColumn),
 	)
 }
 
