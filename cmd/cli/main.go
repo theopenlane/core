@@ -26,7 +26,6 @@ import (
 	_ "github.com/theopenlane/core/cmd/cli/cmd/internalpolicy"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/invite"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/jobresult"
-	_ "github.com/theopenlane/core/cmd/cli/cmd/jobrunnerregistrationtoken"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/jobrunnertoken"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/jobtemplate"
 	_ "github.com/theopenlane/core/cmd/cli/cmd/login"
