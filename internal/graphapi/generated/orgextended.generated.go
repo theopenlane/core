@@ -226,6 +226,26 @@ func (ec *executionContext) fieldContext_OrganizationTransferOwnershipPayload_or
 				return ec.fieldContext_Organization_reviews(ctx, field)
 			case "vulnerabilities":
 				return ec.fieldContext_Organization_vulnerabilities(ctx, field)
+			case "workflowDefinitions":
+				return ec.fieldContext_Organization_workflowDefinitions(ctx, field)
+			case "workflowInstances":
+				return ec.fieldContext_Organization_workflowInstances(ctx, field)
+			case "workflowEvents":
+				return ec.fieldContext_Organization_workflowEvents(ctx, field)
+			case "workflowAssignments":
+				return ec.fieldContext_Organization_workflowAssignments(ctx, field)
+			case "workflowAssignmentTargets":
+				return ec.fieldContext_Organization_workflowAssignmentTargets(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Organization_workflowObjectRefs(ctx, field)
+			case "directoryAccounts":
+				return ec.fieldContext_Organization_directoryAccounts(ctx, field)
+			case "directoryGroups":
+				return ec.fieldContext_Organization_directoryGroups(ctx, field)
+			case "directoryMemberships":
+				return ec.fieldContext_Organization_directoryMemberships(ctx, field)
+			case "directorySyncRuns":
+				return ec.fieldContext_Organization_directorySyncRuns(ctx, field)
 			case "members":
 				return ec.fieldContext_Organization_members(ctx, field)
 			}

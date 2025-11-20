@@ -126,6 +126,8 @@ func (ec *executionContext) fieldContext_TaskBulkCreatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -260,6 +262,8 @@ func (ec *executionContext) fieldContext_TaskBulkUpdatePayload_tasks(_ context.C
 				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -394,6 +398,8 @@ func (ec *executionContext) fieldContext_TaskCreatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},
@@ -528,6 +534,8 @@ func (ec *executionContext) fieldContext_TaskUpdatePayload_task(_ context.Contex
 				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},

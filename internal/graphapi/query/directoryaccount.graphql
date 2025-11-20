@@ -1,0 +1,272 @@
+
+mutation CreateBulkCSVDirectoryAccount($input: Upload!) {
+  createBulkCSVDirectoryAccount(input: $input) {
+    directoryAccounts {
+      accountType
+      canonicalEmail
+      createdAt
+      createdBy
+      department
+      directorySyncRunID
+      displayID
+      displayName
+      externalID
+      familyName
+      givenName
+      id
+      integrationID
+      jobTitle
+      lastLoginAt
+      lastSeenIP
+      mfaState
+      observedAt
+      organizationUnit
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      secondaryKey
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkDirectoryAccount($input: [CreateDirectoryAccountInput!]) {
+  createBulkDirectoryAccount(input: $input) {
+    directoryAccounts {
+      accountType
+      canonicalEmail
+      createdAt
+      createdBy
+      department
+      directorySyncRunID
+      displayID
+      displayName
+      externalID
+      familyName
+      givenName
+      id
+      integrationID
+      jobTitle
+      lastLoginAt
+      lastSeenIP
+      mfaState
+      observedAt
+      organizationUnit
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      secondaryKey
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateDirectoryAccount($input: CreateDirectoryAccountInput!) {
+  createDirectoryAccount(input: $input) {
+    directoryAccount {
+      accountType
+      canonicalEmail
+      createdAt
+      createdBy
+      department
+      directorySyncRunID
+      displayID
+      displayName
+      externalID
+      familyName
+      givenName
+      id
+      integrationID
+      jobTitle
+      lastLoginAt
+      lastSeenIP
+      mfaState
+      observedAt
+      organizationUnit
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      secondaryKey
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteDirectoryAccount($deleteDirectoryAccountId: ID!) {
+  deleteDirectoryAccount(id: $deleteDirectoryAccountId) {
+    deletedID
+  }
+}
+
+query GetAllDirectoryAccounts {
+  directoryAccounts {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accountType
+        canonicalEmail
+        createdAt
+        createdBy
+        department
+        directorySyncRunID
+        displayID
+        displayName
+        externalID
+        familyName
+        givenName
+        id
+        integrationID
+        jobTitle
+        lastLoginAt
+        lastSeenIP
+        mfaState
+        observedAt
+        organizationUnit
+        ownerID
+        profile
+        profileHash
+        rawProfileFileID
+        secondaryKey
+        sourceVersion
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetDirectoryAccountByID($directoryAccountId: ID!) {
+  directoryAccount(id: $directoryAccountId) {
+    accountType
+    canonicalEmail
+    createdAt
+    createdBy
+    department
+    directorySyncRunID
+    displayID
+    displayName
+    externalID
+    familyName
+    givenName
+    id
+    integrationID
+    jobTitle
+    lastLoginAt
+    lastSeenIP
+    mfaState
+    observedAt
+    organizationUnit
+    ownerID
+    profile
+    profileHash
+    rawProfileFileID
+    secondaryKey
+    sourceVersion
+    status
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetDirectoryAccounts($first: Int, $last: Int, $where: DirectoryAccountWhereInput) {
+  directoryAccounts(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        accountType
+        canonicalEmail
+        createdAt
+        createdBy
+        department
+        directorySyncRunID
+        displayID
+        displayName
+        externalID
+        familyName
+        givenName
+        id
+        integrationID
+        jobTitle
+        lastLoginAt
+        lastSeenIP
+        mfaState
+        observedAt
+        organizationUnit
+        ownerID
+        profile
+        profileHash
+        rawProfileFileID
+        secondaryKey
+        sourceVersion
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateDirectoryAccount($updateDirectoryAccountId: ID!, $input: UpdateDirectoryAccountInput!) {
+  updateDirectoryAccount(id: $updateDirectoryAccountId, input: $input) {
+    directoryAccount {
+      accountType
+      canonicalEmail
+      createdAt
+      createdBy
+      department
+      directorySyncRunID
+      displayID
+      displayName
+      externalID
+      familyName
+      givenName
+      id
+      integrationID
+      jobTitle
+      lastLoginAt
+      lastSeenIP
+      mfaState
+      observedAt
+      organizationUnit
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      secondaryKey
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

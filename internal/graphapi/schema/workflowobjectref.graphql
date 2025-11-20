@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up workflowObjectRef by ID
+    """
+     workflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+    ):  WorkflowObjectRef!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowObjectRef
+    """
+    createWorkflowObjectRef(
+        """
+        values of the workflowObjectRef
+        """
+        input: CreateWorkflowObjectRefInput!
+    ): WorkflowObjectRefCreatePayload!
+    """
+    Create multiple new workflowObjectRefs
+    """
+    createBulkWorkflowObjectRef(
+        """
+        values of the workflowObjectRef
+        """
+        input: [CreateWorkflowObjectRefInput!]
+    ): WorkflowObjectRefBulkCreatePayload!
+    """
+    Create multiple new workflowObjectRefs via file upload
+    """
+    createBulkCSVWorkflowObjectRef(
+        """
+        csv file containing values of the workflowObjectRef
+        """
+        input: Upload!
+    ): WorkflowObjectRefBulkCreatePayload!
+    """
+    Update an existing workflowObjectRef
+    """
+    updateWorkflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+        """
+        New values for the workflowObjectRef
+        """
+        input: UpdateWorkflowObjectRefInput!
+    ): WorkflowObjectRefUpdatePayload!
+    """
+    Delete an existing workflowObjectRef
+    """
+    deleteWorkflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+    ): WorkflowObjectRefDeletePayload!
+}
+
+"""
+Return response for createWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefCreatePayload {
+    """
+    Created workflowObjectRef
+    """
+    workflowObjectRef: WorkflowObjectRef!
+}
+
+"""
+Return response for updateWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefUpdatePayload {
+    """
+    Updated workflowObjectRef
+    """
+    workflowObjectRef: WorkflowObjectRef!
+}
+
+"""
+Return response for deleteWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefDeletePayload {
+    """
+    Deleted workflowObjectRef ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefBulkCreatePayload {
+    """
+    Created workflowObjectRefs
+    """
+    workflowObjectRefs: [WorkflowObjectRef!]
+}

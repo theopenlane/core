@@ -297,6 +297,63 @@ query AdminSearch($query: String!) {
         }
       }
     }
+    directoryAccounts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          integrationID
+          directorySyncRunID
+          externalID
+          secondaryKey
+          canonicalEmail
+          displayName
+          givenName
+          familyName
+          jobTitle
+          department
+          organizationUnit
+          lastSeenIP
+          profileHash
+          profile
+          sourceVersion
+        }
+      }
+    }
+    directoryGroups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          integrationID
+          directorySyncRunID
+          externalID
+          email
+          displayName
+          profileHash
+          profile
+          sourceVersion
+        }
+      }
+    }
     documentData {
       totalCount
       pageInfo {
@@ -1302,6 +1359,117 @@ query AdminSearch($query: String!) {
         node {
           id
           tags
+        }
+      }
+    }
+    workflowAssignments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          workflowInstanceID
+          assignmentKey
+          role
+          label
+          metadata
+          actorUserID
+          actorGroupID
+          notes
+        }
+      }
+    }
+    workflowAssignmentTargets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          workflowAssignmentID
+          targetUserID
+          targetGroupID
+          resolverKey
+        }
+      }
+    }
+    workflowDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          internalNotes
+          systemInternalID
+          name
+          description
+          schemaType
+          triggerOperations
+          triggerFields
+          definitionJSON
+          trackedFields
+        }
+      }
+    }
+    workflowEvents {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          workflowInstanceID
+          payload
+        }
+      }
+    }
+    workflowInstances {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          displayID
+          tags
+          ownerID
+          workflowDefinitionID
+          context
+          definitionSnapshot
         }
       }
     }

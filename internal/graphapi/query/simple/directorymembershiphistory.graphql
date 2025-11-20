@@ -1,0 +1,73 @@
+query GetAllDirectoryMembershipHistories {
+  directoryMembershipHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directorySyncRunID
+        displayID
+        firstSeenAt
+        historyTime
+        id
+        integrationID
+        lastConfirmedRunID
+        lastSeenAt
+        metadata
+        observedAt
+        operation
+        ownerID
+        ref
+        role
+        source
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetDirectoryMembershipHistories($first: Int, $last: Int, $where: DirectoryMembershipHistoryWhereInput) {
+  directoryMembershipHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directorySyncRunID
+        displayID
+        firstSeenAt
+        historyTime
+        id
+        integrationID
+        lastConfirmedRunID
+        lastSeenAt
+        metadata
+        observedAt
+        operation
+        ownerID
+        ref
+        role
+        source
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

@@ -1,0 +1,230 @@
+
+mutation CreateBulkCSVDirectoryGroup($input: Upload!) {
+  createBulkCSVDirectoryGroup(input: $input) {
+    directoryGroups {
+      classification
+      createdAt
+      createdBy
+      description
+      directorySyncRunID
+      displayID
+      displayName
+      email
+      externalID
+      externalSharingAllowed
+      id
+      integrationID
+      memberCount
+      observedAt
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkDirectoryGroup($input: [CreateDirectoryGroupInput!]) {
+  createBulkDirectoryGroup(input: $input) {
+    directoryGroups {
+      classification
+      createdAt
+      createdBy
+      description
+      directorySyncRunID
+      displayID
+      displayName
+      email
+      externalID
+      externalSharingAllowed
+      id
+      integrationID
+      memberCount
+      observedAt
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateDirectoryGroup($input: CreateDirectoryGroupInput!) {
+  createDirectoryGroup(input: $input) {
+    directoryGroup {
+      classification
+      createdAt
+      createdBy
+      description
+      directorySyncRunID
+      displayID
+      displayName
+      email
+      externalID
+      externalSharingAllowed
+      id
+      integrationID
+      memberCount
+      observedAt
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteDirectoryGroup($deleteDirectoryGroupId: ID!) {
+  deleteDirectoryGroup(id: $deleteDirectoryGroupId) {
+    deletedID
+  }
+}
+
+query GetAllDirectoryGroups {
+  directoryGroups {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        classification
+        createdAt
+        createdBy
+        description
+        directorySyncRunID
+        displayID
+        displayName
+        email
+        externalID
+        externalSharingAllowed
+        id
+        integrationID
+        memberCount
+        observedAt
+        ownerID
+        profile
+        profileHash
+        rawProfileFileID
+        sourceVersion
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetDirectoryGroupByID($directoryGroupId: ID!) {
+  directoryGroup(id: $directoryGroupId) {
+    classification
+    createdAt
+    createdBy
+    description
+    directorySyncRunID
+    displayID
+    displayName
+    email
+    externalID
+    externalSharingAllowed
+    id
+    integrationID
+    memberCount
+    observedAt
+    ownerID
+    profile
+    profileHash
+    rawProfileFileID
+    sourceVersion
+    status
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetDirectoryGroups($first: Int, $last: Int, $where: DirectoryGroupWhereInput) {
+  directoryGroups(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        classification
+        createdAt
+        createdBy
+        description
+        directorySyncRunID
+        displayID
+        displayName
+        email
+        externalID
+        externalSharingAllowed
+        id
+        integrationID
+        memberCount
+        observedAt
+        ownerID
+        profile
+        profileHash
+        rawProfileFileID
+        sourceVersion
+        status
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateDirectoryGroup($updateDirectoryGroupId: ID!, $input: UpdateDirectoryGroupInput!) {
+  updateDirectoryGroup(id: $updateDirectoryGroupId, input: $input) {
+    directoryGroup {
+      classification
+      createdAt
+      createdBy
+      description
+      directorySyncRunID
+      displayID
+      displayName
+      email
+      externalID
+      externalSharingAllowed
+      id
+      integrationID
+      memberCount
+      observedAt
+      ownerID
+      profile
+      profileHash
+      rawProfileFileID
+      sourceVersion
+      status
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

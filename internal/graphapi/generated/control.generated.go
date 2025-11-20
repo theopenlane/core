@@ -176,6 +176,8 @@ func (ec *executionContext) fieldContext_ControlBulkCreatePayload_controls(_ con
 				return ec.fieldContext_Control_subcontrols(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Control_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			}
@@ -362,6 +364,8 @@ func (ec *executionContext) fieldContext_ControlBulkUpdatePayload_controls(_ con
 				return ec.fieldContext_Control_subcontrols(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Control_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			}
@@ -548,6 +552,8 @@ func (ec *executionContext) fieldContext_ControlCreatePayload_control(_ context.
 				return ec.fieldContext_Control_subcontrols(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Control_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			}
@@ -734,6 +740,8 @@ func (ec *executionContext) fieldContext_ControlUpdatePayload_control(_ context.
 				return ec.fieldContext_Control_subcontrols(ctx, field)
 			case "scheduledJobs":
 				return ec.fieldContext_Control_scheduledJobs(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Control_workflowObjectRefs(ctx, field)
 			case "controlMappings":
 				return ec.fieldContext_Control_controlMappings(ctx, field)
 			}

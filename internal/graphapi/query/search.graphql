@@ -201,6 +201,38 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    directoryAccounts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
+    directoryGroups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
     documentData {
       totalCount
       pageInfo {
@@ -892,6 +924,86 @@ query GlobalSearch($query: String!) {
       }
       edges {
         node {
+          id
+          tags
+        }
+      }
+    }
+    workflowAssignments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
+    workflowAssignmentTargets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
+    workflowDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
+    workflowEvents {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+        }
+      }
+    }
+    workflowInstances {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
           id
           tags
         }

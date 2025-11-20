@@ -1,0 +1,2 @@
+Tags,AssignmentKey,Role,Label,Required,Status,Metadata,DecidedAt,Notes,OwnerId,WorkflowInstanceId,WorkflowAssignmentTargetIDs,UserId,GroupId
+example_tags,example_assignmentkey,example_role,example_label,example_required,example_status,example_metadata,example_decidedat,example_notes,example_ownerid,example_workflowinstanceid,example_workflowassignmenttargetids,example_userid,example_groupid

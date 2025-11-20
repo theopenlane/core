@@ -56,6 +56,20 @@ type Tx struct {
 	DNSVerification *DNSVerificationClient
 	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
 	DNSVerificationHistory *DNSVerificationHistoryClient
+	// DirectoryAccount is the client for interacting with the DirectoryAccount builders.
+	DirectoryAccount *DirectoryAccountClient
+	// DirectoryAccountHistory is the client for interacting with the DirectoryAccountHistory builders.
+	DirectoryAccountHistory *DirectoryAccountHistoryClient
+	// DirectoryGroup is the client for interacting with the DirectoryGroup builders.
+	DirectoryGroup *DirectoryGroupClient
+	// DirectoryGroupHistory is the client for interacting with the DirectoryGroupHistory builders.
+	DirectoryGroupHistory *DirectoryGroupHistoryClient
+	// DirectoryMembership is the client for interacting with the DirectoryMembership builders.
+	DirectoryMembership *DirectoryMembershipClient
+	// DirectoryMembershipHistory is the client for interacting with the DirectoryMembershipHistory builders.
+	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
+	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
+	DirectorySyncRun *DirectorySyncRunClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -276,6 +290,30 @@ type Tx struct {
 	VulnerabilityHistory *VulnerabilityHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
+	// WorkflowAssignment is the client for interacting with the WorkflowAssignment builders.
+	WorkflowAssignment *WorkflowAssignmentClient
+	// WorkflowAssignmentHistory is the client for interacting with the WorkflowAssignmentHistory builders.
+	WorkflowAssignmentHistory *WorkflowAssignmentHistoryClient
+	// WorkflowAssignmentTarget is the client for interacting with the WorkflowAssignmentTarget builders.
+	WorkflowAssignmentTarget *WorkflowAssignmentTargetClient
+	// WorkflowAssignmentTargetHistory is the client for interacting with the WorkflowAssignmentTargetHistory builders.
+	WorkflowAssignmentTargetHistory *WorkflowAssignmentTargetHistoryClient
+	// WorkflowDefinition is the client for interacting with the WorkflowDefinition builders.
+	WorkflowDefinition *WorkflowDefinitionClient
+	// WorkflowDefinitionHistory is the client for interacting with the WorkflowDefinitionHistory builders.
+	WorkflowDefinitionHistory *WorkflowDefinitionHistoryClient
+	// WorkflowEvent is the client for interacting with the WorkflowEvent builders.
+	WorkflowEvent *WorkflowEventClient
+	// WorkflowEventHistory is the client for interacting with the WorkflowEventHistory builders.
+	WorkflowEventHistory *WorkflowEventHistoryClient
+	// WorkflowInstance is the client for interacting with the WorkflowInstance builders.
+	WorkflowInstance *WorkflowInstanceClient
+	// WorkflowInstanceHistory is the client for interacting with the WorkflowInstanceHistory builders.
+	WorkflowInstanceHistory *WorkflowInstanceHistoryClient
+	// WorkflowObjectRef is the client for interacting with the WorkflowObjectRef builders.
+	WorkflowObjectRef *WorkflowObjectRefClient
+	// WorkflowObjectRefHistory is the client for interacting with the WorkflowObjectRefHistory builders.
+	WorkflowObjectRefHistory *WorkflowObjectRefHistoryClient
 
 	// lazily loaded.
 	client     *Client
@@ -429,6 +467,13 @@ func (tx *Tx) init() {
 	tx.CustomTypeEnum = NewCustomTypeEnumClient(tx.config)
 	tx.DNSVerification = NewDNSVerificationClient(tx.config)
 	tx.DNSVerificationHistory = NewDNSVerificationHistoryClient(tx.config)
+	tx.DirectoryAccount = NewDirectoryAccountClient(tx.config)
+	tx.DirectoryAccountHistory = NewDirectoryAccountHistoryClient(tx.config)
+	tx.DirectoryGroup = NewDirectoryGroupClient(tx.config)
+	tx.DirectoryGroupHistory = NewDirectoryGroupHistoryClient(tx.config)
+	tx.DirectoryMembership = NewDirectoryMembershipClient(tx.config)
+	tx.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(tx.config)
+	tx.DirectorySyncRun = NewDirectorySyncRunClient(tx.config)
 	tx.DocumentData = NewDocumentDataClient(tx.config)
 	tx.DocumentDataHistory = NewDocumentDataHistoryClient(tx.config)
 	tx.EmailVerificationToken = NewEmailVerificationTokenClient(tx.config)
@@ -539,6 +584,18 @@ func (tx *Tx) init() {
 	tx.Vulnerability = NewVulnerabilityClient(tx.config)
 	tx.VulnerabilityHistory = NewVulnerabilityHistoryClient(tx.config)
 	tx.Webauthn = NewWebauthnClient(tx.config)
+	tx.WorkflowAssignment = NewWorkflowAssignmentClient(tx.config)
+	tx.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(tx.config)
+	tx.WorkflowAssignmentTarget = NewWorkflowAssignmentTargetClient(tx.config)
+	tx.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(tx.config)
+	tx.WorkflowDefinition = NewWorkflowDefinitionClient(tx.config)
+	tx.WorkflowDefinitionHistory = NewWorkflowDefinitionHistoryClient(tx.config)
+	tx.WorkflowEvent = NewWorkflowEventClient(tx.config)
+	tx.WorkflowEventHistory = NewWorkflowEventHistoryClient(tx.config)
+	tx.WorkflowInstance = NewWorkflowInstanceClient(tx.config)
+	tx.WorkflowInstanceHistory = NewWorkflowInstanceHistoryClient(tx.config)
+	tx.WorkflowObjectRef = NewWorkflowObjectRefClient(tx.config)
+	tx.WorkflowObjectRefHistory = NewWorkflowObjectRefHistoryClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

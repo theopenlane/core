@@ -34,6 +34,8 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		customdomainResults               *generated.CustomDomainConnection
 		customtypeenumResults             *generated.CustomTypeEnumConnection
 		dnsverificationResults            *generated.DNSVerificationConnection
+		directoryaccountResults           *generated.DirectoryAccountConnection
+		directorygroupResults             *generated.DirectoryGroupConnection
 		documentdataResults               *generated.DocumentDataConnection
 		entityResults                     *generated.EntityConnection
 		entitytypeResults                 *generated.EntityTypeConnection
@@ -76,6 +78,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		usersettingResults                *generated.UserSettingConnection
 		vulnerabilityResults              *generated.VulnerabilityConnection
 		webauthnResults                   *generated.WebauthnConnection
+		workflowassignmentResults         *generated.WorkflowAssignmentConnection
+		workflowassignmenttargetResults   *generated.WorkflowAssignmentTargetConnection
+		workflowdefinitionResults         *generated.WorkflowDefinitionConnection
+		workfloweventResults              *generated.WorkflowEventConnection
+		workflowinstanceResults           *generated.WorkflowInstanceConnection
 	)
 
 	highlightTracker := newContextTracker(query)
@@ -225,6 +232,30 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, dnsverificationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			directoryaccountResults, err = searchDirectoryAccounts(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, directoryaccountResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			directorygroupResults, err = searchDirectoryGroups(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, directorygroupResults, highlightTracker)
 			}
 		},
 		func() {
@@ -731,6 +762,66 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 				highlightSearchContext(ctx, query, webauthnResults, highlightTracker)
 			}
 		},
+		func() {
+			var err error
+			workflowassignmentResults, err = searchWorkflowAssignments(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowassignmentResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowassignmenttargetResults, err = searchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowassignmenttargetResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowdefinitionResults, err = searchWorkflowDefinitions(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowdefinitionResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workfloweventResults, err = searchWorkflowEvents(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workfloweventResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowinstanceResults, err = searchWorkflowInstances(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowinstanceResults, highlightTracker)
+			}
+		},
 	})
 
 	// log the errors for debugging
@@ -802,6 +893,16 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.DNSVerifications = dnsverificationResults
 
 		res.TotalCount += dnsverificationResults.TotalCount
+	}
+	if directoryaccountResults != nil && len(directoryaccountResults.Edges) > 0 {
+		res.DirectoryAccounts = directoryaccountResults
+
+		res.TotalCount += directoryaccountResults.TotalCount
+	}
+	if directorygroupResults != nil && len(directorygroupResults.Edges) > 0 {
+		res.DirectoryGroups = directorygroupResults
+
+		res.TotalCount += directorygroupResults.TotalCount
 	}
 	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
 		res.DocumentData = documentdataResults
@@ -1013,6 +1114,31 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += webauthnResults.TotalCount
 	}
+	if workflowassignmentResults != nil && len(workflowassignmentResults.Edges) > 0 {
+		res.WorkflowAssignments = workflowassignmentResults
+
+		res.TotalCount += workflowassignmentResults.TotalCount
+	}
+	if workflowassignmenttargetResults != nil && len(workflowassignmenttargetResults.Edges) > 0 {
+		res.WorkflowAssignmentTargets = workflowassignmenttargetResults
+
+		res.TotalCount += workflowassignmenttargetResults.TotalCount
+	}
+	if workflowdefinitionResults != nil && len(workflowdefinitionResults.Edges) > 0 {
+		res.WorkflowDefinitions = workflowdefinitionResults
+
+		res.TotalCount += workflowdefinitionResults.TotalCount
+	}
+	if workfloweventResults != nil && len(workfloweventResults.Edges) > 0 {
+		res.WorkflowEvents = workfloweventResults
+
+		res.TotalCount += workfloweventResults.TotalCount
+	}
+	if workflowinstanceResults != nil && len(workflowinstanceResults.Edges) > 0 {
+		res.WorkflowInstances = workflowinstanceResults
+
+		res.TotalCount += workflowinstanceResults.TotalCount
+	}
 
 	return res, nil
 }
@@ -1135,6 +1261,26 @@ func (r *queryResolver) DNSVerificationSearch(ctx context.Context, query string,
 
 	// return the results
 	return dnsverificationResults, nil
+}
+func (r *queryResolver) DirectoryAccountSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryAccountConnection, error) {
+	directoryaccountResults, err := searchDirectoryAccounts(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return directoryaccountResults, nil
+}
+func (r *queryResolver) DirectoryGroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryGroupConnection, error) {
+	directorygroupResults, err := searchDirectoryGroups(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return directorygroupResults, nil
 }
 func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	documentdataResults, err := searchDocumentData(ctx, query, after, first, before, last)
@@ -1555,4 +1701,54 @@ func (r *queryResolver) WebauthnSearch(ctx context.Context, query string, after 
 
 	// return the results
 	return webauthnResults, nil
+}
+func (r *queryResolver) WorkflowAssignmentSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentConnection, error) {
+	workflowassignmentResults, err := searchWorkflowAssignments(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowassignmentResults, nil
+}
+func (r *queryResolver) WorkflowAssignmentTargetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentTargetConnection, error) {
+	workflowassignmenttargetResults, err := searchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowassignmenttargetResults, nil
+}
+func (r *queryResolver) WorkflowDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowDefinitionConnection, error) {
+	workflowdefinitionResults, err := searchWorkflowDefinitions(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowdefinitionResults, nil
+}
+func (r *queryResolver) WorkflowEventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowEventConnection, error) {
+	workfloweventResults, err := searchWorkflowEvents(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workfloweventResults, nil
+}
+func (r *queryResolver) WorkflowInstanceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowInstanceConnection, error) {
+	workflowinstanceResults, err := searchWorkflowInstances(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowinstanceResults, nil
 }

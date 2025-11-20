@@ -12,6 +12,8 @@ type ExportType string
 var (
 	// ExportTypeControl indicates the control.
 	ExportTypeControl ExportType = "CONTROL"
+	// ExportTypeDirectoryMembership indicates the directorymembership.
+	ExportTypeDirectoryMembership ExportType = "DIRECTORY_MEMBERSHIP"
 	// ExportTypeEvidence indicates the evidence.
 	ExportTypeEvidence ExportType = "EVIDENCE"
 	// ExportTypeFinding indicates the finding.
@@ -40,6 +42,7 @@ var (
 func (ExportType) Values() []string {
 	return []string{
 		string(ExportTypeControl),
+		string(ExportTypeDirectoryMembership),
 		string(ExportTypeEvidence),
 		string(ExportTypeFinding),
 		string(ExportTypeInternalPolicy),
@@ -63,6 +66,8 @@ func ToExportType(r string) *ExportType {
 	switch strings.ToUpper(r) {
 	case ExportTypeControl.String():
 		return &ExportTypeControl
+	case ExportTypeDirectoryMembership.String():
+		return &ExportTypeDirectoryMembership
 	case ExportTypeEvidence.String():
 		return &ExportTypeEvidence
 	case ExportTypeFinding.String():

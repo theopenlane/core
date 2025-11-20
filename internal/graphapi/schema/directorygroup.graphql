@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up directoryGroup by ID
+    """
+     directoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+    ):  DirectoryGroup!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryGroup
+    """
+    createDirectoryGroup(
+        """
+        values of the directoryGroup
+        """
+        input: CreateDirectoryGroupInput!
+    ): DirectoryGroupCreatePayload!
+    """
+    Create multiple new directoryGroups
+    """
+    createBulkDirectoryGroup(
+        """
+        values of the directoryGroup
+        """
+        input: [CreateDirectoryGroupInput!]
+    ): DirectoryGroupBulkCreatePayload!
+    """
+    Create multiple new directoryGroups via file upload
+    """
+    createBulkCSVDirectoryGroup(
+        """
+        csv file containing values of the directoryGroup
+        """
+        input: Upload!
+    ): DirectoryGroupBulkCreatePayload!
+    """
+    Update an existing directoryGroup
+    """
+    updateDirectoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+        """
+        New values for the directoryGroup
+        """
+        input: UpdateDirectoryGroupInput!
+    ): DirectoryGroupUpdatePayload!
+    """
+    Delete an existing directoryGroup
+    """
+    deleteDirectoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+    ): DirectoryGroupDeletePayload!
+}
+
+"""
+Return response for createDirectoryGroup mutation
+"""
+type DirectoryGroupCreatePayload {
+    """
+    Created directoryGroup
+    """
+    directoryGroup: DirectoryGroup!
+}
+
+"""
+Return response for updateDirectoryGroup mutation
+"""
+type DirectoryGroupUpdatePayload {
+    """
+    Updated directoryGroup
+    """
+    directoryGroup: DirectoryGroup!
+}
+
+"""
+Return response for deleteDirectoryGroup mutation
+"""
+type DirectoryGroupDeletePayload {
+    """
+    Deleted directoryGroup ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryGroup mutation
+"""
+type DirectoryGroupBulkCreatePayload {
+    """
+    Created directoryGroups
+    """
+    directoryGroups: [DirectoryGroup!]
+}

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up workflowInstance by ID
+    """
+     workflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+    ):  WorkflowInstance!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowInstance
+    """
+    createWorkflowInstance(
+        """
+        values of the workflowInstance
+        """
+        input: CreateWorkflowInstanceInput!
+    ): WorkflowInstanceCreatePayload!
+    """
+    Create multiple new workflowInstances
+    """
+    createBulkWorkflowInstance(
+        """
+        values of the workflowInstance
+        """
+        input: [CreateWorkflowInstanceInput!]
+    ): WorkflowInstanceBulkCreatePayload!
+    """
+    Create multiple new workflowInstances via file upload
+    """
+    createBulkCSVWorkflowInstance(
+        """
+        csv file containing values of the workflowInstance
+        """
+        input: Upload!
+    ): WorkflowInstanceBulkCreatePayload!
+    """
+    Update an existing workflowInstance
+    """
+    updateWorkflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+        """
+        New values for the workflowInstance
+        """
+        input: UpdateWorkflowInstanceInput!
+    ): WorkflowInstanceUpdatePayload!
+    """
+    Delete an existing workflowInstance
+    """
+    deleteWorkflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+    ): WorkflowInstanceDeletePayload!
+}
+
+"""
+Return response for createWorkflowInstance mutation
+"""
+type WorkflowInstanceCreatePayload {
+    """
+    Created workflowInstance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for updateWorkflowInstance mutation
+"""
+type WorkflowInstanceUpdatePayload {
+    """
+    Updated workflowInstance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for deleteWorkflowInstance mutation
+"""
+type WorkflowInstanceDeletePayload {
+    """
+    Deleted workflowInstance ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowInstance mutation
+"""
+type WorkflowInstanceBulkCreatePayload {
+    """
+    Created workflowInstances
+    """
+    workflowInstances: [WorkflowInstance!]
+}

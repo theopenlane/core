@@ -1326,6 +1326,484 @@ var (
 			},
 		},
 	}
+	// DirectoryAccountsColumns holds the columns for the "directory_accounts" table.
+	DirectoryAccountsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
+		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "given_name", Type: field.TypeString, Nullable: true},
+		{Name: "family_name", Type: field.TypeString, Nullable: true},
+		{Name: "job_title", Type: field.TypeString, Nullable: true},
+		{Name: "department", Type: field.TypeString, Nullable: true},
+		{Name: "organization_unit", Type: field.TypeString, Nullable: true},
+		{Name: "account_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"USER", "SERVICE", "SHARED", "GUEST"}, Default: "USER"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "SUSPENDED", "DELETED"}, Default: "ACTIVE"},
+		{Name: "mfa_state", Type: field.TypeEnum, Enums: []string{"UNKNOWN", "DISABLED", "ENABLED", "ENFORCED"}, Default: "UNKNOWN"},
+		{Name: "last_seen_ip", Type: field.TypeString, Nullable: true},
+		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "profile_hash", Type: field.TypeString, Default: ""},
+		{Name: "profile", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_version", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "directory_sync_run_directory_accounts", Type: field.TypeString, Nullable: true},
+		{Name: "integration_directory_accounts", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// DirectoryAccountsTable holds the schema information for the "directory_accounts" table.
+	DirectoryAccountsTable = &schema.Table{
+		Name:       "directory_accounts",
+		Columns:    DirectoryAccountsColumns,
+		PrimaryKey: []*schema.Column{DirectoryAccountsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "directory_accounts_integrations_integration",
+				Columns:    []*schema.Column{DirectoryAccountsColumns[26]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_accounts_directory_sync_runs_directory_sync_run",
+				Columns:    []*schema.Column{DirectoryAccountsColumns[27]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_accounts_directory_sync_runs_directory_accounts",
+				Columns:    []*schema.Column{DirectoryAccountsColumns[28]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_accounts_integrations_directory_accounts",
+				Columns:    []*schema.Column{DirectoryAccountsColumns[29]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_accounts_organizations_directory_accounts",
+				Columns:    []*schema.Column{DirectoryAccountsColumns[30]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directoryaccount_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryAccountsColumns[5], DirectoryAccountsColumns[30]},
+			},
+			{
+				Name:    "directoryaccount_integration_id_external_id_directory_sync_run_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryAccountsColumns[26], DirectoryAccountsColumns[7], DirectoryAccountsColumns[27]},
+			},
+			{
+				Name:    "directoryaccount_directory_sync_run_id_canonical_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountsColumns[27], DirectoryAccountsColumns[9]},
+			},
+			{
+				Name:    "directoryaccount_integration_id_canonical_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountsColumns[26], DirectoryAccountsColumns[9]},
+			},
+			{
+				Name:    "directoryaccount_owner_id_canonical_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountsColumns[30], DirectoryAccountsColumns[9]},
+			},
+		},
+	}
+	// DirectoryAccountHistoryColumns holds the columns for the "directory_account_history" table.
+	DirectoryAccountHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "secondary_key", Type: field.TypeString, Nullable: true},
+		{Name: "canonical_email", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "given_name", Type: field.TypeString, Nullable: true},
+		{Name: "family_name", Type: field.TypeString, Nullable: true},
+		{Name: "job_title", Type: field.TypeString, Nullable: true},
+		{Name: "department", Type: field.TypeString, Nullable: true},
+		{Name: "organization_unit", Type: field.TypeString, Nullable: true},
+		{Name: "account_type", Type: field.TypeEnum, Nullable: true, Enums: []string{"USER", "SERVICE", "SHARED", "GUEST"}, Default: "USER"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "SUSPENDED", "DELETED"}, Default: "ACTIVE"},
+		{Name: "mfa_state", Type: field.TypeEnum, Enums: []string{"UNKNOWN", "DISABLED", "ENABLED", "ENFORCED"}, Default: "UNKNOWN"},
+		{Name: "last_seen_ip", Type: field.TypeString, Nullable: true},
+		{Name: "last_login_at", Type: field.TypeTime, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "profile_hash", Type: field.TypeString, Default: ""},
+		{Name: "profile", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_version", Type: field.TypeString, Nullable: true},
+	}
+	// DirectoryAccountHistoryTable holds the schema information for the "directory_account_history" table.
+	DirectoryAccountHistoryTable = &schema.Table{
+		Name:       "directory_account_history",
+		Columns:    DirectoryAccountHistoryColumns,
+		PrimaryKey: []*schema.Column{DirectoryAccountHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directoryaccounthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryAccountHistoryColumns[1]},
+			},
+		},
+	}
+	// DirectoryGroupsColumns holds the columns for the "directory_groups" table.
+	DirectoryGroupsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "classification", Type: field.TypeEnum, Enums: []string{"SECURITY", "DISTRIBUTION", "TEAM", "DYNAMIC"}, Default: "TEAM"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DELETED"}, Default: "ACTIVE"},
+		{Name: "external_sharing_allowed", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "member_count", Type: field.TypeInt, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "profile_hash", Type: field.TypeString, Default: ""},
+		{Name: "profile", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_version", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "directory_sync_run_directory_groups", Type: field.TypeString, Nullable: true},
+		{Name: "integration_directory_groups", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// DirectoryGroupsTable holds the schema information for the "directory_groups" table.
+	DirectoryGroupsTable = &schema.Table{
+		Name:       "directory_groups",
+		Columns:    DirectoryGroupsColumns,
+		PrimaryKey: []*schema.Column{DirectoryGroupsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "directory_groups_integrations_integration",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[20]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_groups_directory_sync_runs_directory_sync_run",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[21]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_groups_directory_sync_runs_directory_groups",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[22]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_groups_integrations_directory_groups",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[23]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_groups_organizations_directory_groups",
+				Columns:    []*schema.Column{DirectoryGroupsColumns[24]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directorygroup_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryGroupsColumns[5], DirectoryGroupsColumns[24]},
+			},
+			{
+				Name:    "directorygroup_integration_id_external_id_directory_sync_run_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryGroupsColumns[20], DirectoryGroupsColumns[7], DirectoryGroupsColumns[21]},
+			},
+			{
+				Name:    "directorygroup_directory_sync_run_id_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupsColumns[21], DirectoryGroupsColumns[8]},
+			},
+			{
+				Name:    "directorygroup_integration_id_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupsColumns[20], DirectoryGroupsColumns[8]},
+			},
+			{
+				Name:    "directorygroup_owner_id_email",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupsColumns[24], DirectoryGroupsColumns[8]},
+			},
+		},
+	}
+	// DirectoryGroupHistoryColumns holds the columns for the "directory_group_history" table.
+	DirectoryGroupHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "external_id", Type: field.TypeString},
+		{Name: "email", Type: field.TypeString, Nullable: true},
+		{Name: "display_name", Type: field.TypeString, Nullable: true},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "classification", Type: field.TypeEnum, Enums: []string{"SECURITY", "DISTRIBUTION", "TEAM", "DYNAMIC"}, Default: "TEAM"},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"ACTIVE", "INACTIVE", "DELETED"}, Default: "ACTIVE"},
+		{Name: "external_sharing_allowed", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "member_count", Type: field.TypeInt, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "profile_hash", Type: field.TypeString, Default: ""},
+		{Name: "profile", Type: field.TypeJSON, Nullable: true},
+		{Name: "raw_profile_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "source_version", Type: field.TypeString, Nullable: true},
+	}
+	// DirectoryGroupHistoryTable holds the schema information for the "directory_group_history" table.
+	DirectoryGroupHistoryTable = &schema.Table{
+		Name:       "directory_group_history",
+		Columns:    DirectoryGroupHistoryColumns,
+		PrimaryKey: []*schema.Column{DirectoryGroupHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directorygrouphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryGroupHistoryColumns[1]},
+			},
+		},
+	}
+	// DirectoryMembershipsColumns holds the columns for the "directory_memberships" table.
+	DirectoryMembershipsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MANAGER", "OWNER"}, Default: "MEMBER"},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "last_confirmed_run_id", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "directory_account_id", Type: field.TypeString},
+		{Name: "directory_group_id", Type: field.TypeString},
+		{Name: "directory_sync_run_directory_memberships", Type: field.TypeString, Nullable: true},
+		{Name: "integration_directory_memberships", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// DirectoryMembershipsTable holds the schema information for the "directory_memberships" table.
+	DirectoryMembershipsTable = &schema.Table{
+		Name:       "directory_memberships",
+		Columns:    DirectoryMembershipsColumns,
+		PrimaryKey: []*schema.Column{DirectoryMembershipsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "directory_memberships_integrations_integration",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[13]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_memberships_directory_sync_runs_directory_sync_run",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[14]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_memberships_directory_accounts_directory_account",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[15]},
+				RefColumns: []*schema.Column{DirectoryAccountsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_memberships_directory_groups_directory_group",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[16]},
+				RefColumns: []*schema.Column{DirectoryGroupsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_memberships_directory_sync_runs_directory_memberships",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[17]},
+				RefColumns: []*schema.Column{DirectorySyncRunsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_memberships_integrations_directory_memberships",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[18]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_memberships_organizations_directory_memberships",
+				Columns:    []*schema.Column{DirectoryMembershipsColumns[19]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directorymembership_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[5], DirectoryMembershipsColumns[19]},
+			},
+			{
+				Name:    "directorymembership_directory_account_id_directory_group_id_directory_sync_run_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[15], DirectoryMembershipsColumns[16], DirectoryMembershipsColumns[14]},
+			},
+			{
+				Name:    "directorymembership_directory_sync_run_id",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[14]},
+			},
+			{
+				Name:    "directorymembership_integration_id_directory_sync_run_id",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[13], DirectoryMembershipsColumns[14]},
+			},
+			{
+				Name:    "directorymembership_directory_account_id_directory_group_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectoryMembershipsColumns[15], DirectoryMembershipsColumns[16]},
+			},
+		},
+	}
+	// DirectoryMembershipHistoryColumns holds the columns for the "directory_membership_history" table.
+	DirectoryMembershipHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "directory_sync_run_id", Type: field.TypeString},
+		{Name: "directory_account_id", Type: field.TypeString},
+		{Name: "directory_group_id", Type: field.TypeString},
+		{Name: "role", Type: field.TypeEnum, Nullable: true, Enums: []string{"MEMBER", "MANAGER", "OWNER"}, Default: "MEMBER"},
+		{Name: "source", Type: field.TypeString, Nullable: true},
+		{Name: "first_seen_at", Type: field.TypeTime, Nullable: true},
+		{Name: "last_seen_at", Type: field.TypeTime, Nullable: true},
+		{Name: "observed_at", Type: field.TypeTime},
+		{Name: "last_confirmed_run_id", Type: field.TypeString, Nullable: true},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+	}
+	// DirectoryMembershipHistoryTable holds the schema information for the "directory_membership_history" table.
+	DirectoryMembershipHistoryTable = &schema.Table{
+		Name:       "directory_membership_history",
+		Columns:    DirectoryMembershipHistoryColumns,
+		PrimaryKey: []*schema.Column{DirectoryMembershipHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directorymembershiphistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{DirectoryMembershipHistoryColumns[1]},
+			},
+		},
+	}
+	// DirectorySyncRunsColumns holds the columns for the "directory_sync_runs" table.
+	DirectorySyncRunsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "RUNNING", "COMPLETED", "FAILED"}, Default: "PENDING"},
+		{Name: "started_at", Type: field.TypeTime},
+		{Name: "completed_at", Type: field.TypeTime, Nullable: true},
+		{Name: "source_cursor", Type: field.TypeString, Nullable: true},
+		{Name: "full_count", Type: field.TypeInt, Default: 0},
+		{Name: "delta_count", Type: field.TypeInt, Default: 0},
+		{Name: "error", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "raw_manifest_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "stats", Type: field.TypeJSON, Nullable: true},
+		{Name: "integration_id", Type: field.TypeString},
+		{Name: "integration_directory_sync_runs", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// DirectorySyncRunsTable holds the schema information for the "directory_sync_runs" table.
+	DirectorySyncRunsTable = &schema.Table{
+		Name:       "directory_sync_runs",
+		Columns:    DirectorySyncRunsColumns,
+		PrimaryKey: []*schema.Column{DirectorySyncRunsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "directory_sync_runs_integrations_integration",
+				Columns:    []*schema.Column{DirectorySyncRunsColumns[15]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "directory_sync_runs_integrations_directory_sync_runs",
+				Columns:    []*schema.Column{DirectorySyncRunsColumns[16]},
+				RefColumns: []*schema.Column{IntegrationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "directory_sync_runs_organizations_directory_sync_runs",
+				Columns:    []*schema.Column{DirectorySyncRunsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "directorysyncrun_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{DirectorySyncRunsColumns[5], DirectorySyncRunsColumns[17]},
+			},
+			{
+				Name:    "directorysyncrun_integration_id_started_at",
+				Unique:  false,
+				Columns: []*schema.Column{DirectorySyncRunsColumns[15], DirectorySyncRunsColumns[7]},
+			},
+		},
+	}
 	// DocumentDataColumns holds the columns for the "document_data" table.
 	DocumentDataColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -1676,6 +2154,7 @@ var (
 		{Name: "correlation_id", Type: field.TypeString, Nullable: true},
 		{Name: "event_type", Type: field.TypeString},
 		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "directory_membership_events", Type: field.TypeString, Nullable: true},
 		{Name: "export_events", Type: field.TypeString, Nullable: true},
 	}
 	// EventsTable holds the schema information for the "events" table.
@@ -1685,8 +2164,14 @@ var (
 		PrimaryKey: []*schema.Column{EventsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "events_exports_events",
+				Symbol:     "events_directory_memberships_events",
 				Columns:    []*schema.Column{EventsColumns[10]},
+				RefColumns: []*schema.Column{DirectoryMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "events_exports_events",
+				Columns:    []*schema.Column{EventsColumns[11]},
 				RefColumns: []*schema.Column{ExportsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1790,7 +2275,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
-		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "EVIDENCE", "FINDING", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBSCRIBER", "TASK", "VULNERABILITY"}},
+		{Name: "export_type", Type: field.TypeEnum, Enums: []string{"CONTROL", "DIRECTORY_MEMBERSHIP", "EVIDENCE", "FINDING", "INTERNAL_POLICY", "PROCEDURE", "REMEDIATION", "REVIEW", "RISK", "SUBSCRIBER", "TASK", "VULNERABILITY"}},
 		{Name: "format", Type: field.TypeEnum, Enums: []string{"CSV"}},
 		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "FAILED", "READY", "NODATA"}, Default: "PENDING"},
 		{Name: "requestor_id", Type: field.TypeString, Nullable: true},
@@ -2318,6 +2803,7 @@ var (
 		{Name: "vulnerability_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_editors", Type: field.TypeString, Nullable: true},
 		{Name: "vulnerability_viewers", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_groups", Type: field.TypeString, Nullable: true},
 	}
 	// GroupsTable holds the schema information for the "groups" table.
 	GroupsTable = &schema.Table{
@@ -2521,6 +3007,12 @@ var (
 				Symbol:     "groups_vulnerabilities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[51]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "groups_workflow_definitions_groups",
+				Columns:    []*schema.Column{GroupsColumns[52]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6108,6 +6600,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_tag_definitions", Type: field.TypeString, Nullable: true},
 	}
 	// TagDefinitionsTable holds the schema information for the "tag_definitions" table.
 	TagDefinitionsTable = &schema.Table{
@@ -6119,6 +6612,12 @@ var (
 				Symbol:     "tag_definitions_organizations_tag_definitions",
 				Columns:    []*schema.Column{TagDefinitionsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "tag_definitions_workflow_definitions_tag_definitions",
+				Columns:    []*schema.Column{TagDefinitionsColumns[16]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -7305,6 +7804,704 @@ var (
 				Columns:    []*schema.Column{WebauthnsColumns[16]},
 				RefColumns: []*schema.Column{UsersColumns[0]},
 				OnDelete:   schema.NoAction,
+			},
+		},
+	}
+	// WorkflowAssignmentsColumns holds the columns for the "workflow_assignments" table.
+	WorkflowAssignmentsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "assignment_key", Type: field.TypeString},
+		{Name: "role", Type: field.TypeString, Default: "APPROVER"},
+		{Name: "label", Type: field.TypeString, Nullable: true},
+		{Name: "required", Type: field.TypeBool, Default: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED"}, Default: "PENDING"},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "decided_at", Type: field.TypeTime, Nullable: true},
+		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "actor_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "actor_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_workflow_assignments", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowAssignmentsTable holds the schema information for the "workflow_assignments" table.
+	WorkflowAssignmentsTable = &schema.Table{
+		Name:       "workflow_assignments",
+		Columns:    WorkflowAssignmentsColumns,
+		PrimaryKey: []*schema.Column{WorkflowAssignmentsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_assignments_organizations_workflow_assignments",
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[17]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignments_workflow_instances_workflow_instance",
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[18]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "workflow_assignments_users_user",
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[19]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignments_groups_group",
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[20]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignments_workflow_instances_workflow_assignments",
+				Columns:    []*schema.Column{WorkflowAssignmentsColumns[21]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowassignment_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[7], WorkflowAssignmentsColumns[17]},
+			},
+			{
+				Name:    "workflowassignment_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[17]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "workflowassignment_workflow_instance_id_assignment_key",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowAssignmentsColumns[18], WorkflowAssignmentsColumns[9]},
+			},
+		},
+	}
+	// WorkflowAssignmentHistoryColumns holds the columns for the "workflow_assignment_history" table.
+	WorkflowAssignmentHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "assignment_key", Type: field.TypeString},
+		{Name: "role", Type: field.TypeString, Default: "APPROVER"},
+		{Name: "label", Type: field.TypeString, Nullable: true},
+		{Name: "required", Type: field.TypeBool, Default: true},
+		{Name: "status", Type: field.TypeEnum, Enums: []string{"PENDING", "APPROVED", "REJECTED"}, Default: "PENDING"},
+		{Name: "metadata", Type: field.TypeJSON, Nullable: true},
+		{Name: "decided_at", Type: field.TypeTime, Nullable: true},
+		{Name: "actor_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "actor_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "notes", Type: field.TypeString, Nullable: true, Size: 2147483647},
+	}
+	// WorkflowAssignmentHistoryTable holds the schema information for the "workflow_assignment_history" table.
+	WorkflowAssignmentHistoryTable = &schema.Table{
+		Name:       "workflow_assignment_history",
+		Columns:    WorkflowAssignmentHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowAssignmentHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowassignmenthistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentHistoryColumns[1]},
+			},
+		},
+	}
+	// WorkflowAssignmentTargetsColumns holds the columns for the "workflow_assignment_targets" table.
+	WorkflowAssignmentTargetsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER"}},
+		{Name: "resolver_key", Type: field.TypeString, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_assignment_workflow_assignment_targets", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_assignment_id", Type: field.TypeString},
+		{Name: "target_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "target_group_id", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowAssignmentTargetsTable holds the schema information for the "workflow_assignment_targets" table.
+	WorkflowAssignmentTargetsTable = &schema.Table{
+		Name:       "workflow_assignment_targets",
+		Columns:    WorkflowAssignmentTargetsColumns,
+		PrimaryKey: []*schema.Column{WorkflowAssignmentTargetsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_assignment_targets_organizations_workflow_assignment_targets",
+				Columns:    []*schema.Column{WorkflowAssignmentTargetsColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignment_targets_workflow_assignments_workflow_assignment_targets",
+				Columns:    []*schema.Column{WorkflowAssignmentTargetsColumns[12]},
+				RefColumns: []*schema.Column{WorkflowAssignmentsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignment_targets_workflow_assignments_workflow_assignment",
+				Columns:    []*schema.Column{WorkflowAssignmentTargetsColumns[13]},
+				RefColumns: []*schema.Column{WorkflowAssignmentsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "workflow_assignment_targets_users_user",
+				Columns:    []*schema.Column{WorkflowAssignmentTargetsColumns[14]},
+				RefColumns: []*schema.Column{UsersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_assignment_targets_groups_group",
+				Columns:    []*schema.Column{WorkflowAssignmentTargetsColumns[15]},
+				RefColumns: []*schema.Column{GroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowassignmenttarget_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[7], WorkflowAssignmentTargetsColumns[11]},
+			},
+			{
+				Name:    "workflowassignmenttarget_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "workflowassignmenttarget_workflow_assignment_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at IS NULL",
+				},
+			},
+			{
+				Name:    "workflowassignmenttarget_workflow_assignment_id_target_type_target_user_id_target_group_id_resolver_key",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowAssignmentTargetsColumns[13], WorkflowAssignmentTargetsColumns[9], WorkflowAssignmentTargetsColumns[14], WorkflowAssignmentTargetsColumns[15], WorkflowAssignmentTargetsColumns[10]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at IS NULL",
+				},
+			},
+		},
+	}
+	// WorkflowAssignmentTargetHistoryColumns holds the columns for the "workflow_assignment_target_history" table.
+	WorkflowAssignmentTargetHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_assignment_id", Type: field.TypeString},
+		{Name: "target_type", Type: field.TypeEnum, Enums: []string{"USER", "GROUP", "ROLE", "RESOLVER"}},
+		{Name: "target_user_id", Type: field.TypeString, Nullable: true},
+		{Name: "target_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "resolver_key", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowAssignmentTargetHistoryTable holds the schema information for the "workflow_assignment_target_history" table.
+	WorkflowAssignmentTargetHistoryTable = &schema.Table{
+		Name:       "workflow_assignment_target_history",
+		Columns:    WorkflowAssignmentTargetHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowAssignmentTargetHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowassignmenttargethistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowAssignmentTargetHistoryColumns[1]},
+			},
+		},
+	}
+	// WorkflowDefinitionsColumns holds the columns for the "workflow_definitions" table.
+	WorkflowDefinitionsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "workflow_kind", Type: field.TypeEnum, Enums: []string{"APPROVAL", "LIFECYCLE", "NOTIFICATION"}},
+		{Name: "schema_type", Type: field.TypeString},
+		{Name: "revision", Type: field.TypeInt, Default: 1},
+		{Name: "draft", Type: field.TypeBool, Default: true},
+		{Name: "published_at", Type: field.TypeTime, Nullable: true},
+		{Name: "cooldown_seconds", Type: field.TypeInt, Default: 0},
+		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "trigger_operations", Type: field.TypeJSON, Nullable: true},
+		{Name: "trigger_fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "definition_json", Type: field.TypeJSON, Nullable: true},
+		{Name: "tracked_fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowDefinitionsTable holds the schema information for the "workflow_definitions" table.
+	WorkflowDefinitionsTable = &schema.Table{
+		Name:       "workflow_definitions",
+		Columns:    WorkflowDefinitionsColumns,
+		PrimaryKey: []*schema.Column{WorkflowDefinitionsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_definitions_organizations_workflow_definitions",
+				Columns:    []*schema.Column{WorkflowDefinitionsColumns[26]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowdefinition_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowDefinitionsColumns[7], WorkflowDefinitionsColumns[26]},
+			},
+			{
+				Name:    "workflowdefinition_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowDefinitionsColumns[26]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// WorkflowDefinitionHistoryColumns holds the columns for the "workflow_definition_history" table.
+	WorkflowDefinitionHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "system_owned", Type: field.TypeBool, Nullable: true, Default: false},
+		{Name: "internal_notes", Type: field.TypeString, Nullable: true},
+		{Name: "system_internal_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
+		{Name: "workflow_kind", Type: field.TypeEnum, Enums: []string{"APPROVAL", "LIFECYCLE", "NOTIFICATION"}},
+		{Name: "schema_type", Type: field.TypeString},
+		{Name: "revision", Type: field.TypeInt, Default: 1},
+		{Name: "draft", Type: field.TypeBool, Default: true},
+		{Name: "published_at", Type: field.TypeTime, Nullable: true},
+		{Name: "cooldown_seconds", Type: field.TypeInt, Default: 0},
+		{Name: "is_default", Type: field.TypeBool, Default: false},
+		{Name: "active", Type: field.TypeBool, Default: true},
+		{Name: "trigger_operations", Type: field.TypeJSON, Nullable: true},
+		{Name: "trigger_fields", Type: field.TypeJSON, Nullable: true},
+		{Name: "definition_json", Type: field.TypeJSON, Nullable: true},
+		{Name: "tracked_fields", Type: field.TypeJSON, Nullable: true},
+	}
+	// WorkflowDefinitionHistoryTable holds the schema information for the "workflow_definition_history" table.
+	WorkflowDefinitionHistoryTable = &schema.Table{
+		Name:       "workflow_definition_history",
+		Columns:    WorkflowDefinitionHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowDefinitionHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowdefinitionhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowDefinitionHistoryColumns[1]},
+			},
+		},
+	}
+	// WorkflowEventsColumns holds the columns for the "workflow_events" table.
+	WorkflowEventsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION"}},
+		{Name: "payload", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "workflow_instance_workflow_events", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowEventsTable holds the schema information for the "workflow_events" table.
+	WorkflowEventsTable = &schema.Table{
+		Name:       "workflow_events",
+		Columns:    WorkflowEventsColumns,
+		PrimaryKey: []*schema.Column{WorkflowEventsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_events_organizations_workflow_events",
+				Columns:    []*schema.Column{WorkflowEventsColumns[11]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_events_workflow_instances_workflow_instance",
+				Columns:    []*schema.Column{WorkflowEventsColumns[12]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "workflow_events_workflow_instances_workflow_events",
+				Columns:    []*schema.Column{WorkflowEventsColumns[13]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowevent_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowEventsColumns[7], WorkflowEventsColumns[11]},
+			},
+			{
+				Name:    "workflowevent_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowEventsColumns[11]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+		},
+	}
+	// WorkflowEventHistoryColumns holds the columns for the "workflow_event_history" table.
+	WorkflowEventHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "event_type", Type: field.TypeEnum, Enums: []string{"ACTION", "TRIGGER", "DECISION"}},
+		{Name: "payload", Type: field.TypeJSON, Nullable: true},
+	}
+	// WorkflowEventHistoryTable holds the schema information for the "workflow_event_history" table.
+	WorkflowEventHistoryTable = &schema.Table{
+		Name:       "workflow_event_history",
+		Columns:    WorkflowEventHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowEventHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workfloweventhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowEventHistoryColumns[1]},
+			},
+		},
+	}
+	// WorkflowInstancesColumns holds the columns for the "workflow_instances" table.
+	WorkflowInstancesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "state", Type: field.TypeEnum, Enums: []string{"RUNNING", "COMPLETED", "FAILED", "PAUSED"}, Default: "RUNNING"},
+		{Name: "context", Type: field.TypeJSON, Nullable: true},
+		{Name: "last_evaluated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "definition_snapshot", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_id", Type: field.TypeString},
+	}
+	// WorkflowInstancesTable holds the schema information for the "workflow_instances" table.
+	WorkflowInstancesTable = &schema.Table{
+		Name:       "workflow_instances",
+		Columns:    WorkflowInstancesColumns,
+		PrimaryKey: []*schema.Column{WorkflowInstancesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_instances_organizations_workflow_instances",
+				Columns:    []*schema.Column{WorkflowInstancesColumns[13]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_instances_workflow_definitions_workflow_definition",
+				Columns:    []*schema.Column{WorkflowInstancesColumns[14]},
+				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowinstance_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowInstancesColumns[7], WorkflowInstancesColumns[13]},
+			},
+			{
+				Name:    "workflowinstance_owner_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[13]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at is NULL",
+				},
+			},
+			{
+				Name:    "workflowinstance_workflow_definition_id",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstancesColumns[14]},
+				Annotation: &entsql.IndexAnnotation{
+					Where: "deleted_at IS NULL",
+				},
+			},
+		},
+	}
+	// WorkflowInstanceHistoryColumns holds the columns for the "workflow_instance_history" table.
+	WorkflowInstanceHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "tags", Type: field.TypeJSON, Nullable: true},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_definition_id", Type: field.TypeString},
+		{Name: "state", Type: field.TypeEnum, Enums: []string{"RUNNING", "COMPLETED", "FAILED", "PAUSED"}, Default: "RUNNING"},
+		{Name: "context", Type: field.TypeJSON, Nullable: true},
+		{Name: "last_evaluated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "definition_snapshot", Type: field.TypeJSON, Nullable: true},
+	}
+	// WorkflowInstanceHistoryTable holds the schema information for the "workflow_instance_history" table.
+	WorkflowInstanceHistoryTable = &schema.Table{
+		Name:       "workflow_instance_history",
+		Columns:    WorkflowInstanceHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowInstanceHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowinstancehistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowInstanceHistoryColumns[1]},
+			},
+		},
+	}
+	// WorkflowObjectRefsColumns holds the columns for the "workflow_object_refs" table.
+	WorkflowObjectRefsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_workflow_object_refs", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString, Nullable: true},
+		{Name: "task_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
+		{Name: "finding_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_account_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_membership_id", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowObjectRefsTable holds the schema information for the "workflow_object_refs" table.
+	WorkflowObjectRefsTable = &schema.Table{
+		Name:       "workflow_object_refs",
+		Columns:    WorkflowObjectRefsColumns,
+		PrimaryKey: []*schema.Column{WorkflowObjectRefsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "workflow_object_refs_organizations_workflow_object_refs",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[6]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_workflow_instances_workflow_object_refs",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[7]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_workflow_instances_workflow_instance",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[8]},
+				RefColumns: []*schema.Column{WorkflowInstancesColumns[0]},
+				OnDelete:   schema.NoAction,
+			},
+			{
+				Symbol:     "workflow_object_refs_controls_control",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[9]},
+				RefColumns: []*schema.Column{ControlsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_tasks_task",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[10]},
+				RefColumns: []*schema.Column{TasksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_internal_policies_internal_policy",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[11]},
+				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_findings_finding",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[12]},
+				RefColumns: []*schema.Column{FindingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_directory_accounts_directory_account",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[13]},
+				RefColumns: []*schema.Column{DirectoryAccountsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_directory_groups_directory_group",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[14]},
+				RefColumns: []*schema.Column{DirectoryGroupsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "workflow_object_refs_directory_memberships_directory_membership",
+				Columns:    []*schema.Column{WorkflowObjectRefsColumns[15]},
+				RefColumns: []*schema.Column{DirectoryMembershipsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowobjectref_display_id_owner_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[5], WorkflowObjectRefsColumns[6]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_control_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[9]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_task_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[10]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_internal_policy_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[11]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_finding_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[12]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_directory_account_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[13]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_directory_group_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[14]},
+			},
+			{
+				Name:    "workflowobjectref_workflow_instance_id_directory_membership_id",
+				Unique:  true,
+				Columns: []*schema.Column{WorkflowObjectRefsColumns[8], WorkflowObjectRefsColumns[15]},
+			},
+		},
+	}
+	// WorkflowObjectRefHistoryColumns holds the columns for the "workflow_object_ref_history" table.
+	WorkflowObjectRefHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "display_id", Type: field.TypeString},
+		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "workflow_instance_id", Type: field.TypeString},
+		{Name: "control_id", Type: field.TypeString, Nullable: true},
+		{Name: "task_id", Type: field.TypeString, Nullable: true},
+		{Name: "internal_policy_id", Type: field.TypeString, Nullable: true},
+		{Name: "finding_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_account_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_group_id", Type: field.TypeString, Nullable: true},
+		{Name: "directory_membership_id", Type: field.TypeString, Nullable: true},
+	}
+	// WorkflowObjectRefHistoryTable holds the schema information for the "workflow_object_ref_history" table.
+	WorkflowObjectRefHistoryTable = &schema.Table{
+		Name:       "workflow_object_ref_history",
+		Columns:    WorkflowObjectRefHistoryColumns,
+		PrimaryKey: []*schema.Column{WorkflowObjectRefHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "workflowobjectrefhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{WorkflowObjectRefHistoryColumns[1]},
 			},
 		},
 	}
@@ -10382,6 +11579,13 @@ var (
 		CustomTypeEnumsTable,
 		DNSVerificationsTable,
 		DNSVerificationHistoryTable,
+		DirectoryAccountsTable,
+		DirectoryAccountHistoryTable,
+		DirectoryGroupsTable,
+		DirectoryGroupHistoryTable,
+		DirectoryMembershipsTable,
+		DirectoryMembershipHistoryTable,
+		DirectorySyncRunsTable,
 		DocumentDataTable,
 		DocumentDataHistoryTable,
 		EmailVerificationTokensTable,
@@ -10492,6 +11696,18 @@ var (
 		VulnerabilitiesTable,
 		VulnerabilityHistoryTable,
 		WebauthnsTable,
+		WorkflowAssignmentsTable,
+		WorkflowAssignmentHistoryTable,
+		WorkflowAssignmentTargetsTable,
+		WorkflowAssignmentTargetHistoryTable,
+		WorkflowDefinitionsTable,
+		WorkflowDefinitionHistoryTable,
+		WorkflowEventsTable,
+		WorkflowEventHistoryTable,
+		WorkflowInstancesTable,
+		WorkflowInstanceHistoryTable,
+		WorkflowObjectRefsTable,
+		WorkflowObjectRefHistoryTable,
 		ActionPlanTasksTable,
 		ContactFilesTable,
 		ControlControlObjectivesTable,
@@ -10690,6 +11906,35 @@ func init() {
 	DNSVerificationHistoryTable.Annotation = &entsql.Annotation{
 		Table: "dns_verification_history",
 	}
+	DirectoryAccountsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	DirectoryAccountsTable.ForeignKeys[1].RefTable = DirectorySyncRunsTable
+	DirectoryAccountsTable.ForeignKeys[2].RefTable = DirectorySyncRunsTable
+	DirectoryAccountsTable.ForeignKeys[3].RefTable = IntegrationsTable
+	DirectoryAccountsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	DirectoryAccountHistoryTable.Annotation = &entsql.Annotation{
+		Table: "directory_account_history",
+	}
+	DirectoryGroupsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	DirectoryGroupsTable.ForeignKeys[1].RefTable = DirectorySyncRunsTable
+	DirectoryGroupsTable.ForeignKeys[2].RefTable = DirectorySyncRunsTable
+	DirectoryGroupsTable.ForeignKeys[3].RefTable = IntegrationsTable
+	DirectoryGroupsTable.ForeignKeys[4].RefTable = OrganizationsTable
+	DirectoryGroupHistoryTable.Annotation = &entsql.Annotation{
+		Table: "directory_group_history",
+	}
+	DirectoryMembershipsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	DirectoryMembershipsTable.ForeignKeys[1].RefTable = DirectorySyncRunsTable
+	DirectoryMembershipsTable.ForeignKeys[2].RefTable = DirectoryAccountsTable
+	DirectoryMembershipsTable.ForeignKeys[3].RefTable = DirectoryGroupsTable
+	DirectoryMembershipsTable.ForeignKeys[4].RefTable = DirectorySyncRunsTable
+	DirectoryMembershipsTable.ForeignKeys[5].RefTable = IntegrationsTable
+	DirectoryMembershipsTable.ForeignKeys[6].RefTable = OrganizationsTable
+	DirectoryMembershipHistoryTable.Annotation = &entsql.Annotation{
+		Table: "directory_membership_history",
+	}
+	DirectorySyncRunsTable.ForeignKeys[0].RefTable = IntegrationsTable
+	DirectorySyncRunsTable.ForeignKeys[1].RefTable = IntegrationsTable
+	DirectorySyncRunsTable.ForeignKeys[2].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[0].RefTable = OrganizationsTable
 	DocumentDataTable.ForeignKeys[1].RefTable = TemplatesTable
 	DocumentDataHistoryTable.Annotation = &entsql.Annotation{
@@ -10712,7 +11957,8 @@ func init() {
 	EntityTypeHistoryTable.Annotation = &entsql.Annotation{
 		Table: "entity_type_history",
 	}
-	EventsTable.ForeignKeys[0].RefTable = ExportsTable
+	EventsTable.ForeignKeys[0].RefTable = DirectoryMembershipsTable
+	EventsTable.ForeignKeys[1].RefTable = ExportsTable
 	EvidencesTable.ForeignKeys[0].RefTable = OrganizationsTable
 	EvidenceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "evidence_history",
@@ -10775,6 +12021,7 @@ func init() {
 	GroupsTable.ForeignKeys[30].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[31].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[32].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[33].RefTable = WorkflowDefinitionsTable
 	GroupHistoryTable.Annotation = &entsql.Annotation{
 		Table: "group_history",
 	}
@@ -10986,6 +12233,7 @@ func init() {
 	SubscribersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TfaSettingsTable.ForeignKeys[0].RefTable = UsersTable
 	TagDefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	TagDefinitionsTable.ForeignKeys[1].RefTable = WorkflowDefinitionsTable
 	TasksTable.ForeignKeys[0].RefTable = CustomTypeEnumsTable
 	TasksTable.ForeignKeys[1].RefTable = FindingsTable
 	TasksTable.ForeignKeys[2].RefTable = IntegrationsTable
@@ -11061,6 +12309,50 @@ func init() {
 		Table: "vulnerability_history",
 	}
 	WebauthnsTable.ForeignKeys[0].RefTable = UsersTable
+	WorkflowAssignmentsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowAssignmentsTable.ForeignKeys[1].RefTable = WorkflowInstancesTable
+	WorkflowAssignmentsTable.ForeignKeys[2].RefTable = UsersTable
+	WorkflowAssignmentsTable.ForeignKeys[3].RefTable = GroupsTable
+	WorkflowAssignmentsTable.ForeignKeys[4].RefTable = WorkflowInstancesTable
+	WorkflowAssignmentHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_assignment_history",
+	}
+	WorkflowAssignmentTargetsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowAssignmentTargetsTable.ForeignKeys[1].RefTable = WorkflowAssignmentsTable
+	WorkflowAssignmentTargetsTable.ForeignKeys[2].RefTable = WorkflowAssignmentsTable
+	WorkflowAssignmentTargetsTable.ForeignKeys[3].RefTable = UsersTable
+	WorkflowAssignmentTargetsTable.ForeignKeys[4].RefTable = GroupsTable
+	WorkflowAssignmentTargetHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_assignment_target_history",
+	}
+	WorkflowDefinitionsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowDefinitionHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_definition_history",
+	}
+	WorkflowEventsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowEventsTable.ForeignKeys[1].RefTable = WorkflowInstancesTable
+	WorkflowEventsTable.ForeignKeys[2].RefTable = WorkflowInstancesTable
+	WorkflowEventHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_event_history",
+	}
+	WorkflowInstancesTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowInstancesTable.ForeignKeys[1].RefTable = WorkflowDefinitionsTable
+	WorkflowInstanceHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_instance_history",
+	}
+	WorkflowObjectRefsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	WorkflowObjectRefsTable.ForeignKeys[1].RefTable = WorkflowInstancesTable
+	WorkflowObjectRefsTable.ForeignKeys[2].RefTable = WorkflowInstancesTable
+	WorkflowObjectRefsTable.ForeignKeys[3].RefTable = ControlsTable
+	WorkflowObjectRefsTable.ForeignKeys[4].RefTable = TasksTable
+	WorkflowObjectRefsTable.ForeignKeys[5].RefTable = InternalPoliciesTable
+	WorkflowObjectRefsTable.ForeignKeys[6].RefTable = FindingsTable
+	WorkflowObjectRefsTable.ForeignKeys[7].RefTable = DirectoryAccountsTable
+	WorkflowObjectRefsTable.ForeignKeys[8].RefTable = DirectoryGroupsTable
+	WorkflowObjectRefsTable.ForeignKeys[9].RefTable = DirectoryMembershipsTable
+	WorkflowObjectRefHistoryTable.Annotation = &entsql.Annotation{
+		Table: "workflow_object_ref_history",
+	}
 	ActionPlanTasksTable.ForeignKeys[0].RefTable = ActionPlansTable
 	ActionPlanTasksTable.ForeignKeys[1].RefTable = TasksTable
 	ContactFilesTable.ForeignKeys[0].RefTable = ContactsTable

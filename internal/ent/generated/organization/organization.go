@@ -203,6 +203,26 @@ const (
 	EdgeVulnerabilities = "vulnerabilities"
 	// EdgeNotifications holds the string denoting the notifications edge name in mutations.
 	EdgeNotifications = "notifications"
+	// EdgeWorkflowDefinitions holds the string denoting the workflow_definitions edge name in mutations.
+	EdgeWorkflowDefinitions = "workflow_definitions"
+	// EdgeWorkflowInstances holds the string denoting the workflow_instances edge name in mutations.
+	EdgeWorkflowInstances = "workflow_instances"
+	// EdgeWorkflowEvents holds the string denoting the workflow_events edge name in mutations.
+	EdgeWorkflowEvents = "workflow_events"
+	// EdgeWorkflowAssignments holds the string denoting the workflow_assignments edge name in mutations.
+	EdgeWorkflowAssignments = "workflow_assignments"
+	// EdgeWorkflowAssignmentTargets holds the string denoting the workflow_assignment_targets edge name in mutations.
+	EdgeWorkflowAssignmentTargets = "workflow_assignment_targets"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
+	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
+	EdgeDirectoryMemberships = "directory_memberships"
+	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
+	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// EdgeMembers holds the string denoting the members edge name in mutations.
 	EdgeMembers = "members"
 	// Table holds the table name of the organization in the database.
@@ -732,6 +752,76 @@ const (
 	NotificationsInverseTable = "notifications"
 	// NotificationsColumn is the table column denoting the notifications relation/edge.
 	NotificationsColumn = "owner_id"
+	// WorkflowDefinitionsTable is the table that holds the workflow_definitions relation/edge.
+	WorkflowDefinitionsTable = "workflow_definitions"
+	// WorkflowDefinitionsInverseTable is the table name for the WorkflowDefinition entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowdefinition" package.
+	WorkflowDefinitionsInverseTable = "workflow_definitions"
+	// WorkflowDefinitionsColumn is the table column denoting the workflow_definitions relation/edge.
+	WorkflowDefinitionsColumn = "owner_id"
+	// WorkflowInstancesTable is the table that holds the workflow_instances relation/edge.
+	WorkflowInstancesTable = "workflow_instances"
+	// WorkflowInstancesInverseTable is the table name for the WorkflowInstance entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowinstance" package.
+	WorkflowInstancesInverseTable = "workflow_instances"
+	// WorkflowInstancesColumn is the table column denoting the workflow_instances relation/edge.
+	WorkflowInstancesColumn = "owner_id"
+	// WorkflowEventsTable is the table that holds the workflow_events relation/edge.
+	WorkflowEventsTable = "workflow_events"
+	// WorkflowEventsInverseTable is the table name for the WorkflowEvent entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowevent" package.
+	WorkflowEventsInverseTable = "workflow_events"
+	// WorkflowEventsColumn is the table column denoting the workflow_events relation/edge.
+	WorkflowEventsColumn = "owner_id"
+	// WorkflowAssignmentsTable is the table that holds the workflow_assignments relation/edge.
+	WorkflowAssignmentsTable = "workflow_assignments"
+	// WorkflowAssignmentsInverseTable is the table name for the WorkflowAssignment entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowassignment" package.
+	WorkflowAssignmentsInverseTable = "workflow_assignments"
+	// WorkflowAssignmentsColumn is the table column denoting the workflow_assignments relation/edge.
+	WorkflowAssignmentsColumn = "owner_id"
+	// WorkflowAssignmentTargetsTable is the table that holds the workflow_assignment_targets relation/edge.
+	WorkflowAssignmentTargetsTable = "workflow_assignment_targets"
+	// WorkflowAssignmentTargetsInverseTable is the table name for the WorkflowAssignmentTarget entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowassignmenttarget" package.
+	WorkflowAssignmentTargetsInverseTable = "workflow_assignment_targets"
+	// WorkflowAssignmentTargetsColumn is the table column denoting the workflow_assignment_targets relation/edge.
+	WorkflowAssignmentTargetsColumn = "owner_id"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "owner_id"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
+	DirectoryAccountsTable = "directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
+	DirectoryAccountsColumn = "owner_id"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "owner_id"
+	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
+	DirectoryMembershipsTable = "directory_memberships"
+	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
+	DirectoryMembershipsInverseTable = "directory_memberships"
+	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
+	DirectoryMembershipsColumn = "owner_id"
+	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
+	DirectorySyncRunsTable = "directory_sync_runs"
+	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
+	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
+	DirectorySyncRunsInverseTable = "directory_sync_runs"
+	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
+	DirectorySyncRunsColumn = "owner_id"
 	// MembersTable is the table that holds the members relation/edge.
 	MembersTable = "org_memberships"
 	// MembersInverseTable is the table name for the OrgMembership entity.
@@ -1970,6 +2060,146 @@ func ByNotifications(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
+// ByWorkflowDefinitionsCount orders the results by workflow_definitions count.
+func ByWorkflowDefinitionsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowDefinitionsStep(), opts...)
+	}
+}
+
+// ByWorkflowDefinitions orders the results by workflow_definitions terms.
+func ByWorkflowDefinitions(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowDefinitionsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowInstancesCount orders the results by workflow_instances count.
+func ByWorkflowInstancesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowInstancesStep(), opts...)
+	}
+}
+
+// ByWorkflowInstances orders the results by workflow_instances terms.
+func ByWorkflowInstances(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowInstancesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowEventsCount orders the results by workflow_events count.
+func ByWorkflowEventsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowEventsStep(), opts...)
+	}
+}
+
+// ByWorkflowEvents orders the results by workflow_events terms.
+func ByWorkflowEvents(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowEventsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowAssignmentsCount orders the results by workflow_assignments count.
+func ByWorkflowAssignmentsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowAssignmentsStep(), opts...)
+	}
+}
+
+// ByWorkflowAssignments orders the results by workflow_assignments terms.
+func ByWorkflowAssignments(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowAssignmentsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowAssignmentTargetsCount orders the results by workflow_assignment_targets count.
+func ByWorkflowAssignmentTargetsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowAssignmentTargetsStep(), opts...)
+	}
+}
+
+// ByWorkflowAssignmentTargets orders the results by workflow_assignment_targets terms.
+func ByWorkflowAssignmentTargets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowAssignmentTargetsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryMembershipsCount orders the results by directory_memberships count.
+func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+	}
+}
+
+// ByDirectoryMemberships orders the results by directory_memberships terms.
+func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
+func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
+	}
+}
+
+// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
+func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByMembersCount orders the results by members count.
 func ByMembersCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -2520,6 +2750,76 @@ func newNotificationsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(NotificationsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, NotificationsTable, NotificationsColumn),
+	)
+}
+func newWorkflowDefinitionsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowDefinitionsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowDefinitionsTable, WorkflowDefinitionsColumn),
+	)
+}
+func newWorkflowInstancesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowInstancesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowInstancesTable, WorkflowInstancesColumn),
+	)
+}
+func newWorkflowEventsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowEventsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowEventsTable, WorkflowEventsColumn),
+	)
+}
+func newWorkflowAssignmentsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowAssignmentsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowAssignmentsTable, WorkflowAssignmentsColumn),
+	)
+}
+func newWorkflowAssignmentTargetsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowAssignmentTargetsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowAssignmentTargetsTable, WorkflowAssignmentTargetsColumn),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+	)
+}
+func newDirectoryMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+	)
+}
+func newDirectorySyncRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }
 func newMembersStep() *sqlgraph.Step {

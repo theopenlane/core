@@ -1,0 +1,188 @@
+
+mutation CreateBulkCSVDirectorySyncRun($input: Upload!) {
+  createBulkCSVDirectorySyncRun(input: $input) {
+    directorySyncRuns {
+      completedAt
+      createdAt
+      createdBy
+      deltaCount
+      displayID
+      error
+      fullCount
+      id
+      integrationID
+      ownerID
+      rawManifestFileID
+      sourceCursor
+      startedAt
+      stats
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkDirectorySyncRun($input: [CreateDirectorySyncRunInput!]) {
+  createBulkDirectorySyncRun(input: $input) {
+    directorySyncRuns {
+      completedAt
+      createdAt
+      createdBy
+      deltaCount
+      displayID
+      error
+      fullCount
+      id
+      integrationID
+      ownerID
+      rawManifestFileID
+      sourceCursor
+      startedAt
+      stats
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateDirectorySyncRun($input: CreateDirectorySyncRunInput!) {
+  createDirectorySyncRun(input: $input) {
+    directorySyncRun {
+      completedAt
+      createdAt
+      createdBy
+      deltaCount
+      displayID
+      error
+      fullCount
+      id
+      integrationID
+      ownerID
+      rawManifestFileID
+      sourceCursor
+      startedAt
+      stats
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteDirectorySyncRun($deleteDirectorySyncRunId: ID!) {
+  deleteDirectorySyncRun(id: $deleteDirectorySyncRunId) {
+    deletedID
+  }
+}
+
+query GetAllDirectorySyncRuns {
+  directorySyncRuns {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        deltaCount
+        displayID
+        error
+        fullCount
+        id
+        integrationID
+        ownerID
+        rawManifestFileID
+        sourceCursor
+        startedAt
+        stats
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetDirectorySyncRunByID($directorySyncRunId: ID!) {
+  directorySyncRun(id: $directorySyncRunId) {
+    completedAt
+    createdAt
+    createdBy
+    deltaCount
+    displayID
+    error
+    fullCount
+    id
+    integrationID
+    ownerID
+    rawManifestFileID
+    sourceCursor
+    startedAt
+    stats
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetDirectorySyncRuns($first: Int, $last: Int, $where: DirectorySyncRunWhereInput) {
+  directorySyncRuns(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        completedAt
+        createdAt
+        createdBy
+        deltaCount
+        displayID
+        error
+        fullCount
+        id
+        integrationID
+        ownerID
+        rawManifestFileID
+        sourceCursor
+        startedAt
+        stats
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateDirectorySyncRun($updateDirectorySyncRunId: ID!, $input: UpdateDirectorySyncRunInput!) {
+  updateDirectorySyncRun(id: $updateDirectorySyncRunId, input: $input) {
+    directorySyncRun {
+      completedAt
+      createdAt
+      createdBy
+      deltaCount
+      displayID
+      error
+      fullCount
+      id
+      integrationID
+      ownerID
+      rawManifestFileID
+      sourceCursor
+      startedAt
+      stats
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}

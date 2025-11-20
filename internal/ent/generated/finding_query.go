@@ -33,6 +33,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -40,52 +41,54 @@ import (
 // FindingQuery is the builder for querying Finding entities.
 type FindingQuery struct {
 	config
-	ctx                      *QueryContext
-	order                    []finding.OrderOption
-	inters                   []Interceptor
-	predicates               []predicate.Finding
-	withOwner                *OrganizationQuery
-	withBlockedGroups        *GroupQuery
-	withEditors              *GroupQuery
-	withViewers              *GroupQuery
-	withIntegrations         *IntegrationQuery
-	withVulnerabilities      *VulnerabilityQuery
-	withActionPlans          *ActionPlanQuery
-	withControls             *ControlQuery
-	withSubcontrols          *SubcontrolQuery
-	withRisks                *RiskQuery
-	withPrograms             *ProgramQuery
-	withAssets               *AssetQuery
-	withEntities             *EntityQuery
-	withScans                *ScanQuery
-	withTasks                *TaskQuery
-	withRemediations         *RemediationQuery
-	withReviews              *ReviewQuery
-	withComments             *NoteQuery
-	withFiles                *FileQuery
-	withControlMappings      *FindingControlQuery
-	withFKs                  bool
-	loadTotal                []func(context.Context, []*Finding) error
-	modifiers                []func(*sql.Selector)
-	withNamedBlockedGroups   map[string]*GroupQuery
-	withNamedEditors         map[string]*GroupQuery
-	withNamedViewers         map[string]*GroupQuery
-	withNamedIntegrations    map[string]*IntegrationQuery
-	withNamedVulnerabilities map[string]*VulnerabilityQuery
-	withNamedActionPlans     map[string]*ActionPlanQuery
-	withNamedControls        map[string]*ControlQuery
-	withNamedSubcontrols     map[string]*SubcontrolQuery
-	withNamedRisks           map[string]*RiskQuery
-	withNamedPrograms        map[string]*ProgramQuery
-	withNamedAssets          map[string]*AssetQuery
-	withNamedEntities        map[string]*EntityQuery
-	withNamedScans           map[string]*ScanQuery
-	withNamedTasks           map[string]*TaskQuery
-	withNamedRemediations    map[string]*RemediationQuery
-	withNamedReviews         map[string]*ReviewQuery
-	withNamedComments        map[string]*NoteQuery
-	withNamedFiles           map[string]*FileQuery
-	withNamedControlMappings map[string]*FindingControlQuery
+	ctx                         *QueryContext
+	order                       []finding.OrderOption
+	inters                      []Interceptor
+	predicates                  []predicate.Finding
+	withOwner                   *OrganizationQuery
+	withBlockedGroups           *GroupQuery
+	withEditors                 *GroupQuery
+	withViewers                 *GroupQuery
+	withIntegrations            *IntegrationQuery
+	withVulnerabilities         *VulnerabilityQuery
+	withActionPlans             *ActionPlanQuery
+	withControls                *ControlQuery
+	withSubcontrols             *SubcontrolQuery
+	withRisks                   *RiskQuery
+	withPrograms                *ProgramQuery
+	withAssets                  *AssetQuery
+	withEntities                *EntityQuery
+	withScans                   *ScanQuery
+	withTasks                   *TaskQuery
+	withRemediations            *RemediationQuery
+	withReviews                 *ReviewQuery
+	withComments                *NoteQuery
+	withFiles                   *FileQuery
+	withWorkflowObjectRefs      *WorkflowObjectRefQuery
+	withControlMappings         *FindingControlQuery
+	withFKs                     bool
+	loadTotal                   []func(context.Context, []*Finding) error
+	modifiers                   []func(*sql.Selector)
+	withNamedBlockedGroups      map[string]*GroupQuery
+	withNamedEditors            map[string]*GroupQuery
+	withNamedViewers            map[string]*GroupQuery
+	withNamedIntegrations       map[string]*IntegrationQuery
+	withNamedVulnerabilities    map[string]*VulnerabilityQuery
+	withNamedActionPlans        map[string]*ActionPlanQuery
+	withNamedControls           map[string]*ControlQuery
+	withNamedSubcontrols        map[string]*SubcontrolQuery
+	withNamedRisks              map[string]*RiskQuery
+	withNamedPrograms           map[string]*ProgramQuery
+	withNamedAssets             map[string]*AssetQuery
+	withNamedEntities           map[string]*EntityQuery
+	withNamedScans              map[string]*ScanQuery
+	withNamedTasks              map[string]*TaskQuery
+	withNamedRemediations       map[string]*RemediationQuery
+	withNamedReviews            map[string]*ReviewQuery
+	withNamedComments           map[string]*NoteQuery
+	withNamedFiles              map[string]*FileQuery
+	withNamedWorkflowObjectRefs map[string]*WorkflowObjectRefQuery
+	withNamedControlMappings    map[string]*FindingControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -597,6 +600,31 @@ func (_q *FindingQuery) QueryFiles() *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *FindingQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, finding.WorkflowObjectRefsTable, finding.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlMappings chains the current query on the "control_mappings" edge.
 func (_q *FindingQuery) QueryControlMappings() *FindingControlQuery {
 	query := (&FindingControlClient{config: _q.config}).Query()
@@ -809,31 +837,32 @@ func (_q *FindingQuery) Clone() *FindingQuery {
 		return nil
 	}
 	return &FindingQuery{
-		config:              _q.config,
-		ctx:                 _q.ctx.Clone(),
-		order:               append([]finding.OrderOption{}, _q.order...),
-		inters:              append([]Interceptor{}, _q.inters...),
-		predicates:          append([]predicate.Finding{}, _q.predicates...),
-		withOwner:           _q.withOwner.Clone(),
-		withBlockedGroups:   _q.withBlockedGroups.Clone(),
-		withEditors:         _q.withEditors.Clone(),
-		withViewers:         _q.withViewers.Clone(),
-		withIntegrations:    _q.withIntegrations.Clone(),
-		withVulnerabilities: _q.withVulnerabilities.Clone(),
-		withActionPlans:     _q.withActionPlans.Clone(),
-		withControls:        _q.withControls.Clone(),
-		withSubcontrols:     _q.withSubcontrols.Clone(),
-		withRisks:           _q.withRisks.Clone(),
-		withPrograms:        _q.withPrograms.Clone(),
-		withAssets:          _q.withAssets.Clone(),
-		withEntities:        _q.withEntities.Clone(),
-		withScans:           _q.withScans.Clone(),
-		withTasks:           _q.withTasks.Clone(),
-		withRemediations:    _q.withRemediations.Clone(),
-		withReviews:         _q.withReviews.Clone(),
-		withComments:        _q.withComments.Clone(),
-		withFiles:           _q.withFiles.Clone(),
-		withControlMappings: _q.withControlMappings.Clone(),
+		config:                 _q.config,
+		ctx:                    _q.ctx.Clone(),
+		order:                  append([]finding.OrderOption{}, _q.order...),
+		inters:                 append([]Interceptor{}, _q.inters...),
+		predicates:             append([]predicate.Finding{}, _q.predicates...),
+		withOwner:              _q.withOwner.Clone(),
+		withBlockedGroups:      _q.withBlockedGroups.Clone(),
+		withEditors:            _q.withEditors.Clone(),
+		withViewers:            _q.withViewers.Clone(),
+		withIntegrations:       _q.withIntegrations.Clone(),
+		withVulnerabilities:    _q.withVulnerabilities.Clone(),
+		withActionPlans:        _q.withActionPlans.Clone(),
+		withControls:           _q.withControls.Clone(),
+		withSubcontrols:        _q.withSubcontrols.Clone(),
+		withRisks:              _q.withRisks.Clone(),
+		withPrograms:           _q.withPrograms.Clone(),
+		withAssets:             _q.withAssets.Clone(),
+		withEntities:           _q.withEntities.Clone(),
+		withScans:              _q.withScans.Clone(),
+		withTasks:              _q.withTasks.Clone(),
+		withRemediations:       _q.withRemediations.Clone(),
+		withReviews:            _q.withReviews.Clone(),
+		withComments:           _q.withComments.Clone(),
+		withFiles:              _q.withFiles.Clone(),
+		withWorkflowObjectRefs: _q.withWorkflowObjectRefs.Clone(),
+		withControlMappings:    _q.withControlMappings.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -1050,6 +1079,17 @@ func (_q *FindingQuery) WithFiles(opts ...func(*FileQuery)) *FindingQuery {
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *FindingQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // WithControlMappings tells the query-builder to eager-load the nodes that are connected to
 // the "control_mappings" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *FindingQuery) WithControlMappings(opts ...func(*FindingControlQuery)) *FindingQuery {
@@ -1146,7 +1186,7 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		nodes       = []*Finding{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [20]bool{
+		loadedTypes = [21]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1166,6 +1206,7 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			_q.withReviews != nil,
 			_q.withComments != nil,
 			_q.withFiles != nil,
+			_q.withWorkflowObjectRefs != nil,
 			_q.withControlMappings != nil,
 		}
 	)
@@ -1327,6 +1368,15 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Finding) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Finding, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControlMappings; query != nil {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Finding) { n.Edges.ControlMappings = []*FindingControl{} },
@@ -1457,6 +1507,13 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 		if err := _q.loadFiles(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedFiles(name) },
 			func(n *Finding, e *File) { n.appendNamedFiles(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Finding) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Finding, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2155,6 +2212,37 @@ func (_q *FindingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes [
 	}
 	return nil
 }
+func (_q *FindingQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Finding)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldFindingID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(finding.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.FindingID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "finding_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *FindingQuery) loadControlMappings(ctx context.Context, query *FindingControlQuery, nodes []*Finding, init func(*Finding), assign func(*Finding, *FindingControl)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Finding)
@@ -2536,6 +2624,20 @@ func (_q *FindingQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *F
 		_q.withNamedFiles = make(map[string]*FileQuery)
 	}
 	_q.withNamedFiles[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FindingQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *FindingQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

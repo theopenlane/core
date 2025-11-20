@@ -150,6 +150,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkCreatePayload_interna
 				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			case "comments":
 				return ec.fieldContext_InternalPolicy_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -308,6 +310,8 @@ func (ec *executionContext) fieldContext_InternalPolicyBulkUpdatePayload_interna
 				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			case "comments":
 				return ec.fieldContext_InternalPolicy_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -466,6 +470,8 @@ func (ec *executionContext) fieldContext_InternalPolicyCreatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			case "comments":
 				return ec.fieldContext_InternalPolicy_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},
@@ -624,6 +630,8 @@ func (ec *executionContext) fieldContext_InternalPolicyUpdatePayload_internalPol
 				return ec.fieldContext_InternalPolicy_file(ctx, field)
 			case "comments":
 				return ec.fieldContext_InternalPolicy_comments(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_InternalPolicy_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type InternalPolicy", field.Name)
 		},

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up directoryAccount by ID
+    """
+     directoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+    ):  DirectoryAccount!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryAccount
+    """
+    createDirectoryAccount(
+        """
+        values of the directoryAccount
+        """
+        input: CreateDirectoryAccountInput!
+    ): DirectoryAccountCreatePayload!
+    """
+    Create multiple new directoryAccounts
+    """
+    createBulkDirectoryAccount(
+        """
+        values of the directoryAccount
+        """
+        input: [CreateDirectoryAccountInput!]
+    ): DirectoryAccountBulkCreatePayload!
+    """
+    Create multiple new directoryAccounts via file upload
+    """
+    createBulkCSVDirectoryAccount(
+        """
+        csv file containing values of the directoryAccount
+        """
+        input: Upload!
+    ): DirectoryAccountBulkCreatePayload!
+    """
+    Update an existing directoryAccount
+    """
+    updateDirectoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+        """
+        New values for the directoryAccount
+        """
+        input: UpdateDirectoryAccountInput!
+    ): DirectoryAccountUpdatePayload!
+    """
+    Delete an existing directoryAccount
+    """
+    deleteDirectoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+    ): DirectoryAccountDeletePayload!
+}
+
+"""
+Return response for createDirectoryAccount mutation
+"""
+type DirectoryAccountCreatePayload {
+    """
+    Created directoryAccount
+    """
+    directoryAccount: DirectoryAccount!
+}
+
+"""
+Return response for updateDirectoryAccount mutation
+"""
+type DirectoryAccountUpdatePayload {
+    """
+    Updated directoryAccount
+    """
+    directoryAccount: DirectoryAccount!
+}
+
+"""
+Return response for deleteDirectoryAccount mutation
+"""
+type DirectoryAccountDeletePayload {
+    """
+    Deleted directoryAccount ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryAccount mutation
+"""
+type DirectoryAccountBulkCreatePayload {
+    """
+    Created directoryAccounts
+    """
+    directoryAccounts: [DirectoryAccount!]
+}

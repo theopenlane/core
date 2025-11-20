@@ -1,0 +1,2 @@
+Tags,EventType,Payload,OwnerId,WorkflowInstanceId
+example_tags,example_eventtype,example_payload,example_ownerid,example_workflowinstanceid

@@ -113,11 +113,13 @@ type TaskEdges struct {
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
 	// Evidence holds the value of the evidence edge.
 	Evidence []*Evidence `json:"evidence,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [16]bool
+	loadedTypes [17]bool
 	// totalCount holds the count of the edges above.
-	totalCount [16]map[string]int
+	totalCount [17]map[string]int
 
 	namedComments               map[string][]*Note
 	namedGroups                 map[string][]*Group
@@ -131,6 +133,7 @@ type TaskEdges struct {
 	namedControlImplementations map[string][]*ControlImplementation
 	namedActionPlans            map[string][]*ActionPlan
 	namedEvidence               map[string][]*Evidence
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -283,6 +286,15 @@ func (e TaskEdges) EvidenceOrErr() ([]*Evidence, error) {
 		return e.Evidence, nil
 	}
 	return nil, &NotLoadedError{edge: "evidence"}
+}
+
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e TaskEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[16] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -604,6 +616,11 @@ func (_m *Task) QueryActionPlans() *ActionPlanQuery {
 // QueryEvidence queries the "evidence" edge of the Task entity.
 func (_m *Task) QueryEvidence() *EvidenceQuery {
 	return NewTaskClient(_m.config).QueryEvidence(_m)
+}
+
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Task entity.
+func (_m *Task) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewTaskClient(_m.config).QueryWorkflowObjectRefs(_m)
 }
 
 // Update returns a builder for updating this Task.
@@ -987,6 +1004,30 @@ func (_m *Task) appendNamedEvidence(name string, edges ...*Evidence) {
 		_m.Edges.namedEvidence[name] = []*Evidence{}
 	} else {
 		_m.Edges.namedEvidence[name] = append(_m.Edges.namedEvidence[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Task) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Task) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

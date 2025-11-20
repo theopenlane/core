@@ -40,6 +40,8 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		customdomainResults               *generated.CustomDomainConnection
 		customtypeenumResults             *generated.CustomTypeEnumConnection
 		dnsverificationResults            *generated.DNSVerificationConnection
+		directoryaccountResults           *generated.DirectoryAccountConnection
+		directorygroupResults             *generated.DirectoryGroupConnection
 		documentdataResults               *generated.DocumentDataConnection
 		entityResults                     *generated.EntityConnection
 		entitytypeResults                 *generated.EntityTypeConnection
@@ -82,6 +84,11 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		usersettingResults                *generated.UserSettingConnection
 		vulnerabilityResults              *generated.VulnerabilityConnection
 		webauthnResults                   *generated.WebauthnConnection
+		workflowassignmentResults         *generated.WorkflowAssignmentConnection
+		workflowassignmenttargetResults   *generated.WorkflowAssignmentTargetConnection
+		workflowdefinitionResults         *generated.WorkflowDefinitionConnection
+		workfloweventResults              *generated.WorkflowEventConnection
+		workflowinstanceResults           *generated.WorkflowInstanceConnection
 	)
 
 	highlightTracker := newContextTracker(query)
@@ -231,6 +238,30 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, dnsverificationResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			directoryaccountResults, err = searchDirectoryAccounts(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, directoryaccountResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			directorygroupResults, err = searchDirectoryGroups(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, directorygroupResults, highlightTracker)
 			}
 		},
 		func() {
@@ -737,6 +768,66 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 				highlightSearchContext(ctx, query, webauthnResults, highlightTracker)
 			}
 		},
+		func() {
+			var err error
+			workflowassignmentResults, err = searchWorkflowAssignments(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowassignmentResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowassignmenttargetResults, err = searchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowassignmenttargetResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowdefinitionResults, err = searchWorkflowDefinitions(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowdefinitionResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workfloweventResults, err = searchWorkflowEvents(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workfloweventResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
+			workflowinstanceResults, err = searchWorkflowInstances(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, workflowinstanceResults, highlightTracker)
+			}
+		},
 	})
 
 	// log the errors for debugging
@@ -808,6 +899,16 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.DNSVerifications = dnsverificationResults
 
 		res.TotalCount += dnsverificationResults.TotalCount
+	}
+	if directoryaccountResults != nil && len(directoryaccountResults.Edges) > 0 {
+		res.DirectoryAccounts = directoryaccountResults
+
+		res.TotalCount += directoryaccountResults.TotalCount
+	}
+	if directorygroupResults != nil && len(directorygroupResults.Edges) > 0 {
+		res.DirectoryGroups = directorygroupResults
+
+		res.TotalCount += directorygroupResults.TotalCount
 	}
 	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
 		res.DocumentData = documentdataResults
@@ -1018,6 +1119,31 @@ func (r *queryResolver) AdminSearch(ctx context.Context, query string, after *en
 		res.Webauthns = webauthnResults
 
 		res.TotalCount += webauthnResults.TotalCount
+	}
+	if workflowassignmentResults != nil && len(workflowassignmentResults.Edges) > 0 {
+		res.WorkflowAssignments = workflowassignmentResults
+
+		res.TotalCount += workflowassignmentResults.TotalCount
+	}
+	if workflowassignmenttargetResults != nil && len(workflowassignmenttargetResults.Edges) > 0 {
+		res.WorkflowAssignmentTargets = workflowassignmenttargetResults
+
+		res.TotalCount += workflowassignmenttargetResults.TotalCount
+	}
+	if workflowdefinitionResults != nil && len(workflowdefinitionResults.Edges) > 0 {
+		res.WorkflowDefinitions = workflowdefinitionResults
+
+		res.TotalCount += workflowdefinitionResults.TotalCount
+	}
+	if workfloweventResults != nil && len(workfloweventResults.Edges) > 0 {
+		res.WorkflowEvents = workfloweventResults
+
+		res.TotalCount += workfloweventResults.TotalCount
+	}
+	if workflowinstanceResults != nil && len(workflowinstanceResults.Edges) > 0 {
+		res.WorkflowInstances = workflowinstanceResults
+
+		res.TotalCount += workflowinstanceResults.TotalCount
 	}
 
 	return res, nil
@@ -1237,6 +1363,42 @@ func (r *queryResolver) AdminDNSVerificationSearch(ctx context.Context, query st
 
 	// return the results
 	return dnsverificationResults, nil
+}
+func (r *queryResolver) AdminDirectoryAccountSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryAccountConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	directoryaccountResults, err := adminSearchDirectoryAccounts(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return directoryaccountResults, nil
+}
+func (r *queryResolver) AdminDirectoryGroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryGroupConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	directorygroupResults, err := adminSearchDirectoryGroups(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return directorygroupResults, nil
 }
 func (r *queryResolver) AdminDocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
 	// ensure the user is a system admin
@@ -1993,4 +2155,94 @@ func (r *queryResolver) AdminWebauthnSearch(ctx context.Context, query string, a
 
 	// return the results
 	return webauthnResults, nil
+}
+func (r *queryResolver) AdminWorkflowAssignmentSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	workflowassignmentResults, err := adminSearchWorkflowAssignments(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowassignmentResults, nil
+}
+func (r *queryResolver) AdminWorkflowAssignmentTargetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentTargetConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	workflowassignmenttargetResults, err := adminSearchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowassignmenttargetResults, nil
+}
+func (r *queryResolver) AdminWorkflowDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowDefinitionConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	workflowdefinitionResults, err := adminSearchWorkflowDefinitions(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowdefinitionResults, nil
+}
+func (r *queryResolver) AdminWorkflowEventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowEventConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	workfloweventResults, err := adminSearchWorkflowEvents(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workfloweventResults, nil
+}
+func (r *queryResolver) AdminWorkflowInstanceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowInstanceConnection, error) {
+	// ensure the user is a system admin
+	isAdmin, err := rule.CheckIsSystemAdminWithContext(ctx)
+	if err != nil || !isAdmin {
+		return nil, generated.ErrPermissionDenied
+	}
+
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	workflowinstanceResults, err := adminSearchWorkflowInstances(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return workflowinstanceResults, nil
 }

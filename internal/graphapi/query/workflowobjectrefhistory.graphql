@@ -1,0 +1,67 @@
+query GetAllWorkflowObjectRefHistories {
+  workflowObjectRefHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directoryMembershipID
+        displayID
+        findingID
+        historyTime
+        id
+        internalPolicyID
+        operation
+        ownerID
+        ref
+        taskID
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+
+query GetWorkflowObjectRefHistories($first: Int, $last: Int, $where: WorkflowObjectRefHistoryWhereInput) {
+  workflowObjectRefHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directoryMembershipID
+        displayID
+        findingID
+        historyTime
+        id
+        internalPolicyID
+        operation
+        ownerID
+        ref
+        taskID
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}

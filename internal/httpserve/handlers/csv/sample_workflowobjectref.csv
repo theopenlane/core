@@ -1,0 +1,2 @@
+OwnerId,WorkflowInstanceId,ControlId,TaskId,InternalPolicyId,FindingId,DirectoryAccountId,DirectoryGroupId
+example_ownerid,example_workflowinstanceid,example_controlid,example_taskid,example_internalpolicyid,example_findingid,example_directoryaccountid,example_directorygroupid

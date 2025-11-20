@@ -53,6 +53,18 @@ models:
   CredentialSet:
     model:
       - github.com/theopenlane/core/pkg/models.CredentialSet
+  WorkflowDefinitionDocument:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionDocument
+  WorkflowDefinitionSchema:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionSchema
+  WorkflowInstanceContext:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowInstanceContext
+  WorkflowEventPayload:
+    model:
+      - github.com/theopenlane/core/pkg/models.WorkflowEventPayload
 schema: ["internal/graphapi/clientschema/schema.graphql"]
 query: ["internal/graphapi/query/*.graphql"]
 generate:

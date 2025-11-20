@@ -28,6 +28,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -73,6 +76,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 type Change struct {
@@ -1136,6 +1145,288 @@ func (_m *DNSVerificationHistory) Diff(history *DNSVerificationHistory) (*Histor
 		}, nil
 	} else if historyOlder {
 		return &HistoryDiff[DNSVerificationHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *DirectoryAccountHistory) changes(new *DirectoryAccountHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.IntegrationID, new.IntegrationID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldIntegrationID, _m.IntegrationID, new.IntegrationID))
+	}
+	if !reflect.DeepEqual(_m.DirectorySyncRunID, new.DirectorySyncRunID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldDirectorySyncRunID, _m.DirectorySyncRunID, new.DirectorySyncRunID))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.SecondaryKey, new.SecondaryKey) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldSecondaryKey, _m.SecondaryKey, new.SecondaryKey))
+	}
+	if !reflect.DeepEqual(_m.CanonicalEmail, new.CanonicalEmail) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldCanonicalEmail, _m.CanonicalEmail, new.CanonicalEmail))
+	}
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(_m.GivenName, new.GivenName) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldGivenName, _m.GivenName, new.GivenName))
+	}
+	if !reflect.DeepEqual(_m.FamilyName, new.FamilyName) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldFamilyName, _m.FamilyName, new.FamilyName))
+	}
+	if !reflect.DeepEqual(_m.JobTitle, new.JobTitle) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldJobTitle, _m.JobTitle, new.JobTitle))
+	}
+	if !reflect.DeepEqual(_m.Department, new.Department) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldDepartment, _m.Department, new.Department))
+	}
+	if !reflect.DeepEqual(_m.OrganizationUnit, new.OrganizationUnit) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldOrganizationUnit, _m.OrganizationUnit, new.OrganizationUnit))
+	}
+	if !reflect.DeepEqual(_m.AccountType, new.AccountType) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldAccountType, _m.AccountType, new.AccountType))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.MfaState, new.MfaState) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldMfaState, _m.MfaState, new.MfaState))
+	}
+	if !reflect.DeepEqual(_m.LastSeenIP, new.LastSeenIP) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldLastSeenIP, _m.LastSeenIP, new.LastSeenIP))
+	}
+	if !reflect.DeepEqual(_m.LastLoginAt, new.LastLoginAt) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldLastLoginAt, _m.LastLoginAt, new.LastLoginAt))
+	}
+	if !reflect.DeepEqual(_m.ObservedAt, new.ObservedAt) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldObservedAt, _m.ObservedAt, new.ObservedAt))
+	}
+	if !reflect.DeepEqual(_m.ProfileHash, new.ProfileHash) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldProfileHash, _m.ProfileHash, new.ProfileHash))
+	}
+	if !reflect.DeepEqual(_m.Profile, new.Profile) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldProfile, _m.Profile, new.Profile))
+	}
+	if !reflect.DeepEqual(_m.RawProfileFileID, new.RawProfileFileID) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldRawProfileFileID, _m.RawProfileFileID, new.RawProfileFileID))
+	}
+	if !reflect.DeepEqual(_m.SourceVersion, new.SourceVersion) {
+		changes = append(changes, NewChange(directoryaccounthistory.FieldSourceVersion, _m.SourceVersion, new.SourceVersion))
+	}
+	return changes
+}
+
+func (_m *DirectoryAccountHistory) Diff(history *DirectoryAccountHistory) (*HistoryDiff[DirectoryAccountHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[DirectoryAccountHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[DirectoryAccountHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *DirectoryGroupHistory) changes(new *DirectoryGroupHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.IntegrationID, new.IntegrationID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldIntegrationID, _m.IntegrationID, new.IntegrationID))
+	}
+	if !reflect.DeepEqual(_m.DirectorySyncRunID, new.DirectorySyncRunID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldDirectorySyncRunID, _m.DirectorySyncRunID, new.DirectorySyncRunID))
+	}
+	if !reflect.DeepEqual(_m.ExternalID, new.ExternalID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldExternalID, _m.ExternalID, new.ExternalID))
+	}
+	if !reflect.DeepEqual(_m.Email, new.Email) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldEmail, _m.Email, new.Email))
+	}
+	if !reflect.DeepEqual(_m.DisplayName, new.DisplayName) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldDisplayName, _m.DisplayName, new.DisplayName))
+	}
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldDescription, _m.Description, new.Description))
+	}
+	if !reflect.DeepEqual(_m.Classification, new.Classification) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldClassification, _m.Classification, new.Classification))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.ExternalSharingAllowed, new.ExternalSharingAllowed) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldExternalSharingAllowed, _m.ExternalSharingAllowed, new.ExternalSharingAllowed))
+	}
+	if !reflect.DeepEqual(_m.MemberCount, new.MemberCount) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldMemberCount, _m.MemberCount, new.MemberCount))
+	}
+	if !reflect.DeepEqual(_m.ObservedAt, new.ObservedAt) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldObservedAt, _m.ObservedAt, new.ObservedAt))
+	}
+	if !reflect.DeepEqual(_m.ProfileHash, new.ProfileHash) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldProfileHash, _m.ProfileHash, new.ProfileHash))
+	}
+	if !reflect.DeepEqual(_m.Profile, new.Profile) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldProfile, _m.Profile, new.Profile))
+	}
+	if !reflect.DeepEqual(_m.RawProfileFileID, new.RawProfileFileID) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldRawProfileFileID, _m.RawProfileFileID, new.RawProfileFileID))
+	}
+	if !reflect.DeepEqual(_m.SourceVersion, new.SourceVersion) {
+		changes = append(changes, NewChange(directorygrouphistory.FieldSourceVersion, _m.SourceVersion, new.SourceVersion))
+	}
+	return changes
+}
+
+func (_m *DirectoryGroupHistory) Diff(history *DirectoryGroupHistory) (*HistoryDiff[DirectoryGroupHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[DirectoryGroupHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[DirectoryGroupHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *DirectoryMembershipHistory) changes(new *DirectoryMembershipHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.IntegrationID, new.IntegrationID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldIntegrationID, _m.IntegrationID, new.IntegrationID))
+	}
+	if !reflect.DeepEqual(_m.DirectorySyncRunID, new.DirectorySyncRunID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldDirectorySyncRunID, _m.DirectorySyncRunID, new.DirectorySyncRunID))
+	}
+	if !reflect.DeepEqual(_m.DirectoryAccountID, new.DirectoryAccountID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldDirectoryAccountID, _m.DirectoryAccountID, new.DirectoryAccountID))
+	}
+	if !reflect.DeepEqual(_m.DirectoryGroupID, new.DirectoryGroupID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldDirectoryGroupID, _m.DirectoryGroupID, new.DirectoryGroupID))
+	}
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldRole, _m.Role, new.Role))
+	}
+	if !reflect.DeepEqual(_m.Source, new.Source) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldSource, _m.Source, new.Source))
+	}
+	if !reflect.DeepEqual(_m.FirstSeenAt, new.FirstSeenAt) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldFirstSeenAt, _m.FirstSeenAt, new.FirstSeenAt))
+	}
+	if !reflect.DeepEqual(_m.LastSeenAt, new.LastSeenAt) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldLastSeenAt, _m.LastSeenAt, new.LastSeenAt))
+	}
+	if !reflect.DeepEqual(_m.ObservedAt, new.ObservedAt) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldObservedAt, _m.ObservedAt, new.ObservedAt))
+	}
+	if !reflect.DeepEqual(_m.LastConfirmedRunID, new.LastConfirmedRunID) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldLastConfirmedRunID, _m.LastConfirmedRunID, new.LastConfirmedRunID))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(directorymembershiphistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	return changes
+}
+
+func (_m *DirectoryMembershipHistory) Diff(history *DirectoryMembershipHistory) (*HistoryDiff[DirectoryMembershipHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[DirectoryMembershipHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[DirectoryMembershipHistory]{
 			Old:     history,
 			New:     _m,
 			Changes: history.changes(_m),
@@ -4876,6 +5167,468 @@ func (_m *VulnerabilityHistory) Diff(history *VulnerabilityHistory) (*HistoryDif
 	return nil, ErrIdenticalHistory
 }
 
+func (_m *WorkflowAssignmentHistory) changes(new *WorkflowAssignmentHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.WorkflowInstanceID, new.WorkflowInstanceID) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldWorkflowInstanceID, _m.WorkflowInstanceID, new.WorkflowInstanceID))
+	}
+	if !reflect.DeepEqual(_m.AssignmentKey, new.AssignmentKey) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldAssignmentKey, _m.AssignmentKey, new.AssignmentKey))
+	}
+	if !reflect.DeepEqual(_m.Role, new.Role) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldRole, _m.Role, new.Role))
+	}
+	if !reflect.DeepEqual(_m.Label, new.Label) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldLabel, _m.Label, new.Label))
+	}
+	if !reflect.DeepEqual(_m.Required, new.Required) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldRequired, _m.Required, new.Required))
+	}
+	if !reflect.DeepEqual(_m.Status, new.Status) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldStatus, _m.Status, new.Status))
+	}
+	if !reflect.DeepEqual(_m.Metadata, new.Metadata) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldMetadata, _m.Metadata, new.Metadata))
+	}
+	if !reflect.DeepEqual(_m.DecidedAt, new.DecidedAt) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldDecidedAt, _m.DecidedAt, new.DecidedAt))
+	}
+	if !reflect.DeepEqual(_m.ActorUserID, new.ActorUserID) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldActorUserID, _m.ActorUserID, new.ActorUserID))
+	}
+	if !reflect.DeepEqual(_m.ActorGroupID, new.ActorGroupID) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldActorGroupID, _m.ActorGroupID, new.ActorGroupID))
+	}
+	if !reflect.DeepEqual(_m.Notes, new.Notes) {
+		changes = append(changes, NewChange(workflowassignmenthistory.FieldNotes, _m.Notes, new.Notes))
+	}
+	return changes
+}
+
+func (_m *WorkflowAssignmentHistory) Diff(history *WorkflowAssignmentHistory) (*HistoryDiff[WorkflowAssignmentHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowAssignmentHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowAssignmentHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *WorkflowAssignmentTargetHistory) changes(new *WorkflowAssignmentTargetHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.WorkflowAssignmentID, new.WorkflowAssignmentID) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldWorkflowAssignmentID, _m.WorkflowAssignmentID, new.WorkflowAssignmentID))
+	}
+	if !reflect.DeepEqual(_m.TargetType, new.TargetType) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldTargetType, _m.TargetType, new.TargetType))
+	}
+	if !reflect.DeepEqual(_m.TargetUserID, new.TargetUserID) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldTargetUserID, _m.TargetUserID, new.TargetUserID))
+	}
+	if !reflect.DeepEqual(_m.TargetGroupID, new.TargetGroupID) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldTargetGroupID, _m.TargetGroupID, new.TargetGroupID))
+	}
+	if !reflect.DeepEqual(_m.ResolverKey, new.ResolverKey) {
+		changes = append(changes, NewChange(workflowassignmenttargethistory.FieldResolverKey, _m.ResolverKey, new.ResolverKey))
+	}
+	return changes
+}
+
+func (_m *WorkflowAssignmentTargetHistory) Diff(history *WorkflowAssignmentTargetHistory) (*HistoryDiff[WorkflowAssignmentTargetHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowAssignmentTargetHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowAssignmentTargetHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *WorkflowDefinitionHistory) changes(new *WorkflowDefinitionHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.SystemOwned, new.SystemOwned) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldSystemOwned, _m.SystemOwned, new.SystemOwned))
+	}
+	if !reflect.DeepEqual(_m.InternalNotes, new.InternalNotes) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldInternalNotes, _m.InternalNotes, new.InternalNotes))
+	}
+	if !reflect.DeepEqual(_m.SystemInternalID, new.SystemInternalID) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldSystemInternalID, _m.SystemInternalID, new.SystemInternalID))
+	}
+	if !reflect.DeepEqual(_m.Name, new.Name) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldName, _m.Name, new.Name))
+	}
+	if !reflect.DeepEqual(_m.Description, new.Description) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDescription, _m.Description, new.Description))
+	}
+	if !reflect.DeepEqual(_m.WorkflowKind, new.WorkflowKind) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldWorkflowKind, _m.WorkflowKind, new.WorkflowKind))
+	}
+	if !reflect.DeepEqual(_m.SchemaType, new.SchemaType) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldSchemaType, _m.SchemaType, new.SchemaType))
+	}
+	if !reflect.DeepEqual(_m.Revision, new.Revision) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldRevision, _m.Revision, new.Revision))
+	}
+	if !reflect.DeepEqual(_m.Draft, new.Draft) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDraft, _m.Draft, new.Draft))
+	}
+	if !reflect.DeepEqual(_m.PublishedAt, new.PublishedAt) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldPublishedAt, _m.PublishedAt, new.PublishedAt))
+	}
+	if !reflect.DeepEqual(_m.CooldownSeconds, new.CooldownSeconds) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldCooldownSeconds, _m.CooldownSeconds, new.CooldownSeconds))
+	}
+	if !reflect.DeepEqual(_m.IsDefault, new.IsDefault) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldIsDefault, _m.IsDefault, new.IsDefault))
+	}
+	if !reflect.DeepEqual(_m.Active, new.Active) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldActive, _m.Active, new.Active))
+	}
+	if !reflect.DeepEqual(_m.TriggerOperations, new.TriggerOperations) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldTriggerOperations, _m.TriggerOperations, new.TriggerOperations))
+	}
+	if !reflect.DeepEqual(_m.TriggerFields, new.TriggerFields) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldTriggerFields, _m.TriggerFields, new.TriggerFields))
+	}
+	if !reflect.DeepEqual(_m.DefinitionJSON, new.DefinitionJSON) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldDefinitionJSON, _m.DefinitionJSON, new.DefinitionJSON))
+	}
+	if !reflect.DeepEqual(_m.TrackedFields, new.TrackedFields) {
+		changes = append(changes, NewChange(workflowdefinitionhistory.FieldTrackedFields, _m.TrackedFields, new.TrackedFields))
+	}
+	return changes
+}
+
+func (_m *WorkflowDefinitionHistory) Diff(history *WorkflowDefinitionHistory) (*HistoryDiff[WorkflowDefinitionHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowDefinitionHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowDefinitionHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *WorkflowEventHistory) changes(new *WorkflowEventHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.WorkflowInstanceID, new.WorkflowInstanceID) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldWorkflowInstanceID, _m.WorkflowInstanceID, new.WorkflowInstanceID))
+	}
+	if !reflect.DeepEqual(_m.EventType, new.EventType) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldEventType, _m.EventType, new.EventType))
+	}
+	if !reflect.DeepEqual(_m.Payload, new.Payload) {
+		changes = append(changes, NewChange(workfloweventhistory.FieldPayload, _m.Payload, new.Payload))
+	}
+	return changes
+}
+
+func (_m *WorkflowEventHistory) Diff(history *WorkflowEventHistory) (*HistoryDiff[WorkflowEventHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowEventHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowEventHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *WorkflowInstanceHistory) changes(new *WorkflowInstanceHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DeletedAt, new.DeletedAt) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldDeletedAt, _m.DeletedAt, new.DeletedAt))
+	}
+	if !reflect.DeepEqual(_m.DeletedBy, new.DeletedBy) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldDeletedBy, _m.DeletedBy, new.DeletedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.Tags, new.Tags) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldTags, _m.Tags, new.Tags))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.WorkflowDefinitionID, new.WorkflowDefinitionID) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldWorkflowDefinitionID, _m.WorkflowDefinitionID, new.WorkflowDefinitionID))
+	}
+	if !reflect.DeepEqual(_m.State, new.State) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldState, _m.State, new.State))
+	}
+	if !reflect.DeepEqual(_m.Context, new.Context) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldContext, _m.Context, new.Context))
+	}
+	if !reflect.DeepEqual(_m.LastEvaluatedAt, new.LastEvaluatedAt) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldLastEvaluatedAt, _m.LastEvaluatedAt, new.LastEvaluatedAt))
+	}
+	if !reflect.DeepEqual(_m.DefinitionSnapshot, new.DefinitionSnapshot) {
+		changes = append(changes, NewChange(workflowinstancehistory.FieldDefinitionSnapshot, _m.DefinitionSnapshot, new.DefinitionSnapshot))
+	}
+	return changes
+}
+
+func (_m *WorkflowInstanceHistory) Diff(history *WorkflowInstanceHistory) (*HistoryDiff[WorkflowInstanceHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowInstanceHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowInstanceHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
+func (_m *WorkflowObjectRefHistory) changes(new *WorkflowObjectRefHistory) []Change {
+	var changes []Change
+	if !reflect.DeepEqual(_m.CreatedAt, new.CreatedAt) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldCreatedAt, _m.CreatedAt, new.CreatedAt))
+	}
+	if !reflect.DeepEqual(_m.UpdatedAt, new.UpdatedAt) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldUpdatedAt, _m.UpdatedAt, new.UpdatedAt))
+	}
+	if !reflect.DeepEqual(_m.CreatedBy, new.CreatedBy) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldCreatedBy, _m.CreatedBy, new.CreatedBy))
+	}
+	if !reflect.DeepEqual(_m.DisplayID, new.DisplayID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldDisplayID, _m.DisplayID, new.DisplayID))
+	}
+	if !reflect.DeepEqual(_m.OwnerID, new.OwnerID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldOwnerID, _m.OwnerID, new.OwnerID))
+	}
+	if !reflect.DeepEqual(_m.WorkflowInstanceID, new.WorkflowInstanceID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldWorkflowInstanceID, _m.WorkflowInstanceID, new.WorkflowInstanceID))
+	}
+	if !reflect.DeepEqual(_m.ControlID, new.ControlID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldControlID, _m.ControlID, new.ControlID))
+	}
+	if !reflect.DeepEqual(_m.TaskID, new.TaskID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldTaskID, _m.TaskID, new.TaskID))
+	}
+	if !reflect.DeepEqual(_m.InternalPolicyID, new.InternalPolicyID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldInternalPolicyID, _m.InternalPolicyID, new.InternalPolicyID))
+	}
+	if !reflect.DeepEqual(_m.FindingID, new.FindingID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldFindingID, _m.FindingID, new.FindingID))
+	}
+	if !reflect.DeepEqual(_m.DirectoryAccountID, new.DirectoryAccountID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldDirectoryAccountID, _m.DirectoryAccountID, new.DirectoryAccountID))
+	}
+	if !reflect.DeepEqual(_m.DirectoryGroupID, new.DirectoryGroupID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldDirectoryGroupID, _m.DirectoryGroupID, new.DirectoryGroupID))
+	}
+	if !reflect.DeepEqual(_m.DirectoryMembershipID, new.DirectoryMembershipID) {
+		changes = append(changes, NewChange(workflowobjectrefhistory.FieldDirectoryMembershipID, _m.DirectoryMembershipID, new.DirectoryMembershipID))
+	}
+	return changes
+}
+
+func (_m *WorkflowObjectRefHistory) Diff(history *WorkflowObjectRefHistory) (*HistoryDiff[WorkflowObjectRefHistory], error) {
+	if _m.Ref != history.Ref {
+		return nil, ErrMismatchedRef
+	}
+
+	_mUnix, historyUnix := _m.HistoryTime.Unix(), history.HistoryTime.Unix()
+	_mOlder := _mUnix < historyUnix || (_mUnix == historyUnix && _m.ID < history.ID)
+	historyOlder := _mUnix > historyUnix || (_mUnix == historyUnix && _m.ID > history.ID)
+
+	if _mOlder {
+		return &HistoryDiff[WorkflowObjectRefHistory]{
+			Old:     _m,
+			New:     history,
+			Changes: _m.changes(history),
+		}, nil
+	} else if historyOlder {
+		return &HistoryDiff[WorkflowObjectRefHistory]{
+			Old:     history,
+			New:     _m,
+			Changes: history.changes(_m),
+		}, nil
+	}
+	return nil, ErrIdenticalHistory
+}
+
 func (c Change) String(op history.OpType) string {
 	var newstr, oldstr string
 	if c.New != nil {
@@ -4963,6 +5716,24 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditDNSVerificationHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditDirectoryAccountHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditDirectoryGroupHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditDirectoryMembershipHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5227,6 +5998,42 @@ func (c *Client) Audit(ctx context.Context, after *Cursor, first *int, before *C
 	result.Edges = append(result.Edges, record.Edges...)
 
 	record, err = auditVulnerabilityHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowAssignmentHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowAssignmentTargetHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowDefinitionHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowEventHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowInstanceHistory(ctx, c.config, after, first, before, last, nil, nil)
+	if err != nil {
+		return nil, err
+	}
+	result.Edges = append(result.Edges, record.Edges...)
+
+	record, err = auditWorkflowObjectRefHistory(ctx, c.config, after, first, before, last, nil, nil)
 	if err != nil {
 		return nil, err
 	}
@@ -5640,6 +6447,129 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 		}
 
 		result, err = auditDNSVerificationHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("DirectoryAccountHistory", "History") {
+		// map AuditLogWhereInput to DirectoryAccountHistoryWhereInput
+		whereInput := &DirectoryAccountHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DirectoryAccountHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DirectoryAccountHistoryOrder{
+			Field:     DirectoryAccountHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDirectoryAccountHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("DirectoryGroupHistory", "History") {
+		// map AuditLogWhereInput to DirectoryGroupHistoryWhereInput
+		whereInput := &DirectoryGroupHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DirectoryGroupHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DirectoryGroupHistoryOrder{
+			Field:     DirectoryGroupHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDirectoryGroupHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("DirectoryMembershipHistory", "History") {
+		// map AuditLogWhereInput to DirectoryMembershipHistoryWhereInput
+		whereInput := &DirectoryMembershipHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to DirectoryMembershipHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &DirectoryMembershipHistoryOrder{
+			Field:     DirectoryMembershipHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditDirectoryMembershipHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
 		if err != nil {
 			return nil, err
 		}
@@ -7450,6 +8380,252 @@ func (c *Client) AuditWithFilter(ctx context.Context, after *Cursor, first *int,
 
 		return
 	}
+	if where.Table == strings.TrimSuffix("WorkflowAssignmentHistory", "History") {
+		// map AuditLogWhereInput to WorkflowAssignmentHistoryWhereInput
+		whereInput := &WorkflowAssignmentHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowAssignmentHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowAssignmentHistoryOrder{
+			Field:     WorkflowAssignmentHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowAssignmentHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("WorkflowAssignmentTargetHistory", "History") {
+		// map AuditLogWhereInput to WorkflowAssignmentTargetHistoryWhereInput
+		whereInput := &WorkflowAssignmentTargetHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowAssignmentTargetHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowAssignmentTargetHistoryOrder{
+			Field:     WorkflowAssignmentTargetHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowAssignmentTargetHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("WorkflowDefinitionHistory", "History") {
+		// map AuditLogWhereInput to WorkflowDefinitionHistoryWhereInput
+		whereInput := &WorkflowDefinitionHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowDefinitionHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowDefinitionHistoryOrder{
+			Field:     WorkflowDefinitionHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowDefinitionHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("WorkflowEventHistory", "History") {
+		// map AuditLogWhereInput to WorkflowEventHistoryWhereInput
+		whereInput := &WorkflowEventHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowEventHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowEventHistoryOrder{
+			Field:     WorkflowEventHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowEventHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("WorkflowInstanceHistory", "History") {
+		// map AuditLogWhereInput to WorkflowInstanceHistoryWhereInput
+		whereInput := &WorkflowInstanceHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowInstanceHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowInstanceHistoryOrder{
+			Field:     WorkflowInstanceHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowInstanceHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
+	if where.Table == strings.TrimSuffix("WorkflowObjectRefHistory", "History") {
+		// map AuditLogWhereInput to WorkflowObjectRefHistoryWhereInput
+		whereInput := &WorkflowObjectRefHistoryWhereInput{}
+		if where.RefID != nil {
+			whereInput.RefEqualFold = where.RefID
+		}
+
+		if where.UpdatedBy != nil {
+			whereInput.UpdatedBy = where.UpdatedBy
+		}
+
+		if where.Operation != nil {
+			whereInput.Operation = where.Operation
+		}
+
+		if where.Before != nil {
+			whereInput.HistoryTimeLT = where.Before
+		}
+
+		if where.After != nil {
+			whereInput.HistoryTimeGT = where.After
+		}
+
+		// map AuditLogOrder to WorkflowObjectRefHistoryOrder
+		// default to ordering by HistoryTime desc
+		orderByInput := &WorkflowObjectRefHistoryOrder{
+			Field:     WorkflowObjectRefHistoryOrderFieldHistoryTime,
+			Direction: entgql.OrderDirectionDesc,
+		}
+
+		if orderBy != nil {
+			orderByInput.Direction = orderBy.Direction
+		}
+
+		result, err = auditWorkflowObjectRefHistory(ctx, c.config, after, first, before, last, orderByInput, whereInput)
+		if err != nil {
+			return nil, err
+		}
+
+		return
+	}
 
 	return
 }
@@ -8184,6 +9360,225 @@ func auditDNSVerificationHistory(ctx context.Context, config config, after *Curs
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &DNSVerificationHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type directoryaccounthistoryref struct {
+	Ref string
+}
+
+func auditDirectoryAccountHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DirectoryAccountHistoryOrder, where *DirectoryAccountHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []DirectoryAccountHistoryPaginateOption{
+		WithDirectoryAccountHistoryOrder(orderBy),
+		WithDirectoryAccountHistoryFilter(where.Filter),
+	}
+
+	client := NewDirectoryAccountHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DirectoryAccountHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DirectoryAccountHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DirectoryAccountHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					directoryaccounthistory.Ref(curr.Node.Ref),
+					directoryaccounthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(directoryaccounthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DirectoryAccountHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type directorygrouphistoryref struct {
+	Ref string
+}
+
+func auditDirectoryGroupHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DirectoryGroupHistoryOrder, where *DirectoryGroupHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []DirectoryGroupHistoryPaginateOption{
+		WithDirectoryGroupHistoryOrder(orderBy),
+		WithDirectoryGroupHistoryFilter(where.Filter),
+	}
+
+	client := NewDirectoryGroupHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DirectoryGroupHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DirectoryGroupHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DirectoryGroupHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					directorygrouphistory.Ref(curr.Node.Ref),
+					directorygrouphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(directorygrouphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DirectoryGroupHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type directorymembershiphistoryref struct {
+	Ref string
+}
+
+func auditDirectoryMembershipHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *DirectoryMembershipHistoryOrder, where *DirectoryMembershipHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []DirectoryMembershipHistoryPaginateOption{
+		WithDirectoryMembershipHistoryOrder(orderBy),
+		WithDirectoryMembershipHistoryFilter(where.Filter),
+	}
+
+	client := NewDirectoryMembershipHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "DirectoryMembershipHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&DirectoryMembershipHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&DirectoryMembershipHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					directorymembershiphistory.Ref(curr.Node.Ref),
+					directorymembershiphistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(directorymembershiphistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &DirectoryMembershipHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)
@@ -11396,6 +12791,444 @@ func auditVulnerabilityHistory(ctx context.Context, config config, after *Cursor
 			// but just in case, we will handle it gracefully
 			if len(prev) == 0 {
 				prev = append(prev, &VulnerabilityHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workflowassignmenthistoryref struct {
+	Ref string
+}
+
+func auditWorkflowAssignmentHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowAssignmentHistoryOrder, where *WorkflowAssignmentHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowAssignmentHistoryPaginateOption{
+		WithWorkflowAssignmentHistoryOrder(orderBy),
+		WithWorkflowAssignmentHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowAssignmentHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowAssignmentHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowAssignmentHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowAssignmentHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workflowassignmenthistory.Ref(curr.Node.Ref),
+					workflowassignmenthistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workflowassignmenthistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowAssignmentHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workflowassignmenttargethistoryref struct {
+	Ref string
+}
+
+func auditWorkflowAssignmentTargetHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowAssignmentTargetHistoryOrder, where *WorkflowAssignmentTargetHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowAssignmentTargetHistoryPaginateOption{
+		WithWorkflowAssignmentTargetHistoryOrder(orderBy),
+		WithWorkflowAssignmentTargetHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowAssignmentTargetHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowAssignmentTargetHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowAssignmentTargetHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowAssignmentTargetHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workflowassignmenttargethistory.Ref(curr.Node.Ref),
+					workflowassignmenttargethistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workflowassignmenttargethistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowAssignmentTargetHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workflowdefinitionhistoryref struct {
+	Ref string
+}
+
+func auditWorkflowDefinitionHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowDefinitionHistoryOrder, where *WorkflowDefinitionHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowDefinitionHistoryPaginateOption{
+		WithWorkflowDefinitionHistoryOrder(orderBy),
+		WithWorkflowDefinitionHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowDefinitionHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowDefinitionHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowDefinitionHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowDefinitionHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workflowdefinitionhistory.Ref(curr.Node.Ref),
+					workflowdefinitionhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workflowdefinitionhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowDefinitionHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workfloweventhistoryref struct {
+	Ref string
+}
+
+func auditWorkflowEventHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowEventHistoryOrder, where *WorkflowEventHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowEventHistoryPaginateOption{
+		WithWorkflowEventHistoryOrder(orderBy),
+		WithWorkflowEventHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowEventHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowEventHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowEventHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowEventHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workfloweventhistory.Ref(curr.Node.Ref),
+					workfloweventhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workfloweventhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowEventHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workflowinstancehistoryref struct {
+	Ref string
+}
+
+func auditWorkflowInstanceHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowInstanceHistoryOrder, where *WorkflowInstanceHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowInstanceHistoryPaginateOption{
+		WithWorkflowInstanceHistoryOrder(orderBy),
+		WithWorkflowInstanceHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowInstanceHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowInstanceHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowInstanceHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowInstanceHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workflowinstancehistory.Ref(curr.Node.Ref),
+					workflowinstancehistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workflowinstancehistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowInstanceHistory{})
+			}
+
+			record.Changes = prev[0].changes(curr.Node)
+		}
+
+		edge := &AuditLogEdge{
+			Node: record,
+			// we only currently support pagination from the same table, so we can use the existing cursor
+			Cursor: curr.Cursor,
+		}
+
+		result.Edges = append(result.Edges, edge)
+	}
+
+	result.TotalCount = histories.TotalCount
+	result.PageInfo = histories.PageInfo
+
+	return result, nil
+}
+
+type workflowobjectrefhistoryref struct {
+	Ref string
+}
+
+func auditWorkflowObjectRefHistory(ctx context.Context, config config, after *Cursor, first *int, before *Cursor, last *int, orderBy *WorkflowObjectRefHistoryOrder, where *WorkflowObjectRefHistoryWhereInput) (result *AuditLogConnection, err error) {
+	result = &AuditLogConnection{
+		Edges: []*AuditLogEdge{},
+	}
+
+	opts := []WorkflowObjectRefHistoryPaginateOption{
+		WithWorkflowObjectRefHistoryOrder(orderBy),
+		WithWorkflowObjectRefHistoryFilter(where.Filter),
+	}
+
+	client := NewWorkflowObjectRefHistoryClient(config)
+
+	histories, err := client.Query().
+		Paginate(ctx, after, first, before, last, opts...)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, curr := range histories.Edges {
+		record := &AuditLog{
+			Table:       "WorkflowObjectRefHistory",
+			RefID:       curr.Node.Ref,
+			HistoryTime: curr.Node.HistoryTime,
+			Operation:   curr.Node.Operation,
+			UpdatedBy:   curr.Node.UpdatedBy,
+		}
+		switch curr.Node.Operation {
+		case history.OpTypeInsert:
+			record.Changes = (&WorkflowObjectRefHistory{}).changes(curr.Node)
+		case history.OpTypeDelete:
+			record.Changes = curr.Node.changes(&WorkflowObjectRefHistory{})
+		default:
+			// Get the previous history entry to calculate the changes
+			prev, err := client.Query().
+				Where(
+					workflowobjectrefhistory.Ref(curr.Node.Ref),
+					workflowobjectrefhistory.HistoryTimeLT(curr.Node.HistoryTime),
+				).
+				Order(workflowobjectrefhistory.ByHistoryTime(sql.OrderDesc())).
+				Limit(1).
+				All(ctx) //there will be two when there is more than one change because we pull limit + 1 in our interceptors
+			if err != nil {
+				return nil, err
+			}
+
+			// this shouldn't happen because the initial change will always be an insert
+			// but just in case, we will handle it gracefully
+			if len(prev) == 0 {
+				prev = append(prev, &WorkflowObjectRefHistory{})
 			}
 
 			record.Changes = prev[0].changes(curr.Node)

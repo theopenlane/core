@@ -746,6 +746,238 @@ func (r *queryResolver) DNSVerificationHistories(ctx context.Context, after *ent
 	return res, err
 }
 
+// DirectoryAccounts is the resolver for the directoryAccounts field.
+func (r *queryResolver) DirectoryAccounts(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) (*generated.DirectoryAccountConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DirectoryAccountOrder{
+			{
+				Field:     generated.DirectoryAccountOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryAccount.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directoryaccount"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryAccountOrder(orderBy),
+		generated.WithDirectoryAccountFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directoryaccount"})
+	}
+
+	return res, err
+}
+
+// DirectoryAccountHistories is the resolver for the directoryAccountHistories field.
+func (r *queryResolver) DirectoryAccountHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryAccountHistoryOrder, where *generated.DirectoryAccountHistoryWhereInput) (*generated.DirectoryAccountHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.DirectoryAccountHistoryOrder{
+			Field:     generated.DirectoryAccountHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryAccountHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directoryaccounthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryAccountHistoryOrder(orderBy),
+		generated.WithDirectoryAccountHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directoryaccounthistory"})
+	}
+
+	return res, err
+}
+
+// DirectoryGroups is the resolver for the directoryGroups field.
+func (r *queryResolver) DirectoryGroups(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) (*generated.DirectoryGroupConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DirectoryGroupOrder{
+			{
+				Field:     generated.DirectoryGroupOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryGroup.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygroup"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryGroupOrder(orderBy),
+		generated.WithDirectoryGroupFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygroup"})
+	}
+
+	return res, err
+}
+
+// DirectoryGroupHistories is the resolver for the directoryGroupHistories field.
+func (r *queryResolver) DirectoryGroupHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryGroupHistoryOrder, where *generated.DirectoryGroupHistoryWhereInput) (*generated.DirectoryGroupHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.DirectoryGroupHistoryOrder{
+			Field:     generated.DirectoryGroupHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryGroupHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygrouphistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryGroupHistoryOrder(orderBy),
+		generated.WithDirectoryGroupHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorygrouphistory"})
+	}
+
+	return res, err
+}
+
+// DirectoryMemberships is the resolver for the directoryMemberships field.
+func (r *queryResolver) DirectoryMemberships(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) (*generated.DirectoryMembershipConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DirectoryMembershipOrder{
+			{
+				Field:     generated.DirectoryMembershipOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryMembership.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorymembership"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryMembershipOrder(orderBy),
+		generated.WithDirectoryMembershipFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorymembership"})
+	}
+
+	return res, err
+}
+
+// DirectoryMembershipHistories is the resolver for the directoryMembershipHistories field.
+func (r *queryResolver) DirectoryMembershipHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryMembershipHistoryOrder, where *generated.DirectoryMembershipHistoryWhereInput) (*generated.DirectoryMembershipHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.DirectoryMembershipHistoryOrder{
+			Field:     generated.DirectoryMembershipHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectoryMembershipHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorymembershiphistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectoryMembershipHistoryOrder(orderBy),
+		generated.WithDirectoryMembershipHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorymembershiphistory"})
+	}
+
+	return res, err
+}
+
+// DirectorySyncRuns is the resolver for the directorySyncRuns field.
+func (r *queryResolver) DirectorySyncRuns(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) (*generated.DirectorySyncRunConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DirectorySyncRunOrder{
+			{
+				Field:     generated.DirectorySyncRunOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DirectorySyncRun.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorysyncrun"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDirectorySyncRunOrder(orderBy),
+		generated.WithDirectorySyncRunFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "directorysyncrun"})
+	}
+
+	return res, err
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set
@@ -4092,6 +4324,402 @@ func (r *queryResolver) Webauthns(ctx context.Context, after *entgql.Cursor[stri
 		generated.WithWebauthnFilter(where.Filter))
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "webauthn"})
+	}
+
+	return res, err
+}
+
+// WorkflowAssignments is the resolver for the workflowAssignments field.
+func (r *queryResolver) WorkflowAssignments(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) (*generated.WorkflowAssignmentConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowAssignmentOrder{
+			{
+				Field:     generated.WorkflowAssignmentOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowAssignment.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignment"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowAssignmentOrder(orderBy),
+		generated.WithWorkflowAssignmentFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignment"})
+	}
+
+	return res, err
+}
+
+// WorkflowAssignmentHistories is the resolver for the workflowAssignmentHistories field.
+func (r *queryResolver) WorkflowAssignmentHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentHistoryOrder, where *generated.WorkflowAssignmentHistoryWhereInput) (*generated.WorkflowAssignmentHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowAssignmentHistoryOrder{
+			Field:     generated.WorkflowAssignmentHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowAssignmentHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenthistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowAssignmentHistoryOrder(orderBy),
+		generated.WithWorkflowAssignmentHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenthistory"})
+	}
+
+	return res, err
+}
+
+// WorkflowAssignmentTargets is the resolver for the workflowAssignmentTargets field.
+func (r *queryResolver) WorkflowAssignmentTargets(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) (*generated.WorkflowAssignmentTargetConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowAssignmentTargetOrder{
+			{
+				Field:     generated.WorkflowAssignmentTargetOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttarget"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowAssignmentTargetOrder(orderBy),
+		generated.WithWorkflowAssignmentTargetFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttarget"})
+	}
+
+	return res, err
+}
+
+// WorkflowAssignmentTargetHistories is the resolver for the workflowAssignmentTargetHistories field.
+func (r *queryResolver) WorkflowAssignmentTargetHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentTargetHistoryOrder, where *generated.WorkflowAssignmentTargetHistoryWhereInput) (*generated.WorkflowAssignmentTargetHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowAssignmentTargetHistoryOrder{
+			Field:     generated.WorkflowAssignmentTargetHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowAssignmentTargetHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttargethistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowAssignmentTargetHistoryOrder(orderBy),
+		generated.WithWorkflowAssignmentTargetHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowassignmenttargethistory"})
+	}
+
+	return res, err
+}
+
+// WorkflowDefinitions is the resolver for the workflowDefinitions field.
+func (r *queryResolver) WorkflowDefinitions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) (*generated.WorkflowDefinitionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowDefinitionOrder{
+			{
+				Field:     generated.WorkflowDefinitionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowDefinition.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowdefinition"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowDefinitionOrder(orderBy),
+		generated.WithWorkflowDefinitionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowdefinition"})
+	}
+
+	return res, err
+}
+
+// WorkflowDefinitionHistories is the resolver for the workflowDefinitionHistories field.
+func (r *queryResolver) WorkflowDefinitionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowDefinitionHistoryOrder, where *generated.WorkflowDefinitionHistoryWhereInput) (*generated.WorkflowDefinitionHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowDefinitionHistoryOrder{
+			Field:     generated.WorkflowDefinitionHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowDefinitionHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowdefinitionhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowDefinitionHistoryOrder(orderBy),
+		generated.WithWorkflowDefinitionHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowdefinitionhistory"})
+	}
+
+	return res, err
+}
+
+// WorkflowEvents is the resolver for the workflowEvents field.
+func (r *queryResolver) WorkflowEvents(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) (*generated.WorkflowEventConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowEventOrder{
+			{
+				Field:     generated.WorkflowEventOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowEvent.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowevent"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowEventOrder(orderBy),
+		generated.WithWorkflowEventFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowevent"})
+	}
+
+	return res, err
+}
+
+// WorkflowEventHistories is the resolver for the workflowEventHistories field.
+func (r *queryResolver) WorkflowEventHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowEventHistoryOrder, where *generated.WorkflowEventHistoryWhereInput) (*generated.WorkflowEventHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowEventHistoryOrder{
+			Field:     generated.WorkflowEventHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowEventHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workfloweventhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowEventHistoryOrder(orderBy),
+		generated.WithWorkflowEventHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workfloweventhistory"})
+	}
+
+	return res, err
+}
+
+// WorkflowInstances is the resolver for the workflowInstances field.
+func (r *queryResolver) WorkflowInstances(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) (*generated.WorkflowInstanceConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowInstanceOrder{
+			{
+				Field:     generated.WorkflowInstanceOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowInstance.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowinstance"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowInstanceOrder(orderBy),
+		generated.WithWorkflowInstanceFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowinstance"})
+	}
+
+	return res, err
+}
+
+// WorkflowInstanceHistories is the resolver for the workflowInstanceHistories field.
+func (r *queryResolver) WorkflowInstanceHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowInstanceHistoryOrder, where *generated.WorkflowInstanceHistoryWhereInput) (*generated.WorkflowInstanceHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowInstanceHistoryOrder{
+			Field:     generated.WorkflowInstanceHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowInstanceHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowinstancehistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowInstanceHistoryOrder(orderBy),
+		generated.WithWorkflowInstanceHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowinstancehistory"})
+	}
+
+	return res, err
+}
+
+// WorkflowObjectRefs is the resolver for the workflowObjectRefs field.
+func (r *queryResolver) WorkflowObjectRefs(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) (*generated.WorkflowObjectRefConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.WorkflowObjectRefOrder{
+			{
+				Field:     generated.WorkflowObjectRefOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowObjectRef.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectref"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowObjectRefOrder(orderBy),
+		generated.WithWorkflowObjectRefFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectref"})
+	}
+
+	return res, err
+}
+
+// WorkflowObjectRefHistories is the resolver for the workflowObjectRefHistories field.
+func (r *queryResolver) WorkflowObjectRefHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowObjectRefHistoryOrder, where *generated.WorkflowObjectRefHistoryWhereInput) (*generated.WorkflowObjectRefHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.WorkflowObjectRefHistoryOrder{
+			Field:     generated.WorkflowObjectRefHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).WorkflowObjectRefHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectrefhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithWorkflowObjectRefHistoryOrder(orderBy),
+		generated.WithWorkflowObjectRefHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "workflowobjectrefhistory"})
 	}
 
 	return res, err

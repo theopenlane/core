@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up workflowDefinition by ID
+    """
+     workflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+    ):  WorkflowDefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowDefinition
+    """
+    createWorkflowDefinition(
+        """
+        values of the workflowDefinition
+        """
+        input: CreateWorkflowDefinitionInput!
+    ): WorkflowDefinitionCreatePayload!
+    """
+    Create multiple new workflowDefinitions
+    """
+    createBulkWorkflowDefinition(
+        """
+        values of the workflowDefinition
+        """
+        input: [CreateWorkflowDefinitionInput!]
+    ): WorkflowDefinitionBulkCreatePayload!
+    """
+    Create multiple new workflowDefinitions via file upload
+    """
+    createBulkCSVWorkflowDefinition(
+        """
+        csv file containing values of the workflowDefinition
+        """
+        input: Upload!
+    ): WorkflowDefinitionBulkCreatePayload!
+    """
+    Update an existing workflowDefinition
+    """
+    updateWorkflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+        """
+        New values for the workflowDefinition
+        """
+        input: UpdateWorkflowDefinitionInput!
+    ): WorkflowDefinitionUpdatePayload!
+    """
+    Delete an existing workflowDefinition
+    """
+    deleteWorkflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+    ): WorkflowDefinitionDeletePayload!
+}
+
+"""
+Return response for createWorkflowDefinition mutation
+"""
+type WorkflowDefinitionCreatePayload {
+    """
+    Created workflowDefinition
+    """
+    workflowDefinition: WorkflowDefinition!
+}
+
+"""
+Return response for updateWorkflowDefinition mutation
+"""
+type WorkflowDefinitionUpdatePayload {
+    """
+    Updated workflowDefinition
+    """
+    workflowDefinition: WorkflowDefinition!
+}
+
+"""
+Return response for deleteWorkflowDefinition mutation
+"""
+type WorkflowDefinitionDeletePayload {
+    """
+    Deleted workflowDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowDefinition mutation
+"""
+type WorkflowDefinitionBulkCreatePayload {
+    """
+    Created workflowDefinitions
+    """
+    workflowDefinitions: [WorkflowDefinition!]
+}

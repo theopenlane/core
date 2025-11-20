@@ -592,4 +592,82 @@ func (ec *executionContext) marshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋ
 	return v
 }
 
+func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (models.WorkflowDefinitionDocument, error) {
+	var res models.WorkflowDefinitionDocument
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v models.WorkflowDefinitionDocument) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (*models.WorkflowDefinitionDocument, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.WorkflowDefinitionDocument)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowDefinitionDocument) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (models.WorkflowEventPayload, error) {
+	var res models.WorkflowEventPayload
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v models.WorkflowEventPayload) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (*models.WorkflowEventPayload, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.WorkflowEventPayload)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowEventPayload) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (models.WorkflowInstanceContext, error) {
+	var res models.WorkflowInstanceContext
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (*models.WorkflowInstanceContext, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.WorkflowInstanceContext)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowInstanceContext) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 // endregion ***************************** type.gotpl *****************************

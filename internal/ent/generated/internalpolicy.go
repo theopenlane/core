@@ -132,11 +132,13 @@ type InternalPolicyEdges struct {
 	File *File `json:"file,omitempty"`
 	// conversations related to the policy
 	Comments []*Note `json:"comments,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [17]bool
+	loadedTypes [18]bool
 	// totalCount holds the count of the edges above.
-	totalCount [17]map[string]int
+	totalCount [18]map[string]int
 
 	namedBlockedGroups          map[string][]*Group
 	namedEditors                map[string][]*Group
@@ -150,6 +152,7 @@ type InternalPolicyEdges struct {
 	namedRisks                  map[string][]*Risk
 	namedPrograms               map[string][]*Program
 	namedComments               map[string][]*Note
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -313,6 +316,15 @@ func (e InternalPolicyEdges) CommentsOrErr() ([]*Note, error) {
 		return e.Comments, nil
 	}
 	return nil, &NotLoadedError{edge: "comments"}
+}
+
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e InternalPolicyEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[17] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -670,6 +682,11 @@ func (_m *InternalPolicy) QueryFile() *FileQuery {
 // QueryComments queries the "comments" edge of the InternalPolicy entity.
 func (_m *InternalPolicy) QueryComments() *NoteQuery {
 	return NewInternalPolicyClient(_m.config).QueryComments(_m)
+}
+
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the InternalPolicy entity.
+func (_m *InternalPolicy) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewInternalPolicyClient(_m.config).QueryWorkflowObjectRefs(_m)
 }
 
 // Update returns a builder for updating this InternalPolicy.
@@ -1090,6 +1107,30 @@ func (_m *InternalPolicy) appendNamedComments(name string, edges ...*Note) {
 		_m.Edges.namedComments[name] = []*Note{}
 	} else {
 		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *InternalPolicy) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *InternalPolicy) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

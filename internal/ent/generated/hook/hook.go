@@ -273,6 +273,90 @@ func (f DNSVerificationHistoryFunc) Mutate(ctx context.Context, m generated.Muta
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DNSVerificationHistoryMutation", m)
 }
 
+// The DirectoryAccountFunc type is an adapter to allow the use of ordinary
+// function as DirectoryAccount mutator.
+type DirectoryAccountFunc func(context.Context, *generated.DirectoryAccountMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryAccountFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryAccountMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryAccountMutation", m)
+}
+
+// The DirectoryAccountHistoryFunc type is an adapter to allow the use of ordinary
+// function as DirectoryAccountHistory mutator.
+type DirectoryAccountHistoryFunc func(context.Context, *generated.DirectoryAccountHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryAccountHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryAccountHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryAccountHistoryMutation", m)
+}
+
+// The DirectoryGroupFunc type is an adapter to allow the use of ordinary
+// function as DirectoryGroup mutator.
+type DirectoryGroupFunc func(context.Context, *generated.DirectoryGroupMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryGroupFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryGroupMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryGroupMutation", m)
+}
+
+// The DirectoryGroupHistoryFunc type is an adapter to allow the use of ordinary
+// function as DirectoryGroupHistory mutator.
+type DirectoryGroupHistoryFunc func(context.Context, *generated.DirectoryGroupHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryGroupHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryGroupHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryGroupHistoryMutation", m)
+}
+
+// The DirectoryMembershipFunc type is an adapter to allow the use of ordinary
+// function as DirectoryMembership mutator.
+type DirectoryMembershipFunc func(context.Context, *generated.DirectoryMembershipMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryMembershipFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryMembershipMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryMembershipMutation", m)
+}
+
+// The DirectoryMembershipHistoryFunc type is an adapter to allow the use of ordinary
+// function as DirectoryMembershipHistory mutator.
+type DirectoryMembershipHistoryFunc func(context.Context, *generated.DirectoryMembershipHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectoryMembershipHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectoryMembershipHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectoryMembershipHistoryMutation", m)
+}
+
+// The DirectorySyncRunFunc type is an adapter to allow the use of ordinary
+// function as DirectorySyncRun mutator.
+type DirectorySyncRunFunc func(context.Context, *generated.DirectorySyncRunMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f DirectorySyncRunFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.DirectorySyncRunMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.DirectorySyncRunMutation", m)
+}
+
 // The DocumentDataFunc type is an adapter to allow the use of ordinary
 // function as DocumentData mutator.
 type DocumentDataFunc func(context.Context, *generated.DocumentDataMutation) (generated.Value, error)
@@ -1591,6 +1675,150 @@ func (f WebauthnFunc) Mutate(ctx context.Context, m generated.Mutation) (generat
 		return f(ctx, mv)
 	}
 	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WebauthnMutation", m)
+}
+
+// The WorkflowAssignmentFunc type is an adapter to allow the use of ordinary
+// function as WorkflowAssignment mutator.
+type WorkflowAssignmentFunc func(context.Context, *generated.WorkflowAssignmentMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowAssignmentFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowAssignmentMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowAssignmentMutation", m)
+}
+
+// The WorkflowAssignmentHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowAssignmentHistory mutator.
+type WorkflowAssignmentHistoryFunc func(context.Context, *generated.WorkflowAssignmentHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowAssignmentHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowAssignmentHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowAssignmentHistoryMutation", m)
+}
+
+// The WorkflowAssignmentTargetFunc type is an adapter to allow the use of ordinary
+// function as WorkflowAssignmentTarget mutator.
+type WorkflowAssignmentTargetFunc func(context.Context, *generated.WorkflowAssignmentTargetMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowAssignmentTargetFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowAssignmentTargetMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowAssignmentTargetMutation", m)
+}
+
+// The WorkflowAssignmentTargetHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowAssignmentTargetHistory mutator.
+type WorkflowAssignmentTargetHistoryFunc func(context.Context, *generated.WorkflowAssignmentTargetHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowAssignmentTargetHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowAssignmentTargetHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowAssignmentTargetHistoryMutation", m)
+}
+
+// The WorkflowDefinitionFunc type is an adapter to allow the use of ordinary
+// function as WorkflowDefinition mutator.
+type WorkflowDefinitionFunc func(context.Context, *generated.WorkflowDefinitionMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowDefinitionFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowDefinitionMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowDefinitionMutation", m)
+}
+
+// The WorkflowDefinitionHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowDefinitionHistory mutator.
+type WorkflowDefinitionHistoryFunc func(context.Context, *generated.WorkflowDefinitionHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowDefinitionHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowDefinitionHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowDefinitionHistoryMutation", m)
+}
+
+// The WorkflowEventFunc type is an adapter to allow the use of ordinary
+// function as WorkflowEvent mutator.
+type WorkflowEventFunc func(context.Context, *generated.WorkflowEventMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowEventFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowEventMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowEventMutation", m)
+}
+
+// The WorkflowEventHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowEventHistory mutator.
+type WorkflowEventHistoryFunc func(context.Context, *generated.WorkflowEventHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowEventHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowEventHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowEventHistoryMutation", m)
+}
+
+// The WorkflowInstanceFunc type is an adapter to allow the use of ordinary
+// function as WorkflowInstance mutator.
+type WorkflowInstanceFunc func(context.Context, *generated.WorkflowInstanceMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowInstanceFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowInstanceMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowInstanceMutation", m)
+}
+
+// The WorkflowInstanceHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowInstanceHistory mutator.
+type WorkflowInstanceHistoryFunc func(context.Context, *generated.WorkflowInstanceHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowInstanceHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowInstanceHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowInstanceHistoryMutation", m)
+}
+
+// The WorkflowObjectRefFunc type is an adapter to allow the use of ordinary
+// function as WorkflowObjectRef mutator.
+type WorkflowObjectRefFunc func(context.Context, *generated.WorkflowObjectRefMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowObjectRefFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowObjectRefMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowObjectRefMutation", m)
+}
+
+// The WorkflowObjectRefHistoryFunc type is an adapter to allow the use of ordinary
+// function as WorkflowObjectRefHistory mutator.
+type WorkflowObjectRefHistoryFunc func(context.Context, *generated.WorkflowObjectRefHistoryMutation) (generated.Value, error)
+
+// Mutate calls f(ctx, m).
+func (f WorkflowObjectRefHistoryFunc) Mutate(ctx context.Context, m generated.Mutation) (generated.Value, error) {
+	if mv, ok := m.(*generated.WorkflowObjectRefHistoryMutation); ok {
+		return f(ctx, mv)
+	}
+	return nil, fmt.Errorf("unexpected mutation type %T. expect *generated.WorkflowObjectRefHistoryMutation", m)
 }
 
 // Condition is a hook condition function.

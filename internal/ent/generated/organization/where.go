@@ -3350,6 +3350,296 @@ func HasNotificationsWith(preds ...predicate.Notification) predicate.Organizatio
 	})
 }
 
+// HasWorkflowDefinitions applies the HasEdge predicate on the "workflow_definitions" edge.
+func HasWorkflowDefinitions() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowDefinitionsTable, WorkflowDefinitionsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowDefinition
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowDefinitionsWith applies the HasEdge predicate on the "workflow_definitions" edge with a given conditions (other predicates).
+func HasWorkflowDefinitionsWith(preds ...predicate.WorkflowDefinition) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowDefinitionsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowDefinition
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowInstances applies the HasEdge predicate on the "workflow_instances" edge.
+func HasWorkflowInstances() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowInstancesTable, WorkflowInstancesColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowInstancesWith applies the HasEdge predicate on the "workflow_instances" edge with a given conditions (other predicates).
+func HasWorkflowInstancesWith(preds ...predicate.WorkflowInstance) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowInstancesStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowEvents applies the HasEdge predicate on the "workflow_events" edge.
+func HasWorkflowEvents() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowEventsTable, WorkflowEventsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowEvent
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowEventsWith applies the HasEdge predicate on the "workflow_events" edge with a given conditions (other predicates).
+func HasWorkflowEventsWith(preds ...predicate.WorkflowEvent) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowEventsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowEvent
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowAssignments applies the HasEdge predicate on the "workflow_assignments" edge.
+func HasWorkflowAssignments() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowAssignmentsTable, WorkflowAssignmentsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowAssignmentsWith applies the HasEdge predicate on the "workflow_assignments" edge with a given conditions (other predicates).
+func HasWorkflowAssignmentsWith(preds ...predicate.WorkflowAssignment) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowAssignmentsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowAssignmentTargets applies the HasEdge predicate on the "workflow_assignment_targets" edge.
+func HasWorkflowAssignmentTargets() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowAssignmentTargetsTable, WorkflowAssignmentTargetsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowAssignmentTargetsWith applies the HasEdge predicate on the "workflow_assignment_targets" edge with a given conditions (other predicates).
+func HasWorkflowAssignmentTargetsWith(preds ...predicate.WorkflowAssignmentTarget) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowAssignmentTargetsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasWorkflowObjectRefs applies the HasEdge predicate on the "workflow_object_refs" edge.
+func HasWorkflowObjectRefs() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasWorkflowObjectRefsWith applies the HasEdge predicate on the "workflow_object_refs" edge with a given conditions (other predicates).
+func HasWorkflowObjectRefsWith(preds ...predicate.WorkflowObjectRef) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newWorkflowObjectRefsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryAccounts applies the HasEdge predicate on the "directory_accounts" edge.
+func HasDirectoryAccounts() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryAccountsWith applies the HasEdge predicate on the "directory_accounts" edge with a given conditions (other predicates).
+func HasDirectoryAccountsWith(preds ...predicate.DirectoryAccount) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDirectoryAccountsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryGroups applies the HasEdge predicate on the "directory_groups" edge.
+func HasDirectoryGroups() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryGroupsWith applies the HasEdge predicate on the "directory_groups" edge with a given conditions (other predicates).
+func HasDirectoryGroupsWith(preds ...predicate.DirectoryGroup) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDirectoryGroupsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectoryMemberships applies the HasEdge predicate on the "directory_memberships" edge.
+func HasDirectoryMemberships() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectoryMembershipsWith applies the HasEdge predicate on the "directory_memberships" edge with a given conditions (other predicates).
+func HasDirectoryMembershipsWith(preds ...predicate.DirectoryMembership) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDirectoryMembershipsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasDirectorySyncRuns applies the HasEdge predicate on the "directory_sync_runs" edge.
+func HasDirectorySyncRuns() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasDirectorySyncRunsWith applies the HasEdge predicate on the "directory_sync_runs" edge with a given conditions (other predicates).
+func HasDirectorySyncRunsWith(preds ...predicate.DirectorySyncRun) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newDirectorySyncRunsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasMembers applies the HasEdge predicate on the "members" edge.
 func HasMembers() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

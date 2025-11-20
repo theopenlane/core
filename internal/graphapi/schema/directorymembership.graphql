@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up directoryMembership by ID
+    """
+     directoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+    ):  DirectoryMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryMembership
+    """
+    createDirectoryMembership(
+        """
+        values of the directoryMembership
+        """
+        input: CreateDirectoryMembershipInput!
+    ): DirectoryMembershipCreatePayload!
+    """
+    Create multiple new directoryMemberships
+    """
+    createBulkDirectoryMembership(
+        """
+        values of the directoryMembership
+        """
+        input: [CreateDirectoryMembershipInput!]
+    ): DirectoryMembershipBulkCreatePayload!
+    """
+    Create multiple new directoryMemberships via file upload
+    """
+    createBulkCSVDirectoryMembership(
+        """
+        csv file containing values of the directoryMembership
+        """
+        input: Upload!
+    ): DirectoryMembershipBulkCreatePayload!
+    """
+    Update an existing directoryMembership
+    """
+    updateDirectoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+        """
+        New values for the directoryMembership
+        """
+        input: UpdateDirectoryMembershipInput!
+    ): DirectoryMembershipUpdatePayload!
+    """
+    Delete an existing directoryMembership
+    """
+    deleteDirectoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+    ): DirectoryMembershipDeletePayload!
+}
+
+"""
+Return response for createDirectoryMembership mutation
+"""
+type DirectoryMembershipCreatePayload {
+    """
+    Created directoryMembership
+    """
+    directoryMembership: DirectoryMembership!
+}
+
+"""
+Return response for updateDirectoryMembership mutation
+"""
+type DirectoryMembershipUpdatePayload {
+    """
+    Updated directoryMembership
+    """
+    directoryMembership: DirectoryMembership!
+}
+
+"""
+Return response for deleteDirectoryMembership mutation
+"""
+type DirectoryMembershipDeletePayload {
+    """
+    Deleted directoryMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryMembership mutation
+"""
+type DirectoryMembershipBulkCreatePayload {
+    """
+    Created directoryMemberships
+    """
+    directoryMemberships: [DirectoryMembership!]
+}

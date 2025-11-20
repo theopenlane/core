@@ -235,6 +235,12 @@ func (f Finding) Edges() []ent.Edge {
 			edgeSchema: File{},
 			comment:    "supporting files or evidence for the finding",
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: f,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "finding",
+		}),
 	}
 }
 

@@ -29,6 +29,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/risk"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -57,6 +58,7 @@ type InternalPolicyQuery struct {
 	withPrograms                    *ProgramQuery
 	withFile                        *FileQuery
 	withComments                    *NoteQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
 	modifiers                       []func(*sql.Selector)
@@ -72,6 +74,7 @@ type InternalPolicyQuery struct {
 	withNamedRisks                  map[string]*RiskQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedComments               map[string]*NoteQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -533,6 +536,31 @@ func (_q *InternalPolicyQuery) QueryComments() *NoteQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *InternalPolicyQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, internalpolicy.WorkflowObjectRefsTable, internalpolicy.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first InternalPolicy entity from the query.
 // Returns a *NotFoundError when no InternalPolicy was found.
 func (_q *InternalPolicyQuery) First(ctx context.Context) (*InternalPolicy, error) {
@@ -742,6 +770,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withPrograms:               _q.withPrograms.Clone(),
 		withFile:                   _q.withFile.Clone(),
 		withComments:               _q.withComments.Clone(),
+		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -936,6 +965,17 @@ func (_q *InternalPolicyQuery) WithComments(opts ...func(*NoteQuery)) *InternalP
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *InternalPolicyQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -1021,7 +1061,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*InternalPolicy{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [17]bool{
+		loadedTypes = [18]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1039,6 +1079,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withPrograms != nil,
 			_q.withFile != nil,
 			_q.withComments != nil,
+			_q.withWorkflowObjectRefs != nil,
 		}
 	)
 	if withFKs {
@@ -1185,6 +1226,15 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *InternalPolicy, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedBlockedGroups {
 		if err := _q.loadBlockedGroups(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedBlockedGroups(name) },
@@ -1266,6 +1316,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedComments(name) },
 			func(n *InternalPolicy, e *Note) { n.appendNamedComments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *InternalPolicy, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2107,6 +2164,37 @@ func (_q *InternalPolicyQuery) loadComments(ctx context.Context, query *NoteQuer
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*InternalPolicy)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldInternalPolicyID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(internalpolicy.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.InternalPolicyID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *InternalPolicyQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2386,6 +2474,20 @@ func (_q *InternalPolicyQuery) WithNamedComments(name string, opts ...func(*Note
 		_q.withNamedComments = make(map[string]*NoteQuery)
 	}
 	_q.withNamedComments[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *InternalPolicyQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

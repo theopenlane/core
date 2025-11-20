@@ -1,0 +1,147 @@
+mutation CreateBulkCSVWorkflowEvent($input: Upload!) {
+  createBulkCSVWorkflowEvent(input: $input) {
+    workflowEvents {
+      createdAt
+      createdBy
+      displayID
+      eventType
+      id
+      ownerID
+      payload
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateBulkWorkflowEvent($input: [CreateWorkflowEventInput!]) {
+  createBulkWorkflowEvent(input: $input) {
+    workflowEvents {
+      createdAt
+      createdBy
+      displayID
+      eventType
+      id
+      ownerID
+      payload
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateWorkflowEvent($input: CreateWorkflowEventInput!) {
+  createWorkflowEvent(input: $input) {
+    workflowEvent {
+      createdAt
+      createdBy
+      displayID
+      eventType
+      id
+      ownerID
+      payload
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation DeleteWorkflowEvent($deleteWorkflowEventId: ID!) {
+  deleteWorkflowEvent(id: $deleteWorkflowEventId) {
+    deletedID
+  }
+}
+
+query GetAllWorkflowEvents {
+  workflowEvents {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        eventType
+        id
+        ownerID
+        payload
+        tags
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+
+query GetWorkflowEventByID($workflowEventId: ID!) {
+  workflowEvent(id: $workflowEventId) {
+    createdAt
+    createdBy
+    displayID
+    eventType
+    id
+    ownerID
+    payload
+    tags
+    updatedAt
+    updatedBy
+    workflowInstanceID
+  }
+}
+
+query GetWorkflowEvents($first: Int, $last: Int, $where: WorkflowEventWhereInput) {
+  workflowEvents(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        eventType
+        id
+        ownerID
+        payload
+        tags
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+
+mutation UpdateWorkflowEvent($updateWorkflowEventId: ID!, $input: UpdateWorkflowEventInput!) {
+  updateWorkflowEvent(id: $updateWorkflowEventId, input: $input) {
+    workflowEvent {
+      createdAt
+      createdBy
+      displayID
+      eventType
+      id
+      ownerID
+      payload
+      tags
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}

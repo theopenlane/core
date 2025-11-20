@@ -148,6 +148,8 @@ const (
 	EdgeMappedToControls = "mapped_to_controls"
 	// EdgeMappedFromControls holds the string denoting the mapped_from_controls edge name in mutations.
 	EdgeMappedFromControls = "mapped_from_controls"
+	// EdgeWorkflowObjectRefs holds the string denoting the workflow_object_refs edge name in mutations.
+	EdgeWorkflowObjectRefs = "workflow_object_refs"
 	// EdgeControlMappings holds the string denoting the control_mappings edge name in mutations.
 	EdgeControlMappings = "control_mappings"
 	// Table holds the table name of the control in the database.
@@ -300,6 +302,13 @@ const (
 	// MappedFromControlsInverseTable is the table name for the MappedControl entity.
 	// It exists in this package in order to avoid circular dependency with the "mappedcontrol" package.
 	MappedFromControlsInverseTable = "mapped_controls"
+	// WorkflowObjectRefsTable is the table that holds the workflow_object_refs relation/edge.
+	WorkflowObjectRefsTable = "workflow_object_refs"
+	// WorkflowObjectRefsInverseTable is the table name for the WorkflowObjectRef entity.
+	// It exists in this package in order to avoid circular dependency with the "workflowobjectref" package.
+	WorkflowObjectRefsInverseTable = "workflow_object_refs"
+	// WorkflowObjectRefsColumn is the table column denoting the workflow_object_refs relation/edge.
+	WorkflowObjectRefsColumn = "control_id"
 	// ControlMappingsTable is the table that holds the control_mappings relation/edge.
 	ControlMappingsTable = "finding_controls"
 	// ControlMappingsInverseTable is the table name for the FindingControl entity.
@@ -976,6 +985,20 @@ func ByMappedFromControls(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
+// ByWorkflowObjectRefsCount orders the results by workflow_object_refs count.
+func ByWorkflowObjectRefsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newWorkflowObjectRefsStep(), opts...)
+	}
+}
+
+// ByWorkflowObjectRefs orders the results by workflow_object_refs terms.
+func ByWorkflowObjectRefs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newWorkflowObjectRefsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
 // ByControlMappingsCount orders the results by control_mappings count.
 func ByControlMappingsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -1169,6 +1192,13 @@ func newMappedFromControlsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(MappedFromControlsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, MappedFromControlsTable, MappedFromControlsPrimaryKey...),
+	)
+}
+func newWorkflowObjectRefsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(WorkflowObjectRefsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, true, WorkflowObjectRefsTable, WorkflowObjectRefsColumn),
 	)
 }
 func newControlMappingsStep() *sqlgraph.Step {

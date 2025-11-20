@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up workflowEvent by ID
+    """
+     workflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+    ):  WorkflowEvent!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowEvent
+    """
+    createWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: CreateWorkflowEventInput!
+    ): WorkflowEventCreatePayload!
+    """
+    Create multiple new workflowEvents
+    """
+    createBulkWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: [CreateWorkflowEventInput!]
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Create multiple new workflowEvents via file upload
+    """
+    createBulkCSVWorkflowEvent(
+        """
+        csv file containing values of the workflowEvent
+        """
+        input: Upload!
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Update an existing workflowEvent
+    """
+    updateWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+        """
+        New values for the workflowEvent
+        """
+        input: UpdateWorkflowEventInput!
+    ): WorkflowEventUpdatePayload!
+    """
+    Delete an existing workflowEvent
+    """
+    deleteWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+    ): WorkflowEventDeletePayload!
+}
+
+"""
+Return response for createWorkflowEvent mutation
+"""
+type WorkflowEventCreatePayload {
+    """
+    Created workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for updateWorkflowEvent mutation
+"""
+type WorkflowEventUpdatePayload {
+    """
+    Updated workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for deleteWorkflowEvent mutation
+"""
+type WorkflowEventDeletePayload {
+    """
+    Deleted workflowEvent ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowEvent mutation
+"""
+type WorkflowEventBulkCreatePayload {
+    """
+    Created workflowEvents
+    """
+    workflowEvents: [WorkflowEvent!]
+}

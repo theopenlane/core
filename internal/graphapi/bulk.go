@@ -690,6 +690,82 @@ func (r *mutationResolver) bulkCreateCustomTypeEnum(ctx context.Context, input [
 	}, nil
 }
 
+// bulkCreateDirectoryAccount uses the CreateBulk function to create multiple DirectoryAccount entities
+func (r *mutationResolver) bulkCreateDirectoryAccount(ctx context.Context, input []*generated.CreateDirectoryAccountInput) (*model.DirectoryAccountBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DirectoryAccountCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.DirectoryAccount.Create().SetInput(*data)
+	}
+
+	res, err := c.DirectoryAccount.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directoryaccount"})
+	}
+
+	// return response
+	return &model.DirectoryAccountBulkCreatePayload{
+		DirectoryAccounts: res,
+	}, nil
+}
+
+// bulkCreateDirectoryGroup uses the CreateBulk function to create multiple DirectoryGroup entities
+func (r *mutationResolver) bulkCreateDirectoryGroup(ctx context.Context, input []*generated.CreateDirectoryGroupInput) (*model.DirectoryGroupBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DirectoryGroupCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.DirectoryGroup.Create().SetInput(*data)
+	}
+
+	res, err := c.DirectoryGroup.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorygroup"})
+	}
+
+	// return response
+	return &model.DirectoryGroupBulkCreatePayload{
+		DirectoryGroups: res,
+	}, nil
+}
+
+// bulkCreateDirectoryMembership uses the CreateBulk function to create multiple DirectoryMembership entities
+func (r *mutationResolver) bulkCreateDirectoryMembership(ctx context.Context, input []*generated.CreateDirectoryMembershipInput) (*model.DirectoryMembershipBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DirectoryMembershipCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.DirectoryMembership.Create().SetInput(*data)
+	}
+
+	res, err := c.DirectoryMembership.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorymembership"})
+	}
+
+	// return response
+	return &model.DirectoryMembershipBulkCreatePayload{
+		DirectoryMemberships: res,
+	}, nil
+}
+
+// bulkCreateDirectorySyncRun uses the CreateBulk function to create multiple DirectorySyncRun entities
+func (r *mutationResolver) bulkCreateDirectorySyncRun(ctx context.Context, input []*generated.CreateDirectorySyncRunInput) (*model.DirectorySyncRunBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.DirectorySyncRunCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.DirectorySyncRun.Create().SetInput(*data)
+	}
+
+	res, err := c.DirectorySyncRun.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "directorysyncrun"})
+	}
+
+	// return response
+	return &model.DirectorySyncRunBulkCreatePayload{
+		DirectorySyncRuns: res,
+	}, nil
+}
+
 // bulkCreateDNSVerification uses the CreateBulk function to create multiple DNSVerification entities
 func (r *mutationResolver) bulkCreateDNSVerification(ctx context.Context, input []*generated.CreateDNSVerificationInput) (*model.DNSVerificationBulkCreatePayload, error) {
 	c := withTransactionalMutation(ctx)
@@ -3232,5 +3308,119 @@ func (r *mutationResolver) bulkCreateVulnerability(ctx context.Context, input []
 	// return response
 	return &model.VulnerabilityBulkCreatePayload{
 		Vulnerabilities: res,
+	}, nil
+}
+
+// bulkCreateWorkflowAssignment uses the CreateBulk function to create multiple WorkflowAssignment entities
+func (r *mutationResolver) bulkCreateWorkflowAssignment(ctx context.Context, input []*generated.CreateWorkflowAssignmentInput) (*model.WorkflowAssignmentBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowAssignmentCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowAssignment.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowAssignment.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignment"})
+	}
+
+	// return response
+	return &model.WorkflowAssignmentBulkCreatePayload{
+		WorkflowAssignments: res,
+	}, nil
+}
+
+// bulkCreateWorkflowAssignmentTarget uses the CreateBulk function to create multiple WorkflowAssignmentTarget entities
+func (r *mutationResolver) bulkCreateWorkflowAssignmentTarget(ctx context.Context, input []*generated.CreateWorkflowAssignmentTargetInput) (*model.WorkflowAssignmentTargetBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowAssignmentTargetCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowAssignmentTarget.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowAssignmentTarget.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowassignmenttarget"})
+	}
+
+	// return response
+	return &model.WorkflowAssignmentTargetBulkCreatePayload{
+		WorkflowAssignmentTargets: res,
+	}, nil
+}
+
+// bulkCreateWorkflowDefinition uses the CreateBulk function to create multiple WorkflowDefinition entities
+func (r *mutationResolver) bulkCreateWorkflowDefinition(ctx context.Context, input []*generated.CreateWorkflowDefinitionInput) (*model.WorkflowDefinitionBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowDefinitionCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowDefinition.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowDefinition.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowdefinition"})
+	}
+
+	// return response
+	return &model.WorkflowDefinitionBulkCreatePayload{
+		WorkflowDefinitions: res,
+	}, nil
+}
+
+// bulkCreateWorkflowEvent uses the CreateBulk function to create multiple WorkflowEvent entities
+func (r *mutationResolver) bulkCreateWorkflowEvent(ctx context.Context, input []*generated.CreateWorkflowEventInput) (*model.WorkflowEventBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowEventCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowEvent.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowEvent.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowevent"})
+	}
+
+	// return response
+	return &model.WorkflowEventBulkCreatePayload{
+		WorkflowEvents: res,
+	}, nil
+}
+
+// bulkCreateWorkflowInstance uses the CreateBulk function to create multiple WorkflowInstance entities
+func (r *mutationResolver) bulkCreateWorkflowInstance(ctx context.Context, input []*generated.CreateWorkflowInstanceInput) (*model.WorkflowInstanceBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowInstanceCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowInstance.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowInstance.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowinstance"})
+	}
+
+	// return response
+	return &model.WorkflowInstanceBulkCreatePayload{
+		WorkflowInstances: res,
+	}, nil
+}
+
+// bulkCreateWorkflowObjectRef uses the CreateBulk function to create multiple WorkflowObjectRef entities
+func (r *mutationResolver) bulkCreateWorkflowObjectRef(ctx context.Context, input []*generated.CreateWorkflowObjectRefInput) (*model.WorkflowObjectRefBulkCreatePayload, error) {
+	c := withTransactionalMutation(ctx)
+	builders := make([]*generated.WorkflowObjectRefCreate, len(input))
+	for i, data := range input {
+		builders[i] = c.WorkflowObjectRef.Create().SetInput(*data)
+	}
+
+	res, err := c.WorkflowObjectRef.CreateBulk(builders...).Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "workflowobjectref"})
+	}
+
+	// return response
+	return &model.WorkflowObjectRefBulkCreatePayload{
+		WorkflowObjectRefs: res,
 	}, nil
 }

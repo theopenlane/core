@@ -49,6 +49,14 @@ type SchemaConfig struct {
 	CustomTypeEnum                     string // CustomTypeEnum table.
 	DNSVerification                    string // DNSVerification table.
 	DNSVerificationHistory             string // DNSVerificationHistory table.
+	DirectoryAccount                   string // DirectoryAccount table.
+	DirectoryAccountGroups             string // DirectoryAccount-groups->DirectoryGroup table.
+	DirectoryAccountHistory            string // DirectoryAccountHistory table.
+	DirectoryGroup                     string // DirectoryGroup table.
+	DirectoryGroupHistory              string // DirectoryGroupHistory table.
+	DirectoryMembership                string // DirectoryMembership table.
+	DirectoryMembershipHistory         string // DirectoryMembershipHistory table.
+	DirectorySyncRun                   string // DirectorySyncRun table.
 	DocumentData                       string // DocumentData table.
 	DocumentDataFiles                  string // DocumentData-files->File table.
 	DocumentDataHistory                string // DocumentDataHistory table.
@@ -265,6 +273,18 @@ type SchemaConfig struct {
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.
 	VulnerabilityHistory               string // VulnerabilityHistory table.
 	Webauthn                           string // Webauthn table.
+	WorkflowAssignment                 string // WorkflowAssignment table.
+	WorkflowAssignmentHistory          string // WorkflowAssignmentHistory table.
+	WorkflowAssignmentTarget           string // WorkflowAssignmentTarget table.
+	WorkflowAssignmentTargetHistory    string // WorkflowAssignmentTargetHistory table.
+	WorkflowDefinition                 string // WorkflowDefinition table.
+	WorkflowDefinitionHistory          string // WorkflowDefinitionHistory table.
+	WorkflowEvent                      string // WorkflowEvent table.
+	WorkflowEventHistory               string // WorkflowEventHistory table.
+	WorkflowInstance                   string // WorkflowInstance table.
+	WorkflowInstanceHistory            string // WorkflowInstanceHistory table.
+	WorkflowObjectRef                  string // WorkflowObjectRef table.
+	WorkflowObjectRefHistory           string // WorkflowObjectRefHistory table.
 }
 
 type schemaCtxKey struct{}

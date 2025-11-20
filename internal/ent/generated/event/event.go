@@ -138,6 +138,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "events"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"directory_membership_events",
 	"export_events",
 }
 

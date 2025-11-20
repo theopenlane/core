@@ -17,6 +17,9 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjectivehistory"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdatahistory"
 	"github.com/theopenlane/core/internal/ent/generated/entityhistory"
@@ -62,6 +65,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/userhistory"
 	"github.com/theopenlane/core/internal/ent/generated/usersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 func (_m *ActionPlan) History() *ActionPlanHistoryQuery {
@@ -521,6 +530,144 @@ func (dvhq *DNSVerificationHistoryQuery) AsOf(ctx context.Context, time time.Tim
 	return dvhq.
 		Where(dnsverificationhistory.HistoryTimeLTE(time)).
 		Order(dnsverificationhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *DirectoryAccount) History() *DirectoryAccountHistoryQuery {
+	historyClient := NewDirectoryAccountHistoryClient(_m.config)
+	return historyClient.Query().Where(directoryaccounthistory.Ref(_m.ID))
+}
+
+func (_m *DirectoryAccountHistory) Next(ctx context.Context) (*DirectoryAccountHistory, error) {
+	client := NewDirectoryAccountHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directoryaccounthistory.Ref(_m.Ref),
+			directoryaccounthistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(directoryaccounthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *DirectoryAccountHistory) Prev(ctx context.Context) (*DirectoryAccountHistory, error) {
+	client := NewDirectoryAccountHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directoryaccounthistory.Ref(_m.Ref),
+			directoryaccounthistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(directoryaccounthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dahq *DirectoryAccountHistoryQuery) Earliest(ctx context.Context) (*DirectoryAccountHistory, error) {
+	return dahq.
+		Order(directoryaccounthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dahq *DirectoryAccountHistoryQuery) Latest(ctx context.Context) (*DirectoryAccountHistory, error) {
+	return dahq.
+		Order(directoryaccounthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dahq *DirectoryAccountHistoryQuery) AsOf(ctx context.Context, time time.Time) (*DirectoryAccountHistory, error) {
+	return dahq.
+		Where(directoryaccounthistory.HistoryTimeLTE(time)).
+		Order(directoryaccounthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *DirectoryGroup) History() *DirectoryGroupHistoryQuery {
+	historyClient := NewDirectoryGroupHistoryClient(_m.config)
+	return historyClient.Query().Where(directorygrouphistory.Ref(_m.ID))
+}
+
+func (_m *DirectoryGroupHistory) Next(ctx context.Context) (*DirectoryGroupHistory, error) {
+	client := NewDirectoryGroupHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directorygrouphistory.Ref(_m.Ref),
+			directorygrouphistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(directorygrouphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *DirectoryGroupHistory) Prev(ctx context.Context) (*DirectoryGroupHistory, error) {
+	client := NewDirectoryGroupHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directorygrouphistory.Ref(_m.Ref),
+			directorygrouphistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(directorygrouphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dghq *DirectoryGroupHistoryQuery) Earliest(ctx context.Context) (*DirectoryGroupHistory, error) {
+	return dghq.
+		Order(directorygrouphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dghq *DirectoryGroupHistoryQuery) Latest(ctx context.Context) (*DirectoryGroupHistory, error) {
+	return dghq.
+		Order(directorygrouphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dghq *DirectoryGroupHistoryQuery) AsOf(ctx context.Context, time time.Time) (*DirectoryGroupHistory, error) {
+	return dghq.
+		Where(directorygrouphistory.HistoryTimeLTE(time)).
+		Order(directorygrouphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *DirectoryMembership) History() *DirectoryMembershipHistoryQuery {
+	historyClient := NewDirectoryMembershipHistoryClient(_m.config)
+	return historyClient.Query().Where(directorymembershiphistory.Ref(_m.ID))
+}
+
+func (_m *DirectoryMembershipHistory) Next(ctx context.Context) (*DirectoryMembershipHistory, error) {
+	client := NewDirectoryMembershipHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directorymembershiphistory.Ref(_m.Ref),
+			directorymembershiphistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(directorymembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *DirectoryMembershipHistory) Prev(ctx context.Context) (*DirectoryMembershipHistory, error) {
+	client := NewDirectoryMembershipHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			directorymembershiphistory.Ref(_m.Ref),
+			directorymembershiphistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(directorymembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dmhq *DirectoryMembershipHistoryQuery) Earliest(ctx context.Context) (*DirectoryMembershipHistory, error) {
+	return dmhq.
+		Order(directorymembershiphistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (dmhq *DirectoryMembershipHistoryQuery) Latest(ctx context.Context) (*DirectoryMembershipHistory, error) {
+	return dmhq.
+		Order(directorymembershiphistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (dmhq *DirectoryMembershipHistoryQuery) AsOf(ctx context.Context, time time.Time) (*DirectoryMembershipHistory, error) {
+	return dmhq.
+		Where(directorymembershiphistory.HistoryTimeLTE(time)).
+		Order(directorymembershiphistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 
@@ -2545,5 +2692,281 @@ func (vhq *VulnerabilityHistoryQuery) AsOf(ctx context.Context, time time.Time) 
 	return vhq.
 		Where(vulnerabilityhistory.HistoryTimeLTE(time)).
 		Order(vulnerabilityhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowAssignment) History() *WorkflowAssignmentHistoryQuery {
+	historyClient := NewWorkflowAssignmentHistoryClient(_m.config)
+	return historyClient.Query().Where(workflowassignmenthistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowAssignmentHistory) Next(ctx context.Context) (*WorkflowAssignmentHistory, error) {
+	client := NewWorkflowAssignmentHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowassignmenthistory.Ref(_m.Ref),
+			workflowassignmenthistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workflowassignmenthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowAssignmentHistory) Prev(ctx context.Context) (*WorkflowAssignmentHistory, error) {
+	client := NewWorkflowAssignmentHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowassignmenthistory.Ref(_m.Ref),
+			workflowassignmenthistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workflowassignmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wahq *WorkflowAssignmentHistoryQuery) Earliest(ctx context.Context) (*WorkflowAssignmentHistory, error) {
+	return wahq.
+		Order(workflowassignmenthistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (wahq *WorkflowAssignmentHistoryQuery) Latest(ctx context.Context) (*WorkflowAssignmentHistory, error) {
+	return wahq.
+		Order(workflowassignmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wahq *WorkflowAssignmentHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowAssignmentHistory, error) {
+	return wahq.
+		Where(workflowassignmenthistory.HistoryTimeLTE(time)).
+		Order(workflowassignmenthistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowAssignmentTarget) History() *WorkflowAssignmentTargetHistoryQuery {
+	historyClient := NewWorkflowAssignmentTargetHistoryClient(_m.config)
+	return historyClient.Query().Where(workflowassignmenttargethistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowAssignmentTargetHistory) Next(ctx context.Context) (*WorkflowAssignmentTargetHistory, error) {
+	client := NewWorkflowAssignmentTargetHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowassignmenttargethistory.Ref(_m.Ref),
+			workflowassignmenttargethistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workflowassignmenttargethistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowAssignmentTargetHistory) Prev(ctx context.Context) (*WorkflowAssignmentTargetHistory, error) {
+	client := NewWorkflowAssignmentTargetHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowassignmenttargethistory.Ref(_m.Ref),
+			workflowassignmenttargethistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workflowassignmenttargethistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wathq *WorkflowAssignmentTargetHistoryQuery) Earliest(ctx context.Context) (*WorkflowAssignmentTargetHistory, error) {
+	return wathq.
+		Order(workflowassignmenttargethistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (wathq *WorkflowAssignmentTargetHistoryQuery) Latest(ctx context.Context) (*WorkflowAssignmentTargetHistory, error) {
+	return wathq.
+		Order(workflowassignmenttargethistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wathq *WorkflowAssignmentTargetHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowAssignmentTargetHistory, error) {
+	return wathq.
+		Where(workflowassignmenttargethistory.HistoryTimeLTE(time)).
+		Order(workflowassignmenttargethistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowDefinition) History() *WorkflowDefinitionHistoryQuery {
+	historyClient := NewWorkflowDefinitionHistoryClient(_m.config)
+	return historyClient.Query().Where(workflowdefinitionhistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowDefinitionHistory) Next(ctx context.Context) (*WorkflowDefinitionHistory, error) {
+	client := NewWorkflowDefinitionHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowdefinitionhistory.Ref(_m.Ref),
+			workflowdefinitionhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workflowdefinitionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowDefinitionHistory) Prev(ctx context.Context) (*WorkflowDefinitionHistory, error) {
+	client := NewWorkflowDefinitionHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowdefinitionhistory.Ref(_m.Ref),
+			workflowdefinitionhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workflowdefinitionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wdhq *WorkflowDefinitionHistoryQuery) Earliest(ctx context.Context) (*WorkflowDefinitionHistory, error) {
+	return wdhq.
+		Order(workflowdefinitionhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (wdhq *WorkflowDefinitionHistoryQuery) Latest(ctx context.Context) (*WorkflowDefinitionHistory, error) {
+	return wdhq.
+		Order(workflowdefinitionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wdhq *WorkflowDefinitionHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowDefinitionHistory, error) {
+	return wdhq.
+		Where(workflowdefinitionhistory.HistoryTimeLTE(time)).
+		Order(workflowdefinitionhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowEvent) History() *WorkflowEventHistoryQuery {
+	historyClient := NewWorkflowEventHistoryClient(_m.config)
+	return historyClient.Query().Where(workfloweventhistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowEventHistory) Next(ctx context.Context) (*WorkflowEventHistory, error) {
+	client := NewWorkflowEventHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workfloweventhistory.Ref(_m.Ref),
+			workfloweventhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workfloweventhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowEventHistory) Prev(ctx context.Context) (*WorkflowEventHistory, error) {
+	client := NewWorkflowEventHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workfloweventhistory.Ref(_m.Ref),
+			workfloweventhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workfloweventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wehq *WorkflowEventHistoryQuery) Earliest(ctx context.Context) (*WorkflowEventHistory, error) {
+	return wehq.
+		Order(workfloweventhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (wehq *WorkflowEventHistoryQuery) Latest(ctx context.Context) (*WorkflowEventHistory, error) {
+	return wehq.
+		Order(workfloweventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wehq *WorkflowEventHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowEventHistory, error) {
+	return wehq.
+		Where(workfloweventhistory.HistoryTimeLTE(time)).
+		Order(workfloweventhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowInstance) History() *WorkflowInstanceHistoryQuery {
+	historyClient := NewWorkflowInstanceHistoryClient(_m.config)
+	return historyClient.Query().Where(workflowinstancehistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowInstanceHistory) Next(ctx context.Context) (*WorkflowInstanceHistory, error) {
+	client := NewWorkflowInstanceHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowinstancehistory.Ref(_m.Ref),
+			workflowinstancehistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workflowinstancehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowInstanceHistory) Prev(ctx context.Context) (*WorkflowInstanceHistory, error) {
+	client := NewWorkflowInstanceHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowinstancehistory.Ref(_m.Ref),
+			workflowinstancehistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workflowinstancehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wihq *WorkflowInstanceHistoryQuery) Earliest(ctx context.Context) (*WorkflowInstanceHistory, error) {
+	return wihq.
+		Order(workflowinstancehistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (wihq *WorkflowInstanceHistoryQuery) Latest(ctx context.Context) (*WorkflowInstanceHistory, error) {
+	return wihq.
+		Order(workflowinstancehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (wihq *WorkflowInstanceHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowInstanceHistory, error) {
+	return wihq.
+		Where(workflowinstancehistory.HistoryTimeLTE(time)).
+		Order(workflowinstancehistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *WorkflowObjectRef) History() *WorkflowObjectRefHistoryQuery {
+	historyClient := NewWorkflowObjectRefHistoryClient(_m.config)
+	return historyClient.Query().Where(workflowobjectrefhistory.Ref(_m.ID))
+}
+
+func (_m *WorkflowObjectRefHistory) Next(ctx context.Context) (*WorkflowObjectRefHistory, error) {
+	client := NewWorkflowObjectRefHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowobjectrefhistory.Ref(_m.Ref),
+			workflowobjectrefhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(workflowobjectrefhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *WorkflowObjectRefHistory) Prev(ctx context.Context) (*WorkflowObjectRefHistory, error) {
+	client := NewWorkflowObjectRefHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			workflowobjectrefhistory.Ref(_m.Ref),
+			workflowobjectrefhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(workflowobjectrefhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (worhq *WorkflowObjectRefHistoryQuery) Earliest(ctx context.Context) (*WorkflowObjectRefHistory, error) {
+	return worhq.
+		Order(workflowobjectrefhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (worhq *WorkflowObjectRefHistoryQuery) Latest(ctx context.Context) (*WorkflowObjectRefHistory, error) {
+	return worhq.
+		Order(workflowobjectrefhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (worhq *WorkflowObjectRefHistoryQuery) AsOf(ctx context.Context, time time.Time) (*WorkflowObjectRefHistory, error) {
+	return worhq.
+		Where(workflowobjectrefhistory.HistoryTimeLTE(time)).
+		Order(workflowobjectrefhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }

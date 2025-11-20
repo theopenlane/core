@@ -216,13 +216,33 @@ type OrganizationEdges struct {
 	Vulnerabilities []*Vulnerability `json:"vulnerabilities,omitempty"`
 	// Notifications holds the value of the notifications edge.
 	Notifications []*Notification `json:"notifications,omitempty"`
+	// WorkflowDefinitions holds the value of the workflow_definitions edge.
+	WorkflowDefinitions []*WorkflowDefinition `json:"workflow_definitions,omitempty"`
+	// WorkflowInstances holds the value of the workflow_instances edge.
+	WorkflowInstances []*WorkflowInstance `json:"workflow_instances,omitempty"`
+	// WorkflowEvents holds the value of the workflow_events edge.
+	WorkflowEvents []*WorkflowEvent `json:"workflow_events,omitempty"`
+	// WorkflowAssignments holds the value of the workflow_assignments edge.
+	WorkflowAssignments []*WorkflowAssignment `json:"workflow_assignments,omitempty"`
+	// WorkflowAssignmentTargets holds the value of the workflow_assignment_targets edge.
+	WorkflowAssignmentTargets []*WorkflowAssignmentTarget `json:"workflow_assignment_targets,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// DirectoryGroups holds the value of the directory_groups edge.
+	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
+	// DirectoryMemberships holds the value of the directory_memberships edge.
+	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
+	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
+	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
 	// Members holds the value of the members edge.
 	Members []*OrgMembership `json:"members,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [78]bool
+	loadedTypes [88]bool
 	// totalCount holds the count of the edges above.
-	totalCount [73]map[string]int
+	totalCount [83]map[string]int
 
 	namedControlCreators               map[string][]*Group
 	namedControlImplementationCreators map[string][]*Group
@@ -298,6 +318,16 @@ type OrganizationEdges struct {
 	namedReviews                       map[string][]*Review
 	namedVulnerabilities               map[string][]*Vulnerability
 	namedNotifications                 map[string][]*Notification
+	namedWorkflowDefinitions           map[string][]*WorkflowDefinition
+	namedWorkflowInstances             map[string][]*WorkflowInstance
+	namedWorkflowEvents                map[string][]*WorkflowEvent
+	namedWorkflowAssignments           map[string][]*WorkflowAssignment
+	namedWorkflowAssignmentTargets     map[string][]*WorkflowAssignmentTarget
+	namedWorkflowObjectRefs            map[string][]*WorkflowObjectRef
+	namedDirectoryAccounts             map[string][]*DirectoryAccount
+	namedDirectoryGroups               map[string][]*DirectoryGroup
+	namedDirectoryMemberships          map[string][]*DirectoryMembership
+	namedDirectorySyncRuns             map[string][]*DirectorySyncRun
 	namedMembers                       map[string][]*OrgMembership
 }
 
@@ -1000,10 +1030,100 @@ func (e OrganizationEdges) NotificationsOrErr() ([]*Notification, error) {
 	return nil, &NotLoadedError{edge: "notifications"}
 }
 
+// WorkflowDefinitionsOrErr returns the WorkflowDefinitions value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowDefinitionsOrErr() ([]*WorkflowDefinition, error) {
+	if e.loadedTypes[77] {
+		return e.WorkflowDefinitions, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_definitions"}
+}
+
+// WorkflowInstancesOrErr returns the WorkflowInstances value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error) {
+	if e.loadedTypes[78] {
+		return e.WorkflowInstances, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_instances"}
+}
+
+// WorkflowEventsOrErr returns the WorkflowEvents value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
+	if e.loadedTypes[79] {
+		return e.WorkflowEvents, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_events"}
+}
+
+// WorkflowAssignmentsOrErr returns the WorkflowAssignments value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, error) {
+	if e.loadedTypes[80] {
+		return e.WorkflowAssignments, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_assignments"}
+}
+
+// WorkflowAssignmentTargetsOrErr returns the WorkflowAssignmentTargets value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowAssignmentTargetsOrErr() ([]*WorkflowAssignmentTarget, error) {
+	if e.loadedTypes[81] {
+		return e.WorkflowAssignmentTargets, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_assignment_targets"}
+}
+
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[82] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[83] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
+// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
+	if e.loadedTypes[84] {
+		return e.DirectoryGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_groups"}
+}
+
+// DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
+	if e.loadedTypes[85] {
+		return e.DirectoryMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_memberships"}
+}
+
+// DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e OrganizationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
+	if e.loadedTypes[86] {
+		return e.DirectorySyncRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_sync_runs"}
+}
+
 // MembersOrErr returns the Members value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) MembersOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[77] {
+	if e.loadedTypes[87] {
 		return e.Members, nil
 	}
 	return nil, &NotLoadedError{edge: "members"}
@@ -1547,6 +1667,56 @@ func (_m *Organization) QueryVulnerabilities() *VulnerabilityQuery {
 // QueryNotifications queries the "notifications" edge of the Organization entity.
 func (_m *Organization) QueryNotifications() *NotificationQuery {
 	return NewOrganizationClient(_m.config).QueryNotifications(_m)
+}
+
+// QueryWorkflowDefinitions queries the "workflow_definitions" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowDefinitions() *WorkflowDefinitionQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowDefinitions(_m)
+}
+
+// QueryWorkflowInstances queries the "workflow_instances" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowInstances() *WorkflowInstanceQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowInstances(_m)
+}
+
+// QueryWorkflowEvents queries the "workflow_events" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowEvents() *WorkflowEventQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowEvents(_m)
+}
+
+// QueryWorkflowAssignments queries the "workflow_assignments" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowAssignments() *WorkflowAssignmentQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowAssignments(_m)
+}
+
+// QueryWorkflowAssignmentTargets queries the "workflow_assignment_targets" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowAssignmentTargets() *WorkflowAssignmentTargetQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowAssignmentTargets(_m)
+}
+
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Organization entity.
+func (_m *Organization) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewOrganizationClient(_m.config).QueryWorkflowObjectRefs(_m)
+}
+
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the Organization entity.
+func (_m *Organization) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewOrganizationClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryDirectoryGroups queries the "directory_groups" edge of the Organization entity.
+func (_m *Organization) QueryDirectoryGroups() *DirectoryGroupQuery {
+	return NewOrganizationClient(_m.config).QueryDirectoryGroups(_m)
+}
+
+// QueryDirectoryMemberships queries the "directory_memberships" edge of the Organization entity.
+func (_m *Organization) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	return NewOrganizationClient(_m.config).QueryDirectoryMemberships(_m)
+}
+
+// QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Organization entity.
+func (_m *Organization) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
+	return NewOrganizationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
 // QueryMembers queries the "members" edge of the Organization entity.
@@ -3412,6 +3582,246 @@ func (_m *Organization) appendNamedNotifications(name string, edges ...*Notifica
 		_m.Edges.namedNotifications[name] = []*Notification{}
 	} else {
 		_m.Edges.namedNotifications[name] = append(_m.Edges.namedNotifications[name], edges...)
+	}
+}
+
+// NamedWorkflowDefinitions returns the WorkflowDefinitions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowDefinitions(name string) ([]*WorkflowDefinition, error) {
+	if _m.Edges.namedWorkflowDefinitions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowDefinitions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowDefinitions(name string, edges ...*WorkflowDefinition) {
+	if _m.Edges.namedWorkflowDefinitions == nil {
+		_m.Edges.namedWorkflowDefinitions = make(map[string][]*WorkflowDefinition)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowDefinitions[name] = []*WorkflowDefinition{}
+	} else {
+		_m.Edges.namedWorkflowDefinitions[name] = append(_m.Edges.namedWorkflowDefinitions[name], edges...)
+	}
+}
+
+// NamedWorkflowInstances returns the WorkflowInstances named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowInstances(name string) ([]*WorkflowInstance, error) {
+	if _m.Edges.namedWorkflowInstances == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowInstances[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowInstances(name string, edges ...*WorkflowInstance) {
+	if _m.Edges.namedWorkflowInstances == nil {
+		_m.Edges.namedWorkflowInstances = make(map[string][]*WorkflowInstance)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowInstances[name] = []*WorkflowInstance{}
+	} else {
+		_m.Edges.namedWorkflowInstances[name] = append(_m.Edges.namedWorkflowInstances[name], edges...)
+	}
+}
+
+// NamedWorkflowEvents returns the WorkflowEvents named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowEvents(name string) ([]*WorkflowEvent, error) {
+	if _m.Edges.namedWorkflowEvents == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowEvents[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowEvents(name string, edges ...*WorkflowEvent) {
+	if _m.Edges.namedWorkflowEvents == nil {
+		_m.Edges.namedWorkflowEvents = make(map[string][]*WorkflowEvent)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowEvents[name] = []*WorkflowEvent{}
+	} else {
+		_m.Edges.namedWorkflowEvents[name] = append(_m.Edges.namedWorkflowEvents[name], edges...)
+	}
+}
+
+// NamedWorkflowAssignments returns the WorkflowAssignments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowAssignments(name string) ([]*WorkflowAssignment, error) {
+	if _m.Edges.namedWorkflowAssignments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowAssignments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowAssignments(name string, edges ...*WorkflowAssignment) {
+	if _m.Edges.namedWorkflowAssignments == nil {
+		_m.Edges.namedWorkflowAssignments = make(map[string][]*WorkflowAssignment)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowAssignments[name] = []*WorkflowAssignment{}
+	} else {
+		_m.Edges.namedWorkflowAssignments[name] = append(_m.Edges.namedWorkflowAssignments[name], edges...)
+	}
+}
+
+// NamedWorkflowAssignmentTargets returns the WorkflowAssignmentTargets named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowAssignmentTargets(name string) ([]*WorkflowAssignmentTarget, error) {
+	if _m.Edges.namedWorkflowAssignmentTargets == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowAssignmentTargets[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowAssignmentTargets(name string, edges ...*WorkflowAssignmentTarget) {
+	if _m.Edges.namedWorkflowAssignmentTargets == nil {
+		_m.Edges.namedWorkflowAssignmentTargets = make(map[string][]*WorkflowAssignmentTarget)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowAssignmentTargets[name] = []*WorkflowAssignmentTarget{}
+	} else {
+		_m.Edges.namedWorkflowAssignmentTargets[name] = append(_m.Edges.namedWorkflowAssignmentTargets[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
+	}
+}
+
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
+	} else {
+		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
+	}
+}
+
+// NamedDirectoryMemberships returns the DirectoryMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedDirectoryMemberships(name string) ([]*DirectoryMembership, error) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedDirectoryMemberships(name string, edges ...*DirectoryMembership) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		_m.Edges.namedDirectoryMemberships = make(map[string][]*DirectoryMembership)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
+	} else {
+		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
+	}
+}
+
+// NamedDirectorySyncRuns returns the DirectorySyncRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Organization) NamedDirectorySyncRuns(name string) ([]*DirectorySyncRun, error) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectorySyncRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Organization) appendNamedDirectorySyncRuns(name string, edges ...*DirectorySyncRun) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		_m.Edges.namedDirectorySyncRuns = make(map[string][]*DirectorySyncRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
+	} else {
+		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
 	}
 }
 

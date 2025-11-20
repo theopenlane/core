@@ -24,6 +24,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -76,6 +80,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -164,6 +174,16 @@ type OrganizationQuery struct {
 	withReviews                            *ReviewQuery
 	withVulnerabilities                    *VulnerabilityQuery
 	withNotifications                      *NotificationQuery
+	withWorkflowDefinitions                *WorkflowDefinitionQuery
+	withWorkflowInstances                  *WorkflowInstanceQuery
+	withWorkflowEvents                     *WorkflowEventQuery
+	withWorkflowAssignments                *WorkflowAssignmentQuery
+	withWorkflowAssignmentTargets          *WorkflowAssignmentTargetQuery
+	withWorkflowObjectRefs                 *WorkflowObjectRefQuery
+	withDirectoryAccounts                  *DirectoryAccountQuery
+	withDirectoryGroups                    *DirectoryGroupQuery
+	withDirectoryMemberships               *DirectoryMembershipQuery
+	withDirectorySyncRuns                  *DirectorySyncRunQuery
 	withMembers                            *OrgMembershipQuery
 	loadTotal                              []func(context.Context, []*Organization) error
 	modifiers                              []func(*sql.Selector)
@@ -241,6 +261,16 @@ type OrganizationQuery struct {
 	withNamedReviews                       map[string]*ReviewQuery
 	withNamedVulnerabilities               map[string]*VulnerabilityQuery
 	withNamedNotifications                 map[string]*NotificationQuery
+	withNamedWorkflowDefinitions           map[string]*WorkflowDefinitionQuery
+	withNamedWorkflowInstances             map[string]*WorkflowInstanceQuery
+	withNamedWorkflowEvents                map[string]*WorkflowEventQuery
+	withNamedWorkflowAssignments           map[string]*WorkflowAssignmentQuery
+	withNamedWorkflowAssignmentTargets     map[string]*WorkflowAssignmentTargetQuery
+	withNamedWorkflowObjectRefs            map[string]*WorkflowObjectRefQuery
+	withNamedDirectoryAccounts             map[string]*DirectoryAccountQuery
+	withNamedDirectoryGroups               map[string]*DirectoryGroupQuery
+	withNamedDirectoryMemberships          map[string]*DirectoryMembershipQuery
+	withNamedDirectorySyncRuns             map[string]*DirectorySyncRunQuery
 	withNamedMembers                       map[string]*OrgMembershipQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -2203,6 +2233,256 @@ func (_q *OrganizationQuery) QueryNotifications() *NotificationQuery {
 	return query
 }
 
+// QueryWorkflowDefinitions chains the current query on the "workflow_definitions" edge.
+func (_q *OrganizationQuery) QueryWorkflowDefinitions() *WorkflowDefinitionQuery {
+	query := (&WorkflowDefinitionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowDefinitionsTable, organization.WorkflowDefinitionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowDefinition
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstances chains the current query on the "workflow_instances" edge.
+func (_q *OrganizationQuery) QueryWorkflowInstances() *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowInstancesTable, organization.WorkflowInstancesColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowEvents chains the current query on the "workflow_events" edge.
+func (_q *OrganizationQuery) QueryWorkflowEvents() *WorkflowEventQuery {
+	query := (&WorkflowEventClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowevent.Table, workflowevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowEventsTable, organization.WorkflowEventsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowEvent
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignments chains the current query on the "workflow_assignments" edge.
+func (_q *OrganizationQuery) QueryWorkflowAssignments() *WorkflowAssignmentQuery {
+	query := (&WorkflowAssignmentClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowassignment.Table, workflowassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentsTable, organization.WorkflowAssignmentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignmentTargets chains the current query on the "workflow_assignment_targets" edge.
+func (_q *OrganizationQuery) QueryWorkflowAssignmentTargets() *WorkflowAssignmentTargetQuery {
+	query := (&WorkflowAssignmentTargetClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentTargetsTable, organization.WorkflowAssignmentTargetsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *OrganizationQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowObjectRefsTable, organization.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts chains the current query on the "directory_accounts" edge.
+func (_q *OrganizationQuery) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryAccountsTable, organization.DirectoryAccountsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups chains the current query on the "directory_groups" edge.
+func (_q *OrganizationQuery) QueryDirectoryGroups() *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryGroupsTable, organization.DirectoryGroupsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships chains the current query on the "directory_memberships" edge.
+func (_q *OrganizationQuery) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryMembershipsTable, organization.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRuns chains the current query on the "directory_sync_runs" edge.
+func (_q *OrganizationQuery) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunsTable, organization.DirectorySyncRunsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryMembers chains the current query on the "members" edge.
 func (_q *OrganizationQuery) QueryMembers() *OrgMembershipQuery {
 	query := (&OrgMembershipClient{config: _q.config}).Query()
@@ -2497,6 +2777,16 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withReviews:                       _q.withReviews.Clone(),
 		withVulnerabilities:               _q.withVulnerabilities.Clone(),
 		withNotifications:                 _q.withNotifications.Clone(),
+		withWorkflowDefinitions:           _q.withWorkflowDefinitions.Clone(),
+		withWorkflowInstances:             _q.withWorkflowInstances.Clone(),
+		withWorkflowEvents:                _q.withWorkflowEvents.Clone(),
+		withWorkflowAssignments:           _q.withWorkflowAssignments.Clone(),
+		withWorkflowAssignmentTargets:     _q.withWorkflowAssignmentTargets.Clone(),
+		withWorkflowObjectRefs:            _q.withWorkflowObjectRefs.Clone(),
+		withDirectoryAccounts:             _q.withDirectoryAccounts.Clone(),
+		withDirectoryGroups:               _q.withDirectoryGroups.Clone(),
+		withDirectoryMemberships:          _q.withDirectoryMemberships.Clone(),
+		withDirectorySyncRuns:             _q.withDirectorySyncRuns.Clone(),
 		withMembers:                       _q.withMembers.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -3352,6 +3642,116 @@ func (_q *OrganizationQuery) WithNotifications(opts ...func(*NotificationQuery))
 	return _q
 }
 
+// WithWorkflowDefinitions tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_definitions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowDefinitions(opts ...func(*WorkflowDefinitionQuery)) *OrganizationQuery {
+	query := (&WorkflowDefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowDefinitions = query
+	return _q
+}
+
+// WithWorkflowInstances tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_instances" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowInstances(opts ...func(*WorkflowInstanceQuery)) *OrganizationQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowInstances = query
+	return _q
+}
+
+// WithWorkflowEvents tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_events" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowEvents(opts ...func(*WorkflowEventQuery)) *OrganizationQuery {
+	query := (&WorkflowEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowEvents = query
+	return _q
+}
+
+// WithWorkflowAssignments tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_assignments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowAssignments(opts ...func(*WorkflowAssignmentQuery)) *OrganizationQuery {
+	query := (&WorkflowAssignmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowAssignments = query
+	return _q
+}
+
+// WithWorkflowAssignmentTargets tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_assignment_targets" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowAssignmentTargets(opts ...func(*WorkflowAssignmentTargetQuery)) *OrganizationQuery {
+	query := (&WorkflowAssignmentTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowAssignmentTargets = query
+	return _q
+}
+
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *OrganizationQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
+// WithDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to
+// the "directory_accounts" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithDirectoryAccounts(opts ...func(*DirectoryAccountQuery)) *OrganizationQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryAccounts = query
+	return _q
+}
+
+// WithDirectoryGroups tells the query-builder to eager-load the nodes that are connected to
+// the "directory_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithDirectoryGroups(opts ...func(*DirectoryGroupQuery)) *OrganizationQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryGroups = query
+	return _q
+}
+
+// WithDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to
+// the "directory_memberships" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithDirectoryMemberships(opts ...func(*DirectoryMembershipQuery)) *OrganizationQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectoryMemberships = query
+	return _q
+}
+
+// WithDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to
+// the "directory_sync_runs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithDirectorySyncRuns(opts ...func(*DirectorySyncRunQuery)) *OrganizationQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDirectorySyncRuns = query
+	return _q
+}
+
 // WithMembers tells the query-builder to eager-load the nodes that are connected to
 // the "members" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *OrganizationQuery) WithMembers(opts ...func(*OrgMembershipQuery)) *OrganizationQuery {
@@ -3447,7 +3847,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [78]bool{
+		loadedTypes = [88]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3525,6 +3925,16 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withReviews != nil,
 			_q.withVulnerabilities != nil,
 			_q.withNotifications != nil,
+			_q.withWorkflowDefinitions != nil,
+			_q.withWorkflowInstances != nil,
+			_q.withWorkflowEvents != nil,
+			_q.withWorkflowAssignments != nil,
+			_q.withWorkflowAssignmentTargets != nil,
+			_q.withWorkflowObjectRefs != nil,
+			_q.withDirectoryAccounts != nil,
+			_q.withDirectoryGroups != nil,
+			_q.withDirectoryMemberships != nil,
+			_q.withDirectorySyncRuns != nil,
 			_q.withMembers != nil,
 		}
 	)
@@ -4119,6 +4529,92 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowDefinitions; query != nil {
+		if err := _q.loadWorkflowDefinitions(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowDefinitions = []*WorkflowDefinition{} },
+			func(n *Organization, e *WorkflowDefinition) {
+				n.Edges.WorkflowDefinitions = append(n.Edges.WorkflowDefinitions, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowInstances; query != nil {
+		if err := _q.loadWorkflowInstances(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowInstances = []*WorkflowInstance{} },
+			func(n *Organization, e *WorkflowInstance) {
+				n.Edges.WorkflowInstances = append(n.Edges.WorkflowInstances, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowEvents; query != nil {
+		if err := _q.loadWorkflowEvents(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowEvents = []*WorkflowEvent{} },
+			func(n *Organization, e *WorkflowEvent) { n.Edges.WorkflowEvents = append(n.Edges.WorkflowEvents, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowAssignments; query != nil {
+		if err := _q.loadWorkflowAssignments(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowAssignments = []*WorkflowAssignment{} },
+			func(n *Organization, e *WorkflowAssignment) {
+				n.Edges.WorkflowAssignments = append(n.Edges.WorkflowAssignments, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowAssignmentTargets; query != nil {
+		if err := _q.loadWorkflowAssignmentTargets(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowAssignmentTargets = []*WorkflowAssignmentTarget{} },
+			func(n *Organization, e *WorkflowAssignmentTarget) {
+				n.Edges.WorkflowAssignmentTargets = append(n.Edges.WorkflowAssignmentTargets, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Organization) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Organization, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryAccounts; query != nil {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Organization) { n.Edges.DirectoryAccounts = []*DirectoryAccount{} },
+			func(n *Organization, e *DirectoryAccount) {
+				n.Edges.DirectoryAccounts = append(n.Edges.DirectoryAccounts, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryGroups; query != nil {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *Organization) { n.Edges.DirectoryGroups = []*DirectoryGroup{} },
+			func(n *Organization, e *DirectoryGroup) { n.Edges.DirectoryGroups = append(n.Edges.DirectoryGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectoryMemberships; query != nil {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *Organization) { n.Edges.DirectoryMemberships = []*DirectoryMembership{} },
+			func(n *Organization, e *DirectoryMembership) {
+				n.Edges.DirectoryMemberships = append(n.Edges.DirectoryMemberships, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withDirectorySyncRuns; query != nil {
+		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
+			func(n *Organization) { n.Edges.DirectorySyncRuns = []*DirectorySyncRun{} },
+			func(n *Organization, e *DirectorySyncRun) {
+				n.Edges.DirectorySyncRuns = append(n.Edges.DirectorySyncRuns, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Organization) { n.Edges.Members = []*OrgMembership{} },
@@ -4645,6 +5141,76 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadNotifications(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedNotifications(name) },
 			func(n *Organization, e *Notification) { n.appendNamedNotifications(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowDefinitions {
+		if err := _q.loadWorkflowDefinitions(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowDefinitions(name) },
+			func(n *Organization, e *WorkflowDefinition) { n.appendNamedWorkflowDefinitions(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowInstances {
+		if err := _q.loadWorkflowInstances(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowInstances(name) },
+			func(n *Organization, e *WorkflowInstance) { n.appendNamedWorkflowInstances(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowEvents {
+		if err := _q.loadWorkflowEvents(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowEvents(name) },
+			func(n *Organization, e *WorkflowEvent) { n.appendNamedWorkflowEvents(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowAssignments {
+		if err := _q.loadWorkflowAssignments(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowAssignments(name) },
+			func(n *Organization, e *WorkflowAssignment) { n.appendNamedWorkflowAssignments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowAssignmentTargets {
+		if err := _q.loadWorkflowAssignmentTargets(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowAssignmentTargets(name) },
+			func(n *Organization, e *WorkflowAssignmentTarget) { n.appendNamedWorkflowAssignmentTargets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Organization, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryAccounts {
+		if err := _q.loadDirectoryAccounts(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDirectoryAccounts(name) },
+			func(n *Organization, e *DirectoryAccount) { n.appendNamedDirectoryAccounts(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryGroups {
+		if err := _q.loadDirectoryGroups(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDirectoryGroups(name) },
+			func(n *Organization, e *DirectoryGroup) { n.appendNamedDirectoryGroups(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectoryMemberships {
+		if err := _q.loadDirectoryMemberships(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDirectoryMemberships(name) },
+			func(n *Organization, e *DirectoryMembership) { n.appendNamedDirectoryMemberships(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDirectorySyncRuns {
+		if err := _q.loadDirectorySyncRuns(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedDirectorySyncRuns(name) },
+			func(n *Organization, e *DirectorySyncRun) { n.appendNamedDirectorySyncRuns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -6963,6 +7529,7 @@ func (_q *OrganizationQuery) loadTagDefinitions(ctx context.Context, query *TagD
 			init(nodes[i])
 		}
 	}
+	query.withFKs = true
 	if len(query.ctx.Fields) > 0 {
 		query.ctx.AppendFieldOnce(tagdefinition.FieldOwnerID)
 	}
@@ -7122,6 +7689,314 @@ func (_q *OrganizationQuery) loadNotifications(ctx context.Context, query *Notif
 	}
 	query.Where(predicate.Notification(func(s *sql.Selector) {
 		s.Where(sql.InValues(s.C(organization.NotificationsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowDefinitions(ctx context.Context, query *WorkflowDefinitionQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowDefinition)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowdefinition.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowDefinition(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowDefinitionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowInstances(ctx context.Context, query *WorkflowInstanceQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowInstance)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowinstance.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowInstance(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowInstancesColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowEvents(ctx context.Context, query *WorkflowEventQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowEvent)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowevent.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowEvent(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowEventsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowAssignments(ctx context.Context, query *WorkflowAssignmentQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowAssignment)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowassignment.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowAssignment(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowAssignmentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowAssignmentTargets(ctx context.Context, query *WorkflowAssignmentTargetQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowAssignmentTarget)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowassignmenttarget.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowAssignmentTarget(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowAssignmentTargetsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldOwnerID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadDirectoryAccounts(ctx context.Context, query *DirectoryAccountQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectoryAccount)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directoryaccount.FieldOwnerID)
+	}
+	query.Where(predicate.DirectoryAccount(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DirectoryAccountsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadDirectoryGroups(ctx context.Context, query *DirectoryGroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectoryGroup)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorygroup.FieldOwnerID)
+	}
+	query.Where(predicate.DirectoryGroup(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DirectoryGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadDirectoryMemberships(ctx context.Context, query *DirectoryMembershipQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectoryMembership)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorymembership.FieldOwnerID)
+	}
+	query.Where(predicate.DirectoryMembership(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DirectoryMembershipsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.OwnerID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadDirectorySyncRuns(ctx context.Context, query *DirectorySyncRunQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *DirectorySyncRun)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(directorysyncrun.FieldOwnerID)
+	}
+	query.Where(predicate.DirectorySyncRun(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.DirectorySyncRunsColumn), fks...))
 	}))
 	neighbors, err := query.All(ctx)
 	if err != nil {
@@ -8305,6 +9180,146 @@ func (_q *OrganizationQuery) WithNamedNotifications(name string, opts ...func(*N
 		_q.withNamedNotifications = make(map[string]*NotificationQuery)
 	}
 	_q.withNamedNotifications[name] = query
+	return _q
+}
+
+// WithNamedWorkflowDefinitions tells the query-builder to eager-load the nodes that are connected to the "workflow_definitions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowDefinitions(name string, opts ...func(*WorkflowDefinitionQuery)) *OrganizationQuery {
+	query := (&WorkflowDefinitionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowDefinitions == nil {
+		_q.withNamedWorkflowDefinitions = make(map[string]*WorkflowDefinitionQuery)
+	}
+	_q.withNamedWorkflowDefinitions[name] = query
+	return _q
+}
+
+// WithNamedWorkflowInstances tells the query-builder to eager-load the nodes that are connected to the "workflow_instances"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowInstances(name string, opts ...func(*WorkflowInstanceQuery)) *OrganizationQuery {
+	query := (&WorkflowInstanceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowInstances == nil {
+		_q.withNamedWorkflowInstances = make(map[string]*WorkflowInstanceQuery)
+	}
+	_q.withNamedWorkflowInstances[name] = query
+	return _q
+}
+
+// WithNamedWorkflowEvents tells the query-builder to eager-load the nodes that are connected to the "workflow_events"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowEvents(name string, opts ...func(*WorkflowEventQuery)) *OrganizationQuery {
+	query := (&WorkflowEventClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowEvents == nil {
+		_q.withNamedWorkflowEvents = make(map[string]*WorkflowEventQuery)
+	}
+	_q.withNamedWorkflowEvents[name] = query
+	return _q
+}
+
+// WithNamedWorkflowAssignments tells the query-builder to eager-load the nodes that are connected to the "workflow_assignments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowAssignments(name string, opts ...func(*WorkflowAssignmentQuery)) *OrganizationQuery {
+	query := (&WorkflowAssignmentClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowAssignments == nil {
+		_q.withNamedWorkflowAssignments = make(map[string]*WorkflowAssignmentQuery)
+	}
+	_q.withNamedWorkflowAssignments[name] = query
+	return _q
+}
+
+// WithNamedWorkflowAssignmentTargets tells the query-builder to eager-load the nodes that are connected to the "workflow_assignment_targets"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowAssignmentTargets(name string, opts ...func(*WorkflowAssignmentTargetQuery)) *OrganizationQuery {
+	query := (&WorkflowAssignmentTargetClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowAssignmentTargets == nil {
+		_q.withNamedWorkflowAssignmentTargets = make(map[string]*WorkflowAssignmentTargetQuery)
+	}
+	_q.withNamedWorkflowAssignmentTargets[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *OrganizationQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
+	return _q
+}
+
+// WithNamedDirectoryAccounts tells the query-builder to eager-load the nodes that are connected to the "directory_accounts"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedDirectoryAccounts(name string, opts ...func(*DirectoryAccountQuery)) *OrganizationQuery {
+	query := (&DirectoryAccountClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryAccounts == nil {
+		_q.withNamedDirectoryAccounts = make(map[string]*DirectoryAccountQuery)
+	}
+	_q.withNamedDirectoryAccounts[name] = query
+	return _q
+}
+
+// WithNamedDirectoryGroups tells the query-builder to eager-load the nodes that are connected to the "directory_groups"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedDirectoryGroups(name string, opts ...func(*DirectoryGroupQuery)) *OrganizationQuery {
+	query := (&DirectoryGroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryGroups == nil {
+		_q.withNamedDirectoryGroups = make(map[string]*DirectoryGroupQuery)
+	}
+	_q.withNamedDirectoryGroups[name] = query
+	return _q
+}
+
+// WithNamedDirectoryMemberships tells the query-builder to eager-load the nodes that are connected to the "directory_memberships"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedDirectoryMemberships(name string, opts ...func(*DirectoryMembershipQuery)) *OrganizationQuery {
+	query := (&DirectoryMembershipClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectoryMemberships == nil {
+		_q.withNamedDirectoryMemberships = make(map[string]*DirectoryMembershipQuery)
+	}
+	_q.withNamedDirectoryMemberships[name] = query
+	return _q
+}
+
+// WithNamedDirectorySyncRuns tells the query-builder to eager-load the nodes that are connected to the "directory_sync_runs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedDirectorySyncRuns(name string, opts ...func(*DirectorySyncRunQuery)) *OrganizationQuery {
+	query := (&DirectorySyncRunClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDirectorySyncRuns == nil {
+		_q.withNamedDirectorySyncRuns = make(map[string]*DirectorySyncRunQuery)
+	}
+	_q.withNamedDirectorySyncRuns[name] = query
 	return _q
 }
 

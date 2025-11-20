@@ -38,6 +38,15 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*DNSVerificationMutation]() {
 		c.DNSVerification.Use(hook)
 	}
+	for _, hook := range history.Hooks[*DirectoryAccountMutation]() {
+		c.DirectoryAccount.Use(hook)
+	}
+	for _, hook := range history.Hooks[*DirectoryGroupMutation]() {
+		c.DirectoryGroup.Use(hook)
+	}
+	for _, hook := range history.Hooks[*DirectoryMembershipMutation]() {
+		c.DirectoryMembership.Use(hook)
+	}
 	for _, hook := range history.Hooks[*DocumentDataMutation]() {
 		c.DocumentData.Use(hook)
 	}
@@ -169,5 +178,23 @@ func (c *Client) WithHistory() {
 	}
 	for _, hook := range history.Hooks[*VulnerabilityMutation]() {
 		c.Vulnerability.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowAssignmentMutation]() {
+		c.WorkflowAssignment.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowAssignmentTargetMutation]() {
+		c.WorkflowAssignmentTarget.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowDefinitionMutation]() {
+		c.WorkflowDefinition.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowEventMutation]() {
+		c.WorkflowEvent.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowInstanceMutation]() {
+		c.WorkflowInstance.Use(hook)
+	}
+	for _, hook := range history.Hooks[*WorkflowObjectRefMutation]() {
+		c.WorkflowObjectRef.Use(hook)
 	}
 }
