@@ -10,6 +10,12 @@ mutation CreateBulkCSVJobTemplate($input: Upload!) {
       id
       ownerID
       platform
+      runtimePlatform
+      scriptPath
+      metadata
+      runtimePlatform
+      scriptPath
+      metadata
       systemOwned
       tags
       title
@@ -31,6 +37,9 @@ mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
       id
       ownerID
       platform
+      runtimePlatform
+      scriptPath
+      metadata
       systemOwned
       tags
       title
@@ -52,6 +61,9 @@ mutation CreateJobTemplate($input: CreateJobTemplateInput!) {
       id
       ownerID
       platform
+      runtimePlatform
+      scriptPath
+      metadata
       systemOwned
       tags
       title
@@ -87,6 +99,9 @@ query GetAllJobTemplates {
         id
         ownerID
         platform
+        runtimePlatform
+        scriptPath
+        metadata
         systemOwned
         tags
         title
@@ -136,6 +151,9 @@ query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
         id
         ownerID
         platform
+        runtimePlatform
+        scriptPath
+        metadata
         systemOwned
         tags
         title
@@ -158,6 +176,9 @@ mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateI
       id
       ownerID
       platform
+      runtimePlatform
+      scriptPath
+      metadata
       systemOwned
       tags
       title

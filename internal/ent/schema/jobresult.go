@@ -65,7 +65,6 @@ func (JobResult) Fields() []ent.Field {
 			Optional().
 			Nillable().
 			Immutable(),
-
 		field.Time("finished_at").
 			Immutable().
 			Default(time.Now).
