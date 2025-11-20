@@ -60,12 +60,18 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				m.SetOriginalFileID(docFiles[0].ID)
 			}
 
-			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
-				return nil, errNotSingularUpload
-			}
-
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
-			if !watermarkingEnabledSet || !watermarkingEnabled {
+
+			// if we have no uploaded files
+			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
+				// check if watermarking is enabled. because if it is,a file must be present
+				if watermarkingEnabledSet && watermarkingEnabled {
+					return nil, errMissingFileID
+				}
+
+				// otherwise set the visibility to NOT_VISIBLE
+				m.SetVisibility(enums.TrustCenterDocumentVisibilityNotVisible)
+			} else if !watermarkingEnabledSet || !watermarkingEnabled {
 				origFileID, origFileIDSet := m.OriginalFileID()
 				if !origFileIDSet {
 					return nil, errMissingFileID
@@ -83,17 +89,13 @@ func HookCreateTrustCenterDoc() ent.Hook {
 				return v, nil
 			}
 
-			if trustCenterDoc.OriginalFileID == nil {
-				return nil, errMissingFileID
-			}
-
 			tuples := []fgax.TupleKey{}
 
 			if trustCenterDoc.Visibility != enums.TrustCenterDocumentVisibilityNotVisible {
 				/// If the document is "visible", add the wildcard viewer tuple for the document
 				tuples = append(tuples, fgax.CreateWildcardViewerTuple(trustCenterDoc.ID, "trust_center_doc")...)
 
-				if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
+				if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible && trustCenterDoc.OriginalFileID != nil {
 					// Files are only globally viewable if the document is publicly visible
 					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
 				}
@@ -177,6 +179,13 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			logx.FromContext(ctx).Debug().Bool("file_uploaded", len(docFiles) > 0).Bool("watermark_file_uploaded", len(watermarkedFiles) > 0).Bool("mutation_sets_original_file_id", mutationSetsOriginalFileID).Bool("mutation_set_file_id", mutationSetFileID).Msg("trust center doc hook")
 
+			isExistingFileCleared := m.OriginalFileIDCleared()
+
+			// if original file was cleared, automatically set visibility to NOT_VISIBLE
+			if isExistingFileCleared {
+				m.SetVisibility(enums.TrustCenterDocumentVisibilityNotVisible)
+			}
+
 			v, err := next.Mutate(ctx, m)
 			if err != nil {
 				return v, err
@@ -187,17 +196,15 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 				return v, nil
 			}
 
-			if trustCenterDoc.OriginalFileID == nil {
-				return nil, errMissingFileID
-			}
-
 			if trustCenterDoc.Visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible {
 				tuples := []fgax.TupleKey{}
-				if (mutationSetFileID || len(watermarkedFiles) > 0) && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
-					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)...)
+				if trustCenterDoc.FileID != nil && trustCenterDoc.OriginalFileID != nil {
+					if (mutationSetFileID || len(watermarkedFiles) > 0) && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
+						tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.FileID, generated.TypeFile)...)
+					}
 				}
 
-				if mutationSetsOriginalFileID || len(docFiles) > 0 {
+				if trustCenterDoc.OriginalFileID != nil && (mutationSetsOriginalFileID || len(docFiles) > 0) {
 					tuples = append(tuples, fgax.CreateWildcardViewerTuple(*trustCenterDoc.OriginalFileID, generated.TypeFile)...)
 				}
 
@@ -208,13 +215,21 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 				}
 			}
 
-			fileIDsToUpdate := []string{*trustCenterDoc.OriginalFileID}
-			if trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
-				fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
+			var fileIDsToUpdate []string
+
+			if trustCenterDoc.OriginalFileID != nil {
+				fileIDsToUpdate = []string{*trustCenterDoc.OriginalFileID}
+
+				if trustCenterDoc.FileID != nil && *trustCenterDoc.FileID != *trustCenterDoc.OriginalFileID {
+					fileIDsToUpdate = append(fileIDsToUpdate, *trustCenterDoc.FileID)
+				}
 			}
 
-			if err = updateTrustCenterDocVisibility(ctx, m, fileIDsToUpdate, trustCenterDoc.ID); err != nil {
-				return nil, err
+			// only update visibility tuples if it was explicitly changed
+			if !isExistingFileCleared {
+				if err = updateTrustCenterDocVisibility(ctx, m, fileIDsToUpdate, trustCenterDoc.ID); err != nil {
+					return nil, err
+				}
 			}
 
 			if mutationSetsOriginalFileID || len(docFiles) > 0 {

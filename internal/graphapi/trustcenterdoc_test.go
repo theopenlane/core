@@ -11,6 +11,7 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -733,7 +734,10 @@ func TestTrustCenterDocUpdateSysAdmin(t *testing.T) {
 	t.Run("sysadmin can update protected document", func(t *testing.T) {
 		input := testclient.UpdateTrustCenterDocInput{}
 
-		resp, err := suite.client.api.UpdateTrustCenterDoc(systemAdminUser.UserCtx, trustCenterDocProtected.ID, input, nil, createPDFUpload())
+		upload := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
+
+		resp, err := suite.client.api.UpdateTrustCenterDoc(systemAdminUser.UserCtx, trustCenterDocProtected.ID, input, nil, upload)
 		assert.NilError(t, err)
 		assert.Assert(t, resp != nil)
 
@@ -1249,4 +1253,132 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter1.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+}
+
+func TestTrustCenterDoc_NotVisible(t *testing.T) {
+
+	t.Run("doc without file should set to NOT_VISIBLE", func(t *testing.T) {
+
+		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+		testCases := []struct {
+			name                    string
+			visibility              *enums.TrustCenterDocumentVisibility
+			watermarkingEnabled     bool
+			expectError             bool
+			expectedErrorMsg        string
+			expectedFinalVisibility enums.TrustCenterDocumentVisibility
+		}{
+			{
+				name:                    "created without file",
+				visibility:              nil,
+				watermarkingEnabled:     false,
+				expectError:             false,
+				expectedFinalVisibility: enums.TrustCenterDocumentVisibilityNotVisible,
+			},
+			{
+				name:                    "created without file with PUBLIC visibility",
+				visibility:              &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+				watermarkingEnabled:     false,
+				expectError:             false,
+				expectedFinalVisibility: enums.TrustCenterDocumentVisibilityNotVisible,
+			},
+			{
+				name:                    "created  without file with PROTECTED visibility",
+				visibility:              &enums.TrustCenterDocumentVisibilityProtected,
+				watermarkingEnabled:     false,
+				expectError:             false,
+				expectedFinalVisibility: enums.TrustCenterDocumentVisibilityNotVisible,
+			},
+			{
+				name:                "created without file and watermarking enabled",
+				visibility:          nil,
+				watermarkingEnabled: true,
+				expectError:         true,
+				expectedErrorMsg:    "missing file",
+			},
+		}
+
+		for _, tc := range testCases {
+			t.Run(tc.name, func(t *testing.T) {
+				allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+				create := suite.client.db.TrustCenterDoc.Create().
+					SetTitle("My Test Document").
+					SetCategory("trustcenter").
+					SetTrustCenterID(trustCenter.ID).
+					SetWatermarkingEnabled(tc.watermarkingEnabled)
+
+				if tc.visibility != nil {
+					create = create.SetVisibility(*tc.visibility)
+				}
+
+				trustCenterDoc, err := create.Save(allowCtx)
+
+				if tc.expectError {
+					assert.ErrorContains(t, err, tc.expectedErrorMsg)
+					return
+				}
+
+				require.NoError(t, err)
+				require.NotNil(t, trustCenterDoc)
+
+				assert.Check(t, trustCenterDoc.ID != "")
+				assert.Check(t, trustCenterDoc.OriginalFileID == nil, "Original file ID should be nil")
+				assert.Check(t, trustCenterDoc.FileID == nil, "File ID should be nil")
+				assert.Check(t, is.Equal(tc.expectedFinalVisibility, trustCenterDoc.Visibility), "Visibility should be set to NOT_VISIBLE")
+
+				(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+			})
+		}
+
+		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	t.Run("when you clear an existing doc, it should set it to NO_VISIBLE", func(t *testing.T) {
+
+		trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		upload := &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*upload})
+
+		createInput := testclient.CreateTrustCenterDocInput{
+			Title:         "Test Document with File",
+			Category:      "Policy",
+			TrustCenterID: &trustCenter.ID,
+			Visibility:    &enums.TrustCenterDocumentVisibilityPubliclyVisible,
+		}
+
+		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *upload)
+		require.NoError(t, err)
+		require.NotNil(t, createResp)
+
+		trustCenterDoc := createResp.CreateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, trustCenterDoc.OriginalFileID != nil, "Original file ID should be set")
+		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityPubliclyVisible, *trustCenterDoc.Visibility))
+
+		allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+
+		updatedDoc, err := suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDoc.ID).
+			ClearOriginalFileID().
+			ClearFileID().
+			Save(allowCtx)
+		require.NoError(t, err)
+		require.NotNil(t, updatedDoc)
+
+		assert.Check(t, updatedDoc.OriginalFileID == nil, "Original file ID should be nil after clearing")
+		assert.Check(t, updatedDoc.FileID == nil, "File ID should be nil after clearing")
+		assert.Check(t, is.Equal(enums.TrustCenterDocumentVisibilityNotVisible, updatedDoc.Visibility), "Visibility should be automatically set to NOT_VISIBLE when file is cleared")
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDoc.ID}).MustDelete(testUser1.UserCtx, t)
+		(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	})
 }
