@@ -70,7 +70,7 @@ func (JobTemplate) Fields() []ent.Field {
 		field.String("windmill_path").
 			Annotations(
 				entgql.Skip(
-					entgql.SkipAll, // hidden from the graphql api, this is an internal field used to track the windmill path
+					entgql.SkipAll,
 				),
 			).
 			Optional().

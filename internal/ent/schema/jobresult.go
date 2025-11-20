@@ -46,8 +46,7 @@ func (JobResult) PluralName() string {
 func (JobResult) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("scheduled_job_id").
-			Comment("the job this result belongs to").
-			Optional(),
+			Comment("the job this result belongs to"),
 		field.String("compliance_job_id").
 			Comment("the job this result belongs to").
 			Optional(),
@@ -63,6 +62,7 @@ func (JobResult) Fields() []ent.Field {
 			).
 			Comment("the exit code from the script that was executed").
 			NonNegative().
+			Optional().
 			Nillable().
 			Immutable(),
 
@@ -119,7 +119,7 @@ func (j JobResult) Edges() []ent.Edge {
 			fromSchema: j,
 			edgeSchema: ScheduledJob{},
 			field:      "scheduled_job_id",
-			required:   false,
+			required:   true,
 		}),
 
 		uniqueEdgeTo(&edgeDefinition{
