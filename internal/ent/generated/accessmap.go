@@ -257,6 +257,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "mapped_from_control",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_mappings": {
 	ObjectType:      "control_mapping",
 	SkipEditCheck:   false,
@@ -404,6 +408,106 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "custom_domains": {
 	ObjectType:      "custom_domain",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "directory_account": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_sync_run": {
+	ObjectType:      "directory_sync_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "memberships": {
+	ObjectType:      "membership",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+},
+}, "directory_group": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_sync_run": {
+	ObjectType:      "directory_sync_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "accounts": {
+	ObjectType:      "account",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "members": {
+	ObjectType:      "member",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "directory_membership": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_sync_run": {
+	ObjectType:      "directory_sync_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_account": {
+	ObjectType:      "directory_account",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "directory_group": {
+	ObjectType:      "directory_group",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "events": {
+	ObjectType:      "event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "directory_sync_run": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "integration": {
+	ObjectType:      "integration",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_accounts": {
+	ObjectType:      "directory_account",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_groups": {
+	ObjectType:      "directory_group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_memberships": {
+	ObjectType:      "directory_membership",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -724,6 +828,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "control_mappings": {
 	ObjectType:      "control_mapping",
 	SkipEditCheck:   false,
@@ -987,6 +1095,22 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "action_plan",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "directory_accounts": {
+	ObjectType:      "directory_account",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_groups": {
+	ObjectType:      "directory_group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_memberships": {
+	ObjectType:      "directory_membership",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_sync_runs": {
+	ObjectType:      "directory_sync_run",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "internal_policy": {"owner": {
 	ObjectType:      "owner",
@@ -1054,6 +1178,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "comments": {
 	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
@@ -1628,6 +1756,46 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "notifications": {
 	ObjectType:      "notification",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_definitions": {
+	ObjectType:      "workflow_definition",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_instances": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_events": {
+	ObjectType:      "workflow_event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_assignments": {
+	ObjectType:      "workflow_assignment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_assignment_targets": {
+	ObjectType:      "workflow_assignment_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_accounts": {
+	ObjectType:      "directory_account",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_groups": {
+	ObjectType:      "directory_group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_memberships": {
+	ObjectType:      "directory_membership",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "directory_sync_runs": {
+	ObjectType:      "directory_sync_run",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "members": {
@@ -2293,6 +2461,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "evidence",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "template": {"owner": {
 	ObjectType:      "owner",
@@ -2602,6 +2774,124 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 },
 }, "webauthn": {"owner": {
 	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+},
+}, "workflow_assignment": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_instance": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_assignment_targets": {
+	ObjectType:      "workflow_assignment_target",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "group": {
+	ObjectType:      "group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_assignment_target": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_assignment": {
+	ObjectType:      "workflow_assignment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "user": {
+	ObjectType:      "user",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "group": {
+	ObjectType:      "group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_definition": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "tag_definitions": {
+	ObjectType:      "tag_definition",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "groups": {
+	ObjectType:      "group",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_event": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_instance": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_instance": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_definition": {
+	ObjectType:      "workflow_definition",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_assignments": {
+	ObjectType:      "workflow_assignment",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_events": {
+	ObjectType:      "workflow_event",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "workflow_object_refs": {
+	ObjectType:      "workflow_object_ref",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "workflow_object_ref": {"owner": {
+	ObjectType:      "owner",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "workflow_instance": {
+	ObjectType:      "workflow_instance",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "control": {
+	ObjectType:      "control",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "task": {
+	ObjectType:      "task",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "internal_policy": {
+	ObjectType:      "internal_policy",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "finding": {
+	ObjectType:      "finding",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "directory_account": {
+	ObjectType:      "directory_account",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "directory_group": {
+	ObjectType:      "directory_group",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "directory_membership": {
+	ObjectType:      "directory_membership",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 },

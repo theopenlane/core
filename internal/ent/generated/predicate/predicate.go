@@ -72,6 +72,27 @@ type DNSVerification func(*sql.Selector)
 // DNSVerificationHistory is the predicate function for dnsverificationhistory builders.
 type DNSVerificationHistory func(*sql.Selector)
 
+// DirectoryAccount is the predicate function for directoryaccount builders.
+type DirectoryAccount func(*sql.Selector)
+
+// DirectoryAccountHistory is the predicate function for directoryaccounthistory builders.
+type DirectoryAccountHistory func(*sql.Selector)
+
+// DirectoryGroup is the predicate function for directorygroup builders.
+type DirectoryGroup func(*sql.Selector)
+
+// DirectoryGroupHistory is the predicate function for directorygrouphistory builders.
+type DirectoryGroupHistory func(*sql.Selector)
+
+// DirectoryMembership is the predicate function for directorymembership builders.
+type DirectoryMembership func(*sql.Selector)
+
+// DirectoryMembershipHistory is the predicate function for directorymembershiphistory builders.
+type DirectoryMembershipHistory func(*sql.Selector)
+
+// DirectorySyncRun is the predicate function for directorysyncrun builders.
+type DirectorySyncRun func(*sql.Selector)
+
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 
@@ -401,3 +422,39 @@ type VulnerabilityHistory func(*sql.Selector)
 
 // Webauthn is the predicate function for webauthn builders.
 type Webauthn func(*sql.Selector)
+
+// WorkflowAssignment is the predicate function for workflowassignment builders.
+type WorkflowAssignment func(*sql.Selector)
+
+// WorkflowAssignmentHistory is the predicate function for workflowassignmenthistory builders.
+type WorkflowAssignmentHistory func(*sql.Selector)
+
+// WorkflowAssignmentTarget is the predicate function for workflowassignmenttarget builders.
+type WorkflowAssignmentTarget func(*sql.Selector)
+
+// WorkflowAssignmentTargetHistory is the predicate function for workflowassignmenttargethistory builders.
+type WorkflowAssignmentTargetHistory func(*sql.Selector)
+
+// WorkflowDefinition is the predicate function for workflowdefinition builders.
+type WorkflowDefinition func(*sql.Selector)
+
+// WorkflowDefinitionHistory is the predicate function for workflowdefinitionhistory builders.
+type WorkflowDefinitionHistory func(*sql.Selector)
+
+// WorkflowEvent is the predicate function for workflowevent builders.
+type WorkflowEvent func(*sql.Selector)
+
+// WorkflowEventHistory is the predicate function for workfloweventhistory builders.
+type WorkflowEventHistory func(*sql.Selector)
+
+// WorkflowInstance is the predicate function for workflowinstance builders.
+type WorkflowInstance func(*sql.Selector)
+
+// WorkflowInstanceHistory is the predicate function for workflowinstancehistory builders.
+type WorkflowInstanceHistory func(*sql.Selector)
+
+// WorkflowObjectRef is the predicate function for workflowobjectref builders.
+type WorkflowObjectRef func(*sql.Selector)
+
+// WorkflowObjectRefHistory is the predicate function for workflowobjectrefhistory builders.
+type WorkflowObjectRefHistory func(*sql.Selector)

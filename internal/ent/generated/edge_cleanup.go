@@ -17,6 +17,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/emailverificationtoken"
@@ -79,6 +83,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/utils/contextx"
@@ -219,6 +229,62 @@ func DNSVerificationEdgeCleanup(ctx context.Context, id string) error {
 
 func DNSVerificationHistoryEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup dnsverificationhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DirectoryAccountEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccount edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryAccountWith(directoryaccount.ID(id)))).Exist(ctx); err == nil && exists {
+		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasDirectoryAccountWith(directoryaccount.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directorymembershipCount).Msg("error deleting directorymembership")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func DirectoryAccountHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directoryaccounthistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DirectoryGroupEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygroup edge")), entfga.DeleteTuplesFirstKey{})
+
+	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasDirectoryGroupWith(directorygroup.ID(id)))).Exist(ctx); err == nil && exists {
+		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasDirectoryGroupWith(directorygroup.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directorymembershipCount).Msg("error deleting directorymembership")
+			return err
+		}
+	}
+
+	return nil
+}
+
+func DirectoryGroupHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorygrouphistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DirectoryMembershipEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembership edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DirectoryMembershipHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorymembershiphistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func DirectorySyncRunEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup directorysyncrun edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }
@@ -990,6 +1056,76 @@ func OrganizationEdgeCleanup(ctx context.Context, id string) error {
 		}
 	}
 
+	if exists, err := FromContext(ctx).WorkflowDefinition.Query().Where((workflowdefinition.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowdefinitionCount, err := FromContext(ctx).WorkflowDefinition.Delete().Where(workflowdefinition.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowdefinitionCount).Msg("error deleting workflowdefinition")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowInstance.Query().Where((workflowinstance.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowinstanceCount, err := FromContext(ctx).WorkflowInstance.Delete().Where(workflowinstance.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowinstanceCount).Msg("error deleting workflowinstance")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowEvent.Query().Where((workflowevent.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workfloweventCount, err := FromContext(ctx).WorkflowEvent.Delete().Where(workflowevent.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workfloweventCount).Msg("error deleting workflowevent")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowAssignment.Query().Where((workflowassignment.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowassignmentCount, err := FromContext(ctx).WorkflowAssignment.Delete().Where(workflowassignment.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmentCount).Msg("error deleting workflowassignment")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowAssignmentTarget.Query().Where((workflowassignmenttarget.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowassignmenttargetCount, err := FromContext(ctx).WorkflowAssignmentTarget.Delete().Where(workflowassignmenttarget.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowassignmenttargetCount).Msg("error deleting workflowassignmenttarget")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).WorkflowObjectRef.Query().Where((workflowobjectref.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if workflowobjectrefCount, err := FromContext(ctx).WorkflowObjectRef.Delete().Where(workflowobjectref.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", workflowobjectrefCount).Msg("error deleting workflowobjectref")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DirectoryAccount.Query().Where((directoryaccount.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if directoryaccountCount, err := FromContext(ctx).DirectoryAccount.Delete().Where(directoryaccount.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directoryaccountCount).Msg("error deleting directoryaccount")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DirectoryGroup.Query().Where((directorygroup.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if directorygroupCount, err := FromContext(ctx).DirectoryGroup.Delete().Where(directorygroup.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directorygroupCount).Msg("error deleting directorygroup")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DirectoryMembership.Query().Where((directorymembership.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if directorymembershipCount, err := FromContext(ctx).DirectoryMembership.Delete().Where(directorymembership.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directorymembershipCount).Msg("error deleting directorymembership")
+			return err
+		}
+	}
+
+	if exists, err := FromContext(ctx).DirectorySyncRun.Query().Where((directorysyncrun.HasOwnerWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
+		if directorysyncrunCount, err := FromContext(ctx).DirectorySyncRun.Delete().Where(directorysyncrun.HasOwnerWith(organization.ID(id))).Exec(ctx); err != nil {
+			logx.FromContext(ctx).Error().Err(err).Int("count", directorysyncrunCount).Msg("error deleting directorysyncrun")
+			return err
+		}
+	}
+
 	if exists, err := FromContext(ctx).OrgMembership.Query().Where((orgmembership.HasOrganizationWith(organization.ID(id)))).Exist(ctx); err == nil && exists {
 		if orgmembershipCount, err := FromContext(ctx).OrgMembership.Delete().Where(orgmembership.HasOrganizationWith(organization.ID(id))).Exec(ctx); err != nil {
 			logx.FromContext(ctx).Error().Err(err).Int("count", orgmembershipCount).Msg("error deleting orgmembership")
@@ -1446,6 +1582,78 @@ func VulnerabilityHistoryEdgeCleanup(ctx context.Context, id string) error {
 
 func WebauthnEdgeCleanup(ctx context.Context, id string) error {
 	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup webauthn edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowAssignmentEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignment edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowAssignmentHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenthistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowAssignmentTargetEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttarget edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowAssignmentTargetHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowassignmenttargethistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowDefinitionEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinition edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowDefinitionHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowdefinitionhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowEventEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowevent edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowEventHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workfloweventhistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowInstanceEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstance edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowInstanceHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowinstancehistory edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowObjectRefEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectref edge")), entfga.DeleteTuplesFirstKey{})
+
+	return nil
+}
+
+func WorkflowObjectRefHistoryEdgeCleanup(ctx context.Context, id string) error {
+	ctx = contextx.With(privacy.DecisionContext(ctx, privacy.Allowf("cleanup workflowobjectrefhistory edge")), entfga.DeleteTuplesFirstKey{})
 
 	return nil
 }

@@ -81,21 +81,33 @@ type IntegrationEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// ActionPlans holds the value of the action_plans edge.
 	ActionPlans []*ActionPlan `json:"action_plans,omitempty"`
+	// DirectoryAccounts holds the value of the directory_accounts edge.
+	DirectoryAccounts []*DirectoryAccount `json:"directory_accounts,omitempty"`
+	// DirectoryGroups holds the value of the directory_groups edge.
+	DirectoryGroups []*DirectoryGroup `json:"directory_groups,omitempty"`
+	// DirectoryMemberships holds the value of the directory_memberships edge.
+	DirectoryMemberships []*DirectoryMembership `json:"directory_memberships,omitempty"`
+	// DirectorySyncRuns holds the value of the directory_sync_runs edge.
+	DirectorySyncRuns []*DirectorySyncRun `json:"directory_sync_runs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [10]bool
+	loadedTypes [14]bool
 	// totalCount holds the count of the edges above.
-	totalCount [10]map[string]int
+	totalCount [14]map[string]int
 
-	namedSecrets         map[string][]*Hush
-	namedFiles           map[string][]*File
-	namedEvents          map[string][]*Event
-	namedFindings        map[string][]*Finding
-	namedVulnerabilities map[string][]*Vulnerability
-	namedReviews         map[string][]*Review
-	namedRemediations    map[string][]*Remediation
-	namedTasks           map[string][]*Task
-	namedActionPlans     map[string][]*ActionPlan
+	namedSecrets              map[string][]*Hush
+	namedFiles                map[string][]*File
+	namedEvents               map[string][]*Event
+	namedFindings             map[string][]*Finding
+	namedVulnerabilities      map[string][]*Vulnerability
+	namedReviews              map[string][]*Review
+	namedRemediations         map[string][]*Remediation
+	namedTasks                map[string][]*Task
+	namedActionPlans          map[string][]*ActionPlan
+	namedDirectoryAccounts    map[string][]*DirectoryAccount
+	namedDirectoryGroups      map[string][]*DirectoryGroup
+	namedDirectoryMemberships map[string][]*DirectoryMembership
+	namedDirectorySyncRuns    map[string][]*DirectorySyncRun
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -188,6 +200,42 @@ func (e IntegrationEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
+}
+
+// DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
+	if e.loadedTypes[10] {
+		return e.DirectoryAccounts, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_accounts"}
+}
+
+// DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
+	if e.loadedTypes[11] {
+		return e.DirectoryGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_groups"}
+}
+
+// DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
+	if e.loadedTypes[12] {
+		return e.DirectoryMemberships, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_memberships"}
+}
+
+// DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
+// was not loaded in eager-loading.
+func (e IntegrationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
+	if e.loadedTypes[13] {
+		return e.DirectorySyncRuns, nil
+	}
+	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -405,6 +453,26 @@ func (_m *Integration) QueryTasks() *TaskQuery {
 // QueryActionPlans queries the "action_plans" edge of the Integration entity.
 func (_m *Integration) QueryActionPlans() *ActionPlanQuery {
 	return NewIntegrationClient(_m.config).QueryActionPlans(_m)
+}
+
+// QueryDirectoryAccounts queries the "directory_accounts" edge of the Integration entity.
+func (_m *Integration) QueryDirectoryAccounts() *DirectoryAccountQuery {
+	return NewIntegrationClient(_m.config).QueryDirectoryAccounts(_m)
+}
+
+// QueryDirectoryGroups queries the "directory_groups" edge of the Integration entity.
+func (_m *Integration) QueryDirectoryGroups() *DirectoryGroupQuery {
+	return NewIntegrationClient(_m.config).QueryDirectoryGroups(_m)
+}
+
+// QueryDirectoryMemberships queries the "directory_memberships" edge of the Integration entity.
+func (_m *Integration) QueryDirectoryMemberships() *DirectoryMembershipQuery {
+	return NewIntegrationClient(_m.config).QueryDirectoryMemberships(_m)
+}
+
+// QueryDirectorySyncRuns queries the "directory_sync_runs" edge of the Integration entity.
+func (_m *Integration) QueryDirectorySyncRuns() *DirectorySyncRunQuery {
+	return NewIntegrationClient(_m.config).QueryDirectorySyncRuns(_m)
 }
 
 // Update returns a builder for updating this Integration.
@@ -698,6 +766,102 @@ func (_m *Integration) appendNamedActionPlans(name string, edges ...*ActionPlan)
 		_m.Edges.namedActionPlans[name] = []*ActionPlan{}
 	} else {
 		_m.Edges.namedActionPlans[name] = append(_m.Edges.namedActionPlans[name], edges...)
+	}
+}
+
+// NamedDirectoryAccounts returns the DirectoryAccounts named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedDirectoryAccounts(name string) ([]*DirectoryAccount, error) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryAccounts[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedDirectoryAccounts(name string, edges ...*DirectoryAccount) {
+	if _m.Edges.namedDirectoryAccounts == nil {
+		_m.Edges.namedDirectoryAccounts = make(map[string][]*DirectoryAccount)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryAccounts[name] = []*DirectoryAccount{}
+	} else {
+		_m.Edges.namedDirectoryAccounts[name] = append(_m.Edges.namedDirectoryAccounts[name], edges...)
+	}
+}
+
+// NamedDirectoryGroups returns the DirectoryGroups named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedDirectoryGroups(name string) ([]*DirectoryGroup, error) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryGroups[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedDirectoryGroups(name string, edges ...*DirectoryGroup) {
+	if _m.Edges.namedDirectoryGroups == nil {
+		_m.Edges.namedDirectoryGroups = make(map[string][]*DirectoryGroup)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryGroups[name] = []*DirectoryGroup{}
+	} else {
+		_m.Edges.namedDirectoryGroups[name] = append(_m.Edges.namedDirectoryGroups[name], edges...)
+	}
+}
+
+// NamedDirectoryMemberships returns the DirectoryMemberships named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedDirectoryMemberships(name string) ([]*DirectoryMembership, error) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectoryMemberships[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedDirectoryMemberships(name string, edges ...*DirectoryMembership) {
+	if _m.Edges.namedDirectoryMemberships == nil {
+		_m.Edges.namedDirectoryMemberships = make(map[string][]*DirectoryMembership)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectoryMemberships[name] = []*DirectoryMembership{}
+	} else {
+		_m.Edges.namedDirectoryMemberships[name] = append(_m.Edges.namedDirectoryMemberships[name], edges...)
+	}
+}
+
+// NamedDirectorySyncRuns returns the DirectorySyncRuns named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Integration) NamedDirectorySyncRuns(name string) ([]*DirectorySyncRun, error) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDirectorySyncRuns[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Integration) appendNamedDirectorySyncRuns(name string, edges ...*DirectorySyncRun) {
+	if _m.Edges.namedDirectorySyncRuns == nil {
+		_m.Edges.namedDirectorySyncRuns = make(map[string][]*DirectorySyncRun)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDirectorySyncRuns[name] = []*DirectorySyncRun{}
+	} else {
+		_m.Edges.namedDirectorySyncRuns[name] = append(_m.Edges.namedDirectorySyncRuns[name], edges...)
 	}
 }
 

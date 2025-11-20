@@ -39,6 +39,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -151,6 +158,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -220,6 +239,20 @@ type Client struct {
 	DNSVerification *DNSVerificationClient
 	// DNSVerificationHistory is the client for interacting with the DNSVerificationHistory builders.
 	DNSVerificationHistory *DNSVerificationHistoryClient
+	// DirectoryAccount is the client for interacting with the DirectoryAccount builders.
+	DirectoryAccount *DirectoryAccountClient
+	// DirectoryAccountHistory is the client for interacting with the DirectoryAccountHistory builders.
+	DirectoryAccountHistory *DirectoryAccountHistoryClient
+	// DirectoryGroup is the client for interacting with the DirectoryGroup builders.
+	DirectoryGroup *DirectoryGroupClient
+	// DirectoryGroupHistory is the client for interacting with the DirectoryGroupHistory builders.
+	DirectoryGroupHistory *DirectoryGroupHistoryClient
+	// DirectoryMembership is the client for interacting with the DirectoryMembership builders.
+	DirectoryMembership *DirectoryMembershipClient
+	// DirectoryMembershipHistory is the client for interacting with the DirectoryMembershipHistory builders.
+	DirectoryMembershipHistory *DirectoryMembershipHistoryClient
+	// DirectorySyncRun is the client for interacting with the DirectorySyncRun builders.
+	DirectorySyncRun *DirectorySyncRunClient
 	// DocumentData is the client for interacting with the DocumentData builders.
 	DocumentData *DocumentDataClient
 	// DocumentDataHistory is the client for interacting with the DocumentDataHistory builders.
@@ -440,6 +473,30 @@ type Client struct {
 	VulnerabilityHistory *VulnerabilityHistoryClient
 	// Webauthn is the client for interacting with the Webauthn builders.
 	Webauthn *WebauthnClient
+	// WorkflowAssignment is the client for interacting with the WorkflowAssignment builders.
+	WorkflowAssignment *WorkflowAssignmentClient
+	// WorkflowAssignmentHistory is the client for interacting with the WorkflowAssignmentHistory builders.
+	WorkflowAssignmentHistory *WorkflowAssignmentHistoryClient
+	// WorkflowAssignmentTarget is the client for interacting with the WorkflowAssignmentTarget builders.
+	WorkflowAssignmentTarget *WorkflowAssignmentTargetClient
+	// WorkflowAssignmentTargetHistory is the client for interacting with the WorkflowAssignmentTargetHistory builders.
+	WorkflowAssignmentTargetHistory *WorkflowAssignmentTargetHistoryClient
+	// WorkflowDefinition is the client for interacting with the WorkflowDefinition builders.
+	WorkflowDefinition *WorkflowDefinitionClient
+	// WorkflowDefinitionHistory is the client for interacting with the WorkflowDefinitionHistory builders.
+	WorkflowDefinitionHistory *WorkflowDefinitionHistoryClient
+	// WorkflowEvent is the client for interacting with the WorkflowEvent builders.
+	WorkflowEvent *WorkflowEventClient
+	// WorkflowEventHistory is the client for interacting with the WorkflowEventHistory builders.
+	WorkflowEventHistory *WorkflowEventHistoryClient
+	// WorkflowInstance is the client for interacting with the WorkflowInstance builders.
+	WorkflowInstance *WorkflowInstanceClient
+	// WorkflowInstanceHistory is the client for interacting with the WorkflowInstanceHistory builders.
+	WorkflowInstanceHistory *WorkflowInstanceHistoryClient
+	// WorkflowObjectRef is the client for interacting with the WorkflowObjectRef builders.
+	WorkflowObjectRef *WorkflowObjectRefClient
+	// WorkflowObjectRefHistory is the client for interacting with the WorkflowObjectRefHistory builders.
+	WorkflowObjectRefHistory *WorkflowObjectRefHistoryClient
 
 	// authzActivated determines if the authz hooks have already been activated
 	authzActivated bool
@@ -482,6 +539,13 @@ func (c *Client) init() {
 	c.CustomTypeEnum = NewCustomTypeEnumClient(c.config)
 	c.DNSVerification = NewDNSVerificationClient(c.config)
 	c.DNSVerificationHistory = NewDNSVerificationHistoryClient(c.config)
+	c.DirectoryAccount = NewDirectoryAccountClient(c.config)
+	c.DirectoryAccountHistory = NewDirectoryAccountHistoryClient(c.config)
+	c.DirectoryGroup = NewDirectoryGroupClient(c.config)
+	c.DirectoryGroupHistory = NewDirectoryGroupHistoryClient(c.config)
+	c.DirectoryMembership = NewDirectoryMembershipClient(c.config)
+	c.DirectoryMembershipHistory = NewDirectoryMembershipHistoryClient(c.config)
+	c.DirectorySyncRun = NewDirectorySyncRunClient(c.config)
 	c.DocumentData = NewDocumentDataClient(c.config)
 	c.DocumentDataHistory = NewDocumentDataHistoryClient(c.config)
 	c.EmailVerificationToken = NewEmailVerificationTokenClient(c.config)
@@ -592,6 +656,18 @@ func (c *Client) init() {
 	c.Vulnerability = NewVulnerabilityClient(c.config)
 	c.VulnerabilityHistory = NewVulnerabilityHistoryClient(c.config)
 	c.Webauthn = NewWebauthnClient(c.config)
+	c.WorkflowAssignment = NewWorkflowAssignmentClient(c.config)
+	c.WorkflowAssignmentHistory = NewWorkflowAssignmentHistoryClient(c.config)
+	c.WorkflowAssignmentTarget = NewWorkflowAssignmentTargetClient(c.config)
+	c.WorkflowAssignmentTargetHistory = NewWorkflowAssignmentTargetHistoryClient(c.config)
+	c.WorkflowDefinition = NewWorkflowDefinitionClient(c.config)
+	c.WorkflowDefinitionHistory = NewWorkflowDefinitionHistoryClient(c.config)
+	c.WorkflowEvent = NewWorkflowEventClient(c.config)
+	c.WorkflowEventHistory = NewWorkflowEventHistoryClient(c.config)
+	c.WorkflowInstance = NewWorkflowInstanceClient(c.config)
+	c.WorkflowInstanceHistory = NewWorkflowInstanceHistoryClient(c.config)
+	c.WorkflowObjectRef = NewWorkflowObjectRefClient(c.config)
+	c.WorkflowObjectRefHistory = NewWorkflowObjectRefHistoryClient(c.config)
 }
 
 type (
@@ -815,6 +891,13 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		CustomTypeEnum:                    NewCustomTypeEnumClient(cfg),
 		DNSVerification:                   NewDNSVerificationClient(cfg),
 		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
+		DirectoryAccount:                  NewDirectoryAccountClient(cfg),
+		DirectoryAccountHistory:           NewDirectoryAccountHistoryClient(cfg),
+		DirectoryGroup:                    NewDirectoryGroupClient(cfg),
+		DirectoryGroupHistory:             NewDirectoryGroupHistoryClient(cfg),
+		DirectoryMembership:               NewDirectoryMembershipClient(cfg),
+		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
+		DirectorySyncRun:                  NewDirectorySyncRunClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
@@ -925,6 +1008,18 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 		Vulnerability:                     NewVulnerabilityClient(cfg),
 		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
+		WorkflowAssignment:                NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
+		WorkflowAssignmentTarget:          NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
+		WorkflowDefinition:                NewWorkflowDefinitionClient(cfg),
+		WorkflowDefinitionHistory:         NewWorkflowDefinitionHistoryClient(cfg),
+		WorkflowEvent:                     NewWorkflowEventClient(cfg),
+		WorkflowEventHistory:              NewWorkflowEventHistoryClient(cfg),
+		WorkflowInstance:                  NewWorkflowInstanceClient(cfg),
+		WorkflowInstanceHistory:           NewWorkflowInstanceHistoryClient(cfg),
+		WorkflowObjectRef:                 NewWorkflowObjectRefClient(cfg),
+		WorkflowObjectRefHistory:          NewWorkflowObjectRefHistoryClient(cfg),
 	}, nil
 }
 
@@ -966,6 +1061,13 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		CustomTypeEnum:                    NewCustomTypeEnumClient(cfg),
 		DNSVerification:                   NewDNSVerificationClient(cfg),
 		DNSVerificationHistory:            NewDNSVerificationHistoryClient(cfg),
+		DirectoryAccount:                  NewDirectoryAccountClient(cfg),
+		DirectoryAccountHistory:           NewDirectoryAccountHistoryClient(cfg),
+		DirectoryGroup:                    NewDirectoryGroupClient(cfg),
+		DirectoryGroupHistory:             NewDirectoryGroupHistoryClient(cfg),
+		DirectoryMembership:               NewDirectoryMembershipClient(cfg),
+		DirectoryMembershipHistory:        NewDirectoryMembershipHistoryClient(cfg),
+		DirectorySyncRun:                  NewDirectorySyncRunClient(cfg),
 		DocumentData:                      NewDocumentDataClient(cfg),
 		DocumentDataHistory:               NewDocumentDataHistoryClient(cfg),
 		EmailVerificationToken:            NewEmailVerificationTokenClient(cfg),
@@ -1076,6 +1178,18 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 		Vulnerability:                     NewVulnerabilityClient(cfg),
 		VulnerabilityHistory:              NewVulnerabilityHistoryClient(cfg),
 		Webauthn:                          NewWebauthnClient(cfg),
+		WorkflowAssignment:                NewWorkflowAssignmentClient(cfg),
+		WorkflowAssignmentHistory:         NewWorkflowAssignmentHistoryClient(cfg),
+		WorkflowAssignmentTarget:          NewWorkflowAssignmentTargetClient(cfg),
+		WorkflowAssignmentTargetHistory:   NewWorkflowAssignmentTargetHistoryClient(cfg),
+		WorkflowDefinition:                NewWorkflowDefinitionClient(cfg),
+		WorkflowDefinitionHistory:         NewWorkflowDefinitionHistoryClient(cfg),
+		WorkflowEvent:                     NewWorkflowEventClient(cfg),
+		WorkflowEventHistory:              NewWorkflowEventHistoryClient(cfg),
+		WorkflowInstance:                  NewWorkflowInstanceClient(cfg),
+		WorkflowInstanceHistory:           NewWorkflowInstanceHistoryClient(cfg),
+		WorkflowObjectRef:                 NewWorkflowObjectRefClient(cfg),
+		WorkflowObjectRefHistory:          NewWorkflowObjectRefHistoryClient(cfg),
 	}, nil
 }
 
@@ -1111,12 +1225,14 @@ func (c *Client) Use(hooks ...Hook) {
 		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
 		c.ControlObjective, c.ControlObjectiveHistory, c.CustomDomain,
 		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
-		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
-		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
-		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.DNSVerificationHistory, c.DirectoryAccount, c.DirectoryAccountHistory,
+		c.DirectoryGroup, c.DirectoryGroupHistory, c.DirectoryMembership,
+		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
+		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
+		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Finding,
+		c.FindingControl, c.FindingControlHistory, c.FindingHistory, c.Group,
+		c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
 		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
@@ -1139,7 +1255,12 @@ func (c *Client) Use(hooks ...Hook) {
 		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
 		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
 		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Vulnerability,
-		c.VulnerabilityHistory, c.Webauthn,
+		c.VulnerabilityHistory, c.Webauthn, c.WorkflowAssignment,
+		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTarget,
+		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinition,
+		c.WorkflowDefinitionHistory, c.WorkflowEvent, c.WorkflowEventHistory,
+		c.WorkflowInstance, c.WorkflowInstanceHistory, c.WorkflowObjectRef,
+		c.WorkflowObjectRefHistory,
 	} {
 		n.Use(hooks...)
 	}
@@ -1155,12 +1276,14 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.ControlHistory, c.ControlImplementation, c.ControlImplementationHistory,
 		c.ControlObjective, c.ControlObjectiveHistory, c.CustomDomain,
 		c.CustomDomainHistory, c.CustomTypeEnum, c.DNSVerification,
-		c.DNSVerificationHistory, c.DocumentData, c.DocumentDataHistory,
-		c.EmailVerificationToken, c.Entity, c.EntityHistory, c.EntityType,
-		c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory, c.Export, c.File,
-		c.FileDownloadToken, c.FileHistory, c.Finding, c.FindingControl,
-		c.FindingControlHistory, c.FindingHistory, c.Group, c.GroupHistory,
-		c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
+		c.DNSVerificationHistory, c.DirectoryAccount, c.DirectoryAccountHistory,
+		c.DirectoryGroup, c.DirectoryGroupHistory, c.DirectoryMembership,
+		c.DirectoryMembershipHistory, c.DirectorySyncRun, c.DocumentData,
+		c.DocumentDataHistory, c.EmailVerificationToken, c.Entity, c.EntityHistory,
+		c.EntityType, c.EntityTypeHistory, c.Event, c.Evidence, c.EvidenceHistory,
+		c.Export, c.File, c.FileDownloadToken, c.FileHistory, c.Finding,
+		c.FindingControl, c.FindingControlHistory, c.FindingHistory, c.Group,
+		c.GroupHistory, c.GroupMembership, c.GroupMembershipHistory, c.GroupSetting,
 		c.GroupSettingHistory, c.Hush, c.HushHistory, c.ImpersonationEvent,
 		c.Integration, c.IntegrationHistory, c.InternalPolicy, c.InternalPolicyHistory,
 		c.Invite, c.JobResult, c.JobRunner, c.JobRunnerRegistrationToken,
@@ -1183,7 +1306,12 @@ func (c *Client) Intercept(interceptors ...Interceptor) {
 		c.TrustCenterSubprocessor, c.TrustCenterSubprocessorHistory,
 		c.TrustCenterWatermarkConfig, c.TrustCenterWatermarkConfigHistory, c.User,
 		c.UserHistory, c.UserSetting, c.UserSettingHistory, c.Vulnerability,
-		c.VulnerabilityHistory, c.Webauthn,
+		c.VulnerabilityHistory, c.Webauthn, c.WorkflowAssignment,
+		c.WorkflowAssignmentHistory, c.WorkflowAssignmentTarget,
+		c.WorkflowAssignmentTargetHistory, c.WorkflowDefinition,
+		c.WorkflowDefinitionHistory, c.WorkflowEvent, c.WorkflowEventHistory,
+		c.WorkflowInstance, c.WorkflowInstanceHistory, c.WorkflowObjectRef,
+		c.WorkflowObjectRefHistory,
 	} {
 		n.Intercept(interceptors...)
 	}
@@ -1308,6 +1436,20 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.DNSVerification.mutate(ctx, m)
 	case *DNSVerificationHistoryMutation:
 		return c.DNSVerificationHistory.mutate(ctx, m)
+	case *DirectoryAccountMutation:
+		return c.DirectoryAccount.mutate(ctx, m)
+	case *DirectoryAccountHistoryMutation:
+		return c.DirectoryAccountHistory.mutate(ctx, m)
+	case *DirectoryGroupMutation:
+		return c.DirectoryGroup.mutate(ctx, m)
+	case *DirectoryGroupHistoryMutation:
+		return c.DirectoryGroupHistory.mutate(ctx, m)
+	case *DirectoryMembershipMutation:
+		return c.DirectoryMembership.mutate(ctx, m)
+	case *DirectoryMembershipHistoryMutation:
+		return c.DirectoryMembershipHistory.mutate(ctx, m)
+	case *DirectorySyncRunMutation:
+		return c.DirectorySyncRun.mutate(ctx, m)
 	case *DocumentDataMutation:
 		return c.DocumentData.mutate(ctx, m)
 	case *DocumentDataHistoryMutation:
@@ -1528,6 +1670,30 @@ func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 		return c.VulnerabilityHistory.mutate(ctx, m)
 	case *WebauthnMutation:
 		return c.Webauthn.mutate(ctx, m)
+	case *WorkflowAssignmentMutation:
+		return c.WorkflowAssignment.mutate(ctx, m)
+	case *WorkflowAssignmentHistoryMutation:
+		return c.WorkflowAssignmentHistory.mutate(ctx, m)
+	case *WorkflowAssignmentTargetMutation:
+		return c.WorkflowAssignmentTarget.mutate(ctx, m)
+	case *WorkflowAssignmentTargetHistoryMutation:
+		return c.WorkflowAssignmentTargetHistory.mutate(ctx, m)
+	case *WorkflowDefinitionMutation:
+		return c.WorkflowDefinition.mutate(ctx, m)
+	case *WorkflowDefinitionHistoryMutation:
+		return c.WorkflowDefinitionHistory.mutate(ctx, m)
+	case *WorkflowEventMutation:
+		return c.WorkflowEvent.mutate(ctx, m)
+	case *WorkflowEventHistoryMutation:
+		return c.WorkflowEventHistory.mutate(ctx, m)
+	case *WorkflowInstanceMutation:
+		return c.WorkflowInstance.mutate(ctx, m)
+	case *WorkflowInstanceHistoryMutation:
+		return c.WorkflowInstanceHistory.mutate(ctx, m)
+	case *WorkflowObjectRefMutation:
+		return c.WorkflowObjectRef.mutate(ctx, m)
+	case *WorkflowObjectRefHistoryMutation:
+		return c.WorkflowObjectRefHistory.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("generated: unknown mutation type %T", m)
 	}
@@ -4266,6 +4432,25 @@ func (c *ControlClient) QueryMappedFromControls(_m *Control) *MappedControlQuery
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Control.
+func (c *ControlClient) QueryWorkflowObjectRefs(_m *Control) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, control.WorkflowObjectRefsTable, control.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlMappings queries the control_mappings edge of a Control.
 func (c *ControlClient) QueryControlMappings(_m *Control) *FindingControlQuery {
 	query := (&FindingControlClient{config: c.config}).Query()
@@ -6324,6 +6509,1407 @@ func (c *DNSVerificationHistoryClient) mutate(ctx context.Context, m *DNSVerific
 		return (&DNSVerificationHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
 	default:
 		return nil, fmt.Errorf("generated: unknown DNSVerificationHistory mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryAccountClient is a client for the DirectoryAccount schema.
+type DirectoryAccountClient struct {
+	config
+}
+
+// NewDirectoryAccountClient returns a client for the DirectoryAccount from the given config.
+func NewDirectoryAccountClient(c config) *DirectoryAccountClient {
+	return &DirectoryAccountClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directoryaccount.Hooks(f(g(h())))`.
+func (c *DirectoryAccountClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryAccount = append(c.hooks.DirectoryAccount, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directoryaccount.Intercept(f(g(h())))`.
+func (c *DirectoryAccountClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryAccount = append(c.inters.DirectoryAccount, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryAccount entity.
+func (c *DirectoryAccountClient) Create() *DirectoryAccountCreate {
+	mutation := newDirectoryAccountMutation(c.config, OpCreate)
+	return &DirectoryAccountCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryAccount entities.
+func (c *DirectoryAccountClient) CreateBulk(builders ...*DirectoryAccountCreate) *DirectoryAccountCreateBulk {
+	return &DirectoryAccountCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryAccountClient) MapCreateBulk(slice any, setFunc func(*DirectoryAccountCreate, int)) *DirectoryAccountCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryAccountCreateBulk{err: fmt.Errorf("calling to DirectoryAccountClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryAccountCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryAccountCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryAccount.
+func (c *DirectoryAccountClient) Update() *DirectoryAccountUpdate {
+	mutation := newDirectoryAccountMutation(c.config, OpUpdate)
+	return &DirectoryAccountUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryAccountClient) UpdateOne(_m *DirectoryAccount) *DirectoryAccountUpdateOne {
+	mutation := newDirectoryAccountMutation(c.config, OpUpdateOne, withDirectoryAccount(_m))
+	return &DirectoryAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryAccountClient) UpdateOneID(id string) *DirectoryAccountUpdateOne {
+	mutation := newDirectoryAccountMutation(c.config, OpUpdateOne, withDirectoryAccountID(id))
+	return &DirectoryAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryAccount.
+func (c *DirectoryAccountClient) Delete() *DirectoryAccountDelete {
+	mutation := newDirectoryAccountMutation(c.config, OpDelete)
+	return &DirectoryAccountDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryAccountClient) DeleteOne(_m *DirectoryAccount) *DirectoryAccountDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryAccountClient) DeleteOneID(id string) *DirectoryAccountDeleteOne {
+	builder := c.Delete().Where(directoryaccount.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryAccountDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryAccount.
+func (c *DirectoryAccountClient) Query() *DirectoryAccountQuery {
+	return &DirectoryAccountQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryAccount},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryAccount entity by its id.
+func (c *DirectoryAccountClient) Get(ctx context.Context, id string) (*DirectoryAccount, error) {
+	return c.Query().Where(directoryaccount.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryAccountClient) GetX(ctx context.Context, id string) *DirectoryAccount {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryOwner(_m *DirectoryAccount) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directoryaccount.OwnerTable, directoryaccount.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryIntegration(_m *DirectoryAccount) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.IntegrationTable, directoryaccount.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryDirectorySyncRun(_m *DirectoryAccount) *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directoryaccount.DirectorySyncRunTable, directoryaccount.DirectorySyncRunColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroups queries the groups edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryGroups(_m *DirectoryAccount) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, false, directoryaccount.GroupsTable, directoryaccount.GroupsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryWorkflowObjectRefs(_m *DirectoryAccount) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, directoryaccount.WorkflowObjectRefsTable, directoryaccount.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMemberships queries the memberships edge of a DirectoryAccount.
+func (c *DirectoryAccountClient) QueryMemberships(_m *DirectoryAccount) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directoryaccount.Table, directoryaccount.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, directoryaccount.MembershipsTable, directoryaccount.MembershipsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryAccountClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryAccount
+	return append(hooks[:len(hooks):len(hooks)], directoryaccount.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryAccountClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryAccount
+	return append(inters[:len(inters):len(inters)], directoryaccount.Interceptors[:]...)
+}
+
+func (c *DirectoryAccountClient) mutate(ctx context.Context, m *DirectoryAccountMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryAccountCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryAccountUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryAccountUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryAccountDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryAccount mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryAccountHistoryClient is a client for the DirectoryAccountHistory schema.
+type DirectoryAccountHistoryClient struct {
+	config
+}
+
+// NewDirectoryAccountHistoryClient returns a client for the DirectoryAccountHistory from the given config.
+func NewDirectoryAccountHistoryClient(c config) *DirectoryAccountHistoryClient {
+	return &DirectoryAccountHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directoryaccounthistory.Hooks(f(g(h())))`.
+func (c *DirectoryAccountHistoryClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryAccountHistory = append(c.hooks.DirectoryAccountHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directoryaccounthistory.Intercept(f(g(h())))`.
+func (c *DirectoryAccountHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryAccountHistory = append(c.inters.DirectoryAccountHistory, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryAccountHistory entity.
+func (c *DirectoryAccountHistoryClient) Create() *DirectoryAccountHistoryCreate {
+	mutation := newDirectoryAccountHistoryMutation(c.config, OpCreate)
+	return &DirectoryAccountHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryAccountHistory entities.
+func (c *DirectoryAccountHistoryClient) CreateBulk(builders ...*DirectoryAccountHistoryCreate) *DirectoryAccountHistoryCreateBulk {
+	return &DirectoryAccountHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryAccountHistoryClient) MapCreateBulk(slice any, setFunc func(*DirectoryAccountHistoryCreate, int)) *DirectoryAccountHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryAccountHistoryCreateBulk{err: fmt.Errorf("calling to DirectoryAccountHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryAccountHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryAccountHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryAccountHistory.
+func (c *DirectoryAccountHistoryClient) Update() *DirectoryAccountHistoryUpdate {
+	mutation := newDirectoryAccountHistoryMutation(c.config, OpUpdate)
+	return &DirectoryAccountHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryAccountHistoryClient) UpdateOne(_m *DirectoryAccountHistory) *DirectoryAccountHistoryUpdateOne {
+	mutation := newDirectoryAccountHistoryMutation(c.config, OpUpdateOne, withDirectoryAccountHistory(_m))
+	return &DirectoryAccountHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryAccountHistoryClient) UpdateOneID(id string) *DirectoryAccountHistoryUpdateOne {
+	mutation := newDirectoryAccountHistoryMutation(c.config, OpUpdateOne, withDirectoryAccountHistoryID(id))
+	return &DirectoryAccountHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryAccountHistory.
+func (c *DirectoryAccountHistoryClient) Delete() *DirectoryAccountHistoryDelete {
+	mutation := newDirectoryAccountHistoryMutation(c.config, OpDelete)
+	return &DirectoryAccountHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryAccountHistoryClient) DeleteOne(_m *DirectoryAccountHistory) *DirectoryAccountHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryAccountHistoryClient) DeleteOneID(id string) *DirectoryAccountHistoryDeleteOne {
+	builder := c.Delete().Where(directoryaccounthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryAccountHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryAccountHistory.
+func (c *DirectoryAccountHistoryClient) Query() *DirectoryAccountHistoryQuery {
+	return &DirectoryAccountHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryAccountHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryAccountHistory entity by its id.
+func (c *DirectoryAccountHistoryClient) Get(ctx context.Context, id string) (*DirectoryAccountHistory, error) {
+	return c.Query().Where(directoryaccounthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryAccountHistoryClient) GetX(ctx context.Context, id string) *DirectoryAccountHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryAccountHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryAccountHistory
+	return append(hooks[:len(hooks):len(hooks)], directoryaccounthistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryAccountHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryAccountHistory
+	return append(inters[:len(inters):len(inters)], directoryaccounthistory.Interceptors[:]...)
+}
+
+func (c *DirectoryAccountHistoryClient) mutate(ctx context.Context, m *DirectoryAccountHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryAccountHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryAccountHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryAccountHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryAccountHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryAccountHistory mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryGroupClient is a client for the DirectoryGroup schema.
+type DirectoryGroupClient struct {
+	config
+}
+
+// NewDirectoryGroupClient returns a client for the DirectoryGroup from the given config.
+func NewDirectoryGroupClient(c config) *DirectoryGroupClient {
+	return &DirectoryGroupClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorygroup.Hooks(f(g(h())))`.
+func (c *DirectoryGroupClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryGroup = append(c.hooks.DirectoryGroup, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorygroup.Intercept(f(g(h())))`.
+func (c *DirectoryGroupClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryGroup = append(c.inters.DirectoryGroup, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryGroup entity.
+func (c *DirectoryGroupClient) Create() *DirectoryGroupCreate {
+	mutation := newDirectoryGroupMutation(c.config, OpCreate)
+	return &DirectoryGroupCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryGroup entities.
+func (c *DirectoryGroupClient) CreateBulk(builders ...*DirectoryGroupCreate) *DirectoryGroupCreateBulk {
+	return &DirectoryGroupCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryGroupClient) MapCreateBulk(slice any, setFunc func(*DirectoryGroupCreate, int)) *DirectoryGroupCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryGroupCreateBulk{err: fmt.Errorf("calling to DirectoryGroupClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryGroupCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryGroupCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryGroup.
+func (c *DirectoryGroupClient) Update() *DirectoryGroupUpdate {
+	mutation := newDirectoryGroupMutation(c.config, OpUpdate)
+	return &DirectoryGroupUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryGroupClient) UpdateOne(_m *DirectoryGroup) *DirectoryGroupUpdateOne {
+	mutation := newDirectoryGroupMutation(c.config, OpUpdateOne, withDirectoryGroup(_m))
+	return &DirectoryGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryGroupClient) UpdateOneID(id string) *DirectoryGroupUpdateOne {
+	mutation := newDirectoryGroupMutation(c.config, OpUpdateOne, withDirectoryGroupID(id))
+	return &DirectoryGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryGroup.
+func (c *DirectoryGroupClient) Delete() *DirectoryGroupDelete {
+	mutation := newDirectoryGroupMutation(c.config, OpDelete)
+	return &DirectoryGroupDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryGroupClient) DeleteOne(_m *DirectoryGroup) *DirectoryGroupDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryGroupClient) DeleteOneID(id string) *DirectoryGroupDeleteOne {
+	builder := c.Delete().Where(directorygroup.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryGroupDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryGroup.
+func (c *DirectoryGroupClient) Query() *DirectoryGroupQuery {
+	return &DirectoryGroupQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryGroup},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryGroup entity by its id.
+func (c *DirectoryGroupClient) Get(ctx context.Context, id string) (*DirectoryGroup, error) {
+	return c.Query().Where(directorygroup.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryGroupClient) GetX(ctx context.Context, id string) *DirectoryGroup {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryOwner(_m *DirectoryGroup) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorygroup.OwnerTable, directorygroup.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryIntegration(_m *DirectoryGroup) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.IntegrationTable, directorygroup.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryDirectorySyncRun(_m *DirectoryGroup) *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorygroup.DirectorySyncRunTable, directorygroup.DirectorySyncRunColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAccounts queries the accounts edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryAccounts(_m *DirectoryGroup) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, directorygroup.AccountsTable, directorygroup.AccountsPrimaryKey...),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryWorkflowObjectRefs(_m *DirectoryGroup) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, directorygroup.WorkflowObjectRefsTable, directorygroup.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryMembers queries the members edge of a DirectoryGroup.
+func (c *DirectoryGroupClient) QueryMembers(_m *DirectoryGroup) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorygroup.Table, directorygroup.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, directorygroup.MembersTable, directorygroup.MembersColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryGroupClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryGroup
+	return append(hooks[:len(hooks):len(hooks)], directorygroup.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryGroupClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryGroup
+	return append(inters[:len(inters):len(inters)], directorygroup.Interceptors[:]...)
+}
+
+func (c *DirectoryGroupClient) mutate(ctx context.Context, m *DirectoryGroupMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryGroupCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryGroupUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryGroupDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryGroup mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryGroupHistoryClient is a client for the DirectoryGroupHistory schema.
+type DirectoryGroupHistoryClient struct {
+	config
+}
+
+// NewDirectoryGroupHistoryClient returns a client for the DirectoryGroupHistory from the given config.
+func NewDirectoryGroupHistoryClient(c config) *DirectoryGroupHistoryClient {
+	return &DirectoryGroupHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorygrouphistory.Hooks(f(g(h())))`.
+func (c *DirectoryGroupHistoryClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryGroupHistory = append(c.hooks.DirectoryGroupHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorygrouphistory.Intercept(f(g(h())))`.
+func (c *DirectoryGroupHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryGroupHistory = append(c.inters.DirectoryGroupHistory, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryGroupHistory entity.
+func (c *DirectoryGroupHistoryClient) Create() *DirectoryGroupHistoryCreate {
+	mutation := newDirectoryGroupHistoryMutation(c.config, OpCreate)
+	return &DirectoryGroupHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryGroupHistory entities.
+func (c *DirectoryGroupHistoryClient) CreateBulk(builders ...*DirectoryGroupHistoryCreate) *DirectoryGroupHistoryCreateBulk {
+	return &DirectoryGroupHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryGroupHistoryClient) MapCreateBulk(slice any, setFunc func(*DirectoryGroupHistoryCreate, int)) *DirectoryGroupHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryGroupHistoryCreateBulk{err: fmt.Errorf("calling to DirectoryGroupHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryGroupHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryGroupHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryGroupHistory.
+func (c *DirectoryGroupHistoryClient) Update() *DirectoryGroupHistoryUpdate {
+	mutation := newDirectoryGroupHistoryMutation(c.config, OpUpdate)
+	return &DirectoryGroupHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryGroupHistoryClient) UpdateOne(_m *DirectoryGroupHistory) *DirectoryGroupHistoryUpdateOne {
+	mutation := newDirectoryGroupHistoryMutation(c.config, OpUpdateOne, withDirectoryGroupHistory(_m))
+	return &DirectoryGroupHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryGroupHistoryClient) UpdateOneID(id string) *DirectoryGroupHistoryUpdateOne {
+	mutation := newDirectoryGroupHistoryMutation(c.config, OpUpdateOne, withDirectoryGroupHistoryID(id))
+	return &DirectoryGroupHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryGroupHistory.
+func (c *DirectoryGroupHistoryClient) Delete() *DirectoryGroupHistoryDelete {
+	mutation := newDirectoryGroupHistoryMutation(c.config, OpDelete)
+	return &DirectoryGroupHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryGroupHistoryClient) DeleteOne(_m *DirectoryGroupHistory) *DirectoryGroupHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryGroupHistoryClient) DeleteOneID(id string) *DirectoryGroupHistoryDeleteOne {
+	builder := c.Delete().Where(directorygrouphistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryGroupHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryGroupHistory.
+func (c *DirectoryGroupHistoryClient) Query() *DirectoryGroupHistoryQuery {
+	return &DirectoryGroupHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryGroupHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryGroupHistory entity by its id.
+func (c *DirectoryGroupHistoryClient) Get(ctx context.Context, id string) (*DirectoryGroupHistory, error) {
+	return c.Query().Where(directorygrouphistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryGroupHistoryClient) GetX(ctx context.Context, id string) *DirectoryGroupHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryGroupHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryGroupHistory
+	return append(hooks[:len(hooks):len(hooks)], directorygrouphistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryGroupHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryGroupHistory
+	return append(inters[:len(inters):len(inters)], directorygrouphistory.Interceptors[:]...)
+}
+
+func (c *DirectoryGroupHistoryClient) mutate(ctx context.Context, m *DirectoryGroupHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryGroupHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryGroupHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryGroupHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryGroupHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryGroupHistory mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryMembershipClient is a client for the DirectoryMembership schema.
+type DirectoryMembershipClient struct {
+	config
+}
+
+// NewDirectoryMembershipClient returns a client for the DirectoryMembership from the given config.
+func NewDirectoryMembershipClient(c config) *DirectoryMembershipClient {
+	return &DirectoryMembershipClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorymembership.Hooks(f(g(h())))`.
+func (c *DirectoryMembershipClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryMembership = append(c.hooks.DirectoryMembership, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorymembership.Intercept(f(g(h())))`.
+func (c *DirectoryMembershipClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryMembership = append(c.inters.DirectoryMembership, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryMembership entity.
+func (c *DirectoryMembershipClient) Create() *DirectoryMembershipCreate {
+	mutation := newDirectoryMembershipMutation(c.config, OpCreate)
+	return &DirectoryMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryMembership entities.
+func (c *DirectoryMembershipClient) CreateBulk(builders ...*DirectoryMembershipCreate) *DirectoryMembershipCreateBulk {
+	return &DirectoryMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryMembershipClient) MapCreateBulk(slice any, setFunc func(*DirectoryMembershipCreate, int)) *DirectoryMembershipCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryMembershipCreateBulk{err: fmt.Errorf("calling to DirectoryMembershipClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryMembershipCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryMembershipCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryMembership.
+func (c *DirectoryMembershipClient) Update() *DirectoryMembershipUpdate {
+	mutation := newDirectoryMembershipMutation(c.config, OpUpdate)
+	return &DirectoryMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryMembershipClient) UpdateOne(_m *DirectoryMembership) *DirectoryMembershipUpdateOne {
+	mutation := newDirectoryMembershipMutation(c.config, OpUpdateOne, withDirectoryMembership(_m))
+	return &DirectoryMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryMembershipClient) UpdateOneID(id string) *DirectoryMembershipUpdateOne {
+	mutation := newDirectoryMembershipMutation(c.config, OpUpdateOne, withDirectoryMembershipID(id))
+	return &DirectoryMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryMembership.
+func (c *DirectoryMembershipClient) Delete() *DirectoryMembershipDelete {
+	mutation := newDirectoryMembershipMutation(c.config, OpDelete)
+	return &DirectoryMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryMembershipClient) DeleteOne(_m *DirectoryMembership) *DirectoryMembershipDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryMembershipClient) DeleteOneID(id string) *DirectoryMembershipDeleteOne {
+	builder := c.Delete().Where(directorymembership.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryMembershipDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryMembership.
+func (c *DirectoryMembershipClient) Query() *DirectoryMembershipQuery {
+	return &DirectoryMembershipQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryMembership},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryMembership entity by its id.
+func (c *DirectoryMembershipClient) Get(ctx context.Context, id string) (*DirectoryMembership, error) {
+	return c.Query().Where(directorymembership.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryMembershipClient) GetX(ctx context.Context, id string) *DirectoryMembership {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryOwner(_m *DirectoryMembership) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorymembership.OwnerTable, directorymembership.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryIntegration(_m *DirectoryMembership) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.IntegrationTable, directorymembership.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRun queries the directory_sync_run edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryDirectorySyncRun(_m *DirectoryMembership) *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.DirectorySyncRunTable, directorymembership.DirectorySyncRunColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccount queries the directory_account edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryDirectoryAccount(_m *DirectoryMembership) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.DirectoryAccountTable, directorymembership.DirectoryAccountColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroup queries the directory_group edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryDirectoryGroup(_m *DirectoryMembership) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorymembership.DirectoryGroupTable, directorymembership.DirectoryGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvents queries the events edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryEvents(_m *DirectoryMembership) *EventQuery {
+	query := (&EventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(event.Table, event.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, directorymembership.EventsTable, directorymembership.EventsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Event
+		step.Edge.Schema = schemaConfig.Event
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a DirectoryMembership.
+func (c *DirectoryMembershipClient) QueryWorkflowObjectRefs(_m *DirectoryMembership) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorymembership.Table, directorymembership.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, directorymembership.WorkflowObjectRefsTable, directorymembership.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryMembershipClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryMembership
+	return append(hooks[:len(hooks):len(hooks)], directorymembership.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryMembershipClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryMembership
+	return append(inters[:len(inters):len(inters)], directorymembership.Interceptors[:]...)
+}
+
+func (c *DirectoryMembershipClient) mutate(ctx context.Context, m *DirectoryMembershipMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryMembershipCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryMembershipUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryMembershipUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryMembershipDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryMembership mutation op: %q", m.Op())
+	}
+}
+
+// DirectoryMembershipHistoryClient is a client for the DirectoryMembershipHistory schema.
+type DirectoryMembershipHistoryClient struct {
+	config
+}
+
+// NewDirectoryMembershipHistoryClient returns a client for the DirectoryMembershipHistory from the given config.
+func NewDirectoryMembershipHistoryClient(c config) *DirectoryMembershipHistoryClient {
+	return &DirectoryMembershipHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorymembershiphistory.Hooks(f(g(h())))`.
+func (c *DirectoryMembershipHistoryClient) Use(hooks ...Hook) {
+	c.hooks.DirectoryMembershipHistory = append(c.hooks.DirectoryMembershipHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorymembershiphistory.Intercept(f(g(h())))`.
+func (c *DirectoryMembershipHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectoryMembershipHistory = append(c.inters.DirectoryMembershipHistory, interceptors...)
+}
+
+// Create returns a builder for creating a DirectoryMembershipHistory entity.
+func (c *DirectoryMembershipHistoryClient) Create() *DirectoryMembershipHistoryCreate {
+	mutation := newDirectoryMembershipHistoryMutation(c.config, OpCreate)
+	return &DirectoryMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectoryMembershipHistory entities.
+func (c *DirectoryMembershipHistoryClient) CreateBulk(builders ...*DirectoryMembershipHistoryCreate) *DirectoryMembershipHistoryCreateBulk {
+	return &DirectoryMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectoryMembershipHistoryClient) MapCreateBulk(slice any, setFunc func(*DirectoryMembershipHistoryCreate, int)) *DirectoryMembershipHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectoryMembershipHistoryCreateBulk{err: fmt.Errorf("calling to DirectoryMembershipHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectoryMembershipHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectoryMembershipHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectoryMembershipHistory.
+func (c *DirectoryMembershipHistoryClient) Update() *DirectoryMembershipHistoryUpdate {
+	mutation := newDirectoryMembershipHistoryMutation(c.config, OpUpdate)
+	return &DirectoryMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectoryMembershipHistoryClient) UpdateOne(_m *DirectoryMembershipHistory) *DirectoryMembershipHistoryUpdateOne {
+	mutation := newDirectoryMembershipHistoryMutation(c.config, OpUpdateOne, withDirectoryMembershipHistory(_m))
+	return &DirectoryMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectoryMembershipHistoryClient) UpdateOneID(id string) *DirectoryMembershipHistoryUpdateOne {
+	mutation := newDirectoryMembershipHistoryMutation(c.config, OpUpdateOne, withDirectoryMembershipHistoryID(id))
+	return &DirectoryMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectoryMembershipHistory.
+func (c *DirectoryMembershipHistoryClient) Delete() *DirectoryMembershipHistoryDelete {
+	mutation := newDirectoryMembershipHistoryMutation(c.config, OpDelete)
+	return &DirectoryMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectoryMembershipHistoryClient) DeleteOne(_m *DirectoryMembershipHistory) *DirectoryMembershipHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectoryMembershipHistoryClient) DeleteOneID(id string) *DirectoryMembershipHistoryDeleteOne {
+	builder := c.Delete().Where(directorymembershiphistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectoryMembershipHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectoryMembershipHistory.
+func (c *DirectoryMembershipHistoryClient) Query() *DirectoryMembershipHistoryQuery {
+	return &DirectoryMembershipHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectoryMembershipHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectoryMembershipHistory entity by its id.
+func (c *DirectoryMembershipHistoryClient) Get(ctx context.Context, id string) (*DirectoryMembershipHistory, error) {
+	return c.Query().Where(directorymembershiphistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectoryMembershipHistoryClient) GetX(ctx context.Context, id string) *DirectoryMembershipHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *DirectoryMembershipHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.DirectoryMembershipHistory
+	return append(hooks[:len(hooks):len(hooks)], directorymembershiphistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectoryMembershipHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectoryMembershipHistory
+	return append(inters[:len(inters):len(inters)], directorymembershiphistory.Interceptors[:]...)
+}
+
+func (c *DirectoryMembershipHistoryClient) mutate(ctx context.Context, m *DirectoryMembershipHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectoryMembershipHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectoryMembershipHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectoryMembershipHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectoryMembershipHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectoryMembershipHistory mutation op: %q", m.Op())
+	}
+}
+
+// DirectorySyncRunClient is a client for the DirectorySyncRun schema.
+type DirectorySyncRunClient struct {
+	config
+}
+
+// NewDirectorySyncRunClient returns a client for the DirectorySyncRun from the given config.
+func NewDirectorySyncRunClient(c config) *DirectorySyncRunClient {
+	return &DirectorySyncRunClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `directorysyncrun.Hooks(f(g(h())))`.
+func (c *DirectorySyncRunClient) Use(hooks ...Hook) {
+	c.hooks.DirectorySyncRun = append(c.hooks.DirectorySyncRun, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `directorysyncrun.Intercept(f(g(h())))`.
+func (c *DirectorySyncRunClient) Intercept(interceptors ...Interceptor) {
+	c.inters.DirectorySyncRun = append(c.inters.DirectorySyncRun, interceptors...)
+}
+
+// Create returns a builder for creating a DirectorySyncRun entity.
+func (c *DirectorySyncRunClient) Create() *DirectorySyncRunCreate {
+	mutation := newDirectorySyncRunMutation(c.config, OpCreate)
+	return &DirectorySyncRunCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of DirectorySyncRun entities.
+func (c *DirectorySyncRunClient) CreateBulk(builders ...*DirectorySyncRunCreate) *DirectorySyncRunCreateBulk {
+	return &DirectorySyncRunCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *DirectorySyncRunClient) MapCreateBulk(slice any, setFunc func(*DirectorySyncRunCreate, int)) *DirectorySyncRunCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &DirectorySyncRunCreateBulk{err: fmt.Errorf("calling to DirectorySyncRunClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*DirectorySyncRunCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &DirectorySyncRunCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for DirectorySyncRun.
+func (c *DirectorySyncRunClient) Update() *DirectorySyncRunUpdate {
+	mutation := newDirectorySyncRunMutation(c.config, OpUpdate)
+	return &DirectorySyncRunUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *DirectorySyncRunClient) UpdateOne(_m *DirectorySyncRun) *DirectorySyncRunUpdateOne {
+	mutation := newDirectorySyncRunMutation(c.config, OpUpdateOne, withDirectorySyncRun(_m))
+	return &DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *DirectorySyncRunClient) UpdateOneID(id string) *DirectorySyncRunUpdateOne {
+	mutation := newDirectorySyncRunMutation(c.config, OpUpdateOne, withDirectorySyncRunID(id))
+	return &DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for DirectorySyncRun.
+func (c *DirectorySyncRunClient) Delete() *DirectorySyncRunDelete {
+	mutation := newDirectorySyncRunMutation(c.config, OpDelete)
+	return &DirectorySyncRunDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *DirectorySyncRunClient) DeleteOne(_m *DirectorySyncRun) *DirectorySyncRunDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *DirectorySyncRunClient) DeleteOneID(id string) *DirectorySyncRunDeleteOne {
+	builder := c.Delete().Where(directorysyncrun.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &DirectorySyncRunDeleteOne{builder}
+}
+
+// Query returns a query builder for DirectorySyncRun.
+func (c *DirectorySyncRunClient) Query() *DirectorySyncRunQuery {
+	return &DirectorySyncRunQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeDirectorySyncRun},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a DirectorySyncRun entity by its id.
+func (c *DirectorySyncRunClient) Get(ctx context.Context, id string) (*DirectorySyncRun, error) {
+	return c.Query().Where(directorysyncrun.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *DirectorySyncRunClient) GetX(ctx context.Context, id string) *DirectorySyncRun {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryOwner(_m *DirectorySyncRun) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, directorysyncrun.OwnerTable, directorysyncrun.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryIntegration queries the integration edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryIntegration(_m *DirectorySyncRun) *IntegrationQuery {
+	query := (&IntegrationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(integration.Table, integration.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, directorysyncrun.IntegrationTable, directorysyncrun.IntegrationColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Integration
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts queries the directory_accounts edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryDirectoryAccounts(_m *DirectorySyncRun) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryAccountsTable, directorysyncrun.DirectoryAccountsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups queries the directory_groups edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryDirectoryGroups(_m *DirectorySyncRun) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryGroupsTable, directorysyncrun.DirectoryGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships queries the directory_memberships edge of a DirectorySyncRun.
+func (c *DirectorySyncRunClient) QueryDirectoryMemberships(_m *DirectorySyncRun) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(directorysyncrun.Table, directorysyncrun.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, directorysyncrun.DirectoryMembershipsTable, directorysyncrun.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *DirectorySyncRunClient) Hooks() []Hook {
+	hooks := c.hooks.DirectorySyncRun
+	return append(hooks[:len(hooks):len(hooks)], directorysyncrun.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *DirectorySyncRunClient) Interceptors() []Interceptor {
+	inters := c.inters.DirectorySyncRun
+	return append(inters[:len(inters):len(inters)], directorysyncrun.Interceptors[:]...)
+}
+
+func (c *DirectorySyncRunClient) mutate(ctx context.Context, m *DirectorySyncRunMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&DirectorySyncRunCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&DirectorySyncRunUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&DirectorySyncRunUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&DirectorySyncRunDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown DirectorySyncRun mutation op: %q", m.Op())
 	}
 }
 
@@ -9787,6 +11373,25 @@ func (c *FindingClient) QueryFiles(_m *Finding) *FileQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Finding.
+func (c *FindingClient) QueryWorkflowObjectRefs(_m *Finding) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(finding.Table, finding.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, finding.WorkflowObjectRefsTable, finding.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryControlMappings queries the control_mappings edge of a Finding.
 func (c *FindingClient) QueryControlMappings(_m *Finding) *FindingControlQuery {
 	query := (&FindingControlClient{config: c.config}).Query()
@@ -12758,6 +14363,82 @@ func (c *IntegrationClient) QueryActionPlans(_m *Integration) *ActionPlanQuery {
 	return query
 }
 
+// QueryDirectoryAccounts queries the directory_accounts edge of a Integration.
+func (c *IntegrationClient) QueryDirectoryAccounts(_m *Integration) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryAccountsTable, integration.DirectoryAccountsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups queries the directory_groups edge of a Integration.
+func (c *IntegrationClient) QueryDirectoryGroups(_m *Integration) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryGroupsTable, integration.DirectoryGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships queries the directory_memberships edge of a Integration.
+func (c *IntegrationClient) QueryDirectoryMemberships(_m *Integration) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectoryMembershipsTable, integration.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRuns queries the directory_sync_runs edge of a Integration.
+func (c *IntegrationClient) QueryDirectorySyncRuns(_m *Integration) *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(integration.Table, integration.FieldID, id),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, integration.DirectorySyncRunsTable, integration.DirectorySyncRunsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *IntegrationClient) Hooks() []Hook {
 	hooks := c.hooks.Integration
@@ -13345,6 +15026,25 @@ func (c *InternalPolicyClient) QueryComments(_m *InternalPolicy) *NoteQuery {
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Note
 		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a InternalPolicy.
+func (c *InternalPolicyClient) QueryWorkflowObjectRefs(_m *InternalPolicy) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, internalpolicy.WorkflowObjectRefsTable, internalpolicy.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -19494,6 +21194,196 @@ func (c *OrganizationClient) QueryNotifications(_m *Organization) *NotificationQ
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.Notification
 		step.Edge.Schema = schemaConfig.Notification
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowDefinitions queries the workflow_definitions edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowDefinitions(_m *Organization) *WorkflowDefinitionQuery {
+	query := (&WorkflowDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowDefinitionsTable, organization.WorkflowDefinitionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowDefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstances queries the workflow_instances edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowInstances(_m *Organization) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowInstancesTable, organization.WorkflowInstancesColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowEvents queries the workflow_events edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowEvents(_m *Organization) *WorkflowEventQuery {
+	query := (&WorkflowEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowevent.Table, workflowevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowEventsTable, organization.WorkflowEventsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowEvent
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignments queries the workflow_assignments edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowAssignments(_m *Organization) *WorkflowAssignmentQuery {
+	query := (&WorkflowAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowassignment.Table, workflowassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentsTable, organization.WorkflowAssignmentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignmentTargets queries the workflow_assignment_targets edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowAssignmentTargets(_m *Organization) *WorkflowAssignmentTargetQuery {
+	query := (&WorkflowAssignmentTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowAssignmentTargetsTable, organization.WorkflowAssignmentTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Organization.
+func (c *OrganizationClient) QueryWorkflowObjectRefs(_m *Organization) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.WorkflowObjectRefsTable, organization.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccounts queries the directory_accounts edge of a Organization.
+func (c *OrganizationClient) QueryDirectoryAccounts(_m *Organization) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryAccountsTable, organization.DirectoryAccountsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.DirectoryAccount
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroups queries the directory_groups edge of a Organization.
+func (c *OrganizationClient) QueryDirectoryGroups(_m *Organization) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryGroupsTable, organization.DirectoryGroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.DirectoryGroup
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryMemberships queries the directory_memberships edge of a Organization.
+func (c *OrganizationClient) QueryDirectoryMemberships(_m *Organization) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectoryMembershipsTable, organization.DirectoryMembershipsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.DirectoryMembership
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectorySyncRuns queries the directory_sync_runs edge of a Organization.
+func (c *OrganizationClient) QueryDirectorySyncRuns(_m *Organization) *DirectorySyncRunQuery {
+	query := (&DirectorySyncRunClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, id),
+			sqlgraph.To(directorysyncrun.Table, directorysyncrun.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.DirectorySyncRunsTable, organization.DirectorySyncRunsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectorySyncRun
+		step.Edge.Schema = schemaConfig.DirectorySyncRun
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -26879,6 +28769,25 @@ func (c *TaskClient) QueryEvidence(_m *Task) *EvidenceQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a Task.
+func (c *TaskClient) QueryWorkflowObjectRefs(_m *Task) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(task.Table, task.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, task.WorkflowObjectRefsTable, task.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *TaskClient) Hooks() []Hook {
 	hooks := c.hooks.Task
@@ -31301,6 +33210,2158 @@ func (c *WebauthnClient) mutate(ctx context.Context, m *WebauthnMutation) (Value
 	}
 }
 
+// WorkflowAssignmentClient is a client for the WorkflowAssignment schema.
+type WorkflowAssignmentClient struct {
+	config
+}
+
+// NewWorkflowAssignmentClient returns a client for the WorkflowAssignment from the given config.
+func NewWorkflowAssignmentClient(c config) *WorkflowAssignmentClient {
+	return &WorkflowAssignmentClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowassignment.Hooks(f(g(h())))`.
+func (c *WorkflowAssignmentClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowAssignment = append(c.hooks.WorkflowAssignment, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowassignment.Intercept(f(g(h())))`.
+func (c *WorkflowAssignmentClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowAssignment = append(c.inters.WorkflowAssignment, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowAssignment entity.
+func (c *WorkflowAssignmentClient) Create() *WorkflowAssignmentCreate {
+	mutation := newWorkflowAssignmentMutation(c.config, OpCreate)
+	return &WorkflowAssignmentCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowAssignment entities.
+func (c *WorkflowAssignmentClient) CreateBulk(builders ...*WorkflowAssignmentCreate) *WorkflowAssignmentCreateBulk {
+	return &WorkflowAssignmentCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowAssignmentClient) MapCreateBulk(slice any, setFunc func(*WorkflowAssignmentCreate, int)) *WorkflowAssignmentCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowAssignmentCreateBulk{err: fmt.Errorf("calling to WorkflowAssignmentClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowAssignmentCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowAssignmentCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowAssignment.
+func (c *WorkflowAssignmentClient) Update() *WorkflowAssignmentUpdate {
+	mutation := newWorkflowAssignmentMutation(c.config, OpUpdate)
+	return &WorkflowAssignmentUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowAssignmentClient) UpdateOne(_m *WorkflowAssignment) *WorkflowAssignmentUpdateOne {
+	mutation := newWorkflowAssignmentMutation(c.config, OpUpdateOne, withWorkflowAssignment(_m))
+	return &WorkflowAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowAssignmentClient) UpdateOneID(id string) *WorkflowAssignmentUpdateOne {
+	mutation := newWorkflowAssignmentMutation(c.config, OpUpdateOne, withWorkflowAssignmentID(id))
+	return &WorkflowAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowAssignment.
+func (c *WorkflowAssignmentClient) Delete() *WorkflowAssignmentDelete {
+	mutation := newWorkflowAssignmentMutation(c.config, OpDelete)
+	return &WorkflowAssignmentDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowAssignmentClient) DeleteOne(_m *WorkflowAssignment) *WorkflowAssignmentDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowAssignmentClient) DeleteOneID(id string) *WorkflowAssignmentDeleteOne {
+	builder := c.Delete().Where(workflowassignment.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowAssignmentDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowAssignment.
+func (c *WorkflowAssignmentClient) Query() *WorkflowAssignmentQuery {
+	return &WorkflowAssignmentQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowAssignment},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowAssignment entity by its id.
+func (c *WorkflowAssignmentClient) Get(ctx context.Context, id string) (*WorkflowAssignment, error) {
+	return c.Query().Where(workflowassignment.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowAssignmentClient) GetX(ctx context.Context, id string) *WorkflowAssignment {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowAssignment.
+func (c *WorkflowAssignmentClient) QueryOwner(_m *WorkflowAssignment) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignment.Table, workflowassignment.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowassignment.OwnerTable, workflowassignment.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstance queries the workflow_instance edge of a WorkflowAssignment.
+func (c *WorkflowAssignmentClient) QueryWorkflowInstance(_m *WorkflowAssignment) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignment.Table, workflowassignment.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignment.WorkflowInstanceTable, workflowassignment.WorkflowInstanceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignmentTargets queries the workflow_assignment_targets edge of a WorkflowAssignment.
+func (c *WorkflowAssignmentClient) QueryWorkflowAssignmentTargets(_m *WorkflowAssignment) *WorkflowAssignmentTargetQuery {
+	query := (&WorkflowAssignmentTargetClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignment.Table, workflowassignment.FieldID, id),
+			sqlgraph.To(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowassignment.WorkflowAssignmentTargetsTable, workflowassignment.WorkflowAssignmentTargetsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignmentTarget
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a WorkflowAssignment.
+func (c *WorkflowAssignmentClient) QueryUser(_m *WorkflowAssignment) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignment.Table, workflowassignment.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignment.UserTable, workflowassignment.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a WorkflowAssignment.
+func (c *WorkflowAssignmentClient) QueryGroup(_m *WorkflowAssignment) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignment.Table, workflowassignment.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignment.GroupTable, workflowassignment.GroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowAssignmentClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowAssignment
+	return append(hooks[:len(hooks):len(hooks)], workflowassignment.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowAssignmentClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowAssignment
+	return append(inters[:len(inters):len(inters)], workflowassignment.Interceptors[:]...)
+}
+
+func (c *WorkflowAssignmentClient) mutate(ctx context.Context, m *WorkflowAssignmentMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowAssignmentCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowAssignmentUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowAssignmentUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowAssignmentDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowAssignment mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowAssignmentHistoryClient is a client for the WorkflowAssignmentHistory schema.
+type WorkflowAssignmentHistoryClient struct {
+	config
+}
+
+// NewWorkflowAssignmentHistoryClient returns a client for the WorkflowAssignmentHistory from the given config.
+func NewWorkflowAssignmentHistoryClient(c config) *WorkflowAssignmentHistoryClient {
+	return &WorkflowAssignmentHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowassignmenthistory.Hooks(f(g(h())))`.
+func (c *WorkflowAssignmentHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowAssignmentHistory = append(c.hooks.WorkflowAssignmentHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowassignmenthistory.Intercept(f(g(h())))`.
+func (c *WorkflowAssignmentHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowAssignmentHistory = append(c.inters.WorkflowAssignmentHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowAssignmentHistory entity.
+func (c *WorkflowAssignmentHistoryClient) Create() *WorkflowAssignmentHistoryCreate {
+	mutation := newWorkflowAssignmentHistoryMutation(c.config, OpCreate)
+	return &WorkflowAssignmentHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowAssignmentHistory entities.
+func (c *WorkflowAssignmentHistoryClient) CreateBulk(builders ...*WorkflowAssignmentHistoryCreate) *WorkflowAssignmentHistoryCreateBulk {
+	return &WorkflowAssignmentHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowAssignmentHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowAssignmentHistoryCreate, int)) *WorkflowAssignmentHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowAssignmentHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowAssignmentHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowAssignmentHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowAssignmentHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowAssignmentHistory.
+func (c *WorkflowAssignmentHistoryClient) Update() *WorkflowAssignmentHistoryUpdate {
+	mutation := newWorkflowAssignmentHistoryMutation(c.config, OpUpdate)
+	return &WorkflowAssignmentHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowAssignmentHistoryClient) UpdateOne(_m *WorkflowAssignmentHistory) *WorkflowAssignmentHistoryUpdateOne {
+	mutation := newWorkflowAssignmentHistoryMutation(c.config, OpUpdateOne, withWorkflowAssignmentHistory(_m))
+	return &WorkflowAssignmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowAssignmentHistoryClient) UpdateOneID(id string) *WorkflowAssignmentHistoryUpdateOne {
+	mutation := newWorkflowAssignmentHistoryMutation(c.config, OpUpdateOne, withWorkflowAssignmentHistoryID(id))
+	return &WorkflowAssignmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowAssignmentHistory.
+func (c *WorkflowAssignmentHistoryClient) Delete() *WorkflowAssignmentHistoryDelete {
+	mutation := newWorkflowAssignmentHistoryMutation(c.config, OpDelete)
+	return &WorkflowAssignmentHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowAssignmentHistoryClient) DeleteOne(_m *WorkflowAssignmentHistory) *WorkflowAssignmentHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowAssignmentHistoryClient) DeleteOneID(id string) *WorkflowAssignmentHistoryDeleteOne {
+	builder := c.Delete().Where(workflowassignmenthistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowAssignmentHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowAssignmentHistory.
+func (c *WorkflowAssignmentHistoryClient) Query() *WorkflowAssignmentHistoryQuery {
+	return &WorkflowAssignmentHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowAssignmentHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowAssignmentHistory entity by its id.
+func (c *WorkflowAssignmentHistoryClient) Get(ctx context.Context, id string) (*WorkflowAssignmentHistory, error) {
+	return c.Query().Where(workflowassignmenthistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowAssignmentHistoryClient) GetX(ctx context.Context, id string) *WorkflowAssignmentHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowAssignmentHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowAssignmentHistory
+	return append(hooks[:len(hooks):len(hooks)], workflowassignmenthistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowAssignmentHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowAssignmentHistory
+	return append(inters[:len(inters):len(inters)], workflowassignmenthistory.Interceptors[:]...)
+}
+
+func (c *WorkflowAssignmentHistoryClient) mutate(ctx context.Context, m *WorkflowAssignmentHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowAssignmentHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowAssignmentHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowAssignmentHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowAssignmentHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowAssignmentHistory mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowAssignmentTargetClient is a client for the WorkflowAssignmentTarget schema.
+type WorkflowAssignmentTargetClient struct {
+	config
+}
+
+// NewWorkflowAssignmentTargetClient returns a client for the WorkflowAssignmentTarget from the given config.
+func NewWorkflowAssignmentTargetClient(c config) *WorkflowAssignmentTargetClient {
+	return &WorkflowAssignmentTargetClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowassignmenttarget.Hooks(f(g(h())))`.
+func (c *WorkflowAssignmentTargetClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowAssignmentTarget = append(c.hooks.WorkflowAssignmentTarget, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowassignmenttarget.Intercept(f(g(h())))`.
+func (c *WorkflowAssignmentTargetClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowAssignmentTarget = append(c.inters.WorkflowAssignmentTarget, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowAssignmentTarget entity.
+func (c *WorkflowAssignmentTargetClient) Create() *WorkflowAssignmentTargetCreate {
+	mutation := newWorkflowAssignmentTargetMutation(c.config, OpCreate)
+	return &WorkflowAssignmentTargetCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowAssignmentTarget entities.
+func (c *WorkflowAssignmentTargetClient) CreateBulk(builders ...*WorkflowAssignmentTargetCreate) *WorkflowAssignmentTargetCreateBulk {
+	return &WorkflowAssignmentTargetCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowAssignmentTargetClient) MapCreateBulk(slice any, setFunc func(*WorkflowAssignmentTargetCreate, int)) *WorkflowAssignmentTargetCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowAssignmentTargetCreateBulk{err: fmt.Errorf("calling to WorkflowAssignmentTargetClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowAssignmentTargetCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowAssignmentTargetCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) Update() *WorkflowAssignmentTargetUpdate {
+	mutation := newWorkflowAssignmentTargetMutation(c.config, OpUpdate)
+	return &WorkflowAssignmentTargetUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowAssignmentTargetClient) UpdateOne(_m *WorkflowAssignmentTarget) *WorkflowAssignmentTargetUpdateOne {
+	mutation := newWorkflowAssignmentTargetMutation(c.config, OpUpdateOne, withWorkflowAssignmentTarget(_m))
+	return &WorkflowAssignmentTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowAssignmentTargetClient) UpdateOneID(id string) *WorkflowAssignmentTargetUpdateOne {
+	mutation := newWorkflowAssignmentTargetMutation(c.config, OpUpdateOne, withWorkflowAssignmentTargetID(id))
+	return &WorkflowAssignmentTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) Delete() *WorkflowAssignmentTargetDelete {
+	mutation := newWorkflowAssignmentTargetMutation(c.config, OpDelete)
+	return &WorkflowAssignmentTargetDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowAssignmentTargetClient) DeleteOne(_m *WorkflowAssignmentTarget) *WorkflowAssignmentTargetDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowAssignmentTargetClient) DeleteOneID(id string) *WorkflowAssignmentTargetDeleteOne {
+	builder := c.Delete().Where(workflowassignmenttarget.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowAssignmentTargetDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) Query() *WorkflowAssignmentTargetQuery {
+	return &WorkflowAssignmentTargetQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowAssignmentTarget},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowAssignmentTarget entity by its id.
+func (c *WorkflowAssignmentTargetClient) Get(ctx context.Context, id string) (*WorkflowAssignmentTarget, error) {
+	return c.Query().Where(workflowassignmenttarget.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowAssignmentTargetClient) GetX(ctx context.Context, id string) *WorkflowAssignmentTarget {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) QueryOwner(_m *WorkflowAssignmentTarget) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowassignmenttarget.OwnerTable, workflowassignmenttarget.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignment queries the workflow_assignment edge of a WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) QueryWorkflowAssignment(_m *WorkflowAssignmentTarget) *WorkflowAssignmentQuery {
+	query := (&WorkflowAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID, id),
+			sqlgraph.To(workflowassignment.Table, workflowassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignmenttarget.WorkflowAssignmentTable, workflowassignmenttarget.WorkflowAssignmentColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUser queries the user edge of a WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) QueryUser(_m *WorkflowAssignmentTarget) *UserQuery {
+	query := (&UserClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID, id),
+			sqlgraph.To(user.Table, user.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignmenttarget.UserTable, workflowassignmenttarget.UserColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.User
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroup queries the group edge of a WorkflowAssignmentTarget.
+func (c *WorkflowAssignmentTargetClient) QueryGroup(_m *WorkflowAssignmentTarget) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowassignmenttarget.Table, workflowassignmenttarget.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowassignmenttarget.GroupTable, workflowassignmenttarget.GroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.WorkflowAssignmentTarget
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowAssignmentTargetClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowAssignmentTarget
+	return append(hooks[:len(hooks):len(hooks)], workflowassignmenttarget.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowAssignmentTargetClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowAssignmentTarget
+	return append(inters[:len(inters):len(inters)], workflowassignmenttarget.Interceptors[:]...)
+}
+
+func (c *WorkflowAssignmentTargetClient) mutate(ctx context.Context, m *WorkflowAssignmentTargetMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowAssignmentTargetCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowAssignmentTargetUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowAssignmentTargetUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowAssignmentTargetDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowAssignmentTarget mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowAssignmentTargetHistoryClient is a client for the WorkflowAssignmentTargetHistory schema.
+type WorkflowAssignmentTargetHistoryClient struct {
+	config
+}
+
+// NewWorkflowAssignmentTargetHistoryClient returns a client for the WorkflowAssignmentTargetHistory from the given config.
+func NewWorkflowAssignmentTargetHistoryClient(c config) *WorkflowAssignmentTargetHistoryClient {
+	return &WorkflowAssignmentTargetHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowassignmenttargethistory.Hooks(f(g(h())))`.
+func (c *WorkflowAssignmentTargetHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowAssignmentTargetHistory = append(c.hooks.WorkflowAssignmentTargetHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowassignmenttargethistory.Intercept(f(g(h())))`.
+func (c *WorkflowAssignmentTargetHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowAssignmentTargetHistory = append(c.inters.WorkflowAssignmentTargetHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowAssignmentTargetHistory entity.
+func (c *WorkflowAssignmentTargetHistoryClient) Create() *WorkflowAssignmentTargetHistoryCreate {
+	mutation := newWorkflowAssignmentTargetHistoryMutation(c.config, OpCreate)
+	return &WorkflowAssignmentTargetHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowAssignmentTargetHistory entities.
+func (c *WorkflowAssignmentTargetHistoryClient) CreateBulk(builders ...*WorkflowAssignmentTargetHistoryCreate) *WorkflowAssignmentTargetHistoryCreateBulk {
+	return &WorkflowAssignmentTargetHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowAssignmentTargetHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowAssignmentTargetHistoryCreate, int)) *WorkflowAssignmentTargetHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowAssignmentTargetHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowAssignmentTargetHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowAssignmentTargetHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowAssignmentTargetHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowAssignmentTargetHistory.
+func (c *WorkflowAssignmentTargetHistoryClient) Update() *WorkflowAssignmentTargetHistoryUpdate {
+	mutation := newWorkflowAssignmentTargetHistoryMutation(c.config, OpUpdate)
+	return &WorkflowAssignmentTargetHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowAssignmentTargetHistoryClient) UpdateOne(_m *WorkflowAssignmentTargetHistory) *WorkflowAssignmentTargetHistoryUpdateOne {
+	mutation := newWorkflowAssignmentTargetHistoryMutation(c.config, OpUpdateOne, withWorkflowAssignmentTargetHistory(_m))
+	return &WorkflowAssignmentTargetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowAssignmentTargetHistoryClient) UpdateOneID(id string) *WorkflowAssignmentTargetHistoryUpdateOne {
+	mutation := newWorkflowAssignmentTargetHistoryMutation(c.config, OpUpdateOne, withWorkflowAssignmentTargetHistoryID(id))
+	return &WorkflowAssignmentTargetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowAssignmentTargetHistory.
+func (c *WorkflowAssignmentTargetHistoryClient) Delete() *WorkflowAssignmentTargetHistoryDelete {
+	mutation := newWorkflowAssignmentTargetHistoryMutation(c.config, OpDelete)
+	return &WorkflowAssignmentTargetHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowAssignmentTargetHistoryClient) DeleteOne(_m *WorkflowAssignmentTargetHistory) *WorkflowAssignmentTargetHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowAssignmentTargetHistoryClient) DeleteOneID(id string) *WorkflowAssignmentTargetHistoryDeleteOne {
+	builder := c.Delete().Where(workflowassignmenttargethistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowAssignmentTargetHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowAssignmentTargetHistory.
+func (c *WorkflowAssignmentTargetHistoryClient) Query() *WorkflowAssignmentTargetHistoryQuery {
+	return &WorkflowAssignmentTargetHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowAssignmentTargetHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowAssignmentTargetHistory entity by its id.
+func (c *WorkflowAssignmentTargetHistoryClient) Get(ctx context.Context, id string) (*WorkflowAssignmentTargetHistory, error) {
+	return c.Query().Where(workflowassignmenttargethistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowAssignmentTargetHistoryClient) GetX(ctx context.Context, id string) *WorkflowAssignmentTargetHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowAssignmentTargetHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowAssignmentTargetHistory
+	return append(hooks[:len(hooks):len(hooks)], workflowassignmenttargethistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowAssignmentTargetHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowAssignmentTargetHistory
+	return append(inters[:len(inters):len(inters)], workflowassignmenttargethistory.Interceptors[:]...)
+}
+
+func (c *WorkflowAssignmentTargetHistoryClient) mutate(ctx context.Context, m *WorkflowAssignmentTargetHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowAssignmentTargetHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowAssignmentTargetHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowAssignmentTargetHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowAssignmentTargetHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowAssignmentTargetHistory mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowDefinitionClient is a client for the WorkflowDefinition schema.
+type WorkflowDefinitionClient struct {
+	config
+}
+
+// NewWorkflowDefinitionClient returns a client for the WorkflowDefinition from the given config.
+func NewWorkflowDefinitionClient(c config) *WorkflowDefinitionClient {
+	return &WorkflowDefinitionClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowdefinition.Hooks(f(g(h())))`.
+func (c *WorkflowDefinitionClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowDefinition = append(c.hooks.WorkflowDefinition, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowdefinition.Intercept(f(g(h())))`.
+func (c *WorkflowDefinitionClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowDefinition = append(c.inters.WorkflowDefinition, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowDefinition entity.
+func (c *WorkflowDefinitionClient) Create() *WorkflowDefinitionCreate {
+	mutation := newWorkflowDefinitionMutation(c.config, OpCreate)
+	return &WorkflowDefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowDefinition entities.
+func (c *WorkflowDefinitionClient) CreateBulk(builders ...*WorkflowDefinitionCreate) *WorkflowDefinitionCreateBulk {
+	return &WorkflowDefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowDefinitionClient) MapCreateBulk(slice any, setFunc func(*WorkflowDefinitionCreate, int)) *WorkflowDefinitionCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowDefinitionCreateBulk{err: fmt.Errorf("calling to WorkflowDefinitionClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowDefinitionCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowDefinitionCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowDefinition.
+func (c *WorkflowDefinitionClient) Update() *WorkflowDefinitionUpdate {
+	mutation := newWorkflowDefinitionMutation(c.config, OpUpdate)
+	return &WorkflowDefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowDefinitionClient) UpdateOne(_m *WorkflowDefinition) *WorkflowDefinitionUpdateOne {
+	mutation := newWorkflowDefinitionMutation(c.config, OpUpdateOne, withWorkflowDefinition(_m))
+	return &WorkflowDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowDefinitionClient) UpdateOneID(id string) *WorkflowDefinitionUpdateOne {
+	mutation := newWorkflowDefinitionMutation(c.config, OpUpdateOne, withWorkflowDefinitionID(id))
+	return &WorkflowDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowDefinition.
+func (c *WorkflowDefinitionClient) Delete() *WorkflowDefinitionDelete {
+	mutation := newWorkflowDefinitionMutation(c.config, OpDelete)
+	return &WorkflowDefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowDefinitionClient) DeleteOne(_m *WorkflowDefinition) *WorkflowDefinitionDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowDefinitionClient) DeleteOneID(id string) *WorkflowDefinitionDeleteOne {
+	builder := c.Delete().Where(workflowdefinition.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowDefinitionDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowDefinition.
+func (c *WorkflowDefinitionClient) Query() *WorkflowDefinitionQuery {
+	return &WorkflowDefinitionQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowDefinition},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowDefinition entity by its id.
+func (c *WorkflowDefinitionClient) Get(ctx context.Context, id string) (*WorkflowDefinition, error) {
+	return c.Query().Where(workflowdefinition.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowDefinitionClient) GetX(ctx context.Context, id string) *WorkflowDefinition {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryOwner(_m *WorkflowDefinition) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowdefinition.OwnerTable, workflowdefinition.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowDefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTagDefinitions queries the tag_definitions edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryTagDefinitions(_m *WorkflowDefinition) *TagDefinitionQuery {
+	query := (&TagDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(tagdefinition.Table, tagdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.TagDefinitionsTable, workflowdefinition.TagDefinitionsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TagDefinition
+		step.Edge.Schema = schemaConfig.TagDefinition
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryGroups queries the groups edge of a WorkflowDefinition.
+func (c *WorkflowDefinitionClient) QueryGroups(_m *WorkflowDefinition) *GroupQuery {
+	query := (&GroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowdefinition.Table, workflowdefinition.FieldID, id),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowdefinition.GroupsTable, workflowdefinition.GroupsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowDefinitionClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowDefinition
+	return append(hooks[:len(hooks):len(hooks)], workflowdefinition.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowDefinitionClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowDefinition
+	return append(inters[:len(inters):len(inters)], workflowdefinition.Interceptors[:]...)
+}
+
+func (c *WorkflowDefinitionClient) mutate(ctx context.Context, m *WorkflowDefinitionMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowDefinitionCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowDefinitionUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowDefinitionUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowDefinitionDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowDefinition mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowDefinitionHistoryClient is a client for the WorkflowDefinitionHistory schema.
+type WorkflowDefinitionHistoryClient struct {
+	config
+}
+
+// NewWorkflowDefinitionHistoryClient returns a client for the WorkflowDefinitionHistory from the given config.
+func NewWorkflowDefinitionHistoryClient(c config) *WorkflowDefinitionHistoryClient {
+	return &WorkflowDefinitionHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowdefinitionhistory.Hooks(f(g(h())))`.
+func (c *WorkflowDefinitionHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowDefinitionHistory = append(c.hooks.WorkflowDefinitionHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowdefinitionhistory.Intercept(f(g(h())))`.
+func (c *WorkflowDefinitionHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowDefinitionHistory = append(c.inters.WorkflowDefinitionHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowDefinitionHistory entity.
+func (c *WorkflowDefinitionHistoryClient) Create() *WorkflowDefinitionHistoryCreate {
+	mutation := newWorkflowDefinitionHistoryMutation(c.config, OpCreate)
+	return &WorkflowDefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowDefinitionHistory entities.
+func (c *WorkflowDefinitionHistoryClient) CreateBulk(builders ...*WorkflowDefinitionHistoryCreate) *WorkflowDefinitionHistoryCreateBulk {
+	return &WorkflowDefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowDefinitionHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowDefinitionHistoryCreate, int)) *WorkflowDefinitionHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowDefinitionHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowDefinitionHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowDefinitionHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowDefinitionHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowDefinitionHistory.
+func (c *WorkflowDefinitionHistoryClient) Update() *WorkflowDefinitionHistoryUpdate {
+	mutation := newWorkflowDefinitionHistoryMutation(c.config, OpUpdate)
+	return &WorkflowDefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowDefinitionHistoryClient) UpdateOne(_m *WorkflowDefinitionHistory) *WorkflowDefinitionHistoryUpdateOne {
+	mutation := newWorkflowDefinitionHistoryMutation(c.config, OpUpdateOne, withWorkflowDefinitionHistory(_m))
+	return &WorkflowDefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowDefinitionHistoryClient) UpdateOneID(id string) *WorkflowDefinitionHistoryUpdateOne {
+	mutation := newWorkflowDefinitionHistoryMutation(c.config, OpUpdateOne, withWorkflowDefinitionHistoryID(id))
+	return &WorkflowDefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowDefinitionHistory.
+func (c *WorkflowDefinitionHistoryClient) Delete() *WorkflowDefinitionHistoryDelete {
+	mutation := newWorkflowDefinitionHistoryMutation(c.config, OpDelete)
+	return &WorkflowDefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowDefinitionHistoryClient) DeleteOne(_m *WorkflowDefinitionHistory) *WorkflowDefinitionHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowDefinitionHistoryClient) DeleteOneID(id string) *WorkflowDefinitionHistoryDeleteOne {
+	builder := c.Delete().Where(workflowdefinitionhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowDefinitionHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowDefinitionHistory.
+func (c *WorkflowDefinitionHistoryClient) Query() *WorkflowDefinitionHistoryQuery {
+	return &WorkflowDefinitionHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowDefinitionHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowDefinitionHistory entity by its id.
+func (c *WorkflowDefinitionHistoryClient) Get(ctx context.Context, id string) (*WorkflowDefinitionHistory, error) {
+	return c.Query().Where(workflowdefinitionhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowDefinitionHistoryClient) GetX(ctx context.Context, id string) *WorkflowDefinitionHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowDefinitionHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowDefinitionHistory
+	return append(hooks[:len(hooks):len(hooks)], workflowdefinitionhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowDefinitionHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowDefinitionHistory
+	return append(inters[:len(inters):len(inters)], workflowdefinitionhistory.Interceptors[:]...)
+}
+
+func (c *WorkflowDefinitionHistoryClient) mutate(ctx context.Context, m *WorkflowDefinitionHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowDefinitionHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowDefinitionHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowDefinitionHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowDefinitionHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowDefinitionHistory mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowEventClient is a client for the WorkflowEvent schema.
+type WorkflowEventClient struct {
+	config
+}
+
+// NewWorkflowEventClient returns a client for the WorkflowEvent from the given config.
+func NewWorkflowEventClient(c config) *WorkflowEventClient {
+	return &WorkflowEventClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowevent.Hooks(f(g(h())))`.
+func (c *WorkflowEventClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowEvent = append(c.hooks.WorkflowEvent, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowevent.Intercept(f(g(h())))`.
+func (c *WorkflowEventClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowEvent = append(c.inters.WorkflowEvent, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowEvent entity.
+func (c *WorkflowEventClient) Create() *WorkflowEventCreate {
+	mutation := newWorkflowEventMutation(c.config, OpCreate)
+	return &WorkflowEventCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowEvent entities.
+func (c *WorkflowEventClient) CreateBulk(builders ...*WorkflowEventCreate) *WorkflowEventCreateBulk {
+	return &WorkflowEventCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowEventClient) MapCreateBulk(slice any, setFunc func(*WorkflowEventCreate, int)) *WorkflowEventCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowEventCreateBulk{err: fmt.Errorf("calling to WorkflowEventClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowEventCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowEventCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowEvent.
+func (c *WorkflowEventClient) Update() *WorkflowEventUpdate {
+	mutation := newWorkflowEventMutation(c.config, OpUpdate)
+	return &WorkflowEventUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowEventClient) UpdateOne(_m *WorkflowEvent) *WorkflowEventUpdateOne {
+	mutation := newWorkflowEventMutation(c.config, OpUpdateOne, withWorkflowEvent(_m))
+	return &WorkflowEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowEventClient) UpdateOneID(id string) *WorkflowEventUpdateOne {
+	mutation := newWorkflowEventMutation(c.config, OpUpdateOne, withWorkflowEventID(id))
+	return &WorkflowEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowEvent.
+func (c *WorkflowEventClient) Delete() *WorkflowEventDelete {
+	mutation := newWorkflowEventMutation(c.config, OpDelete)
+	return &WorkflowEventDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowEventClient) DeleteOne(_m *WorkflowEvent) *WorkflowEventDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowEventClient) DeleteOneID(id string) *WorkflowEventDeleteOne {
+	builder := c.Delete().Where(workflowevent.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowEventDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowEvent.
+func (c *WorkflowEventClient) Query() *WorkflowEventQuery {
+	return &WorkflowEventQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowEvent},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowEvent entity by its id.
+func (c *WorkflowEventClient) Get(ctx context.Context, id string) (*WorkflowEvent, error) {
+	return c.Query().Where(workflowevent.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowEventClient) GetX(ctx context.Context, id string) *WorkflowEvent {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowEvent.
+func (c *WorkflowEventClient) QueryOwner(_m *WorkflowEvent) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowevent.Table, workflowevent.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowevent.OwnerTable, workflowevent.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstance queries the workflow_instance edge of a WorkflowEvent.
+func (c *WorkflowEventClient) QueryWorkflowInstance(_m *WorkflowEvent) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowevent.Table, workflowevent.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowevent.WorkflowInstanceTable, workflowevent.WorkflowInstanceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowEventClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowEvent
+	return append(hooks[:len(hooks):len(hooks)], workflowevent.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowEventClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowEvent
+	return append(inters[:len(inters):len(inters)], workflowevent.Interceptors[:]...)
+}
+
+func (c *WorkflowEventClient) mutate(ctx context.Context, m *WorkflowEventMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowEventCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowEventUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowEventUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowEventDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowEvent mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowEventHistoryClient is a client for the WorkflowEventHistory schema.
+type WorkflowEventHistoryClient struct {
+	config
+}
+
+// NewWorkflowEventHistoryClient returns a client for the WorkflowEventHistory from the given config.
+func NewWorkflowEventHistoryClient(c config) *WorkflowEventHistoryClient {
+	return &WorkflowEventHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workfloweventhistory.Hooks(f(g(h())))`.
+func (c *WorkflowEventHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowEventHistory = append(c.hooks.WorkflowEventHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workfloweventhistory.Intercept(f(g(h())))`.
+func (c *WorkflowEventHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowEventHistory = append(c.inters.WorkflowEventHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowEventHistory entity.
+func (c *WorkflowEventHistoryClient) Create() *WorkflowEventHistoryCreate {
+	mutation := newWorkflowEventHistoryMutation(c.config, OpCreate)
+	return &WorkflowEventHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowEventHistory entities.
+func (c *WorkflowEventHistoryClient) CreateBulk(builders ...*WorkflowEventHistoryCreate) *WorkflowEventHistoryCreateBulk {
+	return &WorkflowEventHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowEventHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowEventHistoryCreate, int)) *WorkflowEventHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowEventHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowEventHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowEventHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowEventHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowEventHistory.
+func (c *WorkflowEventHistoryClient) Update() *WorkflowEventHistoryUpdate {
+	mutation := newWorkflowEventHistoryMutation(c.config, OpUpdate)
+	return &WorkflowEventHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowEventHistoryClient) UpdateOne(_m *WorkflowEventHistory) *WorkflowEventHistoryUpdateOne {
+	mutation := newWorkflowEventHistoryMutation(c.config, OpUpdateOne, withWorkflowEventHistory(_m))
+	return &WorkflowEventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowEventHistoryClient) UpdateOneID(id string) *WorkflowEventHistoryUpdateOne {
+	mutation := newWorkflowEventHistoryMutation(c.config, OpUpdateOne, withWorkflowEventHistoryID(id))
+	return &WorkflowEventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowEventHistory.
+func (c *WorkflowEventHistoryClient) Delete() *WorkflowEventHistoryDelete {
+	mutation := newWorkflowEventHistoryMutation(c.config, OpDelete)
+	return &WorkflowEventHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowEventHistoryClient) DeleteOne(_m *WorkflowEventHistory) *WorkflowEventHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowEventHistoryClient) DeleteOneID(id string) *WorkflowEventHistoryDeleteOne {
+	builder := c.Delete().Where(workfloweventhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowEventHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowEventHistory.
+func (c *WorkflowEventHistoryClient) Query() *WorkflowEventHistoryQuery {
+	return &WorkflowEventHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowEventHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowEventHistory entity by its id.
+func (c *WorkflowEventHistoryClient) Get(ctx context.Context, id string) (*WorkflowEventHistory, error) {
+	return c.Query().Where(workfloweventhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowEventHistoryClient) GetX(ctx context.Context, id string) *WorkflowEventHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowEventHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowEventHistory
+	return append(hooks[:len(hooks):len(hooks)], workfloweventhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowEventHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowEventHistory
+	return append(inters[:len(inters):len(inters)], workfloweventhistory.Interceptors[:]...)
+}
+
+func (c *WorkflowEventHistoryClient) mutate(ctx context.Context, m *WorkflowEventHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowEventHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowEventHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowEventHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowEventHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowEventHistory mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowInstanceClient is a client for the WorkflowInstance schema.
+type WorkflowInstanceClient struct {
+	config
+}
+
+// NewWorkflowInstanceClient returns a client for the WorkflowInstance from the given config.
+func NewWorkflowInstanceClient(c config) *WorkflowInstanceClient {
+	return &WorkflowInstanceClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowinstance.Hooks(f(g(h())))`.
+func (c *WorkflowInstanceClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowInstance = append(c.hooks.WorkflowInstance, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowinstance.Intercept(f(g(h())))`.
+func (c *WorkflowInstanceClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowInstance = append(c.inters.WorkflowInstance, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowInstance entity.
+func (c *WorkflowInstanceClient) Create() *WorkflowInstanceCreate {
+	mutation := newWorkflowInstanceMutation(c.config, OpCreate)
+	return &WorkflowInstanceCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowInstance entities.
+func (c *WorkflowInstanceClient) CreateBulk(builders ...*WorkflowInstanceCreate) *WorkflowInstanceCreateBulk {
+	return &WorkflowInstanceCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowInstanceClient) MapCreateBulk(slice any, setFunc func(*WorkflowInstanceCreate, int)) *WorkflowInstanceCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowInstanceCreateBulk{err: fmt.Errorf("calling to WorkflowInstanceClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowInstanceCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowInstanceCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowInstance.
+func (c *WorkflowInstanceClient) Update() *WorkflowInstanceUpdate {
+	mutation := newWorkflowInstanceMutation(c.config, OpUpdate)
+	return &WorkflowInstanceUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowInstanceClient) UpdateOne(_m *WorkflowInstance) *WorkflowInstanceUpdateOne {
+	mutation := newWorkflowInstanceMutation(c.config, OpUpdateOne, withWorkflowInstance(_m))
+	return &WorkflowInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowInstanceClient) UpdateOneID(id string) *WorkflowInstanceUpdateOne {
+	mutation := newWorkflowInstanceMutation(c.config, OpUpdateOne, withWorkflowInstanceID(id))
+	return &WorkflowInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowInstance.
+func (c *WorkflowInstanceClient) Delete() *WorkflowInstanceDelete {
+	mutation := newWorkflowInstanceMutation(c.config, OpDelete)
+	return &WorkflowInstanceDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowInstanceClient) DeleteOne(_m *WorkflowInstance) *WorkflowInstanceDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowInstanceClient) DeleteOneID(id string) *WorkflowInstanceDeleteOne {
+	builder := c.Delete().Where(workflowinstance.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowInstanceDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowInstance.
+func (c *WorkflowInstanceClient) Query() *WorkflowInstanceQuery {
+	return &WorkflowInstanceQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowInstance},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowInstance entity by its id.
+func (c *WorkflowInstanceClient) Get(ctx context.Context, id string) (*WorkflowInstance, error) {
+	return c.Query().Where(workflowinstance.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowInstanceClient) GetX(ctx context.Context, id string) *WorkflowInstance {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryOwner(_m *WorkflowInstance) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowinstance.OwnerTable, workflowinstance.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowDefinition queries the workflow_definition edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryWorkflowDefinition(_m *WorkflowInstance) *WorkflowDefinitionQuery {
+	query := (&WorkflowDefinitionClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(workflowdefinition.Table, workflowdefinition.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowinstance.WorkflowDefinitionTable, workflowinstance.WorkflowDefinitionColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowDefinition
+		step.Edge.Schema = schemaConfig.WorkflowInstance
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowAssignments queries the workflow_assignments edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryWorkflowAssignments(_m *WorkflowInstance) *WorkflowAssignmentQuery {
+	query := (&WorkflowAssignmentClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(workflowassignment.Table, workflowassignment.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowinstance.WorkflowAssignmentsTable, workflowinstance.WorkflowAssignmentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowAssignment
+		step.Edge.Schema = schemaConfig.WorkflowAssignment
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowEvents queries the workflow_events edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryWorkflowEvents(_m *WorkflowInstance) *WorkflowEventQuery {
+	query := (&WorkflowEventClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(workflowevent.Table, workflowevent.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowinstance.WorkflowEventsTable, workflowinstance.WorkflowEventsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowEvent
+		step.Edge.Schema = schemaConfig.WorkflowEvent
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowObjectRefs queries the workflow_object_refs edge of a WorkflowInstance.
+func (c *WorkflowInstanceClient) QueryWorkflowObjectRefs(_m *WorkflowInstance) *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowinstance.Table, workflowinstance.FieldID, id),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, workflowinstance.WorkflowObjectRefsTable, workflowinstance.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowInstanceClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowInstance
+	return append(hooks[:len(hooks):len(hooks)], workflowinstance.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowInstanceClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowInstance
+	return append(inters[:len(inters):len(inters)], workflowinstance.Interceptors[:]...)
+}
+
+func (c *WorkflowInstanceClient) mutate(ctx context.Context, m *WorkflowInstanceMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowInstanceCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowInstanceUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowInstanceUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowInstanceDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowInstance mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowInstanceHistoryClient is a client for the WorkflowInstanceHistory schema.
+type WorkflowInstanceHistoryClient struct {
+	config
+}
+
+// NewWorkflowInstanceHistoryClient returns a client for the WorkflowInstanceHistory from the given config.
+func NewWorkflowInstanceHistoryClient(c config) *WorkflowInstanceHistoryClient {
+	return &WorkflowInstanceHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowinstancehistory.Hooks(f(g(h())))`.
+func (c *WorkflowInstanceHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowInstanceHistory = append(c.hooks.WorkflowInstanceHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowinstancehistory.Intercept(f(g(h())))`.
+func (c *WorkflowInstanceHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowInstanceHistory = append(c.inters.WorkflowInstanceHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowInstanceHistory entity.
+func (c *WorkflowInstanceHistoryClient) Create() *WorkflowInstanceHistoryCreate {
+	mutation := newWorkflowInstanceHistoryMutation(c.config, OpCreate)
+	return &WorkflowInstanceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowInstanceHistory entities.
+func (c *WorkflowInstanceHistoryClient) CreateBulk(builders ...*WorkflowInstanceHistoryCreate) *WorkflowInstanceHistoryCreateBulk {
+	return &WorkflowInstanceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowInstanceHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowInstanceHistoryCreate, int)) *WorkflowInstanceHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowInstanceHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowInstanceHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowInstanceHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowInstanceHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowInstanceHistory.
+func (c *WorkflowInstanceHistoryClient) Update() *WorkflowInstanceHistoryUpdate {
+	mutation := newWorkflowInstanceHistoryMutation(c.config, OpUpdate)
+	return &WorkflowInstanceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowInstanceHistoryClient) UpdateOne(_m *WorkflowInstanceHistory) *WorkflowInstanceHistoryUpdateOne {
+	mutation := newWorkflowInstanceHistoryMutation(c.config, OpUpdateOne, withWorkflowInstanceHistory(_m))
+	return &WorkflowInstanceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowInstanceHistoryClient) UpdateOneID(id string) *WorkflowInstanceHistoryUpdateOne {
+	mutation := newWorkflowInstanceHistoryMutation(c.config, OpUpdateOne, withWorkflowInstanceHistoryID(id))
+	return &WorkflowInstanceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowInstanceHistory.
+func (c *WorkflowInstanceHistoryClient) Delete() *WorkflowInstanceHistoryDelete {
+	mutation := newWorkflowInstanceHistoryMutation(c.config, OpDelete)
+	return &WorkflowInstanceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowInstanceHistoryClient) DeleteOne(_m *WorkflowInstanceHistory) *WorkflowInstanceHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowInstanceHistoryClient) DeleteOneID(id string) *WorkflowInstanceHistoryDeleteOne {
+	builder := c.Delete().Where(workflowinstancehistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowInstanceHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowInstanceHistory.
+func (c *WorkflowInstanceHistoryClient) Query() *WorkflowInstanceHistoryQuery {
+	return &WorkflowInstanceHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowInstanceHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowInstanceHistory entity by its id.
+func (c *WorkflowInstanceHistoryClient) Get(ctx context.Context, id string) (*WorkflowInstanceHistory, error) {
+	return c.Query().Where(workflowinstancehistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowInstanceHistoryClient) GetX(ctx context.Context, id string) *WorkflowInstanceHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowInstanceHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowInstanceHistory
+	return append(hooks[:len(hooks):len(hooks)], workflowinstancehistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowInstanceHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowInstanceHistory
+	return append(inters[:len(inters):len(inters)], workflowinstancehistory.Interceptors[:]...)
+}
+
+func (c *WorkflowInstanceHistoryClient) mutate(ctx context.Context, m *WorkflowInstanceHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowInstanceHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowInstanceHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowInstanceHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowInstanceHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowInstanceHistory mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowObjectRefClient is a client for the WorkflowObjectRef schema.
+type WorkflowObjectRefClient struct {
+	config
+}
+
+// NewWorkflowObjectRefClient returns a client for the WorkflowObjectRef from the given config.
+func NewWorkflowObjectRefClient(c config) *WorkflowObjectRefClient {
+	return &WorkflowObjectRefClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowobjectref.Hooks(f(g(h())))`.
+func (c *WorkflowObjectRefClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowObjectRef = append(c.hooks.WorkflowObjectRef, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowobjectref.Intercept(f(g(h())))`.
+func (c *WorkflowObjectRefClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowObjectRef = append(c.inters.WorkflowObjectRef, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowObjectRef entity.
+func (c *WorkflowObjectRefClient) Create() *WorkflowObjectRefCreate {
+	mutation := newWorkflowObjectRefMutation(c.config, OpCreate)
+	return &WorkflowObjectRefCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowObjectRef entities.
+func (c *WorkflowObjectRefClient) CreateBulk(builders ...*WorkflowObjectRefCreate) *WorkflowObjectRefCreateBulk {
+	return &WorkflowObjectRefCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowObjectRefClient) MapCreateBulk(slice any, setFunc func(*WorkflowObjectRefCreate, int)) *WorkflowObjectRefCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowObjectRefCreateBulk{err: fmt.Errorf("calling to WorkflowObjectRefClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowObjectRefCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowObjectRefCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) Update() *WorkflowObjectRefUpdate {
+	mutation := newWorkflowObjectRefMutation(c.config, OpUpdate)
+	return &WorkflowObjectRefUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowObjectRefClient) UpdateOne(_m *WorkflowObjectRef) *WorkflowObjectRefUpdateOne {
+	mutation := newWorkflowObjectRefMutation(c.config, OpUpdateOne, withWorkflowObjectRef(_m))
+	return &WorkflowObjectRefUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowObjectRefClient) UpdateOneID(id string) *WorkflowObjectRefUpdateOne {
+	mutation := newWorkflowObjectRefMutation(c.config, OpUpdateOne, withWorkflowObjectRefID(id))
+	return &WorkflowObjectRefUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) Delete() *WorkflowObjectRefDelete {
+	mutation := newWorkflowObjectRefMutation(c.config, OpDelete)
+	return &WorkflowObjectRefDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowObjectRefClient) DeleteOne(_m *WorkflowObjectRef) *WorkflowObjectRefDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowObjectRefClient) DeleteOneID(id string) *WorkflowObjectRefDeleteOne {
+	builder := c.Delete().Where(workflowobjectref.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowObjectRefDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) Query() *WorkflowObjectRefQuery {
+	return &WorkflowObjectRefQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowObjectRef},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowObjectRef entity by its id.
+func (c *WorkflowObjectRefClient) Get(ctx context.Context, id string) (*WorkflowObjectRef, error) {
+	return c.Query().Where(workflowobjectref.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowObjectRefClient) GetX(ctx context.Context, id string) *WorkflowObjectRef {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryOwner queries the owner edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryOwner(_m *WorkflowObjectRef) *OrganizationQuery {
+	query := (&OrganizationClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(organization.Table, organization.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, workflowobjectref.OwnerTable, workflowobjectref.OwnerColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Organization
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryWorkflowInstance queries the workflow_instance edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryWorkflowInstance(_m *WorkflowObjectRef) *WorkflowInstanceQuery {
+	query := (&WorkflowInstanceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(workflowinstance.Table, workflowinstance.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.WorkflowInstanceTable, workflowobjectref.WorkflowInstanceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowInstance
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryControl queries the control edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryControl(_m *WorkflowObjectRef) *ControlQuery {
+	query := (&ControlClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(control.Table, control.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.ControlTable, workflowobjectref.ControlColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Control
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryTask queries the task edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryTask(_m *WorkflowObjectRef) *TaskQuery {
+	query := (&TaskClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(task.Table, task.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.TaskTable, workflowobjectref.TaskColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Task
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryInternalPolicy queries the internal_policy edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryInternalPolicy(_m *WorkflowObjectRef) *InternalPolicyQuery {
+	query := (&InternalPolicyClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(internalpolicy.Table, internalpolicy.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.InternalPolicyTable, workflowobjectref.InternalPolicyColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryFinding queries the finding edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryFinding(_m *WorkflowObjectRef) *FindingQuery {
+	query := (&FindingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(finding.Table, finding.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.FindingTable, workflowobjectref.FindingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Finding
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryAccount queries the directory_account edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryDirectoryAccount(_m *WorkflowObjectRef) *DirectoryAccountQuery {
+	query := (&DirectoryAccountClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(directoryaccount.Table, directoryaccount.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.DirectoryAccountTable, workflowobjectref.DirectoryAccountColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryAccount
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryGroup queries the directory_group edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryDirectoryGroup(_m *WorkflowObjectRef) *DirectoryGroupQuery {
+	query := (&DirectoryGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(directorygroup.Table, directorygroup.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.DirectoryGroupTable, workflowobjectref.DirectoryGroupColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryGroup
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryDirectoryMembership queries the directory_membership edge of a WorkflowObjectRef.
+func (c *WorkflowObjectRefClient) QueryDirectoryMembership(_m *WorkflowObjectRef) *DirectoryMembershipQuery {
+	query := (&DirectoryMembershipClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(workflowobjectref.Table, workflowobjectref.FieldID, id),
+			sqlgraph.To(directorymembership.Table, directorymembership.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, workflowobjectref.DirectoryMembershipTable, workflowobjectref.DirectoryMembershipColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.DirectoryMembership
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowObjectRefClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowObjectRef
+	return append(hooks[:len(hooks):len(hooks)], workflowobjectref.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowObjectRefClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowObjectRef
+	return append(inters[:len(inters):len(inters)], workflowobjectref.Interceptors[:]...)
+}
+
+func (c *WorkflowObjectRefClient) mutate(ctx context.Context, m *WorkflowObjectRefMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowObjectRefCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowObjectRefUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowObjectRefUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowObjectRefDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowObjectRef mutation op: %q", m.Op())
+	}
+}
+
+// WorkflowObjectRefHistoryClient is a client for the WorkflowObjectRefHistory schema.
+type WorkflowObjectRefHistoryClient struct {
+	config
+}
+
+// NewWorkflowObjectRefHistoryClient returns a client for the WorkflowObjectRefHistory from the given config.
+func NewWorkflowObjectRefHistoryClient(c config) *WorkflowObjectRefHistoryClient {
+	return &WorkflowObjectRefHistoryClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `workflowobjectrefhistory.Hooks(f(g(h())))`.
+func (c *WorkflowObjectRefHistoryClient) Use(hooks ...Hook) {
+	c.hooks.WorkflowObjectRefHistory = append(c.hooks.WorkflowObjectRefHistory, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `workflowobjectrefhistory.Intercept(f(g(h())))`.
+func (c *WorkflowObjectRefHistoryClient) Intercept(interceptors ...Interceptor) {
+	c.inters.WorkflowObjectRefHistory = append(c.inters.WorkflowObjectRefHistory, interceptors...)
+}
+
+// Create returns a builder for creating a WorkflowObjectRefHistory entity.
+func (c *WorkflowObjectRefHistoryClient) Create() *WorkflowObjectRefHistoryCreate {
+	mutation := newWorkflowObjectRefHistoryMutation(c.config, OpCreate)
+	return &WorkflowObjectRefHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of WorkflowObjectRefHistory entities.
+func (c *WorkflowObjectRefHistoryClient) CreateBulk(builders ...*WorkflowObjectRefHistoryCreate) *WorkflowObjectRefHistoryCreateBulk {
+	return &WorkflowObjectRefHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *WorkflowObjectRefHistoryClient) MapCreateBulk(slice any, setFunc func(*WorkflowObjectRefHistoryCreate, int)) *WorkflowObjectRefHistoryCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &WorkflowObjectRefHistoryCreateBulk{err: fmt.Errorf("calling to WorkflowObjectRefHistoryClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*WorkflowObjectRefHistoryCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &WorkflowObjectRefHistoryCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for WorkflowObjectRefHistory.
+func (c *WorkflowObjectRefHistoryClient) Update() *WorkflowObjectRefHistoryUpdate {
+	mutation := newWorkflowObjectRefHistoryMutation(c.config, OpUpdate)
+	return &WorkflowObjectRefHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *WorkflowObjectRefHistoryClient) UpdateOne(_m *WorkflowObjectRefHistory) *WorkflowObjectRefHistoryUpdateOne {
+	mutation := newWorkflowObjectRefHistoryMutation(c.config, OpUpdateOne, withWorkflowObjectRefHistory(_m))
+	return &WorkflowObjectRefHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *WorkflowObjectRefHistoryClient) UpdateOneID(id string) *WorkflowObjectRefHistoryUpdateOne {
+	mutation := newWorkflowObjectRefHistoryMutation(c.config, OpUpdateOne, withWorkflowObjectRefHistoryID(id))
+	return &WorkflowObjectRefHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for WorkflowObjectRefHistory.
+func (c *WorkflowObjectRefHistoryClient) Delete() *WorkflowObjectRefHistoryDelete {
+	mutation := newWorkflowObjectRefHistoryMutation(c.config, OpDelete)
+	return &WorkflowObjectRefHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *WorkflowObjectRefHistoryClient) DeleteOne(_m *WorkflowObjectRefHistory) *WorkflowObjectRefHistoryDeleteOne {
+	return c.DeleteOneID(_m.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *WorkflowObjectRefHistoryClient) DeleteOneID(id string) *WorkflowObjectRefHistoryDeleteOne {
+	builder := c.Delete().Where(workflowobjectrefhistory.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &WorkflowObjectRefHistoryDeleteOne{builder}
+}
+
+// Query returns a query builder for WorkflowObjectRefHistory.
+func (c *WorkflowObjectRefHistoryClient) Query() *WorkflowObjectRefHistoryQuery {
+	return &WorkflowObjectRefHistoryQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeWorkflowObjectRefHistory},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a WorkflowObjectRefHistory entity by its id.
+func (c *WorkflowObjectRefHistoryClient) Get(ctx context.Context, id string) (*WorkflowObjectRefHistory, error) {
+	return c.Query().Where(workflowobjectrefhistory.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *WorkflowObjectRefHistoryClient) GetX(ctx context.Context, id string) *WorkflowObjectRefHistory {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *WorkflowObjectRefHistoryClient) Hooks() []Hook {
+	hooks := c.hooks.WorkflowObjectRefHistory
+	return append(hooks[:len(hooks):len(hooks)], workflowobjectrefhistory.Hooks[:]...)
+}
+
+// Interceptors returns the client interceptors.
+func (c *WorkflowObjectRefHistoryClient) Interceptors() []Interceptor {
+	inters := c.inters.WorkflowObjectRefHistory
+	return append(inters[:len(inters):len(inters)], workflowobjectrefhistory.Interceptors[:]...)
+}
+
+func (c *WorkflowObjectRefHistoryClient) mutate(ctx context.Context, m *WorkflowObjectRefHistoryMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&WorkflowObjectRefHistoryCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&WorkflowObjectRefHistoryUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&WorkflowObjectRefHistoryUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&WorkflowObjectRefHistoryDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("generated: unknown WorkflowObjectRefHistory mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
@@ -31309,14 +35370,16 @@ type (
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
 		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
-		DNSVerificationHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
-		Finding, FindingControl, FindingControlHistory, FindingHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
-		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
-		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
+		DNSVerificationHistory, DirectoryAccount, DirectoryAccountHistory,
+		DirectoryGroup, DirectoryGroupHistory, DirectoryMembership,
+		DirectoryMembershipHistory, DirectorySyncRun, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File,
+		FileDownloadToken, FileHistory, Finding, FindingControl, FindingControlHistory,
+		FindingHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
+		GroupSetting, GroupSettingHistory, Hush, HushHistory, ImpersonationEvent,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
 		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
 		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
 		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
@@ -31334,7 +35397,11 @@ type (
 		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
 		UserHistory, UserSetting, UserSettingHistory, Vulnerability,
-		VulnerabilityHistory, Webauthn []ent.Hook
+		VulnerabilityHistory, Webauthn, WorkflowAssignment, WorkflowAssignmentHistory,
+		WorkflowAssignmentTarget, WorkflowAssignmentTargetHistory, WorkflowDefinition,
+		WorkflowDefinitionHistory, WorkflowEvent, WorkflowEventHistory,
+		WorkflowInstance, WorkflowInstanceHistory, WorkflowObjectRef,
+		WorkflowObjectRefHistory []ent.Hook
 	}
 	inters struct {
 		APIToken, ActionPlan, ActionPlanHistory, Assessment, AssessmentHistory,
@@ -31342,14 +35409,16 @@ type (
 		ContactHistory, Control, ControlHistory, ControlImplementation,
 		ControlImplementationHistory, ControlObjective, ControlObjectiveHistory,
 		CustomDomain, CustomDomainHistory, CustomTypeEnum, DNSVerification,
-		DNSVerificationHistory, DocumentData, DocumentDataHistory,
-		EmailVerificationToken, Entity, EntityHistory, EntityType, EntityTypeHistory,
-		Event, Evidence, EvidenceHistory, Export, File, FileDownloadToken, FileHistory,
-		Finding, FindingControl, FindingControlHistory, FindingHistory, Group,
-		GroupHistory, GroupMembership, GroupMembershipHistory, GroupSetting,
-		GroupSettingHistory, Hush, HushHistory, ImpersonationEvent, Integration,
-		IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite, JobResult,
-		JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
+		DNSVerificationHistory, DirectoryAccount, DirectoryAccountHistory,
+		DirectoryGroup, DirectoryGroupHistory, DirectoryMembership,
+		DirectoryMembershipHistory, DirectorySyncRun, DocumentData,
+		DocumentDataHistory, EmailVerificationToken, Entity, EntityHistory, EntityType,
+		EntityTypeHistory, Event, Evidence, EvidenceHistory, Export, File,
+		FileDownloadToken, FileHistory, Finding, FindingControl, FindingControlHistory,
+		FindingHistory, Group, GroupHistory, GroupMembership, GroupMembershipHistory,
+		GroupSetting, GroupSettingHistory, Hush, HushHistory, ImpersonationEvent,
+		Integration, IntegrationHistory, InternalPolicy, InternalPolicyHistory, Invite,
+		JobResult, JobRunner, JobRunnerRegistrationToken, JobRunnerToken, JobTemplate,
 		JobTemplateHistory, MappableDomain, MappableDomainHistory, MappedControl,
 		MappedControlHistory, Narrative, NarrativeHistory, Note, NoteHistory,
 		Notification, Onboarding, OrgMembership, OrgMembershipHistory, OrgModule,
@@ -31367,7 +35436,11 @@ type (
 		TrustCenterSubprocessor, TrustCenterSubprocessorHistory,
 		TrustCenterWatermarkConfig, TrustCenterWatermarkConfigHistory, User,
 		UserHistory, UserSetting, UserSettingHistory, Vulnerability,
-		VulnerabilityHistory, Webauthn []ent.Interceptor
+		VulnerabilityHistory, Webauthn, WorkflowAssignment, WorkflowAssignmentHistory,
+		WorkflowAssignmentTarget, WorkflowAssignmentTargetHistory, WorkflowDefinition,
+		WorkflowDefinitionHistory, WorkflowEvent, WorkflowEventHistory,
+		WorkflowInstance, WorkflowInstanceHistory, WorkflowObjectRef,
+		WorkflowObjectRefHistory []ent.Interceptor
 	}
 )
 

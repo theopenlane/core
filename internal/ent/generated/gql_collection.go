@@ -30,6 +30,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -134,6 +141,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 // CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
@@ -6110,6 +6129,95 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Control) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"control_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(control.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(control.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[24][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[24] == nil {
+								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[24][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(control.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+
 		case "controlMappings":
 			var (
 				alias = field.Alias
@@ -6153,10 +6261,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -6164,10 +6272,10 @@ func (_q *ControlQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Control) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlMappings)
-							if nodes[i].Edges.totalCount[24] == nil {
-								nodes[i].Edges.totalCount[24] = make(map[string]int)
+							if nodes[i].Edges.totalCount[25] == nil {
+								nodes[i].Edges.totalCount[25] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[24][alias] = n
+							nodes[i].Edges.totalCount[25][alias] = n
 						}
 						return nil
 					})
@@ -10890,6 +10998,2595 @@ func newDNSVerificationHistoryPaginateArgs(rv map[string]any) *dnsverificationhi
 	}
 	if v, ok := rv[whereField].(*DNSVerificationHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithDNSVerificationHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryAccountQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryAccountQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryAccountQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directoryaccount.Columns))
+		selectedFields = []string{directoryaccount.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[directoryaccount.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldOwnerID)
+				fieldSeen[directoryaccount.FieldOwnerID] = struct{}{}
+			}
+
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[directoryaccount.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldIntegrationID)
+				fieldSeen[directoryaccount.FieldIntegrationID] = struct{}{}
+			}
+
+		case "directorySyncRun":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectorySyncRunClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorysyncrunImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectorySyncRun = query
+			if _, ok := fieldSeen[directoryaccount.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDirectorySyncRunID)
+				fieldSeen[directoryaccount.FieldDirectorySyncRunID] = struct{}{}
+			}
+
+		case "groups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			args := newDirectoryGroupPaginateArgs(fieldArgs(ctx, new(DirectoryGroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_account_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(directoryaccount.GroupsTable)
+							s.Join(joinT).On(s.C(directorygroup.FieldID), joinT.C(directoryaccount.GroupsPrimaryKey[1]))
+							s.Where(sql.InValues(joinT.C(directoryaccount.GroupsPrimaryKey[0]), ids...))
+							s.Select(joinT.C(directoryaccount.GroupsPrimaryKey[0]), sql.Count("*"))
+							s.GroupBy(joinT.C(directoryaccount.GroupsPrimaryKey[0]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryAccount) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Groups)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directoryaccount.GroupsPrimaryKey[0], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedGroups(alias, func(wq *DirectoryGroupQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_account_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directoryaccount.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(directoryaccount.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryAccount) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directoryaccount.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+
+		case "memberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryAccount) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_account_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directoryaccount.MembershipsColumn), ids...))
+						})
+						if err := query.GroupBy(directoryaccount.MembershipsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryAccount) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Memberships)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directoryaccount.MembershipsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedMemberships(alias, func(wq *DirectoryMembershipQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[directoryaccount.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldCreatedAt)
+				fieldSeen[directoryaccount.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldUpdatedAt)
+				fieldSeen[directoryaccount.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directoryaccount.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldCreatedBy)
+				fieldSeen[directoryaccount.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directoryaccount.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldUpdatedBy)
+				fieldSeen[directoryaccount.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directoryaccount.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDisplayID)
+				fieldSeen[directoryaccount.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[directoryaccount.FieldTags]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldTags)
+				fieldSeen[directoryaccount.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directoryaccount.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldOwnerID)
+				fieldSeen[directoryaccount.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directoryaccount.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldIntegrationID)
+				fieldSeen[directoryaccount.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directoryaccount.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDirectorySyncRunID)
+				fieldSeen[directoryaccount.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[directoryaccount.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldExternalID)
+				fieldSeen[directoryaccount.FieldExternalID] = struct{}{}
+			}
+		case "secondaryKey":
+			if _, ok := fieldSeen[directoryaccount.FieldSecondaryKey]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldSecondaryKey)
+				fieldSeen[directoryaccount.FieldSecondaryKey] = struct{}{}
+			}
+		case "canonicalEmail":
+			if _, ok := fieldSeen[directoryaccount.FieldCanonicalEmail]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldCanonicalEmail)
+				fieldSeen[directoryaccount.FieldCanonicalEmail] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[directoryaccount.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDisplayName)
+				fieldSeen[directoryaccount.FieldDisplayName] = struct{}{}
+			}
+		case "givenName":
+			if _, ok := fieldSeen[directoryaccount.FieldGivenName]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldGivenName)
+				fieldSeen[directoryaccount.FieldGivenName] = struct{}{}
+			}
+		case "familyName":
+			if _, ok := fieldSeen[directoryaccount.FieldFamilyName]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldFamilyName)
+				fieldSeen[directoryaccount.FieldFamilyName] = struct{}{}
+			}
+		case "jobTitle":
+			if _, ok := fieldSeen[directoryaccount.FieldJobTitle]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldJobTitle)
+				fieldSeen[directoryaccount.FieldJobTitle] = struct{}{}
+			}
+		case "department":
+			if _, ok := fieldSeen[directoryaccount.FieldDepartment]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldDepartment)
+				fieldSeen[directoryaccount.FieldDepartment] = struct{}{}
+			}
+		case "organizationUnit":
+			if _, ok := fieldSeen[directoryaccount.FieldOrganizationUnit]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldOrganizationUnit)
+				fieldSeen[directoryaccount.FieldOrganizationUnit] = struct{}{}
+			}
+		case "accountType":
+			if _, ok := fieldSeen[directoryaccount.FieldAccountType]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldAccountType)
+				fieldSeen[directoryaccount.FieldAccountType] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[directoryaccount.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldStatus)
+				fieldSeen[directoryaccount.FieldStatus] = struct{}{}
+			}
+		case "mfaState":
+			if _, ok := fieldSeen[directoryaccount.FieldMfaState]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldMfaState)
+				fieldSeen[directoryaccount.FieldMfaState] = struct{}{}
+			}
+		case "lastSeenIP":
+			if _, ok := fieldSeen[directoryaccount.FieldLastSeenIP]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldLastSeenIP)
+				fieldSeen[directoryaccount.FieldLastSeenIP] = struct{}{}
+			}
+		case "lastLoginAt":
+			if _, ok := fieldSeen[directoryaccount.FieldLastLoginAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldLastLoginAt)
+				fieldSeen[directoryaccount.FieldLastLoginAt] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directoryaccount.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldObservedAt)
+				fieldSeen[directoryaccount.FieldObservedAt] = struct{}{}
+			}
+		case "profileHash":
+			if _, ok := fieldSeen[directoryaccount.FieldProfileHash]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldProfileHash)
+				fieldSeen[directoryaccount.FieldProfileHash] = struct{}{}
+			}
+		case "profile":
+			if _, ok := fieldSeen[directoryaccount.FieldProfile]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldProfile)
+				fieldSeen[directoryaccount.FieldProfile] = struct{}{}
+			}
+		case "rawProfileFileID":
+			if _, ok := fieldSeen[directoryaccount.FieldRawProfileFileID]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldRawProfileFileID)
+				fieldSeen[directoryaccount.FieldRawProfileFileID] = struct{}{}
+			}
+		case "sourceVersion":
+			if _, ok := fieldSeen[directoryaccount.FieldSourceVersion]; !ok {
+				selectedFields = append(selectedFields, directoryaccount.FieldSourceVersion)
+				fieldSeen[directoryaccount.FieldSourceVersion] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directoryaccountPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryAccountPaginateOption
+}
+
+func newDirectoryAccountPaginateArgs(rv map[string]any) *directoryaccountPaginateArgs {
+	args := &directoryaccountPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DirectoryAccountOrder:
+			args.opts = append(args.opts, WithDirectoryAccountOrder(v))
+		case []any:
+			var orders []*DirectoryAccountOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DirectoryAccountOrder{Field: &DirectoryAccountOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDirectoryAccountOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryAccountWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryAccountFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryAccountHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryAccountHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryAccountHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directoryaccounthistory.Columns))
+		selectedFields = []string{directoryaccounthistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldHistoryTime)
+				fieldSeen[directoryaccounthistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldRef)
+				fieldSeen[directoryaccounthistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldOperation)
+				fieldSeen[directoryaccounthistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldCreatedAt)
+				fieldSeen[directoryaccounthistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldUpdatedAt)
+				fieldSeen[directoryaccounthistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldCreatedBy)
+				fieldSeen[directoryaccounthistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldUpdatedBy)
+				fieldSeen[directoryaccounthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldDisplayID)
+				fieldSeen[directoryaccounthistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldTags)
+				fieldSeen[directoryaccounthistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldOwnerID)
+				fieldSeen[directoryaccounthistory.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldIntegrationID)
+				fieldSeen[directoryaccounthistory.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldDirectorySyncRunID)
+				fieldSeen[directoryaccounthistory.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldExternalID)
+				fieldSeen[directoryaccounthistory.FieldExternalID] = struct{}{}
+			}
+		case "secondaryKey":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldSecondaryKey]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldSecondaryKey)
+				fieldSeen[directoryaccounthistory.FieldSecondaryKey] = struct{}{}
+			}
+		case "canonicalEmail":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldCanonicalEmail]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldCanonicalEmail)
+				fieldSeen[directoryaccounthistory.FieldCanonicalEmail] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldDisplayName)
+				fieldSeen[directoryaccounthistory.FieldDisplayName] = struct{}{}
+			}
+		case "givenName":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldGivenName]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldGivenName)
+				fieldSeen[directoryaccounthistory.FieldGivenName] = struct{}{}
+			}
+		case "familyName":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldFamilyName]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldFamilyName)
+				fieldSeen[directoryaccounthistory.FieldFamilyName] = struct{}{}
+			}
+		case "jobTitle":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldJobTitle]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldJobTitle)
+				fieldSeen[directoryaccounthistory.FieldJobTitle] = struct{}{}
+			}
+		case "department":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldDepartment]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldDepartment)
+				fieldSeen[directoryaccounthistory.FieldDepartment] = struct{}{}
+			}
+		case "organizationUnit":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldOrganizationUnit]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldOrganizationUnit)
+				fieldSeen[directoryaccounthistory.FieldOrganizationUnit] = struct{}{}
+			}
+		case "accountType":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldAccountType]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldAccountType)
+				fieldSeen[directoryaccounthistory.FieldAccountType] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldStatus)
+				fieldSeen[directoryaccounthistory.FieldStatus] = struct{}{}
+			}
+		case "mfaState":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldMfaState]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldMfaState)
+				fieldSeen[directoryaccounthistory.FieldMfaState] = struct{}{}
+			}
+		case "lastSeenIP":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldLastSeenIP]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldLastSeenIP)
+				fieldSeen[directoryaccounthistory.FieldLastSeenIP] = struct{}{}
+			}
+		case "lastLoginAt":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldLastLoginAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldLastLoginAt)
+				fieldSeen[directoryaccounthistory.FieldLastLoginAt] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldObservedAt)
+				fieldSeen[directoryaccounthistory.FieldObservedAt] = struct{}{}
+			}
+		case "profileHash":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldProfileHash]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldProfileHash)
+				fieldSeen[directoryaccounthistory.FieldProfileHash] = struct{}{}
+			}
+		case "profile":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldProfile]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldProfile)
+				fieldSeen[directoryaccounthistory.FieldProfile] = struct{}{}
+			}
+		case "rawProfileFileID":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldRawProfileFileID]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldRawProfileFileID)
+				fieldSeen[directoryaccounthistory.FieldRawProfileFileID] = struct{}{}
+			}
+		case "sourceVersion":
+			if _, ok := fieldSeen[directoryaccounthistory.FieldSourceVersion]; !ok {
+				selectedFields = append(selectedFields, directoryaccounthistory.FieldSourceVersion)
+				fieldSeen[directoryaccounthistory.FieldSourceVersion] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directoryaccounthistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryAccountHistoryPaginateOption
+}
+
+func newDirectoryAccountHistoryPaginateArgs(rv map[string]any) *directoryaccounthistoryPaginateArgs {
+	args := &directoryaccounthistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &DirectoryAccountHistoryOrder{Field: &DirectoryAccountHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithDirectoryAccountHistoryOrder(order))
+			}
+		case *DirectoryAccountHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithDirectoryAccountHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryAccountHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryAccountHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryGroupQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryGroupQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryGroupQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directorygroup.Columns))
+		selectedFields = []string{directorygroup.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[directorygroup.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldOwnerID)
+				fieldSeen[directorygroup.FieldOwnerID] = struct{}{}
+			}
+
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[directorygroup.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldIntegrationID)
+				fieldSeen[directorygroup.FieldIntegrationID] = struct{}{}
+			}
+
+		case "directorySyncRun":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectorySyncRunClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorysyncrunImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectorySyncRun = query
+			if _, ok := fieldSeen[directorygroup.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDirectorySyncRunID)
+				fieldSeen[directorygroup.FieldDirectorySyncRunID] = struct{}{}
+			}
+
+		case "accounts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			args := newDirectoryAccountPaginateArgs(fieldArgs(ctx, new(DirectoryAccountWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryAccountPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_group_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							joinT := sql.Table(directorygroup.AccountsTable)
+							s.Join(joinT).On(s.C(directoryaccount.FieldID), joinT.C(directorygroup.AccountsPrimaryKey[0]))
+							s.Where(sql.InValues(joinT.C(directorygroup.AccountsPrimaryKey[1]), ids...))
+							s.Select(joinT.C(directorygroup.AccountsPrimaryKey[1]), sql.Count("*"))
+							s.GroupBy(joinT.C(directorygroup.AccountsPrimaryKey[1]))
+						})
+						if err := query.Select().Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Accounts)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorygroup.AccountsPrimaryKey[1], limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedAccounts(alias, func(wq *DirectoryAccountQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_group_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorygroup.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(directorygroup.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorygroup.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+
+		case "members":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryGroup) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_group_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorygroup.MembersColumn), ids...))
+						})
+						if err := query.GroupBy(directorygroup.MembersColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryGroup) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Members)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorygroup.MembersColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedMembers(alias, func(wq *DirectoryMembershipQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[directorygroup.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldCreatedAt)
+				fieldSeen[directorygroup.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directorygroup.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldUpdatedAt)
+				fieldSeen[directorygroup.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directorygroup.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldCreatedBy)
+				fieldSeen[directorygroup.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directorygroup.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldUpdatedBy)
+				fieldSeen[directorygroup.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directorygroup.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDisplayID)
+				fieldSeen[directorygroup.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[directorygroup.FieldTags]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldTags)
+				fieldSeen[directorygroup.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directorygroup.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldOwnerID)
+				fieldSeen[directorygroup.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directorygroup.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldIntegrationID)
+				fieldSeen[directorygroup.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directorygroup.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDirectorySyncRunID)
+				fieldSeen[directorygroup.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[directorygroup.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldExternalID)
+				fieldSeen[directorygroup.FieldExternalID] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[directorygroup.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldEmail)
+				fieldSeen[directorygroup.FieldEmail] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[directorygroup.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDisplayName)
+				fieldSeen[directorygroup.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[directorygroup.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldDescription)
+				fieldSeen[directorygroup.FieldDescription] = struct{}{}
+			}
+		case "classification":
+			if _, ok := fieldSeen[directorygroup.FieldClassification]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldClassification)
+				fieldSeen[directorygroup.FieldClassification] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[directorygroup.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldStatus)
+				fieldSeen[directorygroup.FieldStatus] = struct{}{}
+			}
+		case "externalSharingAllowed":
+			if _, ok := fieldSeen[directorygroup.FieldExternalSharingAllowed]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldExternalSharingAllowed)
+				fieldSeen[directorygroup.FieldExternalSharingAllowed] = struct{}{}
+			}
+		case "memberCount":
+			if _, ok := fieldSeen[directorygroup.FieldMemberCount]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldMemberCount)
+				fieldSeen[directorygroup.FieldMemberCount] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directorygroup.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldObservedAt)
+				fieldSeen[directorygroup.FieldObservedAt] = struct{}{}
+			}
+		case "profileHash":
+			if _, ok := fieldSeen[directorygroup.FieldProfileHash]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldProfileHash)
+				fieldSeen[directorygroup.FieldProfileHash] = struct{}{}
+			}
+		case "profile":
+			if _, ok := fieldSeen[directorygroup.FieldProfile]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldProfile)
+				fieldSeen[directorygroup.FieldProfile] = struct{}{}
+			}
+		case "rawProfileFileID":
+			if _, ok := fieldSeen[directorygroup.FieldRawProfileFileID]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldRawProfileFileID)
+				fieldSeen[directorygroup.FieldRawProfileFileID] = struct{}{}
+			}
+		case "sourceVersion":
+			if _, ok := fieldSeen[directorygroup.FieldSourceVersion]; !ok {
+				selectedFields = append(selectedFields, directorygroup.FieldSourceVersion)
+				fieldSeen[directorygroup.FieldSourceVersion] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directorygroupPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryGroupPaginateOption
+}
+
+func newDirectoryGroupPaginateArgs(rv map[string]any) *directorygroupPaginateArgs {
+	args := &directorygroupPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DirectoryGroupOrder:
+			args.opts = append(args.opts, WithDirectoryGroupOrder(v))
+		case []any:
+			var orders []*DirectoryGroupOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DirectoryGroupOrder{Field: &DirectoryGroupOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDirectoryGroupOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryGroupWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryGroupFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryGroupHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryGroupHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryGroupHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directorygrouphistory.Columns))
+		selectedFields = []string{directorygrouphistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[directorygrouphistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldHistoryTime)
+				fieldSeen[directorygrouphistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[directorygrouphistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldRef)
+				fieldSeen[directorygrouphistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[directorygrouphistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldOperation)
+				fieldSeen[directorygrouphistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[directorygrouphistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldCreatedAt)
+				fieldSeen[directorygrouphistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directorygrouphistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldUpdatedAt)
+				fieldSeen[directorygrouphistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directorygrouphistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldCreatedBy)
+				fieldSeen[directorygrouphistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directorygrouphistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldUpdatedBy)
+				fieldSeen[directorygrouphistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldDisplayID)
+				fieldSeen[directorygrouphistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[directorygrouphistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldTags)
+				fieldSeen[directorygrouphistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldOwnerID)
+				fieldSeen[directorygrouphistory.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldIntegrationID)
+				fieldSeen[directorygrouphistory.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldDirectorySyncRunID)
+				fieldSeen[directorygrouphistory.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "externalID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldExternalID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldExternalID)
+				fieldSeen[directorygrouphistory.FieldExternalID] = struct{}{}
+			}
+		case "email":
+			if _, ok := fieldSeen[directorygrouphistory.FieldEmail]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldEmail)
+				fieldSeen[directorygrouphistory.FieldEmail] = struct{}{}
+			}
+		case "displayName":
+			if _, ok := fieldSeen[directorygrouphistory.FieldDisplayName]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldDisplayName)
+				fieldSeen[directorygrouphistory.FieldDisplayName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[directorygrouphistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldDescription)
+				fieldSeen[directorygrouphistory.FieldDescription] = struct{}{}
+			}
+		case "classification":
+			if _, ok := fieldSeen[directorygrouphistory.FieldClassification]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldClassification)
+				fieldSeen[directorygrouphistory.FieldClassification] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[directorygrouphistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldStatus)
+				fieldSeen[directorygrouphistory.FieldStatus] = struct{}{}
+			}
+		case "externalSharingAllowed":
+			if _, ok := fieldSeen[directorygrouphistory.FieldExternalSharingAllowed]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldExternalSharingAllowed)
+				fieldSeen[directorygrouphistory.FieldExternalSharingAllowed] = struct{}{}
+			}
+		case "memberCount":
+			if _, ok := fieldSeen[directorygrouphistory.FieldMemberCount]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldMemberCount)
+				fieldSeen[directorygrouphistory.FieldMemberCount] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directorygrouphistory.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldObservedAt)
+				fieldSeen[directorygrouphistory.FieldObservedAt] = struct{}{}
+			}
+		case "profileHash":
+			if _, ok := fieldSeen[directorygrouphistory.FieldProfileHash]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldProfileHash)
+				fieldSeen[directorygrouphistory.FieldProfileHash] = struct{}{}
+			}
+		case "profile":
+			if _, ok := fieldSeen[directorygrouphistory.FieldProfile]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldProfile)
+				fieldSeen[directorygrouphistory.FieldProfile] = struct{}{}
+			}
+		case "rawProfileFileID":
+			if _, ok := fieldSeen[directorygrouphistory.FieldRawProfileFileID]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldRawProfileFileID)
+				fieldSeen[directorygrouphistory.FieldRawProfileFileID] = struct{}{}
+			}
+		case "sourceVersion":
+			if _, ok := fieldSeen[directorygrouphistory.FieldSourceVersion]; !ok {
+				selectedFields = append(selectedFields, directorygrouphistory.FieldSourceVersion)
+				fieldSeen[directorygrouphistory.FieldSourceVersion] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directorygrouphistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryGroupHistoryPaginateOption
+}
+
+func newDirectoryGroupHistoryPaginateArgs(rv map[string]any) *directorygrouphistoryPaginateArgs {
+	args := &directorygrouphistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &DirectoryGroupHistoryOrder{Field: &DirectoryGroupHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithDirectoryGroupHistoryOrder(order))
+			}
+		case *DirectoryGroupHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithDirectoryGroupHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryGroupHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryGroupHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryMembershipQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryMembershipQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryMembershipQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directorymembership.Columns))
+		selectedFields = []string{directorymembership.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[directorymembership.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldOwnerID)
+				fieldSeen[directorymembership.FieldOwnerID] = struct{}{}
+			}
+
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[directorymembership.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldIntegrationID)
+				fieldSeen[directorymembership.FieldIntegrationID] = struct{}{}
+			}
+
+		case "directorySyncRun":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectorySyncRunClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorysyncrunImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectorySyncRun = query
+			if _, ok := fieldSeen[directorymembership.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectorySyncRunID)
+				fieldSeen[directorymembership.FieldDirectorySyncRunID] = struct{}{}
+			}
+
+		case "directoryAccount":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectoryAccount = query
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryAccountID)
+				fieldSeen[directorymembership.FieldDirectoryAccountID] = struct{}{}
+			}
+
+		case "directoryGroup":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectoryGroup = query
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryGroupID)
+				fieldSeen[directorymembership.FieldDirectoryGroupID] = struct{}{}
+			}
+
+		case "events":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&EventClient{config: _q.config}).Query()
+			)
+			args := newEventPaginateArgs(fieldArgs(ctx, new(EventWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newEventPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryMembership) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_membership_events"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorymembership.EventsColumn), ids...))
+						})
+						if err := query.GroupBy(directorymembership.EventsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryMembership) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Events)
+							if nodes[i].Edges.totalCount[5] == nil {
+								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[5][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, eventImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorymembership.EventsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedEvents(alias, func(wq *EventQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectoryMembership) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_membership_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorymembership.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(directorymembership.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectoryMembership) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[6][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorymembership.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[directorymembership.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldCreatedAt)
+				fieldSeen[directorymembership.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directorymembership.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldUpdatedAt)
+				fieldSeen[directorymembership.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directorymembership.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldCreatedBy)
+				fieldSeen[directorymembership.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directorymembership.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldUpdatedBy)
+				fieldSeen[directorymembership.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directorymembership.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDisplayID)
+				fieldSeen[directorymembership.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directorymembership.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldOwnerID)
+				fieldSeen[directorymembership.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directorymembership.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldIntegrationID)
+				fieldSeen[directorymembership.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directorymembership.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectorySyncRunID)
+				fieldSeen[directorymembership.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "directoryAccountID":
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryAccountID)
+				fieldSeen[directorymembership.FieldDirectoryAccountID] = struct{}{}
+			}
+		case "directoryGroupID":
+			if _, ok := fieldSeen[directorymembership.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldDirectoryGroupID)
+				fieldSeen[directorymembership.FieldDirectoryGroupID] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[directorymembership.FieldRole]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldRole)
+				fieldSeen[directorymembership.FieldRole] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[directorymembership.FieldSource]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldSource)
+				fieldSeen[directorymembership.FieldSource] = struct{}{}
+			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directorymembership.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldFirstSeenAt)
+				fieldSeen[directorymembership.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directorymembership.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldLastSeenAt)
+				fieldSeen[directorymembership.FieldLastSeenAt] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directorymembership.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldObservedAt)
+				fieldSeen[directorymembership.FieldObservedAt] = struct{}{}
+			}
+		case "lastConfirmedRunID":
+			if _, ok := fieldSeen[directorymembership.FieldLastConfirmedRunID]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldLastConfirmedRunID)
+				fieldSeen[directorymembership.FieldLastConfirmedRunID] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directorymembership.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directorymembership.FieldMetadata)
+				fieldSeen[directorymembership.FieldMetadata] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directorymembershipPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryMembershipPaginateOption
+}
+
+func newDirectoryMembershipPaginateArgs(rv map[string]any) *directorymembershipPaginateArgs {
+	args := &directorymembershipPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DirectoryMembershipOrder:
+			args.opts = append(args.opts, WithDirectoryMembershipOrder(v))
+		case []any:
+			var orders []*DirectoryMembershipOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DirectoryMembershipOrder{Field: &DirectoryMembershipOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDirectoryMembershipOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryMembershipWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryMembershipFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectoryMembershipHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectoryMembershipHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectoryMembershipHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directorymembershiphistory.Columns))
+		selectedFields = []string{directorymembershiphistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldHistoryTime)
+				fieldSeen[directorymembershiphistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldRef)
+				fieldSeen[directorymembershiphistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldOperation)
+				fieldSeen[directorymembershiphistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldCreatedAt)
+				fieldSeen[directorymembershiphistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldUpdatedAt)
+				fieldSeen[directorymembershiphistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldCreatedBy)
+				fieldSeen[directorymembershiphistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldUpdatedBy)
+				fieldSeen[directorymembershiphistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldDisplayID)
+				fieldSeen[directorymembershiphistory.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldOwnerID)
+				fieldSeen[directorymembershiphistory.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldIntegrationID)
+				fieldSeen[directorymembershiphistory.FieldIntegrationID] = struct{}{}
+			}
+		case "directorySyncRunID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectorySyncRunID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectorySyncRunID)
+				fieldSeen[directorymembershiphistory.FieldDirectorySyncRunID] = struct{}{}
+			}
+		case "directoryAccountID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectoryAccountID)
+				fieldSeen[directorymembershiphistory.FieldDirectoryAccountID] = struct{}{}
+			}
+		case "directoryGroupID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldDirectoryGroupID)
+				fieldSeen[directorymembershiphistory.FieldDirectoryGroupID] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldRole]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldRole)
+				fieldSeen[directorymembershiphistory.FieldRole] = struct{}{}
+			}
+		case "source":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldSource]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldSource)
+				fieldSeen[directorymembershiphistory.FieldSource] = struct{}{}
+			}
+		case "firstSeenAt":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldFirstSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldFirstSeenAt)
+				fieldSeen[directorymembershiphistory.FieldFirstSeenAt] = struct{}{}
+			}
+		case "lastSeenAt":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldLastSeenAt]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldLastSeenAt)
+				fieldSeen[directorymembershiphistory.FieldLastSeenAt] = struct{}{}
+			}
+		case "observedAt":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldObservedAt]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldObservedAt)
+				fieldSeen[directorymembershiphistory.FieldObservedAt] = struct{}{}
+			}
+		case "lastConfirmedRunID":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldLastConfirmedRunID]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldLastConfirmedRunID)
+				fieldSeen[directorymembershiphistory.FieldLastConfirmedRunID] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[directorymembershiphistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, directorymembershiphistory.FieldMetadata)
+				fieldSeen[directorymembershiphistory.FieldMetadata] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directorymembershiphistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectoryMembershipHistoryPaginateOption
+}
+
+func newDirectoryMembershipHistoryPaginateArgs(rv map[string]any) *directorymembershiphistoryPaginateArgs {
+	args := &directorymembershiphistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &DirectoryMembershipHistoryOrder{Field: &DirectoryMembershipHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithDirectoryMembershipHistoryOrder(order))
+			}
+		case *DirectoryMembershipHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithDirectoryMembershipHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*DirectoryMembershipHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithDirectoryMembershipHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *DirectorySyncRunQuery) CollectFields(ctx context.Context, satisfies ...string) (*DirectorySyncRunQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *DirectorySyncRunQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(directorysyncrun.Columns))
+		selectedFields = []string{directorysyncrun.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[directorysyncrun.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldOwnerID)
+				fieldSeen[directorysyncrun.FieldOwnerID] = struct{}{}
+			}
+
+		case "integration":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&IntegrationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, integrationImplementors)...); err != nil {
+				return err
+			}
+			_q.withIntegration = query
+			if _, ok := fieldSeen[directorysyncrun.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldIntegrationID)
+				fieldSeen[directorysyncrun.FieldIntegrationID] = struct{}{}
+			}
+
+		case "directoryAccounts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			args := newDirectoryAccountPaginateArgs(fieldArgs(ctx, new(DirectoryAccountWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryAccountPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectorySyncRun) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_sync_run_directory_accounts"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorysyncrun.DirectoryAccountsColumn), ids...))
+						})
+						if err := query.GroupBy(directorysyncrun.DirectoryAccountsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectorySyncRun) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryAccounts)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorysyncrun.DirectoryAccountsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryAccounts(alias, func(wq *DirectoryAccountQuery) {
+				*wq = *query
+			})
+
+		case "directoryGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			args := newDirectoryGroupPaginateArgs(fieldArgs(ctx, new(DirectoryGroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectorySyncRun) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_sync_run_directory_groups"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorysyncrun.DirectoryGroupsColumn), ids...))
+						})
+						if err := query.GroupBy(directorysyncrun.DirectoryGroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectorySyncRun) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryGroups)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorysyncrun.DirectoryGroupsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryGroups(alias, func(wq *DirectoryGroupQuery) {
+				*wq = *query
+			})
+
+		case "directoryMemberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*DirectorySyncRun) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"directory_sync_run_directory_memberships"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(directorysyncrun.DirectoryMembershipsColumn), ids...))
+						})
+						if err := query.GroupBy(directorysyncrun.DirectoryMembershipsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*DirectorySyncRun) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryMemberships)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(directorysyncrun.DirectoryMembershipsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryMemberships(alias, func(wq *DirectoryMembershipQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[directorysyncrun.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldCreatedAt)
+				fieldSeen[directorysyncrun.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[directorysyncrun.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldUpdatedAt)
+				fieldSeen[directorysyncrun.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[directorysyncrun.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldCreatedBy)
+				fieldSeen[directorysyncrun.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[directorysyncrun.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldUpdatedBy)
+				fieldSeen[directorysyncrun.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[directorysyncrun.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldDisplayID)
+				fieldSeen[directorysyncrun.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[directorysyncrun.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldOwnerID)
+				fieldSeen[directorysyncrun.FieldOwnerID] = struct{}{}
+			}
+		case "integrationID":
+			if _, ok := fieldSeen[directorysyncrun.FieldIntegrationID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldIntegrationID)
+				fieldSeen[directorysyncrun.FieldIntegrationID] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[directorysyncrun.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldStatus)
+				fieldSeen[directorysyncrun.FieldStatus] = struct{}{}
+			}
+		case "startedAt":
+			if _, ok := fieldSeen[directorysyncrun.FieldStartedAt]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldStartedAt)
+				fieldSeen[directorysyncrun.FieldStartedAt] = struct{}{}
+			}
+		case "completedAt":
+			if _, ok := fieldSeen[directorysyncrun.FieldCompletedAt]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldCompletedAt)
+				fieldSeen[directorysyncrun.FieldCompletedAt] = struct{}{}
+			}
+		case "sourceCursor":
+			if _, ok := fieldSeen[directorysyncrun.FieldSourceCursor]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldSourceCursor)
+				fieldSeen[directorysyncrun.FieldSourceCursor] = struct{}{}
+			}
+		case "fullCount":
+			if _, ok := fieldSeen[directorysyncrun.FieldFullCount]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldFullCount)
+				fieldSeen[directorysyncrun.FieldFullCount] = struct{}{}
+			}
+		case "deltaCount":
+			if _, ok := fieldSeen[directorysyncrun.FieldDeltaCount]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldDeltaCount)
+				fieldSeen[directorysyncrun.FieldDeltaCount] = struct{}{}
+			}
+		case "error":
+			if _, ok := fieldSeen[directorysyncrun.FieldError]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldError)
+				fieldSeen[directorysyncrun.FieldError] = struct{}{}
+			}
+		case "rawManifestFileID":
+			if _, ok := fieldSeen[directorysyncrun.FieldRawManifestFileID]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldRawManifestFileID)
+				fieldSeen[directorysyncrun.FieldRawManifestFileID] = struct{}{}
+			}
+		case "stats":
+			if _, ok := fieldSeen[directorysyncrun.FieldStats]; !ok {
+				selectedFields = append(selectedFields, directorysyncrun.FieldStats)
+				fieldSeen[directorysyncrun.FieldStats] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type directorysyncrunPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []DirectorySyncRunPaginateOption
+}
+
+func newDirectorySyncRunPaginateArgs(rv map[string]any) *directorysyncrunPaginateArgs {
+	args := &directorysyncrunPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*DirectorySyncRunOrder:
+			args.opts = append(args.opts, WithDirectorySyncRunOrder(v))
+		case []any:
+			var orders []*DirectorySyncRunOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &DirectorySyncRunOrder{Field: &DirectorySyncRunOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithDirectorySyncRunOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*DirectorySyncRunWhereInput); ok {
+		args.opts = append(args.opts, WithDirectorySyncRunFilter(v.Filter))
 	}
 	return args
 }
@@ -18189,6 +20886,95 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 				*wq = *query
 			})
 
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Finding) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"finding_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(finding.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(finding.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[19][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Finding) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[19] == nil {
+								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[19][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(finding.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+
 		case "controlMappings":
 			var (
 				alias = field.Alias
@@ -18232,10 +21018,10 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[19] == nil {
-								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[19][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -18243,10 +21029,10 @@ func (_q *FindingQuery) collectField(ctx context.Context, oneNode bool, opCtx *g
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Finding) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.ControlMappings)
-							if nodes[i].Edges.totalCount[19] == nil {
-								nodes[i].Edges.totalCount[19] = make(map[string]int)
+							if nodes[i].Edges.totalCount[20] == nil {
+								nodes[i].Edges.totalCount[20] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[19][alias] = n
+							nodes[i].Edges.totalCount[20][alias] = n
 						}
 						return nil
 					})
@@ -25095,6 +27881,362 @@ func (_q *IntegrationQuery) collectField(ctx context.Context, oneNode bool, opCt
 			_q.WithNamedActionPlans(alias, func(wq *ActionPlanQuery) {
 				*wq = *query
 			})
+
+		case "directoryAccounts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			args := newDirectoryAccountPaginateArgs(fieldArgs(ctx, new(DirectoryAccountWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryAccountPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_directory_accounts"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.DirectoryAccountsColumn), ids...))
+						})
+						if err := query.GroupBy(integration.DirectoryAccountsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[10][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryAccounts)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[10][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.DirectoryAccountsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryAccounts(alias, func(wq *DirectoryAccountQuery) {
+				*wq = *query
+			})
+
+		case "directoryGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			args := newDirectoryGroupPaginateArgs(fieldArgs(ctx, new(DirectoryGroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_directory_groups"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.DirectoryGroupsColumn), ids...))
+						})
+						if err := query.GroupBy(integration.DirectoryGroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[11] == nil {
+								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[11][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryGroups)
+							if nodes[i].Edges.totalCount[11] == nil {
+								nodes[i].Edges.totalCount[11] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[11][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.DirectoryGroupsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryGroups(alias, func(wq *DirectoryGroupQuery) {
+				*wq = *query
+			})
+
+		case "directoryMemberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_directory_memberships"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.DirectoryMembershipsColumn), ids...))
+						})
+						if err := query.GroupBy(integration.DirectoryMembershipsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[12] == nil {
+								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[12][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryMemberships)
+							if nodes[i].Edges.totalCount[12] == nil {
+								nodes[i].Edges.totalCount[12] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[12][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.DirectoryMembershipsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryMemberships(alias, func(wq *DirectoryMembershipQuery) {
+				*wq = *query
+			})
+
+		case "directorySyncRuns":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectorySyncRunClient{config: _q.config}).Query()
+			)
+			args := newDirectorySyncRunPaginateArgs(fieldArgs(ctx, new(DirectorySyncRunWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectorySyncRunPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Integration) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"integration_directory_sync_runs"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(integration.DirectorySyncRunsColumn), ids...))
+						})
+						if err := query.GroupBy(integration.DirectorySyncRunsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Integration) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectorySyncRuns)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorysyncrunImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(integration.DirectorySyncRunsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectorySyncRuns(alias, func(wq *DirectorySyncRunQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[integration.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, integration.FieldCreatedAt)
@@ -26605,6 +29747,95 @@ func (_q *InternalPolicyQuery) collectField(ctx context.Context, oneNode bool, o
 				query = pager.applyOrder(query)
 			}
 			_q.WithNamedComments(alias, func(wq *NoteQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*InternalPolicy) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"internal_policy_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(internalpolicy.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(internalpolicy.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[17] == nil {
+								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[17][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*InternalPolicy) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[17] == nil {
+								nodes[i].Edges.totalCount[17] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[17][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(internalpolicy.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -38504,6 +41735,896 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 				*wq = *query
 			})
 
+		case "workflowDefinitions":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowDefinitionClient{config: _q.config}).Query()
+			)
+			args := newWorkflowDefinitionPaginateArgs(fieldArgs(ctx, new(WorkflowDefinitionWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowDefinitionPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowDefinitionsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowDefinitionsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[72] == nil {
+								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[72][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowDefinitions)
+							if nodes[i].Edges.totalCount[72] == nil {
+								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[72][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowdefinitionImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowDefinitionsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowDefinitions(alias, func(wq *WorkflowDefinitionQuery) {
+				*wq = *query
+			})
+
+		case "workflowInstances":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowInstanceClient{config: _q.config}).Query()
+			)
+			args := newWorkflowInstancePaginateArgs(fieldArgs(ctx, new(WorkflowInstanceWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowInstancePager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowInstancesColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowInstancesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[73] == nil {
+								nodes[i].Edges.totalCount[73] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[73][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowInstances)
+							if nodes[i].Edges.totalCount[73] == nil {
+								nodes[i].Edges.totalCount[73] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[73][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowinstanceImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowInstancesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowInstances(alias, func(wq *WorkflowInstanceQuery) {
+				*wq = *query
+			})
+
+		case "workflowEvents":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowEventClient{config: _q.config}).Query()
+			)
+			args := newWorkflowEventPaginateArgs(fieldArgs(ctx, new(WorkflowEventWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowEventPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowEventsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowEventsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[74] == nil {
+								nodes[i].Edges.totalCount[74] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[74][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowEvents)
+							if nodes[i].Edges.totalCount[74] == nil {
+								nodes[i].Edges.totalCount[74] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[74][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workfloweventImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowEventsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowEvents(alias, func(wq *WorkflowEventQuery) {
+				*wq = *query
+			})
+
+		case "workflowAssignments":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowAssignmentClient{config: _q.config}).Query()
+			)
+			args := newWorkflowAssignmentPaginateArgs(fieldArgs(ctx, new(WorkflowAssignmentWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowAssignmentPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowAssignmentsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowAssignmentsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[75] == nil {
+								nodes[i].Edges.totalCount[75] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[75][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowAssignments)
+							if nodes[i].Edges.totalCount[75] == nil {
+								nodes[i].Edges.totalCount[75] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[75][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowassignmentImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowAssignmentsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowAssignments(alias, func(wq *WorkflowAssignmentQuery) {
+				*wq = *query
+			})
+
+		case "workflowAssignmentTargets":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowAssignmentTargetClient{config: _q.config}).Query()
+			)
+			args := newWorkflowAssignmentTargetPaginateArgs(fieldArgs(ctx, new(WorkflowAssignmentTargetWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowAssignmentTargetPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowAssignmentTargetsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowAssignmentTargetsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[76] == nil {
+								nodes[i].Edges.totalCount[76] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[76][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowAssignmentTargets)
+							if nodes[i].Edges.totalCount[76] == nil {
+								nodes[i].Edges.totalCount[76] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[76][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowassignmenttargetImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowAssignmentTargetsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowAssignmentTargets(alias, func(wq *WorkflowAssignmentTargetQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[77] == nil {
+								nodes[i].Edges.totalCount[77] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[77][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[77] == nil {
+								nodes[i].Edges.totalCount[77] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[77][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+
+		case "directoryAccounts":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			args := newDirectoryAccountPaginateArgs(fieldArgs(ctx, new(DirectoryAccountWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryAccountPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.DirectoryAccountsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.DirectoryAccountsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[78] == nil {
+								nodes[i].Edges.totalCount[78] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[78][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryAccounts)
+							if nodes[i].Edges.totalCount[78] == nil {
+								nodes[i].Edges.totalCount[78] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[78][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.DirectoryAccountsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryAccounts(alias, func(wq *DirectoryAccountQuery) {
+				*wq = *query
+			})
+
+		case "directoryGroups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			args := newDirectoryGroupPaginateArgs(fieldArgs(ctx, new(DirectoryGroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.DirectoryGroupsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.DirectoryGroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[79] == nil {
+								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[79][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryGroups)
+							if nodes[i].Edges.totalCount[79] == nil {
+								nodes[i].Edges.totalCount[79] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[79][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.DirectoryGroupsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryGroups(alias, func(wq *DirectoryGroupQuery) {
+				*wq = *query
+			})
+
+		case "directoryMemberships":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			args := newDirectoryMembershipPaginateArgs(fieldArgs(ctx, new(DirectoryMembershipWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectoryMembershipPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.DirectoryMembershipsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.DirectoryMembershipsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[80][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectoryMemberships)
+							if nodes[i].Edges.totalCount[80] == nil {
+								nodes[i].Edges.totalCount[80] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[80][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.DirectoryMembershipsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectoryMemberships(alias, func(wq *DirectoryMembershipQuery) {
+				*wq = *query
+			})
+
+		case "directorySyncRuns":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectorySyncRunClient{config: _q.config}).Query()
+			)
+			args := newDirectorySyncRunPaginateArgs(fieldArgs(ctx, new(DirectorySyncRunWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newDirectorySyncRunPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Organization) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"owner_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(organization.DirectorySyncRunsColumn), ids...))
+						})
+						if err := query.GroupBy(organization.DirectorySyncRunsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[81] == nil {
+								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[81][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.DirectorySyncRuns)
+							if nodes[i].Edges.totalCount[81] == nil {
+								nodes[i].Edges.totalCount[81] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[81][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, directorysyncrunImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(organization.DirectorySyncRunsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedDirectorySyncRuns(alias, func(wq *DirectorySyncRunQuery) {
+				*wq = *query
+			})
+
 		case "members":
 			var (
 				alias = field.Alias
@@ -38547,10 +42668,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[72] == nil {
-								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[72][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -38558,10 +42679,10 @@ func (_q *OrganizationQuery) collectField(ctx context.Context, oneNode bool, opC
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Organization) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Members)
-							if nodes[i].Edges.totalCount[72] == nil {
-								nodes[i].Edges.totalCount[72] = make(map[string]int)
+							if nodes[i].Edges.totalCount[82] == nil {
+								nodes[i].Edges.totalCount[82] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[72][alias] = n
+							nodes[i].Edges.totalCount[82][alias] = n
 						}
 						return nil
 					})
@@ -55539,6 +59660,95 @@ func (_q *TaskQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 			_q.WithNamedEvidence(alias, func(wq *EvidenceQuery) {
 				*wq = *query
 			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*Task) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"task_id"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(task.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(task.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[16][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*Task) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[16] == nil {
+								nodes[i].Edges.totalCount[16] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[16][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(task.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
 		case "createdAt":
 			if _, ok := fieldSeen[task.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, task.FieldCreatedAt)
@@ -63840,6 +68050,2904 @@ func newWebauthnPaginateArgs(rv map[string]any) *webauthnPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*WebauthnWhereInput); ok {
 		args.opts = append(args.opts, WithWebauthnFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowAssignmentQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowAssignmentQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowAssignmentQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowassignment.Columns))
+		selectedFields = []string{workflowassignment.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowassignment.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldOwnerID)
+				fieldSeen[workflowassignment.FieldOwnerID] = struct{}{}
+			}
+
+		case "workflowInstance":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowInstanceClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, workflowinstanceImplementors)...); err != nil {
+				return err
+			}
+			_q.withWorkflowInstance = query
+			if _, ok := fieldSeen[workflowassignment.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldWorkflowInstanceID)
+				fieldSeen[workflowassignment.FieldWorkflowInstanceID] = struct{}{}
+			}
+
+		case "workflowAssignmentTargets":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowAssignmentTargetClient{config: _q.config}).Query()
+			)
+			args := newWorkflowAssignmentTargetPaginateArgs(fieldArgs(ctx, new(WorkflowAssignmentTargetWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowAssignmentTargetPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowAssignment) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_assignment_workflow_assignment_targets"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowassignment.WorkflowAssignmentTargetsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowassignment.WorkflowAssignmentTargetsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowAssignment) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowAssignmentTargets)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowassignmenttargetImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowassignment.WorkflowAssignmentTargetsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowAssignmentTargets(alias, func(wq *WorkflowAssignmentTargetQuery) {
+				*wq = *query
+			})
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			_q.withUser = query
+			if _, ok := fieldSeen[workflowassignment.FieldActorUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldActorUserID)
+				fieldSeen[workflowassignment.FieldActorUserID] = struct{}{}
+			}
+
+		case "group":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			_q.withGroup = query
+			if _, ok := fieldSeen[workflowassignment.FieldActorGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldActorGroupID)
+				fieldSeen[workflowassignment.FieldActorGroupID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowassignment.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldCreatedAt)
+				fieldSeen[workflowassignment.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowassignment.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldUpdatedAt)
+				fieldSeen[workflowassignment.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowassignment.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldCreatedBy)
+				fieldSeen[workflowassignment.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowassignment.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldUpdatedBy)
+				fieldSeen[workflowassignment.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowassignment.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldDisplayID)
+				fieldSeen[workflowassignment.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowassignment.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldTags)
+				fieldSeen[workflowassignment.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowassignment.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldOwnerID)
+				fieldSeen[workflowassignment.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workflowassignment.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldWorkflowInstanceID)
+				fieldSeen[workflowassignment.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "assignmentKey":
+			if _, ok := fieldSeen[workflowassignment.FieldAssignmentKey]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldAssignmentKey)
+				fieldSeen[workflowassignment.FieldAssignmentKey] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[workflowassignment.FieldRole]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldRole)
+				fieldSeen[workflowassignment.FieldRole] = struct{}{}
+			}
+		case "label":
+			if _, ok := fieldSeen[workflowassignment.FieldLabel]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldLabel)
+				fieldSeen[workflowassignment.FieldLabel] = struct{}{}
+			}
+		case "required":
+			if _, ok := fieldSeen[workflowassignment.FieldRequired]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldRequired)
+				fieldSeen[workflowassignment.FieldRequired] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[workflowassignment.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldStatus)
+				fieldSeen[workflowassignment.FieldStatus] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[workflowassignment.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldMetadata)
+				fieldSeen[workflowassignment.FieldMetadata] = struct{}{}
+			}
+		case "decidedAt":
+			if _, ok := fieldSeen[workflowassignment.FieldDecidedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldDecidedAt)
+				fieldSeen[workflowassignment.FieldDecidedAt] = struct{}{}
+			}
+		case "actorUserID":
+			if _, ok := fieldSeen[workflowassignment.FieldActorUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldActorUserID)
+				fieldSeen[workflowassignment.FieldActorUserID] = struct{}{}
+			}
+		case "actorGroupID":
+			if _, ok := fieldSeen[workflowassignment.FieldActorGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldActorGroupID)
+				fieldSeen[workflowassignment.FieldActorGroupID] = struct{}{}
+			}
+		case "notes":
+			if _, ok := fieldSeen[workflowassignment.FieldNotes]; !ok {
+				selectedFields = append(selectedFields, workflowassignment.FieldNotes)
+				fieldSeen[workflowassignment.FieldNotes] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowassignmentPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowAssignmentPaginateOption
+}
+
+func newWorkflowAssignmentPaginateArgs(rv map[string]any) *workflowassignmentPaginateArgs {
+	args := &workflowassignmentPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowAssignmentOrder:
+			args.opts = append(args.opts, WithWorkflowAssignmentOrder(v))
+		case []any:
+			var orders []*WorkflowAssignmentOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowAssignmentOrder{Field: &WorkflowAssignmentOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowAssignmentOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowAssignmentWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowAssignmentFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowAssignmentHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowAssignmentHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowAssignmentHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowassignmenthistory.Columns))
+		selectedFields = []string{workflowassignmenthistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldHistoryTime)
+				fieldSeen[workflowassignmenthistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldRef)
+				fieldSeen[workflowassignmenthistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldOperation)
+				fieldSeen[workflowassignmenthistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldCreatedAt)
+				fieldSeen[workflowassignmenthistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldUpdatedAt)
+				fieldSeen[workflowassignmenthistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldCreatedBy)
+				fieldSeen[workflowassignmenthistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldUpdatedBy)
+				fieldSeen[workflowassignmenthistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldDisplayID)
+				fieldSeen[workflowassignmenthistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldTags)
+				fieldSeen[workflowassignmenthistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldOwnerID)
+				fieldSeen[workflowassignmenthistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldWorkflowInstanceID)
+				fieldSeen[workflowassignmenthistory.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "assignmentKey":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldAssignmentKey]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldAssignmentKey)
+				fieldSeen[workflowassignmenthistory.FieldAssignmentKey] = struct{}{}
+			}
+		case "role":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldRole]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldRole)
+				fieldSeen[workflowassignmenthistory.FieldRole] = struct{}{}
+			}
+		case "label":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldLabel]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldLabel)
+				fieldSeen[workflowassignmenthistory.FieldLabel] = struct{}{}
+			}
+		case "required":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldRequired]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldRequired)
+				fieldSeen[workflowassignmenthistory.FieldRequired] = struct{}{}
+			}
+		case "status":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldStatus]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldStatus)
+				fieldSeen[workflowassignmenthistory.FieldStatus] = struct{}{}
+			}
+		case "metadata":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldMetadata]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldMetadata)
+				fieldSeen[workflowassignmenthistory.FieldMetadata] = struct{}{}
+			}
+		case "decidedAt":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldDecidedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldDecidedAt)
+				fieldSeen[workflowassignmenthistory.FieldDecidedAt] = struct{}{}
+			}
+		case "actorUserID":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldActorUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldActorUserID)
+				fieldSeen[workflowassignmenthistory.FieldActorUserID] = struct{}{}
+			}
+		case "actorGroupID":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldActorGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldActorGroupID)
+				fieldSeen[workflowassignmenthistory.FieldActorGroupID] = struct{}{}
+			}
+		case "notes":
+			if _, ok := fieldSeen[workflowassignmenthistory.FieldNotes]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenthistory.FieldNotes)
+				fieldSeen[workflowassignmenthistory.FieldNotes] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowassignmenthistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowAssignmentHistoryPaginateOption
+}
+
+func newWorkflowAssignmentHistoryPaginateArgs(rv map[string]any) *workflowassignmenthistoryPaginateArgs {
+	args := &workflowassignmenthistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowAssignmentHistoryOrder{Field: &WorkflowAssignmentHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowAssignmentHistoryOrder(order))
+			}
+		case *WorkflowAssignmentHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowAssignmentHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowAssignmentHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowAssignmentHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowAssignmentTargetQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowAssignmentTargetQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowAssignmentTargetQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowassignmenttarget.Columns))
+		selectedFields = []string{workflowassignmenttarget.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldOwnerID)
+				fieldSeen[workflowassignmenttarget.FieldOwnerID] = struct{}{}
+			}
+
+		case "workflowAssignment":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowAssignmentClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, workflowassignmentImplementors)...); err != nil {
+				return err
+			}
+			_q.withWorkflowAssignment = query
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldWorkflowAssignmentID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldWorkflowAssignmentID)
+				fieldSeen[workflowassignmenttarget.FieldWorkflowAssignmentID] = struct{}{}
+			}
+
+		case "user":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&UserClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, userImplementors)...); err != nil {
+				return err
+			}
+			_q.withUser = query
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTargetUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTargetUserID)
+				fieldSeen[workflowassignmenttarget.FieldTargetUserID] = struct{}{}
+			}
+
+		case "group":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+				return err
+			}
+			_q.withGroup = query
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTargetGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTargetGroupID)
+				fieldSeen[workflowassignmenttarget.FieldTargetGroupID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldCreatedAt)
+				fieldSeen[workflowassignmenttarget.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldUpdatedAt)
+				fieldSeen[workflowassignmenttarget.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldCreatedBy)
+				fieldSeen[workflowassignmenttarget.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldUpdatedBy)
+				fieldSeen[workflowassignmenttarget.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldDisplayID)
+				fieldSeen[workflowassignmenttarget.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTags)
+				fieldSeen[workflowassignmenttarget.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldOwnerID)
+				fieldSeen[workflowassignmenttarget.FieldOwnerID] = struct{}{}
+			}
+		case "workflowAssignmentID":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldWorkflowAssignmentID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldWorkflowAssignmentID)
+				fieldSeen[workflowassignmenttarget.FieldWorkflowAssignmentID] = struct{}{}
+			}
+		case "targetType":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTargetType]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTargetType)
+				fieldSeen[workflowassignmenttarget.FieldTargetType] = struct{}{}
+			}
+		case "targetUserID":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTargetUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTargetUserID)
+				fieldSeen[workflowassignmenttarget.FieldTargetUserID] = struct{}{}
+			}
+		case "targetGroupID":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldTargetGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldTargetGroupID)
+				fieldSeen[workflowassignmenttarget.FieldTargetGroupID] = struct{}{}
+			}
+		case "resolverKey":
+			if _, ok := fieldSeen[workflowassignmenttarget.FieldResolverKey]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttarget.FieldResolverKey)
+				fieldSeen[workflowassignmenttarget.FieldResolverKey] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowassignmenttargetPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowAssignmentTargetPaginateOption
+}
+
+func newWorkflowAssignmentTargetPaginateArgs(rv map[string]any) *workflowassignmenttargetPaginateArgs {
+	args := &workflowassignmenttargetPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowAssignmentTargetOrder:
+			args.opts = append(args.opts, WithWorkflowAssignmentTargetOrder(v))
+		case []any:
+			var orders []*WorkflowAssignmentTargetOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowAssignmentTargetOrder{Field: &WorkflowAssignmentTargetOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowAssignmentTargetOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowAssignmentTargetWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowAssignmentTargetFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowAssignmentTargetHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowAssignmentTargetHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowAssignmentTargetHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowassignmenttargethistory.Columns))
+		selectedFields = []string{workflowassignmenttargethistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldHistoryTime)
+				fieldSeen[workflowassignmenttargethistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldRef)
+				fieldSeen[workflowassignmenttargethistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldOperation)
+				fieldSeen[workflowassignmenttargethistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldCreatedAt)
+				fieldSeen[workflowassignmenttargethistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldUpdatedAt)
+				fieldSeen[workflowassignmenttargethistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldCreatedBy)
+				fieldSeen[workflowassignmenttargethistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldUpdatedBy)
+				fieldSeen[workflowassignmenttargethistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldDisplayID)
+				fieldSeen[workflowassignmenttargethistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldTags)
+				fieldSeen[workflowassignmenttargethistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldOwnerID)
+				fieldSeen[workflowassignmenttargethistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowAssignmentID":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldWorkflowAssignmentID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldWorkflowAssignmentID)
+				fieldSeen[workflowassignmenttargethistory.FieldWorkflowAssignmentID] = struct{}{}
+			}
+		case "targetType":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldTargetType]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldTargetType)
+				fieldSeen[workflowassignmenttargethistory.FieldTargetType] = struct{}{}
+			}
+		case "targetUserID":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldTargetUserID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldTargetUserID)
+				fieldSeen[workflowassignmenttargethistory.FieldTargetUserID] = struct{}{}
+			}
+		case "targetGroupID":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldTargetGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldTargetGroupID)
+				fieldSeen[workflowassignmenttargethistory.FieldTargetGroupID] = struct{}{}
+			}
+		case "resolverKey":
+			if _, ok := fieldSeen[workflowassignmenttargethistory.FieldResolverKey]; !ok {
+				selectedFields = append(selectedFields, workflowassignmenttargethistory.FieldResolverKey)
+				fieldSeen[workflowassignmenttargethistory.FieldResolverKey] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowassignmenttargethistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowAssignmentTargetHistoryPaginateOption
+}
+
+func newWorkflowAssignmentTargetHistoryPaginateArgs(rv map[string]any) *workflowassignmenttargethistoryPaginateArgs {
+	args := &workflowassignmenttargethistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowAssignmentTargetHistoryOrder{Field: &WorkflowAssignmentTargetHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowAssignmentTargetHistoryOrder(order))
+			}
+		case *WorkflowAssignmentTargetHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowAssignmentTargetHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowAssignmentTargetHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowAssignmentTargetHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowDefinitionQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowDefinitionQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowDefinitionQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowdefinition.Columns))
+		selectedFields = []string{workflowdefinition.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowdefinition.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldOwnerID)
+				fieldSeen[workflowdefinition.FieldOwnerID] = struct{}{}
+			}
+
+		case "tagDefinitions":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TagDefinitionClient{config: _q.config}).Query()
+			)
+			args := newTagDefinitionPaginateArgs(fieldArgs(ctx, new(TagDefinitionWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTagDefinitionPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_definition_tag_definitions"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowdefinition.TagDefinitionsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowdefinition.TagDefinitionsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowDefinition) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TagDefinitions)
+							if nodes[i].Edges.totalCount[1] == nil {
+								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[1][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, tagdefinitionImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowdefinition.TagDefinitionsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTagDefinitions(alias, func(wq *TagDefinitionQuery) {
+				*wq = *query
+			})
+
+		case "groups":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&GroupClient{config: _q.config}).Query()
+			)
+			args := newGroupPaginateArgs(fieldArgs(ctx, new(GroupWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newGroupPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowDefinition) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_definition_groups"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowdefinition.GroupsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowdefinition.GroupsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowDefinition) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.Groups)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, groupImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowdefinition.GroupsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedGroups(alias, func(wq *GroupQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[workflowdefinition.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldCreatedAt)
+				fieldSeen[workflowdefinition.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowdefinition.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldUpdatedAt)
+				fieldSeen[workflowdefinition.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowdefinition.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldCreatedBy)
+				fieldSeen[workflowdefinition.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowdefinition.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldUpdatedBy)
+				fieldSeen[workflowdefinition.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowdefinition.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldDisplayID)
+				fieldSeen[workflowdefinition.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowdefinition.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldTags)
+				fieldSeen[workflowdefinition.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowdefinition.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldOwnerID)
+				fieldSeen[workflowdefinition.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[workflowdefinition.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldSystemOwned)
+				fieldSeen[workflowdefinition.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[workflowdefinition.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldInternalNotes)
+				fieldSeen[workflowdefinition.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[workflowdefinition.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldSystemInternalID)
+				fieldSeen[workflowdefinition.FieldSystemInternalID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[workflowdefinition.FieldName]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldName)
+				fieldSeen[workflowdefinition.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[workflowdefinition.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldDescription)
+				fieldSeen[workflowdefinition.FieldDescription] = struct{}{}
+			}
+		case "workflowKind":
+			if _, ok := fieldSeen[workflowdefinition.FieldWorkflowKind]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldWorkflowKind)
+				fieldSeen[workflowdefinition.FieldWorkflowKind] = struct{}{}
+			}
+		case "schemaType":
+			if _, ok := fieldSeen[workflowdefinition.FieldSchemaType]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldSchemaType)
+				fieldSeen[workflowdefinition.FieldSchemaType] = struct{}{}
+			}
+		case "revision":
+			if _, ok := fieldSeen[workflowdefinition.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldRevision)
+				fieldSeen[workflowdefinition.FieldRevision] = struct{}{}
+			}
+		case "draft":
+			if _, ok := fieldSeen[workflowdefinition.FieldDraft]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldDraft)
+				fieldSeen[workflowdefinition.FieldDraft] = struct{}{}
+			}
+		case "publishedAt":
+			if _, ok := fieldSeen[workflowdefinition.FieldPublishedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldPublishedAt)
+				fieldSeen[workflowdefinition.FieldPublishedAt] = struct{}{}
+			}
+		case "cooldownSeconds":
+			if _, ok := fieldSeen[workflowdefinition.FieldCooldownSeconds]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldCooldownSeconds)
+				fieldSeen[workflowdefinition.FieldCooldownSeconds] = struct{}{}
+			}
+		case "isDefault":
+			if _, ok := fieldSeen[workflowdefinition.FieldIsDefault]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldIsDefault)
+				fieldSeen[workflowdefinition.FieldIsDefault] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[workflowdefinition.FieldActive]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldActive)
+				fieldSeen[workflowdefinition.FieldActive] = struct{}{}
+			}
+		case "triggerOperations":
+			if _, ok := fieldSeen[workflowdefinition.FieldTriggerOperations]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldTriggerOperations)
+				fieldSeen[workflowdefinition.FieldTriggerOperations] = struct{}{}
+			}
+		case "triggerFields":
+			if _, ok := fieldSeen[workflowdefinition.FieldTriggerFields]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldTriggerFields)
+				fieldSeen[workflowdefinition.FieldTriggerFields] = struct{}{}
+			}
+		case "definitionJSON":
+			if _, ok := fieldSeen[workflowdefinition.FieldDefinitionJSON]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldDefinitionJSON)
+				fieldSeen[workflowdefinition.FieldDefinitionJSON] = struct{}{}
+			}
+		case "trackedFields":
+			if _, ok := fieldSeen[workflowdefinition.FieldTrackedFields]; !ok {
+				selectedFields = append(selectedFields, workflowdefinition.FieldTrackedFields)
+				fieldSeen[workflowdefinition.FieldTrackedFields] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowdefinitionPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowDefinitionPaginateOption
+}
+
+func newWorkflowDefinitionPaginateArgs(rv map[string]any) *workflowdefinitionPaginateArgs {
+	args := &workflowdefinitionPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowDefinitionOrder:
+			args.opts = append(args.opts, WithWorkflowDefinitionOrder(v))
+		case []any:
+			var orders []*WorkflowDefinitionOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowDefinitionOrder{Field: &WorkflowDefinitionOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowDefinitionOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowDefinitionWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowDefinitionFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowDefinitionHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowDefinitionHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowDefinitionHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowdefinitionhistory.Columns))
+		selectedFields = []string{workflowdefinitionhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldHistoryTime)
+				fieldSeen[workflowdefinitionhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldRef)
+				fieldSeen[workflowdefinitionhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldOperation)
+				fieldSeen[workflowdefinitionhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldCreatedAt)
+				fieldSeen[workflowdefinitionhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldUpdatedAt)
+				fieldSeen[workflowdefinitionhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldCreatedBy)
+				fieldSeen[workflowdefinitionhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldUpdatedBy)
+				fieldSeen[workflowdefinitionhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldDisplayID)
+				fieldSeen[workflowdefinitionhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTags)
+				fieldSeen[workflowdefinitionhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldOwnerID)
+				fieldSeen[workflowdefinitionhistory.FieldOwnerID] = struct{}{}
+			}
+		case "systemOwned":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldSystemOwned]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldSystemOwned)
+				fieldSeen[workflowdefinitionhistory.FieldSystemOwned] = struct{}{}
+			}
+		case "internalNotes":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldInternalNotes]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldInternalNotes)
+				fieldSeen[workflowdefinitionhistory.FieldInternalNotes] = struct{}{}
+			}
+		case "systemInternalID":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldSystemInternalID]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldSystemInternalID)
+				fieldSeen[workflowdefinitionhistory.FieldSystemInternalID] = struct{}{}
+			}
+		case "name":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldName]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldName)
+				fieldSeen[workflowdefinitionhistory.FieldName] = struct{}{}
+			}
+		case "description":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDescription]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldDescription)
+				fieldSeen[workflowdefinitionhistory.FieldDescription] = struct{}{}
+			}
+		case "workflowKind":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldWorkflowKind]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldWorkflowKind)
+				fieldSeen[workflowdefinitionhistory.FieldWorkflowKind] = struct{}{}
+			}
+		case "schemaType":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldSchemaType]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldSchemaType)
+				fieldSeen[workflowdefinitionhistory.FieldSchemaType] = struct{}{}
+			}
+		case "revision":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldRevision]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldRevision)
+				fieldSeen[workflowdefinitionhistory.FieldRevision] = struct{}{}
+			}
+		case "draft":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDraft]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldDraft)
+				fieldSeen[workflowdefinitionhistory.FieldDraft] = struct{}{}
+			}
+		case "publishedAt":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldPublishedAt]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldPublishedAt)
+				fieldSeen[workflowdefinitionhistory.FieldPublishedAt] = struct{}{}
+			}
+		case "cooldownSeconds":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldCooldownSeconds]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldCooldownSeconds)
+				fieldSeen[workflowdefinitionhistory.FieldCooldownSeconds] = struct{}{}
+			}
+		case "isDefault":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldIsDefault]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldIsDefault)
+				fieldSeen[workflowdefinitionhistory.FieldIsDefault] = struct{}{}
+			}
+		case "active":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldActive]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldActive)
+				fieldSeen[workflowdefinitionhistory.FieldActive] = struct{}{}
+			}
+		case "triggerOperations":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTriggerOperations]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTriggerOperations)
+				fieldSeen[workflowdefinitionhistory.FieldTriggerOperations] = struct{}{}
+			}
+		case "triggerFields":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTriggerFields]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTriggerFields)
+				fieldSeen[workflowdefinitionhistory.FieldTriggerFields] = struct{}{}
+			}
+		case "definitionJSON":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldDefinitionJSON]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldDefinitionJSON)
+				fieldSeen[workflowdefinitionhistory.FieldDefinitionJSON] = struct{}{}
+			}
+		case "trackedFields":
+			if _, ok := fieldSeen[workflowdefinitionhistory.FieldTrackedFields]; !ok {
+				selectedFields = append(selectedFields, workflowdefinitionhistory.FieldTrackedFields)
+				fieldSeen[workflowdefinitionhistory.FieldTrackedFields] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowdefinitionhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowDefinitionHistoryPaginateOption
+}
+
+func newWorkflowDefinitionHistoryPaginateArgs(rv map[string]any) *workflowdefinitionhistoryPaginateArgs {
+	args := &workflowdefinitionhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowDefinitionHistoryOrder{Field: &WorkflowDefinitionHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowDefinitionHistoryOrder(order))
+			}
+		case *WorkflowDefinitionHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowDefinitionHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowDefinitionHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowDefinitionHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowEventQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowEventQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowEventQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowevent.Columns))
+		selectedFields = []string{workflowevent.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowevent.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldOwnerID)
+				fieldSeen[workflowevent.FieldOwnerID] = struct{}{}
+			}
+
+		case "workflowInstance":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowInstanceClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, workflowinstanceImplementors)...); err != nil {
+				return err
+			}
+			_q.withWorkflowInstance = query
+			if _, ok := fieldSeen[workflowevent.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldWorkflowInstanceID)
+				fieldSeen[workflowevent.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowevent.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldCreatedAt)
+				fieldSeen[workflowevent.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowevent.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldUpdatedAt)
+				fieldSeen[workflowevent.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowevent.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldCreatedBy)
+				fieldSeen[workflowevent.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowevent.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldUpdatedBy)
+				fieldSeen[workflowevent.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowevent.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldDisplayID)
+				fieldSeen[workflowevent.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowevent.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldTags)
+				fieldSeen[workflowevent.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowevent.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldOwnerID)
+				fieldSeen[workflowevent.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workflowevent.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldWorkflowInstanceID)
+				fieldSeen[workflowevent.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "eventType":
+			if _, ok := fieldSeen[workflowevent.FieldEventType]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldEventType)
+				fieldSeen[workflowevent.FieldEventType] = struct{}{}
+			}
+		case "payload":
+			if _, ok := fieldSeen[workflowevent.FieldPayload]; !ok {
+				selectedFields = append(selectedFields, workflowevent.FieldPayload)
+				fieldSeen[workflowevent.FieldPayload] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workfloweventPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowEventPaginateOption
+}
+
+func newWorkflowEventPaginateArgs(rv map[string]any) *workfloweventPaginateArgs {
+	args := &workfloweventPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowEventOrder:
+			args.opts = append(args.opts, WithWorkflowEventOrder(v))
+		case []any:
+			var orders []*WorkflowEventOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowEventOrder{Field: &WorkflowEventOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowEventOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowEventWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowEventFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowEventHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowEventHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowEventHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workfloweventhistory.Columns))
+		selectedFields = []string{workfloweventhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workfloweventhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldHistoryTime)
+				fieldSeen[workfloweventhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workfloweventhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldRef)
+				fieldSeen[workfloweventhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workfloweventhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldOperation)
+				fieldSeen[workfloweventhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workfloweventhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldCreatedAt)
+				fieldSeen[workfloweventhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workfloweventhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldUpdatedAt)
+				fieldSeen[workfloweventhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workfloweventhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldCreatedBy)
+				fieldSeen[workfloweventhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workfloweventhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldUpdatedBy)
+				fieldSeen[workfloweventhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workfloweventhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldDisplayID)
+				fieldSeen[workfloweventhistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workfloweventhistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldTags)
+				fieldSeen[workfloweventhistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workfloweventhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldOwnerID)
+				fieldSeen[workfloweventhistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workfloweventhistory.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldWorkflowInstanceID)
+				fieldSeen[workfloweventhistory.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "eventType":
+			if _, ok := fieldSeen[workfloweventhistory.FieldEventType]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldEventType)
+				fieldSeen[workfloweventhistory.FieldEventType] = struct{}{}
+			}
+		case "payload":
+			if _, ok := fieldSeen[workfloweventhistory.FieldPayload]; !ok {
+				selectedFields = append(selectedFields, workfloweventhistory.FieldPayload)
+				fieldSeen[workfloweventhistory.FieldPayload] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workfloweventhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowEventHistoryPaginateOption
+}
+
+func newWorkflowEventHistoryPaginateArgs(rv map[string]any) *workfloweventhistoryPaginateArgs {
+	args := &workfloweventhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowEventHistoryOrder{Field: &WorkflowEventHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowEventHistoryOrder(order))
+			}
+		case *WorkflowEventHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowEventHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowEventHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowEventHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowInstanceQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowInstanceQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowInstanceQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowinstance.Columns))
+		selectedFields = []string{workflowinstance.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowinstance.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldOwnerID)
+				fieldSeen[workflowinstance.FieldOwnerID] = struct{}{}
+			}
+
+		case "workflowDefinition":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowDefinitionClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, workflowdefinitionImplementors)...); err != nil {
+				return err
+			}
+			_q.withWorkflowDefinition = query
+			if _, ok := fieldSeen[workflowinstance.FieldWorkflowDefinitionID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldWorkflowDefinitionID)
+				fieldSeen[workflowinstance.FieldWorkflowDefinitionID] = struct{}{}
+			}
+
+		case "workflowAssignments":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowAssignmentClient{config: _q.config}).Query()
+			)
+			args := newWorkflowAssignmentPaginateArgs(fieldArgs(ctx, new(WorkflowAssignmentWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowAssignmentPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_instance_workflow_assignments"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowinstance.WorkflowAssignmentsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowinstance.WorkflowAssignmentsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowAssignments)
+							if nodes[i].Edges.totalCount[2] == nil {
+								nodes[i].Edges.totalCount[2] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[2][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowassignmentImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowinstance.WorkflowAssignmentsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowAssignments(alias, func(wq *WorkflowAssignmentQuery) {
+				*wq = *query
+			})
+
+		case "workflowEvents":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowEventClient{config: _q.config}).Query()
+			)
+			args := newWorkflowEventPaginateArgs(fieldArgs(ctx, new(WorkflowEventWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowEventPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_instance_workflow_events"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowinstance.WorkflowEventsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowinstance.WorkflowEventsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowEvents)
+							if nodes[i].Edges.totalCount[3] == nil {
+								nodes[i].Edges.totalCount[3] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[3][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workfloweventImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowinstance.WorkflowEventsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowEvents(alias, func(wq *WorkflowEventQuery) {
+				*wq = *query
+			})
+
+		case "workflowObjectRefs":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowObjectRefClient{config: _q.config}).Query()
+			)
+			args := newWorkflowObjectRefPaginateArgs(fieldArgs(ctx, new(WorkflowObjectRefWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newWorkflowObjectRefPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
+				return err
+			}
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*WorkflowInstance) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"workflow_instance_workflow_object_refs"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(workflowinstance.WorkflowObjectRefsColumn), ids...))
+						})
+						if err := query.GroupBy(workflowinstance.WorkflowObjectRefsColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*WorkflowInstance) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.WorkflowObjectRefs)
+							if nodes[i].Edges.totalCount[4] == nil {
+								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[4][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, workflowobjectrefImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(workflowinstance.WorkflowObjectRefsColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedWorkflowObjectRefs(alias, func(wq *WorkflowObjectRefQuery) {
+				*wq = *query
+			})
+		case "createdAt":
+			if _, ok := fieldSeen[workflowinstance.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldCreatedAt)
+				fieldSeen[workflowinstance.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowinstance.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldUpdatedAt)
+				fieldSeen[workflowinstance.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowinstance.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldCreatedBy)
+				fieldSeen[workflowinstance.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowinstance.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldUpdatedBy)
+				fieldSeen[workflowinstance.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowinstance.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldDisplayID)
+				fieldSeen[workflowinstance.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowinstance.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldTags)
+				fieldSeen[workflowinstance.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowinstance.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldOwnerID)
+				fieldSeen[workflowinstance.FieldOwnerID] = struct{}{}
+			}
+		case "workflowDefinitionID":
+			if _, ok := fieldSeen[workflowinstance.FieldWorkflowDefinitionID]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldWorkflowDefinitionID)
+				fieldSeen[workflowinstance.FieldWorkflowDefinitionID] = struct{}{}
+			}
+		case "state":
+			if _, ok := fieldSeen[workflowinstance.FieldState]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldState)
+				fieldSeen[workflowinstance.FieldState] = struct{}{}
+			}
+		case "context":
+			if _, ok := fieldSeen[workflowinstance.FieldContext]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldContext)
+				fieldSeen[workflowinstance.FieldContext] = struct{}{}
+			}
+		case "lastEvaluatedAt":
+			if _, ok := fieldSeen[workflowinstance.FieldLastEvaluatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldLastEvaluatedAt)
+				fieldSeen[workflowinstance.FieldLastEvaluatedAt] = struct{}{}
+			}
+		case "definitionSnapshot":
+			if _, ok := fieldSeen[workflowinstance.FieldDefinitionSnapshot]; !ok {
+				selectedFields = append(selectedFields, workflowinstance.FieldDefinitionSnapshot)
+				fieldSeen[workflowinstance.FieldDefinitionSnapshot] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowinstancePaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowInstancePaginateOption
+}
+
+func newWorkflowInstancePaginateArgs(rv map[string]any) *workflowinstancePaginateArgs {
+	args := &workflowinstancePaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowInstanceOrder:
+			args.opts = append(args.opts, WithWorkflowInstanceOrder(v))
+		case []any:
+			var orders []*WorkflowInstanceOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowInstanceOrder{Field: &WorkflowInstanceOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowInstanceOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowInstanceWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowInstanceFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowInstanceHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowInstanceHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowInstanceHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowinstancehistory.Columns))
+		selectedFields = []string{workflowinstancehistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldHistoryTime)
+				fieldSeen[workflowinstancehistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldRef)
+				fieldSeen[workflowinstancehistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldOperation)
+				fieldSeen[workflowinstancehistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldCreatedAt)
+				fieldSeen[workflowinstancehistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldUpdatedAt)
+				fieldSeen[workflowinstancehistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldCreatedBy)
+				fieldSeen[workflowinstancehistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldUpdatedBy)
+				fieldSeen[workflowinstancehistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldDisplayID)
+				fieldSeen[workflowinstancehistory.FieldDisplayID] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldTags]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldTags)
+				fieldSeen[workflowinstancehistory.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldOwnerID)
+				fieldSeen[workflowinstancehistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowDefinitionID":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldWorkflowDefinitionID]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldWorkflowDefinitionID)
+				fieldSeen[workflowinstancehistory.FieldWorkflowDefinitionID] = struct{}{}
+			}
+		case "state":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldState]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldState)
+				fieldSeen[workflowinstancehistory.FieldState] = struct{}{}
+			}
+		case "context":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldContext]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldContext)
+				fieldSeen[workflowinstancehistory.FieldContext] = struct{}{}
+			}
+		case "lastEvaluatedAt":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldLastEvaluatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldLastEvaluatedAt)
+				fieldSeen[workflowinstancehistory.FieldLastEvaluatedAt] = struct{}{}
+			}
+		case "definitionSnapshot":
+			if _, ok := fieldSeen[workflowinstancehistory.FieldDefinitionSnapshot]; !ok {
+				selectedFields = append(selectedFields, workflowinstancehistory.FieldDefinitionSnapshot)
+				fieldSeen[workflowinstancehistory.FieldDefinitionSnapshot] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowinstancehistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowInstanceHistoryPaginateOption
+}
+
+func newWorkflowInstanceHistoryPaginateArgs(rv map[string]any) *workflowinstancehistoryPaginateArgs {
+	args := &workflowinstancehistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowInstanceHistoryOrder{Field: &WorkflowInstanceHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowInstanceHistoryOrder(order))
+			}
+		case *WorkflowInstanceHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowInstanceHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowInstanceHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowInstanceHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowObjectRefQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowObjectRefQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowObjectRefQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowobjectref.Columns))
+		selectedFields = []string{workflowobjectref.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[workflowobjectref.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldOwnerID)
+				fieldSeen[workflowobjectref.FieldOwnerID] = struct{}{}
+			}
+
+		case "workflowInstance":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&WorkflowInstanceClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, workflowinstanceImplementors)...); err != nil {
+				return err
+			}
+			_q.withWorkflowInstance = query
+			if _, ok := fieldSeen[workflowobjectref.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldWorkflowInstanceID)
+				fieldSeen[workflowobjectref.FieldWorkflowInstanceID] = struct{}{}
+			}
+
+		case "control":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&ControlClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, controlImplementors)...); err != nil {
+				return err
+			}
+			_q.withControl = query
+			if _, ok := fieldSeen[workflowobjectref.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldControlID)
+				fieldSeen[workflowobjectref.FieldControlID] = struct{}{}
+			}
+
+		case "task":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TaskClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, taskImplementors)...); err != nil {
+				return err
+			}
+			_q.withTask = query
+			if _, ok := fieldSeen[workflowobjectref.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldTaskID)
+				fieldSeen[workflowobjectref.FieldTaskID] = struct{}{}
+			}
+
+		case "internalPolicy":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&InternalPolicyClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, internalpolicyImplementors)...); err != nil {
+				return err
+			}
+			_q.withInternalPolicy = query
+			if _, ok := fieldSeen[workflowobjectref.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldInternalPolicyID)
+				fieldSeen[workflowobjectref.FieldInternalPolicyID] = struct{}{}
+			}
+
+		case "finding":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FindingClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, findingImplementors)...); err != nil {
+				return err
+			}
+			_q.withFinding = query
+			if _, ok := fieldSeen[workflowobjectref.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldFindingID)
+				fieldSeen[workflowobjectref.FieldFindingID] = struct{}{}
+			}
+
+		case "directoryAccount":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryAccountClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directoryaccountImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectoryAccount = query
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryAccountID)
+				fieldSeen[workflowobjectref.FieldDirectoryAccountID] = struct{}{}
+			}
+
+		case "directoryGroup":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryGroupClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorygroupImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectoryGroup = query
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryGroupID)
+				fieldSeen[workflowobjectref.FieldDirectoryGroupID] = struct{}{}
+			}
+
+		case "directoryMembership":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&DirectoryMembershipClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, directorymembershipImplementors)...); err != nil {
+				return err
+			}
+			_q.withDirectoryMembership = query
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryMembershipID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryMembershipID)
+				fieldSeen[workflowobjectref.FieldDirectoryMembershipID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowobjectref.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldCreatedAt)
+				fieldSeen[workflowobjectref.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowobjectref.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldUpdatedAt)
+				fieldSeen[workflowobjectref.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowobjectref.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldCreatedBy)
+				fieldSeen[workflowobjectref.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowobjectref.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldUpdatedBy)
+				fieldSeen[workflowobjectref.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowobjectref.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDisplayID)
+				fieldSeen[workflowobjectref.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowobjectref.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldOwnerID)
+				fieldSeen[workflowobjectref.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workflowobjectref.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldWorkflowInstanceID)
+				fieldSeen[workflowobjectref.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[workflowobjectref.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldControlID)
+				fieldSeen[workflowobjectref.FieldControlID] = struct{}{}
+			}
+		case "taskID":
+			if _, ok := fieldSeen[workflowobjectref.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldTaskID)
+				fieldSeen[workflowobjectref.FieldTaskID] = struct{}{}
+			}
+		case "internalPolicyID":
+			if _, ok := fieldSeen[workflowobjectref.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldInternalPolicyID)
+				fieldSeen[workflowobjectref.FieldInternalPolicyID] = struct{}{}
+			}
+		case "findingID":
+			if _, ok := fieldSeen[workflowobjectref.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldFindingID)
+				fieldSeen[workflowobjectref.FieldFindingID] = struct{}{}
+			}
+		case "directoryAccountID":
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryAccountID)
+				fieldSeen[workflowobjectref.FieldDirectoryAccountID] = struct{}{}
+			}
+		case "directoryGroupID":
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryGroupID)
+				fieldSeen[workflowobjectref.FieldDirectoryGroupID] = struct{}{}
+			}
+		case "directoryMembershipID":
+			if _, ok := fieldSeen[workflowobjectref.FieldDirectoryMembershipID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectref.FieldDirectoryMembershipID)
+				fieldSeen[workflowobjectref.FieldDirectoryMembershipID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowobjectrefPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowObjectRefPaginateOption
+}
+
+func newWorkflowObjectRefPaginateArgs(rv map[string]any) *workflowobjectrefPaginateArgs {
+	args := &workflowobjectrefPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case []*WorkflowObjectRefOrder:
+			args.opts = append(args.opts, WithWorkflowObjectRefOrder(v))
+		case []any:
+			var orders []*WorkflowObjectRefOrder
+			for i := range v {
+				mv, ok := v[i].(map[string]any)
+				if !ok {
+					continue
+				}
+				var (
+					err1, err2 error
+					order      = &WorkflowObjectRefOrder{Field: &WorkflowObjectRefOrderField{}, Direction: entgql.OrderDirectionAsc}
+				)
+				if d, ok := mv[directionField]; ok {
+					err1 = order.Direction.UnmarshalGQL(d)
+				}
+				if f, ok := mv[fieldField]; ok {
+					err2 = order.Field.UnmarshalGQL(f)
+				}
+				if err1 == nil && err2 == nil {
+					orders = append(orders, order)
+				}
+			}
+			args.opts = append(args.opts, WithWorkflowObjectRefOrder(orders))
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowObjectRefWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowObjectRefFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *WorkflowObjectRefHistoryQuery) CollectFields(ctx context.Context, satisfies ...string) (*WorkflowObjectRefHistoryQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *WorkflowObjectRefHistoryQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(workflowobjectrefhistory.Columns))
+		selectedFields = []string{workflowobjectrefhistory.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+		case "historyTime":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldHistoryTime]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldHistoryTime)
+				fieldSeen[workflowobjectrefhistory.FieldHistoryTime] = struct{}{}
+			}
+		case "ref":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldRef]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldRef)
+				fieldSeen[workflowobjectrefhistory.FieldRef] = struct{}{}
+			}
+		case "operation":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldOperation]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldOperation)
+				fieldSeen[workflowobjectrefhistory.FieldOperation] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldCreatedAt)
+				fieldSeen[workflowobjectrefhistory.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldUpdatedAt)
+				fieldSeen[workflowobjectrefhistory.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldCreatedBy)
+				fieldSeen[workflowobjectrefhistory.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldUpdatedBy)
+				fieldSeen[workflowobjectrefhistory.FieldUpdatedBy] = struct{}{}
+			}
+		case "displayID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDisplayID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldDisplayID)
+				fieldSeen[workflowobjectrefhistory.FieldDisplayID] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldOwnerID)
+				fieldSeen[workflowobjectrefhistory.FieldOwnerID] = struct{}{}
+			}
+		case "workflowInstanceID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldWorkflowInstanceID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldWorkflowInstanceID)
+				fieldSeen[workflowobjectrefhistory.FieldWorkflowInstanceID] = struct{}{}
+			}
+		case "controlID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldControlID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldControlID)
+				fieldSeen[workflowobjectrefhistory.FieldControlID] = struct{}{}
+			}
+		case "taskID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldTaskID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldTaskID)
+				fieldSeen[workflowobjectrefhistory.FieldTaskID] = struct{}{}
+			}
+		case "internalPolicyID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldInternalPolicyID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldInternalPolicyID)
+				fieldSeen[workflowobjectrefhistory.FieldInternalPolicyID] = struct{}{}
+			}
+		case "findingID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldFindingID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldFindingID)
+				fieldSeen[workflowobjectrefhistory.FieldFindingID] = struct{}{}
+			}
+		case "directoryAccountID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDirectoryAccountID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldDirectoryAccountID)
+				fieldSeen[workflowobjectrefhistory.FieldDirectoryAccountID] = struct{}{}
+			}
+		case "directoryGroupID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDirectoryGroupID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldDirectoryGroupID)
+				fieldSeen[workflowobjectrefhistory.FieldDirectoryGroupID] = struct{}{}
+			}
+		case "directoryMembershipID":
+			if _, ok := fieldSeen[workflowobjectrefhistory.FieldDirectoryMembershipID]; !ok {
+				selectedFields = append(selectedFields, workflowobjectrefhistory.FieldDirectoryMembershipID)
+				fieldSeen[workflowobjectrefhistory.FieldDirectoryMembershipID] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type workflowobjectrefhistoryPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []WorkflowObjectRefHistoryPaginateOption
+}
+
+func newWorkflowObjectRefHistoryPaginateArgs(rv map[string]any) *workflowobjectrefhistoryPaginateArgs {
+	args := &workflowobjectrefhistoryPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &WorkflowObjectRefHistoryOrder{Field: &WorkflowObjectRefHistoryOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithWorkflowObjectRefHistoryOrder(order))
+			}
+		case *WorkflowObjectRefHistoryOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithWorkflowObjectRefHistoryOrder(v))
+			}
+		}
+	}
+	if v, ok := rv[whereField].(*WorkflowObjectRefHistoryWhereInput); ok {
+		args.opts = append(args.opts, WithWorkflowObjectRefHistoryFilter(v.Filter))
 	}
 	return args
 }

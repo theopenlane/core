@@ -167,13 +167,15 @@ type ControlEdges struct {
 	MappedToControls []*MappedControl `json:"mapped_to_controls,omitempty"`
 	// MappedFromControls holds the value of the mapped_from_controls edge.
 	MappedFromControls []*MappedControl `json:"mapped_from_controls,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// ControlMappings holds the value of the control_mappings edge.
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [27]bool
+	loadedTypes [28]bool
 	// totalCount holds the count of the edges above.
-	totalCount [25]map[string]int
+	totalCount [26]map[string]int
 
 	namedEvidence               map[string][]*Evidence
 	namedControlObjectives      map[string][]*ControlObjective
@@ -195,6 +197,7 @@ type ControlEdges struct {
 	namedScheduledJobs          map[string][]*ScheduledJob
 	namedMappedToControls       map[string][]*MappedControl
 	namedMappedFromControls     map[string][]*MappedControl
+	namedWorkflowObjectRefs     map[string][]*WorkflowObjectRef
 	namedControlMappings        map[string][]*FindingControl
 }
 
@@ -444,10 +447,19 @@ func (e ControlEdges) MappedFromControlsOrErr() ([]*MappedControl, error) {
 	return nil, &NotLoadedError{edge: "mapped_from_controls"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e ControlEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[26] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e ControlEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[26] {
+	if e.loadedTypes[27] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -921,6 +933,11 @@ func (_m *Control) QueryMappedToControls() *MappedControlQuery {
 // QueryMappedFromControls queries the "mapped_from_controls" edge of the Control entity.
 func (_m *Control) QueryMappedFromControls() *MappedControlQuery {
 	return NewControlClient(_m.config).QueryMappedFromControls(_m)
+}
+
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Control entity.
+func (_m *Control) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewControlClient(_m.config).QueryWorkflowObjectRefs(_m)
 }
 
 // QueryControlMappings queries the "control_mappings" edge of the Control entity.
@@ -1558,6 +1575,30 @@ func (_m *Control) appendNamedMappedFromControls(name string, edges ...*MappedCo
 		_m.Edges.namedMappedFromControls[name] = []*MappedControl{}
 	} else {
 		_m.Edges.namedMappedFromControls[name] = append(_m.Edges.namedMappedFromControls[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Control) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Control) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

@@ -128,6 +128,8 @@ func (ec *executionContext) fieldContext_Subscription_taskCreated(_ context.Cont
 				return ec.fieldContext_Task_actionPlans(ctx, field)
 			case "evidence":
 				return ec.fieldContext_Task_evidence(ctx, field)
+			case "workflowObjectRefs":
+				return ec.fieldContext_Task_workflowObjectRefs(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Task", field.Name)
 		},

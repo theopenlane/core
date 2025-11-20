@@ -23,6 +23,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -75,6 +79,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -1463,6 +1473,156 @@ func (_u *OrganizationUpdate) AddNotifications(v ...*Notification) *Organization
 		ids[i] = v[i].ID
 	}
 	return _u.AddNotificationIDs(ids...)
+}
+
+// AddWorkflowDefinitionIDs adds the "workflow_definitions" edge to the WorkflowDefinition entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowDefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowDefinitionIDs(ids...)
+	return _u
+}
+
+// AddWorkflowDefinitions adds the "workflow_definitions" edges to the WorkflowDefinition entity.
+func (_u *OrganizationUpdate) AddWorkflowDefinitions(v ...*WorkflowDefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowDefinitionIDs(ids...)
+}
+
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowInstanceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *OrganizationUpdate) AddWorkflowInstances(v ...*WorkflowInstance) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowInstanceIDs(ids...)
+}
+
+// AddWorkflowEventIDs adds the "workflow_events" edge to the WorkflowEvent entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowEventIDs(ids...)
+	return _u
+}
+
+// AddWorkflowEvents adds the "workflow_events" edges to the WorkflowEvent entity.
+func (_u *OrganizationUpdate) AddWorkflowEvents(v ...*WorkflowEvent) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowEventIDs(ids...)
+}
+
+// AddWorkflowAssignmentIDs adds the "workflow_assignments" edge to the WorkflowAssignment entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowAssignmentIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowAssignmentIDs(ids...)
+	return _u
+}
+
+// AddWorkflowAssignments adds the "workflow_assignments" edges to the WorkflowAssignment entity.
+func (_u *OrganizationUpdate) AddWorkflowAssignments(v ...*WorkflowAssignment) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowAssignmentIDs(ids...)
+}
+
+// AddWorkflowAssignmentTargetIDs adds the "workflow_assignment_targets" edge to the WorkflowAssignmentTarget entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowAssignmentTargetIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowAssignmentTargetIDs(ids...)
+	return _u
+}
+
+// AddWorkflowAssignmentTargets adds the "workflow_assignment_targets" edges to the WorkflowAssignmentTarget entity.
+func (_u *OrganizationUpdate) AddWorkflowAssignmentTargets(v ...*WorkflowAssignmentTarget) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowAssignmentTargetIDs(ids...)
+}
+
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *OrganizationUpdate) AddWorkflowObjectRefIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *OrganizationUpdate) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *OrganizationUpdate) AddDirectoryAccountIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *OrganizationUpdate) AddDirectoryAccounts(v ...*DirectoryAccount) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *OrganizationUpdate) AddDirectoryGroupIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *OrganizationUpdate) AddDirectoryGroups(v ...*DirectoryGroup) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *OrganizationUpdate) AddDirectoryMembershipIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *OrganizationUpdate) AddDirectoryMemberships(v ...*DirectoryMembership) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
+// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
+func (_u *OrganizationUpdate) AddDirectorySyncRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *OrganizationUpdate) AddDirectorySyncRuns(v ...*DirectorySyncRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -3049,6 +3209,216 @@ func (_u *OrganizationUpdate) RemoveNotifications(v ...*Notification) *Organizat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveNotificationIDs(ids...)
+}
+
+// ClearWorkflowDefinitions clears all "workflow_definitions" edges to the WorkflowDefinition entity.
+func (_u *OrganizationUpdate) ClearWorkflowDefinitions() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowDefinitions()
+	return _u
+}
+
+// RemoveWorkflowDefinitionIDs removes the "workflow_definitions" edge to WorkflowDefinition entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowDefinitionIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowDefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowDefinitions removes "workflow_definitions" edges to WorkflowDefinition entities.
+func (_u *OrganizationUpdate) RemoveWorkflowDefinitions(v ...*WorkflowDefinition) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowDefinitionIDs(ids...)
+}
+
+// ClearWorkflowInstances clears all "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *OrganizationUpdate) ClearWorkflowInstances() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowInstances()
+	return _u
+}
+
+// RemoveWorkflowInstanceIDs removes the "workflow_instances" edge to WorkflowInstance entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowInstanceIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowInstances removes "workflow_instances" edges to WorkflowInstance entities.
+func (_u *OrganizationUpdate) RemoveWorkflowInstances(v ...*WorkflowInstance) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowInstanceIDs(ids...)
+}
+
+// ClearWorkflowEvents clears all "workflow_events" edges to the WorkflowEvent entity.
+func (_u *OrganizationUpdate) ClearWorkflowEvents() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowEvents()
+	return _u
+}
+
+// RemoveWorkflowEventIDs removes the "workflow_events" edge to WorkflowEvent entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowEventIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowEventIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowEvents removes "workflow_events" edges to WorkflowEvent entities.
+func (_u *OrganizationUpdate) RemoveWorkflowEvents(v ...*WorkflowEvent) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowEventIDs(ids...)
+}
+
+// ClearWorkflowAssignments clears all "workflow_assignments" edges to the WorkflowAssignment entity.
+func (_u *OrganizationUpdate) ClearWorkflowAssignments() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowAssignments()
+	return _u
+}
+
+// RemoveWorkflowAssignmentIDs removes the "workflow_assignments" edge to WorkflowAssignment entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowAssignmentIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowAssignmentIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowAssignments removes "workflow_assignments" edges to WorkflowAssignment entities.
+func (_u *OrganizationUpdate) RemoveWorkflowAssignments(v ...*WorkflowAssignment) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowAssignmentIDs(ids...)
+}
+
+// ClearWorkflowAssignmentTargets clears all "workflow_assignment_targets" edges to the WorkflowAssignmentTarget entity.
+func (_u *OrganizationUpdate) ClearWorkflowAssignmentTargets() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowAssignmentTargets()
+	return _u
+}
+
+// RemoveWorkflowAssignmentTargetIDs removes the "workflow_assignment_targets" edge to WorkflowAssignmentTarget entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowAssignmentTargetIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowAssignmentTargetIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowAssignmentTargets removes "workflow_assignment_targets" edges to WorkflowAssignmentTarget entities.
+func (_u *OrganizationUpdate) RemoveWorkflowAssignmentTargets(v ...*WorkflowAssignmentTarget) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowAssignmentTargetIDs(ids...)
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *OrganizationUpdate) ClearWorkflowObjectRefs() *OrganizationUpdate {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *OrganizationUpdate) RemoveWorkflowObjectRefIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *OrganizationUpdate) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *OrganizationUpdate) ClearDirectoryAccounts() *OrganizationUpdate {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *OrganizationUpdate) RemoveDirectoryAccountIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *OrganizationUpdate) RemoveDirectoryAccounts(v ...*DirectoryAccount) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *OrganizationUpdate) ClearDirectoryGroups() *OrganizationUpdate {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *OrganizationUpdate) RemoveDirectoryGroupIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *OrganizationUpdate) RemoveDirectoryGroups(v ...*DirectoryGroup) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *OrganizationUpdate) ClearDirectoryMemberships() *OrganizationUpdate {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *OrganizationUpdate) RemoveDirectoryMembershipIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *OrganizationUpdate) RemoveDirectoryMemberships(v ...*DirectoryMembership) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
+// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *OrganizationUpdate) ClearDirectorySyncRuns() *OrganizationUpdate {
+	_u.mutation.ClearDirectorySyncRuns()
+	return _u
+}
+
+// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
+func (_u *OrganizationUpdate) RemoveDirectorySyncRunIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
+func (_u *OrganizationUpdate) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -6871,6 +7241,486 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.WorkflowDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowDefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowEventsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowAssignmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowAssignmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowAssignmentTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowAssignmentTargetsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowAssignmentTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.MembersCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -8313,6 +9163,156 @@ func (_u *OrganizationUpdateOne) AddNotifications(v ...*Notification) *Organizat
 		ids[i] = v[i].ID
 	}
 	return _u.AddNotificationIDs(ids...)
+}
+
+// AddWorkflowDefinitionIDs adds the "workflow_definitions" edge to the WorkflowDefinition entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowDefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowDefinitionIDs(ids...)
+	return _u
+}
+
+// AddWorkflowDefinitions adds the "workflow_definitions" edges to the WorkflowDefinition entity.
+func (_u *OrganizationUpdateOne) AddWorkflowDefinitions(v ...*WorkflowDefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowDefinitionIDs(ids...)
+}
+
+// AddWorkflowInstanceIDs adds the "workflow_instances" edge to the WorkflowInstance entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowInstanceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// AddWorkflowInstances adds the "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *OrganizationUpdateOne) AddWorkflowInstances(v ...*WorkflowInstance) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowInstanceIDs(ids...)
+}
+
+// AddWorkflowEventIDs adds the "workflow_events" edge to the WorkflowEvent entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowEventIDs(ids...)
+	return _u
+}
+
+// AddWorkflowEvents adds the "workflow_events" edges to the WorkflowEvent entity.
+func (_u *OrganizationUpdateOne) AddWorkflowEvents(v ...*WorkflowEvent) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowEventIDs(ids...)
+}
+
+// AddWorkflowAssignmentIDs adds the "workflow_assignments" edge to the WorkflowAssignment entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowAssignmentIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowAssignmentIDs(ids...)
+	return _u
+}
+
+// AddWorkflowAssignments adds the "workflow_assignments" edges to the WorkflowAssignment entity.
+func (_u *OrganizationUpdateOne) AddWorkflowAssignments(v ...*WorkflowAssignment) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowAssignmentIDs(ids...)
+}
+
+// AddWorkflowAssignmentTargetIDs adds the "workflow_assignment_targets" edge to the WorkflowAssignmentTarget entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowAssignmentTargetIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowAssignmentTargetIDs(ids...)
+	return _u
+}
+
+// AddWorkflowAssignmentTargets adds the "workflow_assignment_targets" edges to the WorkflowAssignmentTarget entity.
+func (_u *OrganizationUpdateOne) AddWorkflowAssignmentTargets(v ...*WorkflowAssignmentTarget) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowAssignmentTargetIDs(ids...)
+}
+
+// AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
+func (_u *OrganizationUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// AddWorkflowObjectRefs adds the "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *OrganizationUpdateOne) AddWorkflowObjectRefs(v ...*WorkflowObjectRef) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddWorkflowObjectRefIDs(ids...)
+}
+
+// AddDirectoryAccountIDs adds the "directory_accounts" edge to the DirectoryAccount entity by IDs.
+func (_u *OrganizationUpdateOne) AddDirectoryAccountIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// AddDirectoryAccounts adds the "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *OrganizationUpdateOne) AddDirectoryAccounts(v ...*DirectoryAccount) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryAccountIDs(ids...)
+}
+
+// AddDirectoryGroupIDs adds the "directory_groups" edge to the DirectoryGroup entity by IDs.
+func (_u *OrganizationUpdateOne) AddDirectoryGroupIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// AddDirectoryGroups adds the "directory_groups" edges to the DirectoryGroup entity.
+func (_u *OrganizationUpdateOne) AddDirectoryGroups(v ...*DirectoryGroup) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryGroupIDs(ids...)
+}
+
+// AddDirectoryMembershipIDs adds the "directory_memberships" edge to the DirectoryMembership entity by IDs.
+func (_u *OrganizationUpdateOne) AddDirectoryMembershipIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// AddDirectoryMemberships adds the "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *OrganizationUpdateOne) AddDirectoryMemberships(v ...*DirectoryMembership) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectoryMembershipIDs(ids...)
+}
+
+// AddDirectorySyncRunIDs adds the "directory_sync_runs" edge to the DirectorySyncRun entity by IDs.
+func (_u *OrganizationUpdateOne) AddDirectorySyncRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// AddDirectorySyncRuns adds the "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *OrganizationUpdateOne) AddDirectorySyncRuns(v ...*DirectorySyncRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDirectorySyncRunIDs(ids...)
 }
 
 // AddMemberIDs adds the "members" edge to the OrgMembership entity by IDs.
@@ -9899,6 +10899,216 @@ func (_u *OrganizationUpdateOne) RemoveNotifications(v ...*Notification) *Organi
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveNotificationIDs(ids...)
+}
+
+// ClearWorkflowDefinitions clears all "workflow_definitions" edges to the WorkflowDefinition entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowDefinitions() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowDefinitions()
+	return _u
+}
+
+// RemoveWorkflowDefinitionIDs removes the "workflow_definitions" edge to WorkflowDefinition entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowDefinitionIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowDefinitionIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowDefinitions removes "workflow_definitions" edges to WorkflowDefinition entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowDefinitions(v ...*WorkflowDefinition) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowDefinitionIDs(ids...)
+}
+
+// ClearWorkflowInstances clears all "workflow_instances" edges to the WorkflowInstance entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowInstances() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowInstances()
+	return _u
+}
+
+// RemoveWorkflowInstanceIDs removes the "workflow_instances" edge to WorkflowInstance entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowInstanceIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowInstanceIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowInstances removes "workflow_instances" edges to WorkflowInstance entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowInstances(v ...*WorkflowInstance) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowInstanceIDs(ids...)
+}
+
+// ClearWorkflowEvents clears all "workflow_events" edges to the WorkflowEvent entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowEvents() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowEvents()
+	return _u
+}
+
+// RemoveWorkflowEventIDs removes the "workflow_events" edge to WorkflowEvent entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowEventIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowEventIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowEvents removes "workflow_events" edges to WorkflowEvent entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowEvents(v ...*WorkflowEvent) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowEventIDs(ids...)
+}
+
+// ClearWorkflowAssignments clears all "workflow_assignments" edges to the WorkflowAssignment entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowAssignments() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowAssignments()
+	return _u
+}
+
+// RemoveWorkflowAssignmentIDs removes the "workflow_assignments" edge to WorkflowAssignment entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowAssignmentIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowAssignmentIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowAssignments removes "workflow_assignments" edges to WorkflowAssignment entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowAssignments(v ...*WorkflowAssignment) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowAssignmentIDs(ids...)
+}
+
+// ClearWorkflowAssignmentTargets clears all "workflow_assignment_targets" edges to the WorkflowAssignmentTarget entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowAssignmentTargets() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowAssignmentTargets()
+	return _u
+}
+
+// RemoveWorkflowAssignmentTargetIDs removes the "workflow_assignment_targets" edge to WorkflowAssignmentTarget entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowAssignmentTargetIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowAssignmentTargetIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowAssignmentTargets removes "workflow_assignment_targets" edges to WorkflowAssignmentTarget entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowAssignmentTargets(v ...*WorkflowAssignmentTarget) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowAssignmentTargetIDs(ids...)
+}
+
+// ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
+func (_u *OrganizationUpdateOne) ClearWorkflowObjectRefs() *OrganizationUpdateOne {
+	_u.mutation.ClearWorkflowObjectRefs()
+	return _u
+}
+
+// RemoveWorkflowObjectRefIDs removes the "workflow_object_refs" edge to WorkflowObjectRef entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveWorkflowObjectRefIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveWorkflowObjectRefIDs(ids...)
+	return _u
+}
+
+// RemoveWorkflowObjectRefs removes "workflow_object_refs" edges to WorkflowObjectRef entities.
+func (_u *OrganizationUpdateOne) RemoveWorkflowObjectRefs(v ...*WorkflowObjectRef) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveWorkflowObjectRefIDs(ids...)
+}
+
+// ClearDirectoryAccounts clears all "directory_accounts" edges to the DirectoryAccount entity.
+func (_u *OrganizationUpdateOne) ClearDirectoryAccounts() *OrganizationUpdateOne {
+	_u.mutation.ClearDirectoryAccounts()
+	return _u
+}
+
+// RemoveDirectoryAccountIDs removes the "directory_accounts" edge to DirectoryAccount entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveDirectoryAccountIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDirectoryAccountIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryAccounts removes "directory_accounts" edges to DirectoryAccount entities.
+func (_u *OrganizationUpdateOne) RemoveDirectoryAccounts(v ...*DirectoryAccount) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryAccountIDs(ids...)
+}
+
+// ClearDirectoryGroups clears all "directory_groups" edges to the DirectoryGroup entity.
+func (_u *OrganizationUpdateOne) ClearDirectoryGroups() *OrganizationUpdateOne {
+	_u.mutation.ClearDirectoryGroups()
+	return _u
+}
+
+// RemoveDirectoryGroupIDs removes the "directory_groups" edge to DirectoryGroup entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveDirectoryGroupIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDirectoryGroupIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryGroups removes "directory_groups" edges to DirectoryGroup entities.
+func (_u *OrganizationUpdateOne) RemoveDirectoryGroups(v ...*DirectoryGroup) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryGroupIDs(ids...)
+}
+
+// ClearDirectoryMemberships clears all "directory_memberships" edges to the DirectoryMembership entity.
+func (_u *OrganizationUpdateOne) ClearDirectoryMemberships() *OrganizationUpdateOne {
+	_u.mutation.ClearDirectoryMemberships()
+	return _u
+}
+
+// RemoveDirectoryMembershipIDs removes the "directory_memberships" edge to DirectoryMembership entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveDirectoryMembershipIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDirectoryMembershipIDs(ids...)
+	return _u
+}
+
+// RemoveDirectoryMemberships removes "directory_memberships" edges to DirectoryMembership entities.
+func (_u *OrganizationUpdateOne) RemoveDirectoryMemberships(v ...*DirectoryMembership) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectoryMembershipIDs(ids...)
+}
+
+// ClearDirectorySyncRuns clears all "directory_sync_runs" edges to the DirectorySyncRun entity.
+func (_u *OrganizationUpdateOne) ClearDirectorySyncRuns() *OrganizationUpdateOne {
+	_u.mutation.ClearDirectorySyncRuns()
+	return _u
+}
+
+// RemoveDirectorySyncRunIDs removes the "directory_sync_runs" edge to DirectorySyncRun entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveDirectorySyncRunIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveDirectorySyncRunIDs(ids...)
+	return _u
+}
+
+// RemoveDirectorySyncRuns removes "directory_sync_runs" edges to DirectorySyncRun entities.
+func (_u *OrganizationUpdateOne) RemoveDirectorySyncRuns(v ...*DirectorySyncRun) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDirectorySyncRunIDs(ids...)
 }
 
 // ClearMembers clears all "members" edges to the OrgMembership entity.
@@ -13746,6 +14956,486 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			},
 		}
 		edge.Schema = _u.schemaConfig.Notification
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowDefinitionsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowDefinitionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowDefinitionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowDefinitionsTable,
+			Columns: []string{organization.WorkflowDefinitionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowdefinition.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowDefinition
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowInstancesIDs(); len(nodes) > 0 && !_u.mutation.WorkflowInstancesCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowInstancesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowInstancesTable,
+			Columns: []string{organization.WorkflowInstancesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowinstance.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowInstance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowEventsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowEventsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowEventsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowEventsTable,
+			Columns: []string{organization.WorkflowEventsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowevent.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowEvent
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowAssignmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowAssignmentsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowAssignmentsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentsTable,
+			Columns: []string{organization.WorkflowAssignmentsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignment.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignment
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowAssignmentTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowAssignmentTargetsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowAssignmentTargetsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowAssignmentTargetsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowAssignmentTargetsTable,
+			Columns: []string{organization.WorkflowAssignmentTargetsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowassignmenttarget.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowAssignmentTarget
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedWorkflowObjectRefsIDs(); len(nodes) > 0 && !_u.mutation.WorkflowObjectRefsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.WorkflowObjectRefsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.WorkflowObjectRefsTable,
+			Columns: []string{organization.WorkflowObjectRefsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(workflowobjectref.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.WorkflowObjectRef
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryAccountsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryAccountsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryAccountsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryAccountsTable,
+			Columns: []string{organization.DirectoryAccountsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directoryaccount.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryAccount
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryGroupsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryGroupsTable,
+			Columns: []string{organization.DirectoryGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorygroup.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryGroup
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectoryMembershipsIDs(); len(nodes) > 0 && !_u.mutation.DirectoryMembershipsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectoryMembershipsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectoryMembershipsTable,
+			Columns: []string{organization.DirectoryMembershipsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorymembership.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectoryMembership
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDirectorySyncRunsIDs(); len(nodes) > 0 && !_u.mutation.DirectorySyncRunsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DirectorySyncRunsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.DirectorySyncRunsTable,
+			Columns: []string{organization.DirectorySyncRunsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(directorysyncrun.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.DirectorySyncRun
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

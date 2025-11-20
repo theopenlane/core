@@ -51,8 +51,9 @@ type TagDefinition struct {
 	Color string `json:"color,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TagDefinitionQuery when eager-loading is set.
-	Edges        TagDefinitionEdges `json:"edges"`
-	selectValues sql.SelectValues
+	Edges                               TagDefinitionEdges `json:"edges"`
+	workflow_definition_tag_definitions *string
+	selectValues                        sql.SelectValues
 }
 
 // TagDefinitionEdges holds the relations/edges for other nodes in the graph.
@@ -90,6 +91,8 @@ func (*TagDefinition) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case tagdefinition.FieldCreatedAt, tagdefinition.FieldUpdatedAt, tagdefinition.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
+		case tagdefinition.ForeignKeys[0]: // workflow_definition_tag_definitions
+			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
 		}
@@ -204,6 +207,13 @@ func (_m *TagDefinition) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field color", values[i])
 			} else if value.Valid {
 				_m.Color = value.String
+			}
+		case tagdefinition.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field workflow_definition_tag_definitions", values[i])
+			} else if value.Valid {
+				_m.workflow_definition_tag_definitions = new(string)
+				*_m.workflow_definition_tag_definitions = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])

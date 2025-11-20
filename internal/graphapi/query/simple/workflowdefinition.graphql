@@ -1,0 +1,245 @@
+mutation CreateBulkCSVWorkflowDefinition($input: Upload!) {
+  createBulkCSVWorkflowDefinition(input: $input) {
+    workflowDefinitions {
+      active
+      cooldownSeconds
+      createdAt
+      createdBy
+      definitionJSON
+      description
+      displayID
+      draft
+      id
+      internalNotes
+      isDefault
+      name
+      ownerID
+      publishedAt
+      revision
+      schemaType
+      systemInternalID
+      systemOwned
+      tags
+      trackedFields
+      triggerFields
+      triggerOperations
+      updatedAt
+      updatedBy
+      workflowKind
+    }
+  }
+}
+
+mutation CreateBulkWorkflowDefinition($input: [CreateWorkflowDefinitionInput!]) {
+  createBulkWorkflowDefinition(input: $input) {
+    workflowDefinitions {
+      active
+      cooldownSeconds
+      createdAt
+      createdBy
+      definitionJSON
+      description
+      displayID
+      draft
+      id
+      internalNotes
+      isDefault
+      name
+      ownerID
+      publishedAt
+      revision
+      schemaType
+      systemInternalID
+      systemOwned
+      tags
+      trackedFields
+      triggerFields
+      triggerOperations
+      updatedAt
+      updatedBy
+      workflowKind
+    }
+  }
+}
+
+mutation CreateWorkflowDefinition($input: CreateWorkflowDefinitionInput!) {
+  createWorkflowDefinition(input: $input) {
+    workflowDefinition {
+      active
+      cooldownSeconds
+      createdAt
+      createdBy
+      definitionJSON
+      description
+      displayID
+      draft
+      id
+      internalNotes
+      isDefault
+      name
+      ownerID
+      publishedAt
+      revision
+      schemaType
+      systemInternalID
+      systemOwned
+      tags
+      trackedFields
+      triggerFields
+      triggerOperations
+      updatedAt
+      updatedBy
+      workflowKind
+    }
+  }
+}
+
+mutation DeleteWorkflowDefinition($deleteWorkflowDefinitionId: ID!) {
+  deleteWorkflowDefinition(id: $deleteWorkflowDefinitionId) {
+    deletedID
+  }
+}
+
+query GetAllWorkflowDefinitions {
+  workflowDefinitions {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        cooldownSeconds
+        createdAt
+        createdBy
+        definitionJSON
+        description
+        displayID
+        draft
+        id
+        internalNotes
+        isDefault
+        name
+        ownerID
+        publishedAt
+        revision
+        schemaType
+        systemInternalID
+        systemOwned
+        tags
+        trackedFields
+        triggerFields
+        triggerOperations
+        updatedAt
+        updatedBy
+        workflowKind
+      }
+    }
+  }
+}
+
+query GetWorkflowDefinitionByID($workflowDefinitionId: ID!) {
+  workflowDefinition(id: $workflowDefinitionId) {
+    active
+    cooldownSeconds
+    createdAt
+    createdBy
+    definitionJSON
+    description
+    displayID
+    draft
+    id
+    internalNotes
+    isDefault
+    name
+    ownerID
+    publishedAt
+    revision
+    schemaType
+    systemInternalID
+    systemOwned
+    tags
+    trackedFields
+    triggerFields
+    triggerOperations
+    updatedAt
+    updatedBy
+    workflowKind
+  }
+}
+
+query GetWorkflowDefinitions($first: Int, $last: Int, $where: WorkflowDefinitionWhereInput) {
+  workflowDefinitions(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        cooldownSeconds
+        createdAt
+        createdBy
+        definitionJSON
+        description
+        displayID
+        draft
+        id
+        internalNotes
+        isDefault
+        name
+        ownerID
+        publishedAt
+        revision
+        schemaType
+        systemInternalID
+        systemOwned
+        tags
+        trackedFields
+        triggerFields
+        triggerOperations
+        updatedAt
+        updatedBy
+        workflowKind
+      }
+    }
+  }
+}
+
+mutation UpdateWorkflowDefinition($updateWorkflowDefinitionId: ID!, $input: UpdateWorkflowDefinitionInput!) {
+  updateWorkflowDefinition(id: $updateWorkflowDefinitionId, input: $input) {
+    workflowDefinition {
+      active
+      cooldownSeconds
+      createdAt
+      createdBy
+      definitionJSON
+      description
+      displayID
+      draft
+      id
+      internalNotes
+      isDefault
+      name
+      ownerID
+      publishedAt
+      revision
+      schemaType
+      systemInternalID
+      systemOwned
+      tags
+      trackedFields
+      triggerFields
+      triggerOperations
+      updatedAt
+      updatedBy
+      workflowKind
+    }
+  }
+}

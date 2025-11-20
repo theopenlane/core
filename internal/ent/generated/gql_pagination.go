@@ -34,6 +34,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -138,6 +145,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 
@@ -9640,6 +9659,2700 @@ func (_m *DNSVerificationHistory) ToEdge(order *DNSVerificationHistoryOrder) *DN
 		order = DefaultDNSVerificationHistoryOrder
 	}
 	return &DNSVerificationHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryAccountEdge is the edge representation of DirectoryAccount.
+type DirectoryAccountEdge struct {
+	Node   *DirectoryAccount `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// DirectoryAccountConnection is the connection containing edges to DirectoryAccount.
+type DirectoryAccountConnection struct {
+	Edges      []*DirectoryAccountEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *DirectoryAccountConnection) build(nodes []*DirectoryAccount, pager *directoryaccountPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryAccount
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryAccount {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryAccount {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryAccountEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryAccountEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryAccountPaginateOption enables pagination customization.
+type DirectoryAccountPaginateOption func(*directoryaccountPager) error
+
+// WithDirectoryAccountOrder configures pagination ordering.
+func WithDirectoryAccountOrder(order []*DirectoryAccountOrder) DirectoryAccountPaginateOption {
+	return func(pager *directoryaccountPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDirectoryAccountFilter configures pagination filter.
+func WithDirectoryAccountFilter(filter func(*DirectoryAccountQuery) (*DirectoryAccountQuery, error)) DirectoryAccountPaginateOption {
+	return func(pager *directoryaccountPager) error {
+		if filter == nil {
+			return errors.New("DirectoryAccountQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directoryaccountPager struct {
+	reverse bool
+	order   []*DirectoryAccountOrder
+	filter  func(*DirectoryAccountQuery) (*DirectoryAccountQuery, error)
+}
+
+func newDirectoryAccountPager(opts []DirectoryAccountPaginateOption, reverse bool) (*directoryaccountPager, error) {
+	pager := &directoryaccountPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *directoryaccountPager) applyFilter(query *DirectoryAccountQuery) (*DirectoryAccountQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directoryaccountPager) toCursor(_m *DirectoryAccount) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *directoryaccountPager) applyCursors(query *DirectoryAccountQuery, after, before *Cursor) (*DirectoryAccountQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDirectoryAccountOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *directoryaccountPager) applyOrder(query *DirectoryAccountQuery) *DirectoryAccountQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDirectoryAccountOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDirectoryAccountOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *directoryaccountPager) orderExpr(query *DirectoryAccountQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDirectoryAccountOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryAccount.
+func (_m *DirectoryAccountQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryAccountPaginateOption,
+) (*DirectoryAccountConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryAccountPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryAccountConnection{Edges: []*DirectoryAccountEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryAccountOrderFieldCreatedAt orders DirectoryAccount by created_at.
+	DirectoryAccountOrderFieldCreatedAt = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directoryaccount.FieldCreatedAt,
+		toTerm: directoryaccount.ByCreatedAt,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryAccountOrderFieldUpdatedAt orders DirectoryAccount by updated_at.
+	DirectoryAccountOrderFieldUpdatedAt = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directoryaccount.FieldUpdatedAt,
+		toTerm: directoryaccount.ByUpdatedAt,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// DirectoryAccountOrderFieldExternalID orders DirectoryAccount by external_id.
+	DirectoryAccountOrderFieldExternalID = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: directoryaccount.FieldExternalID,
+		toTerm: directoryaccount.ByExternalID,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// DirectoryAccountOrderFieldCanonicalEmail orders DirectoryAccount by canonical_email.
+	DirectoryAccountOrderFieldCanonicalEmail = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CanonicalEmail == nil {
+				return nil, nil
+			}
+			return _m.CanonicalEmail, nil
+		},
+		column: directoryaccount.FieldCanonicalEmail,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccount.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccount.ByCanonicalEmail(opts...)
+		},
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			if _m.CanonicalEmail == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CanonicalEmail,
+			}
+		},
+	}
+	// DirectoryAccountOrderFieldDisplayName orders DirectoryAccount by display_name.
+	DirectoryAccountOrderFieldDisplayName = &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: directoryaccount.FieldDisplayName,
+		toTerm: directoryaccount.ByDisplayName,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryAccountOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryAccountOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryAccountOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case DirectoryAccountOrderFieldExternalID.column:
+		str = "external_id"
+	case DirectoryAccountOrderFieldCanonicalEmail.column:
+		str = "canonical_email"
+	case DirectoryAccountOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryAccountOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryAccountOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryAccountOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *DirectoryAccountOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryAccountOrderFieldUpdatedAt
+	case "external_id":
+		*f = *DirectoryAccountOrderFieldExternalID
+	case "canonical_email":
+		*f = *DirectoryAccountOrderFieldCanonicalEmail
+	case "display_name":
+		*f = *DirectoryAccountOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryAccountOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryAccountOrderField defines the ordering field of DirectoryAccount.
+type DirectoryAccountOrderField struct {
+	// Value extracts the ordering value from the given DirectoryAccount.
+	Value    func(*DirectoryAccount) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directoryaccount.OrderOption
+	toCursor func(*DirectoryAccount) Cursor
+}
+
+// DirectoryAccountOrder defines the ordering of DirectoryAccount.
+type DirectoryAccountOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *DirectoryAccountOrderField `json:"field"`
+}
+
+// DefaultDirectoryAccountOrder is the default ordering of DirectoryAccount.
+var DefaultDirectoryAccountOrder = &DirectoryAccountOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryAccountOrderField{
+		Value: func(_m *DirectoryAccount) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directoryaccount.FieldID,
+		toTerm: directoryaccount.ByID,
+		toCursor: func(_m *DirectoryAccount) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryAccount into DirectoryAccountEdge.
+func (_m *DirectoryAccount) ToEdge(order *DirectoryAccountOrder) *DirectoryAccountEdge {
+	if order == nil {
+		order = DefaultDirectoryAccountOrder
+	}
+	return &DirectoryAccountEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryAccountHistoryEdge is the edge representation of DirectoryAccountHistory.
+type DirectoryAccountHistoryEdge struct {
+	Node   *DirectoryAccountHistory `json:"node"`
+	Cursor Cursor                   `json:"cursor"`
+}
+
+// DirectoryAccountHistoryConnection is the connection containing edges to DirectoryAccountHistory.
+type DirectoryAccountHistoryConnection struct {
+	Edges      []*DirectoryAccountHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                       `json:"pageInfo"`
+	TotalCount int                            `json:"totalCount"`
+}
+
+func (c *DirectoryAccountHistoryConnection) build(nodes []*DirectoryAccountHistory, pager *directoryaccounthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryAccountHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryAccountHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryAccountHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryAccountHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryAccountHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryAccountHistoryPaginateOption enables pagination customization.
+type DirectoryAccountHistoryPaginateOption func(*directoryaccounthistoryPager) error
+
+// WithDirectoryAccountHistoryOrder configures pagination ordering.
+func WithDirectoryAccountHistoryOrder(order *DirectoryAccountHistoryOrder) DirectoryAccountHistoryPaginateOption {
+	if order == nil {
+		order = DefaultDirectoryAccountHistoryOrder
+	}
+	o := *order
+	return func(pager *directoryaccounthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultDirectoryAccountHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithDirectoryAccountHistoryFilter configures pagination filter.
+func WithDirectoryAccountHistoryFilter(filter func(*DirectoryAccountHistoryQuery) (*DirectoryAccountHistoryQuery, error)) DirectoryAccountHistoryPaginateOption {
+	return func(pager *directoryaccounthistoryPager) error {
+		if filter == nil {
+			return errors.New("DirectoryAccountHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directoryaccounthistoryPager struct {
+	reverse bool
+	order   *DirectoryAccountHistoryOrder
+	filter  func(*DirectoryAccountHistoryQuery) (*DirectoryAccountHistoryQuery, error)
+}
+
+func newDirectoryAccountHistoryPager(opts []DirectoryAccountHistoryPaginateOption, reverse bool) (*directoryaccounthistoryPager, error) {
+	pager := &directoryaccounthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultDirectoryAccountHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *directoryaccounthistoryPager) applyFilter(query *DirectoryAccountHistoryQuery) (*DirectoryAccountHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directoryaccounthistoryPager) toCursor(_m *DirectoryAccountHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *directoryaccounthistoryPager) applyCursors(query *DirectoryAccountHistoryQuery, after, before *Cursor) (*DirectoryAccountHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultDirectoryAccountHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *directoryaccounthistoryPager) applyOrder(query *DirectoryAccountHistoryQuery) *DirectoryAccountHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultDirectoryAccountHistoryOrder.Field {
+		query = query.Order(DefaultDirectoryAccountHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *directoryaccounthistoryPager) orderExpr(query *DirectoryAccountHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultDirectoryAccountHistoryOrder.Field {
+			b.Comma().Ident(DefaultDirectoryAccountHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryAccountHistory.
+func (_m *DirectoryAccountHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryAccountHistoryPaginateOption,
+) (*DirectoryAccountHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryAccountHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryAccountHistoryConnection{Edges: []*DirectoryAccountHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryAccountHistoryOrderFieldHistoryTime orders DirectoryAccountHistory by history_time.
+	DirectoryAccountHistoryOrderFieldHistoryTime = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: directoryaccounthistory.FieldHistoryTime,
+		toTerm: directoryaccounthistory.ByHistoryTime,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// DirectoryAccountHistoryOrderFieldCreatedAt orders DirectoryAccountHistory by created_at.
+	DirectoryAccountHistoryOrderFieldCreatedAt = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directoryaccounthistory.FieldCreatedAt,
+		toTerm: directoryaccounthistory.ByCreatedAt,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryAccountHistoryOrderFieldUpdatedAt orders DirectoryAccountHistory by updated_at.
+	DirectoryAccountHistoryOrderFieldUpdatedAt = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directoryaccounthistory.FieldUpdatedAt,
+		toTerm: directoryaccounthistory.ByUpdatedAt,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// DirectoryAccountHistoryOrderFieldExternalID orders DirectoryAccountHistory by external_id.
+	DirectoryAccountHistoryOrderFieldExternalID = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: directoryaccounthistory.FieldExternalID,
+		toTerm: directoryaccounthistory.ByExternalID,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// DirectoryAccountHistoryOrderFieldCanonicalEmail orders DirectoryAccountHistory by canonical_email.
+	DirectoryAccountHistoryOrderFieldCanonicalEmail = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.CanonicalEmail == nil {
+				return nil, nil
+			}
+			return _m.CanonicalEmail, nil
+		},
+		column: directoryaccounthistory.FieldCanonicalEmail,
+		toTerm: func(opts ...sql.OrderTermOption) directoryaccounthistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directoryaccounthistory.ByCanonicalEmail(opts...)
+		},
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			if _m.CanonicalEmail == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CanonicalEmail,
+			}
+		},
+	}
+	// DirectoryAccountHistoryOrderFieldDisplayName orders DirectoryAccountHistory by display_name.
+	DirectoryAccountHistoryOrderFieldDisplayName = &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: directoryaccounthistory.FieldDisplayName,
+		toTerm: directoryaccounthistory.ByDisplayName,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryAccountHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryAccountHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case DirectoryAccountHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryAccountHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case DirectoryAccountHistoryOrderFieldExternalID.column:
+		str = "external_id"
+	case DirectoryAccountHistoryOrderFieldCanonicalEmail.column:
+		str = "canonical_email"
+	case DirectoryAccountHistoryOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryAccountHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryAccountHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryAccountHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *DirectoryAccountHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *DirectoryAccountHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryAccountHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *DirectoryAccountHistoryOrderFieldExternalID
+	case "canonical_email":
+		*f = *DirectoryAccountHistoryOrderFieldCanonicalEmail
+	case "display_name":
+		*f = *DirectoryAccountHistoryOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryAccountHistoryOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryAccountHistoryOrderField defines the ordering field of DirectoryAccountHistory.
+type DirectoryAccountHistoryOrderField struct {
+	// Value extracts the ordering value from the given DirectoryAccountHistory.
+	Value    func(*DirectoryAccountHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directoryaccounthistory.OrderOption
+	toCursor func(*DirectoryAccountHistory) Cursor
+}
+
+// DirectoryAccountHistoryOrder defines the ordering of DirectoryAccountHistory.
+type DirectoryAccountHistoryOrder struct {
+	Direction OrderDirection                     `json:"direction"`
+	Field     *DirectoryAccountHistoryOrderField `json:"field"`
+}
+
+// DefaultDirectoryAccountHistoryOrder is the default ordering of DirectoryAccountHistory.
+var DefaultDirectoryAccountHistoryOrder = &DirectoryAccountHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryAccountHistoryOrderField{
+		Value: func(_m *DirectoryAccountHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directoryaccounthistory.FieldID,
+		toTerm: directoryaccounthistory.ByID,
+		toCursor: func(_m *DirectoryAccountHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryAccountHistory into DirectoryAccountHistoryEdge.
+func (_m *DirectoryAccountHistory) ToEdge(order *DirectoryAccountHistoryOrder) *DirectoryAccountHistoryEdge {
+	if order == nil {
+		order = DefaultDirectoryAccountHistoryOrder
+	}
+	return &DirectoryAccountHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryGroupEdge is the edge representation of DirectoryGroup.
+type DirectoryGroupEdge struct {
+	Node   *DirectoryGroup `json:"node"`
+	Cursor Cursor          `json:"cursor"`
+}
+
+// DirectoryGroupConnection is the connection containing edges to DirectoryGroup.
+type DirectoryGroupConnection struct {
+	Edges      []*DirectoryGroupEdge `json:"edges"`
+	PageInfo   PageInfo              `json:"pageInfo"`
+	TotalCount int                   `json:"totalCount"`
+}
+
+func (c *DirectoryGroupConnection) build(nodes []*DirectoryGroup, pager *directorygroupPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryGroup
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryGroup {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryGroup {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryGroupEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryGroupEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryGroupPaginateOption enables pagination customization.
+type DirectoryGroupPaginateOption func(*directorygroupPager) error
+
+// WithDirectoryGroupOrder configures pagination ordering.
+func WithDirectoryGroupOrder(order []*DirectoryGroupOrder) DirectoryGroupPaginateOption {
+	return func(pager *directorygroupPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDirectoryGroupFilter configures pagination filter.
+func WithDirectoryGroupFilter(filter func(*DirectoryGroupQuery) (*DirectoryGroupQuery, error)) DirectoryGroupPaginateOption {
+	return func(pager *directorygroupPager) error {
+		if filter == nil {
+			return errors.New("DirectoryGroupQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directorygroupPager struct {
+	reverse bool
+	order   []*DirectoryGroupOrder
+	filter  func(*DirectoryGroupQuery) (*DirectoryGroupQuery, error)
+}
+
+func newDirectoryGroupPager(opts []DirectoryGroupPaginateOption, reverse bool) (*directorygroupPager, error) {
+	pager := &directorygroupPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *directorygroupPager) applyFilter(query *DirectoryGroupQuery) (*DirectoryGroupQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directorygroupPager) toCursor(_m *DirectoryGroup) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *directorygroupPager) applyCursors(query *DirectoryGroupQuery, after, before *Cursor) (*DirectoryGroupQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDirectoryGroupOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *directorygroupPager) applyOrder(query *DirectoryGroupQuery) *DirectoryGroupQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDirectoryGroupOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDirectoryGroupOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *directorygroupPager) orderExpr(query *DirectoryGroupQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDirectoryGroupOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryGroup.
+func (_m *DirectoryGroupQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryGroupPaginateOption,
+) (*DirectoryGroupConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryGroupPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryGroupConnection{Edges: []*DirectoryGroupEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryGroupOrderFieldCreatedAt orders DirectoryGroup by created_at.
+	DirectoryGroupOrderFieldCreatedAt = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directorygroup.FieldCreatedAt,
+		toTerm: directorygroup.ByCreatedAt,
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryGroupOrderFieldUpdatedAt orders DirectoryGroup by updated_at.
+	DirectoryGroupOrderFieldUpdatedAt = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directorygroup.FieldUpdatedAt,
+		toTerm: directorygroup.ByUpdatedAt,
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// DirectoryGroupOrderFieldExternalID orders DirectoryGroup by external_id.
+	DirectoryGroupOrderFieldExternalID = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: directorygroup.FieldExternalID,
+		toTerm: directorygroup.ByExternalID,
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// DirectoryGroupOrderFieldEmail orders DirectoryGroup by email.
+	DirectoryGroupOrderFieldEmail = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.Email == nil {
+				return nil, nil
+			}
+			return _m.Email, nil
+		},
+		column: directorygroup.FieldEmail,
+		toTerm: func(opts ...sql.OrderTermOption) directorygroup.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygroup.ByEmail(opts...)
+		},
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			if _m.Email == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// DirectoryGroupOrderFieldDisplayName orders DirectoryGroup by display_name.
+	DirectoryGroupOrderFieldDisplayName = &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: directorygroup.FieldDisplayName,
+		toTerm: directorygroup.ByDisplayName,
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryGroupOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryGroupOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryGroupOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case DirectoryGroupOrderFieldExternalID.column:
+		str = "external_id"
+	case DirectoryGroupOrderFieldEmail.column:
+		str = "email"
+	case DirectoryGroupOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryGroupOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryGroupOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryGroupOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *DirectoryGroupOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryGroupOrderFieldUpdatedAt
+	case "external_id":
+		*f = *DirectoryGroupOrderFieldExternalID
+	case "email":
+		*f = *DirectoryGroupOrderFieldEmail
+	case "display_name":
+		*f = *DirectoryGroupOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryGroupOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryGroupOrderField defines the ordering field of DirectoryGroup.
+type DirectoryGroupOrderField struct {
+	// Value extracts the ordering value from the given DirectoryGroup.
+	Value    func(*DirectoryGroup) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directorygroup.OrderOption
+	toCursor func(*DirectoryGroup) Cursor
+}
+
+// DirectoryGroupOrder defines the ordering of DirectoryGroup.
+type DirectoryGroupOrder struct {
+	Direction OrderDirection            `json:"direction"`
+	Field     *DirectoryGroupOrderField `json:"field"`
+}
+
+// DefaultDirectoryGroupOrder is the default ordering of DirectoryGroup.
+var DefaultDirectoryGroupOrder = &DirectoryGroupOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryGroupOrderField{
+		Value: func(_m *DirectoryGroup) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directorygroup.FieldID,
+		toTerm: directorygroup.ByID,
+		toCursor: func(_m *DirectoryGroup) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryGroup into DirectoryGroupEdge.
+func (_m *DirectoryGroup) ToEdge(order *DirectoryGroupOrder) *DirectoryGroupEdge {
+	if order == nil {
+		order = DefaultDirectoryGroupOrder
+	}
+	return &DirectoryGroupEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryGroupHistoryEdge is the edge representation of DirectoryGroupHistory.
+type DirectoryGroupHistoryEdge struct {
+	Node   *DirectoryGroupHistory `json:"node"`
+	Cursor Cursor                 `json:"cursor"`
+}
+
+// DirectoryGroupHistoryConnection is the connection containing edges to DirectoryGroupHistory.
+type DirectoryGroupHistoryConnection struct {
+	Edges      []*DirectoryGroupHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                     `json:"pageInfo"`
+	TotalCount int                          `json:"totalCount"`
+}
+
+func (c *DirectoryGroupHistoryConnection) build(nodes []*DirectoryGroupHistory, pager *directorygrouphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryGroupHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryGroupHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryGroupHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryGroupHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryGroupHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryGroupHistoryPaginateOption enables pagination customization.
+type DirectoryGroupHistoryPaginateOption func(*directorygrouphistoryPager) error
+
+// WithDirectoryGroupHistoryOrder configures pagination ordering.
+func WithDirectoryGroupHistoryOrder(order *DirectoryGroupHistoryOrder) DirectoryGroupHistoryPaginateOption {
+	if order == nil {
+		order = DefaultDirectoryGroupHistoryOrder
+	}
+	o := *order
+	return func(pager *directorygrouphistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultDirectoryGroupHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithDirectoryGroupHistoryFilter configures pagination filter.
+func WithDirectoryGroupHistoryFilter(filter func(*DirectoryGroupHistoryQuery) (*DirectoryGroupHistoryQuery, error)) DirectoryGroupHistoryPaginateOption {
+	return func(pager *directorygrouphistoryPager) error {
+		if filter == nil {
+			return errors.New("DirectoryGroupHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directorygrouphistoryPager struct {
+	reverse bool
+	order   *DirectoryGroupHistoryOrder
+	filter  func(*DirectoryGroupHistoryQuery) (*DirectoryGroupHistoryQuery, error)
+}
+
+func newDirectoryGroupHistoryPager(opts []DirectoryGroupHistoryPaginateOption, reverse bool) (*directorygrouphistoryPager, error) {
+	pager := &directorygrouphistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultDirectoryGroupHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *directorygrouphistoryPager) applyFilter(query *DirectoryGroupHistoryQuery) (*DirectoryGroupHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directorygrouphistoryPager) toCursor(_m *DirectoryGroupHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *directorygrouphistoryPager) applyCursors(query *DirectoryGroupHistoryQuery, after, before *Cursor) (*DirectoryGroupHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultDirectoryGroupHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *directorygrouphistoryPager) applyOrder(query *DirectoryGroupHistoryQuery) *DirectoryGroupHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultDirectoryGroupHistoryOrder.Field {
+		query = query.Order(DefaultDirectoryGroupHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *directorygrouphistoryPager) orderExpr(query *DirectoryGroupHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultDirectoryGroupHistoryOrder.Field {
+			b.Comma().Ident(DefaultDirectoryGroupHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryGroupHistory.
+func (_m *DirectoryGroupHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryGroupHistoryPaginateOption,
+) (*DirectoryGroupHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryGroupHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryGroupHistoryConnection{Edges: []*DirectoryGroupHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryGroupHistoryOrderFieldHistoryTime orders DirectoryGroupHistory by history_time.
+	DirectoryGroupHistoryOrderFieldHistoryTime = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: directorygrouphistory.FieldHistoryTime,
+		toTerm: directorygrouphistory.ByHistoryTime,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// DirectoryGroupHistoryOrderFieldCreatedAt orders DirectoryGroupHistory by created_at.
+	DirectoryGroupHistoryOrderFieldCreatedAt = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directorygrouphistory.FieldCreatedAt,
+		toTerm: directorygrouphistory.ByCreatedAt,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryGroupHistoryOrderFieldUpdatedAt orders DirectoryGroupHistory by updated_at.
+	DirectoryGroupHistoryOrderFieldUpdatedAt = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directorygrouphistory.FieldUpdatedAt,
+		toTerm: directorygrouphistory.ByUpdatedAt,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// DirectoryGroupHistoryOrderFieldExternalID orders DirectoryGroupHistory by external_id.
+	DirectoryGroupHistoryOrderFieldExternalID = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.ExternalID, nil
+		},
+		column: directorygrouphistory.FieldExternalID,
+		toTerm: directorygrouphistory.ByExternalID,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.ExternalID,
+			}
+		},
+	}
+	// DirectoryGroupHistoryOrderFieldEmail orders DirectoryGroupHistory by email.
+	DirectoryGroupHistoryOrderFieldEmail = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			// allow for nil values for fields
+			if _m.Email == nil {
+				return nil, nil
+			}
+			return _m.Email, nil
+		},
+		column: directorygrouphistory.FieldEmail,
+		toTerm: func(opts ...sql.OrderTermOption) directorygrouphistory.OrderOption {
+			opts = append(opts, sql.OrderNullsLast())
+			return directorygrouphistory.ByEmail(opts...)
+		},
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			if _m.Email == nil {
+				return Cursor{
+					ID:    _m.ID,
+					Value: nil, // handle nil values for fields
+				}
+			}
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.Email,
+			}
+		},
+	}
+	// DirectoryGroupHistoryOrderFieldDisplayName orders DirectoryGroupHistory by display_name.
+	DirectoryGroupHistoryOrderFieldDisplayName = &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.DisplayName, nil
+		},
+		column: directorygrouphistory.FieldDisplayName,
+		toTerm: directorygrouphistory.ByDisplayName,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.DisplayName,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryGroupHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryGroupHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case DirectoryGroupHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryGroupHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case DirectoryGroupHistoryOrderFieldExternalID.column:
+		str = "external_id"
+	case DirectoryGroupHistoryOrderFieldEmail.column:
+		str = "email"
+	case DirectoryGroupHistoryOrderFieldDisplayName.column:
+		str = "display_name"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryGroupHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryGroupHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryGroupHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *DirectoryGroupHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *DirectoryGroupHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryGroupHistoryOrderFieldUpdatedAt
+	case "external_id":
+		*f = *DirectoryGroupHistoryOrderFieldExternalID
+	case "email":
+		*f = *DirectoryGroupHistoryOrderFieldEmail
+	case "display_name":
+		*f = *DirectoryGroupHistoryOrderFieldDisplayName
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryGroupHistoryOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryGroupHistoryOrderField defines the ordering field of DirectoryGroupHistory.
+type DirectoryGroupHistoryOrderField struct {
+	// Value extracts the ordering value from the given DirectoryGroupHistory.
+	Value    func(*DirectoryGroupHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directorygrouphistory.OrderOption
+	toCursor func(*DirectoryGroupHistory) Cursor
+}
+
+// DirectoryGroupHistoryOrder defines the ordering of DirectoryGroupHistory.
+type DirectoryGroupHistoryOrder struct {
+	Direction OrderDirection                   `json:"direction"`
+	Field     *DirectoryGroupHistoryOrderField `json:"field"`
+}
+
+// DefaultDirectoryGroupHistoryOrder is the default ordering of DirectoryGroupHistory.
+var DefaultDirectoryGroupHistoryOrder = &DirectoryGroupHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryGroupHistoryOrderField{
+		Value: func(_m *DirectoryGroupHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directorygrouphistory.FieldID,
+		toTerm: directorygrouphistory.ByID,
+		toCursor: func(_m *DirectoryGroupHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryGroupHistory into DirectoryGroupHistoryEdge.
+func (_m *DirectoryGroupHistory) ToEdge(order *DirectoryGroupHistoryOrder) *DirectoryGroupHistoryEdge {
+	if order == nil {
+		order = DefaultDirectoryGroupHistoryOrder
+	}
+	return &DirectoryGroupHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryMembershipEdge is the edge representation of DirectoryMembership.
+type DirectoryMembershipEdge struct {
+	Node   *DirectoryMembership `json:"node"`
+	Cursor Cursor               `json:"cursor"`
+}
+
+// DirectoryMembershipConnection is the connection containing edges to DirectoryMembership.
+type DirectoryMembershipConnection struct {
+	Edges      []*DirectoryMembershipEdge `json:"edges"`
+	PageInfo   PageInfo                   `json:"pageInfo"`
+	TotalCount int                        `json:"totalCount"`
+}
+
+func (c *DirectoryMembershipConnection) build(nodes []*DirectoryMembership, pager *directorymembershipPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryMembership
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryMembership {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryMembership {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryMembershipEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryMembershipEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryMembershipPaginateOption enables pagination customization.
+type DirectoryMembershipPaginateOption func(*directorymembershipPager) error
+
+// WithDirectoryMembershipOrder configures pagination ordering.
+func WithDirectoryMembershipOrder(order []*DirectoryMembershipOrder) DirectoryMembershipPaginateOption {
+	return func(pager *directorymembershipPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDirectoryMembershipFilter configures pagination filter.
+func WithDirectoryMembershipFilter(filter func(*DirectoryMembershipQuery) (*DirectoryMembershipQuery, error)) DirectoryMembershipPaginateOption {
+	return func(pager *directorymembershipPager) error {
+		if filter == nil {
+			return errors.New("DirectoryMembershipQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directorymembershipPager struct {
+	reverse bool
+	order   []*DirectoryMembershipOrder
+	filter  func(*DirectoryMembershipQuery) (*DirectoryMembershipQuery, error)
+}
+
+func newDirectoryMembershipPager(opts []DirectoryMembershipPaginateOption, reverse bool) (*directorymembershipPager, error) {
+	pager := &directorymembershipPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *directorymembershipPager) applyFilter(query *DirectoryMembershipQuery) (*DirectoryMembershipQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directorymembershipPager) toCursor(_m *DirectoryMembership) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *directorymembershipPager) applyCursors(query *DirectoryMembershipQuery, after, before *Cursor) (*DirectoryMembershipQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDirectoryMembershipOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *directorymembershipPager) applyOrder(query *DirectoryMembershipQuery) *DirectoryMembershipQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDirectoryMembershipOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDirectoryMembershipOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *directorymembershipPager) orderExpr(query *DirectoryMembershipQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDirectoryMembershipOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryMembership.
+func (_m *DirectoryMembershipQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryMembershipPaginateOption,
+) (*DirectoryMembershipConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryMembershipPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryMembershipOrderFieldCreatedAt orders DirectoryMembership by created_at.
+	DirectoryMembershipOrderFieldCreatedAt = &DirectoryMembershipOrderField{
+		Value: func(_m *DirectoryMembership) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directorymembership.FieldCreatedAt,
+		toTerm: directorymembership.ByCreatedAt,
+		toCursor: func(_m *DirectoryMembership) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryMembershipOrderFieldUpdatedAt orders DirectoryMembership by updated_at.
+	DirectoryMembershipOrderFieldUpdatedAt = &DirectoryMembershipOrderField{
+		Value: func(_m *DirectoryMembership) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directorymembership.FieldUpdatedAt,
+		toTerm: directorymembership.ByUpdatedAt,
+		toCursor: func(_m *DirectoryMembership) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryMembershipOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryMembershipOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryMembershipOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryMembershipOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryMembershipOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryMembershipOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *DirectoryMembershipOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryMembershipOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryMembershipOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryMembershipOrderField defines the ordering field of DirectoryMembership.
+type DirectoryMembershipOrderField struct {
+	// Value extracts the ordering value from the given DirectoryMembership.
+	Value    func(*DirectoryMembership) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directorymembership.OrderOption
+	toCursor func(*DirectoryMembership) Cursor
+}
+
+// DirectoryMembershipOrder defines the ordering of DirectoryMembership.
+type DirectoryMembershipOrder struct {
+	Direction OrderDirection                 `json:"direction"`
+	Field     *DirectoryMembershipOrderField `json:"field"`
+}
+
+// DefaultDirectoryMembershipOrder is the default ordering of DirectoryMembership.
+var DefaultDirectoryMembershipOrder = &DirectoryMembershipOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryMembershipOrderField{
+		Value: func(_m *DirectoryMembership) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directorymembership.FieldID,
+		toTerm: directorymembership.ByID,
+		toCursor: func(_m *DirectoryMembership) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryMembership into DirectoryMembershipEdge.
+func (_m *DirectoryMembership) ToEdge(order *DirectoryMembershipOrder) *DirectoryMembershipEdge {
+	if order == nil {
+		order = DefaultDirectoryMembershipOrder
+	}
+	return &DirectoryMembershipEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectoryMembershipHistoryEdge is the edge representation of DirectoryMembershipHistory.
+type DirectoryMembershipHistoryEdge struct {
+	Node   *DirectoryMembershipHistory `json:"node"`
+	Cursor Cursor                      `json:"cursor"`
+}
+
+// DirectoryMembershipHistoryConnection is the connection containing edges to DirectoryMembershipHistory.
+type DirectoryMembershipHistoryConnection struct {
+	Edges      []*DirectoryMembershipHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                          `json:"pageInfo"`
+	TotalCount int                               `json:"totalCount"`
+}
+
+func (c *DirectoryMembershipHistoryConnection) build(nodes []*DirectoryMembershipHistory, pager *directorymembershiphistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectoryMembershipHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectoryMembershipHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectoryMembershipHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectoryMembershipHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectoryMembershipHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectoryMembershipHistoryPaginateOption enables pagination customization.
+type DirectoryMembershipHistoryPaginateOption func(*directorymembershiphistoryPager) error
+
+// WithDirectoryMembershipHistoryOrder configures pagination ordering.
+func WithDirectoryMembershipHistoryOrder(order *DirectoryMembershipHistoryOrder) DirectoryMembershipHistoryPaginateOption {
+	if order == nil {
+		order = DefaultDirectoryMembershipHistoryOrder
+	}
+	o := *order
+	return func(pager *directorymembershiphistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultDirectoryMembershipHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithDirectoryMembershipHistoryFilter configures pagination filter.
+func WithDirectoryMembershipHistoryFilter(filter func(*DirectoryMembershipHistoryQuery) (*DirectoryMembershipHistoryQuery, error)) DirectoryMembershipHistoryPaginateOption {
+	return func(pager *directorymembershiphistoryPager) error {
+		if filter == nil {
+			return errors.New("DirectoryMembershipHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directorymembershiphistoryPager struct {
+	reverse bool
+	order   *DirectoryMembershipHistoryOrder
+	filter  func(*DirectoryMembershipHistoryQuery) (*DirectoryMembershipHistoryQuery, error)
+}
+
+func newDirectoryMembershipHistoryPager(opts []DirectoryMembershipHistoryPaginateOption, reverse bool) (*directorymembershiphistoryPager, error) {
+	pager := &directorymembershiphistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultDirectoryMembershipHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *directorymembershiphistoryPager) applyFilter(query *DirectoryMembershipHistoryQuery) (*DirectoryMembershipHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directorymembershiphistoryPager) toCursor(_m *DirectoryMembershipHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *directorymembershiphistoryPager) applyCursors(query *DirectoryMembershipHistoryQuery, after, before *Cursor) (*DirectoryMembershipHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultDirectoryMembershipHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *directorymembershiphistoryPager) applyOrder(query *DirectoryMembershipHistoryQuery) *DirectoryMembershipHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultDirectoryMembershipHistoryOrder.Field {
+		query = query.Order(DefaultDirectoryMembershipHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *directorymembershiphistoryPager) orderExpr(query *DirectoryMembershipHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultDirectoryMembershipHistoryOrder.Field {
+			b.Comma().Ident(DefaultDirectoryMembershipHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectoryMembershipHistory.
+func (_m *DirectoryMembershipHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectoryMembershipHistoryPaginateOption,
+) (*DirectoryMembershipHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectoryMembershipHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectoryMembershipHistoryConnection{Edges: []*DirectoryMembershipHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectoryMembershipHistoryOrderFieldHistoryTime orders DirectoryMembershipHistory by history_time.
+	DirectoryMembershipHistoryOrderFieldHistoryTime = &DirectoryMembershipHistoryOrderField{
+		Value: func(_m *DirectoryMembershipHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: directorymembershiphistory.FieldHistoryTime,
+		toTerm: directorymembershiphistory.ByHistoryTime,
+		toCursor: func(_m *DirectoryMembershipHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// DirectoryMembershipHistoryOrderFieldCreatedAt orders DirectoryMembershipHistory by created_at.
+	DirectoryMembershipHistoryOrderFieldCreatedAt = &DirectoryMembershipHistoryOrderField{
+		Value: func(_m *DirectoryMembershipHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directorymembershiphistory.FieldCreatedAt,
+		toTerm: directorymembershiphistory.ByCreatedAt,
+		toCursor: func(_m *DirectoryMembershipHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectoryMembershipHistoryOrderFieldUpdatedAt orders DirectoryMembershipHistory by updated_at.
+	DirectoryMembershipHistoryOrderFieldUpdatedAt = &DirectoryMembershipHistoryOrderField{
+		Value: func(_m *DirectoryMembershipHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directorymembershiphistory.FieldUpdatedAt,
+		toTerm: directorymembershiphistory.ByUpdatedAt,
+		toCursor: func(_m *DirectoryMembershipHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectoryMembershipHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectoryMembershipHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case DirectoryMembershipHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectoryMembershipHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectoryMembershipHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectoryMembershipHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectoryMembershipHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *DirectoryMembershipHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *DirectoryMembershipHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectoryMembershipHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid DirectoryMembershipHistoryOrderField", str)
+	}
+	return nil
+}
+
+// DirectoryMembershipHistoryOrderField defines the ordering field of DirectoryMembershipHistory.
+type DirectoryMembershipHistoryOrderField struct {
+	// Value extracts the ordering value from the given DirectoryMembershipHistory.
+	Value    func(*DirectoryMembershipHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directorymembershiphistory.OrderOption
+	toCursor func(*DirectoryMembershipHistory) Cursor
+}
+
+// DirectoryMembershipHistoryOrder defines the ordering of DirectoryMembershipHistory.
+type DirectoryMembershipHistoryOrder struct {
+	Direction OrderDirection                        `json:"direction"`
+	Field     *DirectoryMembershipHistoryOrderField `json:"field"`
+}
+
+// DefaultDirectoryMembershipHistoryOrder is the default ordering of DirectoryMembershipHistory.
+var DefaultDirectoryMembershipHistoryOrder = &DirectoryMembershipHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectoryMembershipHistoryOrderField{
+		Value: func(_m *DirectoryMembershipHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directorymembershiphistory.FieldID,
+		toTerm: directorymembershiphistory.ByID,
+		toCursor: func(_m *DirectoryMembershipHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectoryMembershipHistory into DirectoryMembershipHistoryEdge.
+func (_m *DirectoryMembershipHistory) ToEdge(order *DirectoryMembershipHistoryOrder) *DirectoryMembershipHistoryEdge {
+	if order == nil {
+		order = DefaultDirectoryMembershipHistoryOrder
+	}
+	return &DirectoryMembershipHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// DirectorySyncRunEdge is the edge representation of DirectorySyncRun.
+type DirectorySyncRunEdge struct {
+	Node   *DirectorySyncRun `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// DirectorySyncRunConnection is the connection containing edges to DirectorySyncRun.
+type DirectorySyncRunConnection struct {
+	Edges      []*DirectorySyncRunEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *DirectorySyncRunConnection) build(nodes []*DirectorySyncRun, pager *directorysyncrunPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *DirectorySyncRun
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *DirectorySyncRun {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *DirectorySyncRun {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*DirectorySyncRunEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &DirectorySyncRunEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// DirectorySyncRunPaginateOption enables pagination customization.
+type DirectorySyncRunPaginateOption func(*directorysyncrunPager) error
+
+// WithDirectorySyncRunOrder configures pagination ordering.
+func WithDirectorySyncRunOrder(order []*DirectorySyncRunOrder) DirectorySyncRunPaginateOption {
+	return func(pager *directorysyncrunPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithDirectorySyncRunFilter configures pagination filter.
+func WithDirectorySyncRunFilter(filter func(*DirectorySyncRunQuery) (*DirectorySyncRunQuery, error)) DirectorySyncRunPaginateOption {
+	return func(pager *directorysyncrunPager) error {
+		if filter == nil {
+			return errors.New("DirectorySyncRunQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type directorysyncrunPager struct {
+	reverse bool
+	order   []*DirectorySyncRunOrder
+	filter  func(*DirectorySyncRunQuery) (*DirectorySyncRunQuery, error)
+}
+
+func newDirectorySyncRunPager(opts []DirectorySyncRunPaginateOption, reverse bool) (*directorysyncrunPager, error) {
+	pager := &directorysyncrunPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *directorysyncrunPager) applyFilter(query *DirectorySyncRunQuery) (*DirectorySyncRunQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *directorysyncrunPager) toCursor(_m *DirectorySyncRun) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *directorysyncrunPager) applyCursors(query *DirectorySyncRunQuery, after, before *Cursor) (*DirectorySyncRunQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultDirectorySyncRunOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *directorysyncrunPager) applyOrder(query *DirectorySyncRunQuery) *DirectorySyncRunQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultDirectorySyncRunOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultDirectorySyncRunOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *directorysyncrunPager) orderExpr(query *DirectorySyncRunQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultDirectorySyncRunOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to DirectorySyncRun.
+func (_m *DirectorySyncRunQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...DirectorySyncRunPaginateOption,
+) (*DirectorySyncRunConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newDirectorySyncRunPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &DirectorySyncRunConnection{Edges: []*DirectorySyncRunEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// DirectorySyncRunOrderFieldCreatedAt orders DirectorySyncRun by created_at.
+	DirectorySyncRunOrderFieldCreatedAt = &DirectorySyncRunOrderField{
+		Value: func(_m *DirectorySyncRun) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: directorysyncrun.FieldCreatedAt,
+		toTerm: directorysyncrun.ByCreatedAt,
+		toCursor: func(_m *DirectorySyncRun) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// DirectorySyncRunOrderFieldUpdatedAt orders DirectorySyncRun by updated_at.
+	DirectorySyncRunOrderFieldUpdatedAt = &DirectorySyncRunOrderField{
+		Value: func(_m *DirectorySyncRun) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: directorysyncrun.FieldUpdatedAt,
+		toTerm: directorysyncrun.ByUpdatedAt,
+		toCursor: func(_m *DirectorySyncRun) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+	// DirectorySyncRunOrderFieldStartedAt orders DirectorySyncRun by started_at.
+	DirectorySyncRunOrderFieldStartedAt = &DirectorySyncRunOrderField{
+		Value: func(_m *DirectorySyncRun) (ent.Value, error) {
+			return _m.StartedAt, nil
+		},
+		column: directorysyncrun.FieldStartedAt,
+		toTerm: directorysyncrun.ByStartedAt,
+		toCursor: func(_m *DirectorySyncRun) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.StartedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f DirectorySyncRunOrderField) String() string {
+	var str string
+	switch f.column {
+	case DirectorySyncRunOrderFieldCreatedAt.column:
+		str = "created_at"
+	case DirectorySyncRunOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	case DirectorySyncRunOrderFieldStartedAt.column:
+		str = "started_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f DirectorySyncRunOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *DirectorySyncRunOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("DirectorySyncRunOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *DirectorySyncRunOrderFieldCreatedAt
+	case "updated_at":
+		*f = *DirectorySyncRunOrderFieldUpdatedAt
+	case "started_at":
+		*f = *DirectorySyncRunOrderFieldStartedAt
+	default:
+		return fmt.Errorf("%s is not a valid DirectorySyncRunOrderField", str)
+	}
+	return nil
+}
+
+// DirectorySyncRunOrderField defines the ordering field of DirectorySyncRun.
+type DirectorySyncRunOrderField struct {
+	// Value extracts the ordering value from the given DirectorySyncRun.
+	Value    func(*DirectorySyncRun) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) directorysyncrun.OrderOption
+	toCursor func(*DirectorySyncRun) Cursor
+}
+
+// DirectorySyncRunOrder defines the ordering of DirectorySyncRun.
+type DirectorySyncRunOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *DirectorySyncRunOrderField `json:"field"`
+}
+
+// DefaultDirectorySyncRunOrder is the default ordering of DirectorySyncRun.
+var DefaultDirectorySyncRunOrder = &DirectorySyncRunOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &DirectorySyncRunOrderField{
+		Value: func(_m *DirectorySyncRun) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: directorysyncrun.FieldID,
+		toTerm: directorysyncrun.ByID,
+		toCursor: func(_m *DirectorySyncRun) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts DirectorySyncRun into DirectorySyncRunEdge.
+func (_m *DirectorySyncRun) ToEdge(order *DirectorySyncRunOrder) *DirectorySyncRunEdge {
+	if order == nil {
+		order = DefaultDirectorySyncRunOrder
+	}
+	return &DirectorySyncRunEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}
@@ -49077,6 +51790,4116 @@ func (_m *Webauthn) ToEdge(order *WebauthnOrder) *WebauthnEdge {
 		order = DefaultWebauthnOrder
 	}
 	return &WebauthnEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowAssignmentEdge is the edge representation of WorkflowAssignment.
+type WorkflowAssignmentEdge struct {
+	Node   *WorkflowAssignment `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// WorkflowAssignmentConnection is the connection containing edges to WorkflowAssignment.
+type WorkflowAssignmentConnection struct {
+	Edges      []*WorkflowAssignmentEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *WorkflowAssignmentConnection) build(nodes []*WorkflowAssignment, pager *workflowassignmentPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowAssignment
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowAssignment {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowAssignment {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowAssignmentEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowAssignmentEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowAssignmentPaginateOption enables pagination customization.
+type WorkflowAssignmentPaginateOption func(*workflowassignmentPager) error
+
+// WithWorkflowAssignmentOrder configures pagination ordering.
+func WithWorkflowAssignmentOrder(order []*WorkflowAssignmentOrder) WorkflowAssignmentPaginateOption {
+	return func(pager *workflowassignmentPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowAssignmentFilter configures pagination filter.
+func WithWorkflowAssignmentFilter(filter func(*WorkflowAssignmentQuery) (*WorkflowAssignmentQuery, error)) WorkflowAssignmentPaginateOption {
+	return func(pager *workflowassignmentPager) error {
+		if filter == nil {
+			return errors.New("WorkflowAssignmentQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowassignmentPager struct {
+	reverse bool
+	order   []*WorkflowAssignmentOrder
+	filter  func(*WorkflowAssignmentQuery) (*WorkflowAssignmentQuery, error)
+}
+
+func newWorkflowAssignmentPager(opts []WorkflowAssignmentPaginateOption, reverse bool) (*workflowassignmentPager, error) {
+	pager := &workflowassignmentPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workflowassignmentPager) applyFilter(query *WorkflowAssignmentQuery) (*WorkflowAssignmentQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmentPager) toCursor(_m *WorkflowAssignment) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workflowassignmentPager) applyCursors(query *WorkflowAssignmentQuery, after, before *Cursor) (*WorkflowAssignmentQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowAssignmentOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workflowassignmentPager) applyOrder(query *WorkflowAssignmentQuery) *WorkflowAssignmentQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowAssignmentOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowAssignmentOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workflowassignmentPager) orderExpr(query *WorkflowAssignmentQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowAssignmentOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowAssignment.
+func (_m *WorkflowAssignmentQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowAssignmentPaginateOption,
+) (*WorkflowAssignmentConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowAssignmentPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowAssignmentConnection{Edges: []*WorkflowAssignmentEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowAssignmentOrderFieldCreatedAt orders WorkflowAssignment by created_at.
+	WorkflowAssignmentOrderFieldCreatedAt = &WorkflowAssignmentOrderField{
+		Value: func(_m *WorkflowAssignment) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowassignment.FieldCreatedAt,
+		toTerm: workflowassignment.ByCreatedAt,
+		toCursor: func(_m *WorkflowAssignment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowAssignmentOrderFieldUpdatedAt orders WorkflowAssignment by updated_at.
+	WorkflowAssignmentOrderFieldUpdatedAt = &WorkflowAssignmentOrderField{
+		Value: func(_m *WorkflowAssignment) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowassignment.FieldUpdatedAt,
+		toTerm: workflowassignment.ByUpdatedAt,
+		toCursor: func(_m *WorkflowAssignment) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowAssignmentOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowAssignmentOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowAssignmentOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowAssignmentOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowAssignmentOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowAssignmentOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowAssignmentOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowAssignmentOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowAssignmentOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowAssignmentOrderField defines the ordering field of WorkflowAssignment.
+type WorkflowAssignmentOrderField struct {
+	// Value extracts the ordering value from the given WorkflowAssignment.
+	Value    func(*WorkflowAssignment) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowassignment.OrderOption
+	toCursor func(*WorkflowAssignment) Cursor
+}
+
+// WorkflowAssignmentOrder defines the ordering of WorkflowAssignment.
+type WorkflowAssignmentOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *WorkflowAssignmentOrderField `json:"field"`
+}
+
+// DefaultWorkflowAssignmentOrder is the default ordering of WorkflowAssignment.
+var DefaultWorkflowAssignmentOrder = &WorkflowAssignmentOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowAssignmentOrderField{
+		Value: func(_m *WorkflowAssignment) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowassignment.FieldID,
+		toTerm: workflowassignment.ByID,
+		toCursor: func(_m *WorkflowAssignment) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowAssignment into WorkflowAssignmentEdge.
+func (_m *WorkflowAssignment) ToEdge(order *WorkflowAssignmentOrder) *WorkflowAssignmentEdge {
+	if order == nil {
+		order = DefaultWorkflowAssignmentOrder
+	}
+	return &WorkflowAssignmentEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowAssignmentHistoryEdge is the edge representation of WorkflowAssignmentHistory.
+type WorkflowAssignmentHistoryEdge struct {
+	Node   *WorkflowAssignmentHistory `json:"node"`
+	Cursor Cursor                     `json:"cursor"`
+}
+
+// WorkflowAssignmentHistoryConnection is the connection containing edges to WorkflowAssignmentHistory.
+type WorkflowAssignmentHistoryConnection struct {
+	Edges      []*WorkflowAssignmentHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                         `json:"pageInfo"`
+	TotalCount int                              `json:"totalCount"`
+}
+
+func (c *WorkflowAssignmentHistoryConnection) build(nodes []*WorkflowAssignmentHistory, pager *workflowassignmenthistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowAssignmentHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowAssignmentHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowAssignmentHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowAssignmentHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowAssignmentHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowAssignmentHistoryPaginateOption enables pagination customization.
+type WorkflowAssignmentHistoryPaginateOption func(*workflowassignmenthistoryPager) error
+
+// WithWorkflowAssignmentHistoryOrder configures pagination ordering.
+func WithWorkflowAssignmentHistoryOrder(order *WorkflowAssignmentHistoryOrder) WorkflowAssignmentHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowAssignmentHistoryOrder
+	}
+	o := *order
+	return func(pager *workflowassignmenthistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowAssignmentHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowAssignmentHistoryFilter configures pagination filter.
+func WithWorkflowAssignmentHistoryFilter(filter func(*WorkflowAssignmentHistoryQuery) (*WorkflowAssignmentHistoryQuery, error)) WorkflowAssignmentHistoryPaginateOption {
+	return func(pager *workflowassignmenthistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowAssignmentHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowassignmenthistoryPager struct {
+	reverse bool
+	order   *WorkflowAssignmentHistoryOrder
+	filter  func(*WorkflowAssignmentHistoryQuery) (*WorkflowAssignmentHistoryQuery, error)
+}
+
+func newWorkflowAssignmentHistoryPager(opts []WorkflowAssignmentHistoryPaginateOption, reverse bool) (*workflowassignmenthistoryPager, error) {
+	pager := &workflowassignmenthistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowAssignmentHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowassignmenthistoryPager) applyFilter(query *WorkflowAssignmentHistoryQuery) (*WorkflowAssignmentHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenthistoryPager) toCursor(_m *WorkflowAssignmentHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowassignmenthistoryPager) applyCursors(query *WorkflowAssignmentHistoryQuery, after, before *Cursor) (*WorkflowAssignmentHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowAssignmentHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenthistoryPager) applyOrder(query *WorkflowAssignmentHistoryQuery) *WorkflowAssignmentHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowAssignmentHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowAssignmentHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowassignmenthistoryPager) orderExpr(query *WorkflowAssignmentHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowAssignmentHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowAssignmentHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowAssignmentHistory.
+func (_m *WorkflowAssignmentHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowAssignmentHistoryPaginateOption,
+) (*WorkflowAssignmentHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowAssignmentHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowAssignmentHistoryConnection{Edges: []*WorkflowAssignmentHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowAssignmentHistoryOrderFieldHistoryTime orders WorkflowAssignmentHistory by history_time.
+	WorkflowAssignmentHistoryOrderFieldHistoryTime = &WorkflowAssignmentHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workflowassignmenthistory.FieldHistoryTime,
+		toTerm: workflowassignmenthistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowAssignmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowAssignmentHistoryOrderFieldCreatedAt orders WorkflowAssignmentHistory by created_at.
+	WorkflowAssignmentHistoryOrderFieldCreatedAt = &WorkflowAssignmentHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowassignmenthistory.FieldCreatedAt,
+		toTerm: workflowassignmenthistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowAssignmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowAssignmentHistoryOrderFieldUpdatedAt orders WorkflowAssignmentHistory by updated_at.
+	WorkflowAssignmentHistoryOrderFieldUpdatedAt = &WorkflowAssignmentHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowassignmenthistory.FieldUpdatedAt,
+		toTerm: workflowassignmenthistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowAssignmentHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowAssignmentHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowAssignmentHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowAssignmentHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowAssignmentHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowAssignmentHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowAssignmentHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowAssignmentHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowAssignmentHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowAssignmentHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowAssignmentHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowAssignmentHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowAssignmentHistoryOrderField defines the ordering field of WorkflowAssignmentHistory.
+type WorkflowAssignmentHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowAssignmentHistory.
+	Value    func(*WorkflowAssignmentHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowassignmenthistory.OrderOption
+	toCursor func(*WorkflowAssignmentHistory) Cursor
+}
+
+// WorkflowAssignmentHistoryOrder defines the ordering of WorkflowAssignmentHistory.
+type WorkflowAssignmentHistoryOrder struct {
+	Direction OrderDirection                       `json:"direction"`
+	Field     *WorkflowAssignmentHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowAssignmentHistoryOrder is the default ordering of WorkflowAssignmentHistory.
+var DefaultWorkflowAssignmentHistoryOrder = &WorkflowAssignmentHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowAssignmentHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowassignmenthistory.FieldID,
+		toTerm: workflowassignmenthistory.ByID,
+		toCursor: func(_m *WorkflowAssignmentHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowAssignmentHistory into WorkflowAssignmentHistoryEdge.
+func (_m *WorkflowAssignmentHistory) ToEdge(order *WorkflowAssignmentHistoryOrder) *WorkflowAssignmentHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowAssignmentHistoryOrder
+	}
+	return &WorkflowAssignmentHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowAssignmentTargetEdge is the edge representation of WorkflowAssignmentTarget.
+type WorkflowAssignmentTargetEdge struct {
+	Node   *WorkflowAssignmentTarget `json:"node"`
+	Cursor Cursor                    `json:"cursor"`
+}
+
+// WorkflowAssignmentTargetConnection is the connection containing edges to WorkflowAssignmentTarget.
+type WorkflowAssignmentTargetConnection struct {
+	Edges      []*WorkflowAssignmentTargetEdge `json:"edges"`
+	PageInfo   PageInfo                        `json:"pageInfo"`
+	TotalCount int                             `json:"totalCount"`
+}
+
+func (c *WorkflowAssignmentTargetConnection) build(nodes []*WorkflowAssignmentTarget, pager *workflowassignmenttargetPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowAssignmentTarget
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowAssignmentTarget {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowAssignmentTarget {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowAssignmentTargetEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowAssignmentTargetEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowAssignmentTargetPaginateOption enables pagination customization.
+type WorkflowAssignmentTargetPaginateOption func(*workflowassignmenttargetPager) error
+
+// WithWorkflowAssignmentTargetOrder configures pagination ordering.
+func WithWorkflowAssignmentTargetOrder(order []*WorkflowAssignmentTargetOrder) WorkflowAssignmentTargetPaginateOption {
+	return func(pager *workflowassignmenttargetPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowAssignmentTargetFilter configures pagination filter.
+func WithWorkflowAssignmentTargetFilter(filter func(*WorkflowAssignmentTargetQuery) (*WorkflowAssignmentTargetQuery, error)) WorkflowAssignmentTargetPaginateOption {
+	return func(pager *workflowassignmenttargetPager) error {
+		if filter == nil {
+			return errors.New("WorkflowAssignmentTargetQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowassignmenttargetPager struct {
+	reverse bool
+	order   []*WorkflowAssignmentTargetOrder
+	filter  func(*WorkflowAssignmentTargetQuery) (*WorkflowAssignmentTargetQuery, error)
+}
+
+func newWorkflowAssignmentTargetPager(opts []WorkflowAssignmentTargetPaginateOption, reverse bool) (*workflowassignmenttargetPager, error) {
+	pager := &workflowassignmenttargetPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workflowassignmenttargetPager) applyFilter(query *WorkflowAssignmentTargetQuery) (*WorkflowAssignmentTargetQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenttargetPager) toCursor(_m *WorkflowAssignmentTarget) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workflowassignmenttargetPager) applyCursors(query *WorkflowAssignmentTargetQuery, after, before *Cursor) (*WorkflowAssignmentTargetQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowAssignmentTargetOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenttargetPager) applyOrder(query *WorkflowAssignmentTargetQuery) *WorkflowAssignmentTargetQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowAssignmentTargetOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowAssignmentTargetOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workflowassignmenttargetPager) orderExpr(query *WorkflowAssignmentTargetQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowAssignmentTargetOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowAssignmentTarget.
+func (_m *WorkflowAssignmentTargetQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowAssignmentTargetPaginateOption,
+) (*WorkflowAssignmentTargetConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowAssignmentTargetPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowAssignmentTargetConnection{Edges: []*WorkflowAssignmentTargetEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowAssignmentTargetOrderFieldCreatedAt orders WorkflowAssignmentTarget by created_at.
+	WorkflowAssignmentTargetOrderFieldCreatedAt = &WorkflowAssignmentTargetOrderField{
+		Value: func(_m *WorkflowAssignmentTarget) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowassignmenttarget.FieldCreatedAt,
+		toTerm: workflowassignmenttarget.ByCreatedAt,
+		toCursor: func(_m *WorkflowAssignmentTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowAssignmentTargetOrderFieldUpdatedAt orders WorkflowAssignmentTarget by updated_at.
+	WorkflowAssignmentTargetOrderFieldUpdatedAt = &WorkflowAssignmentTargetOrderField{
+		Value: func(_m *WorkflowAssignmentTarget) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowassignmenttarget.FieldUpdatedAt,
+		toTerm: workflowassignmenttarget.ByUpdatedAt,
+		toCursor: func(_m *WorkflowAssignmentTarget) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowAssignmentTargetOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowAssignmentTargetOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowAssignmentTargetOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowAssignmentTargetOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowAssignmentTargetOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowAssignmentTargetOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowAssignmentTargetOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowAssignmentTargetOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowAssignmentTargetOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowAssignmentTargetOrderField defines the ordering field of WorkflowAssignmentTarget.
+type WorkflowAssignmentTargetOrderField struct {
+	// Value extracts the ordering value from the given WorkflowAssignmentTarget.
+	Value    func(*WorkflowAssignmentTarget) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowassignmenttarget.OrderOption
+	toCursor func(*WorkflowAssignmentTarget) Cursor
+}
+
+// WorkflowAssignmentTargetOrder defines the ordering of WorkflowAssignmentTarget.
+type WorkflowAssignmentTargetOrder struct {
+	Direction OrderDirection                      `json:"direction"`
+	Field     *WorkflowAssignmentTargetOrderField `json:"field"`
+}
+
+// DefaultWorkflowAssignmentTargetOrder is the default ordering of WorkflowAssignmentTarget.
+var DefaultWorkflowAssignmentTargetOrder = &WorkflowAssignmentTargetOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowAssignmentTargetOrderField{
+		Value: func(_m *WorkflowAssignmentTarget) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowassignmenttarget.FieldID,
+		toTerm: workflowassignmenttarget.ByID,
+		toCursor: func(_m *WorkflowAssignmentTarget) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowAssignmentTarget into WorkflowAssignmentTargetEdge.
+func (_m *WorkflowAssignmentTarget) ToEdge(order *WorkflowAssignmentTargetOrder) *WorkflowAssignmentTargetEdge {
+	if order == nil {
+		order = DefaultWorkflowAssignmentTargetOrder
+	}
+	return &WorkflowAssignmentTargetEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowAssignmentTargetHistoryEdge is the edge representation of WorkflowAssignmentTargetHistory.
+type WorkflowAssignmentTargetHistoryEdge struct {
+	Node   *WorkflowAssignmentTargetHistory `json:"node"`
+	Cursor Cursor                           `json:"cursor"`
+}
+
+// WorkflowAssignmentTargetHistoryConnection is the connection containing edges to WorkflowAssignmentTargetHistory.
+type WorkflowAssignmentTargetHistoryConnection struct {
+	Edges      []*WorkflowAssignmentTargetHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                               `json:"pageInfo"`
+	TotalCount int                                    `json:"totalCount"`
+}
+
+func (c *WorkflowAssignmentTargetHistoryConnection) build(nodes []*WorkflowAssignmentTargetHistory, pager *workflowassignmenttargethistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowAssignmentTargetHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowAssignmentTargetHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowAssignmentTargetHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowAssignmentTargetHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowAssignmentTargetHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowAssignmentTargetHistoryPaginateOption enables pagination customization.
+type WorkflowAssignmentTargetHistoryPaginateOption func(*workflowassignmenttargethistoryPager) error
+
+// WithWorkflowAssignmentTargetHistoryOrder configures pagination ordering.
+func WithWorkflowAssignmentTargetHistoryOrder(order *WorkflowAssignmentTargetHistoryOrder) WorkflowAssignmentTargetHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowAssignmentTargetHistoryOrder
+	}
+	o := *order
+	return func(pager *workflowassignmenttargethistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowAssignmentTargetHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowAssignmentTargetHistoryFilter configures pagination filter.
+func WithWorkflowAssignmentTargetHistoryFilter(filter func(*WorkflowAssignmentTargetHistoryQuery) (*WorkflowAssignmentTargetHistoryQuery, error)) WorkflowAssignmentTargetHistoryPaginateOption {
+	return func(pager *workflowassignmenttargethistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowAssignmentTargetHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowassignmenttargethistoryPager struct {
+	reverse bool
+	order   *WorkflowAssignmentTargetHistoryOrder
+	filter  func(*WorkflowAssignmentTargetHistoryQuery) (*WorkflowAssignmentTargetHistoryQuery, error)
+}
+
+func newWorkflowAssignmentTargetHistoryPager(opts []WorkflowAssignmentTargetHistoryPaginateOption, reverse bool) (*workflowassignmenttargethistoryPager, error) {
+	pager := &workflowassignmenttargethistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowAssignmentTargetHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowassignmenttargethistoryPager) applyFilter(query *WorkflowAssignmentTargetHistoryQuery) (*WorkflowAssignmentTargetHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenttargethistoryPager) toCursor(_m *WorkflowAssignmentTargetHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowassignmenttargethistoryPager) applyCursors(query *WorkflowAssignmentTargetHistoryQuery, after, before *Cursor) (*WorkflowAssignmentTargetHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowAssignmentTargetHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowassignmenttargethistoryPager) applyOrder(query *WorkflowAssignmentTargetHistoryQuery) *WorkflowAssignmentTargetHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowAssignmentTargetHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowAssignmentTargetHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowassignmenttargethistoryPager) orderExpr(query *WorkflowAssignmentTargetHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowAssignmentTargetHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowAssignmentTargetHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowAssignmentTargetHistory.
+func (_m *WorkflowAssignmentTargetHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowAssignmentTargetHistoryPaginateOption,
+) (*WorkflowAssignmentTargetHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowAssignmentTargetHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowAssignmentTargetHistoryConnection{Edges: []*WorkflowAssignmentTargetHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowAssignmentTargetHistoryOrderFieldHistoryTime orders WorkflowAssignmentTargetHistory by history_time.
+	WorkflowAssignmentTargetHistoryOrderFieldHistoryTime = &WorkflowAssignmentTargetHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentTargetHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workflowassignmenttargethistory.FieldHistoryTime,
+		toTerm: workflowassignmenttargethistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowAssignmentTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowAssignmentTargetHistoryOrderFieldCreatedAt orders WorkflowAssignmentTargetHistory by created_at.
+	WorkflowAssignmentTargetHistoryOrderFieldCreatedAt = &WorkflowAssignmentTargetHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentTargetHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowassignmenttargethistory.FieldCreatedAt,
+		toTerm: workflowassignmenttargethistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowAssignmentTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowAssignmentTargetHistoryOrderFieldUpdatedAt orders WorkflowAssignmentTargetHistory by updated_at.
+	WorkflowAssignmentTargetHistoryOrderFieldUpdatedAt = &WorkflowAssignmentTargetHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentTargetHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowassignmenttargethistory.FieldUpdatedAt,
+		toTerm: workflowassignmenttargethistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowAssignmentTargetHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowAssignmentTargetHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowAssignmentTargetHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowAssignmentTargetHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowAssignmentTargetHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowAssignmentTargetHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowAssignmentTargetHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowAssignmentTargetHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowAssignmentTargetHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowAssignmentTargetHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowAssignmentTargetHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowAssignmentTargetHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowAssignmentTargetHistoryOrderField defines the ordering field of WorkflowAssignmentTargetHistory.
+type WorkflowAssignmentTargetHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowAssignmentTargetHistory.
+	Value    func(*WorkflowAssignmentTargetHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowassignmenttargethistory.OrderOption
+	toCursor func(*WorkflowAssignmentTargetHistory) Cursor
+}
+
+// WorkflowAssignmentTargetHistoryOrder defines the ordering of WorkflowAssignmentTargetHistory.
+type WorkflowAssignmentTargetHistoryOrder struct {
+	Direction OrderDirection                             `json:"direction"`
+	Field     *WorkflowAssignmentTargetHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowAssignmentTargetHistoryOrder is the default ordering of WorkflowAssignmentTargetHistory.
+var DefaultWorkflowAssignmentTargetHistoryOrder = &WorkflowAssignmentTargetHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowAssignmentTargetHistoryOrderField{
+		Value: func(_m *WorkflowAssignmentTargetHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowassignmenttargethistory.FieldID,
+		toTerm: workflowassignmenttargethistory.ByID,
+		toCursor: func(_m *WorkflowAssignmentTargetHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowAssignmentTargetHistory into WorkflowAssignmentTargetHistoryEdge.
+func (_m *WorkflowAssignmentTargetHistory) ToEdge(order *WorkflowAssignmentTargetHistoryOrder) *WorkflowAssignmentTargetHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowAssignmentTargetHistoryOrder
+	}
+	return &WorkflowAssignmentTargetHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowDefinitionEdge is the edge representation of WorkflowDefinition.
+type WorkflowDefinitionEdge struct {
+	Node   *WorkflowDefinition `json:"node"`
+	Cursor Cursor              `json:"cursor"`
+}
+
+// WorkflowDefinitionConnection is the connection containing edges to WorkflowDefinition.
+type WorkflowDefinitionConnection struct {
+	Edges      []*WorkflowDefinitionEdge `json:"edges"`
+	PageInfo   PageInfo                  `json:"pageInfo"`
+	TotalCount int                       `json:"totalCount"`
+}
+
+func (c *WorkflowDefinitionConnection) build(nodes []*WorkflowDefinition, pager *workflowdefinitionPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowDefinition
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowDefinition {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowDefinition {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowDefinitionEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowDefinitionEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowDefinitionPaginateOption enables pagination customization.
+type WorkflowDefinitionPaginateOption func(*workflowdefinitionPager) error
+
+// WithWorkflowDefinitionOrder configures pagination ordering.
+func WithWorkflowDefinitionOrder(order []*WorkflowDefinitionOrder) WorkflowDefinitionPaginateOption {
+	return func(pager *workflowdefinitionPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowDefinitionFilter configures pagination filter.
+func WithWorkflowDefinitionFilter(filter func(*WorkflowDefinitionQuery) (*WorkflowDefinitionQuery, error)) WorkflowDefinitionPaginateOption {
+	return func(pager *workflowdefinitionPager) error {
+		if filter == nil {
+			return errors.New("WorkflowDefinitionQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowdefinitionPager struct {
+	reverse bool
+	order   []*WorkflowDefinitionOrder
+	filter  func(*WorkflowDefinitionQuery) (*WorkflowDefinitionQuery, error)
+}
+
+func newWorkflowDefinitionPager(opts []WorkflowDefinitionPaginateOption, reverse bool) (*workflowdefinitionPager, error) {
+	pager := &workflowdefinitionPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workflowdefinitionPager) applyFilter(query *WorkflowDefinitionQuery) (*WorkflowDefinitionQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowdefinitionPager) toCursor(_m *WorkflowDefinition) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workflowdefinitionPager) applyCursors(query *WorkflowDefinitionQuery, after, before *Cursor) (*WorkflowDefinitionQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowDefinitionOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workflowdefinitionPager) applyOrder(query *WorkflowDefinitionQuery) *WorkflowDefinitionQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowDefinitionOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowDefinitionOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workflowdefinitionPager) orderExpr(query *WorkflowDefinitionQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowDefinitionOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowDefinition.
+func (_m *WorkflowDefinitionQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowDefinitionPaginateOption,
+) (*WorkflowDefinitionConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowDefinitionPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowDefinitionConnection{Edges: []*WorkflowDefinitionEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowDefinitionOrderFieldCreatedAt orders WorkflowDefinition by created_at.
+	WorkflowDefinitionOrderFieldCreatedAt = &WorkflowDefinitionOrderField{
+		Value: func(_m *WorkflowDefinition) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowdefinition.FieldCreatedAt,
+		toTerm: workflowdefinition.ByCreatedAt,
+		toCursor: func(_m *WorkflowDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowDefinitionOrderFieldUpdatedAt orders WorkflowDefinition by updated_at.
+	WorkflowDefinitionOrderFieldUpdatedAt = &WorkflowDefinitionOrderField{
+		Value: func(_m *WorkflowDefinition) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowdefinition.FieldUpdatedAt,
+		toTerm: workflowdefinition.ByUpdatedAt,
+		toCursor: func(_m *WorkflowDefinition) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowDefinitionOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowDefinitionOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowDefinitionOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowDefinitionOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowDefinitionOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowDefinitionOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowDefinitionOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowDefinitionOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowDefinitionOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowDefinitionOrderField defines the ordering field of WorkflowDefinition.
+type WorkflowDefinitionOrderField struct {
+	// Value extracts the ordering value from the given WorkflowDefinition.
+	Value    func(*WorkflowDefinition) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowdefinition.OrderOption
+	toCursor func(*WorkflowDefinition) Cursor
+}
+
+// WorkflowDefinitionOrder defines the ordering of WorkflowDefinition.
+type WorkflowDefinitionOrder struct {
+	Direction OrderDirection                `json:"direction"`
+	Field     *WorkflowDefinitionOrderField `json:"field"`
+}
+
+// DefaultWorkflowDefinitionOrder is the default ordering of WorkflowDefinition.
+var DefaultWorkflowDefinitionOrder = &WorkflowDefinitionOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowDefinitionOrderField{
+		Value: func(_m *WorkflowDefinition) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowdefinition.FieldID,
+		toTerm: workflowdefinition.ByID,
+		toCursor: func(_m *WorkflowDefinition) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowDefinition into WorkflowDefinitionEdge.
+func (_m *WorkflowDefinition) ToEdge(order *WorkflowDefinitionOrder) *WorkflowDefinitionEdge {
+	if order == nil {
+		order = DefaultWorkflowDefinitionOrder
+	}
+	return &WorkflowDefinitionEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowDefinitionHistoryEdge is the edge representation of WorkflowDefinitionHistory.
+type WorkflowDefinitionHistoryEdge struct {
+	Node   *WorkflowDefinitionHistory `json:"node"`
+	Cursor Cursor                     `json:"cursor"`
+}
+
+// WorkflowDefinitionHistoryConnection is the connection containing edges to WorkflowDefinitionHistory.
+type WorkflowDefinitionHistoryConnection struct {
+	Edges      []*WorkflowDefinitionHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                         `json:"pageInfo"`
+	TotalCount int                              `json:"totalCount"`
+}
+
+func (c *WorkflowDefinitionHistoryConnection) build(nodes []*WorkflowDefinitionHistory, pager *workflowdefinitionhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowDefinitionHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowDefinitionHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowDefinitionHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowDefinitionHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowDefinitionHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowDefinitionHistoryPaginateOption enables pagination customization.
+type WorkflowDefinitionHistoryPaginateOption func(*workflowdefinitionhistoryPager) error
+
+// WithWorkflowDefinitionHistoryOrder configures pagination ordering.
+func WithWorkflowDefinitionHistoryOrder(order *WorkflowDefinitionHistoryOrder) WorkflowDefinitionHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowDefinitionHistoryOrder
+	}
+	o := *order
+	return func(pager *workflowdefinitionhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowDefinitionHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowDefinitionHistoryFilter configures pagination filter.
+func WithWorkflowDefinitionHistoryFilter(filter func(*WorkflowDefinitionHistoryQuery) (*WorkflowDefinitionHistoryQuery, error)) WorkflowDefinitionHistoryPaginateOption {
+	return func(pager *workflowdefinitionhistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowDefinitionHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowdefinitionhistoryPager struct {
+	reverse bool
+	order   *WorkflowDefinitionHistoryOrder
+	filter  func(*WorkflowDefinitionHistoryQuery) (*WorkflowDefinitionHistoryQuery, error)
+}
+
+func newWorkflowDefinitionHistoryPager(opts []WorkflowDefinitionHistoryPaginateOption, reverse bool) (*workflowdefinitionhistoryPager, error) {
+	pager := &workflowdefinitionhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowDefinitionHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowdefinitionhistoryPager) applyFilter(query *WorkflowDefinitionHistoryQuery) (*WorkflowDefinitionHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowdefinitionhistoryPager) toCursor(_m *WorkflowDefinitionHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowdefinitionhistoryPager) applyCursors(query *WorkflowDefinitionHistoryQuery, after, before *Cursor) (*WorkflowDefinitionHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowDefinitionHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowdefinitionhistoryPager) applyOrder(query *WorkflowDefinitionHistoryQuery) *WorkflowDefinitionHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowDefinitionHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowDefinitionHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowdefinitionhistoryPager) orderExpr(query *WorkflowDefinitionHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowDefinitionHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowDefinitionHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowDefinitionHistory.
+func (_m *WorkflowDefinitionHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowDefinitionHistoryPaginateOption,
+) (*WorkflowDefinitionHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowDefinitionHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowDefinitionHistoryConnection{Edges: []*WorkflowDefinitionHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowDefinitionHistoryOrderFieldHistoryTime orders WorkflowDefinitionHistory by history_time.
+	WorkflowDefinitionHistoryOrderFieldHistoryTime = &WorkflowDefinitionHistoryOrderField{
+		Value: func(_m *WorkflowDefinitionHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workflowdefinitionhistory.FieldHistoryTime,
+		toTerm: workflowdefinitionhistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowDefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowDefinitionHistoryOrderFieldCreatedAt orders WorkflowDefinitionHistory by created_at.
+	WorkflowDefinitionHistoryOrderFieldCreatedAt = &WorkflowDefinitionHistoryOrderField{
+		Value: func(_m *WorkflowDefinitionHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowdefinitionhistory.FieldCreatedAt,
+		toTerm: workflowdefinitionhistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowDefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowDefinitionHistoryOrderFieldUpdatedAt orders WorkflowDefinitionHistory by updated_at.
+	WorkflowDefinitionHistoryOrderFieldUpdatedAt = &WorkflowDefinitionHistoryOrderField{
+		Value: func(_m *WorkflowDefinitionHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowdefinitionhistory.FieldUpdatedAt,
+		toTerm: workflowdefinitionhistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowDefinitionHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowDefinitionHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowDefinitionHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowDefinitionHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowDefinitionHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowDefinitionHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowDefinitionHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowDefinitionHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowDefinitionHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowDefinitionHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowDefinitionHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowDefinitionHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowDefinitionHistoryOrderField defines the ordering field of WorkflowDefinitionHistory.
+type WorkflowDefinitionHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowDefinitionHistory.
+	Value    func(*WorkflowDefinitionHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowdefinitionhistory.OrderOption
+	toCursor func(*WorkflowDefinitionHistory) Cursor
+}
+
+// WorkflowDefinitionHistoryOrder defines the ordering of WorkflowDefinitionHistory.
+type WorkflowDefinitionHistoryOrder struct {
+	Direction OrderDirection                       `json:"direction"`
+	Field     *WorkflowDefinitionHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowDefinitionHistoryOrder is the default ordering of WorkflowDefinitionHistory.
+var DefaultWorkflowDefinitionHistoryOrder = &WorkflowDefinitionHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowDefinitionHistoryOrderField{
+		Value: func(_m *WorkflowDefinitionHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowdefinitionhistory.FieldID,
+		toTerm: workflowdefinitionhistory.ByID,
+		toCursor: func(_m *WorkflowDefinitionHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowDefinitionHistory into WorkflowDefinitionHistoryEdge.
+func (_m *WorkflowDefinitionHistory) ToEdge(order *WorkflowDefinitionHistoryOrder) *WorkflowDefinitionHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowDefinitionHistoryOrder
+	}
+	return &WorkflowDefinitionHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowEventEdge is the edge representation of WorkflowEvent.
+type WorkflowEventEdge struct {
+	Node   *WorkflowEvent `json:"node"`
+	Cursor Cursor         `json:"cursor"`
+}
+
+// WorkflowEventConnection is the connection containing edges to WorkflowEvent.
+type WorkflowEventConnection struct {
+	Edges      []*WorkflowEventEdge `json:"edges"`
+	PageInfo   PageInfo             `json:"pageInfo"`
+	TotalCount int                  `json:"totalCount"`
+}
+
+func (c *WorkflowEventConnection) build(nodes []*WorkflowEvent, pager *workfloweventPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowEvent
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowEvent {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowEvent {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowEventEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowEventEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowEventPaginateOption enables pagination customization.
+type WorkflowEventPaginateOption func(*workfloweventPager) error
+
+// WithWorkflowEventOrder configures pagination ordering.
+func WithWorkflowEventOrder(order []*WorkflowEventOrder) WorkflowEventPaginateOption {
+	return func(pager *workfloweventPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowEventFilter configures pagination filter.
+func WithWorkflowEventFilter(filter func(*WorkflowEventQuery) (*WorkflowEventQuery, error)) WorkflowEventPaginateOption {
+	return func(pager *workfloweventPager) error {
+		if filter == nil {
+			return errors.New("WorkflowEventQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workfloweventPager struct {
+	reverse bool
+	order   []*WorkflowEventOrder
+	filter  func(*WorkflowEventQuery) (*WorkflowEventQuery, error)
+}
+
+func newWorkflowEventPager(opts []WorkflowEventPaginateOption, reverse bool) (*workfloweventPager, error) {
+	pager := &workfloweventPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workfloweventPager) applyFilter(query *WorkflowEventQuery) (*WorkflowEventQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workfloweventPager) toCursor(_m *WorkflowEvent) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workfloweventPager) applyCursors(query *WorkflowEventQuery, after, before *Cursor) (*WorkflowEventQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowEventOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workfloweventPager) applyOrder(query *WorkflowEventQuery) *WorkflowEventQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowEventOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowEventOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workfloweventPager) orderExpr(query *WorkflowEventQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowEventOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowEvent.
+func (_m *WorkflowEventQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowEventPaginateOption,
+) (*WorkflowEventConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowEventPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowEventConnection{Edges: []*WorkflowEventEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowEventOrderFieldCreatedAt orders WorkflowEvent by created_at.
+	WorkflowEventOrderFieldCreatedAt = &WorkflowEventOrderField{
+		Value: func(_m *WorkflowEvent) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowevent.FieldCreatedAt,
+		toTerm: workflowevent.ByCreatedAt,
+		toCursor: func(_m *WorkflowEvent) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowEventOrderFieldUpdatedAt orders WorkflowEvent by updated_at.
+	WorkflowEventOrderFieldUpdatedAt = &WorkflowEventOrderField{
+		Value: func(_m *WorkflowEvent) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowevent.FieldUpdatedAt,
+		toTerm: workflowevent.ByUpdatedAt,
+		toCursor: func(_m *WorkflowEvent) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowEventOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowEventOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowEventOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowEventOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowEventOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowEventOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowEventOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowEventOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowEventOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowEventOrderField defines the ordering field of WorkflowEvent.
+type WorkflowEventOrderField struct {
+	// Value extracts the ordering value from the given WorkflowEvent.
+	Value    func(*WorkflowEvent) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowevent.OrderOption
+	toCursor func(*WorkflowEvent) Cursor
+}
+
+// WorkflowEventOrder defines the ordering of WorkflowEvent.
+type WorkflowEventOrder struct {
+	Direction OrderDirection           `json:"direction"`
+	Field     *WorkflowEventOrderField `json:"field"`
+}
+
+// DefaultWorkflowEventOrder is the default ordering of WorkflowEvent.
+var DefaultWorkflowEventOrder = &WorkflowEventOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowEventOrderField{
+		Value: func(_m *WorkflowEvent) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowevent.FieldID,
+		toTerm: workflowevent.ByID,
+		toCursor: func(_m *WorkflowEvent) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowEvent into WorkflowEventEdge.
+func (_m *WorkflowEvent) ToEdge(order *WorkflowEventOrder) *WorkflowEventEdge {
+	if order == nil {
+		order = DefaultWorkflowEventOrder
+	}
+	return &WorkflowEventEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowEventHistoryEdge is the edge representation of WorkflowEventHistory.
+type WorkflowEventHistoryEdge struct {
+	Node   *WorkflowEventHistory `json:"node"`
+	Cursor Cursor                `json:"cursor"`
+}
+
+// WorkflowEventHistoryConnection is the connection containing edges to WorkflowEventHistory.
+type WorkflowEventHistoryConnection struct {
+	Edges      []*WorkflowEventHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                    `json:"pageInfo"`
+	TotalCount int                         `json:"totalCount"`
+}
+
+func (c *WorkflowEventHistoryConnection) build(nodes []*WorkflowEventHistory, pager *workfloweventhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowEventHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowEventHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowEventHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowEventHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowEventHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowEventHistoryPaginateOption enables pagination customization.
+type WorkflowEventHistoryPaginateOption func(*workfloweventhistoryPager) error
+
+// WithWorkflowEventHistoryOrder configures pagination ordering.
+func WithWorkflowEventHistoryOrder(order *WorkflowEventHistoryOrder) WorkflowEventHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowEventHistoryOrder
+	}
+	o := *order
+	return func(pager *workfloweventhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowEventHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowEventHistoryFilter configures pagination filter.
+func WithWorkflowEventHistoryFilter(filter func(*WorkflowEventHistoryQuery) (*WorkflowEventHistoryQuery, error)) WorkflowEventHistoryPaginateOption {
+	return func(pager *workfloweventhistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowEventHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workfloweventhistoryPager struct {
+	reverse bool
+	order   *WorkflowEventHistoryOrder
+	filter  func(*WorkflowEventHistoryQuery) (*WorkflowEventHistoryQuery, error)
+}
+
+func newWorkflowEventHistoryPager(opts []WorkflowEventHistoryPaginateOption, reverse bool) (*workfloweventhistoryPager, error) {
+	pager := &workfloweventhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowEventHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workfloweventhistoryPager) applyFilter(query *WorkflowEventHistoryQuery) (*WorkflowEventHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workfloweventhistoryPager) toCursor(_m *WorkflowEventHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workfloweventhistoryPager) applyCursors(query *WorkflowEventHistoryQuery, after, before *Cursor) (*WorkflowEventHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowEventHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workfloweventhistoryPager) applyOrder(query *WorkflowEventHistoryQuery) *WorkflowEventHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowEventHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowEventHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workfloweventhistoryPager) orderExpr(query *WorkflowEventHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowEventHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowEventHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowEventHistory.
+func (_m *WorkflowEventHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowEventHistoryPaginateOption,
+) (*WorkflowEventHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowEventHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowEventHistoryConnection{Edges: []*WorkflowEventHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowEventHistoryOrderFieldHistoryTime orders WorkflowEventHistory by history_time.
+	WorkflowEventHistoryOrderFieldHistoryTime = &WorkflowEventHistoryOrderField{
+		Value: func(_m *WorkflowEventHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workfloweventhistory.FieldHistoryTime,
+		toTerm: workfloweventhistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowEventHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowEventHistoryOrderFieldCreatedAt orders WorkflowEventHistory by created_at.
+	WorkflowEventHistoryOrderFieldCreatedAt = &WorkflowEventHistoryOrderField{
+		Value: func(_m *WorkflowEventHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workfloweventhistory.FieldCreatedAt,
+		toTerm: workfloweventhistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowEventHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowEventHistoryOrderFieldUpdatedAt orders WorkflowEventHistory by updated_at.
+	WorkflowEventHistoryOrderFieldUpdatedAt = &WorkflowEventHistoryOrderField{
+		Value: func(_m *WorkflowEventHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workfloweventhistory.FieldUpdatedAt,
+		toTerm: workfloweventhistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowEventHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowEventHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowEventHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowEventHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowEventHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowEventHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowEventHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowEventHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowEventHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowEventHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowEventHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowEventHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowEventHistoryOrderField defines the ordering field of WorkflowEventHistory.
+type WorkflowEventHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowEventHistory.
+	Value    func(*WorkflowEventHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workfloweventhistory.OrderOption
+	toCursor func(*WorkflowEventHistory) Cursor
+}
+
+// WorkflowEventHistoryOrder defines the ordering of WorkflowEventHistory.
+type WorkflowEventHistoryOrder struct {
+	Direction OrderDirection                  `json:"direction"`
+	Field     *WorkflowEventHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowEventHistoryOrder is the default ordering of WorkflowEventHistory.
+var DefaultWorkflowEventHistoryOrder = &WorkflowEventHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowEventHistoryOrderField{
+		Value: func(_m *WorkflowEventHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workfloweventhistory.FieldID,
+		toTerm: workfloweventhistory.ByID,
+		toCursor: func(_m *WorkflowEventHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowEventHistory into WorkflowEventHistoryEdge.
+func (_m *WorkflowEventHistory) ToEdge(order *WorkflowEventHistoryOrder) *WorkflowEventHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowEventHistoryOrder
+	}
+	return &WorkflowEventHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowInstanceEdge is the edge representation of WorkflowInstance.
+type WorkflowInstanceEdge struct {
+	Node   *WorkflowInstance `json:"node"`
+	Cursor Cursor            `json:"cursor"`
+}
+
+// WorkflowInstanceConnection is the connection containing edges to WorkflowInstance.
+type WorkflowInstanceConnection struct {
+	Edges      []*WorkflowInstanceEdge `json:"edges"`
+	PageInfo   PageInfo                `json:"pageInfo"`
+	TotalCount int                     `json:"totalCount"`
+}
+
+func (c *WorkflowInstanceConnection) build(nodes []*WorkflowInstance, pager *workflowinstancePager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowInstance
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowInstance {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowInstance {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowInstanceEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowInstanceEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowInstancePaginateOption enables pagination customization.
+type WorkflowInstancePaginateOption func(*workflowinstancePager) error
+
+// WithWorkflowInstanceOrder configures pagination ordering.
+func WithWorkflowInstanceOrder(order []*WorkflowInstanceOrder) WorkflowInstancePaginateOption {
+	return func(pager *workflowinstancePager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowInstanceFilter configures pagination filter.
+func WithWorkflowInstanceFilter(filter func(*WorkflowInstanceQuery) (*WorkflowInstanceQuery, error)) WorkflowInstancePaginateOption {
+	return func(pager *workflowinstancePager) error {
+		if filter == nil {
+			return errors.New("WorkflowInstanceQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowinstancePager struct {
+	reverse bool
+	order   []*WorkflowInstanceOrder
+	filter  func(*WorkflowInstanceQuery) (*WorkflowInstanceQuery, error)
+}
+
+func newWorkflowInstancePager(opts []WorkflowInstancePaginateOption, reverse bool) (*workflowinstancePager, error) {
+	pager := &workflowinstancePager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workflowinstancePager) applyFilter(query *WorkflowInstanceQuery) (*WorkflowInstanceQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowinstancePager) toCursor(_m *WorkflowInstance) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workflowinstancePager) applyCursors(query *WorkflowInstanceQuery, after, before *Cursor) (*WorkflowInstanceQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowInstanceOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workflowinstancePager) applyOrder(query *WorkflowInstanceQuery) *WorkflowInstanceQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowInstanceOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowInstanceOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workflowinstancePager) orderExpr(query *WorkflowInstanceQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowInstanceOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowInstance.
+func (_m *WorkflowInstanceQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowInstancePaginateOption,
+) (*WorkflowInstanceConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowInstancePager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowInstanceConnection{Edges: []*WorkflowInstanceEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowInstanceOrderFieldCreatedAt orders WorkflowInstance by created_at.
+	WorkflowInstanceOrderFieldCreatedAt = &WorkflowInstanceOrderField{
+		Value: func(_m *WorkflowInstance) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowinstance.FieldCreatedAt,
+		toTerm: workflowinstance.ByCreatedAt,
+		toCursor: func(_m *WorkflowInstance) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowInstanceOrderFieldUpdatedAt orders WorkflowInstance by updated_at.
+	WorkflowInstanceOrderFieldUpdatedAt = &WorkflowInstanceOrderField{
+		Value: func(_m *WorkflowInstance) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowinstance.FieldUpdatedAt,
+		toTerm: workflowinstance.ByUpdatedAt,
+		toCursor: func(_m *WorkflowInstance) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowInstanceOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowInstanceOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowInstanceOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowInstanceOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowInstanceOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowInstanceOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowInstanceOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowInstanceOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowInstanceOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowInstanceOrderField defines the ordering field of WorkflowInstance.
+type WorkflowInstanceOrderField struct {
+	// Value extracts the ordering value from the given WorkflowInstance.
+	Value    func(*WorkflowInstance) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowinstance.OrderOption
+	toCursor func(*WorkflowInstance) Cursor
+}
+
+// WorkflowInstanceOrder defines the ordering of WorkflowInstance.
+type WorkflowInstanceOrder struct {
+	Direction OrderDirection              `json:"direction"`
+	Field     *WorkflowInstanceOrderField `json:"field"`
+}
+
+// DefaultWorkflowInstanceOrder is the default ordering of WorkflowInstance.
+var DefaultWorkflowInstanceOrder = &WorkflowInstanceOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowInstanceOrderField{
+		Value: func(_m *WorkflowInstance) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowinstance.FieldID,
+		toTerm: workflowinstance.ByID,
+		toCursor: func(_m *WorkflowInstance) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowInstance into WorkflowInstanceEdge.
+func (_m *WorkflowInstance) ToEdge(order *WorkflowInstanceOrder) *WorkflowInstanceEdge {
+	if order == nil {
+		order = DefaultWorkflowInstanceOrder
+	}
+	return &WorkflowInstanceEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowInstanceHistoryEdge is the edge representation of WorkflowInstanceHistory.
+type WorkflowInstanceHistoryEdge struct {
+	Node   *WorkflowInstanceHistory `json:"node"`
+	Cursor Cursor                   `json:"cursor"`
+}
+
+// WorkflowInstanceHistoryConnection is the connection containing edges to WorkflowInstanceHistory.
+type WorkflowInstanceHistoryConnection struct {
+	Edges      []*WorkflowInstanceHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                       `json:"pageInfo"`
+	TotalCount int                            `json:"totalCount"`
+}
+
+func (c *WorkflowInstanceHistoryConnection) build(nodes []*WorkflowInstanceHistory, pager *workflowinstancehistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowInstanceHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowInstanceHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowInstanceHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowInstanceHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowInstanceHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowInstanceHistoryPaginateOption enables pagination customization.
+type WorkflowInstanceHistoryPaginateOption func(*workflowinstancehistoryPager) error
+
+// WithWorkflowInstanceHistoryOrder configures pagination ordering.
+func WithWorkflowInstanceHistoryOrder(order *WorkflowInstanceHistoryOrder) WorkflowInstanceHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowInstanceHistoryOrder
+	}
+	o := *order
+	return func(pager *workflowinstancehistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowInstanceHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowInstanceHistoryFilter configures pagination filter.
+func WithWorkflowInstanceHistoryFilter(filter func(*WorkflowInstanceHistoryQuery) (*WorkflowInstanceHistoryQuery, error)) WorkflowInstanceHistoryPaginateOption {
+	return func(pager *workflowinstancehistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowInstanceHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowinstancehistoryPager struct {
+	reverse bool
+	order   *WorkflowInstanceHistoryOrder
+	filter  func(*WorkflowInstanceHistoryQuery) (*WorkflowInstanceHistoryQuery, error)
+}
+
+func newWorkflowInstanceHistoryPager(opts []WorkflowInstanceHistoryPaginateOption, reverse bool) (*workflowinstancehistoryPager, error) {
+	pager := &workflowinstancehistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowInstanceHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowinstancehistoryPager) applyFilter(query *WorkflowInstanceHistoryQuery) (*WorkflowInstanceHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowinstancehistoryPager) toCursor(_m *WorkflowInstanceHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowinstancehistoryPager) applyCursors(query *WorkflowInstanceHistoryQuery, after, before *Cursor) (*WorkflowInstanceHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowInstanceHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowinstancehistoryPager) applyOrder(query *WorkflowInstanceHistoryQuery) *WorkflowInstanceHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowInstanceHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowInstanceHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowinstancehistoryPager) orderExpr(query *WorkflowInstanceHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowInstanceHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowInstanceHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowInstanceHistory.
+func (_m *WorkflowInstanceHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowInstanceHistoryPaginateOption,
+) (*WorkflowInstanceHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowInstanceHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowInstanceHistoryConnection{Edges: []*WorkflowInstanceHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowInstanceHistoryOrderFieldHistoryTime orders WorkflowInstanceHistory by history_time.
+	WorkflowInstanceHistoryOrderFieldHistoryTime = &WorkflowInstanceHistoryOrderField{
+		Value: func(_m *WorkflowInstanceHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workflowinstancehistory.FieldHistoryTime,
+		toTerm: workflowinstancehistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowInstanceHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowInstanceHistoryOrderFieldCreatedAt orders WorkflowInstanceHistory by created_at.
+	WorkflowInstanceHistoryOrderFieldCreatedAt = &WorkflowInstanceHistoryOrderField{
+		Value: func(_m *WorkflowInstanceHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowinstancehistory.FieldCreatedAt,
+		toTerm: workflowinstancehistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowInstanceHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowInstanceHistoryOrderFieldUpdatedAt orders WorkflowInstanceHistory by updated_at.
+	WorkflowInstanceHistoryOrderFieldUpdatedAt = &WorkflowInstanceHistoryOrderField{
+		Value: func(_m *WorkflowInstanceHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowinstancehistory.FieldUpdatedAt,
+		toTerm: workflowinstancehistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowInstanceHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowInstanceHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowInstanceHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowInstanceHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowInstanceHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowInstanceHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowInstanceHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowInstanceHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowInstanceHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowInstanceHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowInstanceHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowInstanceHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowInstanceHistoryOrderField defines the ordering field of WorkflowInstanceHistory.
+type WorkflowInstanceHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowInstanceHistory.
+	Value    func(*WorkflowInstanceHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowinstancehistory.OrderOption
+	toCursor func(*WorkflowInstanceHistory) Cursor
+}
+
+// WorkflowInstanceHistoryOrder defines the ordering of WorkflowInstanceHistory.
+type WorkflowInstanceHistoryOrder struct {
+	Direction OrderDirection                     `json:"direction"`
+	Field     *WorkflowInstanceHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowInstanceHistoryOrder is the default ordering of WorkflowInstanceHistory.
+var DefaultWorkflowInstanceHistoryOrder = &WorkflowInstanceHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowInstanceHistoryOrderField{
+		Value: func(_m *WorkflowInstanceHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowinstancehistory.FieldID,
+		toTerm: workflowinstancehistory.ByID,
+		toCursor: func(_m *WorkflowInstanceHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowInstanceHistory into WorkflowInstanceHistoryEdge.
+func (_m *WorkflowInstanceHistory) ToEdge(order *WorkflowInstanceHistoryOrder) *WorkflowInstanceHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowInstanceHistoryOrder
+	}
+	return &WorkflowInstanceHistoryEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowObjectRefEdge is the edge representation of WorkflowObjectRef.
+type WorkflowObjectRefEdge struct {
+	Node   *WorkflowObjectRef `json:"node"`
+	Cursor Cursor             `json:"cursor"`
+}
+
+// WorkflowObjectRefConnection is the connection containing edges to WorkflowObjectRef.
+type WorkflowObjectRefConnection struct {
+	Edges      []*WorkflowObjectRefEdge `json:"edges"`
+	PageInfo   PageInfo                 `json:"pageInfo"`
+	TotalCount int                      `json:"totalCount"`
+}
+
+func (c *WorkflowObjectRefConnection) build(nodes []*WorkflowObjectRef, pager *workflowobjectrefPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowObjectRef
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowObjectRef {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowObjectRef {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowObjectRefEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowObjectRefEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowObjectRefPaginateOption enables pagination customization.
+type WorkflowObjectRefPaginateOption func(*workflowobjectrefPager) error
+
+// WithWorkflowObjectRefOrder configures pagination ordering.
+func WithWorkflowObjectRefOrder(order []*WorkflowObjectRefOrder) WorkflowObjectRefPaginateOption {
+	return func(pager *workflowobjectrefPager) error {
+		for _, o := range order {
+			if err := o.Direction.Validate(); err != nil {
+				return err
+			}
+		}
+		pager.order = append(pager.order, order...)
+		return nil
+	}
+}
+
+// WithWorkflowObjectRefFilter configures pagination filter.
+func WithWorkflowObjectRefFilter(filter func(*WorkflowObjectRefQuery) (*WorkflowObjectRefQuery, error)) WorkflowObjectRefPaginateOption {
+	return func(pager *workflowobjectrefPager) error {
+		if filter == nil {
+			return errors.New("WorkflowObjectRefQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowobjectrefPager struct {
+	reverse bool
+	order   []*WorkflowObjectRefOrder
+	filter  func(*WorkflowObjectRefQuery) (*WorkflowObjectRefQuery, error)
+}
+
+func newWorkflowObjectRefPager(opts []WorkflowObjectRefPaginateOption, reverse bool) (*workflowobjectrefPager, error) {
+	pager := &workflowobjectrefPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	for i, o := range pager.order {
+		if i > 0 && o.Field == pager.order[i-1].Field {
+			return nil, fmt.Errorf("duplicate order direction %q", o.Direction)
+		}
+	}
+	return pager, nil
+}
+
+func (p *workflowobjectrefPager) applyFilter(query *WorkflowObjectRefQuery) (*WorkflowObjectRefQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowobjectrefPager) toCursor(_m *WorkflowObjectRef) Cursor {
+	cs_ := make([]any, 0, len(p.order))
+	for _, o_ := range p.order {
+		cs_ = append(cs_, o_.Field.toCursor(_m).Value)
+	}
+	return Cursor{ID: _m.ID, Value: cs_}
+}
+
+func (p *workflowobjectrefPager) applyCursors(query *WorkflowObjectRefQuery, after, before *Cursor) (*WorkflowObjectRefQuery, error) {
+	idDirection := entgql.OrderDirectionAsc
+	if p.reverse {
+		idDirection = entgql.OrderDirectionDesc
+	}
+	fields, directions := make([]string, 0, len(p.order)), make([]OrderDirection, 0, len(p.order))
+	for _, o := range p.order {
+		fields = append(fields, o.Field.column)
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		directions = append(directions, direction)
+	}
+	predicates, err := entgql.MultiCursorsPredicate(after, before, &entgql.MultiCursorsOptions{
+		FieldID:     DefaultWorkflowObjectRefOrder.Field.column,
+		DirectionID: idDirection,
+		Fields:      fields,
+		Directions:  directions,
+	})
+	if err != nil {
+		return nil, err
+	}
+	for i, predicate := range predicates {
+		query = query.Where(func(s *sql.Selector) {
+			predicate(s)
+			s.Or().Where(sql.IsNull(fields[i]))
+		})
+	}
+	return query, nil
+}
+
+func (p *workflowobjectrefPager) applyOrder(query *WorkflowObjectRefQuery) *WorkflowObjectRefQuery {
+	var defaultOrdered bool
+	for _, o := range p.order {
+		direction := o.Direction
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(o.Field.toTerm(direction.OrderTermOption()))
+		if o.Field.column == DefaultWorkflowObjectRefOrder.Field.column {
+			defaultOrdered = true
+		}
+		if len(query.ctx.Fields) > 0 {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	if !defaultOrdered {
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		query = query.Order(DefaultWorkflowObjectRefOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	return query
+}
+
+func (p *workflowobjectrefPager) orderExpr(query *WorkflowObjectRefQuery) sql.Querier {
+	if len(query.ctx.Fields) > 0 {
+		for _, o := range p.order {
+			query.ctx.AppendFieldOnce(o.Field.column)
+		}
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		for _, o := range p.order {
+			direction := o.Direction
+			if p.reverse {
+				direction = direction.Reverse()
+			}
+			b.Ident(o.Field.column).Pad().WriteString(string(direction))
+			b.Comma()
+		}
+		direction := entgql.OrderDirectionAsc
+		if p.reverse {
+			direction = direction.Reverse()
+		}
+		b.Ident(DefaultWorkflowObjectRefOrder.Field.column).Pad().WriteString(string(direction))
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowObjectRef.
+func (_m *WorkflowObjectRefQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowObjectRefPaginateOption,
+) (*WorkflowObjectRefConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowObjectRefPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowObjectRefOrderFieldCreatedAt orders WorkflowObjectRef by created_at.
+	WorkflowObjectRefOrderFieldCreatedAt = &WorkflowObjectRefOrderField{
+		Value: func(_m *WorkflowObjectRef) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowobjectref.FieldCreatedAt,
+		toTerm: workflowobjectref.ByCreatedAt,
+		toCursor: func(_m *WorkflowObjectRef) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowObjectRefOrderFieldUpdatedAt orders WorkflowObjectRef by updated_at.
+	WorkflowObjectRefOrderFieldUpdatedAt = &WorkflowObjectRefOrderField{
+		Value: func(_m *WorkflowObjectRef) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowobjectref.FieldUpdatedAt,
+		toTerm: workflowobjectref.ByUpdatedAt,
+		toCursor: func(_m *WorkflowObjectRef) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowObjectRefOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowObjectRefOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowObjectRefOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowObjectRefOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowObjectRefOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowObjectRefOrderField %T must be a string", v)
+	}
+	switch str {
+	case "created_at":
+		*f = *WorkflowObjectRefOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowObjectRefOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowObjectRefOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowObjectRefOrderField defines the ordering field of WorkflowObjectRef.
+type WorkflowObjectRefOrderField struct {
+	// Value extracts the ordering value from the given WorkflowObjectRef.
+	Value    func(*WorkflowObjectRef) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowobjectref.OrderOption
+	toCursor func(*WorkflowObjectRef) Cursor
+}
+
+// WorkflowObjectRefOrder defines the ordering of WorkflowObjectRef.
+type WorkflowObjectRefOrder struct {
+	Direction OrderDirection               `json:"direction"`
+	Field     *WorkflowObjectRefOrderField `json:"field"`
+}
+
+// DefaultWorkflowObjectRefOrder is the default ordering of WorkflowObjectRef.
+var DefaultWorkflowObjectRefOrder = &WorkflowObjectRefOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowObjectRefOrderField{
+		Value: func(_m *WorkflowObjectRef) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowobjectref.FieldID,
+		toTerm: workflowobjectref.ByID,
+		toCursor: func(_m *WorkflowObjectRef) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowObjectRef into WorkflowObjectRefEdge.
+func (_m *WorkflowObjectRef) ToEdge(order *WorkflowObjectRefOrder) *WorkflowObjectRefEdge {
+	if order == nil {
+		order = DefaultWorkflowObjectRefOrder
+	}
+	return &WorkflowObjectRefEdge{
+		Node:   _m,
+		Cursor: order.Field.toCursor(_m),
+	}
+}
+
+// WorkflowObjectRefHistoryEdge is the edge representation of WorkflowObjectRefHistory.
+type WorkflowObjectRefHistoryEdge struct {
+	Node   *WorkflowObjectRefHistory `json:"node"`
+	Cursor Cursor                    `json:"cursor"`
+}
+
+// WorkflowObjectRefHistoryConnection is the connection containing edges to WorkflowObjectRefHistory.
+type WorkflowObjectRefHistoryConnection struct {
+	Edges      []*WorkflowObjectRefHistoryEdge `json:"edges"`
+	PageInfo   PageInfo                        `json:"pageInfo"`
+	TotalCount int                             `json:"totalCount"`
+}
+
+func (c *WorkflowObjectRefHistoryConnection) build(nodes []*WorkflowObjectRefHistory, pager *workflowobjectrefhistoryPager, after *Cursor, first *int, before *Cursor, last *int) {
+	c.PageInfo.HasNextPage = before != nil
+	c.PageInfo.HasPreviousPage = after != nil
+	if first != nil && len(nodes) >= *first+1 {
+		c.PageInfo.HasNextPage = true
+		nodes = nodes[:*first]
+	} else if last != nil && len(nodes) >= *last+1 {
+		c.PageInfo.HasPreviousPage = true
+		nodes = nodes[:*last]
+	}
+	var nodeAt func(int) *WorkflowObjectRefHistory
+	if last != nil {
+		n := len(nodes) - 1
+		nodeAt = func(i int) *WorkflowObjectRefHistory {
+			return nodes[n-i]
+		}
+	} else {
+		nodeAt = func(i int) *WorkflowObjectRefHistory {
+			return nodes[i]
+		}
+	}
+	c.Edges = make([]*WorkflowObjectRefHistoryEdge, len(nodes))
+	for i := range nodes {
+		node := nodeAt(i)
+		c.Edges[i] = &WorkflowObjectRefHistoryEdge{
+			Node:   node,
+			Cursor: pager.toCursor(node),
+		}
+	}
+	if l := len(c.Edges); l > 0 {
+		c.PageInfo.StartCursor = &c.Edges[0].Cursor
+		c.PageInfo.EndCursor = &c.Edges[l-1].Cursor
+	}
+	if c.TotalCount == 0 {
+		c.TotalCount = len(nodes)
+	}
+}
+
+// WorkflowObjectRefHistoryPaginateOption enables pagination customization.
+type WorkflowObjectRefHistoryPaginateOption func(*workflowobjectrefhistoryPager) error
+
+// WithWorkflowObjectRefHistoryOrder configures pagination ordering.
+func WithWorkflowObjectRefHistoryOrder(order *WorkflowObjectRefHistoryOrder) WorkflowObjectRefHistoryPaginateOption {
+	if order == nil {
+		order = DefaultWorkflowObjectRefHistoryOrder
+	}
+	o := *order
+	return func(pager *workflowobjectrefhistoryPager) error {
+		if err := o.Direction.Validate(); err != nil {
+			return err
+		}
+		if o.Field == nil {
+			o.Field = DefaultWorkflowObjectRefHistoryOrder.Field
+		}
+		pager.order = &o
+		return nil
+	}
+}
+
+// WithWorkflowObjectRefHistoryFilter configures pagination filter.
+func WithWorkflowObjectRefHistoryFilter(filter func(*WorkflowObjectRefHistoryQuery) (*WorkflowObjectRefHistoryQuery, error)) WorkflowObjectRefHistoryPaginateOption {
+	return func(pager *workflowobjectrefhistoryPager) error {
+		if filter == nil {
+			return errors.New("WorkflowObjectRefHistoryQuery filter cannot be nil")
+		}
+		pager.filter = filter
+		return nil
+	}
+}
+
+type workflowobjectrefhistoryPager struct {
+	reverse bool
+	order   *WorkflowObjectRefHistoryOrder
+	filter  func(*WorkflowObjectRefHistoryQuery) (*WorkflowObjectRefHistoryQuery, error)
+}
+
+func newWorkflowObjectRefHistoryPager(opts []WorkflowObjectRefHistoryPaginateOption, reverse bool) (*workflowobjectrefhistoryPager, error) {
+	pager := &workflowobjectrefhistoryPager{reverse: reverse}
+	for _, opt := range opts {
+		if err := opt(pager); err != nil {
+			return nil, err
+		}
+	}
+	if pager.order == nil {
+		pager.order = DefaultWorkflowObjectRefHistoryOrder
+	}
+	return pager, nil
+}
+
+func (p *workflowobjectrefhistoryPager) applyFilter(query *WorkflowObjectRefHistoryQuery) (*WorkflowObjectRefHistoryQuery, error) {
+	if p.filter != nil {
+		return p.filter(query)
+	}
+	return query, nil
+}
+
+func (p *workflowobjectrefhistoryPager) toCursor(_m *WorkflowObjectRefHistory) Cursor {
+	return p.order.Field.toCursor(_m)
+}
+
+func (p *workflowobjectrefhistoryPager) applyCursors(query *WorkflowObjectRefHistoryQuery, after, before *Cursor) (*WorkflowObjectRefHistoryQuery, error) {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	for _, predicate := range entgql.CursorsPredicate(after, before, DefaultWorkflowObjectRefHistoryOrder.Field.column, p.order.Field.column, direction) {
+		query = query.Where(predicate)
+	}
+	return query, nil
+}
+
+func (p *workflowobjectrefhistoryPager) applyOrder(query *WorkflowObjectRefHistoryQuery) *WorkflowObjectRefHistoryQuery {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	query = query.Order(p.order.Field.toTerm(direction.OrderTermOption()))
+	if p.order.Field != DefaultWorkflowObjectRefHistoryOrder.Field {
+		query = query.Order(DefaultWorkflowObjectRefHistoryOrder.Field.toTerm(direction.OrderTermOption()))
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return query
+}
+
+func (p *workflowobjectrefhistoryPager) orderExpr(query *WorkflowObjectRefHistoryQuery) sql.Querier {
+	direction := p.order.Direction
+	if p.reverse {
+		direction = direction.Reverse()
+	}
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(p.order.Field.column)
+	}
+	return sql.ExprFunc(func(b *sql.Builder) {
+		b.Ident(p.order.Field.column).Pad().WriteString(string(direction))
+		if p.order.Field != DefaultWorkflowObjectRefHistoryOrder.Field {
+			b.Comma().Ident(DefaultWorkflowObjectRefHistoryOrder.Field.column).Pad().WriteString(string(direction))
+		}
+	})
+}
+
+// Paginate executes the query and returns a relay based cursor connection to WorkflowObjectRefHistory.
+func (_m *WorkflowObjectRefHistoryQuery) Paginate(
+	ctx context.Context, after *Cursor, first *int,
+	before *Cursor, last *int, opts ...WorkflowObjectRefHistoryPaginateOption,
+) (*WorkflowObjectRefHistoryConnection, error) {
+	if err := validateFirstLast(first, last); err != nil {
+		return nil, err
+	}
+	pager, err := newWorkflowObjectRefHistoryPager(opts, last != nil)
+	if err != nil {
+		return nil, err
+	}
+	if _m, err = pager.applyFilter(_m); err != nil {
+		return nil, err
+	}
+	conn := &WorkflowObjectRefHistoryConnection{Edges: []*WorkflowObjectRefHistoryEdge{}}
+	ignoredEdges := !hasCollectedField(ctx, edgesField)
+	if hasCollectedField(ctx, totalCountField) || hasCollectedField(ctx, pageInfoField) {
+		hasPagination := after != nil || first != nil || before != nil || last != nil
+		if hasPagination || ignoredEdges {
+			c := _m.Clone()
+			c.ctx.Fields = nil
+			if conn.TotalCount, err = c.CountIDs(ctx); err != nil {
+				return nil, err
+			}
+			conn.PageInfo.HasNextPage = first != nil && conn.TotalCount > 0
+			conn.PageInfo.HasPreviousPage = last != nil && conn.TotalCount > 0
+		}
+	}
+	if (first != nil && *first == 0) || (last != nil && *last == 0) {
+		return conn, nil
+	}
+	if _m, err = pager.applyCursors(_m, after, before); err != nil {
+		return nil, err
+	}
+	limit := paginateLimit(first, last)
+	if limit != 0 {
+		_m.Limit(limit)
+	}
+	if field := collectedField(ctx, edgesField, nodeField); field != nil {
+		if err := _m.collectField(ctx, limit == 1, graphql.GetOperationContext(ctx), *field, []string{edgesField, nodeField}); err != nil {
+			return nil, err
+		}
+	}
+	_m = pager.applyOrder(_m)
+	nodes, err := _m.All(ctx)
+	if err != nil {
+		return nil, err
+	}
+	conn.build(nodes, pager, after, first, before, last)
+	return conn, nil
+}
+
+var (
+	// WorkflowObjectRefHistoryOrderFieldHistoryTime orders WorkflowObjectRefHistory by history_time.
+	WorkflowObjectRefHistoryOrderFieldHistoryTime = &WorkflowObjectRefHistoryOrderField{
+		Value: func(_m *WorkflowObjectRefHistory) (ent.Value, error) {
+			return _m.HistoryTime, nil
+		},
+		column: workflowobjectrefhistory.FieldHistoryTime,
+		toTerm: workflowobjectrefhistory.ByHistoryTime,
+		toCursor: func(_m *WorkflowObjectRefHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.HistoryTime,
+			}
+		},
+	}
+	// WorkflowObjectRefHistoryOrderFieldCreatedAt orders WorkflowObjectRefHistory by created_at.
+	WorkflowObjectRefHistoryOrderFieldCreatedAt = &WorkflowObjectRefHistoryOrderField{
+		Value: func(_m *WorkflowObjectRefHistory) (ent.Value, error) {
+			return _m.CreatedAt, nil
+		},
+		column: workflowobjectrefhistory.FieldCreatedAt,
+		toTerm: workflowobjectrefhistory.ByCreatedAt,
+		toCursor: func(_m *WorkflowObjectRefHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.CreatedAt,
+			}
+		},
+	}
+	// WorkflowObjectRefHistoryOrderFieldUpdatedAt orders WorkflowObjectRefHistory by updated_at.
+	WorkflowObjectRefHistoryOrderFieldUpdatedAt = &WorkflowObjectRefHistoryOrderField{
+		Value: func(_m *WorkflowObjectRefHistory) (ent.Value, error) {
+			return _m.UpdatedAt, nil
+		},
+		column: workflowobjectrefhistory.FieldUpdatedAt,
+		toTerm: workflowobjectrefhistory.ByUpdatedAt,
+		toCursor: func(_m *WorkflowObjectRefHistory) Cursor {
+			return Cursor{
+				ID:    _m.ID,
+				Value: _m.UpdatedAt,
+			}
+		},
+	}
+)
+
+// String implement fmt.Stringer interface.
+func (f WorkflowObjectRefHistoryOrderField) String() string {
+	var str string
+	switch f.column {
+	case WorkflowObjectRefHistoryOrderFieldHistoryTime.column:
+		str = "history_time"
+	case WorkflowObjectRefHistoryOrderFieldCreatedAt.column:
+		str = "created_at"
+	case WorkflowObjectRefHistoryOrderFieldUpdatedAt.column:
+		str = "updated_at"
+	}
+	return str
+}
+
+// MarshalGQL implements graphql.Marshaler interface.
+func (f WorkflowObjectRefHistoryOrderField) MarshalGQL(w io.Writer) {
+	io.WriteString(w, strconv.Quote(f.String()))
+}
+
+// UnmarshalGQL implements graphql.Unmarshaler interface.
+func (f *WorkflowObjectRefHistoryOrderField) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("WorkflowObjectRefHistoryOrderField %T must be a string", v)
+	}
+	switch str {
+	case "history_time":
+		*f = *WorkflowObjectRefHistoryOrderFieldHistoryTime
+	case "created_at":
+		*f = *WorkflowObjectRefHistoryOrderFieldCreatedAt
+	case "updated_at":
+		*f = *WorkflowObjectRefHistoryOrderFieldUpdatedAt
+	default:
+		return fmt.Errorf("%s is not a valid WorkflowObjectRefHistoryOrderField", str)
+	}
+	return nil
+}
+
+// WorkflowObjectRefHistoryOrderField defines the ordering field of WorkflowObjectRefHistory.
+type WorkflowObjectRefHistoryOrderField struct {
+	// Value extracts the ordering value from the given WorkflowObjectRefHistory.
+	Value    func(*WorkflowObjectRefHistory) (ent.Value, error)
+	column   string // field or computed.
+	toTerm   func(...sql.OrderTermOption) workflowobjectrefhistory.OrderOption
+	toCursor func(*WorkflowObjectRefHistory) Cursor
+}
+
+// WorkflowObjectRefHistoryOrder defines the ordering of WorkflowObjectRefHistory.
+type WorkflowObjectRefHistoryOrder struct {
+	Direction OrderDirection                      `json:"direction"`
+	Field     *WorkflowObjectRefHistoryOrderField `json:"field"`
+}
+
+// DefaultWorkflowObjectRefHistoryOrder is the default ordering of WorkflowObjectRefHistory.
+var DefaultWorkflowObjectRefHistoryOrder = &WorkflowObjectRefHistoryOrder{
+	Direction: entgql.OrderDirectionAsc,
+	Field: &WorkflowObjectRefHistoryOrderField{
+		Value: func(_m *WorkflowObjectRefHistory) (ent.Value, error) {
+			return _m.ID, nil
+		},
+		column: workflowobjectrefhistory.FieldID,
+		toTerm: workflowobjectrefhistory.ByID,
+		toCursor: func(_m *WorkflowObjectRefHistory) Cursor {
+			return Cursor{ID: _m.ID}
+		},
+	},
+}
+
+// ToEdge converts WorkflowObjectRefHistory into WorkflowObjectRefHistoryEdge.
+func (_m *WorkflowObjectRefHistory) ToEdge(order *WorkflowObjectRefHistoryOrder) *WorkflowObjectRefHistoryEdge {
+	if order == nil {
+		order = DefaultWorkflowObjectRefHistoryOrder
+	}
+	return &WorkflowObjectRefHistoryEdge{
 		Node:   _m,
 		Cursor: order.Field.toCursor(_m),
 	}

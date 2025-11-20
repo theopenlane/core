@@ -239,6 +239,12 @@ func (t Task) Edges() []ent.Edge {
 				accessmap.EdgeViewCheck(Evidence{}.Name()),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "task",
+		}),
 	}
 }
 

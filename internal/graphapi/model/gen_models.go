@@ -510,6 +510,102 @@ type DNSVerificationUpdatePayload struct {
 	DNSVerification *generated.DNSVerification `json:"dnsVerification"`
 }
 
+// Return response for createBulkDirectoryAccount mutation
+type DirectoryAccountBulkCreatePayload struct {
+	// Created directoryAccounts
+	DirectoryAccounts []*generated.DirectoryAccount `json:"directoryAccounts,omitempty"`
+}
+
+// Return response for createDirectoryAccount mutation
+type DirectoryAccountCreatePayload struct {
+	// Created directoryAccount
+	DirectoryAccount *generated.DirectoryAccount `json:"directoryAccount"`
+}
+
+// Return response for deleteDirectoryAccount mutation
+type DirectoryAccountDeletePayload struct {
+	// Deleted directoryAccount ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDirectoryAccount mutation
+type DirectoryAccountUpdatePayload struct {
+	// Updated directoryAccount
+	DirectoryAccount *generated.DirectoryAccount `json:"directoryAccount"`
+}
+
+// Return response for createBulkDirectoryGroup mutation
+type DirectoryGroupBulkCreatePayload struct {
+	// Created directoryGroups
+	DirectoryGroups []*generated.DirectoryGroup `json:"directoryGroups,omitempty"`
+}
+
+// Return response for createDirectoryGroup mutation
+type DirectoryGroupCreatePayload struct {
+	// Created directoryGroup
+	DirectoryGroup *generated.DirectoryGroup `json:"directoryGroup"`
+}
+
+// Return response for deleteDirectoryGroup mutation
+type DirectoryGroupDeletePayload struct {
+	// Deleted directoryGroup ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDirectoryGroup mutation
+type DirectoryGroupUpdatePayload struct {
+	// Updated directoryGroup
+	DirectoryGroup *generated.DirectoryGroup `json:"directoryGroup"`
+}
+
+// Return response for createBulkDirectoryMembership mutation
+type DirectoryMembershipBulkCreatePayload struct {
+	// Created directoryMemberships
+	DirectoryMemberships []*generated.DirectoryMembership `json:"directoryMemberships,omitempty"`
+}
+
+// Return response for createDirectoryMembership mutation
+type DirectoryMembershipCreatePayload struct {
+	// Created directoryMembership
+	DirectoryMembership *generated.DirectoryMembership `json:"directoryMembership"`
+}
+
+// Return response for deleteDirectoryMembership mutation
+type DirectoryMembershipDeletePayload struct {
+	// Deleted directoryMembership ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDirectoryMembership mutation
+type DirectoryMembershipUpdatePayload struct {
+	// Updated directoryMembership
+	DirectoryMembership *generated.DirectoryMembership `json:"directoryMembership"`
+}
+
+// Return response for createBulkDirectorySyncRun mutation
+type DirectorySyncRunBulkCreatePayload struct {
+	// Created directorySyncRuns
+	DirectorySyncRuns []*generated.DirectorySyncRun `json:"directorySyncRuns,omitempty"`
+}
+
+// Return response for createDirectorySyncRun mutation
+type DirectorySyncRunCreatePayload struct {
+	// Created directorySyncRun
+	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
+}
+
+// Return response for deleteDirectorySyncRun mutation
+type DirectorySyncRunDeletePayload struct {
+	// Deleted directorySyncRun ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateDirectorySyncRun mutation
+type DirectorySyncRunUpdatePayload struct {
+	// Updated directorySyncRun
+	DirectorySyncRun *generated.DirectorySyncRun `json:"directorySyncRun"`
+}
+
 // Return response for createBulkDocumentData mutation
 type DocumentDataBulkCreatePayload struct {
 	// Created documentData
@@ -1658,6 +1754,8 @@ type SearchResults struct {
 	CustomDomains               *generated.CustomDomainConnection               `json:"customDomains,omitempty"`
 	CustomTypeEnums             *generated.CustomTypeEnumConnection             `json:"customTypeEnums,omitempty"`
 	DNSVerifications            *generated.DNSVerificationConnection            `json:"dnsVerifications,omitempty"`
+	DirectoryAccounts           *generated.DirectoryAccountConnection           `json:"directoryAccounts,omitempty"`
+	DirectoryGroups             *generated.DirectoryGroupConnection             `json:"directoryGroups,omitempty"`
 	DocumentData                *generated.DocumentDataConnection               `json:"documentData,omitempty"`
 	Entities                    *generated.EntityConnection                     `json:"entities,omitempty"`
 	EntityTypes                 *generated.EntityTypeConnection                 `json:"entityTypes,omitempty"`
@@ -1700,6 +1798,11 @@ type SearchResults struct {
 	UserSettings                *generated.UserSettingConnection                `json:"userSettings,omitempty"`
 	Vulnerabilities             *generated.VulnerabilityConnection              `json:"vulnerabilities,omitempty"`
 	Webauthns                   *generated.WebauthnConnection                   `json:"webauthns,omitempty"`
+	WorkflowAssignments         *generated.WorkflowAssignmentConnection         `json:"workflowAssignments,omitempty"`
+	WorkflowAssignmentTargets   *generated.WorkflowAssignmentTargetConnection   `json:"workflowAssignmentTargets,omitempty"`
+	WorkflowDefinitions         *generated.WorkflowDefinitionConnection         `json:"workflowDefinitions,omitempty"`
+	WorkflowEvents              *generated.WorkflowEventConnection              `json:"workflowEvents,omitempty"`
+	WorkflowInstances           *generated.WorkflowInstanceConnection           `json:"workflowInstances,omitempty"`
 	SearchContext               []*models.SearchContext                         `json:"searchContext,omitempty"`
 }
 
@@ -2198,6 +2301,150 @@ type VulnerabilityUpdatePayload struct {
 type WebauthnDeletePayload struct {
 	// Deleted webauthn ID
 	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkWorkflowAssignment mutation
+type WorkflowAssignmentBulkCreatePayload struct {
+	// Created workflowAssignments
+	WorkflowAssignments []*generated.WorkflowAssignment `json:"workflowAssignments,omitempty"`
+}
+
+// Return response for createWorkflowAssignment mutation
+type WorkflowAssignmentCreatePayload struct {
+	// Created workflowAssignment
+	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
+// Return response for deleteWorkflowAssignment mutation
+type WorkflowAssignmentDeletePayload struct {
+	// Deleted workflowAssignment ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for createBulkWorkflowAssignmentTarget mutation
+type WorkflowAssignmentTargetBulkCreatePayload struct {
+	// Created workflowAssignmentTargets
+	WorkflowAssignmentTargets []*generated.WorkflowAssignmentTarget `json:"workflowAssignmentTargets,omitempty"`
+}
+
+// Return response for createWorkflowAssignmentTarget mutation
+type WorkflowAssignmentTargetCreatePayload struct {
+	// Created workflowAssignmentTarget
+	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
+}
+
+// Return response for deleteWorkflowAssignmentTarget mutation
+type WorkflowAssignmentTargetDeletePayload struct {
+	// Deleted workflowAssignmentTarget ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateWorkflowAssignmentTarget mutation
+type WorkflowAssignmentTargetUpdatePayload struct {
+	// Updated workflowAssignmentTarget
+	WorkflowAssignmentTarget *generated.WorkflowAssignmentTarget `json:"workflowAssignmentTarget"`
+}
+
+// Return response for updateWorkflowAssignment mutation
+type WorkflowAssignmentUpdatePayload struct {
+	// Updated workflowAssignment
+	WorkflowAssignment *generated.WorkflowAssignment `json:"workflowAssignment"`
+}
+
+// Return response for createBulkWorkflowDefinition mutation
+type WorkflowDefinitionBulkCreatePayload struct {
+	// Created workflowDefinitions
+	WorkflowDefinitions []*generated.WorkflowDefinition `json:"workflowDefinitions,omitempty"`
+}
+
+// Return response for createWorkflowDefinition mutation
+type WorkflowDefinitionCreatePayload struct {
+	// Created workflowDefinition
+	WorkflowDefinition *generated.WorkflowDefinition `json:"workflowDefinition"`
+}
+
+// Return response for deleteWorkflowDefinition mutation
+type WorkflowDefinitionDeletePayload struct {
+	// Deleted workflowDefinition ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateWorkflowDefinition mutation
+type WorkflowDefinitionUpdatePayload struct {
+	// Updated workflowDefinition
+	WorkflowDefinition *generated.WorkflowDefinition `json:"workflowDefinition"`
+}
+
+// Return response for createBulkWorkflowEvent mutation
+type WorkflowEventBulkCreatePayload struct {
+	// Created workflowEvents
+	WorkflowEvents []*generated.WorkflowEvent `json:"workflowEvents,omitempty"`
+}
+
+// Return response for createWorkflowEvent mutation
+type WorkflowEventCreatePayload struct {
+	// Created workflowEvent
+	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
+}
+
+// Return response for deleteWorkflowEvent mutation
+type WorkflowEventDeletePayload struct {
+	// Deleted workflowEvent ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateWorkflowEvent mutation
+type WorkflowEventUpdatePayload struct {
+	// Updated workflowEvent
+	WorkflowEvent *generated.WorkflowEvent `json:"workflowEvent"`
+}
+
+// Return response for createBulkWorkflowInstance mutation
+type WorkflowInstanceBulkCreatePayload struct {
+	// Created workflowInstances
+	WorkflowInstances []*generated.WorkflowInstance `json:"workflowInstances,omitempty"`
+}
+
+// Return response for createWorkflowInstance mutation
+type WorkflowInstanceCreatePayload struct {
+	// Created workflowInstance
+	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+}
+
+// Return response for deleteWorkflowInstance mutation
+type WorkflowInstanceDeletePayload struct {
+	// Deleted workflowInstance ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateWorkflowInstance mutation
+type WorkflowInstanceUpdatePayload struct {
+	// Updated workflowInstance
+	WorkflowInstance *generated.WorkflowInstance `json:"workflowInstance"`
+}
+
+// Return response for createBulkWorkflowObjectRef mutation
+type WorkflowObjectRefBulkCreatePayload struct {
+	// Created workflowObjectRefs
+	WorkflowObjectRefs []*generated.WorkflowObjectRef `json:"workflowObjectRefs,omitempty"`
+}
+
+// Return response for createWorkflowObjectRef mutation
+type WorkflowObjectRefCreatePayload struct {
+	// Created workflowObjectRef
+	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
+}
+
+// Return response for deleteWorkflowObjectRef mutation
+type WorkflowObjectRefDeletePayload struct {
+	// Deleted workflowObjectRef ID
+	DeletedID string `json:"deletedID"`
+}
+
+// Return response for updateWorkflowObjectRef mutation
+type WorkflowObjectRefUpdatePayload struct {
+	// Updated workflowObjectRef
+	WorkflowObjectRef *generated.WorkflowObjectRef `json:"workflowObjectRef"`
 }
 
 // Properties by which ControlCategory connections can be ordered.

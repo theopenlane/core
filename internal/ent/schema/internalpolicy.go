@@ -78,6 +78,12 @@ func (i InternalPolicy) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: i,
+			edgeSchema: WorkflowObjectRef{},
+			name:       "workflow_object_refs",
+			ref:        "internal_policy",
+		}),
 	}
 }
 

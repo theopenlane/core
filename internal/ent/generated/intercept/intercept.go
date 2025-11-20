@@ -28,6 +28,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -141,6 +148,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 // The Query interface represents an operation that queries a graph.
@@ -791,6 +810,195 @@ func (f TraverseDNSVerificationHistory) Traverse(ctx context.Context, q generate
 		return f(ctx, q)
 	}
 	return fmt.Errorf("unexpected query type %T. expect *generated.DNSVerificationHistoryQuery", q)
+}
+
+// The DirectoryAccountFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryAccountFunc func(context.Context, *generated.DirectoryAccountQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryAccountFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryAccountQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryAccountQuery", q)
+}
+
+// The TraverseDirectoryAccount type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryAccount func(context.Context, *generated.DirectoryAccountQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryAccount) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryAccount) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryAccountQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryAccountQuery", q)
+}
+
+// The DirectoryAccountHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryAccountHistoryFunc func(context.Context, *generated.DirectoryAccountHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryAccountHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryAccountHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryAccountHistoryQuery", q)
+}
+
+// The TraverseDirectoryAccountHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryAccountHistory func(context.Context, *generated.DirectoryAccountHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryAccountHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryAccountHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryAccountHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryAccountHistoryQuery", q)
+}
+
+// The DirectoryGroupFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryGroupFunc func(context.Context, *generated.DirectoryGroupQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryGroupFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryGroupQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryGroupQuery", q)
+}
+
+// The TraverseDirectoryGroup type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryGroup func(context.Context, *generated.DirectoryGroupQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryGroup) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryGroup) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryGroupQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryGroupQuery", q)
+}
+
+// The DirectoryGroupHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryGroupHistoryFunc func(context.Context, *generated.DirectoryGroupHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryGroupHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryGroupHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryGroupHistoryQuery", q)
+}
+
+// The TraverseDirectoryGroupHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryGroupHistory func(context.Context, *generated.DirectoryGroupHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryGroupHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryGroupHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryGroupHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryGroupHistoryQuery", q)
+}
+
+// The DirectoryMembershipFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryMembershipFunc func(context.Context, *generated.DirectoryMembershipQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryMembershipFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryMembershipQuery", q)
+}
+
+// The TraverseDirectoryMembership type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryMembership func(context.Context, *generated.DirectoryMembershipQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryMembership) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryMembership) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryMembershipQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryMembershipQuery", q)
+}
+
+// The DirectoryMembershipHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectoryMembershipHistoryFunc func(context.Context, *generated.DirectoryMembershipHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectoryMembershipHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectoryMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectoryMembershipHistoryQuery", q)
+}
+
+// The TraverseDirectoryMembershipHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectoryMembershipHistory func(context.Context, *generated.DirectoryMembershipHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectoryMembershipHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectoryMembershipHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectoryMembershipHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectoryMembershipHistoryQuery", q)
+}
+
+// The DirectorySyncRunFunc type is an adapter to allow the use of ordinary function as a Querier.
+type DirectorySyncRunFunc func(context.Context, *generated.DirectorySyncRunQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f DirectorySyncRunFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.DirectorySyncRunQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.DirectorySyncRunQuery", q)
+}
+
+// The TraverseDirectorySyncRun type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseDirectorySyncRun func(context.Context, *generated.DirectorySyncRunQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseDirectorySyncRun) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseDirectorySyncRun) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.DirectorySyncRunQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.DirectorySyncRunQuery", q)
 }
 
 // The DocumentDataFunc type is an adapter to allow the use of ordinary function as a Querier.
@@ -3763,6 +3971,330 @@ func (f TraverseWebauthn) Traverse(ctx context.Context, q generated.Query) error
 	return fmt.Errorf("unexpected query type %T. expect *generated.WebauthnQuery", q)
 }
 
+// The WorkflowAssignmentFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowAssignmentFunc func(context.Context, *generated.WorkflowAssignmentQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowAssignmentFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowAssignmentQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentQuery", q)
+}
+
+// The TraverseWorkflowAssignment type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowAssignment func(context.Context, *generated.WorkflowAssignmentQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowAssignment) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowAssignment) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowAssignmentQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentQuery", q)
+}
+
+// The WorkflowAssignmentHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowAssignmentHistoryFunc func(context.Context, *generated.WorkflowAssignmentHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowAssignmentHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowAssignmentHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentHistoryQuery", q)
+}
+
+// The TraverseWorkflowAssignmentHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowAssignmentHistory func(context.Context, *generated.WorkflowAssignmentHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowAssignmentHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowAssignmentHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowAssignmentHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentHistoryQuery", q)
+}
+
+// The WorkflowAssignmentTargetFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowAssignmentTargetFunc func(context.Context, *generated.WorkflowAssignmentTargetQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowAssignmentTargetFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowAssignmentTargetQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentTargetQuery", q)
+}
+
+// The TraverseWorkflowAssignmentTarget type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowAssignmentTarget func(context.Context, *generated.WorkflowAssignmentTargetQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowAssignmentTarget) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowAssignmentTarget) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowAssignmentTargetQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentTargetQuery", q)
+}
+
+// The WorkflowAssignmentTargetHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowAssignmentTargetHistoryFunc func(context.Context, *generated.WorkflowAssignmentTargetHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowAssignmentTargetHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowAssignmentTargetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentTargetHistoryQuery", q)
+}
+
+// The TraverseWorkflowAssignmentTargetHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowAssignmentTargetHistory func(context.Context, *generated.WorkflowAssignmentTargetHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowAssignmentTargetHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowAssignmentTargetHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowAssignmentTargetHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowAssignmentTargetHistoryQuery", q)
+}
+
+// The WorkflowDefinitionFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowDefinitionFunc func(context.Context, *generated.WorkflowDefinitionQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowDefinitionFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowDefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowDefinitionQuery", q)
+}
+
+// The TraverseWorkflowDefinition type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowDefinition func(context.Context, *generated.WorkflowDefinitionQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowDefinition) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowDefinition) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowDefinitionQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowDefinitionQuery", q)
+}
+
+// The WorkflowDefinitionHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowDefinitionHistoryFunc func(context.Context, *generated.WorkflowDefinitionHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowDefinitionHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowDefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowDefinitionHistoryQuery", q)
+}
+
+// The TraverseWorkflowDefinitionHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowDefinitionHistory func(context.Context, *generated.WorkflowDefinitionHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowDefinitionHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowDefinitionHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowDefinitionHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowDefinitionHistoryQuery", q)
+}
+
+// The WorkflowEventFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowEventFunc func(context.Context, *generated.WorkflowEventQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowEventFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowEventQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowEventQuery", q)
+}
+
+// The TraverseWorkflowEvent type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowEvent func(context.Context, *generated.WorkflowEventQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowEvent) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowEvent) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowEventQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowEventQuery", q)
+}
+
+// The WorkflowEventHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowEventHistoryFunc func(context.Context, *generated.WorkflowEventHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowEventHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowEventHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowEventHistoryQuery", q)
+}
+
+// The TraverseWorkflowEventHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowEventHistory func(context.Context, *generated.WorkflowEventHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowEventHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowEventHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowEventHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowEventHistoryQuery", q)
+}
+
+// The WorkflowInstanceFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowInstanceFunc func(context.Context, *generated.WorkflowInstanceQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowInstanceFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowInstanceQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowInstanceQuery", q)
+}
+
+// The TraverseWorkflowInstance type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowInstance func(context.Context, *generated.WorkflowInstanceQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowInstance) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowInstance) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowInstanceQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowInstanceQuery", q)
+}
+
+// The WorkflowInstanceHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowInstanceHistoryFunc func(context.Context, *generated.WorkflowInstanceHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowInstanceHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowInstanceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowInstanceHistoryQuery", q)
+}
+
+// The TraverseWorkflowInstanceHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowInstanceHistory func(context.Context, *generated.WorkflowInstanceHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowInstanceHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowInstanceHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowInstanceHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowInstanceHistoryQuery", q)
+}
+
+// The WorkflowObjectRefFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowObjectRefFunc func(context.Context, *generated.WorkflowObjectRefQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowObjectRefFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowObjectRefQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowObjectRefQuery", q)
+}
+
+// The TraverseWorkflowObjectRef type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowObjectRef func(context.Context, *generated.WorkflowObjectRefQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowObjectRef) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowObjectRef) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowObjectRefQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowObjectRefQuery", q)
+}
+
+// The WorkflowObjectRefHistoryFunc type is an adapter to allow the use of ordinary function as a Querier.
+type WorkflowObjectRefHistoryFunc func(context.Context, *generated.WorkflowObjectRefHistoryQuery) (generated.Value, error)
+
+// Query calls f(ctx, q).
+func (f WorkflowObjectRefHistoryFunc) Query(ctx context.Context, q generated.Query) (generated.Value, error) {
+	if q, ok := q.(*generated.WorkflowObjectRefHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return nil, fmt.Errorf("unexpected query type %T. expect *generated.WorkflowObjectRefHistoryQuery", q)
+}
+
+// The TraverseWorkflowObjectRefHistory type is an adapter to allow the use of ordinary function as Traverser.
+type TraverseWorkflowObjectRefHistory func(context.Context, *generated.WorkflowObjectRefHistoryQuery) error
+
+// Intercept is a dummy implementation of Intercept that returns the next Querier in the pipeline.
+func (f TraverseWorkflowObjectRefHistory) Intercept(next generated.Querier) generated.Querier {
+	return next
+}
+
+// Traverse calls f(ctx, q).
+func (f TraverseWorkflowObjectRefHistory) Traverse(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.WorkflowObjectRefHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return fmt.Errorf("unexpected query type %T. expect *generated.WorkflowObjectRefHistoryQuery", q)
+}
+
 // NewQuery returns the generic Query interface for the given typed query.
 func NewQuery(q generated.Query) (Query, error) {
 	switch q := q.(type) {
@@ -3810,6 +4342,20 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.DNSVerificationQuery, predicate.DNSVerification, dnsverification.OrderOption]{typ: generated.TypeDNSVerification, tq: q}, nil
 	case *generated.DNSVerificationHistoryQuery:
 		return &query[*generated.DNSVerificationHistoryQuery, predicate.DNSVerificationHistory, dnsverificationhistory.OrderOption]{typ: generated.TypeDNSVerificationHistory, tq: q}, nil
+	case *generated.DirectoryAccountQuery:
+		return &query[*generated.DirectoryAccountQuery, predicate.DirectoryAccount, directoryaccount.OrderOption]{typ: generated.TypeDirectoryAccount, tq: q}, nil
+	case *generated.DirectoryAccountHistoryQuery:
+		return &query[*generated.DirectoryAccountHistoryQuery, predicate.DirectoryAccountHistory, directoryaccounthistory.OrderOption]{typ: generated.TypeDirectoryAccountHistory, tq: q}, nil
+	case *generated.DirectoryGroupQuery:
+		return &query[*generated.DirectoryGroupQuery, predicate.DirectoryGroup, directorygroup.OrderOption]{typ: generated.TypeDirectoryGroup, tq: q}, nil
+	case *generated.DirectoryGroupHistoryQuery:
+		return &query[*generated.DirectoryGroupHistoryQuery, predicate.DirectoryGroupHistory, directorygrouphistory.OrderOption]{typ: generated.TypeDirectoryGroupHistory, tq: q}, nil
+	case *generated.DirectoryMembershipQuery:
+		return &query[*generated.DirectoryMembershipQuery, predicate.DirectoryMembership, directorymembership.OrderOption]{typ: generated.TypeDirectoryMembership, tq: q}, nil
+	case *generated.DirectoryMembershipHistoryQuery:
+		return &query[*generated.DirectoryMembershipHistoryQuery, predicate.DirectoryMembershipHistory, directorymembershiphistory.OrderOption]{typ: generated.TypeDirectoryMembershipHistory, tq: q}, nil
+	case *generated.DirectorySyncRunQuery:
+		return &query[*generated.DirectorySyncRunQuery, predicate.DirectorySyncRun, directorysyncrun.OrderOption]{typ: generated.TypeDirectorySyncRun, tq: q}, nil
 	case *generated.DocumentDataQuery:
 		return &query[*generated.DocumentDataQuery, predicate.DocumentData, documentdata.OrderOption]{typ: generated.TypeDocumentData, tq: q}, nil
 	case *generated.DocumentDataHistoryQuery:
@@ -4030,6 +4576,30 @@ func NewQuery(q generated.Query) (Query, error) {
 		return &query[*generated.VulnerabilityHistoryQuery, predicate.VulnerabilityHistory, vulnerabilityhistory.OrderOption]{typ: generated.TypeVulnerabilityHistory, tq: q}, nil
 	case *generated.WebauthnQuery:
 		return &query[*generated.WebauthnQuery, predicate.Webauthn, webauthn.OrderOption]{typ: generated.TypeWebauthn, tq: q}, nil
+	case *generated.WorkflowAssignmentQuery:
+		return &query[*generated.WorkflowAssignmentQuery, predicate.WorkflowAssignment, workflowassignment.OrderOption]{typ: generated.TypeWorkflowAssignment, tq: q}, nil
+	case *generated.WorkflowAssignmentHistoryQuery:
+		return &query[*generated.WorkflowAssignmentHistoryQuery, predicate.WorkflowAssignmentHistory, workflowassignmenthistory.OrderOption]{typ: generated.TypeWorkflowAssignmentHistory, tq: q}, nil
+	case *generated.WorkflowAssignmentTargetQuery:
+		return &query[*generated.WorkflowAssignmentTargetQuery, predicate.WorkflowAssignmentTarget, workflowassignmenttarget.OrderOption]{typ: generated.TypeWorkflowAssignmentTarget, tq: q}, nil
+	case *generated.WorkflowAssignmentTargetHistoryQuery:
+		return &query[*generated.WorkflowAssignmentTargetHistoryQuery, predicate.WorkflowAssignmentTargetHistory, workflowassignmenttargethistory.OrderOption]{typ: generated.TypeWorkflowAssignmentTargetHistory, tq: q}, nil
+	case *generated.WorkflowDefinitionQuery:
+		return &query[*generated.WorkflowDefinitionQuery, predicate.WorkflowDefinition, workflowdefinition.OrderOption]{typ: generated.TypeWorkflowDefinition, tq: q}, nil
+	case *generated.WorkflowDefinitionHistoryQuery:
+		return &query[*generated.WorkflowDefinitionHistoryQuery, predicate.WorkflowDefinitionHistory, workflowdefinitionhistory.OrderOption]{typ: generated.TypeWorkflowDefinitionHistory, tq: q}, nil
+	case *generated.WorkflowEventQuery:
+		return &query[*generated.WorkflowEventQuery, predicate.WorkflowEvent, workflowevent.OrderOption]{typ: generated.TypeWorkflowEvent, tq: q}, nil
+	case *generated.WorkflowEventHistoryQuery:
+		return &query[*generated.WorkflowEventHistoryQuery, predicate.WorkflowEventHistory, workfloweventhistory.OrderOption]{typ: generated.TypeWorkflowEventHistory, tq: q}, nil
+	case *generated.WorkflowInstanceQuery:
+		return &query[*generated.WorkflowInstanceQuery, predicate.WorkflowInstance, workflowinstance.OrderOption]{typ: generated.TypeWorkflowInstance, tq: q}, nil
+	case *generated.WorkflowInstanceHistoryQuery:
+		return &query[*generated.WorkflowInstanceHistoryQuery, predicate.WorkflowInstanceHistory, workflowinstancehistory.OrderOption]{typ: generated.TypeWorkflowInstanceHistory, tq: q}, nil
+	case *generated.WorkflowObjectRefQuery:
+		return &query[*generated.WorkflowObjectRefQuery, predicate.WorkflowObjectRef, workflowobjectref.OrderOption]{typ: generated.TypeWorkflowObjectRef, tq: q}, nil
+	case *generated.WorkflowObjectRefHistoryQuery:
+		return &query[*generated.WorkflowObjectRefHistoryQuery, predicate.WorkflowObjectRefHistory, workflowobjectrefhistory.OrderOption]{typ: generated.TypeWorkflowObjectRefHistory, tq: q}, nil
 	default:
 		return nil, fmt.Errorf("unknown query type %T", q)
 	}

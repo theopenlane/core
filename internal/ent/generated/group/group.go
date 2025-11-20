@@ -390,6 +390,7 @@ var ForeignKeys = []string{
 	"vulnerability_blocked_groups",
 	"vulnerability_editors",
 	"vulnerability_viewers",
+	"workflow_definition_groups",
 }
 
 var (

@@ -3270,6 +3270,1016 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 	return nil
 }
 
+func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.DirectoryAccountHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+		create = create.SetDirectorySyncRunID(directorySyncRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if secondaryKey, exists := m.SecondaryKey(); exists {
+		create = create.SetNillableSecondaryKey(&secondaryKey)
+	}
+
+	if canonicalEmail, exists := m.CanonicalEmail(); exists {
+		create = create.SetNillableCanonicalEmail(&canonicalEmail)
+	}
+
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
+	if givenName, exists := m.GivenName(); exists {
+		create = create.SetNillableGivenName(&givenName)
+	}
+
+	if familyName, exists := m.FamilyName(); exists {
+		create = create.SetNillableFamilyName(&familyName)
+	}
+
+	if jobTitle, exists := m.JobTitle(); exists {
+		create = create.SetNillableJobTitle(&jobTitle)
+	}
+
+	if department, exists := m.Department(); exists {
+		create = create.SetNillableDepartment(&department)
+	}
+
+	if organizationUnit, exists := m.OrganizationUnit(); exists {
+		create = create.SetNillableOrganizationUnit(&organizationUnit)
+	}
+
+	if accountType, exists := m.AccountType(); exists {
+		create = create.SetAccountType(accountType)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if mfaState, exists := m.MfaState(); exists {
+		create = create.SetMfaState(mfaState)
+	}
+
+	if lastSeenIP, exists := m.LastSeenIP(); exists {
+		create = create.SetNillableLastSeenIP(&lastSeenIP)
+	}
+
+	if lastLoginAt, exists := m.LastLoginAt(); exists {
+		create = create.SetNillableLastLoginAt(&lastLoginAt)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetObservedAt(observedAt)
+	}
+
+	if profileHash, exists := m.ProfileHash(); exists {
+		create = create.SetProfileHash(profileHash)
+	}
+
+	if profile, exists := m.Profile(); exists {
+		create = create.SetProfile(profile)
+	}
+
+	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
+		create = create.SetNillableRawProfileFileID(&rawProfileFileID)
+	}
+
+	if sourceVersion, exists := m.SourceVersion(); exists {
+		create = create.SetNillableSourceVersion(&sourceVersion)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directoryaccount, err := client.DirectoryAccount.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryAccountHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(directoryaccount.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(directoryaccount.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(directoryaccount.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(directoryaccount.UpdatedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(directoryaccount.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(directoryaccount.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(directoryaccount.OwnerID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(directoryaccount.IntegrationID)
+		}
+
+		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+			create = create.SetDirectorySyncRunID(directorySyncRunID)
+		} else {
+			create = create.SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(directoryaccount.ExternalID)
+		}
+
+		if secondaryKey, exists := m.SecondaryKey(); exists {
+			create = create.SetNillableSecondaryKey(&secondaryKey)
+		} else {
+			create = create.SetNillableSecondaryKey(directoryaccount.SecondaryKey)
+		}
+
+		if canonicalEmail, exists := m.CanonicalEmail(); exists {
+			create = create.SetNillableCanonicalEmail(&canonicalEmail)
+		} else {
+			create = create.SetNillableCanonicalEmail(directoryaccount.CanonicalEmail)
+		}
+
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(directoryaccount.DisplayName)
+		}
+
+		if givenName, exists := m.GivenName(); exists {
+			create = create.SetNillableGivenName(&givenName)
+		} else {
+			create = create.SetNillableGivenName(directoryaccount.GivenName)
+		}
+
+		if familyName, exists := m.FamilyName(); exists {
+			create = create.SetNillableFamilyName(&familyName)
+		} else {
+			create = create.SetNillableFamilyName(directoryaccount.FamilyName)
+		}
+
+		if jobTitle, exists := m.JobTitle(); exists {
+			create = create.SetNillableJobTitle(&jobTitle)
+		} else {
+			create = create.SetNillableJobTitle(directoryaccount.JobTitle)
+		}
+
+		if department, exists := m.Department(); exists {
+			create = create.SetNillableDepartment(&department)
+		} else {
+			create = create.SetNillableDepartment(directoryaccount.Department)
+		}
+
+		if organizationUnit, exists := m.OrganizationUnit(); exists {
+			create = create.SetNillableOrganizationUnit(&organizationUnit)
+		} else {
+			create = create.SetNillableOrganizationUnit(directoryaccount.OrganizationUnit)
+		}
+
+		if accountType, exists := m.AccountType(); exists {
+			create = create.SetAccountType(accountType)
+		} else {
+			create = create.SetAccountType(directoryaccount.AccountType)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(directoryaccount.Status)
+		}
+
+		if mfaState, exists := m.MfaState(); exists {
+			create = create.SetMfaState(mfaState)
+		} else {
+			create = create.SetMfaState(directoryaccount.MfaState)
+		}
+
+		if lastSeenIP, exists := m.LastSeenIP(); exists {
+			create = create.SetNillableLastSeenIP(&lastSeenIP)
+		} else {
+			create = create.SetNillableLastSeenIP(directoryaccount.LastSeenIP)
+		}
+
+		if lastLoginAt, exists := m.LastLoginAt(); exists {
+			create = create.SetNillableLastLoginAt(&lastLoginAt)
+		} else {
+			create = create.SetNillableLastLoginAt(directoryaccount.LastLoginAt)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetObservedAt(observedAt)
+		} else {
+			create = create.SetObservedAt(directoryaccount.ObservedAt)
+		}
+
+		if profileHash, exists := m.ProfileHash(); exists {
+			create = create.SetProfileHash(profileHash)
+		} else {
+			create = create.SetProfileHash(directoryaccount.ProfileHash)
+		}
+
+		if profile, exists := m.Profile(); exists {
+			create = create.SetProfile(profile)
+		} else {
+			create = create.SetProfile(directoryaccount.Profile)
+		}
+
+		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
+			create = create.SetNillableRawProfileFileID(&rawProfileFileID)
+		} else {
+			create = create.SetNillableRawProfileFileID(directoryaccount.RawProfileFileID)
+		}
+
+		if sourceVersion, exists := m.SourceVersion(); exists {
+			create = create.SetNillableSourceVersion(&sourceVersion)
+		} else {
+			create = create.SetNillableSourceVersion(directoryaccount.SourceVersion)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directoryaccount, err := client.DirectoryAccount.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryAccountHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(directoryaccount.CreatedAt).
+			SetUpdatedAt(directoryaccount.UpdatedAt).
+			SetCreatedBy(directoryaccount.CreatedBy).
+			SetUpdatedBy(directoryaccount.UpdatedBy).
+			SetDisplayID(directoryaccount.DisplayID).
+			SetTags(directoryaccount.Tags).
+			SetOwnerID(directoryaccount.OwnerID).
+			SetIntegrationID(directoryaccount.IntegrationID).
+			SetDirectorySyncRunID(directoryaccount.DirectorySyncRunID).
+			SetExternalID(directoryaccount.ExternalID).
+			SetNillableSecondaryKey(directoryaccount.SecondaryKey).
+			SetNillableCanonicalEmail(directoryaccount.CanonicalEmail).
+			SetDisplayName(directoryaccount.DisplayName).
+			SetNillableGivenName(directoryaccount.GivenName).
+			SetNillableFamilyName(directoryaccount.FamilyName).
+			SetNillableJobTitle(directoryaccount.JobTitle).
+			SetNillableDepartment(directoryaccount.Department).
+			SetNillableOrganizationUnit(directoryaccount.OrganizationUnit).
+			SetAccountType(directoryaccount.AccountType).
+			SetStatus(directoryaccount.Status).
+			SetMfaState(directoryaccount.MfaState).
+			SetNillableLastSeenIP(directoryaccount.LastSeenIP).
+			SetNillableLastLoginAt(directoryaccount.LastLoginAt).
+			SetObservedAt(directoryaccount.ObservedAt).
+			SetProfileHash(directoryaccount.ProfileHash).
+			SetProfile(directoryaccount.Profile).
+			SetNillableRawProfileFileID(directoryaccount.RawProfileFileID).
+			SetNillableSourceVersion(directoryaccount.SourceVersion).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.DirectoryGroupHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+		create = create.SetDirectorySyncRunID(directorySyncRunID)
+	}
+
+	if externalID, exists := m.ExternalID(); exists {
+		create = create.SetExternalID(externalID)
+	}
+
+	if email, exists := m.Email(); exists {
+		create = create.SetNillableEmail(&email)
+	}
+
+	if displayName, exists := m.DisplayName(); exists {
+		create = create.SetDisplayName(displayName)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetNillableDescription(&description)
+	}
+
+	if classification, exists := m.Classification(); exists {
+		create = create.SetClassification(classification)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if externalSharingAllowed, exists := m.ExternalSharingAllowed(); exists {
+		create = create.SetExternalSharingAllowed(externalSharingAllowed)
+	}
+
+	if memberCount, exists := m.MemberCount(); exists {
+		create = create.SetMemberCount(memberCount)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetObservedAt(observedAt)
+	}
+
+	if profileHash, exists := m.ProfileHash(); exists {
+		create = create.SetProfileHash(profileHash)
+	}
+
+	if profile, exists := m.Profile(); exists {
+		create = create.SetProfile(profile)
+	}
+
+	if rawProfileFileID, exists := m.RawProfileFileID(); exists {
+		create = create.SetNillableRawProfileFileID(&rawProfileFileID)
+	}
+
+	if sourceVersion, exists := m.SourceVersion(); exists {
+		create = create.SetNillableSourceVersion(&sourceVersion)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directorygroup, err := client.DirectoryGroup.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryGroupHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(directorygroup.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(directorygroup.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(directorygroup.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(directorygroup.UpdatedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(directorygroup.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(directorygroup.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(directorygroup.OwnerID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(directorygroup.IntegrationID)
+		}
+
+		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+			create = create.SetDirectorySyncRunID(directorySyncRunID)
+		} else {
+			create = create.SetDirectorySyncRunID(directorygroup.DirectorySyncRunID)
+		}
+
+		if externalID, exists := m.ExternalID(); exists {
+			create = create.SetExternalID(externalID)
+		} else {
+			create = create.SetExternalID(directorygroup.ExternalID)
+		}
+
+		if email, exists := m.Email(); exists {
+			create = create.SetNillableEmail(&email)
+		} else {
+			create = create.SetNillableEmail(directorygroup.Email)
+		}
+
+		if displayName, exists := m.DisplayName(); exists {
+			create = create.SetDisplayName(displayName)
+		} else {
+			create = create.SetDisplayName(directorygroup.DisplayName)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetNillableDescription(&description)
+		} else {
+			create = create.SetNillableDescription(directorygroup.Description)
+		}
+
+		if classification, exists := m.Classification(); exists {
+			create = create.SetClassification(classification)
+		} else {
+			create = create.SetClassification(directorygroup.Classification)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(directorygroup.Status)
+		}
+
+		if externalSharingAllowed, exists := m.ExternalSharingAllowed(); exists {
+			create = create.SetExternalSharingAllowed(externalSharingAllowed)
+		} else {
+			create = create.SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed)
+		}
+
+		if memberCount, exists := m.MemberCount(); exists {
+			create = create.SetMemberCount(memberCount)
+		} else {
+			create = create.SetMemberCount(directorygroup.MemberCount)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetObservedAt(observedAt)
+		} else {
+			create = create.SetObservedAt(directorygroup.ObservedAt)
+		}
+
+		if profileHash, exists := m.ProfileHash(); exists {
+			create = create.SetProfileHash(profileHash)
+		} else {
+			create = create.SetProfileHash(directorygroup.ProfileHash)
+		}
+
+		if profile, exists := m.Profile(); exists {
+			create = create.SetProfile(profile)
+		} else {
+			create = create.SetProfile(directorygroup.Profile)
+		}
+
+		if rawProfileFileID, exists := m.RawProfileFileID(); exists {
+			create = create.SetNillableRawProfileFileID(&rawProfileFileID)
+		} else {
+			create = create.SetNillableRawProfileFileID(directorygroup.RawProfileFileID)
+		}
+
+		if sourceVersion, exists := m.SourceVersion(); exists {
+			create = create.SetNillableSourceVersion(&sourceVersion)
+		} else {
+			create = create.SetNillableSourceVersion(directorygroup.SourceVersion)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directorygroup, err := client.DirectoryGroup.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryGroupHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(directorygroup.CreatedAt).
+			SetUpdatedAt(directorygroup.UpdatedAt).
+			SetCreatedBy(directorygroup.CreatedBy).
+			SetUpdatedBy(directorygroup.UpdatedBy).
+			SetDisplayID(directorygroup.DisplayID).
+			SetTags(directorygroup.Tags).
+			SetOwnerID(directorygroup.OwnerID).
+			SetIntegrationID(directorygroup.IntegrationID).
+			SetDirectorySyncRunID(directorygroup.DirectorySyncRunID).
+			SetExternalID(directorygroup.ExternalID).
+			SetNillableEmail(directorygroup.Email).
+			SetDisplayName(directorygroup.DisplayName).
+			SetNillableDescription(directorygroup.Description).
+			SetClassification(directorygroup.Classification).
+			SetStatus(directorygroup.Status).
+			SetExternalSharingAllowed(directorygroup.ExternalSharingAllowed).
+			SetMemberCount(directorygroup.MemberCount).
+			SetObservedAt(directorygroup.ObservedAt).
+			SetProfileHash(directorygroup.ProfileHash).
+			SetProfile(directorygroup.Profile).
+			SetNillableRawProfileFileID(directorygroup.RawProfileFileID).
+			SetNillableSourceVersion(directorygroup.SourceVersion).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.DirectoryMembershipHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if integrationID, exists := m.IntegrationID(); exists {
+		create = create.SetIntegrationID(integrationID)
+	}
+
+	if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+		create = create.SetDirectorySyncRunID(directorySyncRunID)
+	}
+
+	if directoryAccountID, exists := m.DirectoryAccountID(); exists {
+		create = create.SetDirectoryAccountID(directoryAccountID)
+	}
+
+	if directoryGroupID, exists := m.DirectoryGroupID(); exists {
+		create = create.SetDirectoryGroupID(directoryGroupID)
+	}
+
+	if role, exists := m.Role(); exists {
+		create = create.SetRole(role)
+	}
+
+	if source, exists := m.Source(); exists {
+		create = create.SetNillableSource(&source)
+	}
+
+	if firstSeenAt, exists := m.FirstSeenAt(); exists {
+		create = create.SetNillableFirstSeenAt(&firstSeenAt)
+	}
+
+	if lastSeenAt, exists := m.LastSeenAt(); exists {
+		create = create.SetNillableLastSeenAt(&lastSeenAt)
+	}
+
+	if observedAt, exists := m.ObservedAt(); exists {
+		create = create.SetObservedAt(observedAt)
+	}
+
+	if lastConfirmedRunID, exists := m.LastConfirmedRunID(); exists {
+		create = create.SetNillableLastConfirmedRunID(&lastConfirmedRunID)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directorymembership, err := client.DirectoryMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryMembershipHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(directorymembership.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(directorymembership.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(directorymembership.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(directorymembership.UpdatedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(directorymembership.DisplayID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(directorymembership.OwnerID)
+		}
+
+		if integrationID, exists := m.IntegrationID(); exists {
+			create = create.SetIntegrationID(integrationID)
+		} else {
+			create = create.SetIntegrationID(directorymembership.IntegrationID)
+		}
+
+		if directorySyncRunID, exists := m.DirectorySyncRunID(); exists {
+			create = create.SetDirectorySyncRunID(directorySyncRunID)
+		} else {
+			create = create.SetDirectorySyncRunID(directorymembership.DirectorySyncRunID)
+		}
+
+		if directoryAccountID, exists := m.DirectoryAccountID(); exists {
+			create = create.SetDirectoryAccountID(directoryAccountID)
+		} else {
+			create = create.SetDirectoryAccountID(directorymembership.DirectoryAccountID)
+		}
+
+		if directoryGroupID, exists := m.DirectoryGroupID(); exists {
+			create = create.SetDirectoryGroupID(directoryGroupID)
+		} else {
+			create = create.SetDirectoryGroupID(directorymembership.DirectoryGroupID)
+		}
+
+		if role, exists := m.Role(); exists {
+			create = create.SetRole(role)
+		} else {
+			create = create.SetRole(directorymembership.Role)
+		}
+
+		if source, exists := m.Source(); exists {
+			create = create.SetNillableSource(&source)
+		} else {
+			create = create.SetNillableSource(directorymembership.Source)
+		}
+
+		if firstSeenAt, exists := m.FirstSeenAt(); exists {
+			create = create.SetNillableFirstSeenAt(&firstSeenAt)
+		} else {
+			create = create.SetNillableFirstSeenAt(directorymembership.FirstSeenAt)
+		}
+
+		if lastSeenAt, exists := m.LastSeenAt(); exists {
+			create = create.SetNillableLastSeenAt(&lastSeenAt)
+		} else {
+			create = create.SetNillableLastSeenAt(directorymembership.LastSeenAt)
+		}
+
+		if observedAt, exists := m.ObservedAt(); exists {
+			create = create.SetObservedAt(observedAt)
+		} else {
+			create = create.SetObservedAt(directorymembership.ObservedAt)
+		}
+
+		if lastConfirmedRunID, exists := m.LastConfirmedRunID(); exists {
+			create = create.SetNillableLastConfirmedRunID(&lastConfirmedRunID)
+		} else {
+			create = create.SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(directorymembership.Metadata)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		directorymembership, err := client.DirectoryMembership.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.DirectoryMembershipHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(directorymembership.CreatedAt).
+			SetUpdatedAt(directorymembership.UpdatedAt).
+			SetCreatedBy(directorymembership.CreatedBy).
+			SetUpdatedBy(directorymembership.UpdatedBy).
+			SetDisplayID(directorymembership.DisplayID).
+			SetOwnerID(directorymembership.OwnerID).
+			SetIntegrationID(directorymembership.IntegrationID).
+			SetDirectorySyncRunID(directorymembership.DirectorySyncRunID).
+			SetDirectoryAccountID(directorymembership.DirectoryAccountID).
+			SetDirectoryGroupID(directorymembership.DirectoryGroupID).
+			SetRole(directorymembership.Role).
+			SetNillableSource(directorymembership.Source).
+			SetNillableFirstSeenAt(directorymembership.FirstSeenAt).
+			SetNillableLastSeenAt(directorymembership.LastSeenAt).
+			SetObservedAt(directorymembership.ObservedAt).
+			SetNillableLastConfirmedRunID(directorymembership.LastConfirmedRunID).
+			SetMetadata(directorymembership.Metadata).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
 func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	client := m.Client()
@@ -16593,6 +17603,1652 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 			SetExternalURI(vulnerability.ExternalURI).
 			SetMetadata(vulnerability.Metadata).
 			SetRawPayload(vulnerability.RawPayload).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowAssignmentHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+		create = create.SetWorkflowInstanceID(workflowInstanceID)
+	}
+
+	if assignmentKey, exists := m.AssignmentKey(); exists {
+		create = create.SetAssignmentKey(assignmentKey)
+	}
+
+	if role, exists := m.Role(); exists {
+		create = create.SetRole(role)
+	}
+
+	if label, exists := m.Label(); exists {
+		create = create.SetLabel(label)
+	}
+
+	if required, exists := m.Required(); exists {
+		create = create.SetRequired(required)
+	}
+
+	if status, exists := m.Status(); exists {
+		create = create.SetStatus(status)
+	}
+
+	if metadata, exists := m.Metadata(); exists {
+		create = create.SetMetadata(metadata)
+	}
+
+	if decidedAt, exists := m.DecidedAt(); exists {
+		create = create.SetNillableDecidedAt(&decidedAt)
+	}
+
+	if actorUserID, exists := m.ActorUserID(); exists {
+		create = create.SetActorUserID(actorUserID)
+	}
+
+	if actorGroupID, exists := m.ActorGroupID(); exists {
+		create = create.SetActorGroupID(actorGroupID)
+	}
+
+	if notes, exists := m.Notes(); exists {
+		create = create.SetNotes(notes)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowassignment, err := client.WorkflowAssignment.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowAssignmentHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowassignment.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowassignment.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowassignment.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowassignment.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(workflowassignment.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(workflowassignment.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowassignment.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(workflowassignment.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowassignment.OwnerID)
+		}
+
+		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+			create = create.SetWorkflowInstanceID(workflowInstanceID)
+		} else {
+			create = create.SetWorkflowInstanceID(workflowassignment.WorkflowInstanceID)
+		}
+
+		if assignmentKey, exists := m.AssignmentKey(); exists {
+			create = create.SetAssignmentKey(assignmentKey)
+		} else {
+			create = create.SetAssignmentKey(workflowassignment.AssignmentKey)
+		}
+
+		if role, exists := m.Role(); exists {
+			create = create.SetRole(role)
+		} else {
+			create = create.SetRole(workflowassignment.Role)
+		}
+
+		if label, exists := m.Label(); exists {
+			create = create.SetLabel(label)
+		} else {
+			create = create.SetLabel(workflowassignment.Label)
+		}
+
+		if required, exists := m.Required(); exists {
+			create = create.SetRequired(required)
+		} else {
+			create = create.SetRequired(workflowassignment.Required)
+		}
+
+		if status, exists := m.Status(); exists {
+			create = create.SetStatus(status)
+		} else {
+			create = create.SetStatus(workflowassignment.Status)
+		}
+
+		if metadata, exists := m.Metadata(); exists {
+			create = create.SetMetadata(metadata)
+		} else {
+			create = create.SetMetadata(workflowassignment.Metadata)
+		}
+
+		if decidedAt, exists := m.DecidedAt(); exists {
+			create = create.SetNillableDecidedAt(&decidedAt)
+		} else {
+			create = create.SetNillableDecidedAt(workflowassignment.DecidedAt)
+		}
+
+		if actorUserID, exists := m.ActorUserID(); exists {
+			create = create.SetActorUserID(actorUserID)
+		} else {
+			create = create.SetActorUserID(workflowassignment.ActorUserID)
+		}
+
+		if actorGroupID, exists := m.ActorGroupID(); exists {
+			create = create.SetActorGroupID(actorGroupID)
+		} else {
+			create = create.SetActorGroupID(workflowassignment.ActorGroupID)
+		}
+
+		if notes, exists := m.Notes(); exists {
+			create = create.SetNotes(notes)
+		} else {
+			create = create.SetNotes(workflowassignment.Notes)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowassignment, err := client.WorkflowAssignment.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowAssignmentHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowassignment.CreatedAt).
+			SetUpdatedAt(workflowassignment.UpdatedAt).
+			SetCreatedBy(workflowassignment.CreatedBy).
+			SetUpdatedBy(workflowassignment.UpdatedBy).
+			SetDeletedAt(workflowassignment.DeletedAt).
+			SetDeletedBy(workflowassignment.DeletedBy).
+			SetDisplayID(workflowassignment.DisplayID).
+			SetTags(workflowassignment.Tags).
+			SetOwnerID(workflowassignment.OwnerID).
+			SetWorkflowInstanceID(workflowassignment.WorkflowInstanceID).
+			SetAssignmentKey(workflowassignment.AssignmentKey).
+			SetRole(workflowassignment.Role).
+			SetLabel(workflowassignment.Label).
+			SetRequired(workflowassignment.Required).
+			SetStatus(workflowassignment.Status).
+			SetMetadata(workflowassignment.Metadata).
+			SetNillableDecidedAt(workflowassignment.DecidedAt).
+			SetActorUserID(workflowassignment.ActorUserID).
+			SetActorGroupID(workflowassignment.ActorGroupID).
+			SetNotes(workflowassignment.Notes).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowAssignmentTargetHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowAssignmentID, exists := m.WorkflowAssignmentID(); exists {
+		create = create.SetWorkflowAssignmentID(workflowAssignmentID)
+	}
+
+	if targetType, exists := m.TargetType(); exists {
+		create = create.SetTargetType(targetType)
+	}
+
+	if targetUserID, exists := m.TargetUserID(); exists {
+		create = create.SetTargetUserID(targetUserID)
+	}
+
+	if targetGroupID, exists := m.TargetGroupID(); exists {
+		create = create.SetTargetGroupID(targetGroupID)
+	}
+
+	if resolverKey, exists := m.ResolverKey(); exists {
+		create = create.SetResolverKey(resolverKey)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowassignmenttarget, err := client.WorkflowAssignmentTarget.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowAssignmentTargetHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowassignmenttarget.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowassignmenttarget.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowassignmenttarget.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowassignmenttarget.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(workflowassignmenttarget.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(workflowassignmenttarget.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowassignmenttarget.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(workflowassignmenttarget.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowassignmenttarget.OwnerID)
+		}
+
+		if workflowAssignmentID, exists := m.WorkflowAssignmentID(); exists {
+			create = create.SetWorkflowAssignmentID(workflowAssignmentID)
+		} else {
+			create = create.SetWorkflowAssignmentID(workflowassignmenttarget.WorkflowAssignmentID)
+		}
+
+		if targetType, exists := m.TargetType(); exists {
+			create = create.SetTargetType(targetType)
+		} else {
+			create = create.SetTargetType(workflowassignmenttarget.TargetType)
+		}
+
+		if targetUserID, exists := m.TargetUserID(); exists {
+			create = create.SetTargetUserID(targetUserID)
+		} else {
+			create = create.SetTargetUserID(workflowassignmenttarget.TargetUserID)
+		}
+
+		if targetGroupID, exists := m.TargetGroupID(); exists {
+			create = create.SetTargetGroupID(targetGroupID)
+		} else {
+			create = create.SetTargetGroupID(workflowassignmenttarget.TargetGroupID)
+		}
+
+		if resolverKey, exists := m.ResolverKey(); exists {
+			create = create.SetResolverKey(resolverKey)
+		} else {
+			create = create.SetResolverKey(workflowassignmenttarget.ResolverKey)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowassignmenttarget, err := client.WorkflowAssignmentTarget.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowAssignmentTargetHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowassignmenttarget.CreatedAt).
+			SetUpdatedAt(workflowassignmenttarget.UpdatedAt).
+			SetCreatedBy(workflowassignmenttarget.CreatedBy).
+			SetUpdatedBy(workflowassignmenttarget.UpdatedBy).
+			SetDeletedAt(workflowassignmenttarget.DeletedAt).
+			SetDeletedBy(workflowassignmenttarget.DeletedBy).
+			SetDisplayID(workflowassignmenttarget.DisplayID).
+			SetTags(workflowassignmenttarget.Tags).
+			SetOwnerID(workflowassignmenttarget.OwnerID).
+			SetWorkflowAssignmentID(workflowassignmenttarget.WorkflowAssignmentID).
+			SetTargetType(workflowassignmenttarget.TargetType).
+			SetTargetUserID(workflowassignmenttarget.TargetUserID).
+			SetTargetGroupID(workflowassignmenttarget.TargetGroupID).
+			SetResolverKey(workflowassignmenttarget.ResolverKey).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowDefinitionHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if systemOwned, exists := m.SystemOwned(); exists {
+		create = create.SetSystemOwned(systemOwned)
+	}
+
+	if internalNotes, exists := m.InternalNotes(); exists {
+		create = create.SetNillableInternalNotes(&internalNotes)
+	}
+
+	if systemInternalID, exists := m.SystemInternalID(); exists {
+		create = create.SetNillableSystemInternalID(&systemInternalID)
+	}
+
+	if name, exists := m.Name(); exists {
+		create = create.SetName(name)
+	}
+
+	if description, exists := m.Description(); exists {
+		create = create.SetDescription(description)
+	}
+
+	if workflowKind, exists := m.WorkflowKind(); exists {
+		create = create.SetWorkflowKind(workflowKind)
+	}
+
+	if schemaType, exists := m.SchemaType(); exists {
+		create = create.SetSchemaType(schemaType)
+	}
+
+	if revision, exists := m.Revision(); exists {
+		create = create.SetRevision(revision)
+	}
+
+	if draft, exists := m.Draft(); exists {
+		create = create.SetDraft(draft)
+	}
+
+	if publishedAt, exists := m.PublishedAt(); exists {
+		create = create.SetNillablePublishedAt(&publishedAt)
+	}
+
+	if cooldownSeconds, exists := m.CooldownSeconds(); exists {
+		create = create.SetCooldownSeconds(cooldownSeconds)
+	}
+
+	if isDefault, exists := m.IsDefault(); exists {
+		create = create.SetIsDefault(isDefault)
+	}
+
+	if active, exists := m.Active(); exists {
+		create = create.SetActive(active)
+	}
+
+	if triggerOperations, exists := m.TriggerOperations(); exists {
+		create = create.SetTriggerOperations(triggerOperations)
+	}
+
+	if triggerFields, exists := m.TriggerFields(); exists {
+		create = create.SetTriggerFields(triggerFields)
+	}
+
+	if definitionJSON, exists := m.DefinitionJSON(); exists {
+		create = create.SetDefinitionJSON(definitionJSON)
+	}
+
+	if trackedFields, exists := m.TrackedFields(); exists {
+		create = create.SetTrackedFields(trackedFields)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowdefinition, err := client.WorkflowDefinition.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowDefinitionHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowdefinition.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowdefinition.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowdefinition.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowdefinition.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(workflowdefinition.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(workflowdefinition.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowdefinition.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(workflowdefinition.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowdefinition.OwnerID)
+		}
+
+		if systemOwned, exists := m.SystemOwned(); exists {
+			create = create.SetSystemOwned(systemOwned)
+		} else {
+			create = create.SetSystemOwned(workflowdefinition.SystemOwned)
+		}
+
+		if internalNotes, exists := m.InternalNotes(); exists {
+			create = create.SetNillableInternalNotes(&internalNotes)
+		} else {
+			create = create.SetNillableInternalNotes(workflowdefinition.InternalNotes)
+		}
+
+		if systemInternalID, exists := m.SystemInternalID(); exists {
+			create = create.SetNillableSystemInternalID(&systemInternalID)
+		} else {
+			create = create.SetNillableSystemInternalID(workflowdefinition.SystemInternalID)
+		}
+
+		if name, exists := m.Name(); exists {
+			create = create.SetName(name)
+		} else {
+			create = create.SetName(workflowdefinition.Name)
+		}
+
+		if description, exists := m.Description(); exists {
+			create = create.SetDescription(description)
+		} else {
+			create = create.SetDescription(workflowdefinition.Description)
+		}
+
+		if workflowKind, exists := m.WorkflowKind(); exists {
+			create = create.SetWorkflowKind(workflowKind)
+		} else {
+			create = create.SetWorkflowKind(workflowdefinition.WorkflowKind)
+		}
+
+		if schemaType, exists := m.SchemaType(); exists {
+			create = create.SetSchemaType(schemaType)
+		} else {
+			create = create.SetSchemaType(workflowdefinition.SchemaType)
+		}
+
+		if revision, exists := m.Revision(); exists {
+			create = create.SetRevision(revision)
+		} else {
+			create = create.SetRevision(workflowdefinition.Revision)
+		}
+
+		if draft, exists := m.Draft(); exists {
+			create = create.SetDraft(draft)
+		} else {
+			create = create.SetDraft(workflowdefinition.Draft)
+		}
+
+		if publishedAt, exists := m.PublishedAt(); exists {
+			create = create.SetNillablePublishedAt(&publishedAt)
+		} else {
+			create = create.SetNillablePublishedAt(workflowdefinition.PublishedAt)
+		}
+
+		if cooldownSeconds, exists := m.CooldownSeconds(); exists {
+			create = create.SetCooldownSeconds(cooldownSeconds)
+		} else {
+			create = create.SetCooldownSeconds(workflowdefinition.CooldownSeconds)
+		}
+
+		if isDefault, exists := m.IsDefault(); exists {
+			create = create.SetIsDefault(isDefault)
+		} else {
+			create = create.SetIsDefault(workflowdefinition.IsDefault)
+		}
+
+		if active, exists := m.Active(); exists {
+			create = create.SetActive(active)
+		} else {
+			create = create.SetActive(workflowdefinition.Active)
+		}
+
+		if triggerOperations, exists := m.TriggerOperations(); exists {
+			create = create.SetTriggerOperations(triggerOperations)
+		} else {
+			create = create.SetTriggerOperations(workflowdefinition.TriggerOperations)
+		}
+
+		if triggerFields, exists := m.TriggerFields(); exists {
+			create = create.SetTriggerFields(triggerFields)
+		} else {
+			create = create.SetTriggerFields(workflowdefinition.TriggerFields)
+		}
+
+		if definitionJSON, exists := m.DefinitionJSON(); exists {
+			create = create.SetDefinitionJSON(definitionJSON)
+		} else {
+			create = create.SetDefinitionJSON(workflowdefinition.DefinitionJSON)
+		}
+
+		if trackedFields, exists := m.TrackedFields(); exists {
+			create = create.SetTrackedFields(trackedFields)
+		} else {
+			create = create.SetTrackedFields(workflowdefinition.TrackedFields)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowdefinition, err := client.WorkflowDefinition.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowDefinitionHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowdefinition.CreatedAt).
+			SetUpdatedAt(workflowdefinition.UpdatedAt).
+			SetCreatedBy(workflowdefinition.CreatedBy).
+			SetUpdatedBy(workflowdefinition.UpdatedBy).
+			SetDeletedAt(workflowdefinition.DeletedAt).
+			SetDeletedBy(workflowdefinition.DeletedBy).
+			SetDisplayID(workflowdefinition.DisplayID).
+			SetTags(workflowdefinition.Tags).
+			SetOwnerID(workflowdefinition.OwnerID).
+			SetSystemOwned(workflowdefinition.SystemOwned).
+			SetNillableInternalNotes(workflowdefinition.InternalNotes).
+			SetNillableSystemInternalID(workflowdefinition.SystemInternalID).
+			SetName(workflowdefinition.Name).
+			SetDescription(workflowdefinition.Description).
+			SetWorkflowKind(workflowdefinition.WorkflowKind).
+			SetSchemaType(workflowdefinition.SchemaType).
+			SetRevision(workflowdefinition.Revision).
+			SetDraft(workflowdefinition.Draft).
+			SetNillablePublishedAt(workflowdefinition.PublishedAt).
+			SetCooldownSeconds(workflowdefinition.CooldownSeconds).
+			SetIsDefault(workflowdefinition.IsDefault).
+			SetActive(workflowdefinition.Active).
+			SetTriggerOperations(workflowdefinition.TriggerOperations).
+			SetTriggerFields(workflowdefinition.TriggerFields).
+			SetDefinitionJSON(workflowdefinition.DefinitionJSON).
+			SetTrackedFields(workflowdefinition.TrackedFields).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowEventHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+		create = create.SetWorkflowInstanceID(workflowInstanceID)
+	}
+
+	if eventType, exists := m.EventType(); exists {
+		create = create.SetEventType(eventType)
+	}
+
+	if payload, exists := m.Payload(); exists {
+		create = create.SetPayload(payload)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowevent, err := client.WorkflowEvent.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowEventHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowevent.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowevent.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowevent.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowevent.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(workflowevent.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(workflowevent.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowevent.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(workflowevent.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowevent.OwnerID)
+		}
+
+		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+			create = create.SetWorkflowInstanceID(workflowInstanceID)
+		} else {
+			create = create.SetWorkflowInstanceID(workflowevent.WorkflowInstanceID)
+		}
+
+		if eventType, exists := m.EventType(); exists {
+			create = create.SetEventType(eventType)
+		} else {
+			create = create.SetEventType(workflowevent.EventType)
+		}
+
+		if payload, exists := m.Payload(); exists {
+			create = create.SetPayload(payload)
+		} else {
+			create = create.SetPayload(workflowevent.Payload)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowevent, err := client.WorkflowEvent.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowEventHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowevent.CreatedAt).
+			SetUpdatedAt(workflowevent.UpdatedAt).
+			SetCreatedBy(workflowevent.CreatedBy).
+			SetUpdatedBy(workflowevent.UpdatedBy).
+			SetDeletedAt(workflowevent.DeletedAt).
+			SetDeletedBy(workflowevent.DeletedBy).
+			SetDisplayID(workflowevent.DisplayID).
+			SetTags(workflowevent.Tags).
+			SetOwnerID(workflowevent.OwnerID).
+			SetWorkflowInstanceID(workflowevent.WorkflowInstanceID).
+			SetEventType(workflowevent.EventType).
+			SetPayload(workflowevent.Payload).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowInstanceHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if deletedAt, exists := m.DeletedAt(); exists {
+		create = create.SetDeletedAt(deletedAt)
+	}
+
+	if deletedBy, exists := m.DeletedBy(); exists {
+		create = create.SetDeletedBy(deletedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if tags, exists := m.Tags(); exists {
+		create = create.SetTags(tags)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+		create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+	}
+
+	if state, exists := m.State(); exists {
+		create = create.SetState(state)
+	}
+
+	if context, exists := m.Context(); exists {
+		create = create.SetContext(context)
+	}
+
+	if lastEvaluatedAt, exists := m.LastEvaluatedAt(); exists {
+		create = create.SetNillableLastEvaluatedAt(&lastEvaluatedAt)
+	}
+
+	if definitionSnapshot, exists := m.DefinitionSnapshot(); exists {
+		create = create.SetDefinitionSnapshot(definitionSnapshot)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowinstance, err := client.WorkflowInstance.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowInstanceHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowinstance.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowinstance.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowinstance.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowinstance.UpdatedBy)
+		}
+
+		if deletedAt, exists := m.DeletedAt(); exists {
+			create = create.SetDeletedAt(deletedAt)
+		} else {
+			create = create.SetDeletedAt(workflowinstance.DeletedAt)
+		}
+
+		if deletedBy, exists := m.DeletedBy(); exists {
+			create = create.SetDeletedBy(deletedBy)
+		} else {
+			create = create.SetDeletedBy(workflowinstance.DeletedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowinstance.DisplayID)
+		}
+
+		if tags, exists := m.Tags(); exists {
+			create = create.SetTags(tags)
+		} else {
+			create = create.SetTags(workflowinstance.Tags)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowinstance.OwnerID)
+		}
+
+		if workflowDefinitionID, exists := m.WorkflowDefinitionID(); exists {
+			create = create.SetWorkflowDefinitionID(workflowDefinitionID)
+		} else {
+			create = create.SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID)
+		}
+
+		if state, exists := m.State(); exists {
+			create = create.SetState(state)
+		} else {
+			create = create.SetState(workflowinstance.State)
+		}
+
+		if context, exists := m.Context(); exists {
+			create = create.SetContext(context)
+		} else {
+			create = create.SetContext(workflowinstance.Context)
+		}
+
+		if lastEvaluatedAt, exists := m.LastEvaluatedAt(); exists {
+			create = create.SetNillableLastEvaluatedAt(&lastEvaluatedAt)
+		} else {
+			create = create.SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt)
+		}
+
+		if definitionSnapshot, exists := m.DefinitionSnapshot(); exists {
+			create = create.SetDefinitionSnapshot(definitionSnapshot)
+		} else {
+			create = create.SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowinstance, err := client.WorkflowInstance.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowInstanceHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowinstance.CreatedAt).
+			SetUpdatedAt(workflowinstance.UpdatedAt).
+			SetCreatedBy(workflowinstance.CreatedBy).
+			SetUpdatedBy(workflowinstance.UpdatedBy).
+			SetDeletedAt(workflowinstance.DeletedAt).
+			SetDeletedBy(workflowinstance.DeletedBy).
+			SetDisplayID(workflowinstance.DisplayID).
+			SetTags(workflowinstance.Tags).
+			SetOwnerID(workflowinstance.OwnerID).
+			SetWorkflowDefinitionID(workflowinstance.WorkflowDefinitionID).
+			SetState(workflowinstance.State).
+			SetContext(workflowinstance.Context).
+			SetNillableLastEvaluatedAt(workflowinstance.LastEvaluatedAt).
+			SetDefinitionSnapshot(workflowinstance.DefinitionSnapshot).
+			Save(ctx)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	client := m.Client()
+
+	id, ok := m.ID()
+	if !ok {
+		return idNotFoundError
+	}
+
+	create := client.WorkflowObjectRefHistory.Create()
+
+	create = create.
+		SetOperation(EntOpToHistoryOp(m.Op())).
+		SetHistoryTime(time.Now()).
+		SetRef(id)
+
+	if createdAt, exists := m.CreatedAt(); exists {
+		create = create.SetCreatedAt(createdAt)
+	}
+
+	if updatedAt, exists := m.UpdatedAt(); exists {
+		create = create.SetUpdatedAt(updatedAt)
+	}
+
+	if createdBy, exists := m.CreatedBy(); exists {
+		create = create.SetCreatedBy(createdBy)
+	}
+
+	if updatedBy, exists := m.UpdatedBy(); exists {
+		create = create.SetUpdatedBy(updatedBy)
+	}
+
+	if displayID, exists := m.DisplayID(); exists {
+		create = create.SetDisplayID(displayID)
+	}
+
+	if ownerID, exists := m.OwnerID(); exists {
+		create = create.SetOwnerID(ownerID)
+	}
+
+	if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+		create = create.SetWorkflowInstanceID(workflowInstanceID)
+	}
+
+	if controlID, exists := m.ControlID(); exists {
+		create = create.SetControlID(controlID)
+	}
+
+	if taskID, exists := m.TaskID(); exists {
+		create = create.SetTaskID(taskID)
+	}
+
+	if internalPolicyID, exists := m.InternalPolicyID(); exists {
+		create = create.SetInternalPolicyID(internalPolicyID)
+	}
+
+	if findingID, exists := m.FindingID(); exists {
+		create = create.SetFindingID(findingID)
+	}
+
+	if directoryAccountID, exists := m.DirectoryAccountID(); exists {
+		create = create.SetDirectoryAccountID(directoryAccountID)
+	}
+
+	if directoryGroupID, exists := m.DirectoryGroupID(); exists {
+		create = create.SetDirectoryGroupID(directoryGroupID)
+	}
+
+	if directoryMembershipID, exists := m.DirectoryMembershipID(); exists {
+		create = create.SetDirectoryMembershipID(directoryMembershipID)
+	}
+
+	_, err := create.Save(ctx)
+
+	return err
+}
+
+func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+	// check for soft delete operation and delete instead
+	if entx.CheckIsSoftDelete(ctx) {
+		return m.CreateHistoryFromDelete(ctx)
+	}
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowobjectref, err := client.WorkflowObjectRef.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowObjectRefHistory.Create()
+
+		create = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id)
+
+		if createdAt, exists := m.CreatedAt(); exists {
+			create = create.SetCreatedAt(createdAt)
+		} else {
+			create = create.SetCreatedAt(workflowobjectref.CreatedAt)
+		}
+
+		if updatedAt, exists := m.UpdatedAt(); exists {
+			create = create.SetUpdatedAt(updatedAt)
+		} else {
+			create = create.SetUpdatedAt(workflowobjectref.UpdatedAt)
+		}
+
+		if createdBy, exists := m.CreatedBy(); exists {
+			create = create.SetCreatedBy(createdBy)
+		} else {
+			create = create.SetCreatedBy(workflowobjectref.CreatedBy)
+		}
+
+		if updatedBy, exists := m.UpdatedBy(); exists {
+			create = create.SetUpdatedBy(updatedBy)
+		} else {
+			create = create.SetUpdatedBy(workflowobjectref.UpdatedBy)
+		}
+
+		if displayID, exists := m.DisplayID(); exists {
+			create = create.SetDisplayID(displayID)
+		} else {
+			create = create.SetDisplayID(workflowobjectref.DisplayID)
+		}
+
+		if ownerID, exists := m.OwnerID(); exists {
+			create = create.SetOwnerID(ownerID)
+		} else {
+			create = create.SetOwnerID(workflowobjectref.OwnerID)
+		}
+
+		if workflowInstanceID, exists := m.WorkflowInstanceID(); exists {
+			create = create.SetWorkflowInstanceID(workflowInstanceID)
+		} else {
+			create = create.SetWorkflowInstanceID(workflowobjectref.WorkflowInstanceID)
+		}
+
+		if controlID, exists := m.ControlID(); exists {
+			create = create.SetControlID(controlID)
+		} else {
+			create = create.SetControlID(workflowobjectref.ControlID)
+		}
+
+		if taskID, exists := m.TaskID(); exists {
+			create = create.SetTaskID(taskID)
+		} else {
+			create = create.SetTaskID(workflowobjectref.TaskID)
+		}
+
+		if internalPolicyID, exists := m.InternalPolicyID(); exists {
+			create = create.SetInternalPolicyID(internalPolicyID)
+		} else {
+			create = create.SetInternalPolicyID(workflowobjectref.InternalPolicyID)
+		}
+
+		if findingID, exists := m.FindingID(); exists {
+			create = create.SetFindingID(findingID)
+		} else {
+			create = create.SetFindingID(workflowobjectref.FindingID)
+		}
+
+		if directoryAccountID, exists := m.DirectoryAccountID(); exists {
+			create = create.SetDirectoryAccountID(directoryAccountID)
+		} else {
+			create = create.SetDirectoryAccountID(workflowobjectref.DirectoryAccountID)
+		}
+
+		if directoryGroupID, exists := m.DirectoryGroupID(); exists {
+			create = create.SetDirectoryGroupID(directoryGroupID)
+		} else {
+			create = create.SetDirectoryGroupID(workflowobjectref.DirectoryGroupID)
+		}
+
+		if directoryMembershipID, exists := m.DirectoryMembershipID(); exists {
+			create = create.SetDirectoryMembershipID(directoryMembershipID)
+		} else {
+			create = create.SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID)
+		}
+
+		if _, err := create.Save(ctx); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context) error {
+	ctx = history.WithContext(ctx)
+
+	// check for soft delete operation and skip so it happens on update
+	if entx.CheckIsSoftDelete(ctx) {
+		return nil
+	}
+
+	client := m.Client()
+
+	ids, err := m.IDs(ctx)
+	if err != nil {
+		return fmt.Errorf("getting ids: %w", err)
+	}
+
+	for _, id := range ids {
+		workflowobjectref, err := client.WorkflowObjectRef.Get(ctx, id)
+		if err != nil {
+			return err
+		}
+
+		create := client.WorkflowObjectRefHistory.Create()
+
+		_, err = create.
+			SetOperation(EntOpToHistoryOp(m.Op())).
+			SetHistoryTime(time.Now()).
+			SetRef(id).
+			SetCreatedAt(workflowobjectref.CreatedAt).
+			SetUpdatedAt(workflowobjectref.UpdatedAt).
+			SetCreatedBy(workflowobjectref.CreatedBy).
+			SetUpdatedBy(workflowobjectref.UpdatedBy).
+			SetDisplayID(workflowobjectref.DisplayID).
+			SetOwnerID(workflowobjectref.OwnerID).
+			SetWorkflowInstanceID(workflowobjectref.WorkflowInstanceID).
+			SetControlID(workflowobjectref.ControlID).
+			SetTaskID(workflowobjectref.TaskID).
+			SetInternalPolicyID(workflowobjectref.InternalPolicyID).
+			SetFindingID(workflowobjectref.FindingID).
+			SetDirectoryAccountID(workflowobjectref.DirectoryAccountID).
+			SetDirectoryGroupID(workflowobjectref.DirectoryGroupID).
+			SetDirectoryMembershipID(workflowobjectref.DirectoryMembershipID).
 			Save(ctx)
 		if err != nil {
 			return err

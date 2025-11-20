@@ -167,33 +167,36 @@ type FindingEdges struct {
 	Comments []*Note `json:"comments,omitempty"`
 	// supporting files or evidence for the finding
 	Files []*File `json:"files,omitempty"`
+	// WorkflowObjectRefs holds the value of the workflow_object_refs edge.
+	WorkflowObjectRefs []*WorkflowObjectRef `json:"workflow_object_refs,omitempty"`
 	// ControlMappings holds the value of the control_mappings edge.
 	ControlMappings []*FindingControl `json:"control_mappings,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [20]bool
+	loadedTypes [21]bool
 	// totalCount holds the count of the edges above.
-	totalCount [20]map[string]int
+	totalCount [21]map[string]int
 
-	namedBlockedGroups   map[string][]*Group
-	namedEditors         map[string][]*Group
-	namedViewers         map[string][]*Group
-	namedIntegrations    map[string][]*Integration
-	namedVulnerabilities map[string][]*Vulnerability
-	namedActionPlans     map[string][]*ActionPlan
-	namedControls        map[string][]*Control
-	namedSubcontrols     map[string][]*Subcontrol
-	namedRisks           map[string][]*Risk
-	namedPrograms        map[string][]*Program
-	namedAssets          map[string][]*Asset
-	namedEntities        map[string][]*Entity
-	namedScans           map[string][]*Scan
-	namedTasks           map[string][]*Task
-	namedRemediations    map[string][]*Remediation
-	namedReviews         map[string][]*Review
-	namedComments        map[string][]*Note
-	namedFiles           map[string][]*File
-	namedControlMappings map[string][]*FindingControl
+	namedBlockedGroups      map[string][]*Group
+	namedEditors            map[string][]*Group
+	namedViewers            map[string][]*Group
+	namedIntegrations       map[string][]*Integration
+	namedVulnerabilities    map[string][]*Vulnerability
+	namedActionPlans        map[string][]*ActionPlan
+	namedControls           map[string][]*Control
+	namedSubcontrols        map[string][]*Subcontrol
+	namedRisks              map[string][]*Risk
+	namedPrograms           map[string][]*Program
+	namedAssets             map[string][]*Asset
+	namedEntities           map[string][]*Entity
+	namedScans              map[string][]*Scan
+	namedTasks              map[string][]*Task
+	namedRemediations       map[string][]*Remediation
+	namedReviews            map[string][]*Review
+	namedComments           map[string][]*Note
+	namedFiles              map[string][]*File
+	namedWorkflowObjectRefs map[string][]*WorkflowObjectRef
+	namedControlMappings    map[string][]*FindingControl
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -369,10 +372,19 @@ func (e FindingEdges) FilesOrErr() ([]*File, error) {
 	return nil, &NotLoadedError{edge: "files"}
 }
 
+// WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
+// was not loaded in eager-loading.
+func (e FindingEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
+	if e.loadedTypes[19] {
+		return e.WorkflowObjectRefs, nil
+	}
+	return nil, &NotLoadedError{edge: "workflow_object_refs"}
+}
+
 // ControlMappingsOrErr returns the ControlMappings value or an error if the edge
 // was not loaded in eager-loading.
 func (e FindingEdges) ControlMappingsOrErr() ([]*FindingControl, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[20] {
 		return e.ControlMappings, nil
 	}
 	return nil, &NotLoadedError{edge: "control_mappings"}
@@ -866,6 +878,11 @@ func (_m *Finding) QueryComments() *NoteQuery {
 // QueryFiles queries the "files" edge of the Finding entity.
 func (_m *Finding) QueryFiles() *FileQuery {
 	return NewFindingClient(_m.config).QueryFiles(_m)
+}
+
+// QueryWorkflowObjectRefs queries the "workflow_object_refs" edge of the Finding entity.
+func (_m *Finding) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	return NewFindingClient(_m.config).QueryWorkflowObjectRefs(_m)
 }
 
 // QueryControlMappings queries the "control_mappings" edge of the Finding entity.
@@ -1485,6 +1502,30 @@ func (_m *Finding) appendNamedFiles(name string, edges ...*File) {
 		_m.Edges.namedFiles[name] = []*File{}
 	} else {
 		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
+	}
+}
+
+// NamedWorkflowObjectRefs returns the WorkflowObjectRefs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Finding) NamedWorkflowObjectRefs(name string) ([]*WorkflowObjectRef, error) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedWorkflowObjectRefs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Finding) appendNamedWorkflowObjectRefs(name string, edges ...*WorkflowObjectRef) {
+	if _m.Edges.namedWorkflowObjectRefs == nil {
+		_m.Edges.namedWorkflowObjectRefs = make(map[string][]*WorkflowObjectRef)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedWorkflowObjectRefs[name] = []*WorkflowObjectRef{}
+	} else {
+		_m.Edges.namedWorkflowObjectRefs[name] = append(_m.Edges.namedWorkflowObjectRefs[name], edges...)
 	}
 }
 

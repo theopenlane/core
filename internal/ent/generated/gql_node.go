@@ -29,6 +29,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -133,6 +140,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 // Noder wraps the basic Node method.
@@ -249,6 +268,41 @@ var dnsverificationhistoryImplementors = []string{"DNSVerificationHistory", "Nod
 
 // IsNode implements the Node interface check for GQLGen.
 func (*DNSVerificationHistory) IsNode() {}
+
+var directoryaccountImplementors = []string{"DirectoryAccount", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryAccount) IsNode() {}
+
+var directoryaccounthistoryImplementors = []string{"DirectoryAccountHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryAccountHistory) IsNode() {}
+
+var directorygroupImplementors = []string{"DirectoryGroup", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryGroup) IsNode() {}
+
+var directorygrouphistoryImplementors = []string{"DirectoryGroupHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryGroupHistory) IsNode() {}
+
+var directorymembershipImplementors = []string{"DirectoryMembership", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryMembership) IsNode() {}
+
+var directorymembershiphistoryImplementors = []string{"DirectoryMembershipHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectoryMembershipHistory) IsNode() {}
+
+var directorysyncrunImplementors = []string{"DirectorySyncRun", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DirectorySyncRun) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -760,6 +814,66 @@ var webauthnImplementors = []string{"Webauthn", "Node"}
 // IsNode implements the Node interface check for GQLGen.
 func (*Webauthn) IsNode() {}
 
+var workflowassignmentImplementors = []string{"WorkflowAssignment", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowAssignment) IsNode() {}
+
+var workflowassignmenthistoryImplementors = []string{"WorkflowAssignmentHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowAssignmentHistory) IsNode() {}
+
+var workflowassignmenttargetImplementors = []string{"WorkflowAssignmentTarget", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowAssignmentTarget) IsNode() {}
+
+var workflowassignmenttargethistoryImplementors = []string{"WorkflowAssignmentTargetHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowAssignmentTargetHistory) IsNode() {}
+
+var workflowdefinitionImplementors = []string{"WorkflowDefinition", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowDefinition) IsNode() {}
+
+var workflowdefinitionhistoryImplementors = []string{"WorkflowDefinitionHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowDefinitionHistory) IsNode() {}
+
+var workfloweventImplementors = []string{"WorkflowEvent", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowEvent) IsNode() {}
+
+var workfloweventhistoryImplementors = []string{"WorkflowEventHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowEventHistory) IsNode() {}
+
+var workflowinstanceImplementors = []string{"WorkflowInstance", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowInstance) IsNode() {}
+
+var workflowinstancehistoryImplementors = []string{"WorkflowInstanceHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowInstanceHistory) IsNode() {}
+
+var workflowobjectrefImplementors = []string{"WorkflowObjectRef", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowObjectRef) IsNode() {}
+
+var workflowobjectrefhistoryImplementors = []string{"WorkflowObjectRefHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*WorkflowObjectRefHistory) IsNode() {}
+
 var errNodeInvalidID = &NotFoundError{"node"}
 
 // NodeOption allows configuring the Noder execution using functional options.
@@ -1012,6 +1126,69 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(dnsverificationhistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, dnsverificationhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directoryaccount.Table:
+		query := c.DirectoryAccount.Query().
+			Where(directoryaccount.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directoryaccountImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directoryaccounthistory.Table:
+		query := c.DirectoryAccountHistory.Query().
+			Where(directoryaccounthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directoryaccounthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directorygroup.Table:
+		query := c.DirectoryGroup.Query().
+			Where(directorygroup.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorygroupImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directorygrouphistory.Table:
+		query := c.DirectoryGroupHistory.Query().
+			Where(directorygrouphistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorygrouphistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directorymembership.Table:
+		query := c.DirectoryMembership.Query().
+			Where(directorymembership.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorymembershipImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directorymembershiphistory.Table:
+		query := c.DirectoryMembershipHistory.Query().
+			Where(directorymembershiphistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorymembershiphistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case directorysyncrun.Table:
+		query := c.DirectorySyncRun.Query().
+			Where(directorysyncrun.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorysyncrunImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -1934,6 +2111,114 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			}
 		}
 		return query.Only(ctx)
+	case workflowassignment.Table:
+		query := c.WorkflowAssignment.Query().
+			Where(workflowassignment.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowassignmentImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowassignmenthistory.Table:
+		query := c.WorkflowAssignmentHistory.Query().
+			Where(workflowassignmenthistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowassignmenthistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowassignmenttarget.Table:
+		query := c.WorkflowAssignmentTarget.Query().
+			Where(workflowassignmenttarget.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowassignmenttargetImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowassignmenttargethistory.Table:
+		query := c.WorkflowAssignmentTargetHistory.Query().
+			Where(workflowassignmenttargethistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowassignmenttargethistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowdefinition.Table:
+		query := c.WorkflowDefinition.Query().
+			Where(workflowdefinition.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowdefinitionImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowdefinitionhistory.Table:
+		query := c.WorkflowDefinitionHistory.Query().
+			Where(workflowdefinitionhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowdefinitionhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowevent.Table:
+		query := c.WorkflowEvent.Query().
+			Where(workflowevent.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workfloweventImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workfloweventhistory.Table:
+		query := c.WorkflowEventHistory.Query().
+			Where(workfloweventhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workfloweventhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowinstance.Table:
+		query := c.WorkflowInstance.Query().
+			Where(workflowinstance.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowinstanceImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowinstancehistory.Table:
+		query := c.WorkflowInstanceHistory.Query().
+			Where(workflowinstancehistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowinstancehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowobjectref.Table:
+		query := c.WorkflowObjectRef.Query().
+			Where(workflowobjectref.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowobjectrefImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case workflowobjectrefhistory.Table:
+		query := c.WorkflowObjectRefHistory.Query().
+			Where(workflowobjectrefhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, workflowobjectrefhistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
 	default:
 		return nil, fmt.Errorf("cannot resolve noder from table %q: %w", table, errNodeInvalidID)
 	}
@@ -2347,6 +2632,118 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.DNSVerificationHistory.Query().
 			Where(dnsverificationhistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, dnsverificationhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directoryaccount.Table:
+		query := c.DirectoryAccount.Query().
+			Where(directoryaccount.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directoryaccountImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directoryaccounthistory.Table:
+		query := c.DirectoryAccountHistory.Query().
+			Where(directoryaccounthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directoryaccounthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directorygroup.Table:
+		query := c.DirectoryGroup.Query().
+			Where(directorygroup.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directorygroupImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directorygrouphistory.Table:
+		query := c.DirectoryGroupHistory.Query().
+			Where(directorygrouphistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directorygrouphistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directorymembership.Table:
+		query := c.DirectoryMembership.Query().
+			Where(directorymembership.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directorymembershipImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directorymembershiphistory.Table:
+		query := c.DirectoryMembershipHistory.Query().
+			Where(directorymembershiphistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directorymembershiphistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case directorysyncrun.Table:
+		query := c.DirectorySyncRun.Query().
+			Where(directorysyncrun.IDIn(ids...))
+		query, err := query.CollectFields(ctx, directorysyncrunImplementors...)
 		if err != nil {
 			return nil, err
 		}
@@ -3979,6 +4376,198 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.Webauthn.Query().
 			Where(webauthn.IDIn(ids...))
 		query, err := query.CollectFields(ctx, webauthnImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowassignment.Table:
+		query := c.WorkflowAssignment.Query().
+			Where(workflowassignment.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowassignmentImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowassignmenthistory.Table:
+		query := c.WorkflowAssignmentHistory.Query().
+			Where(workflowassignmenthistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowassignmenthistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowassignmenttarget.Table:
+		query := c.WorkflowAssignmentTarget.Query().
+			Where(workflowassignmenttarget.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowassignmenttargetImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowassignmenttargethistory.Table:
+		query := c.WorkflowAssignmentTargetHistory.Query().
+			Where(workflowassignmenttargethistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowassignmenttargethistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowdefinition.Table:
+		query := c.WorkflowDefinition.Query().
+			Where(workflowdefinition.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowdefinitionImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowdefinitionhistory.Table:
+		query := c.WorkflowDefinitionHistory.Query().
+			Where(workflowdefinitionhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowdefinitionhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowevent.Table:
+		query := c.WorkflowEvent.Query().
+			Where(workflowevent.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workfloweventImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workfloweventhistory.Table:
+		query := c.WorkflowEventHistory.Query().
+			Where(workfloweventhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workfloweventhistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowinstance.Table:
+		query := c.WorkflowInstance.Query().
+			Where(workflowinstance.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowinstanceImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowinstancehistory.Table:
+		query := c.WorkflowInstanceHistory.Query().
+			Where(workflowinstancehistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowinstancehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowobjectref.Table:
+		query := c.WorkflowObjectRef.Query().
+			Where(workflowobjectref.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowobjectrefImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case workflowobjectrefhistory.Table:
+		query := c.WorkflowObjectRefHistory.Query().
+			Where(workflowobjectrefhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, workflowobjectrefhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

@@ -1,0 +1,61 @@
+
+
+query GetAllWorkflowEventHistories {
+  workflowEventHistories {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        eventType
+        historyTime
+        id
+        operation
+        ownerID
+        payload
+        ref
+        tags
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+
+query GetWorkflowEventHistories($first: Int, $last: Int, $where: WorkflowEventHistoryWhereInput) {
+  workflowEventHistories(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        eventType
+        historyTime
+        id
+        operation
+        ownerID
+        payload
+        ref
+        tags
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}

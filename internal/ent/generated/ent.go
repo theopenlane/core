@@ -32,6 +32,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -144,6 +151,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -226,6 +245,13 @@ func checkColumn(t, c string) error {
 			customtypeenum.Table:                    customtypeenum.ValidColumn,
 			dnsverification.Table:                   dnsverification.ValidColumn,
 			dnsverificationhistory.Table:            dnsverificationhistory.ValidColumn,
+			directoryaccount.Table:                  directoryaccount.ValidColumn,
+			directoryaccounthistory.Table:           directoryaccounthistory.ValidColumn,
+			directorygroup.Table:                    directorygroup.ValidColumn,
+			directorygrouphistory.Table:             directorygrouphistory.ValidColumn,
+			directorymembership.Table:               directorymembership.ValidColumn,
+			directorymembershiphistory.Table:        directorymembershiphistory.ValidColumn,
+			directorysyncrun.Table:                  directorysyncrun.ValidColumn,
 			documentdata.Table:                      documentdata.ValidColumn,
 			documentdatahistory.Table:               documentdatahistory.ValidColumn,
 			emailverificationtoken.Table:            emailverificationtoken.ValidColumn,
@@ -336,6 +362,18 @@ func checkColumn(t, c string) error {
 			vulnerability.Table:                     vulnerability.ValidColumn,
 			vulnerabilityhistory.Table:              vulnerabilityhistory.ValidColumn,
 			webauthn.Table:                          webauthn.ValidColumn,
+			workflowassignment.Table:                workflowassignment.ValidColumn,
+			workflowassignmenthistory.Table:         workflowassignmenthistory.ValidColumn,
+			workflowassignmenttarget.Table:          workflowassignmenttarget.ValidColumn,
+			workflowassignmenttargethistory.Table:   workflowassignmenttargethistory.ValidColumn,
+			workflowdefinition.Table:                workflowdefinition.ValidColumn,
+			workflowdefinitionhistory.Table:         workflowdefinitionhistory.ValidColumn,
+			workflowevent.Table:                     workflowevent.ValidColumn,
+			workfloweventhistory.Table:              workfloweventhistory.ValidColumn,
+			workflowinstance.Table:                  workflowinstance.ValidColumn,
+			workflowinstancehistory.Table:           workflowinstancehistory.ValidColumn,
+			workflowobjectref.Table:                 workflowobjectref.ValidColumn,
+			workflowobjectrefhistory.Table:          workflowobjectrefhistory.ValidColumn,
 		})
 	})
 	return columnCheck(t, c)

@@ -27,6 +27,7 @@ type TagDefinitionQuery struct {
 	inters     []Interceptor
 	predicates []predicate.TagDefinition
 	withOwner  *OrganizationQuery
+	withFKs    bool
 	loadTotal  []func(context.Context, []*TagDefinition) error
 	modifiers  []func(*sql.Selector)
 	// intermediate query (i.e. traversal path).
@@ -384,11 +385,15 @@ func (_q *TagDefinitionQuery) prepareQuery(ctx context.Context) error {
 func (_q *TagDefinitionQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*TagDefinition, error) {
 	var (
 		nodes       = []*TagDefinition{}
+		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
 		loadedTypes = [1]bool{
 			_q.withOwner != nil,
 		}
 	)
+	if withFKs {
+		_spec.Node.Columns = append(_spec.Node.Columns, tagdefinition.ForeignKeys...)
+	}
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*TagDefinition).scanValues(nil, columns)
 	}

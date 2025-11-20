@@ -72,4 +72,10 @@ var FeatureOfType = map[string][]models.OrgModule{
 	"TrustCenterWatermarkConfig": {models.CatalogTrustCenterModule},
 	"Vulnerability":              {models.CatalogVulnerabilityManagementModule},
 	"Webauthn":                   {models.CatalogBaseModule},
+	"WorkflowAssignment":         {models.CatalogBaseModule},
+	"WorkflowAssignmentTarget":   {models.CatalogBaseModule},
+	"WorkflowDefinition":         {models.CatalogBaseModule},
+	"WorkflowEvent":              {models.CatalogBaseModule},
+	"WorkflowInstance":           {models.CatalogBaseModule},
+	"WorkflowObjectRef":          {models.CatalogBaseModule},
 }

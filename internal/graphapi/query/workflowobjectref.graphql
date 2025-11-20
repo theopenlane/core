@@ -1,0 +1,174 @@
+
+mutation CreateBulkCSVWorkflowObjectRef($input: Upload!) {
+  createBulkCSVWorkflowObjectRef(input: $input) {
+    workflowObjectRefs {
+      controlID
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directoryMembershipID
+      displayID
+      findingID
+      id
+      internalPolicyID
+      ownerID
+      taskID
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateBulkWorkflowObjectRef($input: [CreateWorkflowObjectRefInput!]) {
+  createBulkWorkflowObjectRef(input: $input) {
+    workflowObjectRefs {
+      controlID
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directoryMembershipID
+      displayID
+      findingID
+      id
+      internalPolicyID
+      ownerID
+      taskID
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation CreateWorkflowObjectRef($input: CreateWorkflowObjectRefInput!) {
+  createWorkflowObjectRef(input: $input) {
+    workflowObjectRef {
+      controlID
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directoryMembershipID
+      displayID
+      findingID
+      id
+      internalPolicyID
+      ownerID
+      taskID
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}
+
+mutation DeleteWorkflowObjectRef($deleteWorkflowObjectRefId: ID!) {
+  deleteWorkflowObjectRef(id: $deleteWorkflowObjectRefId) {
+    deletedID
+  }
+}
+
+query GetAllWorkflowObjectRefs {
+  workflowObjectRefs {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directoryMembershipID
+        displayID
+        findingID
+        id
+        internalPolicyID
+        ownerID
+        taskID
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+query GetWorkflowObjectRefByID($workflowObjectRefId: ID!) {
+  workflowObjectRef(id: $workflowObjectRefId) {
+    controlID
+    createdAt
+    createdBy
+    directoryAccountID
+    directoryGroupID
+    directoryMembershipID
+    displayID
+    findingID
+    id
+    internalPolicyID
+    ownerID
+    taskID
+    updatedAt
+    updatedBy
+    workflowInstanceID
+  }
+}
+
+query GetWorkflowObjectRefs($first: Int, $last: Int, $where: WorkflowObjectRefWhereInput) {
+  workflowObjectRefs(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        controlID
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directoryMembershipID
+        displayID
+        findingID
+        id
+        internalPolicyID
+        ownerID
+        taskID
+        updatedAt
+        updatedBy
+        workflowInstanceID
+      }
+    }
+  }
+}
+mutation UpdateWorkflowObjectRef($updateWorkflowObjectRefId: ID!, $input: UpdateWorkflowObjectRefInput!) {
+  updateWorkflowObjectRef(id: $updateWorkflowObjectRefId, input: $input) {
+    workflowObjectRef {
+      controlID
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directoryMembershipID
+      displayID
+      findingID
+      id
+      internalPolicyID
+      ownerID
+      taskID
+      updatedAt
+      updatedBy
+      workflowInstanceID
+    }
+  }
+}

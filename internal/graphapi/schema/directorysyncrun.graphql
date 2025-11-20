@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up directorySyncRun by ID
+    """
+     directorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+    ):  DirectorySyncRun!
+}
+
+extend type Mutation{
+    """
+    Create a new directorySyncRun
+    """
+    createDirectorySyncRun(
+        """
+        values of the directorySyncRun
+        """
+        input: CreateDirectorySyncRunInput!
+    ): DirectorySyncRunCreatePayload!
+    """
+    Create multiple new directorySyncRuns
+    """
+    createBulkDirectorySyncRun(
+        """
+        values of the directorySyncRun
+        """
+        input: [CreateDirectorySyncRunInput!]
+    ): DirectorySyncRunBulkCreatePayload!
+    """
+    Create multiple new directorySyncRuns via file upload
+    """
+    createBulkCSVDirectorySyncRun(
+        """
+        csv file containing values of the directorySyncRun
+        """
+        input: Upload!
+    ): DirectorySyncRunBulkCreatePayload!
+    """
+    Update an existing directorySyncRun
+    """
+    updateDirectorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+        """
+        New values for the directorySyncRun
+        """
+        input: UpdateDirectorySyncRunInput!
+    ): DirectorySyncRunUpdatePayload!
+    """
+    Delete an existing directorySyncRun
+    """
+    deleteDirectorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+    ): DirectorySyncRunDeletePayload!
+}
+
+"""
+Return response for createDirectorySyncRun mutation
+"""
+type DirectorySyncRunCreatePayload {
+    """
+    Created directorySyncRun
+    """
+    directorySyncRun: DirectorySyncRun!
+}
+
+"""
+Return response for updateDirectorySyncRun mutation
+"""
+type DirectorySyncRunUpdatePayload {
+    """
+    Updated directorySyncRun
+    """
+    directorySyncRun: DirectorySyncRun!
+}
+
+"""
+Return response for deleteDirectorySyncRun mutation
+"""
+type DirectorySyncRunDeletePayload {
+    """
+    Deleted directorySyncRun ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectorySyncRun mutation
+"""
+type DirectorySyncRunBulkCreatePayload {
+    """
+    Created directorySyncRuns
+    """
+    directorySyncRuns: [DirectorySyncRun!]
+}

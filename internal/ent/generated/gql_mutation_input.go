@@ -1476,6 +1476,7 @@ type CreateControlInput struct {
 	ControlImplementationIDs   []string
 	SubcontrolIDs              []string
 	ScheduledJobIDs            []string
+	WorkflowObjectRefIDs       []string
 }
 
 // Mutate applies the CreateControlInput on the ControlMutation builder.
@@ -1625,6 +1626,9 @@ func (i *CreateControlInput) Mutate(m *ControlMutation) {
 	if v := i.ScheduledJobIDs; len(v) > 0 {
 		m.AddScheduledJobIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateControlInput on the ControlCreate builder.
@@ -1755,6 +1759,9 @@ type UpdateControlInput struct {
 	ClearScheduledJobs              bool
 	AddScheduledJobIDs              []string
 	RemoveScheduledJobIDs           []string
+	ClearWorkflowObjectRefs         bool
+	AddWorkflowObjectRefIDs         []string
+	RemoveWorkflowObjectRefIDs      []string
 }
 
 // Mutate applies the UpdateControlInput on the ControlMutation builder.
@@ -2118,6 +2125,15 @@ func (i *UpdateControlInput) Mutate(m *ControlMutation) {
 	}
 	if v := i.RemoveScheduledJobIDs; len(v) > 0 {
 		m.RemoveScheduledJobIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
 	}
 }
 
@@ -3227,6 +3243,820 @@ func (c *DNSVerificationUpdate) SetInput(i UpdateDNSVerificationInput) *DNSVerif
 
 // SetInput applies the change-set in the UpdateDNSVerificationInput on the DNSVerificationUpdateOne builder.
 func (c *DNSVerificationUpdateOne) SetInput(i UpdateDNSVerificationInput) *DNSVerificationUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDirectoryAccountInput represents a mutation input for creating directoryaccounts.
+type CreateDirectoryAccountInput struct {
+	Tags                 []string
+	ExternalID           string
+	SecondaryKey         *string
+	CanonicalEmail       *string
+	DisplayName          *string
+	GivenName            *string
+	FamilyName           *string
+	JobTitle             *string
+	Department           *string
+	OrganizationUnit     *string
+	AccountType          *enums.DirectoryAccountType
+	Status               *enums.DirectoryAccountStatus
+	MfaState             *enums.DirectoryAccountMFAState
+	LastSeenIP           *string
+	LastLoginAt          *time.Time
+	ObservedAt           *time.Time
+	ProfileHash          *string
+	Profile              map[string]interface{}
+	SourceVersion        *string
+	OwnerID              *string
+	IntegrationID        string
+	DirectorySyncRunID   string
+	GroupIDs             []string
+	WorkflowObjectRefIDs []string
+}
+
+// Mutate applies the CreateDirectoryAccountInput on the DirectoryAccountMutation builder.
+func (i *CreateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetExternalID(i.ExternalID)
+	if v := i.SecondaryKey; v != nil {
+		m.SetSecondaryKey(*v)
+	}
+	if v := i.CanonicalEmail; v != nil {
+		m.SetCanonicalEmail(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.GivenName; v != nil {
+		m.SetGivenName(*v)
+	}
+	if v := i.FamilyName; v != nil {
+		m.SetFamilyName(*v)
+	}
+	if v := i.JobTitle; v != nil {
+		m.SetJobTitle(*v)
+	}
+	if v := i.Department; v != nil {
+		m.SetDepartment(*v)
+	}
+	if v := i.OrganizationUnit; v != nil {
+		m.SetOrganizationUnit(*v)
+	}
+	if v := i.AccountType; v != nil {
+		m.SetAccountType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.MfaState; v != nil {
+		m.SetMfaState(*v)
+	}
+	if v := i.LastSeenIP; v != nil {
+		m.SetLastSeenIP(*v)
+	}
+	if v := i.LastLoginAt; v != nil {
+		m.SetLastLoginAt(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
+	if v := i.ProfileHash; v != nil {
+		m.SetProfileHash(*v)
+	}
+	if v := i.Profile; v != nil {
+		m.SetProfile(v)
+	}
+	if v := i.SourceVersion; v != nil {
+		m.SetSourceVersion(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetIntegrationID(i.IntegrationID)
+	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDirectoryAccountInput on the DirectoryAccountCreate builder.
+func (c *DirectoryAccountCreate) SetInput(i CreateDirectoryAccountInput) *DirectoryAccountCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDirectoryAccountInput represents a mutation input for updating directoryaccounts.
+type UpdateDirectoryAccountInput struct {
+	ClearTags                  bool
+	Tags                       []string
+	AppendTags                 []string
+	ClearSecondaryKey          bool
+	SecondaryKey               *string
+	ClearCanonicalEmail        bool
+	CanonicalEmail             *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearGivenName             bool
+	GivenName                  *string
+	ClearFamilyName            bool
+	FamilyName                 *string
+	ClearJobTitle              bool
+	JobTitle                   *string
+	ClearDepartment            bool
+	Department                 *string
+	ClearOrganizationUnit      bool
+	OrganizationUnit           *string
+	ClearAccountType           bool
+	AccountType                *enums.DirectoryAccountType
+	Status                     *enums.DirectoryAccountStatus
+	MfaState                   *enums.DirectoryAccountMFAState
+	ClearLastSeenIP            bool
+	LastSeenIP                 *string
+	ClearLastLoginAt           bool
+	LastLoginAt                *time.Time
+	ProfileHash                *string
+	ClearProfile               bool
+	Profile                    map[string]interface{}
+	ClearSourceVersion         bool
+	SourceVersion              *string
+	ClearOwner                 bool
+	OwnerID                    *string
+	ClearGroups                bool
+	AddGroupIDs                []string
+	RemoveGroupIDs             []string
+	ClearWorkflowObjectRefs    bool
+	AddWorkflowObjectRefIDs    []string
+	RemoveWorkflowObjectRefIDs []string
+}
+
+// Mutate applies the UpdateDirectoryAccountInput on the DirectoryAccountMutation builder.
+func (i *UpdateDirectoryAccountInput) Mutate(m *DirectoryAccountMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearSecondaryKey {
+		m.ClearSecondaryKey()
+	}
+	if v := i.SecondaryKey; v != nil {
+		m.SetSecondaryKey(*v)
+	}
+	if i.ClearCanonicalEmail {
+		m.ClearCanonicalEmail()
+	}
+	if v := i.CanonicalEmail; v != nil {
+		m.SetCanonicalEmail(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearGivenName {
+		m.ClearGivenName()
+	}
+	if v := i.GivenName; v != nil {
+		m.SetGivenName(*v)
+	}
+	if i.ClearFamilyName {
+		m.ClearFamilyName()
+	}
+	if v := i.FamilyName; v != nil {
+		m.SetFamilyName(*v)
+	}
+	if i.ClearJobTitle {
+		m.ClearJobTitle()
+	}
+	if v := i.JobTitle; v != nil {
+		m.SetJobTitle(*v)
+	}
+	if i.ClearDepartment {
+		m.ClearDepartment()
+	}
+	if v := i.Department; v != nil {
+		m.SetDepartment(*v)
+	}
+	if i.ClearOrganizationUnit {
+		m.ClearOrganizationUnit()
+	}
+	if v := i.OrganizationUnit; v != nil {
+		m.SetOrganizationUnit(*v)
+	}
+	if i.ClearAccountType {
+		m.ClearAccountType()
+	}
+	if v := i.AccountType; v != nil {
+		m.SetAccountType(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.MfaState; v != nil {
+		m.SetMfaState(*v)
+	}
+	if i.ClearLastSeenIP {
+		m.ClearLastSeenIP()
+	}
+	if v := i.LastSeenIP; v != nil {
+		m.SetLastSeenIP(*v)
+	}
+	if i.ClearLastLoginAt {
+		m.ClearLastLoginAt()
+	}
+	if v := i.LastLoginAt; v != nil {
+		m.SetLastLoginAt(*v)
+	}
+	if v := i.ProfileHash; v != nil {
+		m.SetProfileHash(*v)
+	}
+	if i.ClearProfile {
+		m.ClearProfile()
+	}
+	if v := i.Profile; v != nil {
+		m.SetProfile(v)
+	}
+	if i.ClearSourceVersion {
+		m.ClearSourceVersion()
+	}
+	if v := i.SourceVersion; v != nil {
+		m.SetSourceVersion(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDirectoryAccountInput on the DirectoryAccountUpdate builder.
+func (c *DirectoryAccountUpdate) SetInput(i UpdateDirectoryAccountInput) *DirectoryAccountUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDirectoryAccountInput on the DirectoryAccountUpdateOne builder.
+func (c *DirectoryAccountUpdateOne) SetInput(i UpdateDirectoryAccountInput) *DirectoryAccountUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDirectoryGroupInput represents a mutation input for creating directorygroups.
+type CreateDirectoryGroupInput struct {
+	Tags                   []string
+	ExternalID             string
+	Email                  *string
+	DisplayName            *string
+	Description            *string
+	Classification         *enums.DirectoryGroupClassification
+	Status                 *enums.DirectoryGroupStatus
+	ExternalSharingAllowed *bool
+	MemberCount            *int
+	ObservedAt             *time.Time
+	ProfileHash            *string
+	Profile                map[string]interface{}
+	SourceVersion          *string
+	OwnerID                *string
+	IntegrationID          string
+	DirectorySyncRunID     string
+	WorkflowObjectRefIDs   []string
+}
+
+// Mutate applies the CreateDirectoryGroupInput on the DirectoryGroupMutation builder.
+func (i *CreateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetExternalID(i.ExternalID)
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Classification; v != nil {
+		m.SetClassification(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.ExternalSharingAllowed; v != nil {
+		m.SetExternalSharingAllowed(*v)
+	}
+	if v := i.MemberCount; v != nil {
+		m.SetMemberCount(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
+	if v := i.ProfileHash; v != nil {
+		m.SetProfileHash(*v)
+	}
+	if v := i.Profile; v != nil {
+		m.SetProfile(v)
+	}
+	if v := i.SourceVersion; v != nil {
+		m.SetSourceVersion(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetIntegrationID(i.IntegrationID)
+	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDirectoryGroupInput on the DirectoryGroupCreate builder.
+func (c *DirectoryGroupCreate) SetInput(i CreateDirectoryGroupInput) *DirectoryGroupCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDirectoryGroupInput represents a mutation input for updating directorygroups.
+type UpdateDirectoryGroupInput struct {
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	ClearEmail                  bool
+	Email                       *string
+	ClearDisplayName            bool
+	DisplayName                 *string
+	ClearDescription            bool
+	Description                 *string
+	Classification              *enums.DirectoryGroupClassification
+	Status                      *enums.DirectoryGroupStatus
+	ClearExternalSharingAllowed bool
+	ExternalSharingAllowed      *bool
+	ClearMemberCount            bool
+	MemberCount                 *int
+	ProfileHash                 *string
+	ClearProfile                bool
+	Profile                     map[string]interface{}
+	ClearSourceVersion          bool
+	SourceVersion               *string
+	ClearOwner                  bool
+	OwnerID                     *string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+}
+
+// Mutate applies the UpdateDirectoryGroupInput on the DirectoryGroupMutation builder.
+func (i *UpdateDirectoryGroupInput) Mutate(m *DirectoryGroupMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearEmail {
+		m.ClearEmail()
+	}
+	if v := i.Email; v != nil {
+		m.SetEmail(*v)
+	}
+	if i.ClearDisplayName {
+		m.ClearDisplayName()
+	}
+	if v := i.DisplayName; v != nil {
+		m.SetDisplayName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.Classification; v != nil {
+		m.SetClassification(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearExternalSharingAllowed {
+		m.ClearExternalSharingAllowed()
+	}
+	if v := i.ExternalSharingAllowed; v != nil {
+		m.SetExternalSharingAllowed(*v)
+	}
+	if i.ClearMemberCount {
+		m.ClearMemberCount()
+	}
+	if v := i.MemberCount; v != nil {
+		m.SetMemberCount(*v)
+	}
+	if v := i.ProfileHash; v != nil {
+		m.SetProfileHash(*v)
+	}
+	if i.ClearProfile {
+		m.ClearProfile()
+	}
+	if v := i.Profile; v != nil {
+		m.SetProfile(v)
+	}
+	if i.ClearSourceVersion {
+		m.ClearSourceVersion()
+	}
+	if v := i.SourceVersion; v != nil {
+		m.SetSourceVersion(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDirectoryGroupInput on the DirectoryGroupUpdate builder.
+func (c *DirectoryGroupUpdate) SetInput(i UpdateDirectoryGroupInput) *DirectoryGroupUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDirectoryGroupInput on the DirectoryGroupUpdateOne builder.
+func (c *DirectoryGroupUpdateOne) SetInput(i UpdateDirectoryGroupInput) *DirectoryGroupUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDirectoryMembershipInput represents a mutation input for creating directorymemberships.
+type CreateDirectoryMembershipInput struct {
+	Role                 *enums.DirectoryMembershipRole
+	Source               *string
+	FirstSeenAt          *time.Time
+	LastSeenAt           *time.Time
+	ObservedAt           *time.Time
+	LastConfirmedRunID   *string
+	Metadata             map[string]interface{}
+	OwnerID              *string
+	IntegrationID        string
+	DirectorySyncRunID   string
+	DirectoryAccountID   string
+	DirectoryGroupID     string
+	EventIDs             []string
+	WorkflowObjectRefIDs []string
+}
+
+// Mutate applies the CreateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
+func (i *CreateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) {
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if v := i.ObservedAt; v != nil {
+		m.SetObservedAt(*v)
+	}
+	if v := i.LastConfirmedRunID; v != nil {
+		m.SetLastConfirmedRunID(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetIntegrationID(i.IntegrationID)
+	m.SetDirectorySyncRunID(i.DirectorySyncRunID)
+	m.SetDirectoryAccountID(i.DirectoryAccountID)
+	m.SetDirectoryGroupID(i.DirectoryGroupID)
+	if v := i.EventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDirectoryMembershipInput on the DirectoryMembershipCreate builder.
+func (c *DirectoryMembershipCreate) SetInput(i CreateDirectoryMembershipInput) *DirectoryMembershipCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDirectoryMembershipInput represents a mutation input for updating directorymemberships.
+type UpdateDirectoryMembershipInput struct {
+	ClearRole                  bool
+	Role                       *enums.DirectoryMembershipRole
+	ClearSource                bool
+	Source                     *string
+	ClearFirstSeenAt           bool
+	FirstSeenAt                *time.Time
+	ClearLastSeenAt            bool
+	LastSeenAt                 *time.Time
+	ClearLastConfirmedRunID    bool
+	LastConfirmedRunID         *string
+	ClearMetadata              bool
+	Metadata                   map[string]interface{}
+	ClearOwner                 bool
+	OwnerID                    *string
+	ClearEvents                bool
+	AddEventIDs                []string
+	RemoveEventIDs             []string
+	ClearWorkflowObjectRefs    bool
+	AddWorkflowObjectRefIDs    []string
+	RemoveWorkflowObjectRefIDs []string
+}
+
+// Mutate applies the UpdateDirectoryMembershipInput on the DirectoryMembershipMutation builder.
+func (i *UpdateDirectoryMembershipInput) Mutate(m *DirectoryMembershipMutation) {
+	if i.ClearRole {
+		m.ClearRole()
+	}
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	if i.ClearSource {
+		m.ClearSource()
+	}
+	if v := i.Source; v != nil {
+		m.SetSource(*v)
+	}
+	if i.ClearFirstSeenAt {
+		m.ClearFirstSeenAt()
+	}
+	if v := i.FirstSeenAt; v != nil {
+		m.SetFirstSeenAt(*v)
+	}
+	if i.ClearLastSeenAt {
+		m.ClearLastSeenAt()
+	}
+	if v := i.LastSeenAt; v != nil {
+		m.SetLastSeenAt(*v)
+	}
+	if i.ClearLastConfirmedRunID {
+		m.ClearLastConfirmedRunID()
+	}
+	if v := i.LastConfirmedRunID; v != nil {
+		m.SetLastConfirmedRunID(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearEvents {
+		m.ClearEvents()
+	}
+	if v := i.AddEventIDs; len(v) > 0 {
+		m.AddEventIDs(v...)
+	}
+	if v := i.RemoveEventIDs; len(v) > 0 {
+		m.RemoveEventIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDirectoryMembershipInput on the DirectoryMembershipUpdate builder.
+func (c *DirectoryMembershipUpdate) SetInput(i UpdateDirectoryMembershipInput) *DirectoryMembershipUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDirectoryMembershipInput on the DirectoryMembershipUpdateOne builder.
+func (c *DirectoryMembershipUpdateOne) SetInput(i UpdateDirectoryMembershipInput) *DirectoryMembershipUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateDirectorySyncRunInput represents a mutation input for creating directorysyncruns.
+type CreateDirectorySyncRunInput struct {
+	Status              *enums.DirectorySyncRunStatus
+	StartedAt           *time.Time
+	CompletedAt         *time.Time
+	SourceCursor        *string
+	FullCount           *int
+	DeltaCount          *int
+	Error               *string
+	RawManifestFileID   *string
+	Stats               map[string]interface{}
+	OwnerID             *string
+	IntegrationID       string
+	DirectoryAccountIDs []string
+	DirectoryGroupIDs   []string
+}
+
+// Mutate applies the CreateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
+func (i *CreateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.StartedAt; v != nil {
+		m.SetStartedAt(*v)
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if v := i.SourceCursor; v != nil {
+		m.SetSourceCursor(*v)
+	}
+	if v := i.FullCount; v != nil {
+		m.SetFullCount(*v)
+	}
+	if v := i.DeltaCount; v != nil {
+		m.SetDeltaCount(*v)
+	}
+	if v := i.Error; v != nil {
+		m.SetError(*v)
+	}
+	if v := i.RawManifestFileID; v != nil {
+		m.SetRawManifestFileID(*v)
+	}
+	if v := i.Stats; v != nil {
+		m.SetStats(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetIntegrationID(i.IntegrationID)
+	if v := i.DirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.DirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateDirectorySyncRunInput on the DirectorySyncRunCreate builder.
+func (c *DirectorySyncRunCreate) SetInput(i CreateDirectorySyncRunInput) *DirectorySyncRunCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateDirectorySyncRunInput represents a mutation input for updating directorysyncruns.
+type UpdateDirectorySyncRunInput struct {
+	Status                    *enums.DirectorySyncRunStatus
+	StartedAt                 *time.Time
+	ClearCompletedAt          bool
+	CompletedAt               *time.Time
+	ClearSourceCursor         bool
+	SourceCursor              *string
+	FullCount                 *int
+	DeltaCount                *int
+	ClearError                bool
+	Error                     *string
+	ClearRawManifestFileID    bool
+	RawManifestFileID         *string
+	ClearStats                bool
+	Stats                     map[string]interface{}
+	ClearOwner                bool
+	OwnerID                   *string
+	ClearDirectoryAccounts    bool
+	AddDirectoryAccountIDs    []string
+	RemoveDirectoryAccountIDs []string
+	ClearDirectoryGroups      bool
+	AddDirectoryGroupIDs      []string
+	RemoveDirectoryGroupIDs   []string
+}
+
+// Mutate applies the UpdateDirectorySyncRunInput on the DirectorySyncRunMutation builder.
+func (i *UpdateDirectorySyncRunInput) Mutate(m *DirectorySyncRunMutation) {
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.StartedAt; v != nil {
+		m.SetStartedAt(*v)
+	}
+	if i.ClearCompletedAt {
+		m.ClearCompletedAt()
+	}
+	if v := i.CompletedAt; v != nil {
+		m.SetCompletedAt(*v)
+	}
+	if i.ClearSourceCursor {
+		m.ClearSourceCursor()
+	}
+	if v := i.SourceCursor; v != nil {
+		m.SetSourceCursor(*v)
+	}
+	if v := i.FullCount; v != nil {
+		m.SetFullCount(*v)
+	}
+	if v := i.DeltaCount; v != nil {
+		m.SetDeltaCount(*v)
+	}
+	if i.ClearError {
+		m.ClearError()
+	}
+	if v := i.Error; v != nil {
+		m.SetError(*v)
+	}
+	if i.ClearRawManifestFileID {
+		m.ClearRawManifestFileID()
+	}
+	if v := i.RawManifestFileID; v != nil {
+		m.SetRawManifestFileID(*v)
+	}
+	if i.ClearStats {
+		m.ClearStats()
+	}
+	if v := i.Stats; v != nil {
+		m.SetStats(v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearDirectoryAccounts {
+		m.ClearDirectoryAccounts()
+	}
+	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
+		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearDirectoryGroups {
+		m.ClearDirectoryGroups()
+	}
+	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
+		m.RemoveDirectoryGroupIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateDirectorySyncRunInput on the DirectorySyncRunUpdate builder.
+func (c *DirectorySyncRunUpdate) SetInput(i UpdateDirectorySyncRunInput) *DirectorySyncRunUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateDirectorySyncRunInput on the DirectorySyncRunUpdateOne builder.
+func (c *DirectorySyncRunUpdateOne) SetInput(i UpdateDirectorySyncRunInput) *DirectorySyncRunUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }
@@ -4887,65 +5717,66 @@ func (c *FileUpdateOne) SetInput(i UpdateFileInput) *FileUpdateOne {
 
 // CreateFindingInput represents a mutation input for creating findings.
 type CreateFindingInput struct {
-	Tags               []string
-	InternalNotes      *string
-	SystemInternalID   *string
-	ExternalID         *string
-	ExternalOwnerID    *string
-	Source             *string
-	ResourceName       *string
-	DisplayName        *string
-	State              *string
-	Category           *string
-	Categories         []string
-	FindingClass       *string
-	Severity           *string
-	NumericSeverity    *float64
-	Score              *float64
-	Impact             *float64
-	Exploitability     *float64
-	Priority           *string
-	Open               *bool
-	BlocksProduction   *bool
-	Production         *bool
-	Public             *bool
-	Validated          *bool
-	AssessmentID       *string
-	Description        *string
-	Recommendation     *string
-	RecommendedActions *string
-	References         []string
-	StepsToReproduce   []string
-	Targets            []string
-	TargetDetails      map[string]interface{}
-	Vector             *string
-	RemediationSLA     *int
-	Status             *string
-	EventTime          *models.DateTime
-	ReportedAt         *models.DateTime
-	SourceUpdatedAt    *models.DateTime
-	ExternalURI        *string
-	Metadata           map[string]interface{}
-	RawPayload         map[string]interface{}
-	OwnerID            *string
-	BlockedGroupIDs    []string
-	EditorIDs          []string
-	ViewerIDs          []string
-	IntegrationIDs     []string
-	VulnerabilityIDs   []string
-	ActionPlanIDs      []string
-	ControlIDs         []string
-	SubcontrolIDs      []string
-	RiskIDs            []string
-	ProgramIDs         []string
-	AssetIDs           []string
-	EntityIDs          []string
-	ScanIDs            []string
-	TaskIDs            []string
-	RemediationIDs     []string
-	ReviewIDs          []string
-	CommentIDs         []string
-	FileIDs            []string
+	Tags                 []string
+	InternalNotes        *string
+	SystemInternalID     *string
+	ExternalID           *string
+	ExternalOwnerID      *string
+	Source               *string
+	ResourceName         *string
+	DisplayName          *string
+	State                *string
+	Category             *string
+	Categories           []string
+	FindingClass         *string
+	Severity             *string
+	NumericSeverity      *float64
+	Score                *float64
+	Impact               *float64
+	Exploitability       *float64
+	Priority             *string
+	Open                 *bool
+	BlocksProduction     *bool
+	Production           *bool
+	Public               *bool
+	Validated            *bool
+	AssessmentID         *string
+	Description          *string
+	Recommendation       *string
+	RecommendedActions   *string
+	References           []string
+	StepsToReproduce     []string
+	Targets              []string
+	TargetDetails        map[string]interface{}
+	Vector               *string
+	RemediationSLA       *int
+	Status               *string
+	EventTime            *models.DateTime
+	ReportedAt           *models.DateTime
+	SourceUpdatedAt      *models.DateTime
+	ExternalURI          *string
+	Metadata             map[string]interface{}
+	RawPayload           map[string]interface{}
+	OwnerID              *string
+	BlockedGroupIDs      []string
+	EditorIDs            []string
+	ViewerIDs            []string
+	IntegrationIDs       []string
+	VulnerabilityIDs     []string
+	ActionPlanIDs        []string
+	ControlIDs           []string
+	SubcontrolIDs        []string
+	RiskIDs              []string
+	ProgramIDs           []string
+	AssetIDs             []string
+	EntityIDs            []string
+	ScanIDs              []string
+	TaskIDs              []string
+	RemediationIDs       []string
+	ReviewIDs            []string
+	CommentIDs           []string
+	FileIDs              []string
+	WorkflowObjectRefIDs []string
 }
 
 // Mutate applies the CreateFindingInput on the FindingMutation builder.
@@ -5127,6 +5958,9 @@ func (i *CreateFindingInput) Mutate(m *FindingMutation) {
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFindingInput on the FindingCreate builder.
@@ -5137,145 +5971,148 @@ func (c *FindingCreate) SetInput(i CreateFindingInput) *FindingCreate {
 
 // UpdateFindingInput represents a mutation input for updating findings.
 type UpdateFindingInput struct {
-	ClearTags               bool
-	Tags                    []string
-	AppendTags              []string
-	ClearInternalNotes      bool
-	InternalNotes           *string
-	ClearSystemInternalID   bool
-	SystemInternalID        *string
-	ClearExternalID         bool
-	ExternalID              *string
-	ClearExternalOwnerID    bool
-	ExternalOwnerID         *string
-	ClearSource             bool
-	Source                  *string
-	ClearResourceName       bool
-	ResourceName            *string
-	ClearDisplayName        bool
-	DisplayName             *string
-	ClearState              bool
-	State                   *string
-	ClearCategory           bool
-	Category                *string
-	ClearCategories         bool
-	Categories              []string
-	AppendCategories        []string
-	ClearFindingClass       bool
-	FindingClass            *string
-	ClearSeverity           bool
-	Severity                *string
-	ClearNumericSeverity    bool
-	NumericSeverity         *float64
-	ClearScore              bool
-	Score                   *float64
-	ClearImpact             bool
-	Impact                  *float64
-	ClearExploitability     bool
-	Exploitability          *float64
-	ClearPriority           bool
-	Priority                *string
-	ClearOpen               bool
-	Open                    *bool
-	ClearBlocksProduction   bool
-	BlocksProduction        *bool
-	ClearProduction         bool
-	Production              *bool
-	ClearPublic             bool
-	Public                  *bool
-	ClearValidated          bool
-	Validated               *bool
-	ClearAssessmentID       bool
-	AssessmentID            *string
-	ClearDescription        bool
-	Description             *string
-	ClearRecommendation     bool
-	Recommendation          *string
-	ClearRecommendedActions bool
-	RecommendedActions      *string
-	ClearReferences         bool
-	References              []string
-	AppendReferences        []string
-	ClearStepsToReproduce   bool
-	StepsToReproduce        []string
-	AppendStepsToReproduce  []string
-	ClearTargets            bool
-	Targets                 []string
-	AppendTargets           []string
-	ClearTargetDetails      bool
-	TargetDetails           map[string]interface{}
-	ClearVector             bool
-	Vector                  *string
-	ClearRemediationSLA     bool
-	RemediationSLA          *int
-	ClearStatus             bool
-	Status                  *string
-	ClearEventTime          bool
-	EventTime               *models.DateTime
-	ClearReportedAt         bool
-	ReportedAt              *models.DateTime
-	ClearSourceUpdatedAt    bool
-	SourceUpdatedAt         *models.DateTime
-	ClearExternalURI        bool
-	ExternalURI             *string
-	ClearMetadata           bool
-	Metadata                map[string]interface{}
-	ClearRawPayload         bool
-	RawPayload              map[string]interface{}
-	ClearBlockedGroups      bool
-	AddBlockedGroupIDs      []string
-	RemoveBlockedGroupIDs   []string
-	ClearEditors            bool
-	AddEditorIDs            []string
-	RemoveEditorIDs         []string
-	ClearViewers            bool
-	AddViewerIDs            []string
-	RemoveViewerIDs         []string
-	ClearIntegrations       bool
-	AddIntegrationIDs       []string
-	RemoveIntegrationIDs    []string
-	ClearVulnerabilities    bool
-	AddVulnerabilityIDs     []string
-	RemoveVulnerabilityIDs  []string
-	ClearActionPlans        bool
-	AddActionPlanIDs        []string
-	RemoveActionPlanIDs     []string
-	ClearControls           bool
-	AddControlIDs           []string
-	RemoveControlIDs        []string
-	ClearSubcontrols        bool
-	AddSubcontrolIDs        []string
-	RemoveSubcontrolIDs     []string
-	ClearRisks              bool
-	AddRiskIDs              []string
-	RemoveRiskIDs           []string
-	ClearPrograms           bool
-	AddProgramIDs           []string
-	RemoveProgramIDs        []string
-	ClearAssets             bool
-	AddAssetIDs             []string
-	RemoveAssetIDs          []string
-	ClearEntities           bool
-	AddEntityIDs            []string
-	RemoveEntityIDs         []string
-	ClearScans              bool
-	AddScanIDs              []string
-	RemoveScanIDs           []string
-	ClearTasks              bool
-	AddTaskIDs              []string
-	RemoveTaskIDs           []string
-	ClearRemediations       bool
-	AddRemediationIDs       []string
-	RemoveRemediationIDs    []string
-	ClearReviews            bool
-	AddReviewIDs            []string
-	RemoveReviewIDs         []string
-	ClearComments           bool
-	AddCommentIDs           []string
-	RemoveCommentIDs        []string
-	ClearFiles              bool
-	AddFileIDs              []string
-	RemoveFileIDs           []string
+	ClearTags                  bool
+	Tags                       []string
+	AppendTags                 []string
+	ClearInternalNotes         bool
+	InternalNotes              *string
+	ClearSystemInternalID      bool
+	SystemInternalID           *string
+	ClearExternalID            bool
+	ExternalID                 *string
+	ClearExternalOwnerID       bool
+	ExternalOwnerID            *string
+	ClearSource                bool
+	Source                     *string
+	ClearResourceName          bool
+	ResourceName               *string
+	ClearDisplayName           bool
+	DisplayName                *string
+	ClearState                 bool
+	State                      *string
+	ClearCategory              bool
+	Category                   *string
+	ClearCategories            bool
+	Categories                 []string
+	AppendCategories           []string
+	ClearFindingClass          bool
+	FindingClass               *string
+	ClearSeverity              bool
+	Severity                   *string
+	ClearNumericSeverity       bool
+	NumericSeverity            *float64
+	ClearScore                 bool
+	Score                      *float64
+	ClearImpact                bool
+	Impact                     *float64
+	ClearExploitability        bool
+	Exploitability             *float64
+	ClearPriority              bool
+	Priority                   *string
+	ClearOpen                  bool
+	Open                       *bool
+	ClearBlocksProduction      bool
+	BlocksProduction           *bool
+	ClearProduction            bool
+	Production                 *bool
+	ClearPublic                bool
+	Public                     *bool
+	ClearValidated             bool
+	Validated                  *bool
+	ClearAssessmentID          bool
+	AssessmentID               *string
+	ClearDescription           bool
+	Description                *string
+	ClearRecommendation        bool
+	Recommendation             *string
+	ClearRecommendedActions    bool
+	RecommendedActions         *string
+	ClearReferences            bool
+	References                 []string
+	AppendReferences           []string
+	ClearStepsToReproduce      bool
+	StepsToReproduce           []string
+	AppendStepsToReproduce     []string
+	ClearTargets               bool
+	Targets                    []string
+	AppendTargets              []string
+	ClearTargetDetails         bool
+	TargetDetails              map[string]interface{}
+	ClearVector                bool
+	Vector                     *string
+	ClearRemediationSLA        bool
+	RemediationSLA             *int
+	ClearStatus                bool
+	Status                     *string
+	ClearEventTime             bool
+	EventTime                  *models.DateTime
+	ClearReportedAt            bool
+	ReportedAt                 *models.DateTime
+	ClearSourceUpdatedAt       bool
+	SourceUpdatedAt            *models.DateTime
+	ClearExternalURI           bool
+	ExternalURI                *string
+	ClearMetadata              bool
+	Metadata                   map[string]interface{}
+	ClearRawPayload            bool
+	RawPayload                 map[string]interface{}
+	ClearBlockedGroups         bool
+	AddBlockedGroupIDs         []string
+	RemoveBlockedGroupIDs      []string
+	ClearEditors               bool
+	AddEditorIDs               []string
+	RemoveEditorIDs            []string
+	ClearViewers               bool
+	AddViewerIDs               []string
+	RemoveViewerIDs            []string
+	ClearIntegrations          bool
+	AddIntegrationIDs          []string
+	RemoveIntegrationIDs       []string
+	ClearVulnerabilities       bool
+	AddVulnerabilityIDs        []string
+	RemoveVulnerabilityIDs     []string
+	ClearActionPlans           bool
+	AddActionPlanIDs           []string
+	RemoveActionPlanIDs        []string
+	ClearControls              bool
+	AddControlIDs              []string
+	RemoveControlIDs           []string
+	ClearSubcontrols           bool
+	AddSubcontrolIDs           []string
+	RemoveSubcontrolIDs        []string
+	ClearRisks                 bool
+	AddRiskIDs                 []string
+	RemoveRiskIDs              []string
+	ClearPrograms              bool
+	AddProgramIDs              []string
+	RemoveProgramIDs           []string
+	ClearAssets                bool
+	AddAssetIDs                []string
+	RemoveAssetIDs             []string
+	ClearEntities              bool
+	AddEntityIDs               []string
+	RemoveEntityIDs            []string
+	ClearScans                 bool
+	AddScanIDs                 []string
+	RemoveScanIDs              []string
+	ClearTasks                 bool
+	AddTaskIDs                 []string
+	RemoveTaskIDs              []string
+	ClearRemediations          bool
+	AddRemediationIDs          []string
+	RemoveRemediationIDs       []string
+	ClearReviews               bool
+	AddReviewIDs               []string
+	RemoveReviewIDs            []string
+	ClearComments              bool
+	AddCommentIDs              []string
+	RemoveCommentIDs           []string
+	ClearFiles                 bool
+	AddFileIDs                 []string
+	RemoveFileIDs              []string
+	ClearWorkflowObjectRefs    bool
+	AddWorkflowObjectRefIDs    []string
+	RemoveWorkflowObjectRefIDs []string
 }
 
 // Mutate applies the UpdateFindingInput on the FindingMutation builder.
@@ -5696,6 +6533,15 @@ func (i *UpdateFindingInput) Mutate(m *FindingMutation) {
 	}
 	if v := i.RemoveFileIDs; len(v) > 0 {
 		m.RemoveFileIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
 	}
 }
 
@@ -6903,6 +7749,7 @@ type CreateInternalPolicyInput struct {
 	ProgramIDs                      []string
 	FileID                          *string
 	CommentIDs                      []string
+	WorkflowObjectRefIDs            []string
 }
 
 // Mutate applies the CreateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -7013,6 +7860,9 @@ func (i *CreateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	if v := i.CommentIDs; len(v) > 0 {
 		m.AddCommentIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateInternalPolicyInput on the InternalPolicyCreate builder.
@@ -7113,6 +7963,9 @@ type UpdateInternalPolicyInput struct {
 	ClearComments                         bool
 	AddCommentIDs                         []string
 	RemoveCommentIDs                      []string
+	ClearWorkflowObjectRefs               bool
+	AddWorkflowObjectRefIDs               []string
+	RemoveWorkflowObjectRefIDs            []string
 }
 
 // Mutate applies the UpdateInternalPolicyInput on the InternalPolicyMutation builder.
@@ -7386,6 +8239,15 @@ func (i *UpdateInternalPolicyInput) Mutate(m *InternalPolicyMutation) {
 	}
 	if v := i.RemoveCommentIDs; len(v) > 0 {
 		m.RemoveCommentIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
 	}
 }
 
@@ -8994,6 +9856,15 @@ type CreateOrganizationInput struct {
 	FindingIDs                      []string
 	ReviewIDs                       []string
 	VulnerabilityIDs                []string
+	WorkflowDefinitionIDs           []string
+	WorkflowInstanceIDs             []string
+	WorkflowEventIDs                []string
+	WorkflowAssignmentIDs           []string
+	WorkflowAssignmentTargetIDs     []string
+	WorkflowObjectRefIDs            []string
+	DirectoryAccountIDs             []string
+	DirectoryGroupIDs               []string
+	DirectorySyncRunIDs             []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -9233,6 +10104,33 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	if v := i.VulnerabilityIDs; len(v) > 0 {
 		m.AddVulnerabilityIDs(v...)
 	}
+	if v := i.WorkflowDefinitionIDs; len(v) > 0 {
+		m.AddWorkflowDefinitionIDs(v...)
+	}
+	if v := i.WorkflowInstanceIDs; len(v) > 0 {
+		m.AddWorkflowInstanceIDs(v...)
+	}
+	if v := i.WorkflowEventIDs; len(v) > 0 {
+		m.AddWorkflowEventIDs(v...)
+	}
+	if v := i.WorkflowAssignmentIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentIDs(v...)
+	}
+	if v := i.WorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentTargetIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.DirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.DirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.DirectorySyncRunIDs; len(v) > 0 {
+		m.AddDirectorySyncRunIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateOrganizationInput on the OrganizationCreate builder.
@@ -9462,6 +10360,33 @@ type UpdateOrganizationInput struct {
 	ClearVulnerabilities                  bool
 	AddVulnerabilityIDs                   []string
 	RemoveVulnerabilityIDs                []string
+	ClearWorkflowDefinitions              bool
+	AddWorkflowDefinitionIDs              []string
+	RemoveWorkflowDefinitionIDs           []string
+	ClearWorkflowInstances                bool
+	AddWorkflowInstanceIDs                []string
+	RemoveWorkflowInstanceIDs             []string
+	ClearWorkflowEvents                   bool
+	AddWorkflowEventIDs                   []string
+	RemoveWorkflowEventIDs                []string
+	ClearWorkflowAssignments              bool
+	AddWorkflowAssignmentIDs              []string
+	RemoveWorkflowAssignmentIDs           []string
+	ClearWorkflowAssignmentTargets        bool
+	AddWorkflowAssignmentTargetIDs        []string
+	RemoveWorkflowAssignmentTargetIDs     []string
+	ClearWorkflowObjectRefs               bool
+	AddWorkflowObjectRefIDs               []string
+	RemoveWorkflowObjectRefIDs            []string
+	ClearDirectoryAccounts                bool
+	AddDirectoryAccountIDs                []string
+	RemoveDirectoryAccountIDs             []string
+	ClearDirectoryGroups                  bool
+	AddDirectoryGroupIDs                  []string
+	RemoveDirectoryGroupIDs               []string
+	ClearDirectorySyncRuns                bool
+	AddDirectorySyncRunIDs                []string
+	RemoveDirectorySyncRunIDs             []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -10122,6 +11047,87 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveVulnerabilityIDs; len(v) > 0 {
 		m.RemoveVulnerabilityIDs(v...)
+	}
+	if i.ClearWorkflowDefinitions {
+		m.ClearWorkflowDefinitions()
+	}
+	if v := i.AddWorkflowDefinitionIDs; len(v) > 0 {
+		m.AddWorkflowDefinitionIDs(v...)
+	}
+	if v := i.RemoveWorkflowDefinitionIDs; len(v) > 0 {
+		m.RemoveWorkflowDefinitionIDs(v...)
+	}
+	if i.ClearWorkflowInstances {
+		m.ClearWorkflowInstances()
+	}
+	if v := i.AddWorkflowInstanceIDs; len(v) > 0 {
+		m.AddWorkflowInstanceIDs(v...)
+	}
+	if v := i.RemoveWorkflowInstanceIDs; len(v) > 0 {
+		m.RemoveWorkflowInstanceIDs(v...)
+	}
+	if i.ClearWorkflowEvents {
+		m.ClearWorkflowEvents()
+	}
+	if v := i.AddWorkflowEventIDs; len(v) > 0 {
+		m.AddWorkflowEventIDs(v...)
+	}
+	if v := i.RemoveWorkflowEventIDs; len(v) > 0 {
+		m.RemoveWorkflowEventIDs(v...)
+	}
+	if i.ClearWorkflowAssignments {
+		m.ClearWorkflowAssignments()
+	}
+	if v := i.AddWorkflowAssignmentIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentIDs(v...)
+	}
+	if v := i.RemoveWorkflowAssignmentIDs; len(v) > 0 {
+		m.RemoveWorkflowAssignmentIDs(v...)
+	}
+	if i.ClearWorkflowAssignmentTargets {
+		m.ClearWorkflowAssignmentTargets()
+	}
+	if v := i.AddWorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentTargetIDs(v...)
+	}
+	if v := i.RemoveWorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.RemoveWorkflowAssignmentTargetIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+	if i.ClearDirectoryAccounts {
+		m.ClearDirectoryAccounts()
+	}
+	if v := i.AddDirectoryAccountIDs; len(v) > 0 {
+		m.AddDirectoryAccountIDs(v...)
+	}
+	if v := i.RemoveDirectoryAccountIDs; len(v) > 0 {
+		m.RemoveDirectoryAccountIDs(v...)
+	}
+	if i.ClearDirectoryGroups {
+		m.ClearDirectoryGroups()
+	}
+	if v := i.AddDirectoryGroupIDs; len(v) > 0 {
+		m.AddDirectoryGroupIDs(v...)
+	}
+	if v := i.RemoveDirectoryGroupIDs; len(v) > 0 {
+		m.RemoveDirectoryGroupIDs(v...)
+	}
+	if i.ClearDirectorySyncRuns {
+		m.ClearDirectorySyncRuns()
+	}
+	if v := i.AddDirectorySyncRunIDs; len(v) > 0 {
+		m.AddDirectorySyncRunIDs(v...)
+	}
+	if v := i.RemoveDirectorySyncRunIDs; len(v) > 0 {
+		m.RemoveDirectorySyncRunIDs(v...)
 	}
 }
 
@@ -14949,6 +15955,7 @@ type CreateTaskInput struct {
 	ControlImplementationIDs []string
 	ActionPlanIDs            []string
 	EvidenceIDs              []string
+	WorkflowObjectRefIDs     []string
 }
 
 // Mutate applies the CreateTaskInput on the TaskMutation builder.
@@ -15029,6 +16036,9 @@ func (i *CreateTaskInput) Mutate(m *TaskMutation) {
 	if v := i.EvidenceIDs; len(v) > 0 {
 		m.AddEvidenceIDs(v...)
 	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTaskInput on the TaskCreate builder.
@@ -15100,6 +16110,9 @@ type UpdateTaskInput struct {
 	ClearEvidence                  bool
 	AddEvidenceIDs                 []string
 	RemoveEvidenceIDs              []string
+	ClearWorkflowObjectRefs        bool
+	AddWorkflowObjectRefIDs        []string
+	RemoveWorkflowObjectRefIDs     []string
 }
 
 // Mutate applies the UpdateTaskInput on the TaskMutation builder.
@@ -15286,6 +16299,15 @@ func (i *UpdateTaskInput) Mutate(m *TaskMutation) {
 	}
 	if v := i.RemoveEvidenceIDs; len(v) > 0 {
 		m.RemoveEvidenceIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
 	}
 }
 
@@ -17709,6 +18731,880 @@ func (c *VulnerabilityUpdate) SetInput(i UpdateVulnerabilityInput) *Vulnerabilit
 
 // SetInput applies the change-set in the UpdateVulnerabilityInput on the VulnerabilityUpdateOne builder.
 func (c *VulnerabilityUpdateOne) SetInput(i UpdateVulnerabilityInput) *VulnerabilityUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowAssignmentInput represents a mutation input for creating workflowassignments.
+type CreateWorkflowAssignmentInput struct {
+	Tags                        []string
+	AssignmentKey               string
+	Role                        *string
+	Label                       *string
+	Required                    *bool
+	Status                      *enums.WorkflowAssignmentStatus
+	Metadata                    map[string]interface{}
+	DecidedAt                   *time.Time
+	Notes                       *string
+	OwnerID                     *string
+	WorkflowInstanceID          string
+	WorkflowAssignmentTargetIDs []string
+	UserID                      *string
+	GroupID                     *string
+}
+
+// Mutate applies the CreateWorkflowAssignmentInput on the WorkflowAssignmentMutation builder.
+func (i *CreateWorkflowAssignmentInput) Mutate(m *WorkflowAssignmentMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetAssignmentKey(i.AssignmentKey)
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	if v := i.Label; v != nil {
+		m.SetLabel(*v)
+	}
+	if v := i.Required; v != nil {
+		m.SetRequired(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if v := i.DecidedAt; v != nil {
+		m.SetDecidedAt(*v)
+	}
+	if v := i.Notes; v != nil {
+		m.SetNotes(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
+	if v := i.WorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentTargetIDs(v...)
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkflowAssignmentInput on the WorkflowAssignmentCreate builder.
+func (c *WorkflowAssignmentCreate) SetInput(i CreateWorkflowAssignmentInput) *WorkflowAssignmentCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowAssignmentInput represents a mutation input for updating workflowassignments.
+type UpdateWorkflowAssignmentInput struct {
+	ClearTags                         bool
+	Tags                              []string
+	AppendTags                        []string
+	AssignmentKey                     *string
+	Role                              *string
+	ClearLabel                        bool
+	Label                             *string
+	Required                          *bool
+	Status                            *enums.WorkflowAssignmentStatus
+	ClearMetadata                     bool
+	Metadata                          map[string]interface{}
+	ClearDecidedAt                    bool
+	DecidedAt                         *time.Time
+	ClearNotes                        bool
+	Notes                             *string
+	ClearOwner                        bool
+	OwnerID                           *string
+	WorkflowInstanceID                *string
+	ClearWorkflowAssignmentTargets    bool
+	AddWorkflowAssignmentTargetIDs    []string
+	RemoveWorkflowAssignmentTargetIDs []string
+	ClearUser                         bool
+	UserID                            *string
+	ClearGroup                        bool
+	GroupID                           *string
+}
+
+// Mutate applies the UpdateWorkflowAssignmentInput on the WorkflowAssignmentMutation builder.
+func (i *UpdateWorkflowAssignmentInput) Mutate(m *WorkflowAssignmentMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.AssignmentKey; v != nil {
+		m.SetAssignmentKey(*v)
+	}
+	if v := i.Role; v != nil {
+		m.SetRole(*v)
+	}
+	if i.ClearLabel {
+		m.ClearLabel()
+	}
+	if v := i.Label; v != nil {
+		m.SetLabel(*v)
+	}
+	if v := i.Required; v != nil {
+		m.SetRequired(*v)
+	}
+	if v := i.Status; v != nil {
+		m.SetStatus(*v)
+	}
+	if i.ClearMetadata {
+		m.ClearMetadata()
+	}
+	if v := i.Metadata; v != nil {
+		m.SetMetadata(v)
+	}
+	if i.ClearDecidedAt {
+		m.ClearDecidedAt()
+	}
+	if v := i.DecidedAt; v != nil {
+		m.SetDecidedAt(*v)
+	}
+	if i.ClearNotes {
+		m.ClearNotes()
+	}
+	if v := i.Notes; v != nil {
+		m.SetNotes(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.WorkflowInstanceID; v != nil {
+		m.SetWorkflowInstanceID(*v)
+	}
+	if i.ClearWorkflowAssignmentTargets {
+		m.ClearWorkflowAssignmentTargets()
+	}
+	if v := i.AddWorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentTargetIDs(v...)
+	}
+	if v := i.RemoveWorkflowAssignmentTargetIDs; len(v) > 0 {
+		m.RemoveWorkflowAssignmentTargetIDs(v...)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowAssignmentInput on the WorkflowAssignmentUpdate builder.
+func (c *WorkflowAssignmentUpdate) SetInput(i UpdateWorkflowAssignmentInput) *WorkflowAssignmentUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowAssignmentInput on the WorkflowAssignmentUpdateOne builder.
+func (c *WorkflowAssignmentUpdateOne) SetInput(i UpdateWorkflowAssignmentInput) *WorkflowAssignmentUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowAssignmentTargetInput represents a mutation input for creating workflowassignmenttargets.
+type CreateWorkflowAssignmentTargetInput struct {
+	Tags                 []string
+	TargetType           enums.WorkflowTargetType
+	ResolverKey          *string
+	OwnerID              *string
+	WorkflowAssignmentID string
+	UserID               *string
+	GroupID              *string
+}
+
+// Mutate applies the CreateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetMutation builder.
+func (i *CreateWorkflowAssignmentTargetInput) Mutate(m *WorkflowAssignmentTargetMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetTargetType(i.TargetType)
+	if v := i.ResolverKey; v != nil {
+		m.SetResolverKey(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetWorkflowAssignmentID(i.WorkflowAssignmentID)
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetCreate builder.
+func (c *WorkflowAssignmentTargetCreate) SetInput(i CreateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowAssignmentTargetInput represents a mutation input for updating workflowassignmenttargets.
+type UpdateWorkflowAssignmentTargetInput struct {
+	ClearTags            bool
+	Tags                 []string
+	AppendTags           []string
+	TargetType           *enums.WorkflowTargetType
+	ClearResolverKey     bool
+	ResolverKey          *string
+	ClearOwner           bool
+	OwnerID              *string
+	WorkflowAssignmentID *string
+	ClearUser            bool
+	UserID               *string
+	ClearGroup           bool
+	GroupID              *string
+}
+
+// Mutate applies the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetMutation builder.
+func (i *UpdateWorkflowAssignmentTargetInput) Mutate(m *WorkflowAssignmentTargetMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.TargetType; v != nil {
+		m.SetTargetType(*v)
+	}
+	if i.ClearResolverKey {
+		m.ClearResolverKey()
+	}
+	if v := i.ResolverKey; v != nil {
+		m.SetResolverKey(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.WorkflowAssignmentID; v != nil {
+		m.SetWorkflowAssignmentID(*v)
+	}
+	if i.ClearUser {
+		m.ClearUser()
+	}
+	if v := i.UserID; v != nil {
+		m.SetUserID(*v)
+	}
+	if i.ClearGroup {
+		m.ClearGroup()
+	}
+	if v := i.GroupID; v != nil {
+		m.SetGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetUpdate builder.
+func (c *WorkflowAssignmentTargetUpdate) SetInput(i UpdateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowAssignmentTargetInput on the WorkflowAssignmentTargetUpdateOne builder.
+func (c *WorkflowAssignmentTargetUpdateOne) SetInput(i UpdateWorkflowAssignmentTargetInput) *WorkflowAssignmentTargetUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowDefinitionInput represents a mutation input for creating workflowdefinitions.
+type CreateWorkflowDefinitionInput struct {
+	Tags              []string
+	InternalNotes     *string
+	SystemInternalID  *string
+	Name              string
+	Description       *string
+	WorkflowKind      enums.WorkflowKind
+	SchemaType        string
+	Revision          *int
+	Draft             *bool
+	PublishedAt       *time.Time
+	CooldownSeconds   *int
+	IsDefault         *bool
+	Active            *bool
+	TriggerOperations []string
+	TriggerFields     []string
+	DefinitionJSON    *models.WorkflowDefinitionDocument
+	TrackedFields     []string
+	OwnerID           *string
+	TagDefinitionIDs  []string
+	GroupIDs          []string
+}
+
+// Mutate applies the CreateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
+func (i *CreateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	m.SetWorkflowKind(i.WorkflowKind)
+	m.SetSchemaType(i.SchemaType)
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
+	if v := i.Draft; v != nil {
+		m.SetDraft(*v)
+	}
+	if v := i.PublishedAt; v != nil {
+		m.SetPublishedAt(*v)
+	}
+	if v := i.CooldownSeconds; v != nil {
+		m.SetCooldownSeconds(*v)
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if v := i.TriggerOperations; v != nil {
+		m.SetTriggerOperations(v)
+	}
+	if v := i.TriggerFields; v != nil {
+		m.SetTriggerFields(v)
+	}
+	if v := i.DefinitionJSON; v != nil {
+		m.SetDefinitionJSON(*v)
+	}
+	if v := i.TrackedFields; v != nil {
+		m.SetTrackedFields(v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.TagDefinitionIDs; len(v) > 0 {
+		m.AddTagDefinitionIDs(v...)
+	}
+	if v := i.GroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkflowDefinitionInput on the WorkflowDefinitionCreate builder.
+func (c *WorkflowDefinitionCreate) SetInput(i CreateWorkflowDefinitionInput) *WorkflowDefinitionCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowDefinitionInput represents a mutation input for updating workflowdefinitions.
+type UpdateWorkflowDefinitionInput struct {
+	ClearTags               bool
+	Tags                    []string
+	AppendTags              []string
+	ClearInternalNotes      bool
+	InternalNotes           *string
+	ClearSystemInternalID   bool
+	SystemInternalID        *string
+	Name                    *string
+	ClearDescription        bool
+	Description             *string
+	WorkflowKind            *enums.WorkflowKind
+	SchemaType              *string
+	Revision                *int
+	Draft                   *bool
+	ClearPublishedAt        bool
+	PublishedAt             *time.Time
+	CooldownSeconds         *int
+	IsDefault               *bool
+	Active                  *bool
+	ClearTriggerOperations  bool
+	TriggerOperations       []string
+	AppendTriggerOperations []string
+	ClearTriggerFields      bool
+	TriggerFields           []string
+	AppendTriggerFields     []string
+	ClearDefinitionJSON     bool
+	DefinitionJSON          *models.WorkflowDefinitionDocument
+	ClearTrackedFields      bool
+	TrackedFields           []string
+	AppendTrackedFields     []string
+	ClearOwner              bool
+	OwnerID                 *string
+	ClearTagDefinitions     bool
+	AddTagDefinitionIDs     []string
+	RemoveTagDefinitionIDs  []string
+	ClearGroups             bool
+	AddGroupIDs             []string
+	RemoveGroupIDs          []string
+}
+
+// Mutate applies the UpdateWorkflowDefinitionInput on the WorkflowDefinitionMutation builder.
+func (i *UpdateWorkflowDefinitionInput) Mutate(m *WorkflowDefinitionMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if i.ClearInternalNotes {
+		m.ClearInternalNotes()
+	}
+	if v := i.InternalNotes; v != nil {
+		m.SetInternalNotes(*v)
+	}
+	if i.ClearSystemInternalID {
+		m.ClearSystemInternalID()
+	}
+	if v := i.SystemInternalID; v != nil {
+		m.SetSystemInternalID(*v)
+	}
+	if v := i.Name; v != nil {
+		m.SetName(*v)
+	}
+	if i.ClearDescription {
+		m.ClearDescription()
+	}
+	if v := i.Description; v != nil {
+		m.SetDescription(*v)
+	}
+	if v := i.WorkflowKind; v != nil {
+		m.SetWorkflowKind(*v)
+	}
+	if v := i.SchemaType; v != nil {
+		m.SetSchemaType(*v)
+	}
+	if v := i.Revision; v != nil {
+		m.SetRevision(*v)
+	}
+	if v := i.Draft; v != nil {
+		m.SetDraft(*v)
+	}
+	if i.ClearPublishedAt {
+		m.ClearPublishedAt()
+	}
+	if v := i.PublishedAt; v != nil {
+		m.SetPublishedAt(*v)
+	}
+	if v := i.CooldownSeconds; v != nil {
+		m.SetCooldownSeconds(*v)
+	}
+	if v := i.IsDefault; v != nil {
+		m.SetIsDefault(*v)
+	}
+	if v := i.Active; v != nil {
+		m.SetActive(*v)
+	}
+	if i.ClearTriggerOperations {
+		m.ClearTriggerOperations()
+	}
+	if v := i.TriggerOperations; v != nil {
+		m.SetTriggerOperations(v)
+	}
+	if i.AppendTriggerOperations != nil {
+		m.AppendTriggerOperations(i.TriggerOperations)
+	}
+	if i.ClearTriggerFields {
+		m.ClearTriggerFields()
+	}
+	if v := i.TriggerFields; v != nil {
+		m.SetTriggerFields(v)
+	}
+	if i.AppendTriggerFields != nil {
+		m.AppendTriggerFields(i.TriggerFields)
+	}
+	if i.ClearDefinitionJSON {
+		m.ClearDefinitionJSON()
+	}
+	if v := i.DefinitionJSON; v != nil {
+		m.SetDefinitionJSON(*v)
+	}
+	if i.ClearTrackedFields {
+		m.ClearTrackedFields()
+	}
+	if v := i.TrackedFields; v != nil {
+		m.SetTrackedFields(v)
+	}
+	if i.AppendTrackedFields != nil {
+		m.AppendTrackedFields(i.TrackedFields)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if i.ClearTagDefinitions {
+		m.ClearTagDefinitions()
+	}
+	if v := i.AddTagDefinitionIDs; len(v) > 0 {
+		m.AddTagDefinitionIDs(v...)
+	}
+	if v := i.RemoveTagDefinitionIDs; len(v) > 0 {
+		m.RemoveTagDefinitionIDs(v...)
+	}
+	if i.ClearGroups {
+		m.ClearGroups()
+	}
+	if v := i.AddGroupIDs; len(v) > 0 {
+		m.AddGroupIDs(v...)
+	}
+	if v := i.RemoveGroupIDs; len(v) > 0 {
+		m.RemoveGroupIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowDefinitionInput on the WorkflowDefinitionUpdate builder.
+func (c *WorkflowDefinitionUpdate) SetInput(i UpdateWorkflowDefinitionInput) *WorkflowDefinitionUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowDefinitionInput on the WorkflowDefinitionUpdateOne builder.
+func (c *WorkflowDefinitionUpdateOne) SetInput(i UpdateWorkflowDefinitionInput) *WorkflowDefinitionUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowEventInput represents a mutation input for creating workflowevents.
+type CreateWorkflowEventInput struct {
+	Tags               []string
+	EventType          enums.WorkflowEventType
+	Payload            *models.WorkflowEventPayload
+	OwnerID            *string
+	WorkflowInstanceID string
+}
+
+// Mutate applies the CreateWorkflowEventInput on the WorkflowEventMutation builder.
+func (i *CreateWorkflowEventInput) Mutate(m *WorkflowEventMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetEventType(i.EventType)
+	if v := i.Payload; v != nil {
+		m.SetPayload(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
+}
+
+// SetInput applies the change-set in the CreateWorkflowEventInput on the WorkflowEventCreate builder.
+func (c *WorkflowEventCreate) SetInput(i CreateWorkflowEventInput) *WorkflowEventCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowEventInput represents a mutation input for updating workflowevents.
+type UpdateWorkflowEventInput struct {
+	ClearTags          bool
+	Tags               []string
+	AppendTags         []string
+	EventType          *enums.WorkflowEventType
+	ClearPayload       bool
+	Payload            *models.WorkflowEventPayload
+	ClearOwner         bool
+	OwnerID            *string
+	WorkflowInstanceID *string
+}
+
+// Mutate applies the UpdateWorkflowEventInput on the WorkflowEventMutation builder.
+func (i *UpdateWorkflowEventInput) Mutate(m *WorkflowEventMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.EventType; v != nil {
+		m.SetEventType(*v)
+	}
+	if i.ClearPayload {
+		m.ClearPayload()
+	}
+	if v := i.Payload; v != nil {
+		m.SetPayload(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.WorkflowInstanceID; v != nil {
+		m.SetWorkflowInstanceID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowEventInput on the WorkflowEventUpdate builder.
+func (c *WorkflowEventUpdate) SetInput(i UpdateWorkflowEventInput) *WorkflowEventUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowEventInput on the WorkflowEventUpdateOne builder.
+func (c *WorkflowEventUpdateOne) SetInput(i UpdateWorkflowEventInput) *WorkflowEventUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowInstanceInput represents a mutation input for creating workflowinstances.
+type CreateWorkflowInstanceInput struct {
+	Tags                  []string
+	State                 *enums.WorkflowInstanceState
+	Context               *models.WorkflowInstanceContext
+	LastEvaluatedAt       *time.Time
+	DefinitionSnapshot    *models.WorkflowDefinitionDocument
+	OwnerID               *string
+	WorkflowDefinitionID  string
+	WorkflowAssignmentIDs []string
+	WorkflowEventIDs      []string
+	WorkflowObjectRefIDs  []string
+}
+
+// Mutate applies the CreateWorkflowInstanceInput on the WorkflowInstanceMutation builder.
+func (i *CreateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if v := i.Context; v != nil {
+		m.SetContext(*v)
+	}
+	if v := i.LastEvaluatedAt; v != nil {
+		m.SetLastEvaluatedAt(*v)
+	}
+	if v := i.DefinitionSnapshot; v != nil {
+		m.SetDefinitionSnapshot(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetWorkflowDefinitionID(i.WorkflowDefinitionID)
+	if v := i.WorkflowAssignmentIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentIDs(v...)
+	}
+	if v := i.WorkflowEventIDs; len(v) > 0 {
+		m.AddWorkflowEventIDs(v...)
+	}
+	if v := i.WorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkflowInstanceInput on the WorkflowInstanceCreate builder.
+func (c *WorkflowInstanceCreate) SetInput(i CreateWorkflowInstanceInput) *WorkflowInstanceCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowInstanceInput represents a mutation input for updating workflowinstances.
+type UpdateWorkflowInstanceInput struct {
+	ClearTags                   bool
+	Tags                        []string
+	AppendTags                  []string
+	State                       *enums.WorkflowInstanceState
+	ClearContext                bool
+	Context                     *models.WorkflowInstanceContext
+	ClearLastEvaluatedAt        bool
+	LastEvaluatedAt             *time.Time
+	ClearDefinitionSnapshot     bool
+	DefinitionSnapshot          *models.WorkflowDefinitionDocument
+	ClearOwner                  bool
+	OwnerID                     *string
+	WorkflowDefinitionID        *string
+	ClearWorkflowAssignments    bool
+	AddWorkflowAssignmentIDs    []string
+	RemoveWorkflowAssignmentIDs []string
+	ClearWorkflowEvents         bool
+	AddWorkflowEventIDs         []string
+	RemoveWorkflowEventIDs      []string
+	ClearWorkflowObjectRefs     bool
+	AddWorkflowObjectRefIDs     []string
+	RemoveWorkflowObjectRefIDs  []string
+}
+
+// Mutate applies the UpdateWorkflowInstanceInput on the WorkflowInstanceMutation builder.
+func (i *UpdateWorkflowInstanceInput) Mutate(m *WorkflowInstanceMutation) {
+	if i.ClearTags {
+		m.ClearTags()
+	}
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	if i.AppendTags != nil {
+		m.AppendTags(i.Tags)
+	}
+	if v := i.State; v != nil {
+		m.SetState(*v)
+	}
+	if i.ClearContext {
+		m.ClearContext()
+	}
+	if v := i.Context; v != nil {
+		m.SetContext(*v)
+	}
+	if i.ClearLastEvaluatedAt {
+		m.ClearLastEvaluatedAt()
+	}
+	if v := i.LastEvaluatedAt; v != nil {
+		m.SetLastEvaluatedAt(*v)
+	}
+	if i.ClearDefinitionSnapshot {
+		m.ClearDefinitionSnapshot()
+	}
+	if v := i.DefinitionSnapshot; v != nil {
+		m.SetDefinitionSnapshot(*v)
+	}
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	if v := i.WorkflowDefinitionID; v != nil {
+		m.SetWorkflowDefinitionID(*v)
+	}
+	if i.ClearWorkflowAssignments {
+		m.ClearWorkflowAssignments()
+	}
+	if v := i.AddWorkflowAssignmentIDs; len(v) > 0 {
+		m.AddWorkflowAssignmentIDs(v...)
+	}
+	if v := i.RemoveWorkflowAssignmentIDs; len(v) > 0 {
+		m.RemoveWorkflowAssignmentIDs(v...)
+	}
+	if i.ClearWorkflowEvents {
+		m.ClearWorkflowEvents()
+	}
+	if v := i.AddWorkflowEventIDs; len(v) > 0 {
+		m.AddWorkflowEventIDs(v...)
+	}
+	if v := i.RemoveWorkflowEventIDs; len(v) > 0 {
+		m.RemoveWorkflowEventIDs(v...)
+	}
+	if i.ClearWorkflowObjectRefs {
+		m.ClearWorkflowObjectRefs()
+	}
+	if v := i.AddWorkflowObjectRefIDs; len(v) > 0 {
+		m.AddWorkflowObjectRefIDs(v...)
+	}
+	if v := i.RemoveWorkflowObjectRefIDs; len(v) > 0 {
+		m.RemoveWorkflowObjectRefIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowInstanceInput on the WorkflowInstanceUpdate builder.
+func (c *WorkflowInstanceUpdate) SetInput(i UpdateWorkflowInstanceInput) *WorkflowInstanceUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowInstanceInput on the WorkflowInstanceUpdateOne builder.
+func (c *WorkflowInstanceUpdateOne) SetInput(i UpdateWorkflowInstanceInput) *WorkflowInstanceUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateWorkflowObjectRefInput represents a mutation input for creating workflowobjectrefs.
+type CreateWorkflowObjectRefInput struct {
+	OwnerID            *string
+	WorkflowInstanceID string
+	ControlID          *string
+	TaskID             *string
+	InternalPolicyID   *string
+	FindingID          *string
+	DirectoryAccountID *string
+	DirectoryGroupID   *string
+}
+
+// Mutate applies the CreateWorkflowObjectRefInput on the WorkflowObjectRefMutation builder.
+func (i *CreateWorkflowObjectRefInput) Mutate(m *WorkflowObjectRefMutation) {
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+	m.SetWorkflowInstanceID(i.WorkflowInstanceID)
+	if v := i.ControlID; v != nil {
+		m.SetControlID(*v)
+	}
+	if v := i.TaskID; v != nil {
+		m.SetTaskID(*v)
+	}
+	if v := i.InternalPolicyID; v != nil {
+		m.SetInternalPolicyID(*v)
+	}
+	if v := i.FindingID; v != nil {
+		m.SetFindingID(*v)
+	}
+	if v := i.DirectoryAccountID; v != nil {
+		m.SetDirectoryAccountID(*v)
+	}
+	if v := i.DirectoryGroupID; v != nil {
+		m.SetDirectoryGroupID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateWorkflowObjectRefInput on the WorkflowObjectRefCreate builder.
+func (c *WorkflowObjectRefCreate) SetInput(i CreateWorkflowObjectRefInput) *WorkflowObjectRefCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateWorkflowObjectRefInput represents a mutation input for updating workflowobjectrefs.
+type UpdateWorkflowObjectRefInput struct {
+	ClearOwner bool
+	OwnerID    *string
+}
+
+// Mutate applies the UpdateWorkflowObjectRefInput on the WorkflowObjectRefMutation builder.
+func (i *UpdateWorkflowObjectRefInput) Mutate(m *WorkflowObjectRefMutation) {
+	if i.ClearOwner {
+		m.ClearOwner()
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the UpdateWorkflowObjectRefInput on the WorkflowObjectRefUpdate builder.
+func (c *WorkflowObjectRefUpdate) SetInput(i UpdateWorkflowObjectRefInput) *WorkflowObjectRefUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateWorkflowObjectRefInput on the WorkflowObjectRefUpdateOne builder.
+func (c *WorkflowObjectRefUpdateOne) SetInput(i UpdateWorkflowObjectRefInput) *WorkflowObjectRefUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

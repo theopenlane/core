@@ -67,6 +67,14 @@ const (
 	EdgeTasks = "tasks"
 	// EdgeActionPlans holds the string denoting the action_plans edge name in mutations.
 	EdgeActionPlans = "action_plans"
+	// EdgeDirectoryAccounts holds the string denoting the directory_accounts edge name in mutations.
+	EdgeDirectoryAccounts = "directory_accounts"
+	// EdgeDirectoryGroups holds the string denoting the directory_groups edge name in mutations.
+	EdgeDirectoryGroups = "directory_groups"
+	// EdgeDirectoryMemberships holds the string denoting the directory_memberships edge name in mutations.
+	EdgeDirectoryMemberships = "directory_memberships"
+	// EdgeDirectorySyncRuns holds the string denoting the directory_sync_runs edge name in mutations.
+	EdgeDirectorySyncRuns = "directory_sync_runs"
 	// Table holds the table name of the integration in the database.
 	Table = "integrations"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -125,6 +133,34 @@ const (
 	// ActionPlansInverseTable is the table name for the ActionPlan entity.
 	// It exists in this package in order to avoid circular dependency with the "actionplan" package.
 	ActionPlansInverseTable = "action_plans"
+	// DirectoryAccountsTable is the table that holds the directory_accounts relation/edge.
+	DirectoryAccountsTable = "directory_accounts"
+	// DirectoryAccountsInverseTable is the table name for the DirectoryAccount entity.
+	// It exists in this package in order to avoid circular dependency with the "directoryaccount" package.
+	DirectoryAccountsInverseTable = "directory_accounts"
+	// DirectoryAccountsColumn is the table column denoting the directory_accounts relation/edge.
+	DirectoryAccountsColumn = "integration_directory_accounts"
+	// DirectoryGroupsTable is the table that holds the directory_groups relation/edge.
+	DirectoryGroupsTable = "directory_groups"
+	// DirectoryGroupsInverseTable is the table name for the DirectoryGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "directorygroup" package.
+	DirectoryGroupsInverseTable = "directory_groups"
+	// DirectoryGroupsColumn is the table column denoting the directory_groups relation/edge.
+	DirectoryGroupsColumn = "integration_directory_groups"
+	// DirectoryMembershipsTable is the table that holds the directory_memberships relation/edge.
+	DirectoryMembershipsTable = "directory_memberships"
+	// DirectoryMembershipsInverseTable is the table name for the DirectoryMembership entity.
+	// It exists in this package in order to avoid circular dependency with the "directorymembership" package.
+	DirectoryMembershipsInverseTable = "directory_memberships"
+	// DirectoryMembershipsColumn is the table column denoting the directory_memberships relation/edge.
+	DirectoryMembershipsColumn = "integration_directory_memberships"
+	// DirectorySyncRunsTable is the table that holds the directory_sync_runs relation/edge.
+	DirectorySyncRunsTable = "directory_sync_runs"
+	// DirectorySyncRunsInverseTable is the table name for the DirectorySyncRun entity.
+	// It exists in this package in order to avoid circular dependency with the "directorysyncrun" package.
+	DirectorySyncRunsInverseTable = "directory_sync_runs"
+	// DirectorySyncRunsColumn is the table column denoting the directory_sync_runs relation/edge.
+	DirectorySyncRunsColumn = "integration_directory_sync_runs"
 )
 
 // Columns holds all SQL columns for integration fields.
@@ -429,6 +465,62 @@ func ByActionPlans(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newActionPlansStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByDirectoryAccountsCount orders the results by directory_accounts count.
+func ByDirectoryAccountsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryAccountsStep(), opts...)
+	}
+}
+
+// ByDirectoryAccounts orders the results by directory_accounts terms.
+func ByDirectoryAccounts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryAccountsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryGroupsCount orders the results by directory_groups count.
+func ByDirectoryGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryGroupsStep(), opts...)
+	}
+}
+
+// ByDirectoryGroups orders the results by directory_groups terms.
+func ByDirectoryGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectoryMembershipsCount orders the results by directory_memberships count.
+func ByDirectoryMembershipsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectoryMembershipsStep(), opts...)
+	}
+}
+
+// ByDirectoryMemberships orders the results by directory_memberships terms.
+func ByDirectoryMemberships(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectoryMembershipsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByDirectorySyncRunsCount orders the results by directory_sync_runs count.
+func ByDirectorySyncRunsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newDirectorySyncRunsStep(), opts...)
+	}
+}
+
+// ByDirectorySyncRuns orders the results by directory_sync_runs terms.
+func ByDirectorySyncRuns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newDirectorySyncRunsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -497,5 +589,33 @@ func newActionPlansStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(ActionPlansInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, false, ActionPlansTable, ActionPlansPrimaryKey...),
+	)
+}
+func newDirectoryAccountsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryAccountsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryAccountsTable, DirectoryAccountsColumn),
+	)
+}
+func newDirectoryGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryGroupsTable, DirectoryGroupsColumn),
+	)
+}
+func newDirectoryMembershipsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectoryMembershipsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectoryMembershipsTable, DirectoryMembershipsColumn),
+	)
+}
+func newDirectorySyncRunsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(DirectorySyncRunsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, DirectorySyncRunsTable, DirectorySyncRunsColumn),
 	)
 }

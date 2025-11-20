@@ -26,6 +26,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customdomainhistory"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccounthistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
+	"github.com/theopenlane/core/internal/ent/generated/directorygrouphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
+	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
+	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -138,6 +145,18 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerabilityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenthistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttargethistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinitionhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workfloweventhistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstancehistory"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectrefhistory"
 	"github.com/theopenlane/core/internal/ent/schema"
 
 	"entgo.io/ent"
@@ -1738,6 +1757,449 @@ func init() {
 	dnsverificationhistoryDescID := dnsverificationhistoryFields[9].Descriptor()
 	// dnsverificationhistory.DefaultID holds the default value on creation for the id field.
 	dnsverificationhistory.DefaultID = dnsverificationhistoryDescID.Default.(func() string)
+	directoryaccountMixin := schema.DirectoryAccount{}.Mixin()
+	directoryaccount.Policy = privacy.NewPolicies(schema.DirectoryAccount{})
+	directoryaccount.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directoryaccount.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directoryaccountMixinHooks0 := directoryaccountMixin[0].Hooks()
+	directoryaccountMixinHooks1 := directoryaccountMixin[1].Hooks()
+	directoryaccountMixinHooks2 := directoryaccountMixin[2].Hooks()
+	directoryaccountMixinHooks3 := directoryaccountMixin[3].Hooks()
+	directoryaccountMixinHooks5 := directoryaccountMixin[5].Hooks()
+
+	directoryaccount.Hooks[1] = directoryaccountMixinHooks0[0]
+
+	directoryaccount.Hooks[2] = directoryaccountMixinHooks1[0]
+
+	directoryaccount.Hooks[3] = directoryaccountMixinHooks2[0]
+
+	directoryaccount.Hooks[4] = directoryaccountMixinHooks3[0]
+
+	directoryaccount.Hooks[5] = directoryaccountMixinHooks5[0]
+	directoryaccountMixinInters1 := directoryaccountMixin[1].Interceptors()
+	directoryaccountMixinInters5 := directoryaccountMixin[5].Interceptors()
+	directoryaccount.Interceptors[0] = directoryaccountMixinInters1[0]
+	directoryaccount.Interceptors[1] = directoryaccountMixinInters5[0]
+	directoryaccountMixinFields0 := directoryaccountMixin[0].Fields()
+	_ = directoryaccountMixinFields0
+	directoryaccountMixinFields2 := directoryaccountMixin[2].Fields()
+	_ = directoryaccountMixinFields2
+	directoryaccountMixinFields3 := directoryaccountMixin[3].Fields()
+	_ = directoryaccountMixinFields3
+	directoryaccountMixinFields5 := directoryaccountMixin[5].Fields()
+	_ = directoryaccountMixinFields5
+	directoryaccountFields := schema.DirectoryAccount{}.Fields()
+	_ = directoryaccountFields
+	// directoryaccountDescCreatedAt is the schema descriptor for created_at field.
+	directoryaccountDescCreatedAt := directoryaccountMixinFields0[0].Descriptor()
+	// directoryaccount.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directoryaccount.DefaultCreatedAt = directoryaccountDescCreatedAt.Default.(func() time.Time)
+	// directoryaccountDescUpdatedAt is the schema descriptor for updated_at field.
+	directoryaccountDescUpdatedAt := directoryaccountMixinFields0[1].Descriptor()
+	// directoryaccount.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directoryaccount.DefaultUpdatedAt = directoryaccountDescUpdatedAt.Default.(func() time.Time)
+	// directoryaccount.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directoryaccount.UpdateDefaultUpdatedAt = directoryaccountDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directoryaccountDescDisplayID is the schema descriptor for display_id field.
+	directoryaccountDescDisplayID := directoryaccountMixinFields2[1].Descriptor()
+	// directoryaccount.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	directoryaccount.DisplayIDValidator = directoryaccountDescDisplayID.Validators[0].(func(string) error)
+	// directoryaccountDescTags is the schema descriptor for tags field.
+	directoryaccountDescTags := directoryaccountMixinFields3[0].Descriptor()
+	// directoryaccount.DefaultTags holds the default value on creation for the tags field.
+	directoryaccount.DefaultTags = directoryaccountDescTags.Default.([]string)
+	// directoryaccountDescOwnerID is the schema descriptor for owner_id field.
+	directoryaccountDescOwnerID := directoryaccountMixinFields5[0].Descriptor()
+	// directoryaccount.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	directoryaccount.OwnerIDValidator = directoryaccountDescOwnerID.Validators[0].(func(string) error)
+	// directoryaccountDescIntegrationID is the schema descriptor for integration_id field.
+	directoryaccountDescIntegrationID := directoryaccountFields[0].Descriptor()
+	// directoryaccount.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
+	directoryaccount.IntegrationIDValidator = directoryaccountDescIntegrationID.Validators[0].(func(string) error)
+	// directoryaccountDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
+	directoryaccountDescDirectorySyncRunID := directoryaccountFields[1].Descriptor()
+	// directoryaccount.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
+	directoryaccount.DirectorySyncRunIDValidator = directoryaccountDescDirectorySyncRunID.Validators[0].(func(string) error)
+	// directoryaccountDescExternalID is the schema descriptor for external_id field.
+	directoryaccountDescExternalID := directoryaccountFields[2].Descriptor()
+	// directoryaccount.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
+	directoryaccount.ExternalIDValidator = directoryaccountDescExternalID.Validators[0].(func(string) error)
+	// directoryaccountDescObservedAt is the schema descriptor for observed_at field.
+	directoryaccountDescObservedAt := directoryaccountFields[16].Descriptor()
+	// directoryaccount.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directoryaccount.DefaultObservedAt = directoryaccountDescObservedAt.Default.(func() time.Time)
+	// directoryaccountDescProfileHash is the schema descriptor for profile_hash field.
+	directoryaccountDescProfileHash := directoryaccountFields[17].Descriptor()
+	// directoryaccount.DefaultProfileHash holds the default value on creation for the profile_hash field.
+	directoryaccount.DefaultProfileHash = directoryaccountDescProfileHash.Default.(string)
+	// directoryaccountDescID is the schema descriptor for id field.
+	directoryaccountDescID := directoryaccountMixinFields2[0].Descriptor()
+	// directoryaccount.DefaultID holds the default value on creation for the id field.
+	directoryaccount.DefaultID = directoryaccountDescID.Default.(func() string)
+	directoryaccounthistory.Policy = privacy.NewPolicies(schema.DirectoryAccountHistory{})
+	directoryaccounthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directoryaccounthistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directoryaccounthistoryInters := schema.DirectoryAccountHistory{}.Interceptors()
+	directoryaccounthistory.Interceptors[0] = directoryaccounthistoryInters[0]
+	directoryaccounthistoryFields := schema.DirectoryAccountHistory{}.Fields()
+	_ = directoryaccounthistoryFields
+	// directoryaccounthistoryDescHistoryTime is the schema descriptor for history_time field.
+	directoryaccounthistoryDescHistoryTime := directoryaccounthistoryFields[0].Descriptor()
+	// directoryaccounthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	directoryaccounthistory.DefaultHistoryTime = directoryaccounthistoryDescHistoryTime.Default.(func() time.Time)
+	// directoryaccounthistoryDescCreatedAt is the schema descriptor for created_at field.
+	directoryaccounthistoryDescCreatedAt := directoryaccounthistoryFields[3].Descriptor()
+	// directoryaccounthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directoryaccounthistory.DefaultCreatedAt = directoryaccounthistoryDescCreatedAt.Default.(func() time.Time)
+	// directoryaccounthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	directoryaccounthistoryDescUpdatedAt := directoryaccounthistoryFields[4].Descriptor()
+	// directoryaccounthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directoryaccounthistory.DefaultUpdatedAt = directoryaccounthistoryDescUpdatedAt.Default.(func() time.Time)
+	// directoryaccounthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directoryaccounthistory.UpdateDefaultUpdatedAt = directoryaccounthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directoryaccounthistoryDescTags is the schema descriptor for tags field.
+	directoryaccounthistoryDescTags := directoryaccounthistoryFields[9].Descriptor()
+	// directoryaccounthistory.DefaultTags holds the default value on creation for the tags field.
+	directoryaccounthistory.DefaultTags = directoryaccounthistoryDescTags.Default.([]string)
+	// directoryaccounthistoryDescObservedAt is the schema descriptor for observed_at field.
+	directoryaccounthistoryDescObservedAt := directoryaccounthistoryFields[27].Descriptor()
+	// directoryaccounthistory.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directoryaccounthistory.DefaultObservedAt = directoryaccounthistoryDescObservedAt.Default.(func() time.Time)
+	// directoryaccounthistoryDescProfileHash is the schema descriptor for profile_hash field.
+	directoryaccounthistoryDescProfileHash := directoryaccounthistoryFields[28].Descriptor()
+	// directoryaccounthistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
+	directoryaccounthistory.DefaultProfileHash = directoryaccounthistoryDescProfileHash.Default.(string)
+	// directoryaccounthistoryDescID is the schema descriptor for id field.
+	directoryaccounthistoryDescID := directoryaccounthistoryFields[7].Descriptor()
+	// directoryaccounthistory.DefaultID holds the default value on creation for the id field.
+	directoryaccounthistory.DefaultID = directoryaccounthistoryDescID.Default.(func() string)
+	directorygroupMixin := schema.DirectoryGroup{}.Mixin()
+	directorygroup.Policy = privacy.NewPolicies(schema.DirectoryGroup{})
+	directorygroup.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directorygroup.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directorygroupMixinHooks0 := directorygroupMixin[0].Hooks()
+	directorygroupMixinHooks1 := directorygroupMixin[1].Hooks()
+	directorygroupMixinHooks2 := directorygroupMixin[2].Hooks()
+	directorygroupMixinHooks3 := directorygroupMixin[3].Hooks()
+	directorygroupMixinHooks5 := directorygroupMixin[5].Hooks()
+
+	directorygroup.Hooks[1] = directorygroupMixinHooks0[0]
+
+	directorygroup.Hooks[2] = directorygroupMixinHooks1[0]
+
+	directorygroup.Hooks[3] = directorygroupMixinHooks2[0]
+
+	directorygroup.Hooks[4] = directorygroupMixinHooks3[0]
+
+	directorygroup.Hooks[5] = directorygroupMixinHooks5[0]
+	directorygroupMixinInters1 := directorygroupMixin[1].Interceptors()
+	directorygroupMixinInters5 := directorygroupMixin[5].Interceptors()
+	directorygroup.Interceptors[0] = directorygroupMixinInters1[0]
+	directorygroup.Interceptors[1] = directorygroupMixinInters5[0]
+	directorygroupMixinFields0 := directorygroupMixin[0].Fields()
+	_ = directorygroupMixinFields0
+	directorygroupMixinFields2 := directorygroupMixin[2].Fields()
+	_ = directorygroupMixinFields2
+	directorygroupMixinFields3 := directorygroupMixin[3].Fields()
+	_ = directorygroupMixinFields3
+	directorygroupMixinFields5 := directorygroupMixin[5].Fields()
+	_ = directorygroupMixinFields5
+	directorygroupFields := schema.DirectoryGroup{}.Fields()
+	_ = directorygroupFields
+	// directorygroupDescCreatedAt is the schema descriptor for created_at field.
+	directorygroupDescCreatedAt := directorygroupMixinFields0[0].Descriptor()
+	// directorygroup.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directorygroup.DefaultCreatedAt = directorygroupDescCreatedAt.Default.(func() time.Time)
+	// directorygroupDescUpdatedAt is the schema descriptor for updated_at field.
+	directorygroupDescUpdatedAt := directorygroupMixinFields0[1].Descriptor()
+	// directorygroup.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directorygroup.DefaultUpdatedAt = directorygroupDescUpdatedAt.Default.(func() time.Time)
+	// directorygroup.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directorygroup.UpdateDefaultUpdatedAt = directorygroupDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directorygroupDescDisplayID is the schema descriptor for display_id field.
+	directorygroupDescDisplayID := directorygroupMixinFields2[1].Descriptor()
+	// directorygroup.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	directorygroup.DisplayIDValidator = directorygroupDescDisplayID.Validators[0].(func(string) error)
+	// directorygroupDescTags is the schema descriptor for tags field.
+	directorygroupDescTags := directorygroupMixinFields3[0].Descriptor()
+	// directorygroup.DefaultTags holds the default value on creation for the tags field.
+	directorygroup.DefaultTags = directorygroupDescTags.Default.([]string)
+	// directorygroupDescOwnerID is the schema descriptor for owner_id field.
+	directorygroupDescOwnerID := directorygroupMixinFields5[0].Descriptor()
+	// directorygroup.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	directorygroup.OwnerIDValidator = directorygroupDescOwnerID.Validators[0].(func(string) error)
+	// directorygroupDescIntegrationID is the schema descriptor for integration_id field.
+	directorygroupDescIntegrationID := directorygroupFields[0].Descriptor()
+	// directorygroup.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
+	directorygroup.IntegrationIDValidator = directorygroupDescIntegrationID.Validators[0].(func(string) error)
+	// directorygroupDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
+	directorygroupDescDirectorySyncRunID := directorygroupFields[1].Descriptor()
+	// directorygroup.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
+	directorygroup.DirectorySyncRunIDValidator = directorygroupDescDirectorySyncRunID.Validators[0].(func(string) error)
+	// directorygroupDescExternalID is the schema descriptor for external_id field.
+	directorygroupDescExternalID := directorygroupFields[2].Descriptor()
+	// directorygroup.ExternalIDValidator is a validator for the "external_id" field. It is called by the builders before save.
+	directorygroup.ExternalIDValidator = directorygroupDescExternalID.Validators[0].(func(string) error)
+	// directorygroupDescEmail is the schema descriptor for email field.
+	directorygroupDescEmail := directorygroupFields[3].Descriptor()
+	// directorygroup.EmailValidator is a validator for the "email" field. It is called by the builders before save.
+	directorygroup.EmailValidator = directorygroupDescEmail.Validators[0].(func(string) error)
+	// directorygroupDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
+	directorygroupDescExternalSharingAllowed := directorygroupFields[8].Descriptor()
+	// directorygroup.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
+	directorygroup.DefaultExternalSharingAllowed = directorygroupDescExternalSharingAllowed.Default.(bool)
+	// directorygroupDescObservedAt is the schema descriptor for observed_at field.
+	directorygroupDescObservedAt := directorygroupFields[10].Descriptor()
+	// directorygroup.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directorygroup.DefaultObservedAt = directorygroupDescObservedAt.Default.(func() time.Time)
+	// directorygroupDescProfileHash is the schema descriptor for profile_hash field.
+	directorygroupDescProfileHash := directorygroupFields[11].Descriptor()
+	// directorygroup.DefaultProfileHash holds the default value on creation for the profile_hash field.
+	directorygroup.DefaultProfileHash = directorygroupDescProfileHash.Default.(string)
+	// directorygroupDescID is the schema descriptor for id field.
+	directorygroupDescID := directorygroupMixinFields2[0].Descriptor()
+	// directorygroup.DefaultID holds the default value on creation for the id field.
+	directorygroup.DefaultID = directorygroupDescID.Default.(func() string)
+	directorygrouphistory.Policy = privacy.NewPolicies(schema.DirectoryGroupHistory{})
+	directorygrouphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directorygrouphistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directorygrouphistoryInters := schema.DirectoryGroupHistory{}.Interceptors()
+	directorygrouphistory.Interceptors[0] = directorygrouphistoryInters[0]
+	directorygrouphistoryFields := schema.DirectoryGroupHistory{}.Fields()
+	_ = directorygrouphistoryFields
+	// directorygrouphistoryDescHistoryTime is the schema descriptor for history_time field.
+	directorygrouphistoryDescHistoryTime := directorygrouphistoryFields[0].Descriptor()
+	// directorygrouphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	directorygrouphistory.DefaultHistoryTime = directorygrouphistoryDescHistoryTime.Default.(func() time.Time)
+	// directorygrouphistoryDescCreatedAt is the schema descriptor for created_at field.
+	directorygrouphistoryDescCreatedAt := directorygrouphistoryFields[3].Descriptor()
+	// directorygrouphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directorygrouphistory.DefaultCreatedAt = directorygrouphistoryDescCreatedAt.Default.(func() time.Time)
+	// directorygrouphistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	directorygrouphistoryDescUpdatedAt := directorygrouphistoryFields[4].Descriptor()
+	// directorygrouphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directorygrouphistory.DefaultUpdatedAt = directorygrouphistoryDescUpdatedAt.Default.(func() time.Time)
+	// directorygrouphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directorygrouphistory.UpdateDefaultUpdatedAt = directorygrouphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directorygrouphistoryDescTags is the schema descriptor for tags field.
+	directorygrouphistoryDescTags := directorygrouphistoryFields[9].Descriptor()
+	// directorygrouphistory.DefaultTags holds the default value on creation for the tags field.
+	directorygrouphistory.DefaultTags = directorygrouphistoryDescTags.Default.([]string)
+	// directorygrouphistoryDescExternalSharingAllowed is the schema descriptor for external_sharing_allowed field.
+	directorygrouphistoryDescExternalSharingAllowed := directorygrouphistoryFields[19].Descriptor()
+	// directorygrouphistory.DefaultExternalSharingAllowed holds the default value on creation for the external_sharing_allowed field.
+	directorygrouphistory.DefaultExternalSharingAllowed = directorygrouphistoryDescExternalSharingAllowed.Default.(bool)
+	// directorygrouphistoryDescObservedAt is the schema descriptor for observed_at field.
+	directorygrouphistoryDescObservedAt := directorygrouphistoryFields[21].Descriptor()
+	// directorygrouphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directorygrouphistory.DefaultObservedAt = directorygrouphistoryDescObservedAt.Default.(func() time.Time)
+	// directorygrouphistoryDescProfileHash is the schema descriptor for profile_hash field.
+	directorygrouphistoryDescProfileHash := directorygrouphistoryFields[22].Descriptor()
+	// directorygrouphistory.DefaultProfileHash holds the default value on creation for the profile_hash field.
+	directorygrouphistory.DefaultProfileHash = directorygrouphistoryDescProfileHash.Default.(string)
+	// directorygrouphistoryDescID is the schema descriptor for id field.
+	directorygrouphistoryDescID := directorygrouphistoryFields[7].Descriptor()
+	// directorygrouphistory.DefaultID holds the default value on creation for the id field.
+	directorygrouphistory.DefaultID = directorygrouphistoryDescID.Default.(func() string)
+	directorymembershipMixin := schema.DirectoryMembership{}.Mixin()
+	directorymembership.Policy = privacy.NewPolicies(schema.DirectoryMembership{})
+	directorymembership.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directorymembership.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directorymembershipMixinHooks0 := directorymembershipMixin[0].Hooks()
+	directorymembershipMixinHooks1 := directorymembershipMixin[1].Hooks()
+	directorymembershipMixinHooks2 := directorymembershipMixin[2].Hooks()
+	directorymembershipMixinHooks4 := directorymembershipMixin[4].Hooks()
+
+	directorymembership.Hooks[1] = directorymembershipMixinHooks0[0]
+
+	directorymembership.Hooks[2] = directorymembershipMixinHooks1[0]
+
+	directorymembership.Hooks[3] = directorymembershipMixinHooks2[0]
+
+	directorymembership.Hooks[4] = directorymembershipMixinHooks4[0]
+	directorymembershipMixinInters1 := directorymembershipMixin[1].Interceptors()
+	directorymembershipMixinInters4 := directorymembershipMixin[4].Interceptors()
+	directorymembership.Interceptors[0] = directorymembershipMixinInters1[0]
+	directorymembership.Interceptors[1] = directorymembershipMixinInters4[0]
+	directorymembershipMixinFields0 := directorymembershipMixin[0].Fields()
+	_ = directorymembershipMixinFields0
+	directorymembershipMixinFields2 := directorymembershipMixin[2].Fields()
+	_ = directorymembershipMixinFields2
+	directorymembershipMixinFields4 := directorymembershipMixin[4].Fields()
+	_ = directorymembershipMixinFields4
+	directorymembershipFields := schema.DirectoryMembership{}.Fields()
+	_ = directorymembershipFields
+	// directorymembershipDescCreatedAt is the schema descriptor for created_at field.
+	directorymembershipDescCreatedAt := directorymembershipMixinFields0[0].Descriptor()
+	// directorymembership.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directorymembership.DefaultCreatedAt = directorymembershipDescCreatedAt.Default.(func() time.Time)
+	// directorymembershipDescUpdatedAt is the schema descriptor for updated_at field.
+	directorymembershipDescUpdatedAt := directorymembershipMixinFields0[1].Descriptor()
+	// directorymembership.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directorymembership.DefaultUpdatedAt = directorymembershipDescUpdatedAt.Default.(func() time.Time)
+	// directorymembership.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directorymembership.UpdateDefaultUpdatedAt = directorymembershipDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directorymembershipDescDisplayID is the schema descriptor for display_id field.
+	directorymembershipDescDisplayID := directorymembershipMixinFields2[1].Descriptor()
+	// directorymembership.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	directorymembership.DisplayIDValidator = directorymembershipDescDisplayID.Validators[0].(func(string) error)
+	// directorymembershipDescOwnerID is the schema descriptor for owner_id field.
+	directorymembershipDescOwnerID := directorymembershipMixinFields4[0].Descriptor()
+	// directorymembership.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	directorymembership.OwnerIDValidator = directorymembershipDescOwnerID.Validators[0].(func(string) error)
+	// directorymembershipDescIntegrationID is the schema descriptor for integration_id field.
+	directorymembershipDescIntegrationID := directorymembershipFields[0].Descriptor()
+	// directorymembership.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
+	directorymembership.IntegrationIDValidator = directorymembershipDescIntegrationID.Validators[0].(func(string) error)
+	// directorymembershipDescDirectorySyncRunID is the schema descriptor for directory_sync_run_id field.
+	directorymembershipDescDirectorySyncRunID := directorymembershipFields[1].Descriptor()
+	// directorymembership.DirectorySyncRunIDValidator is a validator for the "directory_sync_run_id" field. It is called by the builders before save.
+	directorymembership.DirectorySyncRunIDValidator = directorymembershipDescDirectorySyncRunID.Validators[0].(func(string) error)
+	// directorymembershipDescObservedAt is the schema descriptor for observed_at field.
+	directorymembershipDescObservedAt := directorymembershipFields[8].Descriptor()
+	// directorymembership.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directorymembership.DefaultObservedAt = directorymembershipDescObservedAt.Default.(func() time.Time)
+	// directorymembershipDescID is the schema descriptor for id field.
+	directorymembershipDescID := directorymembershipMixinFields2[0].Descriptor()
+	// directorymembership.DefaultID holds the default value on creation for the id field.
+	directorymembership.DefaultID = directorymembershipDescID.Default.(func() string)
+	directorymembershiphistory.Policy = privacy.NewPolicies(schema.DirectoryMembershipHistory{})
+	directorymembershiphistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directorymembershiphistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directorymembershiphistoryInters := schema.DirectoryMembershipHistory{}.Interceptors()
+	directorymembershiphistory.Interceptors[0] = directorymembershiphistoryInters[0]
+	directorymembershiphistoryFields := schema.DirectoryMembershipHistory{}.Fields()
+	_ = directorymembershiphistoryFields
+	// directorymembershiphistoryDescHistoryTime is the schema descriptor for history_time field.
+	directorymembershiphistoryDescHistoryTime := directorymembershiphistoryFields[0].Descriptor()
+	// directorymembershiphistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	directorymembershiphistory.DefaultHistoryTime = directorymembershiphistoryDescHistoryTime.Default.(func() time.Time)
+	// directorymembershiphistoryDescCreatedAt is the schema descriptor for created_at field.
+	directorymembershiphistoryDescCreatedAt := directorymembershiphistoryFields[3].Descriptor()
+	// directorymembershiphistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directorymembershiphistory.DefaultCreatedAt = directorymembershiphistoryDescCreatedAt.Default.(func() time.Time)
+	// directorymembershiphistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	directorymembershiphistoryDescUpdatedAt := directorymembershiphistoryFields[4].Descriptor()
+	// directorymembershiphistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directorymembershiphistory.DefaultUpdatedAt = directorymembershiphistoryDescUpdatedAt.Default.(func() time.Time)
+	// directorymembershiphistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directorymembershiphistory.UpdateDefaultUpdatedAt = directorymembershiphistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directorymembershiphistoryDescObservedAt is the schema descriptor for observed_at field.
+	directorymembershiphistoryDescObservedAt := directorymembershiphistoryFields[18].Descriptor()
+	// directorymembershiphistory.DefaultObservedAt holds the default value on creation for the observed_at field.
+	directorymembershiphistory.DefaultObservedAt = directorymembershiphistoryDescObservedAt.Default.(func() time.Time)
+	// directorymembershiphistoryDescID is the schema descriptor for id field.
+	directorymembershiphistoryDescID := directorymembershiphistoryFields[7].Descriptor()
+	// directorymembershiphistory.DefaultID holds the default value on creation for the id field.
+	directorymembershiphistory.DefaultID = directorymembershiphistoryDescID.Default.(func() string)
+	directorysyncrunMixin := schema.DirectorySyncRun{}.Mixin()
+	directorysyncrun.Policy = privacy.NewPolicies(schema.DirectorySyncRun{})
+	directorysyncrun.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := directorysyncrun.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	directorysyncrunMixinHooks0 := directorysyncrunMixin[0].Hooks()
+	directorysyncrunMixinHooks1 := directorysyncrunMixin[1].Hooks()
+	directorysyncrunMixinHooks2 := directorysyncrunMixin[2].Hooks()
+	directorysyncrunMixinHooks4 := directorysyncrunMixin[4].Hooks()
+
+	directorysyncrun.Hooks[1] = directorysyncrunMixinHooks0[0]
+
+	directorysyncrun.Hooks[2] = directorysyncrunMixinHooks1[0]
+
+	directorysyncrun.Hooks[3] = directorysyncrunMixinHooks2[0]
+
+	directorysyncrun.Hooks[4] = directorysyncrunMixinHooks4[0]
+	directorysyncrunMixinInters1 := directorysyncrunMixin[1].Interceptors()
+	directorysyncrunMixinInters4 := directorysyncrunMixin[4].Interceptors()
+	directorysyncrun.Interceptors[0] = directorysyncrunMixinInters1[0]
+	directorysyncrun.Interceptors[1] = directorysyncrunMixinInters4[0]
+	directorysyncrunMixinFields0 := directorysyncrunMixin[0].Fields()
+	_ = directorysyncrunMixinFields0
+	directorysyncrunMixinFields2 := directorysyncrunMixin[2].Fields()
+	_ = directorysyncrunMixinFields2
+	directorysyncrunMixinFields4 := directorysyncrunMixin[4].Fields()
+	_ = directorysyncrunMixinFields4
+	directorysyncrunFields := schema.DirectorySyncRun{}.Fields()
+	_ = directorysyncrunFields
+	// directorysyncrunDescCreatedAt is the schema descriptor for created_at field.
+	directorysyncrunDescCreatedAt := directorysyncrunMixinFields0[0].Descriptor()
+	// directorysyncrun.DefaultCreatedAt holds the default value on creation for the created_at field.
+	directorysyncrun.DefaultCreatedAt = directorysyncrunDescCreatedAt.Default.(func() time.Time)
+	// directorysyncrunDescUpdatedAt is the schema descriptor for updated_at field.
+	directorysyncrunDescUpdatedAt := directorysyncrunMixinFields0[1].Descriptor()
+	// directorysyncrun.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	directorysyncrun.DefaultUpdatedAt = directorysyncrunDescUpdatedAt.Default.(func() time.Time)
+	// directorysyncrun.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	directorysyncrun.UpdateDefaultUpdatedAt = directorysyncrunDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// directorysyncrunDescDisplayID is the schema descriptor for display_id field.
+	directorysyncrunDescDisplayID := directorysyncrunMixinFields2[1].Descriptor()
+	// directorysyncrun.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	directorysyncrun.DisplayIDValidator = directorysyncrunDescDisplayID.Validators[0].(func(string) error)
+	// directorysyncrunDescOwnerID is the schema descriptor for owner_id field.
+	directorysyncrunDescOwnerID := directorysyncrunMixinFields4[0].Descriptor()
+	// directorysyncrun.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	directorysyncrun.OwnerIDValidator = directorysyncrunDescOwnerID.Validators[0].(func(string) error)
+	// directorysyncrunDescIntegrationID is the schema descriptor for integration_id field.
+	directorysyncrunDescIntegrationID := directorysyncrunFields[0].Descriptor()
+	// directorysyncrun.IntegrationIDValidator is a validator for the "integration_id" field. It is called by the builders before save.
+	directorysyncrun.IntegrationIDValidator = directorysyncrunDescIntegrationID.Validators[0].(func(string) error)
+	// directorysyncrunDescStartedAt is the schema descriptor for started_at field.
+	directorysyncrunDescStartedAt := directorysyncrunFields[2].Descriptor()
+	// directorysyncrun.DefaultStartedAt holds the default value on creation for the started_at field.
+	directorysyncrun.DefaultStartedAt = directorysyncrunDescStartedAt.Default.(func() time.Time)
+	// directorysyncrunDescFullCount is the schema descriptor for full_count field.
+	directorysyncrunDescFullCount := directorysyncrunFields[5].Descriptor()
+	// directorysyncrun.DefaultFullCount holds the default value on creation for the full_count field.
+	directorysyncrun.DefaultFullCount = directorysyncrunDescFullCount.Default.(int)
+	// directorysyncrunDescDeltaCount is the schema descriptor for delta_count field.
+	directorysyncrunDescDeltaCount := directorysyncrunFields[6].Descriptor()
+	// directorysyncrun.DefaultDeltaCount holds the default value on creation for the delta_count field.
+	directorysyncrun.DefaultDeltaCount = directorysyncrunDescDeltaCount.Default.(int)
+	// directorysyncrunDescID is the schema descriptor for id field.
+	directorysyncrunDescID := directorysyncrunMixinFields2[0].Descriptor()
+	// directorysyncrun.DefaultID holds the default value on creation for the id field.
+	directorysyncrun.DefaultID = directorysyncrunDescID.Default.(func() string)
 	documentdataMixin := schema.DocumentData{}.Mixin()
 	documentdata.Policy = privacy.NewPolicies(schema.DocumentData{})
 	documentdata.Hooks[0] = func(next ent.Mutator) ent.Mutator {
@@ -8958,6 +9420,729 @@ func init() {
 	webauthnDescID := webauthnMixinFields1[0].Descriptor()
 	// webauthn.DefaultID holds the default value on creation for the id field.
 	webauthn.DefaultID = webauthnDescID.Default.(func() string)
+	workflowassignmentMixin := schema.WorkflowAssignment{}.Mixin()
+	workflowassignment.Policy = privacy.NewPolicies(schema.WorkflowAssignment{})
+	workflowassignment.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowassignment.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowassignmentMixinHooks0 := workflowassignmentMixin[0].Hooks()
+	workflowassignmentMixinHooks1 := workflowassignmentMixin[1].Hooks()
+	workflowassignmentMixinHooks2 := workflowassignmentMixin[2].Hooks()
+	workflowassignmentMixinHooks3 := workflowassignmentMixin[3].Hooks()
+	workflowassignmentMixinHooks4 := workflowassignmentMixin[4].Hooks()
+	workflowassignmentMixinHooks6 := workflowassignmentMixin[6].Hooks()
+
+	workflowassignment.Hooks[1] = workflowassignmentMixinHooks0[0]
+
+	workflowassignment.Hooks[2] = workflowassignmentMixinHooks1[0]
+
+	workflowassignment.Hooks[3] = workflowassignmentMixinHooks2[0]
+
+	workflowassignment.Hooks[4] = workflowassignmentMixinHooks3[0]
+
+	workflowassignment.Hooks[5] = workflowassignmentMixinHooks4[0]
+
+	workflowassignment.Hooks[6] = workflowassignmentMixinHooks6[0]
+	workflowassignmentMixinInters1 := workflowassignmentMixin[1].Interceptors()
+	workflowassignmentMixinInters2 := workflowassignmentMixin[2].Interceptors()
+	workflowassignmentMixinInters6 := workflowassignmentMixin[6].Interceptors()
+	workflowassignment.Interceptors[0] = workflowassignmentMixinInters1[0]
+	workflowassignment.Interceptors[1] = workflowassignmentMixinInters2[0]
+	workflowassignment.Interceptors[2] = workflowassignmentMixinInters6[0]
+	workflowassignmentMixinFields0 := workflowassignmentMixin[0].Fields()
+	_ = workflowassignmentMixinFields0
+	workflowassignmentMixinFields3 := workflowassignmentMixin[3].Fields()
+	_ = workflowassignmentMixinFields3
+	workflowassignmentMixinFields4 := workflowassignmentMixin[4].Fields()
+	_ = workflowassignmentMixinFields4
+	workflowassignmentMixinFields6 := workflowassignmentMixin[6].Fields()
+	_ = workflowassignmentMixinFields6
+	workflowassignmentFields := schema.WorkflowAssignment{}.Fields()
+	_ = workflowassignmentFields
+	// workflowassignmentDescCreatedAt is the schema descriptor for created_at field.
+	workflowassignmentDescCreatedAt := workflowassignmentMixinFields0[0].Descriptor()
+	// workflowassignment.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowassignment.DefaultCreatedAt = workflowassignmentDescCreatedAt.Default.(func() time.Time)
+	// workflowassignmentDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowassignmentDescUpdatedAt := workflowassignmentMixinFields0[1].Descriptor()
+	// workflowassignment.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowassignment.DefaultUpdatedAt = workflowassignmentDescUpdatedAt.Default.(func() time.Time)
+	// workflowassignment.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowassignment.UpdateDefaultUpdatedAt = workflowassignmentDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowassignmentDescDisplayID is the schema descriptor for display_id field.
+	workflowassignmentDescDisplayID := workflowassignmentMixinFields3[1].Descriptor()
+	// workflowassignment.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowassignment.DisplayIDValidator = workflowassignmentDescDisplayID.Validators[0].(func(string) error)
+	// workflowassignmentDescTags is the schema descriptor for tags field.
+	workflowassignmentDescTags := workflowassignmentMixinFields4[0].Descriptor()
+	// workflowassignment.DefaultTags holds the default value on creation for the tags field.
+	workflowassignment.DefaultTags = workflowassignmentDescTags.Default.([]string)
+	// workflowassignmentDescOwnerID is the schema descriptor for owner_id field.
+	workflowassignmentDescOwnerID := workflowassignmentMixinFields6[0].Descriptor()
+	// workflowassignment.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowassignment.OwnerIDValidator = workflowassignmentDescOwnerID.Validators[0].(func(string) error)
+	// workflowassignmentDescWorkflowInstanceID is the schema descriptor for workflow_instance_id field.
+	workflowassignmentDescWorkflowInstanceID := workflowassignmentFields[0].Descriptor()
+	// workflowassignment.WorkflowInstanceIDValidator is a validator for the "workflow_instance_id" field. It is called by the builders before save.
+	workflowassignment.WorkflowInstanceIDValidator = workflowassignmentDescWorkflowInstanceID.Validators[0].(func(string) error)
+	// workflowassignmentDescAssignmentKey is the schema descriptor for assignment_key field.
+	workflowassignmentDescAssignmentKey := workflowassignmentFields[1].Descriptor()
+	// workflowassignment.AssignmentKeyValidator is a validator for the "assignment_key" field. It is called by the builders before save.
+	workflowassignment.AssignmentKeyValidator = workflowassignmentDescAssignmentKey.Validators[0].(func(string) error)
+	// workflowassignmentDescRole is the schema descriptor for role field.
+	workflowassignmentDescRole := workflowassignmentFields[2].Descriptor()
+	// workflowassignment.DefaultRole holds the default value on creation for the role field.
+	workflowassignment.DefaultRole = workflowassignmentDescRole.Default.(string)
+	// workflowassignmentDescRequired is the schema descriptor for required field.
+	workflowassignmentDescRequired := workflowassignmentFields[4].Descriptor()
+	// workflowassignment.DefaultRequired holds the default value on creation for the required field.
+	workflowassignment.DefaultRequired = workflowassignmentDescRequired.Default.(bool)
+	// workflowassignmentDescID is the schema descriptor for id field.
+	workflowassignmentDescID := workflowassignmentMixinFields3[0].Descriptor()
+	// workflowassignment.DefaultID holds the default value on creation for the id field.
+	workflowassignment.DefaultID = workflowassignmentDescID.Default.(func() string)
+	workflowassignmenthistory.Policy = privacy.NewPolicies(schema.WorkflowAssignmentHistory{})
+	workflowassignmenthistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowassignmenthistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowassignmenthistoryInters := schema.WorkflowAssignmentHistory{}.Interceptors()
+	workflowassignmenthistory.Interceptors[0] = workflowassignmenthistoryInters[0]
+	workflowassignmenthistoryFields := schema.WorkflowAssignmentHistory{}.Fields()
+	_ = workflowassignmenthistoryFields
+	// workflowassignmenthistoryDescHistoryTime is the schema descriptor for history_time field.
+	workflowassignmenthistoryDescHistoryTime := workflowassignmenthistoryFields[0].Descriptor()
+	// workflowassignmenthistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workflowassignmenthistory.DefaultHistoryTime = workflowassignmenthistoryDescHistoryTime.Default.(func() time.Time)
+	// workflowassignmenthistoryDescCreatedAt is the schema descriptor for created_at field.
+	workflowassignmenthistoryDescCreatedAt := workflowassignmenthistoryFields[3].Descriptor()
+	// workflowassignmenthistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowassignmenthistory.DefaultCreatedAt = workflowassignmenthistoryDescCreatedAt.Default.(func() time.Time)
+	// workflowassignmenthistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowassignmenthistoryDescUpdatedAt := workflowassignmenthistoryFields[4].Descriptor()
+	// workflowassignmenthistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowassignmenthistory.DefaultUpdatedAt = workflowassignmenthistoryDescUpdatedAt.Default.(func() time.Time)
+	// workflowassignmenthistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowassignmenthistory.UpdateDefaultUpdatedAt = workflowassignmenthistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowassignmenthistoryDescTags is the schema descriptor for tags field.
+	workflowassignmenthistoryDescTags := workflowassignmenthistoryFields[11].Descriptor()
+	// workflowassignmenthistory.DefaultTags holds the default value on creation for the tags field.
+	workflowassignmenthistory.DefaultTags = workflowassignmenthistoryDescTags.Default.([]string)
+	// workflowassignmenthistoryDescRole is the schema descriptor for role field.
+	workflowassignmenthistoryDescRole := workflowassignmenthistoryFields[15].Descriptor()
+	// workflowassignmenthistory.DefaultRole holds the default value on creation for the role field.
+	workflowassignmenthistory.DefaultRole = workflowassignmenthistoryDescRole.Default.(string)
+	// workflowassignmenthistoryDescRequired is the schema descriptor for required field.
+	workflowassignmenthistoryDescRequired := workflowassignmenthistoryFields[17].Descriptor()
+	// workflowassignmenthistory.DefaultRequired holds the default value on creation for the required field.
+	workflowassignmenthistory.DefaultRequired = workflowassignmenthistoryDescRequired.Default.(bool)
+	// workflowassignmenthistoryDescID is the schema descriptor for id field.
+	workflowassignmenthistoryDescID := workflowassignmenthistoryFields[9].Descriptor()
+	// workflowassignmenthistory.DefaultID holds the default value on creation for the id field.
+	workflowassignmenthistory.DefaultID = workflowassignmenthistoryDescID.Default.(func() string)
+	workflowassignmenttargetMixin := schema.WorkflowAssignmentTarget{}.Mixin()
+	workflowassignmenttarget.Policy = privacy.NewPolicies(schema.WorkflowAssignmentTarget{})
+	workflowassignmenttarget.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowassignmenttarget.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowassignmenttargetMixinHooks0 := workflowassignmenttargetMixin[0].Hooks()
+	workflowassignmenttargetMixinHooks1 := workflowassignmenttargetMixin[1].Hooks()
+	workflowassignmenttargetMixinHooks2 := workflowassignmenttargetMixin[2].Hooks()
+	workflowassignmenttargetMixinHooks3 := workflowassignmenttargetMixin[3].Hooks()
+	workflowassignmenttargetMixinHooks4 := workflowassignmenttargetMixin[4].Hooks()
+	workflowassignmenttargetMixinHooks6 := workflowassignmenttargetMixin[6].Hooks()
+
+	workflowassignmenttarget.Hooks[1] = workflowassignmenttargetMixinHooks0[0]
+
+	workflowassignmenttarget.Hooks[2] = workflowassignmenttargetMixinHooks1[0]
+
+	workflowassignmenttarget.Hooks[3] = workflowassignmenttargetMixinHooks2[0]
+
+	workflowassignmenttarget.Hooks[4] = workflowassignmenttargetMixinHooks3[0]
+
+	workflowassignmenttarget.Hooks[5] = workflowassignmenttargetMixinHooks4[0]
+
+	workflowassignmenttarget.Hooks[6] = workflowassignmenttargetMixinHooks6[0]
+	workflowassignmenttargetMixinInters1 := workflowassignmenttargetMixin[1].Interceptors()
+	workflowassignmenttargetMixinInters2 := workflowassignmenttargetMixin[2].Interceptors()
+	workflowassignmenttargetMixinInters6 := workflowassignmenttargetMixin[6].Interceptors()
+	workflowassignmenttarget.Interceptors[0] = workflowassignmenttargetMixinInters1[0]
+	workflowassignmenttarget.Interceptors[1] = workflowassignmenttargetMixinInters2[0]
+	workflowassignmenttarget.Interceptors[2] = workflowassignmenttargetMixinInters6[0]
+	workflowassignmenttargetMixinFields0 := workflowassignmenttargetMixin[0].Fields()
+	_ = workflowassignmenttargetMixinFields0
+	workflowassignmenttargetMixinFields3 := workflowassignmenttargetMixin[3].Fields()
+	_ = workflowassignmenttargetMixinFields3
+	workflowassignmenttargetMixinFields4 := workflowassignmenttargetMixin[4].Fields()
+	_ = workflowassignmenttargetMixinFields4
+	workflowassignmenttargetMixinFields6 := workflowassignmenttargetMixin[6].Fields()
+	_ = workflowassignmenttargetMixinFields6
+	workflowassignmenttargetFields := schema.WorkflowAssignmentTarget{}.Fields()
+	_ = workflowassignmenttargetFields
+	// workflowassignmenttargetDescCreatedAt is the schema descriptor for created_at field.
+	workflowassignmenttargetDescCreatedAt := workflowassignmenttargetMixinFields0[0].Descriptor()
+	// workflowassignmenttarget.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowassignmenttarget.DefaultCreatedAt = workflowassignmenttargetDescCreatedAt.Default.(func() time.Time)
+	// workflowassignmenttargetDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowassignmenttargetDescUpdatedAt := workflowassignmenttargetMixinFields0[1].Descriptor()
+	// workflowassignmenttarget.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowassignmenttarget.DefaultUpdatedAt = workflowassignmenttargetDescUpdatedAt.Default.(func() time.Time)
+	// workflowassignmenttarget.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowassignmenttarget.UpdateDefaultUpdatedAt = workflowassignmenttargetDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowassignmenttargetDescDisplayID is the schema descriptor for display_id field.
+	workflowassignmenttargetDescDisplayID := workflowassignmenttargetMixinFields3[1].Descriptor()
+	// workflowassignmenttarget.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowassignmenttarget.DisplayIDValidator = workflowassignmenttargetDescDisplayID.Validators[0].(func(string) error)
+	// workflowassignmenttargetDescTags is the schema descriptor for tags field.
+	workflowassignmenttargetDescTags := workflowassignmenttargetMixinFields4[0].Descriptor()
+	// workflowassignmenttarget.DefaultTags holds the default value on creation for the tags field.
+	workflowassignmenttarget.DefaultTags = workflowassignmenttargetDescTags.Default.([]string)
+	// workflowassignmenttargetDescOwnerID is the schema descriptor for owner_id field.
+	workflowassignmenttargetDescOwnerID := workflowassignmenttargetMixinFields6[0].Descriptor()
+	// workflowassignmenttarget.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowassignmenttarget.OwnerIDValidator = workflowassignmenttargetDescOwnerID.Validators[0].(func(string) error)
+	// workflowassignmenttargetDescWorkflowAssignmentID is the schema descriptor for workflow_assignment_id field.
+	workflowassignmenttargetDescWorkflowAssignmentID := workflowassignmenttargetFields[0].Descriptor()
+	// workflowassignmenttarget.WorkflowAssignmentIDValidator is a validator for the "workflow_assignment_id" field. It is called by the builders before save.
+	workflowassignmenttarget.WorkflowAssignmentIDValidator = workflowassignmenttargetDescWorkflowAssignmentID.Validators[0].(func(string) error)
+	// workflowassignmenttargetDescID is the schema descriptor for id field.
+	workflowassignmenttargetDescID := workflowassignmenttargetMixinFields3[0].Descriptor()
+	// workflowassignmenttarget.DefaultID holds the default value on creation for the id field.
+	workflowassignmenttarget.DefaultID = workflowassignmenttargetDescID.Default.(func() string)
+	workflowassignmenttargethistory.Policy = privacy.NewPolicies(schema.WorkflowAssignmentTargetHistory{})
+	workflowassignmenttargethistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowassignmenttargethistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowassignmenttargethistoryInters := schema.WorkflowAssignmentTargetHistory{}.Interceptors()
+	workflowassignmenttargethistory.Interceptors[0] = workflowassignmenttargethistoryInters[0]
+	workflowassignmenttargethistoryFields := schema.WorkflowAssignmentTargetHistory{}.Fields()
+	_ = workflowassignmenttargethistoryFields
+	// workflowassignmenttargethistoryDescHistoryTime is the schema descriptor for history_time field.
+	workflowassignmenttargethistoryDescHistoryTime := workflowassignmenttargethistoryFields[0].Descriptor()
+	// workflowassignmenttargethistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workflowassignmenttargethistory.DefaultHistoryTime = workflowassignmenttargethistoryDescHistoryTime.Default.(func() time.Time)
+	// workflowassignmenttargethistoryDescCreatedAt is the schema descriptor for created_at field.
+	workflowassignmenttargethistoryDescCreatedAt := workflowassignmenttargethistoryFields[3].Descriptor()
+	// workflowassignmenttargethistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowassignmenttargethistory.DefaultCreatedAt = workflowassignmenttargethistoryDescCreatedAt.Default.(func() time.Time)
+	// workflowassignmenttargethistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowassignmenttargethistoryDescUpdatedAt := workflowassignmenttargethistoryFields[4].Descriptor()
+	// workflowassignmenttargethistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowassignmenttargethistory.DefaultUpdatedAt = workflowassignmenttargethistoryDescUpdatedAt.Default.(func() time.Time)
+	// workflowassignmenttargethistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowassignmenttargethistory.UpdateDefaultUpdatedAt = workflowassignmenttargethistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowassignmenttargethistoryDescTags is the schema descriptor for tags field.
+	workflowassignmenttargethistoryDescTags := workflowassignmenttargethistoryFields[11].Descriptor()
+	// workflowassignmenttargethistory.DefaultTags holds the default value on creation for the tags field.
+	workflowassignmenttargethistory.DefaultTags = workflowassignmenttargethistoryDescTags.Default.([]string)
+	// workflowassignmenttargethistoryDescID is the schema descriptor for id field.
+	workflowassignmenttargethistoryDescID := workflowassignmenttargethistoryFields[9].Descriptor()
+	// workflowassignmenttargethistory.DefaultID holds the default value on creation for the id field.
+	workflowassignmenttargethistory.DefaultID = workflowassignmenttargethistoryDescID.Default.(func() string)
+	workflowdefinitionMixin := schema.WorkflowDefinition{}.Mixin()
+	workflowdefinition.Policy = privacy.NewPolicies(workflowdefinitionMixin[7], schema.WorkflowDefinition{})
+	workflowdefinition.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowdefinition.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowdefinitionMixinHooks0 := workflowdefinitionMixin[0].Hooks()
+	workflowdefinitionMixinHooks1 := workflowdefinitionMixin[1].Hooks()
+	workflowdefinitionMixinHooks2 := workflowdefinitionMixin[2].Hooks()
+	workflowdefinitionMixinHooks3 := workflowdefinitionMixin[3].Hooks()
+	workflowdefinitionMixinHooks4 := workflowdefinitionMixin[4].Hooks()
+	workflowdefinitionMixinHooks6 := workflowdefinitionMixin[6].Hooks()
+	workflowdefinitionMixinHooks7 := workflowdefinitionMixin[7].Hooks()
+
+	workflowdefinition.Hooks[1] = workflowdefinitionMixinHooks0[0]
+
+	workflowdefinition.Hooks[2] = workflowdefinitionMixinHooks1[0]
+
+	workflowdefinition.Hooks[3] = workflowdefinitionMixinHooks2[0]
+
+	workflowdefinition.Hooks[4] = workflowdefinitionMixinHooks3[0]
+
+	workflowdefinition.Hooks[5] = workflowdefinitionMixinHooks4[0]
+
+	workflowdefinition.Hooks[6] = workflowdefinitionMixinHooks6[0]
+
+	workflowdefinition.Hooks[7] = workflowdefinitionMixinHooks7[0]
+	workflowdefinitionMixinInters1 := workflowdefinitionMixin[1].Interceptors()
+	workflowdefinitionMixinInters2 := workflowdefinitionMixin[2].Interceptors()
+	workflowdefinitionMixinInters6 := workflowdefinitionMixin[6].Interceptors()
+	workflowdefinition.Interceptors[0] = workflowdefinitionMixinInters1[0]
+	workflowdefinition.Interceptors[1] = workflowdefinitionMixinInters2[0]
+	workflowdefinition.Interceptors[2] = workflowdefinitionMixinInters6[0]
+	workflowdefinitionMixinFields0 := workflowdefinitionMixin[0].Fields()
+	_ = workflowdefinitionMixinFields0
+	workflowdefinitionMixinFields3 := workflowdefinitionMixin[3].Fields()
+	_ = workflowdefinitionMixinFields3
+	workflowdefinitionMixinFields4 := workflowdefinitionMixin[4].Fields()
+	_ = workflowdefinitionMixinFields4
+	workflowdefinitionMixinFields7 := workflowdefinitionMixin[7].Fields()
+	_ = workflowdefinitionMixinFields7
+	workflowdefinitionFields := schema.WorkflowDefinition{}.Fields()
+	_ = workflowdefinitionFields
+	// workflowdefinitionDescCreatedAt is the schema descriptor for created_at field.
+	workflowdefinitionDescCreatedAt := workflowdefinitionMixinFields0[0].Descriptor()
+	// workflowdefinition.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowdefinition.DefaultCreatedAt = workflowdefinitionDescCreatedAt.Default.(func() time.Time)
+	// workflowdefinitionDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowdefinitionDescUpdatedAt := workflowdefinitionMixinFields0[1].Descriptor()
+	// workflowdefinition.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowdefinition.DefaultUpdatedAt = workflowdefinitionDescUpdatedAt.Default.(func() time.Time)
+	// workflowdefinition.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowdefinition.UpdateDefaultUpdatedAt = workflowdefinitionDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowdefinitionDescDisplayID is the schema descriptor for display_id field.
+	workflowdefinitionDescDisplayID := workflowdefinitionMixinFields3[1].Descriptor()
+	// workflowdefinition.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowdefinition.DisplayIDValidator = workflowdefinitionDescDisplayID.Validators[0].(func(string) error)
+	// workflowdefinitionDescTags is the schema descriptor for tags field.
+	workflowdefinitionDescTags := workflowdefinitionMixinFields4[0].Descriptor()
+	// workflowdefinition.DefaultTags holds the default value on creation for the tags field.
+	workflowdefinition.DefaultTags = workflowdefinitionDescTags.Default.([]string)
+	// workflowdefinitionDescSystemOwned is the schema descriptor for system_owned field.
+	workflowdefinitionDescSystemOwned := workflowdefinitionMixinFields7[0].Descriptor()
+	// workflowdefinition.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	workflowdefinition.DefaultSystemOwned = workflowdefinitionDescSystemOwned.Default.(bool)
+	// workflowdefinitionDescName is the schema descriptor for name field.
+	workflowdefinitionDescName := workflowdefinitionFields[0].Descriptor()
+	// workflowdefinition.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	workflowdefinition.NameValidator = workflowdefinitionDescName.Validators[0].(func(string) error)
+	// workflowdefinitionDescSchemaType is the schema descriptor for schema_type field.
+	workflowdefinitionDescSchemaType := workflowdefinitionFields[3].Descriptor()
+	// workflowdefinition.SchemaTypeValidator is a validator for the "schema_type" field. It is called by the builders before save.
+	workflowdefinition.SchemaTypeValidator = workflowdefinitionDescSchemaType.Validators[0].(func(string) error)
+	// workflowdefinitionDescRevision is the schema descriptor for revision field.
+	workflowdefinitionDescRevision := workflowdefinitionFields[4].Descriptor()
+	// workflowdefinition.DefaultRevision holds the default value on creation for the revision field.
+	workflowdefinition.DefaultRevision = workflowdefinitionDescRevision.Default.(int)
+	// workflowdefinitionDescDraft is the schema descriptor for draft field.
+	workflowdefinitionDescDraft := workflowdefinitionFields[5].Descriptor()
+	// workflowdefinition.DefaultDraft holds the default value on creation for the draft field.
+	workflowdefinition.DefaultDraft = workflowdefinitionDescDraft.Default.(bool)
+	// workflowdefinitionDescCooldownSeconds is the schema descriptor for cooldown_seconds field.
+	workflowdefinitionDescCooldownSeconds := workflowdefinitionFields[7].Descriptor()
+	// workflowdefinition.DefaultCooldownSeconds holds the default value on creation for the cooldown_seconds field.
+	workflowdefinition.DefaultCooldownSeconds = workflowdefinitionDescCooldownSeconds.Default.(int)
+	// workflowdefinitionDescIsDefault is the schema descriptor for is_default field.
+	workflowdefinitionDescIsDefault := workflowdefinitionFields[8].Descriptor()
+	// workflowdefinition.DefaultIsDefault holds the default value on creation for the is_default field.
+	workflowdefinition.DefaultIsDefault = workflowdefinitionDescIsDefault.Default.(bool)
+	// workflowdefinitionDescActive is the schema descriptor for active field.
+	workflowdefinitionDescActive := workflowdefinitionFields[9].Descriptor()
+	// workflowdefinition.DefaultActive holds the default value on creation for the active field.
+	workflowdefinition.DefaultActive = workflowdefinitionDescActive.Default.(bool)
+	// workflowdefinitionDescTriggerOperations is the schema descriptor for trigger_operations field.
+	workflowdefinitionDescTriggerOperations := workflowdefinitionFields[10].Descriptor()
+	// workflowdefinition.DefaultTriggerOperations holds the default value on creation for the trigger_operations field.
+	workflowdefinition.DefaultTriggerOperations = workflowdefinitionDescTriggerOperations.Default.([]string)
+	// workflowdefinitionDescTriggerFields is the schema descriptor for trigger_fields field.
+	workflowdefinitionDescTriggerFields := workflowdefinitionFields[11].Descriptor()
+	// workflowdefinition.DefaultTriggerFields holds the default value on creation for the trigger_fields field.
+	workflowdefinition.DefaultTriggerFields = workflowdefinitionDescTriggerFields.Default.([]string)
+	// workflowdefinitionDescID is the schema descriptor for id field.
+	workflowdefinitionDescID := workflowdefinitionMixinFields3[0].Descriptor()
+	// workflowdefinition.DefaultID holds the default value on creation for the id field.
+	workflowdefinition.DefaultID = workflowdefinitionDescID.Default.(func() string)
+	workflowdefinitionhistory.Policy = privacy.NewPolicies(schema.WorkflowDefinitionHistory{})
+	workflowdefinitionhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowdefinitionhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowdefinitionhistoryInters := schema.WorkflowDefinitionHistory{}.Interceptors()
+	workflowdefinitionhistory.Interceptors[0] = workflowdefinitionhistoryInters[0]
+	workflowdefinitionhistoryFields := schema.WorkflowDefinitionHistory{}.Fields()
+	_ = workflowdefinitionhistoryFields
+	// workflowdefinitionhistoryDescHistoryTime is the schema descriptor for history_time field.
+	workflowdefinitionhistoryDescHistoryTime := workflowdefinitionhistoryFields[0].Descriptor()
+	// workflowdefinitionhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workflowdefinitionhistory.DefaultHistoryTime = workflowdefinitionhistoryDescHistoryTime.Default.(func() time.Time)
+	// workflowdefinitionhistoryDescCreatedAt is the schema descriptor for created_at field.
+	workflowdefinitionhistoryDescCreatedAt := workflowdefinitionhistoryFields[3].Descriptor()
+	// workflowdefinitionhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowdefinitionhistory.DefaultCreatedAt = workflowdefinitionhistoryDescCreatedAt.Default.(func() time.Time)
+	// workflowdefinitionhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowdefinitionhistoryDescUpdatedAt := workflowdefinitionhistoryFields[4].Descriptor()
+	// workflowdefinitionhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowdefinitionhistory.DefaultUpdatedAt = workflowdefinitionhistoryDescUpdatedAt.Default.(func() time.Time)
+	// workflowdefinitionhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowdefinitionhistory.UpdateDefaultUpdatedAt = workflowdefinitionhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowdefinitionhistoryDescTags is the schema descriptor for tags field.
+	workflowdefinitionhistoryDescTags := workflowdefinitionhistoryFields[11].Descriptor()
+	// workflowdefinitionhistory.DefaultTags holds the default value on creation for the tags field.
+	workflowdefinitionhistory.DefaultTags = workflowdefinitionhistoryDescTags.Default.([]string)
+	// workflowdefinitionhistoryDescSystemOwned is the schema descriptor for system_owned field.
+	workflowdefinitionhistoryDescSystemOwned := workflowdefinitionhistoryFields[13].Descriptor()
+	// workflowdefinitionhistory.DefaultSystemOwned holds the default value on creation for the system_owned field.
+	workflowdefinitionhistory.DefaultSystemOwned = workflowdefinitionhistoryDescSystemOwned.Default.(bool)
+	// workflowdefinitionhistoryDescRevision is the schema descriptor for revision field.
+	workflowdefinitionhistoryDescRevision := workflowdefinitionhistoryFields[20].Descriptor()
+	// workflowdefinitionhistory.DefaultRevision holds the default value on creation for the revision field.
+	workflowdefinitionhistory.DefaultRevision = workflowdefinitionhistoryDescRevision.Default.(int)
+	// workflowdefinitionhistoryDescDraft is the schema descriptor for draft field.
+	workflowdefinitionhistoryDescDraft := workflowdefinitionhistoryFields[21].Descriptor()
+	// workflowdefinitionhistory.DefaultDraft holds the default value on creation for the draft field.
+	workflowdefinitionhistory.DefaultDraft = workflowdefinitionhistoryDescDraft.Default.(bool)
+	// workflowdefinitionhistoryDescCooldownSeconds is the schema descriptor for cooldown_seconds field.
+	workflowdefinitionhistoryDescCooldownSeconds := workflowdefinitionhistoryFields[23].Descriptor()
+	// workflowdefinitionhistory.DefaultCooldownSeconds holds the default value on creation for the cooldown_seconds field.
+	workflowdefinitionhistory.DefaultCooldownSeconds = workflowdefinitionhistoryDescCooldownSeconds.Default.(int)
+	// workflowdefinitionhistoryDescIsDefault is the schema descriptor for is_default field.
+	workflowdefinitionhistoryDescIsDefault := workflowdefinitionhistoryFields[24].Descriptor()
+	// workflowdefinitionhistory.DefaultIsDefault holds the default value on creation for the is_default field.
+	workflowdefinitionhistory.DefaultIsDefault = workflowdefinitionhistoryDescIsDefault.Default.(bool)
+	// workflowdefinitionhistoryDescActive is the schema descriptor for active field.
+	workflowdefinitionhistoryDescActive := workflowdefinitionhistoryFields[25].Descriptor()
+	// workflowdefinitionhistory.DefaultActive holds the default value on creation for the active field.
+	workflowdefinitionhistory.DefaultActive = workflowdefinitionhistoryDescActive.Default.(bool)
+	// workflowdefinitionhistoryDescTriggerOperations is the schema descriptor for trigger_operations field.
+	workflowdefinitionhistoryDescTriggerOperations := workflowdefinitionhistoryFields[26].Descriptor()
+	// workflowdefinitionhistory.DefaultTriggerOperations holds the default value on creation for the trigger_operations field.
+	workflowdefinitionhistory.DefaultTriggerOperations = workflowdefinitionhistoryDescTriggerOperations.Default.([]string)
+	// workflowdefinitionhistoryDescTriggerFields is the schema descriptor for trigger_fields field.
+	workflowdefinitionhistoryDescTriggerFields := workflowdefinitionhistoryFields[27].Descriptor()
+	// workflowdefinitionhistory.DefaultTriggerFields holds the default value on creation for the trigger_fields field.
+	workflowdefinitionhistory.DefaultTriggerFields = workflowdefinitionhistoryDescTriggerFields.Default.([]string)
+	// workflowdefinitionhistoryDescID is the schema descriptor for id field.
+	workflowdefinitionhistoryDescID := workflowdefinitionhistoryFields[9].Descriptor()
+	// workflowdefinitionhistory.DefaultID holds the default value on creation for the id field.
+	workflowdefinitionhistory.DefaultID = workflowdefinitionhistoryDescID.Default.(func() string)
+	workfloweventMixin := schema.WorkflowEvent{}.Mixin()
+	workflowevent.Policy = privacy.NewPolicies(schema.WorkflowEvent{})
+	workflowevent.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowevent.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workfloweventMixinHooks0 := workfloweventMixin[0].Hooks()
+	workfloweventMixinHooks1 := workfloweventMixin[1].Hooks()
+	workfloweventMixinHooks2 := workfloweventMixin[2].Hooks()
+	workfloweventMixinHooks3 := workfloweventMixin[3].Hooks()
+	workfloweventMixinHooks4 := workfloweventMixin[4].Hooks()
+	workfloweventMixinHooks6 := workfloweventMixin[6].Hooks()
+
+	workflowevent.Hooks[1] = workfloweventMixinHooks0[0]
+
+	workflowevent.Hooks[2] = workfloweventMixinHooks1[0]
+
+	workflowevent.Hooks[3] = workfloweventMixinHooks2[0]
+
+	workflowevent.Hooks[4] = workfloweventMixinHooks3[0]
+
+	workflowevent.Hooks[5] = workfloweventMixinHooks4[0]
+
+	workflowevent.Hooks[6] = workfloweventMixinHooks6[0]
+	workfloweventMixinInters1 := workfloweventMixin[1].Interceptors()
+	workfloweventMixinInters2 := workfloweventMixin[2].Interceptors()
+	workfloweventMixinInters6 := workfloweventMixin[6].Interceptors()
+	workflowevent.Interceptors[0] = workfloweventMixinInters1[0]
+	workflowevent.Interceptors[1] = workfloweventMixinInters2[0]
+	workflowevent.Interceptors[2] = workfloweventMixinInters6[0]
+	workfloweventMixinFields0 := workfloweventMixin[0].Fields()
+	_ = workfloweventMixinFields0
+	workfloweventMixinFields3 := workfloweventMixin[3].Fields()
+	_ = workfloweventMixinFields3
+	workfloweventMixinFields4 := workfloweventMixin[4].Fields()
+	_ = workfloweventMixinFields4
+	workfloweventMixinFields6 := workfloweventMixin[6].Fields()
+	_ = workfloweventMixinFields6
+	workfloweventFields := schema.WorkflowEvent{}.Fields()
+	_ = workfloweventFields
+	// workfloweventDescCreatedAt is the schema descriptor for created_at field.
+	workfloweventDescCreatedAt := workfloweventMixinFields0[0].Descriptor()
+	// workflowevent.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowevent.DefaultCreatedAt = workfloweventDescCreatedAt.Default.(func() time.Time)
+	// workfloweventDescUpdatedAt is the schema descriptor for updated_at field.
+	workfloweventDescUpdatedAt := workfloweventMixinFields0[1].Descriptor()
+	// workflowevent.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowevent.DefaultUpdatedAt = workfloweventDescUpdatedAt.Default.(func() time.Time)
+	// workflowevent.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowevent.UpdateDefaultUpdatedAt = workfloweventDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workfloweventDescDisplayID is the schema descriptor for display_id field.
+	workfloweventDescDisplayID := workfloweventMixinFields3[1].Descriptor()
+	// workflowevent.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowevent.DisplayIDValidator = workfloweventDescDisplayID.Validators[0].(func(string) error)
+	// workfloweventDescTags is the schema descriptor for tags field.
+	workfloweventDescTags := workfloweventMixinFields4[0].Descriptor()
+	// workflowevent.DefaultTags holds the default value on creation for the tags field.
+	workflowevent.DefaultTags = workfloweventDescTags.Default.([]string)
+	// workfloweventDescOwnerID is the schema descriptor for owner_id field.
+	workfloweventDescOwnerID := workfloweventMixinFields6[0].Descriptor()
+	// workflowevent.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowevent.OwnerIDValidator = workfloweventDescOwnerID.Validators[0].(func(string) error)
+	// workfloweventDescWorkflowInstanceID is the schema descriptor for workflow_instance_id field.
+	workfloweventDescWorkflowInstanceID := workfloweventFields[0].Descriptor()
+	// workflowevent.WorkflowInstanceIDValidator is a validator for the "workflow_instance_id" field. It is called by the builders before save.
+	workflowevent.WorkflowInstanceIDValidator = workfloweventDescWorkflowInstanceID.Validators[0].(func(string) error)
+	// workfloweventDescID is the schema descriptor for id field.
+	workfloweventDescID := workfloweventMixinFields3[0].Descriptor()
+	// workflowevent.DefaultID holds the default value on creation for the id field.
+	workflowevent.DefaultID = workfloweventDescID.Default.(func() string)
+	workfloweventhistory.Policy = privacy.NewPolicies(schema.WorkflowEventHistory{})
+	workfloweventhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workfloweventhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workfloweventhistoryInters := schema.WorkflowEventHistory{}.Interceptors()
+	workfloweventhistory.Interceptors[0] = workfloweventhistoryInters[0]
+	workfloweventhistoryFields := schema.WorkflowEventHistory{}.Fields()
+	_ = workfloweventhistoryFields
+	// workfloweventhistoryDescHistoryTime is the schema descriptor for history_time field.
+	workfloweventhistoryDescHistoryTime := workfloweventhistoryFields[0].Descriptor()
+	// workfloweventhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workfloweventhistory.DefaultHistoryTime = workfloweventhistoryDescHistoryTime.Default.(func() time.Time)
+	// workfloweventhistoryDescCreatedAt is the schema descriptor for created_at field.
+	workfloweventhistoryDescCreatedAt := workfloweventhistoryFields[3].Descriptor()
+	// workfloweventhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workfloweventhistory.DefaultCreatedAt = workfloweventhistoryDescCreatedAt.Default.(func() time.Time)
+	// workfloweventhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workfloweventhistoryDescUpdatedAt := workfloweventhistoryFields[4].Descriptor()
+	// workfloweventhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workfloweventhistory.DefaultUpdatedAt = workfloweventhistoryDescUpdatedAt.Default.(func() time.Time)
+	// workfloweventhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workfloweventhistory.UpdateDefaultUpdatedAt = workfloweventhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workfloweventhistoryDescTags is the schema descriptor for tags field.
+	workfloweventhistoryDescTags := workfloweventhistoryFields[11].Descriptor()
+	// workfloweventhistory.DefaultTags holds the default value on creation for the tags field.
+	workfloweventhistory.DefaultTags = workfloweventhistoryDescTags.Default.([]string)
+	// workfloweventhistoryDescID is the schema descriptor for id field.
+	workfloweventhistoryDescID := workfloweventhistoryFields[9].Descriptor()
+	// workfloweventhistory.DefaultID holds the default value on creation for the id field.
+	workfloweventhistory.DefaultID = workfloweventhistoryDescID.Default.(func() string)
+	workflowinstanceMixin := schema.WorkflowInstance{}.Mixin()
+	workflowinstance.Policy = privacy.NewPolicies(schema.WorkflowInstance{})
+	workflowinstance.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowinstance.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowinstanceMixinHooks0 := workflowinstanceMixin[0].Hooks()
+	workflowinstanceMixinHooks1 := workflowinstanceMixin[1].Hooks()
+	workflowinstanceMixinHooks2 := workflowinstanceMixin[2].Hooks()
+	workflowinstanceMixinHooks3 := workflowinstanceMixin[3].Hooks()
+	workflowinstanceMixinHooks4 := workflowinstanceMixin[4].Hooks()
+	workflowinstanceMixinHooks6 := workflowinstanceMixin[6].Hooks()
+
+	workflowinstance.Hooks[1] = workflowinstanceMixinHooks0[0]
+
+	workflowinstance.Hooks[2] = workflowinstanceMixinHooks1[0]
+
+	workflowinstance.Hooks[3] = workflowinstanceMixinHooks2[0]
+
+	workflowinstance.Hooks[4] = workflowinstanceMixinHooks3[0]
+
+	workflowinstance.Hooks[5] = workflowinstanceMixinHooks4[0]
+
+	workflowinstance.Hooks[6] = workflowinstanceMixinHooks6[0]
+	workflowinstanceMixinInters1 := workflowinstanceMixin[1].Interceptors()
+	workflowinstanceMixinInters2 := workflowinstanceMixin[2].Interceptors()
+	workflowinstanceMixinInters6 := workflowinstanceMixin[6].Interceptors()
+	workflowinstance.Interceptors[0] = workflowinstanceMixinInters1[0]
+	workflowinstance.Interceptors[1] = workflowinstanceMixinInters2[0]
+	workflowinstance.Interceptors[2] = workflowinstanceMixinInters6[0]
+	workflowinstanceMixinFields0 := workflowinstanceMixin[0].Fields()
+	_ = workflowinstanceMixinFields0
+	workflowinstanceMixinFields3 := workflowinstanceMixin[3].Fields()
+	_ = workflowinstanceMixinFields3
+	workflowinstanceMixinFields4 := workflowinstanceMixin[4].Fields()
+	_ = workflowinstanceMixinFields4
+	workflowinstanceMixinFields6 := workflowinstanceMixin[6].Fields()
+	_ = workflowinstanceMixinFields6
+	workflowinstanceFields := schema.WorkflowInstance{}.Fields()
+	_ = workflowinstanceFields
+	// workflowinstanceDescCreatedAt is the schema descriptor for created_at field.
+	workflowinstanceDescCreatedAt := workflowinstanceMixinFields0[0].Descriptor()
+	// workflowinstance.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowinstance.DefaultCreatedAt = workflowinstanceDescCreatedAt.Default.(func() time.Time)
+	// workflowinstanceDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowinstanceDescUpdatedAt := workflowinstanceMixinFields0[1].Descriptor()
+	// workflowinstance.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowinstance.DefaultUpdatedAt = workflowinstanceDescUpdatedAt.Default.(func() time.Time)
+	// workflowinstance.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowinstance.UpdateDefaultUpdatedAt = workflowinstanceDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowinstanceDescDisplayID is the schema descriptor for display_id field.
+	workflowinstanceDescDisplayID := workflowinstanceMixinFields3[1].Descriptor()
+	// workflowinstance.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowinstance.DisplayIDValidator = workflowinstanceDescDisplayID.Validators[0].(func(string) error)
+	// workflowinstanceDescTags is the schema descriptor for tags field.
+	workflowinstanceDescTags := workflowinstanceMixinFields4[0].Descriptor()
+	// workflowinstance.DefaultTags holds the default value on creation for the tags field.
+	workflowinstance.DefaultTags = workflowinstanceDescTags.Default.([]string)
+	// workflowinstanceDescOwnerID is the schema descriptor for owner_id field.
+	workflowinstanceDescOwnerID := workflowinstanceMixinFields6[0].Descriptor()
+	// workflowinstance.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowinstance.OwnerIDValidator = workflowinstanceDescOwnerID.Validators[0].(func(string) error)
+	// workflowinstanceDescWorkflowDefinitionID is the schema descriptor for workflow_definition_id field.
+	workflowinstanceDescWorkflowDefinitionID := workflowinstanceFields[0].Descriptor()
+	// workflowinstance.WorkflowDefinitionIDValidator is a validator for the "workflow_definition_id" field. It is called by the builders before save.
+	workflowinstance.WorkflowDefinitionIDValidator = workflowinstanceDescWorkflowDefinitionID.Validators[0].(func(string) error)
+	// workflowinstanceDescID is the schema descriptor for id field.
+	workflowinstanceDescID := workflowinstanceMixinFields3[0].Descriptor()
+	// workflowinstance.DefaultID holds the default value on creation for the id field.
+	workflowinstance.DefaultID = workflowinstanceDescID.Default.(func() string)
+	workflowinstancehistory.Policy = privacy.NewPolicies(schema.WorkflowInstanceHistory{})
+	workflowinstancehistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowinstancehistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowinstancehistoryInters := schema.WorkflowInstanceHistory{}.Interceptors()
+	workflowinstancehistory.Interceptors[0] = workflowinstancehistoryInters[0]
+	workflowinstancehistoryFields := schema.WorkflowInstanceHistory{}.Fields()
+	_ = workflowinstancehistoryFields
+	// workflowinstancehistoryDescHistoryTime is the schema descriptor for history_time field.
+	workflowinstancehistoryDescHistoryTime := workflowinstancehistoryFields[0].Descriptor()
+	// workflowinstancehistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workflowinstancehistory.DefaultHistoryTime = workflowinstancehistoryDescHistoryTime.Default.(func() time.Time)
+	// workflowinstancehistoryDescCreatedAt is the schema descriptor for created_at field.
+	workflowinstancehistoryDescCreatedAt := workflowinstancehistoryFields[3].Descriptor()
+	// workflowinstancehistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowinstancehistory.DefaultCreatedAt = workflowinstancehistoryDescCreatedAt.Default.(func() time.Time)
+	// workflowinstancehistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowinstancehistoryDescUpdatedAt := workflowinstancehistoryFields[4].Descriptor()
+	// workflowinstancehistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowinstancehistory.DefaultUpdatedAt = workflowinstancehistoryDescUpdatedAt.Default.(func() time.Time)
+	// workflowinstancehistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowinstancehistory.UpdateDefaultUpdatedAt = workflowinstancehistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowinstancehistoryDescTags is the schema descriptor for tags field.
+	workflowinstancehistoryDescTags := workflowinstancehistoryFields[11].Descriptor()
+	// workflowinstancehistory.DefaultTags holds the default value on creation for the tags field.
+	workflowinstancehistory.DefaultTags = workflowinstancehistoryDescTags.Default.([]string)
+	// workflowinstancehistoryDescID is the schema descriptor for id field.
+	workflowinstancehistoryDescID := workflowinstancehistoryFields[9].Descriptor()
+	// workflowinstancehistory.DefaultID holds the default value on creation for the id field.
+	workflowinstancehistory.DefaultID = workflowinstancehistoryDescID.Default.(func() string)
+	workflowobjectrefMixin := schema.WorkflowObjectRef{}.Mixin()
+	workflowobjectref.Policy = privacy.NewPolicies(schema.WorkflowObjectRef{})
+	workflowobjectref.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowobjectref.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowobjectrefMixinHooks0 := workflowobjectrefMixin[0].Hooks()
+	workflowobjectrefMixinHooks1 := workflowobjectrefMixin[1].Hooks()
+	workflowobjectrefMixinHooks2 := workflowobjectrefMixin[2].Hooks()
+	workflowobjectrefMixinHooks4 := workflowobjectrefMixin[4].Hooks()
+
+	workflowobjectref.Hooks[1] = workflowobjectrefMixinHooks0[0]
+
+	workflowobjectref.Hooks[2] = workflowobjectrefMixinHooks1[0]
+
+	workflowobjectref.Hooks[3] = workflowobjectrefMixinHooks2[0]
+
+	workflowobjectref.Hooks[4] = workflowobjectrefMixinHooks4[0]
+	workflowobjectrefMixinInters1 := workflowobjectrefMixin[1].Interceptors()
+	workflowobjectrefMixinInters4 := workflowobjectrefMixin[4].Interceptors()
+	workflowobjectref.Interceptors[0] = workflowobjectrefMixinInters1[0]
+	workflowobjectref.Interceptors[1] = workflowobjectrefMixinInters4[0]
+	workflowobjectrefMixinFields0 := workflowobjectrefMixin[0].Fields()
+	_ = workflowobjectrefMixinFields0
+	workflowobjectrefMixinFields2 := workflowobjectrefMixin[2].Fields()
+	_ = workflowobjectrefMixinFields2
+	workflowobjectrefMixinFields4 := workflowobjectrefMixin[4].Fields()
+	_ = workflowobjectrefMixinFields4
+	workflowobjectrefFields := schema.WorkflowObjectRef{}.Fields()
+	_ = workflowobjectrefFields
+	// workflowobjectrefDescCreatedAt is the schema descriptor for created_at field.
+	workflowobjectrefDescCreatedAt := workflowobjectrefMixinFields0[0].Descriptor()
+	// workflowobjectref.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowobjectref.DefaultCreatedAt = workflowobjectrefDescCreatedAt.Default.(func() time.Time)
+	// workflowobjectrefDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowobjectrefDescUpdatedAt := workflowobjectrefMixinFields0[1].Descriptor()
+	// workflowobjectref.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowobjectref.DefaultUpdatedAt = workflowobjectrefDescUpdatedAt.Default.(func() time.Time)
+	// workflowobjectref.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowobjectref.UpdateDefaultUpdatedAt = workflowobjectrefDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowobjectrefDescDisplayID is the schema descriptor for display_id field.
+	workflowobjectrefDescDisplayID := workflowobjectrefMixinFields2[1].Descriptor()
+	// workflowobjectref.DisplayIDValidator is a validator for the "display_id" field. It is called by the builders before save.
+	workflowobjectref.DisplayIDValidator = workflowobjectrefDescDisplayID.Validators[0].(func(string) error)
+	// workflowobjectrefDescOwnerID is the schema descriptor for owner_id field.
+	workflowobjectrefDescOwnerID := workflowobjectrefMixinFields4[0].Descriptor()
+	// workflowobjectref.OwnerIDValidator is a validator for the "owner_id" field. It is called by the builders before save.
+	workflowobjectref.OwnerIDValidator = workflowobjectrefDescOwnerID.Validators[0].(func(string) error)
+	// workflowobjectrefDescWorkflowInstanceID is the schema descriptor for workflow_instance_id field.
+	workflowobjectrefDescWorkflowInstanceID := workflowobjectrefFields[0].Descriptor()
+	// workflowobjectref.WorkflowInstanceIDValidator is a validator for the "workflow_instance_id" field. It is called by the builders before save.
+	workflowobjectref.WorkflowInstanceIDValidator = workflowobjectrefDescWorkflowInstanceID.Validators[0].(func(string) error)
+	// workflowobjectrefDescID is the schema descriptor for id field.
+	workflowobjectrefDescID := workflowobjectrefMixinFields2[0].Descriptor()
+	// workflowobjectref.DefaultID holds the default value on creation for the id field.
+	workflowobjectref.DefaultID = workflowobjectrefDescID.Default.(func() string)
+	workflowobjectrefhistory.Policy = privacy.NewPolicies(schema.WorkflowObjectRefHistory{})
+	workflowobjectrefhistory.Hooks[0] = func(next ent.Mutator) ent.Mutator {
+		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
+			if err := workflowobjectrefhistory.Policy.EvalMutation(ctx, m); err != nil {
+				return nil, err
+			}
+			return next.Mutate(ctx, m)
+		})
+	}
+	workflowobjectrefhistoryInters := schema.WorkflowObjectRefHistory{}.Interceptors()
+	workflowobjectrefhistory.Interceptors[0] = workflowobjectrefhistoryInters[0]
+	workflowobjectrefhistoryFields := schema.WorkflowObjectRefHistory{}.Fields()
+	_ = workflowobjectrefhistoryFields
+	// workflowobjectrefhistoryDescHistoryTime is the schema descriptor for history_time field.
+	workflowobjectrefhistoryDescHistoryTime := workflowobjectrefhistoryFields[0].Descriptor()
+	// workflowobjectrefhistory.DefaultHistoryTime holds the default value on creation for the history_time field.
+	workflowobjectrefhistory.DefaultHistoryTime = workflowobjectrefhistoryDescHistoryTime.Default.(func() time.Time)
+	// workflowobjectrefhistoryDescCreatedAt is the schema descriptor for created_at field.
+	workflowobjectrefhistoryDescCreatedAt := workflowobjectrefhistoryFields[3].Descriptor()
+	// workflowobjectrefhistory.DefaultCreatedAt holds the default value on creation for the created_at field.
+	workflowobjectrefhistory.DefaultCreatedAt = workflowobjectrefhistoryDescCreatedAt.Default.(func() time.Time)
+	// workflowobjectrefhistoryDescUpdatedAt is the schema descriptor for updated_at field.
+	workflowobjectrefhistoryDescUpdatedAt := workflowobjectrefhistoryFields[4].Descriptor()
+	// workflowobjectrefhistory.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	workflowobjectrefhistory.DefaultUpdatedAt = workflowobjectrefhistoryDescUpdatedAt.Default.(func() time.Time)
+	// workflowobjectrefhistory.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	workflowobjectrefhistory.UpdateDefaultUpdatedAt = workflowobjectrefhistoryDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// workflowobjectrefhistoryDescID is the schema descriptor for id field.
+	workflowobjectrefhistoryDescID := workflowobjectrefhistoryFields[7].Descriptor()
+	// workflowobjectrefhistory.DefaultID holds the default value on creation for the id field.
+	workflowobjectrefhistory.DefaultID = workflowobjectrefhistoryDescID.Default.(func() string)
 }
 
 const (

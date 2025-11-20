@@ -688,6 +688,7 @@ type ComplexityRoot struct {
 		Title                      func(childComplexity int) int
 		UpdatedAt                  func(childComplexity int) int
 		UpdatedBy                  func(childComplexity int) int
+		WorkflowObjectRefs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	ControlBulkCreatePayload struct {
@@ -1217,6 +1218,358 @@ type ComplexityRoot struct {
 
 	DNSVerificationUpdatePayload struct {
 		DNSVerification func(childComplexity int) int
+	}
+
+	DirectoryAccount struct {
+		AccountType        func(childComplexity int) int
+		CanonicalEmail     func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		Department         func(childComplexity int) int
+		DirectorySyncRun   func(childComplexity int) int
+		DirectorySyncRunID func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		ExternalID         func(childComplexity int) int
+		FamilyName         func(childComplexity int) int
+		GivenName          func(childComplexity int) int
+		Groups             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		ID                 func(childComplexity int) int
+		Integration        func(childComplexity int) int
+		IntegrationID      func(childComplexity int) int
+		JobTitle           func(childComplexity int) int
+		LastLoginAt        func(childComplexity int) int
+		LastSeenIP         func(childComplexity int) int
+		Memberships        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		MfaState           func(childComplexity int) int
+		ObservedAt         func(childComplexity int) int
+		OrganizationUnit   func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Profile            func(childComplexity int) int
+		ProfileHash        func(childComplexity int) int
+		RawProfileFileID   func(childComplexity int) int
+		SecondaryKey       func(childComplexity int) int
+		SourceVersion      func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		WorkflowObjectRefs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+	}
+
+	DirectoryAccountBulkCreatePayload struct {
+		DirectoryAccounts func(childComplexity int) int
+	}
+
+	DirectoryAccountConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryAccountCreatePayload struct {
+		DirectoryAccount func(childComplexity int) int
+	}
+
+	DirectoryAccountDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DirectoryAccountEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryAccountHistory struct {
+		AccountType        func(childComplexity int) int
+		CanonicalEmail     func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		Department         func(childComplexity int) int
+		DirectorySyncRunID func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		DisplayName        func(childComplexity int) int
+		ExternalID         func(childComplexity int) int
+		FamilyName         func(childComplexity int) int
+		GivenName          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		IntegrationID      func(childComplexity int) int
+		JobTitle           func(childComplexity int) int
+		LastLoginAt        func(childComplexity int) int
+		LastSeenIP         func(childComplexity int) int
+		MfaState           func(childComplexity int) int
+		ObservedAt         func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OrganizationUnit   func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Profile            func(childComplexity int) int
+		ProfileHash        func(childComplexity int) int
+		RawProfileFileID   func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		SecondaryKey       func(childComplexity int) int
+		SourceVersion      func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+	}
+
+	DirectoryAccountHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryAccountHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryAccountUpdatePayload struct {
+		DirectoryAccount func(childComplexity int) int
+	}
+
+	DirectoryGroup struct {
+		Accounts               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		Classification         func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DirectorySyncRun       func(childComplexity int) int
+		DirectorySyncRunID     func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DisplayName            func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		ExternalID             func(childComplexity int) int
+		ExternalSharingAllowed func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		Integration            func(childComplexity int) int
+		IntegrationID          func(childComplexity int) int
+		MemberCount            func(childComplexity int) int
+		Members                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		ObservedAt             func(childComplexity int) int
+		Owner                  func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Profile                func(childComplexity int) int
+		ProfileHash            func(childComplexity int) int
+		RawProfileFileID       func(childComplexity int) int
+		SourceVersion          func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+	}
+
+	DirectoryGroupBulkCreatePayload struct {
+		DirectoryGroups func(childComplexity int) int
+	}
+
+	DirectoryGroupConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryGroupCreatePayload struct {
+		DirectoryGroup func(childComplexity int) int
+	}
+
+	DirectoryGroupDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DirectoryGroupEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryGroupHistory struct {
+		Classification         func(childComplexity int) int
+		CreatedAt              func(childComplexity int) int
+		CreatedBy              func(childComplexity int) int
+		Description            func(childComplexity int) int
+		DirectorySyncRunID     func(childComplexity int) int
+		DisplayID              func(childComplexity int) int
+		DisplayName            func(childComplexity int) int
+		Email                  func(childComplexity int) int
+		ExternalID             func(childComplexity int) int
+		ExternalSharingAllowed func(childComplexity int) int
+		HistoryTime            func(childComplexity int) int
+		ID                     func(childComplexity int) int
+		IntegrationID          func(childComplexity int) int
+		MemberCount            func(childComplexity int) int
+		ObservedAt             func(childComplexity int) int
+		Operation              func(childComplexity int) int
+		OwnerID                func(childComplexity int) int
+		Profile                func(childComplexity int) int
+		ProfileHash            func(childComplexity int) int
+		RawProfileFileID       func(childComplexity int) int
+		Ref                    func(childComplexity int) int
+		SourceVersion          func(childComplexity int) int
+		Status                 func(childComplexity int) int
+		Tags                   func(childComplexity int) int
+		UpdatedAt              func(childComplexity int) int
+		UpdatedBy              func(childComplexity int) int
+	}
+
+	DirectoryGroupHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryGroupHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryGroupUpdatePayload struct {
+		DirectoryGroup func(childComplexity int) int
+	}
+
+	DirectoryMembership struct {
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DirectoryAccount   func(childComplexity int) int
+		DirectoryAccountID func(childComplexity int) int
+		DirectoryGroup     func(childComplexity int) int
+		DirectoryGroupID   func(childComplexity int) int
+		DirectorySyncRun   func(childComplexity int) int
+		DirectorySyncRunID func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		Events             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		FirstSeenAt        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Integration        func(childComplexity int) int
+		IntegrationID      func(childComplexity int) int
+		LastConfirmedRunID func(childComplexity int) int
+		LastSeenAt         func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		ObservedAt         func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Role               func(childComplexity int) int
+		Source             func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		WorkflowObjectRefs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+	}
+
+	DirectoryMembershipBulkCreatePayload struct {
+		DirectoryMemberships func(childComplexity int) int
+	}
+
+	DirectoryMembershipConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryMembershipCreatePayload struct {
+		DirectoryMembership func(childComplexity int) int
+	}
+
+	DirectoryMembershipDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DirectoryMembershipEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryMembershipHistory struct {
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DirectoryAccountID func(childComplexity int) int
+		DirectoryGroupID   func(childComplexity int) int
+		DirectorySyncRunID func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		FirstSeenAt        func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		IntegrationID      func(childComplexity int) int
+		LastConfirmedRunID func(childComplexity int) int
+		LastSeenAt         func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		ObservedAt         func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Role               func(childComplexity int) int
+		Source             func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+	}
+
+	DirectoryMembershipHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectoryMembershipHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectoryMembershipUpdatePayload struct {
+		DirectoryMembership func(childComplexity int) int
+	}
+
+	DirectorySyncRun struct {
+		CompletedAt          func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DeltaCount           func(childComplexity int) int
+		DirectoryAccounts    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DisplayID            func(childComplexity int) int
+		Error                func(childComplexity int) int
+		FullCount            func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		Integration          func(childComplexity int) int
+		IntegrationID        func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		RawManifestFileID    func(childComplexity int) int
+		SourceCursor         func(childComplexity int) int
+		StartedAt            func(childComplexity int) int
+		Stats                func(childComplexity int) int
+		Status               func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+	}
+
+	DirectorySyncRunBulkCreatePayload struct {
+		DirectorySyncRuns func(childComplexity int) int
+	}
+
+	DirectorySyncRunConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	DirectorySyncRunCreatePayload struct {
+		DirectorySyncRun func(childComplexity int) int
+	}
+
+	DirectorySyncRunDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	DirectorySyncRunEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	DirectorySyncRunUpdatePayload struct {
+		DirectorySyncRun func(childComplexity int) int
 	}
 
 	DocumentData struct {
@@ -1829,6 +2182,7 @@ type ComplexityRoot struct {
 		Vector             func(childComplexity int) int
 		Viewers            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Vulnerabilities    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WorkflowObjectRefs func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	FindingBulkCreatePayload struct {
@@ -2382,31 +2736,35 @@ type ComplexityRoot struct {
 	}
 
 	Integration struct {
-		ActionPlans      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		CreatedAt        func(childComplexity int) int
-		CreatedBy        func(childComplexity int) int
-		Description      func(childComplexity int) int
-		Events           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		ID               func(childComplexity int) int
-		IntegrationType  func(childComplexity int) int
-		InternalNotes    func(childComplexity int) int
-		Kind             func(childComplexity int) int
-		Metadata         func(childComplexity int) int
-		Name             func(childComplexity int) int
-		Owner            func(childComplexity int) int
-		OwnerID          func(childComplexity int) int
-		Remediations     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Secrets          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		SystemInternalID func(childComplexity int) int
-		SystemOwned      func(childComplexity int) int
-		Tags             func(childComplexity int) int
-		Tasks            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		UpdatedAt        func(childComplexity int) int
-		UpdatedBy        func(childComplexity int) int
-		Vulnerabilities  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		ActionPlans          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		Description          func(childComplexity int) int
+		DirectoryAccounts    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		Events               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Files                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		ID                   func(childComplexity int) int
+		IntegrationType      func(childComplexity int) int
+		InternalNotes        func(childComplexity int) int
+		Kind                 func(childComplexity int) int
+		Metadata             func(childComplexity int) int
+		Name                 func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Remediations         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Secrets              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		SystemInternalID     func(childComplexity int) int
+		SystemOwned          func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		Tasks                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		Vulnerabilities      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
 	}
 
 	IntegrationConnection struct {
@@ -2506,6 +2864,7 @@ type ComplexityRoot struct {
 		URL                             func(childComplexity int) int
 		UpdatedAt                       func(childComplexity int) int
 		UpdatedBy                       func(childComplexity int) int
+		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	InternalPolicyBulkCreatePayload struct {
@@ -3053,365 +3412,415 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		CloneBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
-		CreateAPIToken                       func(childComplexity int, input generated.CreateAPITokenInput) int
-		CreateActionPlan                     func(childComplexity int, input generated.CreateActionPlanInput) int
-		CreateAssessment                     func(childComplexity int, input generated.CreateAssessmentInput) int
-		CreateAssessmentResponse             func(childComplexity int, input generated.CreateAssessmentResponseInput) int
-		CreateAsset                          func(childComplexity int, input generated.CreateAssetInput) int
-		CreateBulkAPIToken                   func(childComplexity int, input []*generated.CreateAPITokenInput) int
-		CreateBulkActionPlan                 func(childComplexity int, input []*generated.CreateActionPlanInput) int
-		CreateBulkAsset                      func(childComplexity int, input []*generated.CreateAssetInput) int
-		CreateBulkCSVAPIToken                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVActionPlan              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVAsset                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVContact                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControl                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlImplementation   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVControlObjective        func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCustomDomain            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVCustomTypeEnum          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDNSVerification         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVDocumentData            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntity                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEntityType              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVEvent                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVFinding                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVFindingControl          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroup                   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupMembership         func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVGroupSetting            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVHush                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInternalPolicy          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVInvite                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVJobTemplate             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappableDomain          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVMappedControl           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVNarrative               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrgMembership           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVOrganizationSetting     func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProcedure               func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgram                 func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVProgramMembership       func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRemediation             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVReview                  func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVRisk                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScan                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVScheduledJob            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubcontrol              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubprocessor            func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVSubscriber              func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTagDefinition           func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTask                    func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTemplate                func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterCompliance   func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterDoc          func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVTrustCenterSubprocessor func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVUserSetting             func(childComplexity int, input graphql.Upload) int
-		CreateBulkCSVVulnerability           func(childComplexity int, input graphql.Upload) int
-		CreateBulkContact                    func(childComplexity int, input []*generated.CreateContactInput) int
-		CreateBulkControl                    func(childComplexity int, input []*generated.CreateControlInput) int
-		CreateBulkControlImplementation      func(childComplexity int, input []*generated.CreateControlImplementationInput) int
-		CreateBulkControlObjective           func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
-		CreateBulkCustomDomain               func(childComplexity int, input []*generated.CreateCustomDomainInput) int
-		CreateBulkCustomTypeEnum             func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
-		CreateBulkDNSVerification            func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
-		CreateBulkDocumentData               func(childComplexity int, input []*generated.CreateDocumentDataInput) int
-		CreateBulkEntity                     func(childComplexity int, input []*generated.CreateEntityInput) int
-		CreateBulkEntityType                 func(childComplexity int, input []*generated.CreateEntityTypeInput) int
-		CreateBulkEvent                      func(childComplexity int, input []*generated.CreateEventInput) int
-		CreateBulkFinding                    func(childComplexity int, input []*generated.CreateFindingInput) int
-		CreateBulkFindingControl             func(childComplexity int, input []*generated.CreateFindingControlInput) int
-		CreateBulkGroup                      func(childComplexity int, input []*generated.CreateGroupInput) int
-		CreateBulkGroupMembership            func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
-		CreateBulkGroupSetting               func(childComplexity int, input []*generated.CreateGroupSettingInput) int
-		CreateBulkHush                       func(childComplexity int, input []*generated.CreateHushInput) int
-		CreateBulkInternalPolicy             func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
-		CreateBulkInvite                     func(childComplexity int, input []*generated.CreateInviteInput) int
-		CreateBulkJobTemplate                func(childComplexity int, input []*generated.CreateJobTemplateInput) int
-		CreateBulkMappableDomain             func(childComplexity int, input []*generated.CreateMappableDomainInput) int
-		CreateBulkMappedControl              func(childComplexity int, input []*generated.CreateMappedControlInput) int
-		CreateBulkNarrative                  func(childComplexity int, input []*generated.CreateNarrativeInput) int
-		CreateBulkOrgMembership              func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
-		CreateBulkOrganizationSetting        func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
-		CreateBulkProcedure                  func(childComplexity int, input []*generated.CreateProcedureInput) int
-		CreateBulkProgram                    func(childComplexity int, input []*generated.CreateProgramInput) int
-		CreateBulkProgramMembership          func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
-		CreateBulkRemediation                func(childComplexity int, input []*generated.CreateRemediationInput) int
-		CreateBulkReview                     func(childComplexity int, input []*generated.CreateReviewInput) int
-		CreateBulkRisk                       func(childComplexity int, input []*generated.CreateRiskInput) int
-		CreateBulkScan                       func(childComplexity int, input []*generated.CreateScanInput) int
-		CreateBulkScheduledJob               func(childComplexity int, input []*generated.CreateScheduledJobInput) int
-		CreateBulkSubcontrol                 func(childComplexity int, input []*generated.CreateSubcontrolInput) int
-		CreateBulkSubprocessor               func(childComplexity int, input []*generated.CreateSubprocessorInput) int
-		CreateBulkSubscriber                 func(childComplexity int, input []*generated.CreateSubscriberInput) int
-		CreateBulkTagDefinition              func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
-		CreateBulkTask                       func(childComplexity int, input []*generated.CreateTaskInput) int
-		CreateBulkTemplate                   func(childComplexity int, input []*generated.CreateTemplateInput) int
-		CreateBulkTrustCenterCompliance      func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
-		CreateBulkTrustCenterDoc             func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
-		CreateBulkTrustCenterSubprocessor    func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
-		CreateBulkUserSetting                func(childComplexity int, input []*generated.CreateUserSettingInput) int
-		CreateBulkVulnerability              func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
-		CreateContact                        func(childComplexity int, input generated.CreateContactInput) int
-		CreateControl                        func(childComplexity int, input generated.CreateControlInput) int
-		CreateControlImplementation          func(childComplexity int, input generated.CreateControlImplementationInput) int
-		CreateControlObjective               func(childComplexity int, input generated.CreateControlObjectiveInput) int
-		CreateControlWithSubcontrols         func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
-		CreateControlsByClone                func(childComplexity int, input *model.CloneControlInput) int
-		CreateCustomDomain                   func(childComplexity int, input generated.CreateCustomDomainInput) int
-		CreateCustomTypeEnum                 func(childComplexity int, input generated.CreateCustomTypeEnumInput) int
-		CreateDNSVerification                func(childComplexity int, input generated.CreateDNSVerificationInput) int
-		CreateDocumentData                   func(childComplexity int, input generated.CreateDocumentDataInput) int
-		CreateEntity                         func(childComplexity int, input generated.CreateEntityInput) int
-		CreateEntityType                     func(childComplexity int, input generated.CreateEntityTypeInput) int
-		CreateEvent                          func(childComplexity int, input generated.CreateEventInput) int
-		CreateEvidence                       func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		CreateExport                         func(childComplexity int, input generated.CreateExportInput) int
-		CreateFinding                        func(childComplexity int, input generated.CreateFindingInput) int
-		CreateFindingControl                 func(childComplexity int, input generated.CreateFindingControlInput) int
-		CreateFullProgram                    func(childComplexity int, input model.CreateFullProgramInput) int
-		CreateGroup                          func(childComplexity int, input generated.CreateGroupInput) int
-		CreateGroupByClone                   func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
-		CreateGroupMembership                func(childComplexity int, input generated.CreateGroupMembershipInput) int
-		CreateGroupSetting                   func(childComplexity int, input generated.CreateGroupSettingInput) int
-		CreateGroupWithMembers               func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
-		CreateHush                           func(childComplexity int, input generated.CreateHushInput) int
-		CreateInternalPolicy                 func(childComplexity int, input generated.CreateInternalPolicyInput) int
-		CreateInvite                         func(childComplexity int, input generated.CreateInviteInput) int
-		CreateJobResult                      func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) int
-		CreateJobRunner                      func(childComplexity int, input generated.CreateJobRunnerInput) int
-		CreateJobRunnerRegistrationToken     func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
-		CreateJobRunnerToken                 func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
-		CreateJobTemplate                    func(childComplexity int, input generated.CreateJobTemplateInput) int
-		CreateMappableDomain                 func(childComplexity int, input generated.CreateMappableDomainInput) int
-		CreateMappedControl                  func(childComplexity int, input generated.CreateMappedControlInput) int
-		CreateNarrative                      func(childComplexity int, input generated.CreateNarrativeInput) int
-		CreateOnboarding                     func(childComplexity int, input generated.CreateOnboardingInput) int
-		CreateOrgMembership                  func(childComplexity int, input generated.CreateOrgMembershipInput) int
-		CreateOrganization                   func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
-		CreateOrganizationSetting            func(childComplexity int, input generated.CreateOrganizationSettingInput) int
-		CreateOrganizationWithMembers        func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
-		CreatePersonalAccessToken            func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
-		CreateProcedure                      func(childComplexity int, input generated.CreateProcedureInput) int
-		CreateProgram                        func(childComplexity int, input generated.CreateProgramInput) int
-		CreateProgramMembership              func(childComplexity int, input generated.CreateProgramMembershipInput) int
-		CreateProgramWithMembers             func(childComplexity int, input model.CreateProgramWithMembersInput) int
-		CreateRemediation                    func(childComplexity int, input generated.CreateRemediationInput) int
-		CreateReview                         func(childComplexity int, input generated.CreateReviewInput) int
-		CreateRisk                           func(childComplexity int, input generated.CreateRiskInput) int
-		CreateScan                           func(childComplexity int, input generated.CreateScanInput) int
-		CreateScheduledJob                   func(childComplexity int, input generated.CreateScheduledJobInput) int
-		CreateScheduledJobRun                func(childComplexity int, input generated.CreateScheduledJobRunInput) int
-		CreateStandard                       func(childComplexity int, input generated.CreateStandardInput) int
-		CreateSubcontrol                     func(childComplexity int, input generated.CreateSubcontrolInput) int
-		CreateSubprocessor                   func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
-		CreateSubscriber                     func(childComplexity int, input generated.CreateSubscriberInput) int
-		CreateTFASetting                     func(childComplexity int, input generated.CreateTFASettingInput) int
-		CreateTagDefinition                  func(childComplexity int, input generated.CreateTagDefinitionInput) int
-		CreateTask                           func(childComplexity int, input generated.CreateTaskInput) int
-		CreateTemplate                       func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
-		CreateTrustCenter                    func(childComplexity int, input generated.CreateTrustCenterInput) int
-		CreateTrustCenterCompliance          func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
-		CreateTrustCenterDoc                 func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
-		CreateTrustCenterDomain              func(childComplexity int, input model.CreateTrustCenterDomainInput) int
-		CreateTrustCenterNda                 func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
-		CreateTrustCenterSetting             func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		CreateTrustCenterSubprocessor        func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
-		CreateTrustCenterWatermarkConfig     func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
-		CreateUploadInternalPolicy           func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
-		CreateUploadProcedure                func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
-		CreateUser                           func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
-		CreateUserSetting                    func(childComplexity int, input generated.CreateUserSettingInput) int
-		CreateVulnerability                  func(childComplexity int, input generated.CreateVulnerabilityInput) int
-		DeleteAPIToken                       func(childComplexity int, id string) int
-		DeleteActionPlan                     func(childComplexity int, id string) int
-		DeleteAssessment                     func(childComplexity int, id string) int
-		DeleteAssessmentResponse             func(childComplexity int, id string) int
-		DeleteAsset                          func(childComplexity int, id string) int
-		DeleteBulkAPIToken                   func(childComplexity int, ids []string) int
-		DeleteBulkActionPlan                 func(childComplexity int, ids []string) int
-		DeleteBulkAsset                      func(childComplexity int, ids []string) int
-		DeleteBulkContact                    func(childComplexity int, ids []string) int
-		DeleteBulkControl                    func(childComplexity int, ids []string) int
-		DeleteBulkControlImplementation      func(childComplexity int, ids []string) int
-		DeleteBulkControlObjective           func(childComplexity int, ids []string) int
-		DeleteBulkCustomDomain               func(childComplexity int, ids []string) int
-		DeleteBulkDNSVerification            func(childComplexity int, ids []string) int
-		DeleteBulkDocumentData               func(childComplexity int, ids []string) int
-		DeleteBulkEntity                     func(childComplexity int, ids []string) int
-		DeleteBulkEntityType                 func(childComplexity int, ids []string) int
-		DeleteBulkEvent                      func(childComplexity int, ids []string) int
-		DeleteBulkExport                     func(childComplexity int, ids []string) int
-		DeleteBulkGroup                      func(childComplexity int, ids []string) int
-		DeleteBulkGroupMembership            func(childComplexity int, ids []string) int
-		DeleteBulkGroupSetting               func(childComplexity int, ids []string) int
-		DeleteBulkHush                       func(childComplexity int, ids []string) int
-		DeleteBulkInternalPolicy             func(childComplexity int, ids []string) int
-		DeleteBulkInvite                     func(childComplexity int, ids []string) int
-		DeleteBulkJobTemplate                func(childComplexity int, ids []string) int
-		DeleteBulkMappableDomain             func(childComplexity int, ids []string) int
-		DeleteBulkMappedControl              func(childComplexity int, ids []string) int
-		DeleteBulkNarrative                  func(childComplexity int, ids []string) int
-		DeleteBulkOrgMembership              func(childComplexity int, ids []string) int
-		DeleteBulkOrganizationSetting        func(childComplexity int, ids []string) int
-		DeleteBulkProcedure                  func(childComplexity int, ids []string) int
-		DeleteBulkProgram                    func(childComplexity int, ids []string) int
-		DeleteBulkProgramMembership          func(childComplexity int, ids []string) int
-		DeleteBulkRisk                       func(childComplexity int, ids []string) int
-		DeleteBulkScan                       func(childComplexity int, ids []string) int
-		DeleteBulkScheduledJob               func(childComplexity int, ids []string) int
-		DeleteBulkSubcontrol                 func(childComplexity int, ids []string) int
-		DeleteBulkSubprocessor               func(childComplexity int, ids []string) int
-		DeleteBulkTask                       func(childComplexity int, ids []string) int
-		DeleteBulkTemplate                   func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterCompliance      func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterDoc             func(childComplexity int, ids []string) int
-		DeleteBulkTrustCenterSubprocessor    func(childComplexity int, ids []string) int
-		DeleteBulkUserSetting                func(childComplexity int, ids []string) int
-		DeleteContact                        func(childComplexity int, id string) int
-		DeleteControl                        func(childComplexity int, id string) int
-		DeleteControlImplementation          func(childComplexity int, id string) int
-		DeleteControlObjective               func(childComplexity int, id string) int
-		DeleteCustomDomain                   func(childComplexity int, id string) int
-		DeleteCustomTypeEnum                 func(childComplexity int, id string) int
-		DeleteDNSVerification                func(childComplexity int, id string) int
-		DeleteDocumentData                   func(childComplexity int, id string) int
-		DeleteEntity                         func(childComplexity int, id string) int
-		DeleteEntityType                     func(childComplexity int, id string) int
-		DeleteEvent                          func(childComplexity int, id string) int
-		DeleteEvidence                       func(childComplexity int, id string) int
-		DeleteExport                         func(childComplexity int, id string) int
-		DeleteFile                           func(childComplexity int, id string) int
-		DeleteFinding                        func(childComplexity int, id string) int
-		DeleteFindingControl                 func(childComplexity int, id string) int
-		DeleteGroup                          func(childComplexity int, id string) int
-		DeleteGroupMembership                func(childComplexity int, id string) int
-		DeleteGroupSetting                   func(childComplexity int, id string) int
-		DeleteHush                           func(childComplexity int, id string) int
-		DeleteIntegration                    func(childComplexity int, id string) int
-		DeleteInternalPolicy                 func(childComplexity int, id string) int
-		DeleteInvite                         func(childComplexity int, id string) int
-		DeleteJobResult                      func(childComplexity int, id string) int
-		DeleteJobRunner                      func(childComplexity int, id string) int
-		DeleteJobRunnerRegistrationToken     func(childComplexity int, id string) int
-		DeleteJobRunnerToken                 func(childComplexity int, id string) int
-		DeleteJobTemplate                    func(childComplexity int, id string) int
-		DeleteMappableDomain                 func(childComplexity int, id string) int
-		DeleteMappedControl                  func(childComplexity int, id string) int
-		DeleteNarrative                      func(childComplexity int, id string) int
-		DeleteNote                           func(childComplexity int, id string) int
-		DeleteOrgMembership                  func(childComplexity int, id string) int
-		DeleteOrganization                   func(childComplexity int, id string) int
-		DeleteOrganizationSetting            func(childComplexity int, id string) int
-		DeletePersonalAccessToken            func(childComplexity int, id string) int
-		DeleteProcedure                      func(childComplexity int, id string) int
-		DeleteProgram                        func(childComplexity int, id string) int
-		DeleteProgramMembership              func(childComplexity int, id string) int
-		DeleteRemediation                    func(childComplexity int, id string) int
-		DeleteReview                         func(childComplexity int, id string) int
-		DeleteRisk                           func(childComplexity int, id string) int
-		DeleteScan                           func(childComplexity int, id string) int
-		DeleteScheduledJob                   func(childComplexity int, id string) int
-		DeleteScheduledJobRun                func(childComplexity int, id string) int
-		DeleteStandard                       func(childComplexity int, id string) int
-		DeleteSubcontrol                     func(childComplexity int, id string) int
-		DeleteSubprocessor                   func(childComplexity int, id string) int
-		DeleteSubscriber                     func(childComplexity int, email string, ownerID *string) int
-		DeleteTagDefinition                  func(childComplexity int, id string) int
-		DeleteTask                           func(childComplexity int, id string) int
-		DeleteTemplate                       func(childComplexity int, id string) int
-		DeleteTrustCenter                    func(childComplexity int, id string) int
-		DeleteTrustCenterCompliance          func(childComplexity int, id string) int
-		DeleteTrustCenterDoc                 func(childComplexity int, id string) int
-		DeleteTrustCenterSetting             func(childComplexity int, id string) int
-		DeleteTrustCenterSubprocessor        func(childComplexity int, id string) int
-		DeleteTrustCenterWatermarkConfig     func(childComplexity int, id string) int
-		DeleteUser                           func(childComplexity int, id string) int
-		DeleteVulnerability                  func(childComplexity int, id string) int
-		DeleteWebauthn                       func(childComplexity int, id string) int
-		SendTrustCenterNDAEmail              func(childComplexity int, input model.SendTrustCenterNDAInput) int
-		SubmitTrustCenterNDAResponse         func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
-		TransferOrganizationOwnership        func(childComplexity int, newOwnerEmail string) int
-		UpdateAPIToken                       func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
-		UpdateActionPlan                     func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
-		UpdateAssessment                     func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
-		UpdateAsset                          func(childComplexity int, id string, input generated.UpdateAssetInput) int
-		UpdateBulkActionPlan                 func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
-		UpdateBulkContact                    func(childComplexity int, ids []string, input generated.UpdateContactInput) int
-		UpdateBulkControl                    func(childComplexity int, ids []string, input generated.UpdateControlInput) int
-		UpdateBulkHush                       func(childComplexity int, ids []string, input generated.UpdateHushInput) int
-		UpdateBulkInternalPolicy             func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
-		UpdateBulkProcedure                  func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
-		UpdateBulkRisk                       func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
-		UpdateBulkScan                       func(childComplexity int, ids []string, input generated.UpdateScanInput) int
-		UpdateBulkTask                       func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
-		UpdateBulkTrustCenterDoc             func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
-		UpdateContact                        func(childComplexity int, id string, input generated.UpdateContactInput) int
-		UpdateControl                        func(childComplexity int, id string, input generated.UpdateControlInput) int
-		UpdateControlComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateControlImplementation          func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
-		UpdateControlObjective               func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
-		UpdateCustomDomain                   func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
-		UpdateCustomTypeEnum                 func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
-		UpdateDNSVerification                func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
-		UpdateDocumentData                   func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
-		UpdateEntity                         func(childComplexity int, id string, input generated.UpdateEntityInput) int
-		UpdateEntityType                     func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
-		UpdateEvent                          func(childComplexity int, id string, input generated.UpdateEventInput) int
-		UpdateEvidence                       func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
-		UpdateExport                         func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
-		UpdateFinding                        func(childComplexity int, id string, input generated.UpdateFindingInput) int
-		UpdateFindingControl                 func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
-		UpdateGroup                          func(childComplexity int, id string, input generated.UpdateGroupInput) int
-		UpdateGroupMembership                func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
-		UpdateGroupSetting                   func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
-		UpdateHush                           func(childComplexity int, id string, input generated.UpdateHushInput) int
-		UpdateInternalPolicy                 func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
-		UpdateInternalPolicyComment          func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateInvite                         func(childComplexity int, id string, input generated.UpdateInviteInput) int
-		UpdateJobResult                      func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
-		UpdateJobRunner                      func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
-		UpdateJobTemplate                    func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
-		UpdateMappableDomain                 func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
-		UpdateMappedControl                  func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
-		UpdateNarrative                      func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
-		UpdateOrgMembership                  func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
-		UpdateOrganization                   func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
-		UpdateOrganizationSetting            func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
-		UpdatePersonalAccessToken            func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
-		UpdateProcedure                      func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
-		UpdateProcedureComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateProgram                        func(childComplexity int, id string, input generated.UpdateProgramInput) int
-		UpdateProgramMembership              func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
-		UpdateRemediation                    func(childComplexity int, id string, input generated.UpdateRemediationInput) int
-		UpdateReview                         func(childComplexity int, id string, input generated.UpdateReviewInput) int
-		UpdateRisk                           func(childComplexity int, id string, input generated.UpdateRiskInput) int
-		UpdateRiskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateScan                           func(childComplexity int, id string, input generated.UpdateScanInput) int
-		UpdateScheduledJob                   func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
-		UpdateScheduledJobRun                func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
-		UpdateStandard                       func(childComplexity int, id string, input generated.UpdateStandardInput) int
-		UpdateSubcontrol                     func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
-		UpdateSubcontrolComment              func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateSubprocessor                   func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
-		UpdateSubscriber                     func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
-		UpdateTFASetting                     func(childComplexity int, input generated.UpdateTFASettingInput) int
-		UpdateTagDefinition                  func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
-		UpdateTask                           func(childComplexity int, id string, input generated.UpdateTaskInput) int
-		UpdateTaskComment                    func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTemplate                       func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
-		UpdateTrustCenter                    func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
-		UpdateTrustCenterCompliance          func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
-		UpdateTrustCenterDoc                 func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
-		UpdateTrustCenterNda                 func(childComplexity int, id string, templateFiles []*graphql.Upload) int
-		UpdateTrustCenterPost                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
-		UpdateTrustCenterSetting             func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
-		UpdateTrustCenterSubprocessor        func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
-		UpdateTrustCenterWatermarkConfig     func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
-		UpdateUser                           func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
-		UpdateUserSetting                    func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
-		UpdateVulnerability                  func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
+		CloneBulkCSVControl                   func(childComplexity int, input graphql.Upload) int
+		CreateAPIToken                        func(childComplexity int, input generated.CreateAPITokenInput) int
+		CreateActionPlan                      func(childComplexity int, input generated.CreateActionPlanInput) int
+		CreateAssessment                      func(childComplexity int, input generated.CreateAssessmentInput) int
+		CreateAssessmentResponse              func(childComplexity int, input generated.CreateAssessmentResponseInput) int
+		CreateAsset                           func(childComplexity int, input generated.CreateAssetInput) int
+		CreateBulkAPIToken                    func(childComplexity int, input []*generated.CreateAPITokenInput) int
+		CreateBulkActionPlan                  func(childComplexity int, input []*generated.CreateActionPlanInput) int
+		CreateBulkAsset                       func(childComplexity int, input []*generated.CreateAssetInput) int
+		CreateBulkCSVAPIToken                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVActionPlan               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVAsset                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVContact                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControl                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlImplementation    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVControlObjective         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomDomain             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVCustomTypeEnum           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDNSVerification          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryAccount         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryGroup           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectoryMembership      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDirectorySyncRun         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVDocumentData             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntity                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEntityType               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVEvent                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFinding                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVFindingControl           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroup                    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupMembership          func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVGroupSetting             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVHush                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInternalPolicy           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVInvite                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVJobTemplate              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappableDomain           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVMappedControl            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVNarrative                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrgMembership            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVOrganizationSetting      func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProcedure                func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgram                  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVProgramMembership        func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRemediation              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVReview                   func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVRisk                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScan                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVScheduledJob             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubcontrol               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubprocessor             func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVSubscriber               func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTagDefinition            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTask                     func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTemplate                 func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterCompliance    func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterDoc           func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVTrustCenterSubprocessor  func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVUserSetting              func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVVulnerability            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowAssignment       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowAssignmentTarget func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowDefinition       func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowEvent            func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowInstance         func(childComplexity int, input graphql.Upload) int
+		CreateBulkCSVWorkflowObjectRef        func(childComplexity int, input graphql.Upload) int
+		CreateBulkContact                     func(childComplexity int, input []*generated.CreateContactInput) int
+		CreateBulkControl                     func(childComplexity int, input []*generated.CreateControlInput) int
+		CreateBulkControlImplementation       func(childComplexity int, input []*generated.CreateControlImplementationInput) int
+		CreateBulkControlObjective            func(childComplexity int, input []*generated.CreateControlObjectiveInput) int
+		CreateBulkCustomDomain                func(childComplexity int, input []*generated.CreateCustomDomainInput) int
+		CreateBulkCustomTypeEnum              func(childComplexity int, input []*generated.CreateCustomTypeEnumInput) int
+		CreateBulkDNSVerification             func(childComplexity int, input []*generated.CreateDNSVerificationInput) int
+		CreateBulkDirectoryAccount            func(childComplexity int, input []*generated.CreateDirectoryAccountInput) int
+		CreateBulkDirectoryGroup              func(childComplexity int, input []*generated.CreateDirectoryGroupInput) int
+		CreateBulkDirectoryMembership         func(childComplexity int, input []*generated.CreateDirectoryMembershipInput) int
+		CreateBulkDirectorySyncRun            func(childComplexity int, input []*generated.CreateDirectorySyncRunInput) int
+		CreateBulkDocumentData                func(childComplexity int, input []*generated.CreateDocumentDataInput) int
+		CreateBulkEntity                      func(childComplexity int, input []*generated.CreateEntityInput) int
+		CreateBulkEntityType                  func(childComplexity int, input []*generated.CreateEntityTypeInput) int
+		CreateBulkEvent                       func(childComplexity int, input []*generated.CreateEventInput) int
+		CreateBulkFinding                     func(childComplexity int, input []*generated.CreateFindingInput) int
+		CreateBulkFindingControl              func(childComplexity int, input []*generated.CreateFindingControlInput) int
+		CreateBulkGroup                       func(childComplexity int, input []*generated.CreateGroupInput) int
+		CreateBulkGroupMembership             func(childComplexity int, input []*generated.CreateGroupMembershipInput) int
+		CreateBulkGroupSetting                func(childComplexity int, input []*generated.CreateGroupSettingInput) int
+		CreateBulkHush                        func(childComplexity int, input []*generated.CreateHushInput) int
+		CreateBulkInternalPolicy              func(childComplexity int, input []*generated.CreateInternalPolicyInput) int
+		CreateBulkInvite                      func(childComplexity int, input []*generated.CreateInviteInput) int
+		CreateBulkJobTemplate                 func(childComplexity int, input []*generated.CreateJobTemplateInput) int
+		CreateBulkMappableDomain              func(childComplexity int, input []*generated.CreateMappableDomainInput) int
+		CreateBulkMappedControl               func(childComplexity int, input []*generated.CreateMappedControlInput) int
+		CreateBulkNarrative                   func(childComplexity int, input []*generated.CreateNarrativeInput) int
+		CreateBulkOrgMembership               func(childComplexity int, input []*generated.CreateOrgMembershipInput) int
+		CreateBulkOrganizationSetting         func(childComplexity int, input []*generated.CreateOrganizationSettingInput) int
+		CreateBulkProcedure                   func(childComplexity int, input []*generated.CreateProcedureInput) int
+		CreateBulkProgram                     func(childComplexity int, input []*generated.CreateProgramInput) int
+		CreateBulkProgramMembership           func(childComplexity int, input []*generated.CreateProgramMembershipInput) int
+		CreateBulkRemediation                 func(childComplexity int, input []*generated.CreateRemediationInput) int
+		CreateBulkReview                      func(childComplexity int, input []*generated.CreateReviewInput) int
+		CreateBulkRisk                        func(childComplexity int, input []*generated.CreateRiskInput) int
+		CreateBulkScan                        func(childComplexity int, input []*generated.CreateScanInput) int
+		CreateBulkScheduledJob                func(childComplexity int, input []*generated.CreateScheduledJobInput) int
+		CreateBulkSubcontrol                  func(childComplexity int, input []*generated.CreateSubcontrolInput) int
+		CreateBulkSubprocessor                func(childComplexity int, input []*generated.CreateSubprocessorInput) int
+		CreateBulkSubscriber                  func(childComplexity int, input []*generated.CreateSubscriberInput) int
+		CreateBulkTagDefinition               func(childComplexity int, input []*generated.CreateTagDefinitionInput) int
+		CreateBulkTask                        func(childComplexity int, input []*generated.CreateTaskInput) int
+		CreateBulkTemplate                    func(childComplexity int, input []*generated.CreateTemplateInput) int
+		CreateBulkTrustCenterCompliance       func(childComplexity int, input []*generated.CreateTrustCenterComplianceInput) int
+		CreateBulkTrustCenterDoc              func(childComplexity int, input []*generated.CreateTrustCenterDocInput) int
+		CreateBulkTrustCenterSubprocessor     func(childComplexity int, input []*generated.CreateTrustCenterSubprocessorInput) int
+		CreateBulkUserSetting                 func(childComplexity int, input []*generated.CreateUserSettingInput) int
+		CreateBulkVulnerability               func(childComplexity int, input []*generated.CreateVulnerabilityInput) int
+		CreateBulkWorkflowAssignment          func(childComplexity int, input []*generated.CreateWorkflowAssignmentInput) int
+		CreateBulkWorkflowAssignmentTarget    func(childComplexity int, input []*generated.CreateWorkflowAssignmentTargetInput) int
+		CreateBulkWorkflowDefinition          func(childComplexity int, input []*generated.CreateWorkflowDefinitionInput) int
+		CreateBulkWorkflowEvent               func(childComplexity int, input []*generated.CreateWorkflowEventInput) int
+		CreateBulkWorkflowInstance            func(childComplexity int, input []*generated.CreateWorkflowInstanceInput) int
+		CreateBulkWorkflowObjectRef           func(childComplexity int, input []*generated.CreateWorkflowObjectRefInput) int
+		CreateContact                         func(childComplexity int, input generated.CreateContactInput) int
+		CreateControl                         func(childComplexity int, input generated.CreateControlInput) int
+		CreateControlImplementation           func(childComplexity int, input generated.CreateControlImplementationInput) int
+		CreateControlObjective                func(childComplexity int, input generated.CreateControlObjectiveInput) int
+		CreateControlWithSubcontrols          func(childComplexity int, input model.CreateControlWithSubcontrolsInput) int
+		CreateControlsByClone                 func(childComplexity int, input *model.CloneControlInput) int
+		CreateCustomDomain                    func(childComplexity int, input generated.CreateCustomDomainInput) int
+		CreateCustomTypeEnum                  func(childComplexity int, input generated.CreateCustomTypeEnumInput) int
+		CreateDNSVerification                 func(childComplexity int, input generated.CreateDNSVerificationInput) int
+		CreateDirectoryAccount                func(childComplexity int, input generated.CreateDirectoryAccountInput) int
+		CreateDirectoryGroup                  func(childComplexity int, input generated.CreateDirectoryGroupInput) int
+		CreateDirectoryMembership             func(childComplexity int, input generated.CreateDirectoryMembershipInput) int
+		CreateDirectorySyncRun                func(childComplexity int, input generated.CreateDirectorySyncRunInput) int
+		CreateDocumentData                    func(childComplexity int, input generated.CreateDocumentDataInput) int
+		CreateEntity                          func(childComplexity int, input generated.CreateEntityInput) int
+		CreateEntityType                      func(childComplexity int, input generated.CreateEntityTypeInput) int
+		CreateEvent                           func(childComplexity int, input generated.CreateEventInput) int
+		CreateEvidence                        func(childComplexity int, input generated.CreateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		CreateExport                          func(childComplexity int, input generated.CreateExportInput) int
+		CreateFinding                         func(childComplexity int, input generated.CreateFindingInput) int
+		CreateFindingControl                  func(childComplexity int, input generated.CreateFindingControlInput) int
+		CreateFullProgram                     func(childComplexity int, input model.CreateFullProgramInput) int
+		CreateGroup                           func(childComplexity int, input generated.CreateGroupInput) int
+		CreateGroupByClone                    func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput, inheritGroupPermissions *string, cloneGroupMembers *string) int
+		CreateGroupMembership                 func(childComplexity int, input generated.CreateGroupMembershipInput) int
+		CreateGroupSetting                    func(childComplexity int, input generated.CreateGroupSettingInput) int
+		CreateGroupWithMembers                func(childComplexity int, groupInput generated.CreateGroupInput, members []*model.GroupMembersInput) int
+		CreateHush                            func(childComplexity int, input generated.CreateHushInput) int
+		CreateInternalPolicy                  func(childComplexity int, input generated.CreateInternalPolicyInput) int
+		CreateInvite                          func(childComplexity int, input generated.CreateInviteInput) int
+		CreateJobResult                       func(childComplexity int, input generated.CreateJobResultInput, jobResultFiles []*graphql.Upload) int
+		CreateJobRunner                       func(childComplexity int, input generated.CreateJobRunnerInput) int
+		CreateJobRunnerRegistrationToken      func(childComplexity int, input generated.CreateJobRunnerRegistrationTokenInput) int
+		CreateJobRunnerToken                  func(childComplexity int, input generated.CreateJobRunnerTokenInput) int
+		CreateJobTemplate                     func(childComplexity int, input generated.CreateJobTemplateInput) int
+		CreateMappableDomain                  func(childComplexity int, input generated.CreateMappableDomainInput) int
+		CreateMappedControl                   func(childComplexity int, input generated.CreateMappedControlInput) int
+		CreateNarrative                       func(childComplexity int, input generated.CreateNarrativeInput) int
+		CreateOnboarding                      func(childComplexity int, input generated.CreateOnboardingInput) int
+		CreateOrgMembership                   func(childComplexity int, input generated.CreateOrgMembershipInput) int
+		CreateOrganization                    func(childComplexity int, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) int
+		CreateOrganizationSetting             func(childComplexity int, input generated.CreateOrganizationSettingInput) int
+		CreateOrganizationWithMembers         func(childComplexity int, organizationInput generated.CreateOrganizationInput, avatarFile *graphql.Upload, members []*model.OrgMembersInput) int
+		CreatePersonalAccessToken             func(childComplexity int, input generated.CreatePersonalAccessTokenInput) int
+		CreateProcedure                       func(childComplexity int, input generated.CreateProcedureInput) int
+		CreateProgram                         func(childComplexity int, input generated.CreateProgramInput) int
+		CreateProgramMembership               func(childComplexity int, input generated.CreateProgramMembershipInput) int
+		CreateProgramWithMembers              func(childComplexity int, input model.CreateProgramWithMembersInput) int
+		CreateRemediation                     func(childComplexity int, input generated.CreateRemediationInput) int
+		CreateReview                          func(childComplexity int, input generated.CreateReviewInput) int
+		CreateRisk                            func(childComplexity int, input generated.CreateRiskInput) int
+		CreateScan                            func(childComplexity int, input generated.CreateScanInput) int
+		CreateScheduledJob                    func(childComplexity int, input generated.CreateScheduledJobInput) int
+		CreateScheduledJobRun                 func(childComplexity int, input generated.CreateScheduledJobRunInput) int
+		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput) int
+		CreateSubcontrol                      func(childComplexity int, input generated.CreateSubcontrolInput) int
+		CreateSubprocessor                    func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
+		CreateSubscriber                      func(childComplexity int, input generated.CreateSubscriberInput) int
+		CreateTFASetting                      func(childComplexity int, input generated.CreateTFASettingInput) int
+		CreateTagDefinition                   func(childComplexity int, input generated.CreateTagDefinitionInput) int
+		CreateTask                            func(childComplexity int, input generated.CreateTaskInput) int
+		CreateTemplate                        func(childComplexity int, input generated.CreateTemplateInput, templateFiles []*graphql.Upload) int
+		CreateTrustCenter                     func(childComplexity int, input generated.CreateTrustCenterInput) int
+		CreateTrustCenterCompliance           func(childComplexity int, input generated.CreateTrustCenterComplianceInput) int
+		CreateTrustCenterDoc                  func(childComplexity int, input generated.CreateTrustCenterDocInput, trustCenterDocFile graphql.Upload) int
+		CreateTrustCenterDomain               func(childComplexity int, input model.CreateTrustCenterDomainInput) int
+		CreateTrustCenterNda                  func(childComplexity int, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) int
+		CreateTrustCenterSetting              func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		CreateTrustCenterSubprocessor         func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
+		CreateTrustCenterWatermarkConfig      func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
+		CreateUploadInternalPolicy            func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
+		CreateUploadProcedure                 func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
+		CreateUser                            func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
+		CreateUserSetting                     func(childComplexity int, input generated.CreateUserSettingInput) int
+		CreateVulnerability                   func(childComplexity int, input generated.CreateVulnerabilityInput) int
+		CreateWorkflowAssignment              func(childComplexity int, input generated.CreateWorkflowAssignmentInput) int
+		CreateWorkflowAssignmentTarget        func(childComplexity int, input generated.CreateWorkflowAssignmentTargetInput) int
+		CreateWorkflowDefinition              func(childComplexity int, input generated.CreateWorkflowDefinitionInput) int
+		CreateWorkflowEvent                   func(childComplexity int, input generated.CreateWorkflowEventInput) int
+		CreateWorkflowInstance                func(childComplexity int, input generated.CreateWorkflowInstanceInput) int
+		CreateWorkflowObjectRef               func(childComplexity int, input generated.CreateWorkflowObjectRefInput) int
+		DeleteAPIToken                        func(childComplexity int, id string) int
+		DeleteActionPlan                      func(childComplexity int, id string) int
+		DeleteAssessment                      func(childComplexity int, id string) int
+		DeleteAssessmentResponse              func(childComplexity int, id string) int
+		DeleteAsset                           func(childComplexity int, id string) int
+		DeleteBulkAPIToken                    func(childComplexity int, ids []string) int
+		DeleteBulkActionPlan                  func(childComplexity int, ids []string) int
+		DeleteBulkAsset                       func(childComplexity int, ids []string) int
+		DeleteBulkContact                     func(childComplexity int, ids []string) int
+		DeleteBulkControl                     func(childComplexity int, ids []string) int
+		DeleteBulkControlImplementation       func(childComplexity int, ids []string) int
+		DeleteBulkControlObjective            func(childComplexity int, ids []string) int
+		DeleteBulkCustomDomain                func(childComplexity int, ids []string) int
+		DeleteBulkDNSVerification             func(childComplexity int, ids []string) int
+		DeleteBulkDocumentData                func(childComplexity int, ids []string) int
+		DeleteBulkEntity                      func(childComplexity int, ids []string) int
+		DeleteBulkEntityType                  func(childComplexity int, ids []string) int
+		DeleteBulkEvent                       func(childComplexity int, ids []string) int
+		DeleteBulkExport                      func(childComplexity int, ids []string) int
+		DeleteBulkGroup                       func(childComplexity int, ids []string) int
+		DeleteBulkGroupMembership             func(childComplexity int, ids []string) int
+		DeleteBulkGroupSetting                func(childComplexity int, ids []string) int
+		DeleteBulkHush                        func(childComplexity int, ids []string) int
+		DeleteBulkInternalPolicy              func(childComplexity int, ids []string) int
+		DeleteBulkInvite                      func(childComplexity int, ids []string) int
+		DeleteBulkJobTemplate                 func(childComplexity int, ids []string) int
+		DeleteBulkMappableDomain              func(childComplexity int, ids []string) int
+		DeleteBulkMappedControl               func(childComplexity int, ids []string) int
+		DeleteBulkNarrative                   func(childComplexity int, ids []string) int
+		DeleteBulkOrgMembership               func(childComplexity int, ids []string) int
+		DeleteBulkOrganizationSetting         func(childComplexity int, ids []string) int
+		DeleteBulkProcedure                   func(childComplexity int, ids []string) int
+		DeleteBulkProgram                     func(childComplexity int, ids []string) int
+		DeleteBulkProgramMembership           func(childComplexity int, ids []string) int
+		DeleteBulkRisk                        func(childComplexity int, ids []string) int
+		DeleteBulkScan                        func(childComplexity int, ids []string) int
+		DeleteBulkScheduledJob                func(childComplexity int, ids []string) int
+		DeleteBulkSubcontrol                  func(childComplexity int, ids []string) int
+		DeleteBulkSubprocessor                func(childComplexity int, ids []string) int
+		DeleteBulkTask                        func(childComplexity int, ids []string) int
+		DeleteBulkTemplate                    func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterCompliance       func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterDoc              func(childComplexity int, ids []string) int
+		DeleteBulkTrustCenterSubprocessor     func(childComplexity int, ids []string) int
+		DeleteBulkUserSetting                 func(childComplexity int, ids []string) int
+		DeleteContact                         func(childComplexity int, id string) int
+		DeleteControl                         func(childComplexity int, id string) int
+		DeleteControlImplementation           func(childComplexity int, id string) int
+		DeleteControlObjective                func(childComplexity int, id string) int
+		DeleteCustomDomain                    func(childComplexity int, id string) int
+		DeleteCustomTypeEnum                  func(childComplexity int, id string) int
+		DeleteDNSVerification                 func(childComplexity int, id string) int
+		DeleteDirectoryAccount                func(childComplexity int, id string) int
+		DeleteDirectoryGroup                  func(childComplexity int, id string) int
+		DeleteDirectoryMembership             func(childComplexity int, id string) int
+		DeleteDirectorySyncRun                func(childComplexity int, id string) int
+		DeleteDocumentData                    func(childComplexity int, id string) int
+		DeleteEntity                          func(childComplexity int, id string) int
+		DeleteEntityType                      func(childComplexity int, id string) int
+		DeleteEvent                           func(childComplexity int, id string) int
+		DeleteEvidence                        func(childComplexity int, id string) int
+		DeleteExport                          func(childComplexity int, id string) int
+		DeleteFile                            func(childComplexity int, id string) int
+		DeleteFinding                         func(childComplexity int, id string) int
+		DeleteFindingControl                  func(childComplexity int, id string) int
+		DeleteGroup                           func(childComplexity int, id string) int
+		DeleteGroupMembership                 func(childComplexity int, id string) int
+		DeleteGroupSetting                    func(childComplexity int, id string) int
+		DeleteHush                            func(childComplexity int, id string) int
+		DeleteIntegration                     func(childComplexity int, id string) int
+		DeleteInternalPolicy                  func(childComplexity int, id string) int
+		DeleteInvite                          func(childComplexity int, id string) int
+		DeleteJobResult                       func(childComplexity int, id string) int
+		DeleteJobRunner                       func(childComplexity int, id string) int
+		DeleteJobRunnerRegistrationToken      func(childComplexity int, id string) int
+		DeleteJobRunnerToken                  func(childComplexity int, id string) int
+		DeleteJobTemplate                     func(childComplexity int, id string) int
+		DeleteMappableDomain                  func(childComplexity int, id string) int
+		DeleteMappedControl                   func(childComplexity int, id string) int
+		DeleteNarrative                       func(childComplexity int, id string) int
+		DeleteNote                            func(childComplexity int, id string) int
+		DeleteOrgMembership                   func(childComplexity int, id string) int
+		DeleteOrganization                    func(childComplexity int, id string) int
+		DeleteOrganizationSetting             func(childComplexity int, id string) int
+		DeletePersonalAccessToken             func(childComplexity int, id string) int
+		DeleteProcedure                       func(childComplexity int, id string) int
+		DeleteProgram                         func(childComplexity int, id string) int
+		DeleteProgramMembership               func(childComplexity int, id string) int
+		DeleteRemediation                     func(childComplexity int, id string) int
+		DeleteReview                          func(childComplexity int, id string) int
+		DeleteRisk                            func(childComplexity int, id string) int
+		DeleteScan                            func(childComplexity int, id string) int
+		DeleteScheduledJob                    func(childComplexity int, id string) int
+		DeleteScheduledJobRun                 func(childComplexity int, id string) int
+		DeleteStandard                        func(childComplexity int, id string) int
+		DeleteSubcontrol                      func(childComplexity int, id string) int
+		DeleteSubprocessor                    func(childComplexity int, id string) int
+		DeleteSubscriber                      func(childComplexity int, email string, ownerID *string) int
+		DeleteTagDefinition                   func(childComplexity int, id string) int
+		DeleteTask                            func(childComplexity int, id string) int
+		DeleteTemplate                        func(childComplexity int, id string) int
+		DeleteTrustCenter                     func(childComplexity int, id string) int
+		DeleteTrustCenterCompliance           func(childComplexity int, id string) int
+		DeleteTrustCenterDoc                  func(childComplexity int, id string) int
+		DeleteTrustCenterSetting              func(childComplexity int, id string) int
+		DeleteTrustCenterSubprocessor         func(childComplexity int, id string) int
+		DeleteTrustCenterWatermarkConfig      func(childComplexity int, id string) int
+		DeleteUser                            func(childComplexity int, id string) int
+		DeleteVulnerability                   func(childComplexity int, id string) int
+		DeleteWebauthn                        func(childComplexity int, id string) int
+		DeleteWorkflowAssignment              func(childComplexity int, id string) int
+		DeleteWorkflowAssignmentTarget        func(childComplexity int, id string) int
+		DeleteWorkflowDefinition              func(childComplexity int, id string) int
+		DeleteWorkflowEvent                   func(childComplexity int, id string) int
+		DeleteWorkflowInstance                func(childComplexity int, id string) int
+		DeleteWorkflowObjectRef               func(childComplexity int, id string) int
+		SendTrustCenterNDAEmail               func(childComplexity int, input model.SendTrustCenterNDAInput) int
+		SubmitTrustCenterNDAResponse          func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
+		TransferOrganizationOwnership         func(childComplexity int, newOwnerEmail string) int
+		UpdateAPIToken                        func(childComplexity int, id string, input generated.UpdateAPITokenInput) int
+		UpdateActionPlan                      func(childComplexity int, id string, input generated.UpdateActionPlanInput) int
+		UpdateAssessment                      func(childComplexity int, id string, input generated.UpdateAssessmentInput) int
+		UpdateAsset                           func(childComplexity int, id string, input generated.UpdateAssetInput) int
+		UpdateBulkActionPlan                  func(childComplexity int, ids []string, input generated.UpdateActionPlanInput) int
+		UpdateBulkContact                     func(childComplexity int, ids []string, input generated.UpdateContactInput) int
+		UpdateBulkControl                     func(childComplexity int, ids []string, input generated.UpdateControlInput) int
+		UpdateBulkHush                        func(childComplexity int, ids []string, input generated.UpdateHushInput) int
+		UpdateBulkInternalPolicy              func(childComplexity int, ids []string, input generated.UpdateInternalPolicyInput) int
+		UpdateBulkProcedure                   func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
+		UpdateBulkRisk                        func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
+		UpdateBulkScan                        func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkTask                        func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
+		UpdateBulkTrustCenterDoc              func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
+		UpdateContact                         func(childComplexity int, id string, input generated.UpdateContactInput) int
+		UpdateControl                         func(childComplexity int, id string, input generated.UpdateControlInput) int
+		UpdateControlComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateControlImplementation           func(childComplexity int, id string, input generated.UpdateControlImplementationInput) int
+		UpdateControlObjective                func(childComplexity int, id string, input generated.UpdateControlObjectiveInput) int
+		UpdateCustomDomain                    func(childComplexity int, id string, input generated.UpdateCustomDomainInput) int
+		UpdateCustomTypeEnum                  func(childComplexity int, id string, input generated.UpdateCustomTypeEnumInput) int
+		UpdateDNSVerification                 func(childComplexity int, id string, input generated.UpdateDNSVerificationInput) int
+		UpdateDirectoryAccount                func(childComplexity int, id string, input generated.UpdateDirectoryAccountInput) int
+		UpdateDirectoryGroup                  func(childComplexity int, id string, input generated.UpdateDirectoryGroupInput) int
+		UpdateDirectoryMembership             func(childComplexity int, id string, input generated.UpdateDirectoryMembershipInput) int
+		UpdateDirectorySyncRun                func(childComplexity int, id string, input generated.UpdateDirectorySyncRunInput) int
+		UpdateDocumentData                    func(childComplexity int, id string, input generated.UpdateDocumentDataInput) int
+		UpdateEntity                          func(childComplexity int, id string, input generated.UpdateEntityInput) int
+		UpdateEntityType                      func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
+		UpdateEvent                           func(childComplexity int, id string, input generated.UpdateEventInput) int
+		UpdateEvidence                        func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateExport                          func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
+		UpdateFinding                         func(childComplexity int, id string, input generated.UpdateFindingInput) int
+		UpdateFindingControl                  func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
+		UpdateGroup                           func(childComplexity int, id string, input generated.UpdateGroupInput) int
+		UpdateGroupMembership                 func(childComplexity int, id string, input generated.UpdateGroupMembershipInput) int
+		UpdateGroupSetting                    func(childComplexity int, id string, input generated.UpdateGroupSettingInput) int
+		UpdateHush                            func(childComplexity int, id string, input generated.UpdateHushInput) int
+		UpdateInternalPolicy                  func(childComplexity int, id string, input generated.UpdateInternalPolicyInput, internalPolicyFile *graphql.Upload) int
+		UpdateInternalPolicyComment           func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateInvite                          func(childComplexity int, id string, input generated.UpdateInviteInput) int
+		UpdateJobResult                       func(childComplexity int, id string, input generated.UpdateJobResultInput, jobResultFiles []*graphql.Upload) int
+		UpdateJobRunner                       func(childComplexity int, id string, input generated.UpdateJobRunnerInput) int
+		UpdateJobTemplate                     func(childComplexity int, id string, input generated.UpdateJobTemplateInput) int
+		UpdateMappableDomain                  func(childComplexity int, id string, input generated.UpdateMappableDomainInput) int
+		UpdateMappedControl                   func(childComplexity int, id string, input generated.UpdateMappedControlInput) int
+		UpdateNarrative                       func(childComplexity int, id string, input generated.UpdateNarrativeInput) int
+		UpdateOrgMembership                   func(childComplexity int, id string, input generated.UpdateOrgMembershipInput) int
+		UpdateOrganization                    func(childComplexity int, id string, input generated.UpdateOrganizationInput, avatarFile *graphql.Upload) int
+		UpdateOrganizationSetting             func(childComplexity int, id string, input generated.UpdateOrganizationSettingInput) int
+		UpdatePersonalAccessToken             func(childComplexity int, id string, input generated.UpdatePersonalAccessTokenInput) int
+		UpdateProcedure                       func(childComplexity int, id string, input generated.UpdateProcedureInput, procedureFile *graphql.Upload) int
+		UpdateProcedureComment                func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateProgram                         func(childComplexity int, id string, input generated.UpdateProgramInput) int
+		UpdateProgramMembership               func(childComplexity int, id string, input generated.UpdateProgramMembershipInput) int
+		UpdateRemediation                     func(childComplexity int, id string, input generated.UpdateRemediationInput) int
+		UpdateReview                          func(childComplexity int, id string, input generated.UpdateReviewInput) int
+		UpdateRisk                            func(childComplexity int, id string, input generated.UpdateRiskInput) int
+		UpdateRiskComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateScan                            func(childComplexity int, id string, input generated.UpdateScanInput) int
+		UpdateScheduledJob                    func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
+		UpdateScheduledJobRun                 func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
+		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateSubcontrol                      func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
+		UpdateSubcontrolComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateSubprocessor                    func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
+		UpdateSubscriber                      func(childComplexity int, email string, input generated.UpdateSubscriberInput) int
+		UpdateTFASetting                      func(childComplexity int, input generated.UpdateTFASettingInput) int
+		UpdateTagDefinition                   func(childComplexity int, id string, input generated.UpdateTagDefinitionInput) int
+		UpdateTask                            func(childComplexity int, id string, input generated.UpdateTaskInput) int
+		UpdateTaskComment                     func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateTemplate                        func(childComplexity int, id string, input generated.UpdateTemplateInput, templateFiles []*graphql.Upload) int
+		UpdateTrustCenter                     func(childComplexity int, id string, input generated.UpdateTrustCenterInput) int
+		UpdateTrustCenterCompliance           func(childComplexity int, id string, input generated.UpdateTrustCenterComplianceInput) int
+		UpdateTrustCenterDoc                  func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
+		UpdateTrustCenterNda                  func(childComplexity int, id string, templateFiles []*graphql.Upload) int
+		UpdateTrustCenterPost                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateTrustCenterSetting              func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
+		UpdateTrustCenterSubprocessor         func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
+		UpdateTrustCenterWatermarkConfig      func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
+		UpdateUser                            func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
+		UpdateUserSetting                     func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
+		UpdateVulnerability                   func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
+		UpdateWorkflowAssignment              func(childComplexity int, id string, input generated.UpdateWorkflowAssignmentInput) int
+		UpdateWorkflowAssignmentTarget        func(childComplexity int, id string, input generated.UpdateWorkflowAssignmentTargetInput) int
+		UpdateWorkflowDefinition              func(childComplexity int, id string, input generated.UpdateWorkflowDefinitionInput) int
+		UpdateWorkflowEvent                   func(childComplexity int, id string, input generated.UpdateWorkflowEventInput) int
+		UpdateWorkflowInstance                func(childComplexity int, id string, input generated.UpdateWorkflowInstanceInput) int
+		UpdateWorkflowObjectRef               func(childComplexity int, id string, input generated.UpdateWorkflowObjectRefInput) int
 	}
 
 	Narrative struct {
@@ -3731,6 +4140,10 @@ type ComplexityRoot struct {
 		DNSVerifications              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
 		DedicatedDb                   func(childComplexity int) int
 		Description                   func(childComplexity int) int
+		DirectoryAccounts             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		DisplayName                   func(childComplexity int) int
 		Documents                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
 		Entities                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
@@ -3795,6 +4208,12 @@ type ComplexityRoot struct {
 		UpdatedBy                     func(childComplexity int) int
 		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
 		Vulnerabilities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WorkflowAssignmentTargets     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
+		WorkflowAssignments           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
+		WorkflowDefinitions           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
+		WorkflowEvents                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
+		WorkflowInstances             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
+		WorkflowObjectRefs            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -4376,6 +4795,8 @@ type ComplexityRoot struct {
 		AdminCustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminCustomTypeEnumSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDNSVerificationSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminDirectoryAccountSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminDirectoryGroupSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminDocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminEntityTypeSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4419,6 +4840,11 @@ type ComplexityRoot struct {
 		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminVulnerabilitySearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWorkflowAssignmentSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWorkflowAssignmentTargetSearch   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWorkflowDefinitionSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWorkflowEventSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AdminWorkflowInstanceSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Assessment                            func(childComplexity int, id string) int
 		AssessmentHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) int
 		AssessmentResponse                    func(childComplexity int, id string) int
@@ -4464,6 +4890,19 @@ type ComplexityRoot struct {
 		DNSVerificationHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) int
 		DNSVerificationSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		DNSVerifications                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
+		DirectoryAccount                      func(childComplexity int, id string) int
+		DirectoryAccountHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryAccountHistoryOrder, where *generated.DirectoryAccountHistoryWhereInput) int
+		DirectoryAccountSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		DirectoryAccounts                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroup                        func(childComplexity int, id string) int
+		DirectoryGroupHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryGroupHistoryOrder, where *generated.DirectoryGroupHistoryWhereInput) int
+		DirectoryGroupSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		DirectoryGroups                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMembership                   func(childComplexity int, id string) int
+		DirectoryMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryMembershipHistoryOrder, where *generated.DirectoryMembershipHistoryWhereInput) int
+		DirectoryMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRun                      func(childComplexity int, id string) int
+		DirectorySyncRuns                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
 		DocumentData                          func(childComplexity int, id string) int
 		DocumentDataHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
 		DocumentDataSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
@@ -4667,6 +5106,29 @@ type ComplexityRoot struct {
 		VulnerabilitySearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		WebauthnSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
 		Webauthns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+		WorkflowAssignment                    func(childComplexity int, id string) int
+		WorkflowAssignmentHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentHistoryOrder, where *generated.WorkflowAssignmentHistoryWhereInput) int
+		WorkflowAssignmentSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		WorkflowAssignmentTarget              func(childComplexity int, id string) int
+		WorkflowAssignmentTargetHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentTargetHistoryOrder, where *generated.WorkflowAssignmentTargetHistoryWhereInput) int
+		WorkflowAssignmentTargetSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		WorkflowAssignmentTargets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
+		WorkflowAssignments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
+		WorkflowDefinition                    func(childComplexity int, id string) int
+		WorkflowDefinitionHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowDefinitionHistoryOrder, where *generated.WorkflowDefinitionHistoryWhereInput) int
+		WorkflowDefinitionSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		WorkflowDefinitions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
+		WorkflowEvent                         func(childComplexity int, id string) int
+		WorkflowEventHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowEventHistoryOrder, where *generated.WorkflowEventHistoryWhereInput) int
+		WorkflowEventSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		WorkflowEvents                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
+		WorkflowInstance                      func(childComplexity int, id string) int
+		WorkflowInstanceHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowInstanceHistoryOrder, where *generated.WorkflowInstanceHistoryWhereInput) int
+		WorkflowInstanceSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		WorkflowInstances                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
+		WorkflowObjectRef                     func(childComplexity int, id string) int
+		WorkflowObjectRefHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowObjectRefHistoryOrder, where *generated.WorkflowObjectRefHistoryWhereInput) int
+		WorkflowObjectRefs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	Remediation struct {
@@ -5263,6 +5725,8 @@ type ComplexityRoot struct {
 		CustomDomains               func(childComplexity int) int
 		CustomTypeEnums             func(childComplexity int) int
 		DNSVerifications            func(childComplexity int) int
+		DirectoryAccounts           func(childComplexity int) int
+		DirectoryGroups             func(childComplexity int) int
 		DocumentData                func(childComplexity int) int
 		Entities                    func(childComplexity int) int
 		EntityTypes                 func(childComplexity int) int
@@ -5308,6 +5772,11 @@ type ComplexityRoot struct {
 		Users                       func(childComplexity int) int
 		Vulnerabilities             func(childComplexity int) int
 		Webauthns                   func(childComplexity int) int
+		WorkflowAssignmentTargets   func(childComplexity int) int
+		WorkflowAssignments         func(childComplexity int) int
+		WorkflowDefinitions         func(childComplexity int) int
+		WorkflowEvents              func(childComplexity int) int
+		WorkflowInstances           func(childComplexity int) int
 	}
 
 	SearchSnippet struct {
@@ -5816,6 +6285,7 @@ type ComplexityRoot struct {
 		Title                  func(childComplexity int) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
+		WorkflowObjectRefs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	TaskBulkCreatePayload struct {
@@ -6827,6 +7297,508 @@ type ComplexityRoot struct {
 	WebauthnEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignment struct {
+		ActorGroupID              func(childComplexity int) int
+		ActorUserID               func(childComplexity int) int
+		AssignmentKey             func(childComplexity int) int
+		CreatedAt                 func(childComplexity int) int
+		CreatedBy                 func(childComplexity int) int
+		DecidedAt                 func(childComplexity int) int
+		DisplayID                 func(childComplexity int) int
+		Group                     func(childComplexity int) int
+		ID                        func(childComplexity int) int
+		Label                     func(childComplexity int) int
+		Metadata                  func(childComplexity int) int
+		Notes                     func(childComplexity int) int
+		Owner                     func(childComplexity int) int
+		OwnerID                   func(childComplexity int) int
+		Required                  func(childComplexity int) int
+		Role                      func(childComplexity int) int
+		Status                    func(childComplexity int) int
+		Tags                      func(childComplexity int) int
+		UpdatedAt                 func(childComplexity int) int
+		UpdatedBy                 func(childComplexity int) int
+		User                      func(childComplexity int) int
+		WorkflowAssignmentTargets func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
+		WorkflowInstance          func(childComplexity int) int
+		WorkflowInstanceID        func(childComplexity int) int
+	}
+
+	WorkflowAssignmentBulkCreatePayload struct {
+		WorkflowAssignments func(childComplexity int) int
+	}
+
+	WorkflowAssignmentConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowAssignmentCreatePayload struct {
+		WorkflowAssignment func(childComplexity int) int
+	}
+
+	WorkflowAssignmentDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowAssignmentEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignmentHistory struct {
+		ActorGroupID       func(childComplexity int) int
+		ActorUserID        func(childComplexity int) int
+		AssignmentKey      func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DecidedAt          func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Label              func(childComplexity int) int
+		Metadata           func(childComplexity int) int
+		Notes              func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Required           func(childComplexity int) int
+		Role               func(childComplexity int) int
+		Status             func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		WorkflowInstanceID func(childComplexity int) int
+	}
+
+	WorkflowAssignmentHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowAssignmentHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTarget struct {
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		Group                func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		ResolverKey          func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		TargetGroupID        func(childComplexity int) int
+		TargetType           func(childComplexity int) int
+		TargetUserID         func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		User                 func(childComplexity int) int
+		WorkflowAssignment   func(childComplexity int) int
+		WorkflowAssignmentID func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetBulkCreatePayload struct {
+		WorkflowAssignmentTargets func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetCreatePayload struct {
+		WorkflowAssignmentTarget func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetHistory struct {
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		ResolverKey          func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		TargetGroupID        func(childComplexity int) int
+		TargetType           func(childComplexity int) int
+		TargetUserID         func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		WorkflowAssignmentID func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowAssignmentTargetUpdatePayload struct {
+		WorkflowAssignmentTarget func(childComplexity int) int
+	}
+
+	WorkflowAssignmentUpdatePayload struct {
+		WorkflowAssignment func(childComplexity int) int
+	}
+
+	WorkflowDefinition struct {
+		Active            func(childComplexity int) int
+		CooldownSeconds   func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DefinitionJSON    func(childComplexity int) int
+		Description       func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		Draft             func(childComplexity int) int
+		Groups            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                func(childComplexity int) int
+		InternalNotes     func(childComplexity int) int
+		IsDefault         func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Owner             func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		PublishedAt       func(childComplexity int) int
+		Revision          func(childComplexity int) int
+		SchemaType        func(childComplexity int) int
+		SystemInternalID  func(childComplexity int) int
+		SystemOwned       func(childComplexity int) int
+		TagDefinitions    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Tags              func(childComplexity int) int
+		TrackedFields     func(childComplexity int) int
+		TriggerFields     func(childComplexity int) int
+		TriggerOperations func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
+		WorkflowKind      func(childComplexity int) int
+	}
+
+	WorkflowDefinitionBulkCreatePayload struct {
+		WorkflowDefinitions func(childComplexity int) int
+	}
+
+	WorkflowDefinitionConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowDefinitionCreatePayload struct {
+		WorkflowDefinition func(childComplexity int) int
+	}
+
+	WorkflowDefinitionDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowDefinitionEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowDefinitionHistory struct {
+		Active            func(childComplexity int) int
+		CooldownSeconds   func(childComplexity int) int
+		CreatedAt         func(childComplexity int) int
+		CreatedBy         func(childComplexity int) int
+		DefinitionJSON    func(childComplexity int) int
+		Description       func(childComplexity int) int
+		DisplayID         func(childComplexity int) int
+		Draft             func(childComplexity int) int
+		HistoryTime       func(childComplexity int) int
+		ID                func(childComplexity int) int
+		InternalNotes     func(childComplexity int) int
+		IsDefault         func(childComplexity int) int
+		Name              func(childComplexity int) int
+		Operation         func(childComplexity int) int
+		OwnerID           func(childComplexity int) int
+		PublishedAt       func(childComplexity int) int
+		Ref               func(childComplexity int) int
+		Revision          func(childComplexity int) int
+		SchemaType        func(childComplexity int) int
+		SystemInternalID  func(childComplexity int) int
+		SystemOwned       func(childComplexity int) int
+		Tags              func(childComplexity int) int
+		TrackedFields     func(childComplexity int) int
+		TriggerFields     func(childComplexity int) int
+		TriggerOperations func(childComplexity int) int
+		UpdatedAt         func(childComplexity int) int
+		UpdatedBy         func(childComplexity int) int
+		WorkflowKind      func(childComplexity int) int
+	}
+
+	WorkflowDefinitionHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowDefinitionHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowDefinitionUpdatePayload struct {
+		WorkflowDefinition func(childComplexity int) int
+	}
+
+	WorkflowEvent struct {
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		EventType          func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Owner              func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Payload            func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		WorkflowInstance   func(childComplexity int) int
+		WorkflowInstanceID func(childComplexity int) int
+	}
+
+	WorkflowEventBulkCreatePayload struct {
+		WorkflowEvents func(childComplexity int) int
+	}
+
+	WorkflowEventConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowEventCreatePayload struct {
+		WorkflowEvent func(childComplexity int) int
+	}
+
+	WorkflowEventDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowEventEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowEventHistory struct {
+		CreatedAt          func(childComplexity int) int
+		CreatedBy          func(childComplexity int) int
+		DisplayID          func(childComplexity int) int
+		EventType          func(childComplexity int) int
+		HistoryTime        func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Operation          func(childComplexity int) int
+		OwnerID            func(childComplexity int) int
+		Payload            func(childComplexity int) int
+		Ref                func(childComplexity int) int
+		Tags               func(childComplexity int) int
+		UpdatedAt          func(childComplexity int) int
+		UpdatedBy          func(childComplexity int) int
+		WorkflowInstanceID func(childComplexity int) int
+	}
+
+	WorkflowEventHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowEventHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowEventUpdatePayload struct {
+		WorkflowEvent func(childComplexity int) int
+	}
+
+	WorkflowInstance struct {
+		Context              func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DefinitionSnapshot   func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		LastEvaluatedAt      func(childComplexity int) int
+		Owner                func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		State                func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		WorkflowAssignments  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
+		WorkflowDefinition   func(childComplexity int) int
+		WorkflowDefinitionID func(childComplexity int) int
+		WorkflowEvents       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
+		WorkflowObjectRefs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+	}
+
+	WorkflowInstanceBulkCreatePayload struct {
+		WorkflowInstances func(childComplexity int) int
+	}
+
+	WorkflowInstanceConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowInstanceCreatePayload struct {
+		WorkflowInstance func(childComplexity int) int
+	}
+
+	WorkflowInstanceDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowInstanceEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowInstanceHistory struct {
+		Context              func(childComplexity int) int
+		CreatedAt            func(childComplexity int) int
+		CreatedBy            func(childComplexity int) int
+		DefinitionSnapshot   func(childComplexity int) int
+		DisplayID            func(childComplexity int) int
+		HistoryTime          func(childComplexity int) int
+		ID                   func(childComplexity int) int
+		LastEvaluatedAt      func(childComplexity int) int
+		Operation            func(childComplexity int) int
+		OwnerID              func(childComplexity int) int
+		Ref                  func(childComplexity int) int
+		State                func(childComplexity int) int
+		Tags                 func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UpdatedBy            func(childComplexity int) int
+		WorkflowDefinitionID func(childComplexity int) int
+	}
+
+	WorkflowInstanceHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowInstanceHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowInstanceUpdatePayload struct {
+		WorkflowInstance func(childComplexity int) int
+	}
+
+	WorkflowObjectRef struct {
+		Control               func(childComplexity int) int
+		ControlID             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DirectoryAccount      func(childComplexity int) int
+		DirectoryAccountID    func(childComplexity int) int
+		DirectoryGroup        func(childComplexity int) int
+		DirectoryGroupID      func(childComplexity int) int
+		DirectoryMembership   func(childComplexity int) int
+		DirectoryMembershipID func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		Finding               func(childComplexity int) int
+		FindingID             func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalPolicy        func(childComplexity int) int
+		InternalPolicyID      func(childComplexity int) int
+		Owner                 func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Task                  func(childComplexity int) int
+		TaskID                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		WorkflowInstance      func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
+	}
+
+	WorkflowObjectRefBulkCreatePayload struct {
+		WorkflowObjectRefs func(childComplexity int) int
+	}
+
+	WorkflowObjectRefConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowObjectRefCreatePayload struct {
+		WorkflowObjectRef func(childComplexity int) int
+	}
+
+	WorkflowObjectRefDeletePayload struct {
+		DeletedID func(childComplexity int) int
+	}
+
+	WorkflowObjectRefEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowObjectRefHistory struct {
+		ControlID             func(childComplexity int) int
+		CreatedAt             func(childComplexity int) int
+		CreatedBy             func(childComplexity int) int
+		DirectoryAccountID    func(childComplexity int) int
+		DirectoryGroupID      func(childComplexity int) int
+		DirectoryMembershipID func(childComplexity int) int
+		DisplayID             func(childComplexity int) int
+		FindingID             func(childComplexity int) int
+		HistoryTime           func(childComplexity int) int
+		ID                    func(childComplexity int) int
+		InternalPolicyID      func(childComplexity int) int
+		Operation             func(childComplexity int) int
+		OwnerID               func(childComplexity int) int
+		Ref                   func(childComplexity int) int
+		TaskID                func(childComplexity int) int
+		UpdatedAt             func(childComplexity int) int
+		UpdatedBy             func(childComplexity int) int
+		WorkflowInstanceID    func(childComplexity int) int
+	}
+
+	WorkflowObjectRefHistoryConnection struct {
+		Edges      func(childComplexity int) int
+		PageInfo   func(childComplexity int) int
+		TotalCount func(childComplexity int) int
+	}
+
+	WorkflowObjectRefHistoryEdge struct {
+		Cursor func(childComplexity int) int
+		Node   func(childComplexity int) int
+	}
+
+	WorkflowObjectRefUpdatePayload struct {
+		WorkflowObjectRef func(childComplexity int) int
 	}
 }
 
@@ -10038,6 +11010,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Control.UpdatedBy(childComplexity), true
 
+	case "Control.workflowObjectRefs":
+		if e.complexity.Control.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Control_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Control.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
 	case "ControlBulkCreatePayload.controls":
 		if e.complexity.ControlBulkCreatePayload.Controls == nil {
 			break
@@ -12452,6 +13436,1748 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.DNSVerificationUpdatePayload.DNSVerification(childComplexity), true
+
+	case "DirectoryAccount.accountType":
+		if e.complexity.DirectoryAccount.AccountType == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.AccountType(childComplexity), true
+
+	case "DirectoryAccount.canonicalEmail":
+		if e.complexity.DirectoryAccount.CanonicalEmail == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.CanonicalEmail(childComplexity), true
+
+	case "DirectoryAccount.createdAt":
+		if e.complexity.DirectoryAccount.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.CreatedAt(childComplexity), true
+
+	case "DirectoryAccount.createdBy":
+		if e.complexity.DirectoryAccount.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.CreatedBy(childComplexity), true
+
+	case "DirectoryAccount.department":
+		if e.complexity.DirectoryAccount.Department == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Department(childComplexity), true
+
+	case "DirectoryAccount.directorySyncRun":
+		if e.complexity.DirectoryAccount.DirectorySyncRun == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.DirectorySyncRun(childComplexity), true
+
+	case "DirectoryAccount.directorySyncRunID":
+		if e.complexity.DirectoryAccount.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryAccount.displayID":
+		if e.complexity.DirectoryAccount.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.DisplayID(childComplexity), true
+
+	case "DirectoryAccount.displayName":
+		if e.complexity.DirectoryAccount.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.DisplayName(childComplexity), true
+
+	case "DirectoryAccount.externalID":
+		if e.complexity.DirectoryAccount.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ExternalID(childComplexity), true
+
+	case "DirectoryAccount.familyName":
+		if e.complexity.DirectoryAccount.FamilyName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.FamilyName(childComplexity), true
+
+	case "DirectoryAccount.givenName":
+		if e.complexity.DirectoryAccount.GivenName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.GivenName(childComplexity), true
+
+	case "DirectoryAccount.groups":
+		if e.complexity.DirectoryAccount.Groups == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryAccount_groups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryAccount.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "DirectoryAccount.id":
+		if e.complexity.DirectoryAccount.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ID(childComplexity), true
+
+	case "DirectoryAccount.integration":
+		if e.complexity.DirectoryAccount.Integration == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Integration(childComplexity), true
+
+	case "DirectoryAccount.integrationID":
+		if e.complexity.DirectoryAccount.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.IntegrationID(childComplexity), true
+
+	case "DirectoryAccount.jobTitle":
+		if e.complexity.DirectoryAccount.JobTitle == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.JobTitle(childComplexity), true
+
+	case "DirectoryAccount.lastLoginAt":
+		if e.complexity.DirectoryAccount.LastLoginAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.LastLoginAt(childComplexity), true
+
+	case "DirectoryAccount.lastSeenIP":
+		if e.complexity.DirectoryAccount.LastSeenIP == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.LastSeenIP(childComplexity), true
+
+	case "DirectoryAccount.memberships":
+		if e.complexity.DirectoryAccount.Memberships == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryAccount_memberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryAccount.Memberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "DirectoryAccount.mfaState":
+		if e.complexity.DirectoryAccount.MfaState == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.MfaState(childComplexity), true
+
+	case "DirectoryAccount.observedAt":
+		if e.complexity.DirectoryAccount.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ObservedAt(childComplexity), true
+
+	case "DirectoryAccount.organizationUnit":
+		if e.complexity.DirectoryAccount.OrganizationUnit == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.OrganizationUnit(childComplexity), true
+
+	case "DirectoryAccount.owner":
+		if e.complexity.DirectoryAccount.Owner == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Owner(childComplexity), true
+
+	case "DirectoryAccount.ownerID":
+		if e.complexity.DirectoryAccount.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.OwnerID(childComplexity), true
+
+	case "DirectoryAccount.profile":
+		if e.complexity.DirectoryAccount.Profile == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Profile(childComplexity), true
+
+	case "DirectoryAccount.profileHash":
+		if e.complexity.DirectoryAccount.ProfileHash == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.ProfileHash(childComplexity), true
+
+	case "DirectoryAccount.rawProfileFileID":
+		if e.complexity.DirectoryAccount.RawProfileFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.RawProfileFileID(childComplexity), true
+
+	case "DirectoryAccount.secondaryKey":
+		if e.complexity.DirectoryAccount.SecondaryKey == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.SecondaryKey(childComplexity), true
+
+	case "DirectoryAccount.sourceVersion":
+		if e.complexity.DirectoryAccount.SourceVersion == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.SourceVersion(childComplexity), true
+
+	case "DirectoryAccount.status":
+		if e.complexity.DirectoryAccount.Status == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Status(childComplexity), true
+
+	case "DirectoryAccount.tags":
+		if e.complexity.DirectoryAccount.Tags == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.Tags(childComplexity), true
+
+	case "DirectoryAccount.updatedAt":
+		if e.complexity.DirectoryAccount.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.UpdatedAt(childComplexity), true
+
+	case "DirectoryAccount.updatedBy":
+		if e.complexity.DirectoryAccount.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccount.UpdatedBy(childComplexity), true
+
+	case "DirectoryAccount.workflowObjectRefs":
+		if e.complexity.DirectoryAccount.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryAccount_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryAccount.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "DirectoryAccountBulkCreatePayload.directoryAccounts":
+		if e.complexity.DirectoryAccountBulkCreatePayload.DirectoryAccounts == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountBulkCreatePayload.DirectoryAccounts(childComplexity), true
+
+	case "DirectoryAccountConnection.edges":
+		if e.complexity.DirectoryAccountConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountConnection.Edges(childComplexity), true
+
+	case "DirectoryAccountConnection.pageInfo":
+		if e.complexity.DirectoryAccountConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountConnection.PageInfo(childComplexity), true
+
+	case "DirectoryAccountConnection.totalCount":
+		if e.complexity.DirectoryAccountConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountConnection.TotalCount(childComplexity), true
+
+	case "DirectoryAccountCreatePayload.directoryAccount":
+		if e.complexity.DirectoryAccountCreatePayload.DirectoryAccount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountCreatePayload.DirectoryAccount(childComplexity), true
+
+	case "DirectoryAccountDeletePayload.deletedID":
+		if e.complexity.DirectoryAccountDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountDeletePayload.DeletedID(childComplexity), true
+
+	case "DirectoryAccountEdge.cursor":
+		if e.complexity.DirectoryAccountEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountEdge.Cursor(childComplexity), true
+
+	case "DirectoryAccountEdge.node":
+		if e.complexity.DirectoryAccountEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountEdge.Node(childComplexity), true
+
+	case "DirectoryAccountHistory.accountType":
+		if e.complexity.DirectoryAccountHistory.AccountType == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.AccountType(childComplexity), true
+
+	case "DirectoryAccountHistory.canonicalEmail":
+		if e.complexity.DirectoryAccountHistory.CanonicalEmail == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.CanonicalEmail(childComplexity), true
+
+	case "DirectoryAccountHistory.createdAt":
+		if e.complexity.DirectoryAccountHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.CreatedAt(childComplexity), true
+
+	case "DirectoryAccountHistory.createdBy":
+		if e.complexity.DirectoryAccountHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.CreatedBy(childComplexity), true
+
+	case "DirectoryAccountHistory.department":
+		if e.complexity.DirectoryAccountHistory.Department == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Department(childComplexity), true
+
+	case "DirectoryAccountHistory.directorySyncRunID":
+		if e.complexity.DirectoryAccountHistory.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryAccountHistory.displayID":
+		if e.complexity.DirectoryAccountHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.DisplayID(childComplexity), true
+
+	case "DirectoryAccountHistory.displayName":
+		if e.complexity.DirectoryAccountHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.DisplayName(childComplexity), true
+
+	case "DirectoryAccountHistory.externalID":
+		if e.complexity.DirectoryAccountHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ExternalID(childComplexity), true
+
+	case "DirectoryAccountHistory.familyName":
+		if e.complexity.DirectoryAccountHistory.FamilyName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.FamilyName(childComplexity), true
+
+	case "DirectoryAccountHistory.givenName":
+		if e.complexity.DirectoryAccountHistory.GivenName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.GivenName(childComplexity), true
+
+	case "DirectoryAccountHistory.historyTime":
+		if e.complexity.DirectoryAccountHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.HistoryTime(childComplexity), true
+
+	case "DirectoryAccountHistory.id":
+		if e.complexity.DirectoryAccountHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ID(childComplexity), true
+
+	case "DirectoryAccountHistory.integrationID":
+		if e.complexity.DirectoryAccountHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.IntegrationID(childComplexity), true
+
+	case "DirectoryAccountHistory.jobTitle":
+		if e.complexity.DirectoryAccountHistory.JobTitle == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.JobTitle(childComplexity), true
+
+	case "DirectoryAccountHistory.lastLoginAt":
+		if e.complexity.DirectoryAccountHistory.LastLoginAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.LastLoginAt(childComplexity), true
+
+	case "DirectoryAccountHistory.lastSeenIP":
+		if e.complexity.DirectoryAccountHistory.LastSeenIP == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.LastSeenIP(childComplexity), true
+
+	case "DirectoryAccountHistory.mfaState":
+		if e.complexity.DirectoryAccountHistory.MfaState == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.MfaState(childComplexity), true
+
+	case "DirectoryAccountHistory.observedAt":
+		if e.complexity.DirectoryAccountHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ObservedAt(childComplexity), true
+
+	case "DirectoryAccountHistory.operation":
+		if e.complexity.DirectoryAccountHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Operation(childComplexity), true
+
+	case "DirectoryAccountHistory.organizationUnit":
+		if e.complexity.DirectoryAccountHistory.OrganizationUnit == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.OrganizationUnit(childComplexity), true
+
+	case "DirectoryAccountHistory.ownerID":
+		if e.complexity.DirectoryAccountHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.OwnerID(childComplexity), true
+
+	case "DirectoryAccountHistory.profile":
+		if e.complexity.DirectoryAccountHistory.Profile == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Profile(childComplexity), true
+
+	case "DirectoryAccountHistory.profileHash":
+		if e.complexity.DirectoryAccountHistory.ProfileHash == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.ProfileHash(childComplexity), true
+
+	case "DirectoryAccountHistory.rawProfileFileID":
+		if e.complexity.DirectoryAccountHistory.RawProfileFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.RawProfileFileID(childComplexity), true
+
+	case "DirectoryAccountHistory.ref":
+		if e.complexity.DirectoryAccountHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Ref(childComplexity), true
+
+	case "DirectoryAccountHistory.secondaryKey":
+		if e.complexity.DirectoryAccountHistory.SecondaryKey == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.SecondaryKey(childComplexity), true
+
+	case "DirectoryAccountHistory.sourceVersion":
+		if e.complexity.DirectoryAccountHistory.SourceVersion == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.SourceVersion(childComplexity), true
+
+	case "DirectoryAccountHistory.status":
+		if e.complexity.DirectoryAccountHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Status(childComplexity), true
+
+	case "DirectoryAccountHistory.tags":
+		if e.complexity.DirectoryAccountHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.Tags(childComplexity), true
+
+	case "DirectoryAccountHistory.updatedAt":
+		if e.complexity.DirectoryAccountHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.UpdatedAt(childComplexity), true
+
+	case "DirectoryAccountHistory.updatedBy":
+		if e.complexity.DirectoryAccountHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistory.UpdatedBy(childComplexity), true
+
+	case "DirectoryAccountHistoryConnection.edges":
+		if e.complexity.DirectoryAccountHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistoryConnection.Edges(childComplexity), true
+
+	case "DirectoryAccountHistoryConnection.pageInfo":
+		if e.complexity.DirectoryAccountHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistoryConnection.PageInfo(childComplexity), true
+
+	case "DirectoryAccountHistoryConnection.totalCount":
+		if e.complexity.DirectoryAccountHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistoryConnection.TotalCount(childComplexity), true
+
+	case "DirectoryAccountHistoryEdge.cursor":
+		if e.complexity.DirectoryAccountHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistoryEdge.Cursor(childComplexity), true
+
+	case "DirectoryAccountHistoryEdge.node":
+		if e.complexity.DirectoryAccountHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountHistoryEdge.Node(childComplexity), true
+
+	case "DirectoryAccountUpdatePayload.directoryAccount":
+		if e.complexity.DirectoryAccountUpdatePayload.DirectoryAccount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryAccountUpdatePayload.DirectoryAccount(childComplexity), true
+
+	case "DirectoryGroup.accounts":
+		if e.complexity.DirectoryGroup.Accounts == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryGroup_accounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryGroup.Accounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "DirectoryGroup.classification":
+		if e.complexity.DirectoryGroup.Classification == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Classification(childComplexity), true
+
+	case "DirectoryGroup.createdAt":
+		if e.complexity.DirectoryGroup.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.CreatedAt(childComplexity), true
+
+	case "DirectoryGroup.createdBy":
+		if e.complexity.DirectoryGroup.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.CreatedBy(childComplexity), true
+
+	case "DirectoryGroup.description":
+		if e.complexity.DirectoryGroup.Description == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Description(childComplexity), true
+
+	case "DirectoryGroup.directorySyncRun":
+		if e.complexity.DirectoryGroup.DirectorySyncRun == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.DirectorySyncRun(childComplexity), true
+
+	case "DirectoryGroup.directorySyncRunID":
+		if e.complexity.DirectoryGroup.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryGroup.displayID":
+		if e.complexity.DirectoryGroup.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.DisplayID(childComplexity), true
+
+	case "DirectoryGroup.displayName":
+		if e.complexity.DirectoryGroup.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.DisplayName(childComplexity), true
+
+	case "DirectoryGroup.email":
+		if e.complexity.DirectoryGroup.Email == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Email(childComplexity), true
+
+	case "DirectoryGroup.externalID":
+		if e.complexity.DirectoryGroup.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ExternalID(childComplexity), true
+
+	case "DirectoryGroup.externalSharingAllowed":
+		if e.complexity.DirectoryGroup.ExternalSharingAllowed == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ExternalSharingAllowed(childComplexity), true
+
+	case "DirectoryGroup.id":
+		if e.complexity.DirectoryGroup.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ID(childComplexity), true
+
+	case "DirectoryGroup.integration":
+		if e.complexity.DirectoryGroup.Integration == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Integration(childComplexity), true
+
+	case "DirectoryGroup.integrationID":
+		if e.complexity.DirectoryGroup.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.IntegrationID(childComplexity), true
+
+	case "DirectoryGroup.memberCount":
+		if e.complexity.DirectoryGroup.MemberCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.MemberCount(childComplexity), true
+
+	case "DirectoryGroup.members":
+		if e.complexity.DirectoryGroup.Members == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryGroup_members_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryGroup.Members(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "DirectoryGroup.observedAt":
+		if e.complexity.DirectoryGroup.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ObservedAt(childComplexity), true
+
+	case "DirectoryGroup.owner":
+		if e.complexity.DirectoryGroup.Owner == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Owner(childComplexity), true
+
+	case "DirectoryGroup.ownerID":
+		if e.complexity.DirectoryGroup.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.OwnerID(childComplexity), true
+
+	case "DirectoryGroup.profile":
+		if e.complexity.DirectoryGroup.Profile == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Profile(childComplexity), true
+
+	case "DirectoryGroup.profileHash":
+		if e.complexity.DirectoryGroup.ProfileHash == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.ProfileHash(childComplexity), true
+
+	case "DirectoryGroup.rawProfileFileID":
+		if e.complexity.DirectoryGroup.RawProfileFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.RawProfileFileID(childComplexity), true
+
+	case "DirectoryGroup.sourceVersion":
+		if e.complexity.DirectoryGroup.SourceVersion == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.SourceVersion(childComplexity), true
+
+	case "DirectoryGroup.status":
+		if e.complexity.DirectoryGroup.Status == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Status(childComplexity), true
+
+	case "DirectoryGroup.tags":
+		if e.complexity.DirectoryGroup.Tags == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.Tags(childComplexity), true
+
+	case "DirectoryGroup.updatedAt":
+		if e.complexity.DirectoryGroup.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.UpdatedAt(childComplexity), true
+
+	case "DirectoryGroup.updatedBy":
+		if e.complexity.DirectoryGroup.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroup.UpdatedBy(childComplexity), true
+
+	case "DirectoryGroup.workflowObjectRefs":
+		if e.complexity.DirectoryGroup.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryGroup_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryGroup.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "DirectoryGroupBulkCreatePayload.directoryGroups":
+		if e.complexity.DirectoryGroupBulkCreatePayload.DirectoryGroups == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupBulkCreatePayload.DirectoryGroups(childComplexity), true
+
+	case "DirectoryGroupConnection.edges":
+		if e.complexity.DirectoryGroupConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupConnection.Edges(childComplexity), true
+
+	case "DirectoryGroupConnection.pageInfo":
+		if e.complexity.DirectoryGroupConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupConnection.PageInfo(childComplexity), true
+
+	case "DirectoryGroupConnection.totalCount":
+		if e.complexity.DirectoryGroupConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupConnection.TotalCount(childComplexity), true
+
+	case "DirectoryGroupCreatePayload.directoryGroup":
+		if e.complexity.DirectoryGroupCreatePayload.DirectoryGroup == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupCreatePayload.DirectoryGroup(childComplexity), true
+
+	case "DirectoryGroupDeletePayload.deletedID":
+		if e.complexity.DirectoryGroupDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupDeletePayload.DeletedID(childComplexity), true
+
+	case "DirectoryGroupEdge.cursor":
+		if e.complexity.DirectoryGroupEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupEdge.Cursor(childComplexity), true
+
+	case "DirectoryGroupEdge.node":
+		if e.complexity.DirectoryGroupEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupEdge.Node(childComplexity), true
+
+	case "DirectoryGroupHistory.classification":
+		if e.complexity.DirectoryGroupHistory.Classification == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Classification(childComplexity), true
+
+	case "DirectoryGroupHistory.createdAt":
+		if e.complexity.DirectoryGroupHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.CreatedAt(childComplexity), true
+
+	case "DirectoryGroupHistory.createdBy":
+		if e.complexity.DirectoryGroupHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.CreatedBy(childComplexity), true
+
+	case "DirectoryGroupHistory.description":
+		if e.complexity.DirectoryGroupHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Description(childComplexity), true
+
+	case "DirectoryGroupHistory.directorySyncRunID":
+		if e.complexity.DirectoryGroupHistory.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryGroupHistory.displayID":
+		if e.complexity.DirectoryGroupHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.DisplayID(childComplexity), true
+
+	case "DirectoryGroupHistory.displayName":
+		if e.complexity.DirectoryGroupHistory.DisplayName == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.DisplayName(childComplexity), true
+
+	case "DirectoryGroupHistory.email":
+		if e.complexity.DirectoryGroupHistory.Email == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Email(childComplexity), true
+
+	case "DirectoryGroupHistory.externalID":
+		if e.complexity.DirectoryGroupHistory.ExternalID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ExternalID(childComplexity), true
+
+	case "DirectoryGroupHistory.externalSharingAllowed":
+		if e.complexity.DirectoryGroupHistory.ExternalSharingAllowed == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ExternalSharingAllowed(childComplexity), true
+
+	case "DirectoryGroupHistory.historyTime":
+		if e.complexity.DirectoryGroupHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.HistoryTime(childComplexity), true
+
+	case "DirectoryGroupHistory.id":
+		if e.complexity.DirectoryGroupHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ID(childComplexity), true
+
+	case "DirectoryGroupHistory.integrationID":
+		if e.complexity.DirectoryGroupHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.IntegrationID(childComplexity), true
+
+	case "DirectoryGroupHistory.memberCount":
+		if e.complexity.DirectoryGroupHistory.MemberCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.MemberCount(childComplexity), true
+
+	case "DirectoryGroupHistory.observedAt":
+		if e.complexity.DirectoryGroupHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ObservedAt(childComplexity), true
+
+	case "DirectoryGroupHistory.operation":
+		if e.complexity.DirectoryGroupHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Operation(childComplexity), true
+
+	case "DirectoryGroupHistory.ownerID":
+		if e.complexity.DirectoryGroupHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.OwnerID(childComplexity), true
+
+	case "DirectoryGroupHistory.profile":
+		if e.complexity.DirectoryGroupHistory.Profile == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Profile(childComplexity), true
+
+	case "DirectoryGroupHistory.profileHash":
+		if e.complexity.DirectoryGroupHistory.ProfileHash == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.ProfileHash(childComplexity), true
+
+	case "DirectoryGroupHistory.rawProfileFileID":
+		if e.complexity.DirectoryGroupHistory.RawProfileFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.RawProfileFileID(childComplexity), true
+
+	case "DirectoryGroupHistory.ref":
+		if e.complexity.DirectoryGroupHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Ref(childComplexity), true
+
+	case "DirectoryGroupHistory.sourceVersion":
+		if e.complexity.DirectoryGroupHistory.SourceVersion == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.SourceVersion(childComplexity), true
+
+	case "DirectoryGroupHistory.status":
+		if e.complexity.DirectoryGroupHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Status(childComplexity), true
+
+	case "DirectoryGroupHistory.tags":
+		if e.complexity.DirectoryGroupHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.Tags(childComplexity), true
+
+	case "DirectoryGroupHistory.updatedAt":
+		if e.complexity.DirectoryGroupHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.UpdatedAt(childComplexity), true
+
+	case "DirectoryGroupHistory.updatedBy":
+		if e.complexity.DirectoryGroupHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistory.UpdatedBy(childComplexity), true
+
+	case "DirectoryGroupHistoryConnection.edges":
+		if e.complexity.DirectoryGroupHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistoryConnection.Edges(childComplexity), true
+
+	case "DirectoryGroupHistoryConnection.pageInfo":
+		if e.complexity.DirectoryGroupHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistoryConnection.PageInfo(childComplexity), true
+
+	case "DirectoryGroupHistoryConnection.totalCount":
+		if e.complexity.DirectoryGroupHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistoryConnection.TotalCount(childComplexity), true
+
+	case "DirectoryGroupHistoryEdge.cursor":
+		if e.complexity.DirectoryGroupHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistoryEdge.Cursor(childComplexity), true
+
+	case "DirectoryGroupHistoryEdge.node":
+		if e.complexity.DirectoryGroupHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupHistoryEdge.Node(childComplexity), true
+
+	case "DirectoryGroupUpdatePayload.directoryGroup":
+		if e.complexity.DirectoryGroupUpdatePayload.DirectoryGroup == nil {
+			break
+		}
+
+		return e.complexity.DirectoryGroupUpdatePayload.DirectoryGroup(childComplexity), true
+
+	case "DirectoryMembership.createdAt":
+		if e.complexity.DirectoryMembership.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.CreatedAt(childComplexity), true
+
+	case "DirectoryMembership.createdBy":
+		if e.complexity.DirectoryMembership.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.CreatedBy(childComplexity), true
+
+	case "DirectoryMembership.directoryAccount":
+		if e.complexity.DirectoryMembership.DirectoryAccount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectoryAccount(childComplexity), true
+
+	case "DirectoryMembership.directoryAccountID":
+		if e.complexity.DirectoryMembership.DirectoryAccountID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectoryAccountID(childComplexity), true
+
+	case "DirectoryMembership.directoryGroup":
+		if e.complexity.DirectoryMembership.DirectoryGroup == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectoryGroup(childComplexity), true
+
+	case "DirectoryMembership.directoryGroupID":
+		if e.complexity.DirectoryMembership.DirectoryGroupID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectoryGroupID(childComplexity), true
+
+	case "DirectoryMembership.directorySyncRun":
+		if e.complexity.DirectoryMembership.DirectorySyncRun == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectorySyncRun(childComplexity), true
+
+	case "DirectoryMembership.directorySyncRunID":
+		if e.complexity.DirectoryMembership.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryMembership.displayID":
+		if e.complexity.DirectoryMembership.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.DisplayID(childComplexity), true
+
+	case "DirectoryMembership.events":
+		if e.complexity.DirectoryMembership.Events == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryMembership_events_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryMembership.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
+
+	case "DirectoryMembership.firstSeenAt":
+		if e.complexity.DirectoryMembership.FirstSeenAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.FirstSeenAt(childComplexity), true
+
+	case "DirectoryMembership.id":
+		if e.complexity.DirectoryMembership.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.ID(childComplexity), true
+
+	case "DirectoryMembership.integration":
+		if e.complexity.DirectoryMembership.Integration == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Integration(childComplexity), true
+
+	case "DirectoryMembership.integrationID":
+		if e.complexity.DirectoryMembership.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.IntegrationID(childComplexity), true
+
+	case "DirectoryMembership.lastConfirmedRunID":
+		if e.complexity.DirectoryMembership.LastConfirmedRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.LastConfirmedRunID(childComplexity), true
+
+	case "DirectoryMembership.lastSeenAt":
+		if e.complexity.DirectoryMembership.LastSeenAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.LastSeenAt(childComplexity), true
+
+	case "DirectoryMembership.metadata":
+		if e.complexity.DirectoryMembership.Metadata == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Metadata(childComplexity), true
+
+	case "DirectoryMembership.observedAt":
+		if e.complexity.DirectoryMembership.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.ObservedAt(childComplexity), true
+
+	case "DirectoryMembership.owner":
+		if e.complexity.DirectoryMembership.Owner == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Owner(childComplexity), true
+
+	case "DirectoryMembership.ownerID":
+		if e.complexity.DirectoryMembership.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.OwnerID(childComplexity), true
+
+	case "DirectoryMembership.role":
+		if e.complexity.DirectoryMembership.Role == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Role(childComplexity), true
+
+	case "DirectoryMembership.source":
+		if e.complexity.DirectoryMembership.Source == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.Source(childComplexity), true
+
+	case "DirectoryMembership.updatedAt":
+		if e.complexity.DirectoryMembership.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.UpdatedAt(childComplexity), true
+
+	case "DirectoryMembership.updatedBy":
+		if e.complexity.DirectoryMembership.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembership.UpdatedBy(childComplexity), true
+
+	case "DirectoryMembership.workflowObjectRefs":
+		if e.complexity.DirectoryMembership.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_DirectoryMembership_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectoryMembership.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "DirectoryMembershipBulkCreatePayload.directoryMemberships":
+		if e.complexity.DirectoryMembershipBulkCreatePayload.DirectoryMemberships == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipBulkCreatePayload.DirectoryMemberships(childComplexity), true
+
+	case "DirectoryMembershipConnection.edges":
+		if e.complexity.DirectoryMembershipConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipConnection.Edges(childComplexity), true
+
+	case "DirectoryMembershipConnection.pageInfo":
+		if e.complexity.DirectoryMembershipConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipConnection.PageInfo(childComplexity), true
+
+	case "DirectoryMembershipConnection.totalCount":
+		if e.complexity.DirectoryMembershipConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipConnection.TotalCount(childComplexity), true
+
+	case "DirectoryMembershipCreatePayload.directoryMembership":
+		if e.complexity.DirectoryMembershipCreatePayload.DirectoryMembership == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipCreatePayload.DirectoryMembership(childComplexity), true
+
+	case "DirectoryMembershipDeletePayload.deletedID":
+		if e.complexity.DirectoryMembershipDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipDeletePayload.DeletedID(childComplexity), true
+
+	case "DirectoryMembershipEdge.cursor":
+		if e.complexity.DirectoryMembershipEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipEdge.Cursor(childComplexity), true
+
+	case "DirectoryMembershipEdge.node":
+		if e.complexity.DirectoryMembershipEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipEdge.Node(childComplexity), true
+
+	case "DirectoryMembershipHistory.createdAt":
+		if e.complexity.DirectoryMembershipHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.CreatedAt(childComplexity), true
+
+	case "DirectoryMembershipHistory.createdBy":
+		if e.complexity.DirectoryMembershipHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.CreatedBy(childComplexity), true
+
+	case "DirectoryMembershipHistory.directoryAccountID":
+		if e.complexity.DirectoryMembershipHistory.DirectoryAccountID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.DirectoryAccountID(childComplexity), true
+
+	case "DirectoryMembershipHistory.directoryGroupID":
+		if e.complexity.DirectoryMembershipHistory.DirectoryGroupID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.DirectoryGroupID(childComplexity), true
+
+	case "DirectoryMembershipHistory.directorySyncRunID":
+		if e.complexity.DirectoryMembershipHistory.DirectorySyncRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.DirectorySyncRunID(childComplexity), true
+
+	case "DirectoryMembershipHistory.displayID":
+		if e.complexity.DirectoryMembershipHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.DisplayID(childComplexity), true
+
+	case "DirectoryMembershipHistory.firstSeenAt":
+		if e.complexity.DirectoryMembershipHistory.FirstSeenAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.FirstSeenAt(childComplexity), true
+
+	case "DirectoryMembershipHistory.historyTime":
+		if e.complexity.DirectoryMembershipHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.HistoryTime(childComplexity), true
+
+	case "DirectoryMembershipHistory.id":
+		if e.complexity.DirectoryMembershipHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.ID(childComplexity), true
+
+	case "DirectoryMembershipHistory.integrationID":
+		if e.complexity.DirectoryMembershipHistory.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.IntegrationID(childComplexity), true
+
+	case "DirectoryMembershipHistory.lastConfirmedRunID":
+		if e.complexity.DirectoryMembershipHistory.LastConfirmedRunID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.LastConfirmedRunID(childComplexity), true
+
+	case "DirectoryMembershipHistory.lastSeenAt":
+		if e.complexity.DirectoryMembershipHistory.LastSeenAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.LastSeenAt(childComplexity), true
+
+	case "DirectoryMembershipHistory.metadata":
+		if e.complexity.DirectoryMembershipHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.Metadata(childComplexity), true
+
+	case "DirectoryMembershipHistory.observedAt":
+		if e.complexity.DirectoryMembershipHistory.ObservedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.ObservedAt(childComplexity), true
+
+	case "DirectoryMembershipHistory.operation":
+		if e.complexity.DirectoryMembershipHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.Operation(childComplexity), true
+
+	case "DirectoryMembershipHistory.ownerID":
+		if e.complexity.DirectoryMembershipHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.OwnerID(childComplexity), true
+
+	case "DirectoryMembershipHistory.ref":
+		if e.complexity.DirectoryMembershipHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.Ref(childComplexity), true
+
+	case "DirectoryMembershipHistory.role":
+		if e.complexity.DirectoryMembershipHistory.Role == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.Role(childComplexity), true
+
+	case "DirectoryMembershipHistory.source":
+		if e.complexity.DirectoryMembershipHistory.Source == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.Source(childComplexity), true
+
+	case "DirectoryMembershipHistory.updatedAt":
+		if e.complexity.DirectoryMembershipHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.UpdatedAt(childComplexity), true
+
+	case "DirectoryMembershipHistory.updatedBy":
+		if e.complexity.DirectoryMembershipHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistory.UpdatedBy(childComplexity), true
+
+	case "DirectoryMembershipHistoryConnection.edges":
+		if e.complexity.DirectoryMembershipHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistoryConnection.Edges(childComplexity), true
+
+	case "DirectoryMembershipHistoryConnection.pageInfo":
+		if e.complexity.DirectoryMembershipHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistoryConnection.PageInfo(childComplexity), true
+
+	case "DirectoryMembershipHistoryConnection.totalCount":
+		if e.complexity.DirectoryMembershipHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistoryConnection.TotalCount(childComplexity), true
+
+	case "DirectoryMembershipHistoryEdge.cursor":
+		if e.complexity.DirectoryMembershipHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistoryEdge.Cursor(childComplexity), true
+
+	case "DirectoryMembershipHistoryEdge.node":
+		if e.complexity.DirectoryMembershipHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipHistoryEdge.Node(childComplexity), true
+
+	case "DirectoryMembershipUpdatePayload.directoryMembership":
+		if e.complexity.DirectoryMembershipUpdatePayload.DirectoryMembership == nil {
+			break
+		}
+
+		return e.complexity.DirectoryMembershipUpdatePayload.DirectoryMembership(childComplexity), true
+
+	case "DirectorySyncRun.completedAt":
+		if e.complexity.DirectorySyncRun.CompletedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.CompletedAt(childComplexity), true
+
+	case "DirectorySyncRun.createdAt":
+		if e.complexity.DirectorySyncRun.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.CreatedAt(childComplexity), true
+
+	case "DirectorySyncRun.createdBy":
+		if e.complexity.DirectorySyncRun.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.CreatedBy(childComplexity), true
+
+	case "DirectorySyncRun.deltaCount":
+		if e.complexity.DirectorySyncRun.DeltaCount == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.DeltaCount(childComplexity), true
+
+	case "DirectorySyncRun.directoryAccounts":
+		if e.complexity.DirectorySyncRun.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_DirectorySyncRun_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectorySyncRun.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "DirectorySyncRun.directoryGroups":
+		if e.complexity.DirectorySyncRun.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_DirectorySyncRun_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectorySyncRun.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "DirectorySyncRun.directoryMemberships":
+		if e.complexity.DirectorySyncRun.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_DirectorySyncRun_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.DirectorySyncRun.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "DirectorySyncRun.displayID":
+		if e.complexity.DirectorySyncRun.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.DisplayID(childComplexity), true
+
+	case "DirectorySyncRun.error":
+		if e.complexity.DirectorySyncRun.Error == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Error(childComplexity), true
+
+	case "DirectorySyncRun.fullCount":
+		if e.complexity.DirectorySyncRun.FullCount == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.FullCount(childComplexity), true
+
+	case "DirectorySyncRun.id":
+		if e.complexity.DirectorySyncRun.ID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.ID(childComplexity), true
+
+	case "DirectorySyncRun.integration":
+		if e.complexity.DirectorySyncRun.Integration == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Integration(childComplexity), true
+
+	case "DirectorySyncRun.integrationID":
+		if e.complexity.DirectorySyncRun.IntegrationID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.IntegrationID(childComplexity), true
+
+	case "DirectorySyncRun.owner":
+		if e.complexity.DirectorySyncRun.Owner == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Owner(childComplexity), true
+
+	case "DirectorySyncRun.ownerID":
+		if e.complexity.DirectorySyncRun.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.OwnerID(childComplexity), true
+
+	case "DirectorySyncRun.rawManifestFileID":
+		if e.complexity.DirectorySyncRun.RawManifestFileID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.RawManifestFileID(childComplexity), true
+
+	case "DirectorySyncRun.sourceCursor":
+		if e.complexity.DirectorySyncRun.SourceCursor == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.SourceCursor(childComplexity), true
+
+	case "DirectorySyncRun.startedAt":
+		if e.complexity.DirectorySyncRun.StartedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.StartedAt(childComplexity), true
+
+	case "DirectorySyncRun.stats":
+		if e.complexity.DirectorySyncRun.Stats == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Stats(childComplexity), true
+
+	case "DirectorySyncRun.status":
+		if e.complexity.DirectorySyncRun.Status == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.Status(childComplexity), true
+
+	case "DirectorySyncRun.updatedAt":
+		if e.complexity.DirectorySyncRun.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.UpdatedAt(childComplexity), true
+
+	case "DirectorySyncRun.updatedBy":
+		if e.complexity.DirectorySyncRun.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRun.UpdatedBy(childComplexity), true
+
+	case "DirectorySyncRunBulkCreatePayload.directorySyncRuns":
+		if e.complexity.DirectorySyncRunBulkCreatePayload.DirectorySyncRuns == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunBulkCreatePayload.DirectorySyncRuns(childComplexity), true
+
+	case "DirectorySyncRunConnection.edges":
+		if e.complexity.DirectorySyncRunConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunConnection.Edges(childComplexity), true
+
+	case "DirectorySyncRunConnection.pageInfo":
+		if e.complexity.DirectorySyncRunConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunConnection.PageInfo(childComplexity), true
+
+	case "DirectorySyncRunConnection.totalCount":
+		if e.complexity.DirectorySyncRunConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunConnection.TotalCount(childComplexity), true
+
+	case "DirectorySyncRunCreatePayload.directorySyncRun":
+		if e.complexity.DirectorySyncRunCreatePayload.DirectorySyncRun == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunCreatePayload.DirectorySyncRun(childComplexity), true
+
+	case "DirectorySyncRunDeletePayload.deletedID":
+		if e.complexity.DirectorySyncRunDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunDeletePayload.DeletedID(childComplexity), true
+
+	case "DirectorySyncRunEdge.cursor":
+		if e.complexity.DirectorySyncRunEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunEdge.Cursor(childComplexity), true
+
+	case "DirectorySyncRunEdge.node":
+		if e.complexity.DirectorySyncRunEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunEdge.Node(childComplexity), true
+
+	case "DirectorySyncRunUpdatePayload.directorySyncRun":
+		if e.complexity.DirectorySyncRunUpdatePayload.DirectorySyncRun == nil {
+			break
+		}
+
+		return e.complexity.DirectorySyncRunUpdatePayload.DirectorySyncRun(childComplexity), true
 
 	case "DocumentData.createdAt":
 		if e.complexity.DocumentData.CreatedAt == nil {
@@ -15610,6 +18336,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Finding.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
 
+	case "Finding.workflowObjectRefs":
+		if e.complexity.Finding.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Finding_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Finding.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
 	case "FindingBulkCreatePayload.findings":
 		if e.complexity.FindingBulkCreatePayload.Findings == nil {
 			break
@@ -18286,6 +21024,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Integration.Description(childComplexity), true
 
+	case "Integration.directoryAccounts":
+		if e.complexity.Integration.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "Integration.directoryGroups":
+		if e.complexity.Integration.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "Integration.directoryMemberships":
+		if e.complexity.Integration.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "Integration.directorySyncRuns":
+		if e.complexity.Integration.DirectorySyncRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Integration_directorySyncRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Integration.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
 	case "Integration.events":
 		if e.complexity.Integration.Events == nil {
 			break
@@ -19078,6 +21864,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.InternalPolicy.UpdatedBy(childComplexity), true
+
+	case "InternalPolicy.workflowObjectRefs":
+		if e.complexity.InternalPolicy.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_InternalPolicy_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.InternalPolicy.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "InternalPolicyBulkCreatePayload.internalPolicies":
 		if e.complexity.InternalPolicyBulkCreatePayload.InternalPolicies == nil {
@@ -21579,6 +24377,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVDNSVerification(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVDirectoryAccount":
+		if e.complexity.Mutation.CreateBulkCSVDirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDirectoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDirectoryAccount(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVDirectoryGroup":
+		if e.complexity.Mutation.CreateBulkCSVDirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDirectoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDirectoryGroup(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVDirectoryMembership":
+		if e.complexity.Mutation.CreateBulkCSVDirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDirectoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDirectoryMembership(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVDirectorySyncRun":
+		if e.complexity.Mutation.CreateBulkCSVDirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVDirectorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVDirectorySyncRun(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkCSVDocumentData":
 		if e.complexity.Mutation.CreateBulkCSVDocumentData == nil {
 			break
@@ -22023,6 +24869,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkCSVVulnerability(childComplexity, args["input"].(graphql.Upload)), true
 
+	case "Mutation.createBulkCSVWorkflowAssignment":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowAssignment(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVWorkflowAssignmentTarget":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowAssignmentTarget(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVWorkflowDefinition":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowDefinition(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVWorkflowEvent":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowEvent(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVWorkflowInstance":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowInstance(childComplexity, args["input"].(graphql.Upload)), true
+
+	case "Mutation.createBulkCSVWorkflowObjectRef":
+		if e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkCSVWorkflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkCSVWorkflowObjectRef(childComplexity, args["input"].(graphql.Upload)), true
+
 	case "Mutation.createBulkContact":
 		if e.complexity.Mutation.CreateBulkContact == nil {
 			break
@@ -22106,6 +25024,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateBulkDNSVerification(childComplexity, args["input"].([]*generated.CreateDNSVerificationInput)), true
+
+	case "Mutation.createBulkDirectoryAccount":
+		if e.complexity.Mutation.CreateBulkDirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDirectoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDirectoryAccount(childComplexity, args["input"].([]*generated.CreateDirectoryAccountInput)), true
+
+	case "Mutation.createBulkDirectoryGroup":
+		if e.complexity.Mutation.CreateBulkDirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDirectoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDirectoryGroup(childComplexity, args["input"].([]*generated.CreateDirectoryGroupInput)), true
+
+	case "Mutation.createBulkDirectoryMembership":
+		if e.complexity.Mutation.CreateBulkDirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDirectoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDirectoryMembership(childComplexity, args["input"].([]*generated.CreateDirectoryMembershipInput)), true
+
+	case "Mutation.createBulkDirectorySyncRun":
+		if e.complexity.Mutation.CreateBulkDirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkDirectorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkDirectorySyncRun(childComplexity, args["input"].([]*generated.CreateDirectorySyncRunInput)), true
 
 	case "Mutation.createBulkDocumentData":
 		if e.complexity.Mutation.CreateBulkDocumentData == nil {
@@ -22551,6 +25517,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateBulkVulnerability(childComplexity, args["input"].([]*generated.CreateVulnerabilityInput)), true
 
+	case "Mutation.createBulkWorkflowAssignment":
+		if e.complexity.Mutation.CreateBulkWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowAssignment(childComplexity, args["input"].([]*generated.CreateWorkflowAssignmentInput)), true
+
+	case "Mutation.createBulkWorkflowAssignmentTarget":
+		if e.complexity.Mutation.CreateBulkWorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowAssignmentTarget(childComplexity, args["input"].([]*generated.CreateWorkflowAssignmentTargetInput)), true
+
+	case "Mutation.createBulkWorkflowDefinition":
+		if e.complexity.Mutation.CreateBulkWorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowDefinition(childComplexity, args["input"].([]*generated.CreateWorkflowDefinitionInput)), true
+
+	case "Mutation.createBulkWorkflowEvent":
+		if e.complexity.Mutation.CreateBulkWorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowEvent(childComplexity, args["input"].([]*generated.CreateWorkflowEventInput)), true
+
+	case "Mutation.createBulkWorkflowInstance":
+		if e.complexity.Mutation.CreateBulkWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowInstance(childComplexity, args["input"].([]*generated.CreateWorkflowInstanceInput)), true
+
+	case "Mutation.createBulkWorkflowObjectRef":
+		if e.complexity.Mutation.CreateBulkWorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createBulkWorkflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateBulkWorkflowObjectRef(childComplexity, args["input"].([]*generated.CreateWorkflowObjectRefInput)), true
+
 	case "Mutation.createContact":
 		if e.complexity.Mutation.CreateContact == nil {
 			break
@@ -22658,6 +25696,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.CreateDNSVerification(childComplexity, args["input"].(generated.CreateDNSVerificationInput)), true
+
+	case "Mutation.createDirectoryAccount":
+		if e.complexity.Mutation.CreateDirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDirectoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDirectoryAccount(childComplexity, args["input"].(generated.CreateDirectoryAccountInput)), true
+
+	case "Mutation.createDirectoryGroup":
+		if e.complexity.Mutation.CreateDirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDirectoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDirectoryGroup(childComplexity, args["input"].(generated.CreateDirectoryGroupInput)), true
+
+	case "Mutation.createDirectoryMembership":
+		if e.complexity.Mutation.CreateDirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDirectoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDirectoryMembership(childComplexity, args["input"].(generated.CreateDirectoryMembershipInput)), true
+
+	case "Mutation.createDirectorySyncRun":
+		if e.complexity.Mutation.CreateDirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createDirectorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateDirectorySyncRun(childComplexity, args["input"].(generated.CreateDirectorySyncRunInput)), true
 
 	case "Mutation.createDocumentData":
 		if e.complexity.Mutation.CreateDocumentData == nil {
@@ -23403,6 +26489,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.CreateVulnerability(childComplexity, args["input"].(generated.CreateVulnerabilityInput)), true
 
+	case "Mutation.createWorkflowAssignment":
+		if e.complexity.Mutation.CreateWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowAssignment(childComplexity, args["input"].(generated.CreateWorkflowAssignmentInput)), true
+
+	case "Mutation.createWorkflowAssignmentTarget":
+		if e.complexity.Mutation.CreateWorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowAssignmentTarget(childComplexity, args["input"].(generated.CreateWorkflowAssignmentTargetInput)), true
+
+	case "Mutation.createWorkflowDefinition":
+		if e.complexity.Mutation.CreateWorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowDefinition(childComplexity, args["input"].(generated.CreateWorkflowDefinitionInput)), true
+
+	case "Mutation.createWorkflowEvent":
+		if e.complexity.Mutation.CreateWorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowEvent(childComplexity, args["input"].(generated.CreateWorkflowEventInput)), true
+
+	case "Mutation.createWorkflowInstance":
+		if e.complexity.Mutation.CreateWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowInstance(childComplexity, args["input"].(generated.CreateWorkflowInstanceInput)), true
+
+	case "Mutation.createWorkflowObjectRef":
+		if e.complexity.Mutation.CreateWorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_createWorkflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CreateWorkflowObjectRef(childComplexity, args["input"].(generated.CreateWorkflowObjectRefInput)), true
+
 	case "Mutation.deleteAPIToken":
 		if e.complexity.Mutation.DeleteAPIToken == nil {
 			break
@@ -24026,6 +27184,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.DeleteDNSVerification(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteDirectoryAccount":
+		if e.complexity.Mutation.DeleteDirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDirectoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDirectoryAccount(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteDirectoryGroup":
+		if e.complexity.Mutation.DeleteDirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDirectoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDirectoryGroup(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteDirectoryMembership":
+		if e.complexity.Mutation.DeleteDirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDirectoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDirectoryMembership(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteDirectorySyncRun":
+		if e.complexity.Mutation.DeleteDirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteDirectorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteDirectorySyncRun(childComplexity, args["id"].(string)), true
 
 	case "Mutation.deleteDocumentData":
 		if e.complexity.Mutation.DeleteDocumentData == nil {
@@ -24675,6 +27881,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWebauthn(childComplexity, args["id"].(string)), true
 
+	case "Mutation.deleteWorkflowAssignment":
+		if e.complexity.Mutation.DeleteWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowAssignment(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteWorkflowAssignmentTarget":
+		if e.complexity.Mutation.DeleteWorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowAssignmentTarget(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteWorkflowDefinition":
+		if e.complexity.Mutation.DeleteWorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowDefinition(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteWorkflowEvent":
+		if e.complexity.Mutation.DeleteWorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowEvent(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteWorkflowInstance":
+		if e.complexity.Mutation.DeleteWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowInstance(childComplexity, args["id"].(string)), true
+
+	case "Mutation.deleteWorkflowObjectRef":
+		if e.complexity.Mutation.DeleteWorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_deleteWorkflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeleteWorkflowObjectRef(childComplexity, args["id"].(string)), true
+
 	case "Mutation.sendTrustCenterNDAEmail":
 		if e.complexity.Mutation.SendTrustCenterNDAEmail == nil {
 			break
@@ -24974,6 +28252,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateDNSVerification(childComplexity, args["id"].(string), args["input"].(generated.UpdateDNSVerificationInput)), true
+
+	case "Mutation.updateDirectoryAccount":
+		if e.complexity.Mutation.UpdateDirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDirectoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDirectoryAccount(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectoryAccountInput)), true
+
+	case "Mutation.updateDirectoryGroup":
+		if e.complexity.Mutation.UpdateDirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDirectoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDirectoryGroup(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectoryGroupInput)), true
+
+	case "Mutation.updateDirectoryMembership":
+		if e.complexity.Mutation.UpdateDirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDirectoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDirectoryMembership(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectoryMembershipInput)), true
+
+	case "Mutation.updateDirectorySyncRun":
+		if e.complexity.Mutation.UpdateDirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateDirectorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateDirectorySyncRun(childComplexity, args["id"].(string), args["input"].(generated.UpdateDirectorySyncRunInput)), true
 
 	case "Mutation.updateDocumentData":
 		if e.complexity.Mutation.UpdateDocumentData == nil {
@@ -25658,6 +28984,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateVulnerability(childComplexity, args["id"].(string), args["input"].(generated.UpdateVulnerabilityInput)), true
+
+	case "Mutation.updateWorkflowAssignment":
+		if e.complexity.Mutation.UpdateWorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowAssignment(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowAssignmentInput)), true
+
+	case "Mutation.updateWorkflowAssignmentTarget":
+		if e.complexity.Mutation.UpdateWorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowAssignmentTarget(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowAssignmentTargetInput)), true
+
+	case "Mutation.updateWorkflowDefinition":
+		if e.complexity.Mutation.UpdateWorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowDefinition(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowDefinitionInput)), true
+
+	case "Mutation.updateWorkflowEvent":
+		if e.complexity.Mutation.UpdateWorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowEvent(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowEventInput)), true
+
+	case "Mutation.updateWorkflowInstance":
+		if e.complexity.Mutation.UpdateWorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowInstance(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowInstanceInput)), true
+
+	case "Mutation.updateWorkflowObjectRef":
+		if e.complexity.Mutation.UpdateWorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateWorkflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateWorkflowObjectRef(childComplexity, args["id"].(string), args["input"].(generated.UpdateWorkflowObjectRefInput)), true
 
 	case "Narrative.blockedGroups":
 		if e.complexity.Narrative.BlockedGroups == nil {
@@ -27224,6 +30622,54 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Description(childComplexity), true
 
+	case "Organization.directoryAccounts":
+		if e.complexity.Organization.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "Organization.directoryGroups":
+		if e.complexity.Organization.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "Organization.directoryMemberships":
+		if e.complexity.Organization.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "Organization.directorySyncRuns":
+		if e.complexity.Organization.DirectorySyncRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_directorySyncRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
+
 	case "Organization.displayName":
 		if e.complexity.Organization.DisplayName == nil {
 			break
@@ -27936,6 +31382,78 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Vulnerabilities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.VulnerabilityOrder), args["where"].(*generated.VulnerabilityWhereInput)), true
+
+	case "Organization.workflowAssignmentTargets":
+		if e.complexity.Organization.WorkflowAssignmentTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowAssignmentTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowAssignmentTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentTargetOrder), args["where"].(*generated.WorkflowAssignmentTargetWhereInput)), true
+
+	case "Organization.workflowAssignments":
+		if e.complexity.Organization.WorkflowAssignments == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowAssignments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowAssignments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentOrder), args["where"].(*generated.WorkflowAssignmentWhereInput)), true
+
+	case "Organization.workflowDefinitions":
+		if e.complexity.Organization.WorkflowDefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowDefinitionOrder), args["where"].(*generated.WorkflowDefinitionWhereInput)), true
+
+	case "Organization.workflowEvents":
+		if e.complexity.Organization.WorkflowEvents == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowEvents_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput)), true
+
+	case "Organization.workflowInstances":
+		if e.complexity.Organization.WorkflowInstances == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowInstances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowInstances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowInstanceOrder), args["where"].(*generated.WorkflowInstanceWhereInput)), true
+
+	case "Organization.workflowObjectRefs":
+		if e.complexity.Organization.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "OrganizationBulkCreatePayload.organizations":
 		if e.complexity.OrganizationBulkCreatePayload.Organizations == nil {
@@ -30905,6 +34423,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.AdminDNSVerificationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
+	case "Query.adminDirectoryAccountSearch":
+		if e.complexity.Query.AdminDirectoryAccountSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminDirectoryAccountSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminDirectoryAccountSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminDirectoryGroupSearch":
+		if e.complexity.Query.AdminDirectoryGroupSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminDirectoryGroupSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminDirectoryGroupSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
 	case "Query.adminDocumentDataSearch":
 		if e.complexity.Query.AdminDocumentDataSearch == nil {
 			break
@@ -31420,6 +34962,66 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.AdminWebauthnSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminWorkflowAssignmentSearch":
+		if e.complexity.Query.AdminWorkflowAssignmentSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminWorkflowAssignmentSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminWorkflowAssignmentSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminWorkflowAssignmentTargetSearch":
+		if e.complexity.Query.AdminWorkflowAssignmentTargetSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminWorkflowAssignmentTargetSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminWorkflowAssignmentTargetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminWorkflowDefinitionSearch":
+		if e.complexity.Query.AdminWorkflowDefinitionSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminWorkflowDefinitionSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminWorkflowDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminWorkflowEventSearch":
+		if e.complexity.Query.AdminWorkflowEventSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminWorkflowEventSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminWorkflowEventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.adminWorkflowInstanceSearch":
+		if e.complexity.Query.AdminWorkflowInstanceSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_adminWorkflowInstanceSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.AdminWorkflowInstanceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.assessment":
 		if e.complexity.Query.Assessment == nil {
@@ -31950,6 +35552,162 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.DNSVerifications(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DNSVerificationOrder), args["where"].(*generated.DNSVerificationWhereInput)), true
+
+	case "Query.directoryAccount":
+		if e.complexity.Query.DirectoryAccount == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryAccount_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryAccount(childComplexity, args["id"].(string)), true
+
+	case "Query.directoryAccountHistories":
+		if e.complexity.Query.DirectoryAccountHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryAccountHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryAccountHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DirectoryAccountHistoryOrder), args["where"].(*generated.DirectoryAccountHistoryWhereInput)), true
+
+	case "Query.directoryAccountSearch":
+		if e.complexity.Query.DirectoryAccountSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryAccountSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryAccountSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.directoryAccounts":
+		if e.complexity.Query.DirectoryAccounts == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryAccounts_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryAccounts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryAccountOrder), args["where"].(*generated.DirectoryAccountWhereInput)), true
+
+	case "Query.directoryGroup":
+		if e.complexity.Query.DirectoryGroup == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryGroup_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryGroup(childComplexity, args["id"].(string)), true
+
+	case "Query.directoryGroupHistories":
+		if e.complexity.Query.DirectoryGroupHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryGroupHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryGroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DirectoryGroupHistoryOrder), args["where"].(*generated.DirectoryGroupHistoryWhereInput)), true
+
+	case "Query.directoryGroupSearch":
+		if e.complexity.Query.DirectoryGroupSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryGroupSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryGroupSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.directoryGroups":
+		if e.complexity.Query.DirectoryGroups == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryGroups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryGroups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryGroupOrder), args["where"].(*generated.DirectoryGroupWhereInput)), true
+
+	case "Query.directoryMembership":
+		if e.complexity.Query.DirectoryMembership == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryMembership_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryMembership(childComplexity, args["id"].(string)), true
+
+	case "Query.directoryMembershipHistories":
+		if e.complexity.Query.DirectoryMembershipHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryMembershipHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryMembershipHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DirectoryMembershipHistoryOrder), args["where"].(*generated.DirectoryMembershipHistoryWhereInput)), true
+
+	case "Query.directoryMemberships":
+		if e.complexity.Query.DirectoryMemberships == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directoryMemberships_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectoryMemberships(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectoryMembershipOrder), args["where"].(*generated.DirectoryMembershipWhereInput)), true
+
+	case "Query.directorySyncRun":
+		if e.complexity.Query.DirectorySyncRun == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directorySyncRun_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectorySyncRun(childComplexity, args["id"].(string)), true
+
+	case "Query.directorySyncRuns":
+		if e.complexity.Query.DirectorySyncRuns == nil {
+			break
+		}
+
+		args, err := ec.field_Query_directorySyncRuns_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.DirectorySyncRuns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.DirectorySyncRunOrder), args["where"].(*generated.DirectorySyncRunWhereInput)), true
 
 	case "Query.documentData":
 		if e.complexity.Query.DocumentData == nil {
@@ -34381,6 +38139,282 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Webauthns(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WebauthnOrder), args["where"].(*generated.WebauthnWhereInput)), true
+
+	case "Query.workflowAssignment":
+		if e.complexity.Query.WorkflowAssignment == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignment(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowAssignmentHistories":
+		if e.complexity.Query.WorkflowAssignmentHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowAssignmentHistoryOrder), args["where"].(*generated.WorkflowAssignmentHistoryWhereInput)), true
+
+	case "Query.workflowAssignmentSearch":
+		if e.complexity.Query.WorkflowAssignmentSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.workflowAssignmentTarget":
+		if e.complexity.Query.WorkflowAssignmentTarget == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentTarget_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentTarget(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowAssignmentTargetHistories":
+		if e.complexity.Query.WorkflowAssignmentTargetHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentTargetHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowAssignmentTargetHistoryOrder), args["where"].(*generated.WorkflowAssignmentTargetHistoryWhereInput)), true
+
+	case "Query.workflowAssignmentTargetSearch":
+		if e.complexity.Query.WorkflowAssignmentTargetSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentTargetSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentTargetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.workflowAssignmentTargets":
+		if e.complexity.Query.WorkflowAssignmentTargets == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignmentTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignmentTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentTargetOrder), args["where"].(*generated.WorkflowAssignmentTargetWhereInput)), true
+
+	case "Query.workflowAssignments":
+		if e.complexity.Query.WorkflowAssignments == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowAssignments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowAssignments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentOrder), args["where"].(*generated.WorkflowAssignmentWhereInput)), true
+
+	case "Query.workflowDefinition":
+		if e.complexity.Query.WorkflowDefinition == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowDefinition_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowDefinition(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowDefinitionHistories":
+		if e.complexity.Query.WorkflowDefinitionHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowDefinitionHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowDefinitionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowDefinitionHistoryOrder), args["where"].(*generated.WorkflowDefinitionHistoryWhereInput)), true
+
+	case "Query.workflowDefinitionSearch":
+		if e.complexity.Query.WorkflowDefinitionSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowDefinitionSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.workflowDefinitions":
+		if e.complexity.Query.WorkflowDefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowDefinitionOrder), args["where"].(*generated.WorkflowDefinitionWhereInput)), true
+
+	case "Query.workflowEvent":
+		if e.complexity.Query.WorkflowEvent == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEvent_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEvent(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowEventHistories":
+		if e.complexity.Query.WorkflowEventHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEventHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowEventHistoryOrder), args["where"].(*generated.WorkflowEventHistoryWhereInput)), true
+
+	case "Query.workflowEventSearch":
+		if e.complexity.Query.WorkflowEventSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEventSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.workflowEvents":
+		if e.complexity.Query.WorkflowEvents == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowEvents_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput)), true
+
+	case "Query.workflowInstance":
+		if e.complexity.Query.WorkflowInstance == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowInstance_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowInstance(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowInstanceHistories":
+		if e.complexity.Query.WorkflowInstanceHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowInstanceHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowInstanceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowInstanceHistoryOrder), args["where"].(*generated.WorkflowInstanceHistoryWhereInput)), true
+
+	case "Query.workflowInstanceSearch":
+		if e.complexity.Query.WorkflowInstanceSearch == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowInstanceSearch_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowInstanceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
+
+	case "Query.workflowInstances":
+		if e.complexity.Query.WorkflowInstances == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowInstances_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowInstances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowInstanceOrder), args["where"].(*generated.WorkflowInstanceWhereInput)), true
+
+	case "Query.workflowObjectRef":
+		if e.complexity.Query.WorkflowObjectRef == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowObjectRef_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowObjectRef(childComplexity, args["id"].(string)), true
+
+	case "Query.workflowObjectRefHistories":
+		if e.complexity.Query.WorkflowObjectRefHistories == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowObjectRefHistories_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowObjectRefHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowObjectRefHistoryOrder), args["where"].(*generated.WorkflowObjectRefHistoryWhereInput)), true
+
+	case "Query.workflowObjectRefs":
+		if e.complexity.Query.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Query_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "Remediation.actionPlans":
 		if e.complexity.Remediation.ActionPlans == nil {
@@ -37506,6 +41540,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.DNSVerifications(childComplexity), true
 
+	case "SearchResults.directoryAccounts":
+		if e.complexity.SearchResults.DirectoryAccounts == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.DirectoryAccounts(childComplexity), true
+
+	case "SearchResults.directoryGroups":
+		if e.complexity.SearchResults.DirectoryGroups == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.DirectoryGroups(childComplexity), true
+
 	case "SearchResults.documentData":
 		if e.complexity.SearchResults.DocumentData == nil {
 			break
@@ -37820,6 +41868,41 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Webauthns(childComplexity), true
+
+	case "SearchResults.workflowAssignmentTargets":
+		if e.complexity.SearchResults.WorkflowAssignmentTargets == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.WorkflowAssignmentTargets(childComplexity), true
+
+	case "SearchResults.workflowAssignments":
+		if e.complexity.SearchResults.WorkflowAssignments == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.WorkflowAssignments(childComplexity), true
+
+	case "SearchResults.workflowDefinitions":
+		if e.complexity.SearchResults.WorkflowDefinitions == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.WorkflowDefinitions(childComplexity), true
+
+	case "SearchResults.workflowEvents":
+		if e.complexity.SearchResults.WorkflowEvents == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.WorkflowEvents(childComplexity), true
+
+	case "SearchResults.workflowInstances":
+		if e.complexity.SearchResults.WorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.SearchResults.WorkflowInstances(childComplexity), true
 
 	case "SearchSnippet.field":
 		if e.complexity.SearchSnippet.Field == nil {
@@ -40340,6 +44423,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Task.UpdatedBy(childComplexity), true
+
+	case "Task.workflowObjectRefs":
+		if e.complexity.Task.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_Task_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Task.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
 
 	case "TaskBulkCreatePayload.tasks":
 		if e.complexity.TaskBulkCreatePayload.Tasks == nil {
@@ -45076,6 +49171,2290 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.WebauthnEdge.Node(childComplexity), true
 
+	case "WorkflowAssignment.actorGroupID":
+		if e.complexity.WorkflowAssignment.ActorGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.ActorGroupID(childComplexity), true
+
+	case "WorkflowAssignment.actorUserID":
+		if e.complexity.WorkflowAssignment.ActorUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.ActorUserID(childComplexity), true
+
+	case "WorkflowAssignment.assignmentKey":
+		if e.complexity.WorkflowAssignment.AssignmentKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.AssignmentKey(childComplexity), true
+
+	case "WorkflowAssignment.createdAt":
+		if e.complexity.WorkflowAssignment.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.CreatedAt(childComplexity), true
+
+	case "WorkflowAssignment.createdBy":
+		if e.complexity.WorkflowAssignment.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.CreatedBy(childComplexity), true
+
+	case "WorkflowAssignment.decidedAt":
+		if e.complexity.WorkflowAssignment.DecidedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.DecidedAt(childComplexity), true
+
+	case "WorkflowAssignment.displayID":
+		if e.complexity.WorkflowAssignment.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.DisplayID(childComplexity), true
+
+	case "WorkflowAssignment.group":
+		if e.complexity.WorkflowAssignment.Group == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Group(childComplexity), true
+
+	case "WorkflowAssignment.id":
+		if e.complexity.WorkflowAssignment.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.ID(childComplexity), true
+
+	case "WorkflowAssignment.label":
+		if e.complexity.WorkflowAssignment.Label == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Label(childComplexity), true
+
+	case "WorkflowAssignment.metadata":
+		if e.complexity.WorkflowAssignment.Metadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Metadata(childComplexity), true
+
+	case "WorkflowAssignment.notes":
+		if e.complexity.WorkflowAssignment.Notes == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Notes(childComplexity), true
+
+	case "WorkflowAssignment.owner":
+		if e.complexity.WorkflowAssignment.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Owner(childComplexity), true
+
+	case "WorkflowAssignment.ownerID":
+		if e.complexity.WorkflowAssignment.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.OwnerID(childComplexity), true
+
+	case "WorkflowAssignment.required":
+		if e.complexity.WorkflowAssignment.Required == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Required(childComplexity), true
+
+	case "WorkflowAssignment.role":
+		if e.complexity.WorkflowAssignment.Role == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Role(childComplexity), true
+
+	case "WorkflowAssignment.status":
+		if e.complexity.WorkflowAssignment.Status == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Status(childComplexity), true
+
+	case "WorkflowAssignment.tags":
+		if e.complexity.WorkflowAssignment.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.Tags(childComplexity), true
+
+	case "WorkflowAssignment.updatedAt":
+		if e.complexity.WorkflowAssignment.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.UpdatedAt(childComplexity), true
+
+	case "WorkflowAssignment.updatedBy":
+		if e.complexity.WorkflowAssignment.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.UpdatedBy(childComplexity), true
+
+	case "WorkflowAssignment.user":
+		if e.complexity.WorkflowAssignment.User == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.User(childComplexity), true
+
+	case "WorkflowAssignment.workflowAssignmentTargets":
+		if e.complexity.WorkflowAssignment.WorkflowAssignmentTargets == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowAssignment_workflowAssignmentTargets_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowAssignment.WorkflowAssignmentTargets(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentTargetOrder), args["where"].(*generated.WorkflowAssignmentTargetWhereInput)), true
+
+	case "WorkflowAssignment.workflowInstance":
+		if e.complexity.WorkflowAssignment.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.WorkflowInstance(childComplexity), true
+
+	case "WorkflowAssignment.workflowInstanceID":
+		if e.complexity.WorkflowAssignment.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignment.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowAssignmentBulkCreatePayload.workflowAssignments":
+		if e.complexity.WorkflowAssignmentBulkCreatePayload.WorkflowAssignments == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentBulkCreatePayload.WorkflowAssignments(childComplexity), true
+
+	case "WorkflowAssignmentConnection.edges":
+		if e.complexity.WorkflowAssignmentConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentConnection.Edges(childComplexity), true
+
+	case "WorkflowAssignmentConnection.pageInfo":
+		if e.complexity.WorkflowAssignmentConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentConnection.PageInfo(childComplexity), true
+
+	case "WorkflowAssignmentConnection.totalCount":
+		if e.complexity.WorkflowAssignmentConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentConnection.TotalCount(childComplexity), true
+
+	case "WorkflowAssignmentCreatePayload.workflowAssignment":
+		if e.complexity.WorkflowAssignmentCreatePayload.WorkflowAssignment == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentCreatePayload.WorkflowAssignment(childComplexity), true
+
+	case "WorkflowAssignmentDeletePayload.deletedID":
+		if e.complexity.WorkflowAssignmentDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowAssignmentEdge.cursor":
+		if e.complexity.WorkflowAssignmentEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentEdge.Cursor(childComplexity), true
+
+	case "WorkflowAssignmentEdge.node":
+		if e.complexity.WorkflowAssignmentEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentEdge.Node(childComplexity), true
+
+	case "WorkflowAssignmentHistory.actorGroupID":
+		if e.complexity.WorkflowAssignmentHistory.ActorGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.ActorGroupID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.actorUserID":
+		if e.complexity.WorkflowAssignmentHistory.ActorUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.ActorUserID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.assignmentKey":
+		if e.complexity.WorkflowAssignmentHistory.AssignmentKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.AssignmentKey(childComplexity), true
+
+	case "WorkflowAssignmentHistory.createdAt":
+		if e.complexity.WorkflowAssignmentHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowAssignmentHistory.createdBy":
+		if e.complexity.WorkflowAssignmentHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowAssignmentHistory.decidedAt":
+		if e.complexity.WorkflowAssignmentHistory.DecidedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.DecidedAt(childComplexity), true
+
+	case "WorkflowAssignmentHistory.displayID":
+		if e.complexity.WorkflowAssignmentHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.DisplayID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.historyTime":
+		if e.complexity.WorkflowAssignmentHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowAssignmentHistory.id":
+		if e.complexity.WorkflowAssignmentHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.ID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.label":
+		if e.complexity.WorkflowAssignmentHistory.Label == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Label(childComplexity), true
+
+	case "WorkflowAssignmentHistory.metadata":
+		if e.complexity.WorkflowAssignmentHistory.Metadata == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Metadata(childComplexity), true
+
+	case "WorkflowAssignmentHistory.notes":
+		if e.complexity.WorkflowAssignmentHistory.Notes == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Notes(childComplexity), true
+
+	case "WorkflowAssignmentHistory.operation":
+		if e.complexity.WorkflowAssignmentHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Operation(childComplexity), true
+
+	case "WorkflowAssignmentHistory.ownerID":
+		if e.complexity.WorkflowAssignmentHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.OwnerID(childComplexity), true
+
+	case "WorkflowAssignmentHistory.ref":
+		if e.complexity.WorkflowAssignmentHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Ref(childComplexity), true
+
+	case "WorkflowAssignmentHistory.required":
+		if e.complexity.WorkflowAssignmentHistory.Required == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Required(childComplexity), true
+
+	case "WorkflowAssignmentHistory.role":
+		if e.complexity.WorkflowAssignmentHistory.Role == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Role(childComplexity), true
+
+	case "WorkflowAssignmentHistory.status":
+		if e.complexity.WorkflowAssignmentHistory.Status == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Status(childComplexity), true
+
+	case "WorkflowAssignmentHistory.tags":
+		if e.complexity.WorkflowAssignmentHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.Tags(childComplexity), true
+
+	case "WorkflowAssignmentHistory.updatedAt":
+		if e.complexity.WorkflowAssignmentHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowAssignmentHistory.updatedBy":
+		if e.complexity.WorkflowAssignmentHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowAssignmentHistory.workflowInstanceID":
+		if e.complexity.WorkflowAssignmentHistory.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistory.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowAssignmentHistoryConnection.edges":
+		if e.complexity.WorkflowAssignmentHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowAssignmentHistoryConnection.pageInfo":
+		if e.complexity.WorkflowAssignmentHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowAssignmentHistoryConnection.totalCount":
+		if e.complexity.WorkflowAssignmentHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowAssignmentHistoryEdge.cursor":
+		if e.complexity.WorkflowAssignmentHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowAssignmentHistoryEdge.node":
+		if e.complexity.WorkflowAssignmentHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowAssignmentTarget.createdAt":
+		if e.complexity.WorkflowAssignmentTarget.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.CreatedAt(childComplexity), true
+
+	case "WorkflowAssignmentTarget.createdBy":
+		if e.complexity.WorkflowAssignmentTarget.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.CreatedBy(childComplexity), true
+
+	case "WorkflowAssignmentTarget.displayID":
+		if e.complexity.WorkflowAssignmentTarget.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.DisplayID(childComplexity), true
+
+	case "WorkflowAssignmentTarget.group":
+		if e.complexity.WorkflowAssignmentTarget.Group == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.Group(childComplexity), true
+
+	case "WorkflowAssignmentTarget.id":
+		if e.complexity.WorkflowAssignmentTarget.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.ID(childComplexity), true
+
+	case "WorkflowAssignmentTarget.owner":
+		if e.complexity.WorkflowAssignmentTarget.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.Owner(childComplexity), true
+
+	case "WorkflowAssignmentTarget.ownerID":
+		if e.complexity.WorkflowAssignmentTarget.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.OwnerID(childComplexity), true
+
+	case "WorkflowAssignmentTarget.resolverKey":
+		if e.complexity.WorkflowAssignmentTarget.ResolverKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.ResolverKey(childComplexity), true
+
+	case "WorkflowAssignmentTarget.tags":
+		if e.complexity.WorkflowAssignmentTarget.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.Tags(childComplexity), true
+
+	case "WorkflowAssignmentTarget.targetGroupID":
+		if e.complexity.WorkflowAssignmentTarget.TargetGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.TargetGroupID(childComplexity), true
+
+	case "WorkflowAssignmentTarget.targetType":
+		if e.complexity.WorkflowAssignmentTarget.TargetType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.TargetType(childComplexity), true
+
+	case "WorkflowAssignmentTarget.targetUserID":
+		if e.complexity.WorkflowAssignmentTarget.TargetUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.TargetUserID(childComplexity), true
+
+	case "WorkflowAssignmentTarget.updatedAt":
+		if e.complexity.WorkflowAssignmentTarget.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.UpdatedAt(childComplexity), true
+
+	case "WorkflowAssignmentTarget.updatedBy":
+		if e.complexity.WorkflowAssignmentTarget.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.UpdatedBy(childComplexity), true
+
+	case "WorkflowAssignmentTarget.user":
+		if e.complexity.WorkflowAssignmentTarget.User == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.User(childComplexity), true
+
+	case "WorkflowAssignmentTarget.workflowAssignment":
+		if e.complexity.WorkflowAssignmentTarget.WorkflowAssignment == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.WorkflowAssignment(childComplexity), true
+
+	case "WorkflowAssignmentTarget.workflowAssignmentID":
+		if e.complexity.WorkflowAssignmentTarget.WorkflowAssignmentID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTarget.WorkflowAssignmentID(childComplexity), true
+
+	case "WorkflowAssignmentTargetBulkCreatePayload.workflowAssignmentTargets":
+		if e.complexity.WorkflowAssignmentTargetBulkCreatePayload.WorkflowAssignmentTargets == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetBulkCreatePayload.WorkflowAssignmentTargets(childComplexity), true
+
+	case "WorkflowAssignmentTargetConnection.edges":
+		if e.complexity.WorkflowAssignmentTargetConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetConnection.Edges(childComplexity), true
+
+	case "WorkflowAssignmentTargetConnection.pageInfo":
+		if e.complexity.WorkflowAssignmentTargetConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetConnection.PageInfo(childComplexity), true
+
+	case "WorkflowAssignmentTargetConnection.totalCount":
+		if e.complexity.WorkflowAssignmentTargetConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetConnection.TotalCount(childComplexity), true
+
+	case "WorkflowAssignmentTargetCreatePayload.workflowAssignmentTarget":
+		if e.complexity.WorkflowAssignmentTargetCreatePayload.WorkflowAssignmentTarget == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetCreatePayload.WorkflowAssignmentTarget(childComplexity), true
+
+	case "WorkflowAssignmentTargetDeletePayload.deletedID":
+		if e.complexity.WorkflowAssignmentTargetDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowAssignmentTargetEdge.cursor":
+		if e.complexity.WorkflowAssignmentTargetEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetEdge.Cursor(childComplexity), true
+
+	case "WorkflowAssignmentTargetEdge.node":
+		if e.complexity.WorkflowAssignmentTargetEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetEdge.Node(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.createdAt":
+		if e.complexity.WorkflowAssignmentTargetHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.createdBy":
+		if e.complexity.WorkflowAssignmentTargetHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.displayID":
+		if e.complexity.WorkflowAssignmentTargetHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.DisplayID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.historyTime":
+		if e.complexity.WorkflowAssignmentTargetHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.id":
+		if e.complexity.WorkflowAssignmentTargetHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.ID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.operation":
+		if e.complexity.WorkflowAssignmentTargetHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.Operation(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.ownerID":
+		if e.complexity.WorkflowAssignmentTargetHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.OwnerID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.ref":
+		if e.complexity.WorkflowAssignmentTargetHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.Ref(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.resolverKey":
+		if e.complexity.WorkflowAssignmentTargetHistory.ResolverKey == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.ResolverKey(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.tags":
+		if e.complexity.WorkflowAssignmentTargetHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.Tags(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.targetGroupID":
+		if e.complexity.WorkflowAssignmentTargetHistory.TargetGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.TargetGroupID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.targetType":
+		if e.complexity.WorkflowAssignmentTargetHistory.TargetType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.TargetType(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.targetUserID":
+		if e.complexity.WorkflowAssignmentTargetHistory.TargetUserID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.TargetUserID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.updatedAt":
+		if e.complexity.WorkflowAssignmentTargetHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.updatedBy":
+		if e.complexity.WorkflowAssignmentTargetHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistory.workflowAssignmentID":
+		if e.complexity.WorkflowAssignmentTargetHistory.WorkflowAssignmentID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistory.WorkflowAssignmentID(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistoryConnection.edges":
+		if e.complexity.WorkflowAssignmentTargetHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistoryConnection.pageInfo":
+		if e.complexity.WorkflowAssignmentTargetHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistoryConnection.totalCount":
+		if e.complexity.WorkflowAssignmentTargetHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistoryEdge.cursor":
+		if e.complexity.WorkflowAssignmentTargetHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowAssignmentTargetHistoryEdge.node":
+		if e.complexity.WorkflowAssignmentTargetHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowAssignmentTargetUpdatePayload.workflowAssignmentTarget":
+		if e.complexity.WorkflowAssignmentTargetUpdatePayload.WorkflowAssignmentTarget == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentTargetUpdatePayload.WorkflowAssignmentTarget(childComplexity), true
+
+	case "WorkflowAssignmentUpdatePayload.workflowAssignment":
+		if e.complexity.WorkflowAssignmentUpdatePayload.WorkflowAssignment == nil {
+			break
+		}
+
+		return e.complexity.WorkflowAssignmentUpdatePayload.WorkflowAssignment(childComplexity), true
+
+	case "WorkflowDefinition.active":
+		if e.complexity.WorkflowDefinition.Active == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Active(childComplexity), true
+
+	case "WorkflowDefinition.cooldownSeconds":
+		if e.complexity.WorkflowDefinition.CooldownSeconds == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.CooldownSeconds(childComplexity), true
+
+	case "WorkflowDefinition.createdAt":
+		if e.complexity.WorkflowDefinition.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.CreatedAt(childComplexity), true
+
+	case "WorkflowDefinition.createdBy":
+		if e.complexity.WorkflowDefinition.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.CreatedBy(childComplexity), true
+
+	case "WorkflowDefinition.definitionJSON":
+		if e.complexity.WorkflowDefinition.DefinitionJSON == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.DefinitionJSON(childComplexity), true
+
+	case "WorkflowDefinition.description":
+		if e.complexity.WorkflowDefinition.Description == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Description(childComplexity), true
+
+	case "WorkflowDefinition.displayID":
+		if e.complexity.WorkflowDefinition.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.DisplayID(childComplexity), true
+
+	case "WorkflowDefinition.draft":
+		if e.complexity.WorkflowDefinition.Draft == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Draft(childComplexity), true
+
+	case "WorkflowDefinition.groups":
+		if e.complexity.WorkflowDefinition.Groups == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_groups_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowDefinition.Groups(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "WorkflowDefinition.id":
+		if e.complexity.WorkflowDefinition.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.ID(childComplexity), true
+
+	case "WorkflowDefinition.internalNotes":
+		if e.complexity.WorkflowDefinition.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.InternalNotes(childComplexity), true
+
+	case "WorkflowDefinition.isDefault":
+		if e.complexity.WorkflowDefinition.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.IsDefault(childComplexity), true
+
+	case "WorkflowDefinition.name":
+		if e.complexity.WorkflowDefinition.Name == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Name(childComplexity), true
+
+	case "WorkflowDefinition.owner":
+		if e.complexity.WorkflowDefinition.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Owner(childComplexity), true
+
+	case "WorkflowDefinition.ownerID":
+		if e.complexity.WorkflowDefinition.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.OwnerID(childComplexity), true
+
+	case "WorkflowDefinition.publishedAt":
+		if e.complexity.WorkflowDefinition.PublishedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.PublishedAt(childComplexity), true
+
+	case "WorkflowDefinition.revision":
+		if e.complexity.WorkflowDefinition.Revision == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Revision(childComplexity), true
+
+	case "WorkflowDefinition.schemaType":
+		if e.complexity.WorkflowDefinition.SchemaType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.SchemaType(childComplexity), true
+
+	case "WorkflowDefinition.systemInternalID":
+		if e.complexity.WorkflowDefinition.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.SystemInternalID(childComplexity), true
+
+	case "WorkflowDefinition.systemOwned":
+		if e.complexity.WorkflowDefinition.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.SystemOwned(childComplexity), true
+
+	case "WorkflowDefinition.tagDefinitions":
+		if e.complexity.WorkflowDefinition.TagDefinitions == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowDefinition_tagDefinitions_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowDefinition.TagDefinitions(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TagDefinitionOrder), args["where"].(*generated.TagDefinitionWhereInput)), true
+
+	case "WorkflowDefinition.tags":
+		if e.complexity.WorkflowDefinition.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.Tags(childComplexity), true
+
+	case "WorkflowDefinition.trackedFields":
+		if e.complexity.WorkflowDefinition.TrackedFields == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.TrackedFields(childComplexity), true
+
+	case "WorkflowDefinition.triggerFields":
+		if e.complexity.WorkflowDefinition.TriggerFields == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.TriggerFields(childComplexity), true
+
+	case "WorkflowDefinition.triggerOperations":
+		if e.complexity.WorkflowDefinition.TriggerOperations == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.TriggerOperations(childComplexity), true
+
+	case "WorkflowDefinition.updatedAt":
+		if e.complexity.WorkflowDefinition.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.UpdatedAt(childComplexity), true
+
+	case "WorkflowDefinition.updatedBy":
+		if e.complexity.WorkflowDefinition.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.UpdatedBy(childComplexity), true
+
+	case "WorkflowDefinition.workflowKind":
+		if e.complexity.WorkflowDefinition.WorkflowKind == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinition.WorkflowKind(childComplexity), true
+
+	case "WorkflowDefinitionBulkCreatePayload.workflowDefinitions":
+		if e.complexity.WorkflowDefinitionBulkCreatePayload.WorkflowDefinitions == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionBulkCreatePayload.WorkflowDefinitions(childComplexity), true
+
+	case "WorkflowDefinitionConnection.edges":
+		if e.complexity.WorkflowDefinitionConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionConnection.Edges(childComplexity), true
+
+	case "WorkflowDefinitionConnection.pageInfo":
+		if e.complexity.WorkflowDefinitionConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionConnection.PageInfo(childComplexity), true
+
+	case "WorkflowDefinitionConnection.totalCount":
+		if e.complexity.WorkflowDefinitionConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionConnection.TotalCount(childComplexity), true
+
+	case "WorkflowDefinitionCreatePayload.workflowDefinition":
+		if e.complexity.WorkflowDefinitionCreatePayload.WorkflowDefinition == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionCreatePayload.WorkflowDefinition(childComplexity), true
+
+	case "WorkflowDefinitionDeletePayload.deletedID":
+		if e.complexity.WorkflowDefinitionDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowDefinitionEdge.cursor":
+		if e.complexity.WorkflowDefinitionEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionEdge.Cursor(childComplexity), true
+
+	case "WorkflowDefinitionEdge.node":
+		if e.complexity.WorkflowDefinitionEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionEdge.Node(childComplexity), true
+
+	case "WorkflowDefinitionHistory.active":
+		if e.complexity.WorkflowDefinitionHistory.Active == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Active(childComplexity), true
+
+	case "WorkflowDefinitionHistory.cooldownSeconds":
+		if e.complexity.WorkflowDefinitionHistory.CooldownSeconds == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.CooldownSeconds(childComplexity), true
+
+	case "WorkflowDefinitionHistory.createdAt":
+		if e.complexity.WorkflowDefinitionHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowDefinitionHistory.createdBy":
+		if e.complexity.WorkflowDefinitionHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowDefinitionHistory.definitionJSON":
+		if e.complexity.WorkflowDefinitionHistory.DefinitionJSON == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.DefinitionJSON(childComplexity), true
+
+	case "WorkflowDefinitionHistory.description":
+		if e.complexity.WorkflowDefinitionHistory.Description == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Description(childComplexity), true
+
+	case "WorkflowDefinitionHistory.displayID":
+		if e.complexity.WorkflowDefinitionHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.DisplayID(childComplexity), true
+
+	case "WorkflowDefinitionHistory.draft":
+		if e.complexity.WorkflowDefinitionHistory.Draft == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Draft(childComplexity), true
+
+	case "WorkflowDefinitionHistory.historyTime":
+		if e.complexity.WorkflowDefinitionHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowDefinitionHistory.id":
+		if e.complexity.WorkflowDefinitionHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.ID(childComplexity), true
+
+	case "WorkflowDefinitionHistory.internalNotes":
+		if e.complexity.WorkflowDefinitionHistory.InternalNotes == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.InternalNotes(childComplexity), true
+
+	case "WorkflowDefinitionHistory.isDefault":
+		if e.complexity.WorkflowDefinitionHistory.IsDefault == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.IsDefault(childComplexity), true
+
+	case "WorkflowDefinitionHistory.name":
+		if e.complexity.WorkflowDefinitionHistory.Name == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Name(childComplexity), true
+
+	case "WorkflowDefinitionHistory.operation":
+		if e.complexity.WorkflowDefinitionHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Operation(childComplexity), true
+
+	case "WorkflowDefinitionHistory.ownerID":
+		if e.complexity.WorkflowDefinitionHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.OwnerID(childComplexity), true
+
+	case "WorkflowDefinitionHistory.publishedAt":
+		if e.complexity.WorkflowDefinitionHistory.PublishedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.PublishedAt(childComplexity), true
+
+	case "WorkflowDefinitionHistory.ref":
+		if e.complexity.WorkflowDefinitionHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Ref(childComplexity), true
+
+	case "WorkflowDefinitionHistory.revision":
+		if e.complexity.WorkflowDefinitionHistory.Revision == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Revision(childComplexity), true
+
+	case "WorkflowDefinitionHistory.schemaType":
+		if e.complexity.WorkflowDefinitionHistory.SchemaType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.SchemaType(childComplexity), true
+
+	case "WorkflowDefinitionHistory.systemInternalID":
+		if e.complexity.WorkflowDefinitionHistory.SystemInternalID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.SystemInternalID(childComplexity), true
+
+	case "WorkflowDefinitionHistory.systemOwned":
+		if e.complexity.WorkflowDefinitionHistory.SystemOwned == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.SystemOwned(childComplexity), true
+
+	case "WorkflowDefinitionHistory.tags":
+		if e.complexity.WorkflowDefinitionHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.Tags(childComplexity), true
+
+	case "WorkflowDefinitionHistory.trackedFields":
+		if e.complexity.WorkflowDefinitionHistory.TrackedFields == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.TrackedFields(childComplexity), true
+
+	case "WorkflowDefinitionHistory.triggerFields":
+		if e.complexity.WorkflowDefinitionHistory.TriggerFields == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.TriggerFields(childComplexity), true
+
+	case "WorkflowDefinitionHistory.triggerOperations":
+		if e.complexity.WorkflowDefinitionHistory.TriggerOperations == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.TriggerOperations(childComplexity), true
+
+	case "WorkflowDefinitionHistory.updatedAt":
+		if e.complexity.WorkflowDefinitionHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowDefinitionHistory.updatedBy":
+		if e.complexity.WorkflowDefinitionHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowDefinitionHistory.workflowKind":
+		if e.complexity.WorkflowDefinitionHistory.WorkflowKind == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistory.WorkflowKind(childComplexity), true
+
+	case "WorkflowDefinitionHistoryConnection.edges":
+		if e.complexity.WorkflowDefinitionHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowDefinitionHistoryConnection.pageInfo":
+		if e.complexity.WorkflowDefinitionHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowDefinitionHistoryConnection.totalCount":
+		if e.complexity.WorkflowDefinitionHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowDefinitionHistoryEdge.cursor":
+		if e.complexity.WorkflowDefinitionHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowDefinitionHistoryEdge.node":
+		if e.complexity.WorkflowDefinitionHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowDefinitionUpdatePayload.workflowDefinition":
+		if e.complexity.WorkflowDefinitionUpdatePayload.WorkflowDefinition == nil {
+			break
+		}
+
+		return e.complexity.WorkflowDefinitionUpdatePayload.WorkflowDefinition(childComplexity), true
+
+	case "WorkflowEvent.createdAt":
+		if e.complexity.WorkflowEvent.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.CreatedAt(childComplexity), true
+
+	case "WorkflowEvent.createdBy":
+		if e.complexity.WorkflowEvent.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.CreatedBy(childComplexity), true
+
+	case "WorkflowEvent.displayID":
+		if e.complexity.WorkflowEvent.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.DisplayID(childComplexity), true
+
+	case "WorkflowEvent.eventType":
+		if e.complexity.WorkflowEvent.EventType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.EventType(childComplexity), true
+
+	case "WorkflowEvent.id":
+		if e.complexity.WorkflowEvent.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.ID(childComplexity), true
+
+	case "WorkflowEvent.owner":
+		if e.complexity.WorkflowEvent.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.Owner(childComplexity), true
+
+	case "WorkflowEvent.ownerID":
+		if e.complexity.WorkflowEvent.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.OwnerID(childComplexity), true
+
+	case "WorkflowEvent.payload":
+		if e.complexity.WorkflowEvent.Payload == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.Payload(childComplexity), true
+
+	case "WorkflowEvent.tags":
+		if e.complexity.WorkflowEvent.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.Tags(childComplexity), true
+
+	case "WorkflowEvent.updatedAt":
+		if e.complexity.WorkflowEvent.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.UpdatedAt(childComplexity), true
+
+	case "WorkflowEvent.updatedBy":
+		if e.complexity.WorkflowEvent.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.UpdatedBy(childComplexity), true
+
+	case "WorkflowEvent.workflowInstance":
+		if e.complexity.WorkflowEvent.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.WorkflowInstance(childComplexity), true
+
+	case "WorkflowEvent.workflowInstanceID":
+		if e.complexity.WorkflowEvent.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEvent.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowEventBulkCreatePayload.workflowEvents":
+		if e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventBulkCreatePayload.WorkflowEvents(childComplexity), true
+
+	case "WorkflowEventConnection.edges":
+		if e.complexity.WorkflowEventConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventConnection.Edges(childComplexity), true
+
+	case "WorkflowEventConnection.pageInfo":
+		if e.complexity.WorkflowEventConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventConnection.PageInfo(childComplexity), true
+
+	case "WorkflowEventConnection.totalCount":
+		if e.complexity.WorkflowEventConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventConnection.TotalCount(childComplexity), true
+
+	case "WorkflowEventCreatePayload.workflowEvent":
+		if e.complexity.WorkflowEventCreatePayload.WorkflowEvent == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventCreatePayload.WorkflowEvent(childComplexity), true
+
+	case "WorkflowEventDeletePayload.deletedID":
+		if e.complexity.WorkflowEventDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowEventEdge.cursor":
+		if e.complexity.WorkflowEventEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventEdge.Cursor(childComplexity), true
+
+	case "WorkflowEventEdge.node":
+		if e.complexity.WorkflowEventEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventEdge.Node(childComplexity), true
+
+	case "WorkflowEventHistory.createdAt":
+		if e.complexity.WorkflowEventHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowEventHistory.createdBy":
+		if e.complexity.WorkflowEventHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowEventHistory.displayID":
+		if e.complexity.WorkflowEventHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.DisplayID(childComplexity), true
+
+	case "WorkflowEventHistory.eventType":
+		if e.complexity.WorkflowEventHistory.EventType == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.EventType(childComplexity), true
+
+	case "WorkflowEventHistory.historyTime":
+		if e.complexity.WorkflowEventHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowEventHistory.id":
+		if e.complexity.WorkflowEventHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.ID(childComplexity), true
+
+	case "WorkflowEventHistory.operation":
+		if e.complexity.WorkflowEventHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.Operation(childComplexity), true
+
+	case "WorkflowEventHistory.ownerID":
+		if e.complexity.WorkflowEventHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.OwnerID(childComplexity), true
+
+	case "WorkflowEventHistory.payload":
+		if e.complexity.WorkflowEventHistory.Payload == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.Payload(childComplexity), true
+
+	case "WorkflowEventHistory.ref":
+		if e.complexity.WorkflowEventHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.Ref(childComplexity), true
+
+	case "WorkflowEventHistory.tags":
+		if e.complexity.WorkflowEventHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.Tags(childComplexity), true
+
+	case "WorkflowEventHistory.updatedAt":
+		if e.complexity.WorkflowEventHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowEventHistory.updatedBy":
+		if e.complexity.WorkflowEventHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowEventHistory.workflowInstanceID":
+		if e.complexity.WorkflowEventHistory.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistory.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowEventHistoryConnection.edges":
+		if e.complexity.WorkflowEventHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowEventHistoryConnection.pageInfo":
+		if e.complexity.WorkflowEventHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowEventHistoryConnection.totalCount":
+		if e.complexity.WorkflowEventHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowEventHistoryEdge.cursor":
+		if e.complexity.WorkflowEventHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowEventHistoryEdge.node":
+		if e.complexity.WorkflowEventHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowEventUpdatePayload.workflowEvent":
+		if e.complexity.WorkflowEventUpdatePayload.WorkflowEvent == nil {
+			break
+		}
+
+		return e.complexity.WorkflowEventUpdatePayload.WorkflowEvent(childComplexity), true
+
+	case "WorkflowInstance.context":
+		if e.complexity.WorkflowInstance.Context == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Context(childComplexity), true
+
+	case "WorkflowInstance.createdAt":
+		if e.complexity.WorkflowInstance.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CreatedAt(childComplexity), true
+
+	case "WorkflowInstance.createdBy":
+		if e.complexity.WorkflowInstance.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.CreatedBy(childComplexity), true
+
+	case "WorkflowInstance.definitionSnapshot":
+		if e.complexity.WorkflowInstance.DefinitionSnapshot == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.DefinitionSnapshot(childComplexity), true
+
+	case "WorkflowInstance.displayID":
+		if e.complexity.WorkflowInstance.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.DisplayID(childComplexity), true
+
+	case "WorkflowInstance.id":
+		if e.complexity.WorkflowInstance.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.ID(childComplexity), true
+
+	case "WorkflowInstance.lastEvaluatedAt":
+		if e.complexity.WorkflowInstance.LastEvaluatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.LastEvaluatedAt(childComplexity), true
+
+	case "WorkflowInstance.owner":
+		if e.complexity.WorkflowInstance.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Owner(childComplexity), true
+
+	case "WorkflowInstance.ownerID":
+		if e.complexity.WorkflowInstance.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.OwnerID(childComplexity), true
+
+	case "WorkflowInstance.state":
+		if e.complexity.WorkflowInstance.State == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.State(childComplexity), true
+
+	case "WorkflowInstance.tags":
+		if e.complexity.WorkflowInstance.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.Tags(childComplexity), true
+
+	case "WorkflowInstance.updatedAt":
+		if e.complexity.WorkflowInstance.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.UpdatedAt(childComplexity), true
+
+	case "WorkflowInstance.updatedBy":
+		if e.complexity.WorkflowInstance.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.UpdatedBy(childComplexity), true
+
+	case "WorkflowInstance.workflowAssignments":
+		if e.complexity.WorkflowInstance.WorkflowAssignments == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowInstance_workflowAssignments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowAssignments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowAssignmentOrder), args["where"].(*generated.WorkflowAssignmentWhereInput)), true
+
+	case "WorkflowInstance.workflowDefinition":
+		if e.complexity.WorkflowInstance.WorkflowDefinition == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowDefinition(childComplexity), true
+
+	case "WorkflowInstance.workflowDefinitionID":
+		if e.complexity.WorkflowInstance.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowDefinitionID(childComplexity), true
+
+	case "WorkflowInstance.workflowEvents":
+		if e.complexity.WorkflowInstance.WorkflowEvents == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowInstance_workflowEvents_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowEvents(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowEventOrder), args["where"].(*generated.WorkflowEventWhereInput)), true
+
+	case "WorkflowInstance.workflowObjectRefs":
+		if e.complexity.WorkflowInstance.WorkflowObjectRefs == nil {
+			break
+		}
+
+		args, err := ec.field_WorkflowInstance_workflowObjectRefs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.WorkflowInstance.WorkflowObjectRefs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.WorkflowObjectRefOrder), args["where"].(*generated.WorkflowObjectRefWhereInput)), true
+
+	case "WorkflowInstanceBulkCreatePayload.workflowInstances":
+		if e.complexity.WorkflowInstanceBulkCreatePayload.WorkflowInstances == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceBulkCreatePayload.WorkflowInstances(childComplexity), true
+
+	case "WorkflowInstanceConnection.edges":
+		if e.complexity.WorkflowInstanceConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceConnection.Edges(childComplexity), true
+
+	case "WorkflowInstanceConnection.pageInfo":
+		if e.complexity.WorkflowInstanceConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceConnection.PageInfo(childComplexity), true
+
+	case "WorkflowInstanceConnection.totalCount":
+		if e.complexity.WorkflowInstanceConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceConnection.TotalCount(childComplexity), true
+
+	case "WorkflowInstanceCreatePayload.workflowInstance":
+		if e.complexity.WorkflowInstanceCreatePayload.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceCreatePayload.WorkflowInstance(childComplexity), true
+
+	case "WorkflowInstanceDeletePayload.deletedID":
+		if e.complexity.WorkflowInstanceDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowInstanceEdge.cursor":
+		if e.complexity.WorkflowInstanceEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceEdge.Cursor(childComplexity), true
+
+	case "WorkflowInstanceEdge.node":
+		if e.complexity.WorkflowInstanceEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceEdge.Node(childComplexity), true
+
+	case "WorkflowInstanceHistory.context":
+		if e.complexity.WorkflowInstanceHistory.Context == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.Context(childComplexity), true
+
+	case "WorkflowInstanceHistory.createdAt":
+		if e.complexity.WorkflowInstanceHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowInstanceHistory.createdBy":
+		if e.complexity.WorkflowInstanceHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowInstanceHistory.definitionSnapshot":
+		if e.complexity.WorkflowInstanceHistory.DefinitionSnapshot == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.DefinitionSnapshot(childComplexity), true
+
+	case "WorkflowInstanceHistory.displayID":
+		if e.complexity.WorkflowInstanceHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.DisplayID(childComplexity), true
+
+	case "WorkflowInstanceHistory.historyTime":
+		if e.complexity.WorkflowInstanceHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowInstanceHistory.id":
+		if e.complexity.WorkflowInstanceHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.ID(childComplexity), true
+
+	case "WorkflowInstanceHistory.lastEvaluatedAt":
+		if e.complexity.WorkflowInstanceHistory.LastEvaluatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.LastEvaluatedAt(childComplexity), true
+
+	case "WorkflowInstanceHistory.operation":
+		if e.complexity.WorkflowInstanceHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.Operation(childComplexity), true
+
+	case "WorkflowInstanceHistory.ownerID":
+		if e.complexity.WorkflowInstanceHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.OwnerID(childComplexity), true
+
+	case "WorkflowInstanceHistory.ref":
+		if e.complexity.WorkflowInstanceHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.Ref(childComplexity), true
+
+	case "WorkflowInstanceHistory.state":
+		if e.complexity.WorkflowInstanceHistory.State == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.State(childComplexity), true
+
+	case "WorkflowInstanceHistory.tags":
+		if e.complexity.WorkflowInstanceHistory.Tags == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.Tags(childComplexity), true
+
+	case "WorkflowInstanceHistory.updatedAt":
+		if e.complexity.WorkflowInstanceHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowInstanceHistory.updatedBy":
+		if e.complexity.WorkflowInstanceHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowInstanceHistory.workflowDefinitionID":
+		if e.complexity.WorkflowInstanceHistory.WorkflowDefinitionID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistory.WorkflowDefinitionID(childComplexity), true
+
+	case "WorkflowInstanceHistoryConnection.edges":
+		if e.complexity.WorkflowInstanceHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowInstanceHistoryConnection.pageInfo":
+		if e.complexity.WorkflowInstanceHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowInstanceHistoryConnection.totalCount":
+		if e.complexity.WorkflowInstanceHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowInstanceHistoryEdge.cursor":
+		if e.complexity.WorkflowInstanceHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowInstanceHistoryEdge.node":
+		if e.complexity.WorkflowInstanceHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowInstanceUpdatePayload.workflowInstance":
+		if e.complexity.WorkflowInstanceUpdatePayload.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowInstanceUpdatePayload.WorkflowInstance(childComplexity), true
+
+	case "WorkflowObjectRef.control":
+		if e.complexity.WorkflowObjectRef.Control == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Control(childComplexity), true
+
+	case "WorkflowObjectRef.controlID":
+		if e.complexity.WorkflowObjectRef.ControlID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.ControlID(childComplexity), true
+
+	case "WorkflowObjectRef.createdAt":
+		if e.complexity.WorkflowObjectRef.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.CreatedAt(childComplexity), true
+
+	case "WorkflowObjectRef.createdBy":
+		if e.complexity.WorkflowObjectRef.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.CreatedBy(childComplexity), true
+
+	case "WorkflowObjectRef.directoryAccount":
+		if e.complexity.WorkflowObjectRef.DirectoryAccount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryAccount(childComplexity), true
+
+	case "WorkflowObjectRef.directoryAccountID":
+		if e.complexity.WorkflowObjectRef.DirectoryAccountID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryAccountID(childComplexity), true
+
+	case "WorkflowObjectRef.directoryGroup":
+		if e.complexity.WorkflowObjectRef.DirectoryGroup == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryGroup(childComplexity), true
+
+	case "WorkflowObjectRef.directoryGroupID":
+		if e.complexity.WorkflowObjectRef.DirectoryGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryGroupID(childComplexity), true
+
+	case "WorkflowObjectRef.directoryMembership":
+		if e.complexity.WorkflowObjectRef.DirectoryMembership == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryMembership(childComplexity), true
+
+	case "WorkflowObjectRef.directoryMembershipID":
+		if e.complexity.WorkflowObjectRef.DirectoryMembershipID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DirectoryMembershipID(childComplexity), true
+
+	case "WorkflowObjectRef.displayID":
+		if e.complexity.WorkflowObjectRef.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.DisplayID(childComplexity), true
+
+	case "WorkflowObjectRef.finding":
+		if e.complexity.WorkflowObjectRef.Finding == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Finding(childComplexity), true
+
+	case "WorkflowObjectRef.findingID":
+		if e.complexity.WorkflowObjectRef.FindingID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.FindingID(childComplexity), true
+
+	case "WorkflowObjectRef.id":
+		if e.complexity.WorkflowObjectRef.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.ID(childComplexity), true
+
+	case "WorkflowObjectRef.internalPolicy":
+		if e.complexity.WorkflowObjectRef.InternalPolicy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.InternalPolicy(childComplexity), true
+
+	case "WorkflowObjectRef.internalPolicyID":
+		if e.complexity.WorkflowObjectRef.InternalPolicyID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.InternalPolicyID(childComplexity), true
+
+	case "WorkflowObjectRef.owner":
+		if e.complexity.WorkflowObjectRef.Owner == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Owner(childComplexity), true
+
+	case "WorkflowObjectRef.ownerID":
+		if e.complexity.WorkflowObjectRef.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.OwnerID(childComplexity), true
+
+	case "WorkflowObjectRef.task":
+		if e.complexity.WorkflowObjectRef.Task == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.Task(childComplexity), true
+
+	case "WorkflowObjectRef.taskID":
+		if e.complexity.WorkflowObjectRef.TaskID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.TaskID(childComplexity), true
+
+	case "WorkflowObjectRef.updatedAt":
+		if e.complexity.WorkflowObjectRef.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.UpdatedAt(childComplexity), true
+
+	case "WorkflowObjectRef.updatedBy":
+		if e.complexity.WorkflowObjectRef.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.UpdatedBy(childComplexity), true
+
+	case "WorkflowObjectRef.workflowInstance":
+		if e.complexity.WorkflowObjectRef.WorkflowInstance == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.WorkflowInstance(childComplexity), true
+
+	case "WorkflowObjectRef.workflowInstanceID":
+		if e.complexity.WorkflowObjectRef.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRef.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowObjectRefBulkCreatePayload.workflowObjectRefs":
+		if e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefBulkCreatePayload.WorkflowObjectRefs(childComplexity), true
+
+	case "WorkflowObjectRefConnection.edges":
+		if e.complexity.WorkflowObjectRefConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefConnection.Edges(childComplexity), true
+
+	case "WorkflowObjectRefConnection.pageInfo":
+		if e.complexity.WorkflowObjectRefConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefConnection.PageInfo(childComplexity), true
+
+	case "WorkflowObjectRefConnection.totalCount":
+		if e.complexity.WorkflowObjectRefConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefConnection.TotalCount(childComplexity), true
+
+	case "WorkflowObjectRefCreatePayload.workflowObjectRef":
+		if e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefCreatePayload.WorkflowObjectRef(childComplexity), true
+
+	case "WorkflowObjectRefDeletePayload.deletedID":
+		if e.complexity.WorkflowObjectRefDeletePayload.DeletedID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefDeletePayload.DeletedID(childComplexity), true
+
+	case "WorkflowObjectRefEdge.cursor":
+		if e.complexity.WorkflowObjectRefEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefEdge.Cursor(childComplexity), true
+
+	case "WorkflowObjectRefEdge.node":
+		if e.complexity.WorkflowObjectRefEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefEdge.Node(childComplexity), true
+
+	case "WorkflowObjectRefHistory.controlID":
+		if e.complexity.WorkflowObjectRefHistory.ControlID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.ControlID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.createdAt":
+		if e.complexity.WorkflowObjectRefHistory.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.CreatedAt(childComplexity), true
+
+	case "WorkflowObjectRefHistory.createdBy":
+		if e.complexity.WorkflowObjectRefHistory.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.CreatedBy(childComplexity), true
+
+	case "WorkflowObjectRefHistory.directoryAccountID":
+		if e.complexity.WorkflowObjectRefHistory.DirectoryAccountID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.DirectoryAccountID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.directoryGroupID":
+		if e.complexity.WorkflowObjectRefHistory.DirectoryGroupID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.DirectoryGroupID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.directoryMembershipID":
+		if e.complexity.WorkflowObjectRefHistory.DirectoryMembershipID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.DirectoryMembershipID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.displayID":
+		if e.complexity.WorkflowObjectRefHistory.DisplayID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.DisplayID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.findingID":
+		if e.complexity.WorkflowObjectRefHistory.FindingID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.FindingID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.historyTime":
+		if e.complexity.WorkflowObjectRefHistory.HistoryTime == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.HistoryTime(childComplexity), true
+
+	case "WorkflowObjectRefHistory.id":
+		if e.complexity.WorkflowObjectRefHistory.ID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.ID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.internalPolicyID":
+		if e.complexity.WorkflowObjectRefHistory.InternalPolicyID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.InternalPolicyID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.operation":
+		if e.complexity.WorkflowObjectRefHistory.Operation == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.Operation(childComplexity), true
+
+	case "WorkflowObjectRefHistory.ownerID":
+		if e.complexity.WorkflowObjectRefHistory.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.OwnerID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.ref":
+		if e.complexity.WorkflowObjectRefHistory.Ref == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.Ref(childComplexity), true
+
+	case "WorkflowObjectRefHistory.taskID":
+		if e.complexity.WorkflowObjectRefHistory.TaskID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.TaskID(childComplexity), true
+
+	case "WorkflowObjectRefHistory.updatedAt":
+		if e.complexity.WorkflowObjectRefHistory.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.UpdatedAt(childComplexity), true
+
+	case "WorkflowObjectRefHistory.updatedBy":
+		if e.complexity.WorkflowObjectRefHistory.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.UpdatedBy(childComplexity), true
+
+	case "WorkflowObjectRefHistory.workflowInstanceID":
+		if e.complexity.WorkflowObjectRefHistory.WorkflowInstanceID == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistory.WorkflowInstanceID(childComplexity), true
+
+	case "WorkflowObjectRefHistoryConnection.edges":
+		if e.complexity.WorkflowObjectRefHistoryConnection.Edges == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistoryConnection.Edges(childComplexity), true
+
+	case "WorkflowObjectRefHistoryConnection.pageInfo":
+		if e.complexity.WorkflowObjectRefHistoryConnection.PageInfo == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistoryConnection.PageInfo(childComplexity), true
+
+	case "WorkflowObjectRefHistoryConnection.totalCount":
+		if e.complexity.WorkflowObjectRefHistoryConnection.TotalCount == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistoryConnection.TotalCount(childComplexity), true
+
+	case "WorkflowObjectRefHistoryEdge.cursor":
+		if e.complexity.WorkflowObjectRefHistoryEdge.Cursor == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistoryEdge.Cursor(childComplexity), true
+
+	case "WorkflowObjectRefHistoryEdge.node":
+		if e.complexity.WorkflowObjectRefHistoryEdge.Node == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefHistoryEdge.Node(childComplexity), true
+
+	case "WorkflowObjectRefUpdatePayload.workflowObjectRef":
+		if e.complexity.WorkflowObjectRefUpdatePayload.WorkflowObjectRef == nil {
+			break
+		}
+
+		return e.complexity.WorkflowObjectRefUpdatePayload.WorkflowObjectRef(childComplexity), true
+
 	}
 	return 0, false
 }
@@ -45137,6 +51516,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateCustomDomainInput,
 		ec.unmarshalInputCreateCustomTypeEnumInput,
 		ec.unmarshalInputCreateDNSVerificationInput,
+		ec.unmarshalInputCreateDirectoryAccountInput,
+		ec.unmarshalInputCreateDirectoryGroupInput,
+		ec.unmarshalInputCreateDirectoryMembershipInput,
+		ec.unmarshalInputCreateDirectorySyncRunInput,
 		ec.unmarshalInputCreateDocumentDataInput,
 		ec.unmarshalInputCreateEntityInput,
 		ec.unmarshalInputCreateEntityTypeInput,
@@ -45197,6 +51580,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateUserInput,
 		ec.unmarshalInputCreateUserSettingInput,
 		ec.unmarshalInputCreateVulnerabilityInput,
+		ec.unmarshalInputCreateWorkflowAssignmentInput,
+		ec.unmarshalInputCreateWorkflowAssignmentTargetInput,
+		ec.unmarshalInputCreateWorkflowDefinitionInput,
+		ec.unmarshalInputCreateWorkflowEventInput,
+		ec.unmarshalInputCreateWorkflowInstanceInput,
+		ec.unmarshalInputCreateWorkflowObjectRefInput,
 		ec.unmarshalInputCustomDomainHistoryOrder,
 		ec.unmarshalInputCustomDomainHistoryWhereInput,
 		ec.unmarshalInputCustomDomainOrder,
@@ -45207,6 +51596,20 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputDNSVerificationHistoryWhereInput,
 		ec.unmarshalInputDNSVerificationOrder,
 		ec.unmarshalInputDNSVerificationWhereInput,
+		ec.unmarshalInputDirectoryAccountHistoryOrder,
+		ec.unmarshalInputDirectoryAccountHistoryWhereInput,
+		ec.unmarshalInputDirectoryAccountOrder,
+		ec.unmarshalInputDirectoryAccountWhereInput,
+		ec.unmarshalInputDirectoryGroupHistoryOrder,
+		ec.unmarshalInputDirectoryGroupHistoryWhereInput,
+		ec.unmarshalInputDirectoryGroupOrder,
+		ec.unmarshalInputDirectoryGroupWhereInput,
+		ec.unmarshalInputDirectoryMembershipHistoryOrder,
+		ec.unmarshalInputDirectoryMembershipHistoryWhereInput,
+		ec.unmarshalInputDirectoryMembershipOrder,
+		ec.unmarshalInputDirectoryMembershipWhereInput,
+		ec.unmarshalInputDirectorySyncRunOrder,
+		ec.unmarshalInputDirectorySyncRunWhereInput,
 		ec.unmarshalInputDocumentDataHistoryOrder,
 		ec.unmarshalInputDocumentDataHistoryWhereInput,
 		ec.unmarshalInputDocumentDataOrder,
@@ -45413,6 +51816,10 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateCustomDomainInput,
 		ec.unmarshalInputUpdateCustomTypeEnumInput,
 		ec.unmarshalInputUpdateDNSVerificationInput,
+		ec.unmarshalInputUpdateDirectoryAccountInput,
+		ec.unmarshalInputUpdateDirectoryGroupInput,
+		ec.unmarshalInputUpdateDirectoryMembershipInput,
+		ec.unmarshalInputUpdateDirectorySyncRunInput,
 		ec.unmarshalInputUpdateDocumentDataInput,
 		ec.unmarshalInputUpdateEntityInput,
 		ec.unmarshalInputUpdateEntityTypeInput,
@@ -45467,6 +51874,12 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputUpdateUserInput,
 		ec.unmarshalInputUpdateUserSettingInput,
 		ec.unmarshalInputUpdateVulnerabilityInput,
+		ec.unmarshalInputUpdateWorkflowAssignmentInput,
+		ec.unmarshalInputUpdateWorkflowAssignmentTargetInput,
+		ec.unmarshalInputUpdateWorkflowDefinitionInput,
+		ec.unmarshalInputUpdateWorkflowEventInput,
+		ec.unmarshalInputUpdateWorkflowInstanceInput,
+		ec.unmarshalInputUpdateWorkflowObjectRefInput,
 		ec.unmarshalInputUserHistoryOrder,
 		ec.unmarshalInputUserHistoryWhereInput,
 		ec.unmarshalInputUserOrder,
@@ -45481,6 +51894,30 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputVulnerabilityWhereInput,
 		ec.unmarshalInputWebauthnOrder,
 		ec.unmarshalInputWebauthnWhereInput,
+		ec.unmarshalInputWorkflowAssignmentHistoryOrder,
+		ec.unmarshalInputWorkflowAssignmentHistoryWhereInput,
+		ec.unmarshalInputWorkflowAssignmentOrder,
+		ec.unmarshalInputWorkflowAssignmentTargetHistoryOrder,
+		ec.unmarshalInputWorkflowAssignmentTargetHistoryWhereInput,
+		ec.unmarshalInputWorkflowAssignmentTargetOrder,
+		ec.unmarshalInputWorkflowAssignmentTargetWhereInput,
+		ec.unmarshalInputWorkflowAssignmentWhereInput,
+		ec.unmarshalInputWorkflowDefinitionHistoryOrder,
+		ec.unmarshalInputWorkflowDefinitionHistoryWhereInput,
+		ec.unmarshalInputWorkflowDefinitionOrder,
+		ec.unmarshalInputWorkflowDefinitionWhereInput,
+		ec.unmarshalInputWorkflowEventHistoryOrder,
+		ec.unmarshalInputWorkflowEventHistoryWhereInput,
+		ec.unmarshalInputWorkflowEventOrder,
+		ec.unmarshalInputWorkflowEventWhereInput,
+		ec.unmarshalInputWorkflowInstanceHistoryOrder,
+		ec.unmarshalInputWorkflowInstanceHistoryWhereInput,
+		ec.unmarshalInputWorkflowInstanceOrder,
+		ec.unmarshalInputWorkflowInstanceWhereInput,
+		ec.unmarshalInputWorkflowObjectRefHistoryOrder,
+		ec.unmarshalInputWorkflowObjectRefHistoryWhereInput,
+		ec.unmarshalInputWorkflowObjectRefOrder,
+		ec.unmarshalInputWorkflowObjectRefWhereInput,
 	)
 	first := true
 
@@ -46047,6 +52484,56 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): DNSVerificationConnection
+    """
+    Search across DirectoryAccount objects
+    """
+    adminDirectoryAccountSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryAccountConnection
+    """
+    Search across DirectoryGroup objects
+    """
+    adminDirectoryGroupSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryGroupConnection
     """
     Search across DocumentData objects
     """
@@ -47097,6 +53584,131 @@ type ActionPlanBulkDeletePayload {
         """
         last: Int
     ): WebauthnConnection
+    """
+    Search across WorkflowAssignment objects
+    """
+    adminWorkflowAssignmentSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentConnection
+    """
+    Search across WorkflowAssignmentTarget objects
+    """
+    adminWorkflowAssignmentTargetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentTargetConnection
+    """
+    Search across WorkflowDefinition objects
+    """
+    adminWorkflowDefinitionSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowDefinitionConnection
+    """
+    Search across WorkflowEvent objects
+    """
+    adminWorkflowEventSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowEventConnection
+    """
+    Search across WorkflowInstance objects
+    """
+    adminWorkflowInstanceSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowInstanceConnection
 }`, BuiltIn: false},
 	{Name: "../schema/apitoken.graphql", Input: `extend type Query {
     """
@@ -48646,6 +55258,418 @@ This does not prevent the viewing of the field
 """
 directive @externalSource(source: ControlControlSource) on OBJECT | FIELD_DEFINITION
 `, BuiltIn: false},
+	{Name: "../schema/directoryaccount.graphql", Input: `extend type Query {
+    """
+    Look up directoryAccount by ID
+    """
+     directoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+    ):  DirectoryAccount!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryAccount
+    """
+    createDirectoryAccount(
+        """
+        values of the directoryAccount
+        """
+        input: CreateDirectoryAccountInput!
+    ): DirectoryAccountCreatePayload!
+    """
+    Create multiple new directoryAccounts
+    """
+    createBulkDirectoryAccount(
+        """
+        values of the directoryAccount
+        """
+        input: [CreateDirectoryAccountInput!]
+    ): DirectoryAccountBulkCreatePayload!
+    """
+    Create multiple new directoryAccounts via file upload
+    """
+    createBulkCSVDirectoryAccount(
+        """
+        csv file containing values of the directoryAccount
+        """
+        input: Upload!
+    ): DirectoryAccountBulkCreatePayload!
+    """
+    Update an existing directoryAccount
+    """
+    updateDirectoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+        """
+        New values for the directoryAccount
+        """
+        input: UpdateDirectoryAccountInput!
+    ): DirectoryAccountUpdatePayload!
+    """
+    Delete an existing directoryAccount
+    """
+    deleteDirectoryAccount(
+        """
+        ID of the directoryAccount
+        """
+        id: ID!
+    ): DirectoryAccountDeletePayload!
+}
+
+"""
+Return response for createDirectoryAccount mutation
+"""
+type DirectoryAccountCreatePayload {
+    """
+    Created directoryAccount
+    """
+    directoryAccount: DirectoryAccount!
+}
+
+"""
+Return response for updateDirectoryAccount mutation
+"""
+type DirectoryAccountUpdatePayload {
+    """
+    Updated directoryAccount
+    """
+    directoryAccount: DirectoryAccount!
+}
+
+"""
+Return response for deleteDirectoryAccount mutation
+"""
+type DirectoryAccountDeletePayload {
+    """
+    Deleted directoryAccount ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryAccount mutation
+"""
+type DirectoryAccountBulkCreatePayload {
+    """
+    Created directoryAccounts
+    """
+    directoryAccounts: [DirectoryAccount!]
+}`, BuiltIn: false},
+	{Name: "../schema/directorygroup.graphql", Input: `extend type Query {
+    """
+    Look up directoryGroup by ID
+    """
+     directoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+    ):  DirectoryGroup!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryGroup
+    """
+    createDirectoryGroup(
+        """
+        values of the directoryGroup
+        """
+        input: CreateDirectoryGroupInput!
+    ): DirectoryGroupCreatePayload!
+    """
+    Create multiple new directoryGroups
+    """
+    createBulkDirectoryGroup(
+        """
+        values of the directoryGroup
+        """
+        input: [CreateDirectoryGroupInput!]
+    ): DirectoryGroupBulkCreatePayload!
+    """
+    Create multiple new directoryGroups via file upload
+    """
+    createBulkCSVDirectoryGroup(
+        """
+        csv file containing values of the directoryGroup
+        """
+        input: Upload!
+    ): DirectoryGroupBulkCreatePayload!
+    """
+    Update an existing directoryGroup
+    """
+    updateDirectoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+        """
+        New values for the directoryGroup
+        """
+        input: UpdateDirectoryGroupInput!
+    ): DirectoryGroupUpdatePayload!
+    """
+    Delete an existing directoryGroup
+    """
+    deleteDirectoryGroup(
+        """
+        ID of the directoryGroup
+        """
+        id: ID!
+    ): DirectoryGroupDeletePayload!
+}
+
+"""
+Return response for createDirectoryGroup mutation
+"""
+type DirectoryGroupCreatePayload {
+    """
+    Created directoryGroup
+    """
+    directoryGroup: DirectoryGroup!
+}
+
+"""
+Return response for updateDirectoryGroup mutation
+"""
+type DirectoryGroupUpdatePayload {
+    """
+    Updated directoryGroup
+    """
+    directoryGroup: DirectoryGroup!
+}
+
+"""
+Return response for deleteDirectoryGroup mutation
+"""
+type DirectoryGroupDeletePayload {
+    """
+    Deleted directoryGroup ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryGroup mutation
+"""
+type DirectoryGroupBulkCreatePayload {
+    """
+    Created directoryGroups
+    """
+    directoryGroups: [DirectoryGroup!]
+}`, BuiltIn: false},
+	{Name: "../schema/directorymembership.graphql", Input: `extend type Query {
+    """
+    Look up directoryMembership by ID
+    """
+     directoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+    ):  DirectoryMembership!
+}
+
+extend type Mutation{
+    """
+    Create a new directoryMembership
+    """
+    createDirectoryMembership(
+        """
+        values of the directoryMembership
+        """
+        input: CreateDirectoryMembershipInput!
+    ): DirectoryMembershipCreatePayload!
+    """
+    Create multiple new directoryMemberships
+    """
+    createBulkDirectoryMembership(
+        """
+        values of the directoryMembership
+        """
+        input: [CreateDirectoryMembershipInput!]
+    ): DirectoryMembershipBulkCreatePayload!
+    """
+    Create multiple new directoryMemberships via file upload
+    """
+    createBulkCSVDirectoryMembership(
+        """
+        csv file containing values of the directoryMembership
+        """
+        input: Upload!
+    ): DirectoryMembershipBulkCreatePayload!
+    """
+    Update an existing directoryMembership
+    """
+    updateDirectoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+        """
+        New values for the directoryMembership
+        """
+        input: UpdateDirectoryMembershipInput!
+    ): DirectoryMembershipUpdatePayload!
+    """
+    Delete an existing directoryMembership
+    """
+    deleteDirectoryMembership(
+        """
+        ID of the directoryMembership
+        """
+        id: ID!
+    ): DirectoryMembershipDeletePayload!
+}
+
+"""
+Return response for createDirectoryMembership mutation
+"""
+type DirectoryMembershipCreatePayload {
+    """
+    Created directoryMembership
+    """
+    directoryMembership: DirectoryMembership!
+}
+
+"""
+Return response for updateDirectoryMembership mutation
+"""
+type DirectoryMembershipUpdatePayload {
+    """
+    Updated directoryMembership
+    """
+    directoryMembership: DirectoryMembership!
+}
+
+"""
+Return response for deleteDirectoryMembership mutation
+"""
+type DirectoryMembershipDeletePayload {
+    """
+    Deleted directoryMembership ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectoryMembership mutation
+"""
+type DirectoryMembershipBulkCreatePayload {
+    """
+    Created directoryMemberships
+    """
+    directoryMemberships: [DirectoryMembership!]
+}`, BuiltIn: false},
+	{Name: "../schema/directorysyncrun.graphql", Input: `extend type Query {
+    """
+    Look up directorySyncRun by ID
+    """
+     directorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+    ):  DirectorySyncRun!
+}
+
+extend type Mutation{
+    """
+    Create a new directorySyncRun
+    """
+    createDirectorySyncRun(
+        """
+        values of the directorySyncRun
+        """
+        input: CreateDirectorySyncRunInput!
+    ): DirectorySyncRunCreatePayload!
+    """
+    Create multiple new directorySyncRuns
+    """
+    createBulkDirectorySyncRun(
+        """
+        values of the directorySyncRun
+        """
+        input: [CreateDirectorySyncRunInput!]
+    ): DirectorySyncRunBulkCreatePayload!
+    """
+    Create multiple new directorySyncRuns via file upload
+    """
+    createBulkCSVDirectorySyncRun(
+        """
+        csv file containing values of the directorySyncRun
+        """
+        input: Upload!
+    ): DirectorySyncRunBulkCreatePayload!
+    """
+    Update an existing directorySyncRun
+    """
+    updateDirectorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+        """
+        New values for the directorySyncRun
+        """
+        input: UpdateDirectorySyncRunInput!
+    ): DirectorySyncRunUpdatePayload!
+    """
+    Delete an existing directorySyncRun
+    """
+    deleteDirectorySyncRun(
+        """
+        ID of the directorySyncRun
+        """
+        id: ID!
+    ): DirectorySyncRunDeletePayload!
+}
+
+"""
+Return response for createDirectorySyncRun mutation
+"""
+type DirectorySyncRunCreatePayload {
+    """
+    Created directorySyncRun
+    """
+    directorySyncRun: DirectorySyncRun!
+}
+
+"""
+Return response for updateDirectorySyncRun mutation
+"""
+type DirectorySyncRunUpdatePayload {
+    """
+    Updated directorySyncRun
+    """
+    directorySyncRun: DirectorySyncRun!
+}
+
+"""
+Return response for deleteDirectorySyncRun mutation
+"""
+type DirectorySyncRunDeletePayload {
+    """
+    Deleted directorySyncRun ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkDirectorySyncRun mutation
+"""
+type DirectorySyncRunBulkCreatePayload {
+    """
+    Created directorySyncRuns
+    """
+    directorySyncRuns: [DirectorySyncRun!]
+}`, BuiltIn: false},
 	{Name: "../schema/dnsverification.graphql", Input: `extend type Query {
     """
     Look up dnsVerification by ID
@@ -54863,6 +61887,37 @@ type Control implements Node {
     """
     where: ScheduledJobWhereInput
   ): ScheduledJobConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
   controlMappings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -58561,6 +65616,11 @@ input ControlWhereInput {
   hasScheduledJobs: Boolean
   hasScheduledJobsWith: [ScheduledJobWhereInput!]
   """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
   control_mappings edge predicates
   """
   hasControlMappings: Boolean
@@ -59062,6 +66122,7 @@ input CreateControlInput {
   controlImplementationIDs: [ID!]
   subcontrolIDs: [ID!]
   scheduledJobIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateControlObjectiveInput is used for create ControlObjective object.
@@ -59238,6 +66299,242 @@ input CreateDNSVerificationInput {
   acmeChallengeStatus: DNSVerificationSSLVerificationStatus
   ownerID: ID
   customDomainIDs: [ID!]
+}
+"""
+CreateDirectoryAccountInput is used for create DirectoryAccount object.
+Input was generated by ent.
+"""
+input CreateDirectoryAccountInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  optional secondary identifier such as Azure immutable ID
+  """
+  secondaryKey: String
+  """
+  lower-cased primary email address, if present
+  """
+  canonicalEmail: String
+  """
+  provider supplied display name
+  """
+  displayName: String
+  """
+  first name reported by the provider
+  """
+  givenName: String
+  """
+  last name reported by the provider
+  """
+  familyName: String
+  """
+  title captured at sync time
+  """
+  jobTitle: String
+  """
+  department captured at sync time
+  """
+  department: String
+  """
+  organizational unit or OU path the account lives under
+  """
+  organizationUnit: String
+  """
+  type of principal represented in the directory
+  """
+  accountType: DirectoryAccountDirectoryAccountType
+  """
+  lifecycle status returned by the directory
+  """
+  status: DirectoryAccountDirectoryAccountStatus
+  """
+  multi-factor authentication state reported by the directory
+  """
+  mfaState: DirectoryAccountDirectoryAccountMFAState
+  """
+  last IP address observed by the provider, if any
+  """
+  lastSeenIP: String
+  """
+  timestamp of the most recent login reported by the provider
+  """
+  lastLoginAt: Time
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time
+  """
+  hash of the normalized profile payload for change detection
+  """
+  profileHash: String
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  ownerID: ID
+  integrationID: ID!
+  directorySyncRunID: ID!
+  groupIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+}
+"""
+CreateDirectoryGroupInput is used for create DirectoryGroup object.
+Input was generated by ent.
+"""
+input CreateDirectoryGroupInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  primary group email address, when applicable
+  """
+  email: String
+  """
+  directory supplied display name
+  """
+  displayName: String
+  """
+  free-form description captured at sync time
+  """
+  description: String
+  """
+  provider classification such as security, distribution, or dynamic
+  """
+  classification: DirectoryGroupDirectoryGroupClassification
+  """
+  lifecycle status reported by the directory
+  """
+  status: DirectoryGroupDirectoryGroupStatus
+  """
+  true when directory settings allow sharing outside the tenant
+  """
+  externalSharingAllowed: Boolean
+  """
+  member count reported by the directory
+  """
+  memberCount: Int
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time
+  """
+  hash of the normalized payload for diffing
+  """
+  profileHash: String
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  ownerID: ID
+  integrationID: ID!
+  directorySyncRunID: ID!
+  workflowObjectRefIDs: [ID!]
+}
+"""
+CreateDirectoryMembershipInput is used for create DirectoryMembership object.
+Input was generated by ent.
+"""
+input CreateDirectoryMembershipInput {
+  """
+  membership role reported by the provider
+  """
+  role: DirectoryMembershipDirectoryMembershipRole
+  """
+  mechanism used to populate the membership (api, scim, csv, etc)
+  """
+  source: String
+  """
+  first time the membership was detected
+  """
+  firstSeenAt: Time
+  """
+  most recent time the membership was detected
+  """
+  lastSeenAt: Time
+  """
+  time when this record was created
+  """
+  observedAt: Time
+  """
+  sync run identifier that most recently confirmed this membership
+  """
+  lastConfirmedRunID: String
+  """
+  raw metadata associated with this membership from the provider
+  """
+  metadata: Map
+  ownerID: ID
+  integrationID: ID!
+  directorySyncRunID: ID!
+  directoryAccountID: ID!
+  directoryGroupID: ID!
+  eventIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+}
+"""
+CreateDirectorySyncRunInput is used for create DirectorySyncRun object.
+Input was generated by ent.
+"""
+input CreateDirectorySyncRunInput {
+  """
+  current state of the sync run
+  """
+  status: DirectorySyncRunDirectorySyncRunStatus
+  """
+  time the sync started
+  """
+  startedAt: Time
+  """
+  time the sync finished
+  """
+  completedAt: Time
+  """
+  cursor or checkpoint returned by the provider for the next run
+  """
+  sourceCursor: String
+  """
+  total records processed during this run
+  """
+  fullCount: Int
+  """
+  number of records that changed compared to the prior run
+  """
+  deltaCount: Int
+  """
+  serialized error information when the run failed
+  """
+  error: String
+  """
+  object storage file identifier for the manifest captured during the run
+  """
+  rawManifestFileID: String
+  """
+  additional provider-specific stats for the run
+  """
+  stats: Map
+  ownerID: ID
+  integrationID: ID!
+  directoryAccountIDs: [ID!]
+  directoryGroupIDs: [ID!]
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -59746,6 +67043,7 @@ input CreateFindingInput {
   reviewIDs: [ID!]
   commentIDs: [ID!]
   fileIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateGroupInput is used for create Group object.
@@ -60006,6 +67304,7 @@ input CreateInternalPolicyInput {
   programIDs: [ID!]
   fileID: ID
   commentIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateInviteInput is used for create Invite object.
@@ -60461,6 +67760,15 @@ input CreateOrganizationInput {
   findingIDs: [ID!]
   reviewIDs: [ID!]
   vulnerabilityIDs: [ID!]
+  workflowDefinitionIDs: [ID!]
+  workflowInstanceIDs: [ID!]
+  workflowEventIDs: [ID!]
+  workflowAssignmentIDs: [ID!]
+  workflowAssignmentTargetIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+  directoryAccountIDs: [ID!]
+  directoryGroupIDs: [ID!]
+  directorySyncRunIDs: [ID!]
 }
 """
 CreateOrganizationSettingInput is used for create OrganizationSetting object.
@@ -61510,6 +68818,7 @@ input CreateTaskInput {
   controlImplementationIDs: [ID!]
   actionPlanIDs: [ID!]
   evidenceIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
 }
 """
 CreateTemplateInput is used for create Template object.
@@ -62016,6 +69325,217 @@ input CreateVulnerabilityInput {
   reviewIDs: [ID!]
   commentIDs: [ID!]
   fileIDs: [ID!]
+}
+"""
+CreateWorkflowAssignmentInput is used for create WorkflowAssignment object.
+Input was generated by ent.
+"""
+input CreateWorkflowAssignmentInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Unique key for the assignment within the workflow instance
+  """
+  assignmentKey: String!
+  """
+  Role assigned to the target, e.g. APPROVER
+  """
+  role: String
+  """
+  Optional label for the assignment
+  """
+  label: String
+  """
+  Whether this assignment is required for workflow progression
+  """
+  required: Boolean
+  """
+  Current status of the assignment
+  """
+  status: WorkflowAssignmentWorkflowAssignmentStatus
+  """
+  Optional metadata for the assignment
+  """
+  metadata: Map
+  """
+  Timestamp when the assignment was decided
+  """
+  decidedAt: Time
+  """
+  Optional notes about the assignment
+  """
+  notes: String
+  ownerID: ID
+  workflowInstanceID: ID!
+  workflowAssignmentTargetIDs: [ID!]
+  userID: ID
+  groupID: ID
+}
+"""
+CreateWorkflowAssignmentTargetInput is used for create WorkflowAssignmentTarget object.
+Input was generated by ent.
+"""
+input CreateWorkflowAssignmentTargetInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Type of the target (USER, GROUP, ROLE, RESOLVER)
+  """
+  targetType: WorkflowAssignmentTargetWorkflowTargetType!
+  """
+  Resolver key when target_type is RESOLVER
+  """
+  resolverKey: String
+  ownerID: ID
+  workflowAssignmentID: ID!
+  userID: ID
+  groupID: ID
+}
+"""
+CreateWorkflowDefinitionInput is used for create WorkflowDefinition object.
+Input was generated by ent.
+"""
+input CreateWorkflowDefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  """
+  Name of the workflow definition
+  """
+  name: String!
+  """
+  Optional description of the workflow definition
+  """
+  description: String
+  """
+  Kind of workflow, e.g. APPROVAL, LIFECYCLE, NOTIFICATION
+  """
+  workflowKind: WorkflowDefinitionWorkflowKind!
+  """
+  Type of schema this workflow applies to
+  """
+  schemaType: String!
+  """
+  Revision number for this definition
+  """
+  revision: Int
+  """
+  Whether this definition is a draft
+  """
+  draft: Boolean
+  """
+  When this definition was published
+  """
+  publishedAt: Time
+  """
+  Suppress duplicate triggers within this window per object/definition
+  """
+  cooldownSeconds: Int
+  """
+  Whether this is the default workflow for the schema type
+  """
+  isDefault: Boolean
+  """
+  Whether the workflow definition is active
+  """
+  active: Boolean
+  """
+  Derived: normalized operations from definition for prefiltering; not user editable
+  """
+  triggerOperations: [String!]
+  """
+  Derived: normalized fields from definition for prefiltering; not user editable
+  """
+  triggerFields: [String!]
+  """
+  Typed document describing triggers, conditions, and actions
+  """
+  definitionJSON: WorkflowDefinitionDocument
+  """
+  Cached list of fields that should trigger workflow evaluation
+  """
+  trackedFields: [String!]
+  ownerID: ID
+  tagDefinitionIDs: [ID!]
+  groupIDs: [ID!]
+}
+"""
+CreateWorkflowEventInput is used for create WorkflowEvent object.
+Input was generated by ent.
+"""
+input CreateWorkflowEventInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Type of event, typically the action kind
+  """
+  eventType: WorkflowEventWorkflowEventType!
+  """
+  Payload for the event; stored raw
+  """
+  payload: WorkflowEventPayload
+  ownerID: ID
+  workflowInstanceID: ID!
+}
+"""
+CreateWorkflowInstanceInput is used for create WorkflowInstance object.
+Input was generated by ent.
+"""
+input CreateWorkflowInstanceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  Current state of the workflow instance
+  """
+  state: WorkflowInstanceWorkflowInstanceState
+  """
+  Optional context for the workflow instance
+  """
+  context: WorkflowInstanceContext
+  """
+  Timestamp when the workflow was last evaluated
+  """
+  lastEvaluatedAt: Time
+  """
+  Copy of definition JSON used for this instance
+  """
+  definitionSnapshot: WorkflowDefinitionDocument
+  ownerID: ID
+  workflowDefinitionID: ID!
+  workflowAssignmentIDs: [ID!]
+  workflowEventIDs: [ID!]
+  workflowObjectRefIDs: [ID!]
+}
+"""
+CreateWorkflowObjectRefInput is used for create WorkflowObjectRef object.
+Input was generated by ent.
+"""
+input CreateWorkflowObjectRefInput {
+  ownerID: ID
+  workflowInstanceID: ID!
+  controlID: ID
+  taskID: ID
+  internalPolicyID: ID
+  findingID: ID
+  directoryAccountID: ID
+  directoryGroupID: ID
 }
 """
 Define a Relay Cursor type:
@@ -64167,6 +71687,3690 @@ input DNSVerificationWhereInput {
   """
   hasCustomDomains: Boolean
   hasCustomDomainsWith: [CustomDomainWhereInput!]
+}
+type DirectoryAccount implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  integration that owns this directory account
+  """
+  integrationID: ID!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: ID!
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  optional secondary identifier such as Azure immutable ID
+  """
+  secondaryKey: String
+  """
+  lower-cased primary email address, if present
+  """
+  canonicalEmail: String
+  """
+  provider supplied display name
+  """
+  displayName: String
+  """
+  first name reported by the provider
+  """
+  givenName: String
+  """
+  last name reported by the provider
+  """
+  familyName: String
+  """
+  title captured at sync time
+  """
+  jobTitle: String
+  """
+  department captured at sync time
+  """
+  department: String
+  """
+  organizational unit or OU path the account lives under
+  """
+  organizationUnit: String
+  """
+  type of principal represented in the directory
+  """
+  accountType: DirectoryAccountDirectoryAccountType
+  """
+  lifecycle status returned by the directory
+  """
+  status: DirectoryAccountDirectoryAccountStatus!
+  """
+  multi-factor authentication state reported by the directory
+  """
+  mfaState: DirectoryAccountDirectoryAccountMFAState!
+  """
+  last IP address observed by the provider, if any
+  """
+  lastSeenIP: String
+  """
+  timestamp of the most recent login reported by the provider
+  """
+  lastLoginAt: Time
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time!
+  """
+  hash of the normalized profile payload for change detection
+  """
+  profileHash: String!
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  object storage file identifier that holds the raw upstream payload
+  """
+  rawProfileFileID: String
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  owner: Organization
+  """
+  integration that owns this directory account
+  """
+  integration: Integration!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRun: DirectorySyncRun!
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  memberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryAccountConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryAccountEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryAccountDirectoryAccountMFAState is enum for the field mfa_state
+"""
+enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+  UNKNOWN
+  DISABLED
+  ENABLED
+  ENFORCED
+}
+"""
+DirectoryAccountDirectoryAccountStatus is enum for the field status
+"""
+enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
+}
+"""
+DirectoryAccountDirectoryAccountType is enum for the field account_type
+"""
+enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+  USER
+  SERVICE
+  SHARED
+  GUEST
+}
+"""
+An edge in a connection.
+"""
+type DirectoryAccountEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryAccount
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type DirectoryAccountHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: DirectoryAccountHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  integration that owns this directory account
+  """
+  integrationID: String!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: String!
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  optional secondary identifier such as Azure immutable ID
+  """
+  secondaryKey: String
+  """
+  lower-cased primary email address, if present
+  """
+  canonicalEmail: String
+  """
+  provider supplied display name
+  """
+  displayName: String
+  """
+  first name reported by the provider
+  """
+  givenName: String
+  """
+  last name reported by the provider
+  """
+  familyName: String
+  """
+  title captured at sync time
+  """
+  jobTitle: String
+  """
+  department captured at sync time
+  """
+  department: String
+  """
+  organizational unit or OU path the account lives under
+  """
+  organizationUnit: String
+  """
+  type of principal represented in the directory
+  """
+  accountType: DirectoryAccountHistoryDirectoryAccountType
+  """
+  lifecycle status returned by the directory
+  """
+  status: DirectoryAccountHistoryDirectoryAccountStatus!
+  """
+  multi-factor authentication state reported by the directory
+  """
+  mfaState: DirectoryAccountHistoryDirectoryAccountMFAState!
+  """
+  last IP address observed by the provider, if any
+  """
+  lastSeenIP: String
+  """
+  timestamp of the most recent login reported by the provider
+  """
+  lastLoginAt: Time
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time!
+  """
+  hash of the normalized profile payload for change detection
+  """
+  profileHash: String!
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  object storage file identifier that holds the raw upstream payload
+  """
+  rawProfileFileID: String
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryAccountHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryAccountHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryAccountHistoryDirectoryAccountMFAState is enum for the field mfa_state
+"""
+enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+  UNKNOWN
+  DISABLED
+  ENABLED
+  ENFORCED
+}
+"""
+DirectoryAccountHistoryDirectoryAccountStatus is enum for the field status
+"""
+enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  DELETED
+}
+"""
+DirectoryAccountHistoryDirectoryAccountType is enum for the field account_type
+"""
+enum DirectoryAccountHistoryDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+  USER
+  SERVICE
+  SHARED
+  GUEST
+}
+"""
+An edge in a connection.
+"""
+type DirectoryAccountHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryAccountHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+DirectoryAccountHistoryOpType is enum for the field operation
+"""
+enum DirectoryAccountHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for DirectoryAccountHistory connections
+"""
+input DirectoryAccountHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryAccountHistories.
+  """
+  field: DirectoryAccountHistoryOrderField!
+}
+"""
+Properties by which DirectoryAccountHistory connections can be ordered.
+"""
+enum DirectoryAccountHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_id
+  canonical_email
+  display_name
+}
+"""
+DirectoryAccountHistoryWhereInput is used for filtering DirectoryAccountHistory objects.
+Input was generated by ent.
+"""
+input DirectoryAccountHistoryWhereInput {
+  not: DirectoryAccountHistoryWhereInput
+  and: [DirectoryAccountHistoryWhereInput!]
+  or: [DirectoryAccountHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: DirectoryAccountHistoryOpType
+  operationNEQ: DirectoryAccountHistoryOpType
+  operationIn: [DirectoryAccountHistoryOpType!]
+  operationNotIn: [DirectoryAccountHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  directory_sync_run_id field predicates
+  """
+  directorySyncRunID: String
+  directorySyncRunIDNEQ: String
+  directorySyncRunIDIn: [String!]
+  directorySyncRunIDNotIn: [String!]
+  directorySyncRunIDGT: String
+  directorySyncRunIDGTE: String
+  directorySyncRunIDLT: String
+  directorySyncRunIDLTE: String
+  directorySyncRunIDContains: String
+  directorySyncRunIDHasPrefix: String
+  directorySyncRunIDHasSuffix: String
+  directorySyncRunIDEqualFold: String
+  directorySyncRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  secondary_key field predicates
+  """
+  secondaryKey: String
+  secondaryKeyNEQ: String
+  secondaryKeyIn: [String!]
+  secondaryKeyNotIn: [String!]
+  secondaryKeyGT: String
+  secondaryKeyGTE: String
+  secondaryKeyLT: String
+  secondaryKeyLTE: String
+  secondaryKeyContains: String
+  secondaryKeyHasPrefix: String
+  secondaryKeyHasSuffix: String
+  secondaryKeyIsNil: Boolean
+  secondaryKeyNotNil: Boolean
+  secondaryKeyEqualFold: String
+  secondaryKeyContainsFold: String
+  """
+  canonical_email field predicates
+  """
+  canonicalEmail: String
+  canonicalEmailNEQ: String
+  canonicalEmailIn: [String!]
+  canonicalEmailNotIn: [String!]
+  canonicalEmailGT: String
+  canonicalEmailGTE: String
+  canonicalEmailLT: String
+  canonicalEmailLTE: String
+  canonicalEmailContains: String
+  canonicalEmailHasPrefix: String
+  canonicalEmailHasSuffix: String
+  canonicalEmailIsNil: Boolean
+  canonicalEmailNotNil: Boolean
+  canonicalEmailEqualFold: String
+  canonicalEmailContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  given_name field predicates
+  """
+  givenName: String
+  givenNameNEQ: String
+  givenNameIn: [String!]
+  givenNameNotIn: [String!]
+  givenNameGT: String
+  givenNameGTE: String
+  givenNameLT: String
+  givenNameLTE: String
+  givenNameContains: String
+  givenNameHasPrefix: String
+  givenNameHasSuffix: String
+  givenNameIsNil: Boolean
+  givenNameNotNil: Boolean
+  givenNameEqualFold: String
+  givenNameContainsFold: String
+  """
+  family_name field predicates
+  """
+  familyName: String
+  familyNameNEQ: String
+  familyNameIn: [String!]
+  familyNameNotIn: [String!]
+  familyNameGT: String
+  familyNameGTE: String
+  familyNameLT: String
+  familyNameLTE: String
+  familyNameContains: String
+  familyNameHasPrefix: String
+  familyNameHasSuffix: String
+  familyNameIsNil: Boolean
+  familyNameNotNil: Boolean
+  familyNameEqualFold: String
+  familyNameContainsFold: String
+  """
+  job_title field predicates
+  """
+  jobTitle: String
+  jobTitleNEQ: String
+  jobTitleIn: [String!]
+  jobTitleNotIn: [String!]
+  jobTitleGT: String
+  jobTitleGTE: String
+  jobTitleLT: String
+  jobTitleLTE: String
+  jobTitleContains: String
+  jobTitleHasPrefix: String
+  jobTitleHasSuffix: String
+  jobTitleIsNil: Boolean
+  jobTitleNotNil: Boolean
+  jobTitleEqualFold: String
+  jobTitleContainsFold: String
+  """
+  department field predicates
+  """
+  department: String
+  departmentNEQ: String
+  departmentIn: [String!]
+  departmentNotIn: [String!]
+  departmentGT: String
+  departmentGTE: String
+  departmentLT: String
+  departmentLTE: String
+  departmentContains: String
+  departmentHasPrefix: String
+  departmentHasSuffix: String
+  departmentIsNil: Boolean
+  departmentNotNil: Boolean
+  departmentEqualFold: String
+  departmentContainsFold: String
+  """
+  organization_unit field predicates
+  """
+  organizationUnit: String
+  organizationUnitNEQ: String
+  organizationUnitIn: [String!]
+  organizationUnitNotIn: [String!]
+  organizationUnitGT: String
+  organizationUnitGTE: String
+  organizationUnitLT: String
+  organizationUnitLTE: String
+  organizationUnitContains: String
+  organizationUnitHasPrefix: String
+  organizationUnitHasSuffix: String
+  organizationUnitIsNil: Boolean
+  organizationUnitNotNil: Boolean
+  organizationUnitEqualFold: String
+  organizationUnitContainsFold: String
+  """
+  account_type field predicates
+  """
+  accountType: DirectoryAccountHistoryDirectoryAccountType
+  accountTypeNEQ: DirectoryAccountHistoryDirectoryAccountType
+  accountTypeIn: [DirectoryAccountHistoryDirectoryAccountType!]
+  accountTypeNotIn: [DirectoryAccountHistoryDirectoryAccountType!]
+  accountTypeIsNil: Boolean
+  accountTypeNotNil: Boolean
+  """
+  status field predicates
+  """
+  status: DirectoryAccountHistoryDirectoryAccountStatus
+  statusNEQ: DirectoryAccountHistoryDirectoryAccountStatus
+  statusIn: [DirectoryAccountHistoryDirectoryAccountStatus!]
+  statusNotIn: [DirectoryAccountHistoryDirectoryAccountStatus!]
+  """
+  mfa_state field predicates
+  """
+  mfaState: DirectoryAccountHistoryDirectoryAccountMFAState
+  mfaStateNEQ: DirectoryAccountHistoryDirectoryAccountMFAState
+  mfaStateIn: [DirectoryAccountHistoryDirectoryAccountMFAState!]
+  mfaStateNotIn: [DirectoryAccountHistoryDirectoryAccountMFAState!]
+  """
+  last_seen_ip field predicates
+  """
+  lastSeenIP: String
+  lastSeenIPNEQ: String
+  lastSeenIPIn: [String!]
+  lastSeenIPNotIn: [String!]
+  lastSeenIPGT: String
+  lastSeenIPGTE: String
+  lastSeenIPLT: String
+  lastSeenIPLTE: String
+  lastSeenIPContains: String
+  lastSeenIPHasPrefix: String
+  lastSeenIPHasSuffix: String
+  lastSeenIPIsNil: Boolean
+  lastSeenIPNotNil: Boolean
+  lastSeenIPEqualFold: String
+  lastSeenIPContainsFold: String
+  """
+  last_login_at field predicates
+  """
+  lastLoginAt: Time
+  lastLoginAtNEQ: Time
+  lastLoginAtIn: [Time!]
+  lastLoginAtNotIn: [Time!]
+  lastLoginAtGT: Time
+  lastLoginAtGTE: Time
+  lastLoginAtLT: Time
+  lastLoginAtLTE: Time
+  lastLoginAtIsNil: Boolean
+  lastLoginAtNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  profile_hash field predicates
+  """
+  profileHash: String
+  profileHashNEQ: String
+  profileHashIn: [String!]
+  profileHashNotIn: [String!]
+  profileHashGT: String
+  profileHashGTE: String
+  profileHashLT: String
+  profileHashLTE: String
+  profileHashContains: String
+  profileHashHasPrefix: String
+  profileHashHasSuffix: String
+  profileHashEqualFold: String
+  profileHashContainsFold: String
+  """
+  source_version field predicates
+  """
+  sourceVersion: String
+  sourceVersionNEQ: String
+  sourceVersionIn: [String!]
+  sourceVersionNotIn: [String!]
+  sourceVersionGT: String
+  sourceVersionGTE: String
+  sourceVersionLT: String
+  sourceVersionLTE: String
+  sourceVersionContains: String
+  sourceVersionHasPrefix: String
+  sourceVersionHasSuffix: String
+  sourceVersionIsNil: Boolean
+  sourceVersionNotNil: Boolean
+  sourceVersionEqualFold: String
+  sourceVersionContainsFold: String
+}
+"""
+Ordering options for DirectoryAccount connections
+"""
+input DirectoryAccountOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryAccounts.
+  """
+  field: DirectoryAccountOrderField!
+}
+"""
+Properties by which DirectoryAccount connections can be ordered.
+"""
+enum DirectoryAccountOrderField {
+  created_at
+  updated_at
+  external_id
+  canonical_email
+  display_name
+}
+"""
+DirectoryAccountWhereInput is used for filtering DirectoryAccount objects.
+Input was generated by ent.
+"""
+input DirectoryAccountWhereInput {
+  not: DirectoryAccountWhereInput
+  and: [DirectoryAccountWhereInput!]
+  or: [DirectoryAccountWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  directory_sync_run_id field predicates
+  """
+  directorySyncRunID: ID
+  directorySyncRunIDNEQ: ID
+  directorySyncRunIDIn: [ID!]
+  directorySyncRunIDNotIn: [ID!]
+  directorySyncRunIDGT: ID
+  directorySyncRunIDGTE: ID
+  directorySyncRunIDLT: ID
+  directorySyncRunIDLTE: ID
+  directorySyncRunIDContains: ID
+  directorySyncRunIDHasPrefix: ID
+  directorySyncRunIDHasSuffix: ID
+  directorySyncRunIDEqualFold: ID
+  directorySyncRunIDContainsFold: ID
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  secondary_key field predicates
+  """
+  secondaryKey: String
+  secondaryKeyNEQ: String
+  secondaryKeyIn: [String!]
+  secondaryKeyNotIn: [String!]
+  secondaryKeyGT: String
+  secondaryKeyGTE: String
+  secondaryKeyLT: String
+  secondaryKeyLTE: String
+  secondaryKeyContains: String
+  secondaryKeyHasPrefix: String
+  secondaryKeyHasSuffix: String
+  secondaryKeyIsNil: Boolean
+  secondaryKeyNotNil: Boolean
+  secondaryKeyEqualFold: String
+  secondaryKeyContainsFold: String
+  """
+  canonical_email field predicates
+  """
+  canonicalEmail: String
+  canonicalEmailNEQ: String
+  canonicalEmailIn: [String!]
+  canonicalEmailNotIn: [String!]
+  canonicalEmailGT: String
+  canonicalEmailGTE: String
+  canonicalEmailLT: String
+  canonicalEmailLTE: String
+  canonicalEmailContains: String
+  canonicalEmailHasPrefix: String
+  canonicalEmailHasSuffix: String
+  canonicalEmailIsNil: Boolean
+  canonicalEmailNotNil: Boolean
+  canonicalEmailEqualFold: String
+  canonicalEmailContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  given_name field predicates
+  """
+  givenName: String
+  givenNameNEQ: String
+  givenNameIn: [String!]
+  givenNameNotIn: [String!]
+  givenNameGT: String
+  givenNameGTE: String
+  givenNameLT: String
+  givenNameLTE: String
+  givenNameContains: String
+  givenNameHasPrefix: String
+  givenNameHasSuffix: String
+  givenNameIsNil: Boolean
+  givenNameNotNil: Boolean
+  givenNameEqualFold: String
+  givenNameContainsFold: String
+  """
+  family_name field predicates
+  """
+  familyName: String
+  familyNameNEQ: String
+  familyNameIn: [String!]
+  familyNameNotIn: [String!]
+  familyNameGT: String
+  familyNameGTE: String
+  familyNameLT: String
+  familyNameLTE: String
+  familyNameContains: String
+  familyNameHasPrefix: String
+  familyNameHasSuffix: String
+  familyNameIsNil: Boolean
+  familyNameNotNil: Boolean
+  familyNameEqualFold: String
+  familyNameContainsFold: String
+  """
+  job_title field predicates
+  """
+  jobTitle: String
+  jobTitleNEQ: String
+  jobTitleIn: [String!]
+  jobTitleNotIn: [String!]
+  jobTitleGT: String
+  jobTitleGTE: String
+  jobTitleLT: String
+  jobTitleLTE: String
+  jobTitleContains: String
+  jobTitleHasPrefix: String
+  jobTitleHasSuffix: String
+  jobTitleIsNil: Boolean
+  jobTitleNotNil: Boolean
+  jobTitleEqualFold: String
+  jobTitleContainsFold: String
+  """
+  department field predicates
+  """
+  department: String
+  departmentNEQ: String
+  departmentIn: [String!]
+  departmentNotIn: [String!]
+  departmentGT: String
+  departmentGTE: String
+  departmentLT: String
+  departmentLTE: String
+  departmentContains: String
+  departmentHasPrefix: String
+  departmentHasSuffix: String
+  departmentIsNil: Boolean
+  departmentNotNil: Boolean
+  departmentEqualFold: String
+  departmentContainsFold: String
+  """
+  organization_unit field predicates
+  """
+  organizationUnit: String
+  organizationUnitNEQ: String
+  organizationUnitIn: [String!]
+  organizationUnitNotIn: [String!]
+  organizationUnitGT: String
+  organizationUnitGTE: String
+  organizationUnitLT: String
+  organizationUnitLTE: String
+  organizationUnitContains: String
+  organizationUnitHasPrefix: String
+  organizationUnitHasSuffix: String
+  organizationUnitIsNil: Boolean
+  organizationUnitNotNil: Boolean
+  organizationUnitEqualFold: String
+  organizationUnitContainsFold: String
+  """
+  account_type field predicates
+  """
+  accountType: DirectoryAccountDirectoryAccountType
+  accountTypeNEQ: DirectoryAccountDirectoryAccountType
+  accountTypeIn: [DirectoryAccountDirectoryAccountType!]
+  accountTypeNotIn: [DirectoryAccountDirectoryAccountType!]
+  accountTypeIsNil: Boolean
+  accountTypeNotNil: Boolean
+  """
+  status field predicates
+  """
+  status: DirectoryAccountDirectoryAccountStatus
+  statusNEQ: DirectoryAccountDirectoryAccountStatus
+  statusIn: [DirectoryAccountDirectoryAccountStatus!]
+  statusNotIn: [DirectoryAccountDirectoryAccountStatus!]
+  """
+  mfa_state field predicates
+  """
+  mfaState: DirectoryAccountDirectoryAccountMFAState
+  mfaStateNEQ: DirectoryAccountDirectoryAccountMFAState
+  mfaStateIn: [DirectoryAccountDirectoryAccountMFAState!]
+  mfaStateNotIn: [DirectoryAccountDirectoryAccountMFAState!]
+  """
+  last_seen_ip field predicates
+  """
+  lastSeenIP: String
+  lastSeenIPNEQ: String
+  lastSeenIPIn: [String!]
+  lastSeenIPNotIn: [String!]
+  lastSeenIPGT: String
+  lastSeenIPGTE: String
+  lastSeenIPLT: String
+  lastSeenIPLTE: String
+  lastSeenIPContains: String
+  lastSeenIPHasPrefix: String
+  lastSeenIPHasSuffix: String
+  lastSeenIPIsNil: Boolean
+  lastSeenIPNotNil: Boolean
+  lastSeenIPEqualFold: String
+  lastSeenIPContainsFold: String
+  """
+  last_login_at field predicates
+  """
+  lastLoginAt: Time
+  lastLoginAtNEQ: Time
+  lastLoginAtIn: [Time!]
+  lastLoginAtNotIn: [Time!]
+  lastLoginAtGT: Time
+  lastLoginAtGTE: Time
+  lastLoginAtLT: Time
+  lastLoginAtLTE: Time
+  lastLoginAtIsNil: Boolean
+  lastLoginAtNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  profile_hash field predicates
+  """
+  profileHash: String
+  profileHashNEQ: String
+  profileHashIn: [String!]
+  profileHashNotIn: [String!]
+  profileHashGT: String
+  profileHashGTE: String
+  profileHashLT: String
+  profileHashLTE: String
+  profileHashContains: String
+  profileHashHasPrefix: String
+  profileHashHasSuffix: String
+  profileHashEqualFold: String
+  profileHashContainsFold: String
+  """
+  source_version field predicates
+  """
+  sourceVersion: String
+  sourceVersionNEQ: String
+  sourceVersionIn: [String!]
+  sourceVersionNotIn: [String!]
+  sourceVersionGT: String
+  sourceVersionGTE: String
+  sourceVersionLT: String
+  sourceVersionLTE: String
+  sourceVersionContains: String
+  sourceVersionHasPrefix: String
+  sourceVersionHasSuffix: String
+  sourceVersionIsNil: Boolean
+  sourceVersionNotNil: Boolean
+  sourceVersionEqualFold: String
+  sourceVersionContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  directory_sync_run edge predicates
+  """
+  hasDirectorySyncRun: Boolean
+  hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
+  """
+  groups edge predicates
+  """
+  hasGroups: Boolean
+  hasGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  memberships edge predicates
+  """
+  hasMemberships: Boolean
+  hasMembershipsWith: [DirectoryMembershipWhereInput!]
+}
+type DirectoryGroup implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  integration that owns this directory group
+  """
+  integrationID: ID!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: ID!
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  primary group email address, when applicable
+  """
+  email: String
+  """
+  directory supplied display name
+  """
+  displayName: String
+  """
+  free-form description captured at sync time
+  """
+  description: String
+  """
+  provider classification such as security, distribution, or dynamic
+  """
+  classification: DirectoryGroupDirectoryGroupClassification!
+  """
+  lifecycle status reported by the directory
+  """
+  status: DirectoryGroupDirectoryGroupStatus!
+  """
+  true when directory settings allow sharing outside the tenant
+  """
+  externalSharingAllowed: Boolean
+  """
+  member count reported by the directory
+  """
+  memberCount: Int
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time!
+  """
+  hash of the normalized payload for diffing
+  """
+  profileHash: String!
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  object storage file identifier containing the raw upstream payload
+  """
+  rawProfileFileID: String
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  owner: Organization
+  """
+  integration that owns this directory group
+  """
+  integration: Integration!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRun: DirectorySyncRun!
+  accounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  members(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryGroupConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryGroupEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryGroupDirectoryGroupClassification is enum for the field classification
+"""
+enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+  SECURITY
+  DISTRIBUTION
+  TEAM
+  DYNAMIC
+}
+"""
+DirectoryGroupDirectoryGroupStatus is enum for the field status
+"""
+enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+"""
+An edge in a connection.
+"""
+type DirectoryGroupEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryGroup
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type DirectoryGroupHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: DirectoryGroupHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  integration that owns this directory group
+  """
+  integrationID: String!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: String!
+  """
+  stable identifier from the directory system
+  """
+  externalID: String!
+  """
+  primary group email address, when applicable
+  """
+  email: String
+  """
+  directory supplied display name
+  """
+  displayName: String
+  """
+  free-form description captured at sync time
+  """
+  description: String
+  """
+  provider classification such as security, distribution, or dynamic
+  """
+  classification: DirectoryGroupHistoryDirectoryGroupClassification!
+  """
+  lifecycle status reported by the directory
+  """
+  status: DirectoryGroupHistoryDirectoryGroupStatus!
+  """
+  true when directory settings allow sharing outside the tenant
+  """
+  externalSharingAllowed: Boolean
+  """
+  member count reported by the directory
+  """
+  memberCount: Int
+  """
+  time when this snapshot was recorded
+  """
+  observedAt: Time!
+  """
+  hash of the normalized payload for diffing
+  """
+  profileHash: String!
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  """
+  object storage file identifier containing the raw upstream payload
+  """
+  rawProfileFileID: String
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryGroupHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryGroupHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryGroupHistoryDirectoryGroupClassification is enum for the field classification
+"""
+enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+  SECURITY
+  DISTRIBUTION
+  TEAM
+  DYNAMIC
+}
+"""
+DirectoryGroupHistoryDirectoryGroupStatus is enum for the field status
+"""
+enum DirectoryGroupHistoryDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+  ACTIVE
+  INACTIVE
+  DELETED
+}
+"""
+An edge in a connection.
+"""
+type DirectoryGroupHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryGroupHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+DirectoryGroupHistoryOpType is enum for the field operation
+"""
+enum DirectoryGroupHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for DirectoryGroupHistory connections
+"""
+input DirectoryGroupHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryGroupHistories.
+  """
+  field: DirectoryGroupHistoryOrderField!
+}
+"""
+Properties by which DirectoryGroupHistory connections can be ordered.
+"""
+enum DirectoryGroupHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+  external_id
+  email
+  display_name
+}
+"""
+DirectoryGroupHistoryWhereInput is used for filtering DirectoryGroupHistory objects.
+Input was generated by ent.
+"""
+input DirectoryGroupHistoryWhereInput {
+  not: DirectoryGroupHistoryWhereInput
+  and: [DirectoryGroupHistoryWhereInput!]
+  or: [DirectoryGroupHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: DirectoryGroupHistoryOpType
+  operationNEQ: DirectoryGroupHistoryOpType
+  operationIn: [DirectoryGroupHistoryOpType!]
+  operationNotIn: [DirectoryGroupHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  directory_sync_run_id field predicates
+  """
+  directorySyncRunID: String
+  directorySyncRunIDNEQ: String
+  directorySyncRunIDIn: [String!]
+  directorySyncRunIDNotIn: [String!]
+  directorySyncRunIDGT: String
+  directorySyncRunIDGTE: String
+  directorySyncRunIDLT: String
+  directorySyncRunIDLTE: String
+  directorySyncRunIDContains: String
+  directorySyncRunIDHasPrefix: String
+  directorySyncRunIDHasSuffix: String
+  directorySyncRunIDEqualFold: String
+  directorySyncRunIDContainsFold: String
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  classification field predicates
+  """
+  classification: DirectoryGroupHistoryDirectoryGroupClassification
+  classificationNEQ: DirectoryGroupHistoryDirectoryGroupClassification
+  classificationIn: [DirectoryGroupHistoryDirectoryGroupClassification!]
+  classificationNotIn: [DirectoryGroupHistoryDirectoryGroupClassification!]
+  """
+  status field predicates
+  """
+  status: DirectoryGroupHistoryDirectoryGroupStatus
+  statusNEQ: DirectoryGroupHistoryDirectoryGroupStatus
+  statusIn: [DirectoryGroupHistoryDirectoryGroupStatus!]
+  statusNotIn: [DirectoryGroupHistoryDirectoryGroupStatus!]
+  """
+  external_sharing_allowed field predicates
+  """
+  externalSharingAllowed: Boolean
+  externalSharingAllowedNEQ: Boolean
+  externalSharingAllowedIsNil: Boolean
+  externalSharingAllowedNotNil: Boolean
+  """
+  member_count field predicates
+  """
+  memberCount: Int
+  memberCountNEQ: Int
+  memberCountIn: [Int!]
+  memberCountNotIn: [Int!]
+  memberCountGT: Int
+  memberCountGTE: Int
+  memberCountLT: Int
+  memberCountLTE: Int
+  memberCountIsNil: Boolean
+  memberCountNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  profile_hash field predicates
+  """
+  profileHash: String
+  profileHashNEQ: String
+  profileHashIn: [String!]
+  profileHashNotIn: [String!]
+  profileHashGT: String
+  profileHashGTE: String
+  profileHashLT: String
+  profileHashLTE: String
+  profileHashContains: String
+  profileHashHasPrefix: String
+  profileHashHasSuffix: String
+  profileHashEqualFold: String
+  profileHashContainsFold: String
+  """
+  source_version field predicates
+  """
+  sourceVersion: String
+  sourceVersionNEQ: String
+  sourceVersionIn: [String!]
+  sourceVersionNotIn: [String!]
+  sourceVersionGT: String
+  sourceVersionGTE: String
+  sourceVersionLT: String
+  sourceVersionLTE: String
+  sourceVersionContains: String
+  sourceVersionHasPrefix: String
+  sourceVersionHasSuffix: String
+  sourceVersionIsNil: Boolean
+  sourceVersionNotNil: Boolean
+  sourceVersionEqualFold: String
+  sourceVersionContainsFold: String
+}
+"""
+Ordering options for DirectoryGroup connections
+"""
+input DirectoryGroupOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryGroups.
+  """
+  field: DirectoryGroupOrderField!
+}
+"""
+Properties by which DirectoryGroup connections can be ordered.
+"""
+enum DirectoryGroupOrderField {
+  created_at
+  updated_at
+  external_id
+  email
+  display_name
+}
+"""
+DirectoryGroupWhereInput is used for filtering DirectoryGroup objects.
+Input was generated by ent.
+"""
+input DirectoryGroupWhereInput {
+  not: DirectoryGroupWhereInput
+  and: [DirectoryGroupWhereInput!]
+  or: [DirectoryGroupWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  directory_sync_run_id field predicates
+  """
+  directorySyncRunID: ID
+  directorySyncRunIDNEQ: ID
+  directorySyncRunIDIn: [ID!]
+  directorySyncRunIDNotIn: [ID!]
+  directorySyncRunIDGT: ID
+  directorySyncRunIDGTE: ID
+  directorySyncRunIDLT: ID
+  directorySyncRunIDLTE: ID
+  directorySyncRunIDContains: ID
+  directorySyncRunIDHasPrefix: ID
+  directorySyncRunIDHasSuffix: ID
+  directorySyncRunIDEqualFold: ID
+  directorySyncRunIDContainsFold: ID
+  """
+  external_id field predicates
+  """
+  externalID: String
+  externalIDNEQ: String
+  externalIDIn: [String!]
+  externalIDNotIn: [String!]
+  externalIDGT: String
+  externalIDGTE: String
+  externalIDLT: String
+  externalIDLTE: String
+  externalIDContains: String
+  externalIDHasPrefix: String
+  externalIDHasSuffix: String
+  externalIDEqualFold: String
+  externalIDContainsFold: String
+  """
+  email field predicates
+  """
+  email: String
+  emailNEQ: String
+  emailIn: [String!]
+  emailNotIn: [String!]
+  emailGT: String
+  emailGTE: String
+  emailLT: String
+  emailLTE: String
+  emailContains: String
+  emailHasPrefix: String
+  emailHasSuffix: String
+  emailIsNil: Boolean
+  emailNotNil: Boolean
+  emailEqualFold: String
+  emailContainsFold: String
+  """
+  display_name field predicates
+  """
+  displayName: String
+  displayNameNEQ: String
+  displayNameIn: [String!]
+  displayNameNotIn: [String!]
+  displayNameGT: String
+  displayNameGTE: String
+  displayNameLT: String
+  displayNameLTE: String
+  displayNameContains: String
+  displayNameHasPrefix: String
+  displayNameHasSuffix: String
+  displayNameIsNil: Boolean
+  displayNameNotNil: Boolean
+  displayNameEqualFold: String
+  displayNameContainsFold: String
+  """
+  classification field predicates
+  """
+  classification: DirectoryGroupDirectoryGroupClassification
+  classificationNEQ: DirectoryGroupDirectoryGroupClassification
+  classificationIn: [DirectoryGroupDirectoryGroupClassification!]
+  classificationNotIn: [DirectoryGroupDirectoryGroupClassification!]
+  """
+  status field predicates
+  """
+  status: DirectoryGroupDirectoryGroupStatus
+  statusNEQ: DirectoryGroupDirectoryGroupStatus
+  statusIn: [DirectoryGroupDirectoryGroupStatus!]
+  statusNotIn: [DirectoryGroupDirectoryGroupStatus!]
+  """
+  external_sharing_allowed field predicates
+  """
+  externalSharingAllowed: Boolean
+  externalSharingAllowedNEQ: Boolean
+  externalSharingAllowedIsNil: Boolean
+  externalSharingAllowedNotNil: Boolean
+  """
+  member_count field predicates
+  """
+  memberCount: Int
+  memberCountNEQ: Int
+  memberCountIn: [Int!]
+  memberCountNotIn: [Int!]
+  memberCountGT: Int
+  memberCountGTE: Int
+  memberCountLT: Int
+  memberCountLTE: Int
+  memberCountIsNil: Boolean
+  memberCountNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  profile_hash field predicates
+  """
+  profileHash: String
+  profileHashNEQ: String
+  profileHashIn: [String!]
+  profileHashNotIn: [String!]
+  profileHashGT: String
+  profileHashGTE: String
+  profileHashLT: String
+  profileHashLTE: String
+  profileHashContains: String
+  profileHashHasPrefix: String
+  profileHashHasSuffix: String
+  profileHashEqualFold: String
+  profileHashContainsFold: String
+  """
+  source_version field predicates
+  """
+  sourceVersion: String
+  sourceVersionNEQ: String
+  sourceVersionIn: [String!]
+  sourceVersionNotIn: [String!]
+  sourceVersionGT: String
+  sourceVersionGTE: String
+  sourceVersionLT: String
+  sourceVersionLTE: String
+  sourceVersionContains: String
+  sourceVersionHasPrefix: String
+  sourceVersionHasSuffix: String
+  sourceVersionIsNil: Boolean
+  sourceVersionNotNil: Boolean
+  sourceVersionEqualFold: String
+  sourceVersionContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  directory_sync_run edge predicates
+  """
+  hasDirectorySyncRun: Boolean
+  hasDirectorySyncRunWith: [DirectorySyncRunWhereInput!]
+  """
+  accounts edge predicates
+  """
+  hasAccounts: Boolean
+  hasAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  members edge predicates
+  """
+  hasMembers: Boolean
+  hasMembersWith: [DirectoryMembershipWhereInput!]
+}
+type DirectoryMembership implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  integration that owns this directory membership
+  """
+  integrationID: ID!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: ID!
+  """
+  directory account participating in this membership
+  """
+  directoryAccountID: ID!
+  """
+  directory group associated with this membership
+  """
+  directoryGroupID: ID!
+  """
+  membership role reported by the provider
+  """
+  role: DirectoryMembershipDirectoryMembershipRole
+  """
+  mechanism used to populate the membership (api, scim, csv, etc)
+  """
+  source: String
+  """
+  first time the membership was detected
+  """
+  firstSeenAt: Time
+  """
+  most recent time the membership was detected
+  """
+  lastSeenAt: Time
+  """
+  time when this record was created
+  """
+  observedAt: Time!
+  """
+  sync run identifier that most recently confirmed this membership
+  """
+  lastConfirmedRunID: String
+  """
+  raw metadata associated with this membership from the provider
+  """
+  metadata: Map
+  owner: Organization
+  """
+  integration that owns this directory membership
+  """
+  integration: Integration!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRun: DirectorySyncRun!
+  directoryAccount: DirectoryAccount!
+  directoryGroup: DirectoryGroup!
+  events(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Events returned from the connection.
+    """
+    orderBy: [EventOrder!]
+
+    """
+    Filtering options for Events returned from the connection.
+    """
+    where: EventWhereInput
+  ): EventConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryMembershipConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryMembershipEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryMembershipDirectoryMembershipRole is enum for the field role
+"""
+enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+  MEMBER
+  MANAGER
+  OWNER
+}
+"""
+An edge in a connection.
+"""
+type DirectoryMembershipEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryMembership
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type DirectoryMembershipHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: DirectoryMembershipHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  integration that owns this directory membership
+  """
+  integrationID: String!
+  """
+  sync run that produced this snapshot
+  """
+  directorySyncRunID: String!
+  """
+  directory account participating in this membership
+  """
+  directoryAccountID: String!
+  """
+  directory group associated with this membership
+  """
+  directoryGroupID: String!
+  """
+  membership role reported by the provider
+  """
+  role: DirectoryMembershipHistoryDirectoryMembershipRole
+  """
+  mechanism used to populate the membership (api, scim, csv, etc)
+  """
+  source: String
+  """
+  first time the membership was detected
+  """
+  firstSeenAt: Time
+  """
+  most recent time the membership was detected
+  """
+  lastSeenAt: Time
+  """
+  time when this record was created
+  """
+  observedAt: Time!
+  """
+  sync run identifier that most recently confirmed this membership
+  """
+  lastConfirmedRunID: String
+  """
+  raw metadata associated with this membership from the provider
+  """
+  metadata: Map
+}
+"""
+A connection to a list of items.
+"""
+type DirectoryMembershipHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectoryMembershipHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
+"""
+enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+  MEMBER
+  MANAGER
+  OWNER
+}
+"""
+An edge in a connection.
+"""
+type DirectoryMembershipHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectoryMembershipHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+DirectoryMembershipHistoryOpType is enum for the field operation
+"""
+enum DirectoryMembershipHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for DirectoryMembershipHistory connections
+"""
+input DirectoryMembershipHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryMembershipHistories.
+  """
+  field: DirectoryMembershipHistoryOrderField!
+}
+"""
+Properties by which DirectoryMembershipHistory connections can be ordered.
+"""
+enum DirectoryMembershipHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+DirectoryMembershipHistoryWhereInput is used for filtering DirectoryMembershipHistory objects.
+Input was generated by ent.
+"""
+input DirectoryMembershipHistoryWhereInput {
+  not: DirectoryMembershipHistoryWhereInput
+  and: [DirectoryMembershipHistoryWhereInput!]
+  or: [DirectoryMembershipHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: DirectoryMembershipHistoryOpType
+  operationNEQ: DirectoryMembershipHistoryOpType
+  operationIn: [DirectoryMembershipHistoryOpType!]
+  operationNotIn: [DirectoryMembershipHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  integration_id field predicates
+  """
+  integrationID: String
+  integrationIDNEQ: String
+  integrationIDIn: [String!]
+  integrationIDNotIn: [String!]
+  integrationIDGT: String
+  integrationIDGTE: String
+  integrationIDLT: String
+  integrationIDLTE: String
+  integrationIDContains: String
+  integrationIDHasPrefix: String
+  integrationIDHasSuffix: String
+  integrationIDEqualFold: String
+  integrationIDContainsFold: String
+  """
+  directory_sync_run_id field predicates
+  """
+  directorySyncRunID: String
+  directorySyncRunIDNEQ: String
+  directorySyncRunIDIn: [String!]
+  directorySyncRunIDNotIn: [String!]
+  directorySyncRunIDGT: String
+  directorySyncRunIDGTE: String
+  directorySyncRunIDLT: String
+  directorySyncRunIDLTE: String
+  directorySyncRunIDContains: String
+  directorySyncRunIDHasPrefix: String
+  directorySyncRunIDHasSuffix: String
+  directorySyncRunIDEqualFold: String
+  directorySyncRunIDContainsFold: String
+  """
+  directory_account_id field predicates
+  """
+  directoryAccountID: String
+  directoryAccountIDNEQ: String
+  directoryAccountIDIn: [String!]
+  directoryAccountIDNotIn: [String!]
+  directoryAccountIDGT: String
+  directoryAccountIDGTE: String
+  directoryAccountIDLT: String
+  directoryAccountIDLTE: String
+  directoryAccountIDContains: String
+  directoryAccountIDHasPrefix: String
+  directoryAccountIDHasSuffix: String
+  directoryAccountIDEqualFold: String
+  directoryAccountIDContainsFold: String
+  """
+  directory_group_id field predicates
+  """
+  directoryGroupID: String
+  directoryGroupIDNEQ: String
+  directoryGroupIDIn: [String!]
+  directoryGroupIDNotIn: [String!]
+  directoryGroupIDGT: String
+  directoryGroupIDGTE: String
+  directoryGroupIDLT: String
+  directoryGroupIDLTE: String
+  directoryGroupIDContains: String
+  directoryGroupIDHasPrefix: String
+  directoryGroupIDHasSuffix: String
+  directoryGroupIDEqualFold: String
+  directoryGroupIDContainsFold: String
+  """
+  role field predicates
+  """
+  role: DirectoryMembershipHistoryDirectoryMembershipRole
+  roleNEQ: DirectoryMembershipHistoryDirectoryMembershipRole
+  roleIn: [DirectoryMembershipHistoryDirectoryMembershipRole!]
+  roleNotIn: [DirectoryMembershipHistoryDirectoryMembershipRole!]
+  roleIsNil: Boolean
+  roleNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  first_seen_at field predicates
+  """
+  firstSeenAt: Time
+  firstSeenAtNEQ: Time
+  firstSeenAtIn: [Time!]
+  firstSeenAtNotIn: [Time!]
+  firstSeenAtGT: Time
+  firstSeenAtGTE: Time
+  firstSeenAtLT: Time
+  firstSeenAtLTE: Time
+  firstSeenAtIsNil: Boolean
+  firstSeenAtNotNil: Boolean
+  """
+  last_seen_at field predicates
+  """
+  lastSeenAt: Time
+  lastSeenAtNEQ: Time
+  lastSeenAtIn: [Time!]
+  lastSeenAtNotIn: [Time!]
+  lastSeenAtGT: Time
+  lastSeenAtGTE: Time
+  lastSeenAtLT: Time
+  lastSeenAtLTE: Time
+  lastSeenAtIsNil: Boolean
+  lastSeenAtNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  last_confirmed_run_id field predicates
+  """
+  lastConfirmedRunID: String
+  lastConfirmedRunIDNEQ: String
+  lastConfirmedRunIDIn: [String!]
+  lastConfirmedRunIDNotIn: [String!]
+  lastConfirmedRunIDGT: String
+  lastConfirmedRunIDGTE: String
+  lastConfirmedRunIDLT: String
+  lastConfirmedRunIDLTE: String
+  lastConfirmedRunIDContains: String
+  lastConfirmedRunIDHasPrefix: String
+  lastConfirmedRunIDHasSuffix: String
+  lastConfirmedRunIDIsNil: Boolean
+  lastConfirmedRunIDNotNil: Boolean
+  lastConfirmedRunIDEqualFold: String
+  lastConfirmedRunIDContainsFold: String
+}
+"""
+Ordering options for DirectoryMembership connections
+"""
+input DirectoryMembershipOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectoryMemberships.
+  """
+  field: DirectoryMembershipOrderField!
+}
+"""
+Properties by which DirectoryMembership connections can be ordered.
+"""
+enum DirectoryMembershipOrderField {
+  created_at
+  updated_at
+}
+"""
+DirectoryMembershipWhereInput is used for filtering DirectoryMembership objects.
+Input was generated by ent.
+"""
+input DirectoryMembershipWhereInput {
+  not: DirectoryMembershipWhereInput
+  and: [DirectoryMembershipWhereInput!]
+  or: [DirectoryMembershipWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  role field predicates
+  """
+  role: DirectoryMembershipDirectoryMembershipRole
+  roleNEQ: DirectoryMembershipDirectoryMembershipRole
+  roleIn: [DirectoryMembershipDirectoryMembershipRole!]
+  roleNotIn: [DirectoryMembershipDirectoryMembershipRole!]
+  roleIsNil: Boolean
+  roleNotNil: Boolean
+  """
+  source field predicates
+  """
+  source: String
+  sourceNEQ: String
+  sourceIn: [String!]
+  sourceNotIn: [String!]
+  sourceGT: String
+  sourceGTE: String
+  sourceLT: String
+  sourceLTE: String
+  sourceContains: String
+  sourceHasPrefix: String
+  sourceHasSuffix: String
+  sourceIsNil: Boolean
+  sourceNotNil: Boolean
+  sourceEqualFold: String
+  sourceContainsFold: String
+  """
+  first_seen_at field predicates
+  """
+  firstSeenAt: Time
+  firstSeenAtNEQ: Time
+  firstSeenAtIn: [Time!]
+  firstSeenAtNotIn: [Time!]
+  firstSeenAtGT: Time
+  firstSeenAtGTE: Time
+  firstSeenAtLT: Time
+  firstSeenAtLTE: Time
+  firstSeenAtIsNil: Boolean
+  firstSeenAtNotNil: Boolean
+  """
+  last_seen_at field predicates
+  """
+  lastSeenAt: Time
+  lastSeenAtNEQ: Time
+  lastSeenAtIn: [Time!]
+  lastSeenAtNotIn: [Time!]
+  lastSeenAtGT: Time
+  lastSeenAtGTE: Time
+  lastSeenAtLT: Time
+  lastSeenAtLTE: Time
+  lastSeenAtIsNil: Boolean
+  lastSeenAtNotNil: Boolean
+  """
+  observed_at field predicates
+  """
+  observedAt: Time
+  observedAtNEQ: Time
+  observedAtIn: [Time!]
+  observedAtNotIn: [Time!]
+  observedAtGT: Time
+  observedAtGTE: Time
+  observedAtLT: Time
+  observedAtLTE: Time
+  """
+  last_confirmed_run_id field predicates
+  """
+  lastConfirmedRunID: String
+  lastConfirmedRunIDNEQ: String
+  lastConfirmedRunIDIn: [String!]
+  lastConfirmedRunIDNotIn: [String!]
+  lastConfirmedRunIDGT: String
+  lastConfirmedRunIDGTE: String
+  lastConfirmedRunIDLT: String
+  lastConfirmedRunIDLTE: String
+  lastConfirmedRunIDContains: String
+  lastConfirmedRunIDHasPrefix: String
+  lastConfirmedRunIDHasSuffix: String
+  lastConfirmedRunIDIsNil: Boolean
+  lastConfirmedRunIDNotNil: Boolean
+  lastConfirmedRunIDEqualFold: String
+  lastConfirmedRunIDContainsFold: String
+}
+type DirectorySyncRun implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  integration this sync run executed for
+  """
+  integrationID: ID!
+  """
+  current state of the sync run
+  """
+  status: DirectorySyncRunDirectorySyncRunStatus!
+  """
+  time the sync started
+  """
+  startedAt: Time!
+  """
+  time the sync finished
+  """
+  completedAt: Time
+  """
+  cursor or checkpoint returned by the provider for the next run
+  """
+  sourceCursor: String
+  """
+  total records processed during this run
+  """
+  fullCount: Int!
+  """
+  number of records that changed compared to the prior run
+  """
+  deltaCount: Int!
+  """
+  serialized error information when the run failed
+  """
+  error: String
+  """
+  object storage file identifier for the manifest captured during the run
+  """
+  rawManifestFileID: String
+  """
+  additional provider-specific stats for the run
+  """
+  stats: Map
+  owner: Organization
+  """
+  integration that executed this sync run
+  """
+  integration: Integration!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+}
+"""
+A connection to a list of items.
+"""
+type DirectorySyncRunConnection {
+  """
+  A list of edges.
+  """
+  edges: [DirectorySyncRunEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+DirectorySyncRunDirectorySyncRunStatus is enum for the field status
+"""
+enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectorySyncRunStatus") {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+}
+"""
+An edge in a connection.
+"""
+type DirectorySyncRunEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: DirectorySyncRun
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+Ordering options for DirectorySyncRun connections
+"""
+input DirectorySyncRunOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order DirectorySyncRuns.
+  """
+  field: DirectorySyncRunOrderField!
+}
+"""
+Properties by which DirectorySyncRun connections can be ordered.
+"""
+enum DirectorySyncRunOrderField {
+  created_at
+  updated_at
+  started_at
+}
+"""
+DirectorySyncRunWhereInput is used for filtering DirectorySyncRun objects.
+Input was generated by ent.
+"""
+input DirectorySyncRunWhereInput {
+  not: DirectorySyncRunWhereInput
+  and: [DirectorySyncRunWhereInput!]
+  or: [DirectorySyncRunWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  integration_id field predicates
+  """
+  integrationID: ID
+  integrationIDNEQ: ID
+  integrationIDIn: [ID!]
+  integrationIDNotIn: [ID!]
+  integrationIDGT: ID
+  integrationIDGTE: ID
+  integrationIDLT: ID
+  integrationIDLTE: ID
+  integrationIDContains: ID
+  integrationIDHasPrefix: ID
+  integrationIDHasSuffix: ID
+  integrationIDEqualFold: ID
+  integrationIDContainsFold: ID
+  """
+  status field predicates
+  """
+  status: DirectorySyncRunDirectorySyncRunStatus
+  statusNEQ: DirectorySyncRunDirectorySyncRunStatus
+  statusIn: [DirectorySyncRunDirectorySyncRunStatus!]
+  statusNotIn: [DirectorySyncRunDirectorySyncRunStatus!]
+  """
+  started_at field predicates
+  """
+  startedAt: Time
+  startedAtNEQ: Time
+  startedAtIn: [Time!]
+  startedAtNotIn: [Time!]
+  startedAtGT: Time
+  startedAtGTE: Time
+  startedAtLT: Time
+  startedAtLTE: Time
+  """
+  completed_at field predicates
+  """
+  completedAt: Time
+  completedAtNEQ: Time
+  completedAtIn: [Time!]
+  completedAtNotIn: [Time!]
+  completedAtGT: Time
+  completedAtGTE: Time
+  completedAtLT: Time
+  completedAtLTE: Time
+  completedAtIsNil: Boolean
+  completedAtNotNil: Boolean
+  """
+  source_cursor field predicates
+  """
+  sourceCursor: String
+  sourceCursorNEQ: String
+  sourceCursorIn: [String!]
+  sourceCursorNotIn: [String!]
+  sourceCursorGT: String
+  sourceCursorGTE: String
+  sourceCursorLT: String
+  sourceCursorLTE: String
+  sourceCursorContains: String
+  sourceCursorHasPrefix: String
+  sourceCursorHasSuffix: String
+  sourceCursorIsNil: Boolean
+  sourceCursorNotNil: Boolean
+  sourceCursorEqualFold: String
+  sourceCursorContainsFold: String
+  """
+  full_count field predicates
+  """
+  fullCount: Int
+  fullCountNEQ: Int
+  fullCountIn: [Int!]
+  fullCountNotIn: [Int!]
+  fullCountGT: Int
+  fullCountGTE: Int
+  fullCountLT: Int
+  fullCountLTE: Int
+  """
+  delta_count field predicates
+  """
+  deltaCount: Int
+  deltaCountNEQ: Int
+  deltaCountIn: [Int!]
+  deltaCountNotIn: [Int!]
+  deltaCountGT: Int
+  deltaCountGTE: Int
+  deltaCountLT: Int
+  deltaCountLTE: Int
+  """
+  error field predicates
+  """
+  error: String
+  errorNEQ: String
+  errorIn: [String!]
+  errorNotIn: [String!]
+  errorGT: String
+  errorGTE: String
+  errorLT: String
+  errorLTE: String
+  errorContains: String
+  errorHasPrefix: String
+  errorHasSuffix: String
+  errorIsNil: Boolean
+  errorNotNil: Boolean
+  errorEqualFold: String
+  errorContainsFold: String
+  """
+  raw_manifest_file_id field predicates
+  """
+  rawManifestFileID: String
+  rawManifestFileIDNEQ: String
+  rawManifestFileIDIn: [String!]
+  rawManifestFileIDNotIn: [String!]
+  rawManifestFileIDGT: String
+  rawManifestFileIDGTE: String
+  rawManifestFileIDLT: String
+  rawManifestFileIDLTE: String
+  rawManifestFileIDContains: String
+  rawManifestFileIDHasPrefix: String
+  rawManifestFileIDHasSuffix: String
+  rawManifestFileIDIsNil: Boolean
+  rawManifestFileIDNotNil: Boolean
+  rawManifestFileIDEqualFold: String
+  rawManifestFileIDContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  integration edge predicates
+  """
+  hasIntegration: Boolean
+  hasIntegrationWith: [IntegrationWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_groups edge predicates
+  """
+  hasDirectoryGroups: Boolean
+  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
 }
 type DocumentData implements Node {
   id: ID!
@@ -68113,6 +79317,7 @@ ExportExportType is enum for the field export_type
 """
 enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
   CONTROL
+  DIRECTORY_MEMBERSHIP
   EVIDENCE
   FINDING
   INTERNAL_POLICY
@@ -70400,6 +81605,37 @@ type Finding implements Node {
     """
     where: FileWhereInput
   ): FileConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
   controlMappings(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -72698,6 +83934,11 @@ input FindingWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
   """
   control_mappings edge predicates
   """
@@ -76759,6 +88000,130 @@ type Integration implements Node {
     """
     where: ActionPlanWhereInput
   ): ActionPlanConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+  directorySyncRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectorySyncRuns returned from the connection.
+    """
+    orderBy: [DirectorySyncRunOrder!]
+
+    """
+    Filtering options for DirectorySyncRuns returned from the connection.
+    """
+    where: DirectorySyncRunWhereInput
+  ): DirectorySyncRunConnection!
 }
 """
 A connection to a list of items.
@@ -77404,6 +88769,26 @@ input IntegrationWhereInput {
   """
   hasActionPlans: Boolean
   hasActionPlansWith: [ActionPlanWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_groups edge predicates
+  """
+  hasDirectoryGroups: Boolean
+  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+  """
+  directory_sync_runs edge predicates
+  """
+  hasDirectorySyncRuns: Boolean
+  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
 }
 type InternalPolicy implements Node {
   id: ID!
@@ -77899,6 +89284,37 @@ type InternalPolicy implements Node {
     """
     where: NoteWhereInput
   ): NoteConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -79046,6 +90462,11 @@ input InternalPolicyWhereInput {
   """
   hasComments: Boolean
   hasCommentsWith: [NoteWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Invite implements Node {
   id: ID!
@@ -87539,6 +98960,316 @@ type Organization implements Node {
     """
     where: VulnerabilityWhereInput
   ): VulnerabilityConnection!
+  workflowDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowDefinitions returned from the connection.
+    """
+    orderBy: [WorkflowDefinitionOrder!]
+
+    """
+    Filtering options for WorkflowDefinitions returned from the connection.
+    """
+    where: WorkflowDefinitionWhereInput
+  ): WorkflowDefinitionConnection!
+  workflowInstances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowInstances returned from the connection.
+    """
+    orderBy: [WorkflowInstanceOrder!]
+
+    """
+    Filtering options for WorkflowInstances returned from the connection.
+    """
+    where: WorkflowInstanceWhereInput
+  ): WorkflowInstanceConnection!
+  workflowEvents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowEvents returned from the connection.
+    """
+    orderBy: [WorkflowEventOrder!]
+
+    """
+    Filtering options for WorkflowEvents returned from the connection.
+    """
+    where: WorkflowEventWhereInput
+  ): WorkflowEventConnection!
+  workflowAssignments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignments returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentOrder!]
+
+    """
+    Filtering options for WorkflowAssignments returned from the connection.
+    """
+    where: WorkflowAssignmentWhereInput
+  ): WorkflowAssignmentConnection!
+  workflowAssignmentTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentTargetOrder!]
+
+    """
+    Filtering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    where: WorkflowAssignmentTargetWhereInput
+  ): WorkflowAssignmentTargetConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+  directorySyncRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectorySyncRuns returned from the connection.
+    """
+    orderBy: [DirectorySyncRunOrder!]
+
+    """
+    Filtering options for DirectorySyncRuns returned from the connection.
+    """
+    where: DirectorySyncRunWhereInput
+  ): DirectorySyncRunConnection!
   members(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -89697,6 +101428,56 @@ input OrganizationWhereInput {
   """
   hasVulnerabilities: Boolean
   hasVulnerabilitiesWith: [VulnerabilityWhereInput!]
+  """
+  workflow_definitions edge predicates
+  """
+  hasWorkflowDefinitions: Boolean
+  hasWorkflowDefinitionsWith: [WorkflowDefinitionWhereInput!]
+  """
+  workflow_instances edge predicates
+  """
+  hasWorkflowInstances: Boolean
+  hasWorkflowInstancesWith: [WorkflowInstanceWhereInput!]
+  """
+  workflow_events edge predicates
+  """
+  hasWorkflowEvents: Boolean
+  hasWorkflowEventsWith: [WorkflowEventWhereInput!]
+  """
+  workflow_assignments edge predicates
+  """
+  hasWorkflowAssignments: Boolean
+  hasWorkflowAssignmentsWith: [WorkflowAssignmentWhereInput!]
+  """
+  workflow_assignment_targets edge predicates
+  """
+  hasWorkflowAssignmentTargets: Boolean
+  hasWorkflowAssignmentTargetsWith: [WorkflowAssignmentTargetWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+  """
+  directory_accounts edge predicates
+  """
+  hasDirectoryAccounts: Boolean
+  hasDirectoryAccountsWith: [DirectoryAccountWhereInput!]
+  """
+  directory_groups edge predicates
+  """
+  hasDirectoryGroups: Boolean
+  hasDirectoryGroupsWith: [DirectoryGroupWhereInput!]
+  """
+  directory_memberships edge predicates
+  """
+  hasDirectoryMemberships: Boolean
+  hasDirectoryMembershipsWith: [DirectoryMembershipWhereInput!]
+  """
+  directory_sync_runs edge predicates
+  """
+  hasDirectorySyncRuns: Boolean
+  hasDirectorySyncRunsWith: [DirectorySyncRunWhereInput!]
   """
   members edge predicates
   """
@@ -94418,6 +106199,223 @@ type Query {
     """
     where: DNSVerificationHistoryWhereInput
   ): DNSVerificationHistoryConnection!
+  directoryAccounts(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccounts returned from the connection.
+    """
+    orderBy: [DirectoryAccountOrder!]
+
+    """
+    Filtering options for DirectoryAccounts returned from the connection.
+    """
+    where: DirectoryAccountWhereInput
+  ): DirectoryAccountConnection!
+  directoryAccountHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryAccountHistories returned from the connection.
+    """
+    orderBy: DirectoryAccountHistoryOrder
+
+    """
+    Filtering options for DirectoryAccountHistories returned from the connection.
+    """
+    where: DirectoryAccountHistoryWhereInput
+  ): DirectoryAccountHistoryConnection!
+  directoryGroups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroups returned from the connection.
+    """
+    orderBy: [DirectoryGroupOrder!]
+
+    """
+    Filtering options for DirectoryGroups returned from the connection.
+    """
+    where: DirectoryGroupWhereInput
+  ): DirectoryGroupConnection!
+  directoryGroupHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryGroupHistories returned from the connection.
+    """
+    orderBy: DirectoryGroupHistoryOrder
+
+    """
+    Filtering options for DirectoryGroupHistories returned from the connection.
+    """
+    where: DirectoryGroupHistoryWhereInput
+  ): DirectoryGroupHistoryConnection!
+  directoryMemberships(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMemberships returned from the connection.
+    """
+    orderBy: [DirectoryMembershipOrder!]
+
+    """
+    Filtering options for DirectoryMemberships returned from the connection.
+    """
+    where: DirectoryMembershipWhereInput
+  ): DirectoryMembershipConnection!
+  directoryMembershipHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectoryMembershipHistories returned from the connection.
+    """
+    orderBy: DirectoryMembershipHistoryOrder
+
+    """
+    Filtering options for DirectoryMembershipHistories returned from the connection.
+    """
+    where: DirectoryMembershipHistoryWhereInput
+  ): DirectoryMembershipHistoryConnection!
+  directorySyncRuns(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for DirectorySyncRuns returned from the connection.
+    """
+    orderBy: [DirectorySyncRunOrder!]
+
+    """
+    Filtering options for DirectorySyncRuns returned from the connection.
+    """
+    where: DirectorySyncRunWhereInput
+  ): DirectorySyncRunConnection!
   documentDataSlice(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -97549,6 +109547,378 @@ type Query {
     """
     where: WebauthnWhereInput
   ): WebauthnConnection!
+  workflowAssignments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignments returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentOrder!]
+
+    """
+    Filtering options for WorkflowAssignments returned from the connection.
+    """
+    where: WorkflowAssignmentWhereInput
+  ): WorkflowAssignmentConnection!
+  workflowAssignmentHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignmentHistories returned from the connection.
+    """
+    orderBy: WorkflowAssignmentHistoryOrder
+
+    """
+    Filtering options for WorkflowAssignmentHistories returned from the connection.
+    """
+    where: WorkflowAssignmentHistoryWhereInput
+  ): WorkflowAssignmentHistoryConnection!
+  workflowAssignmentTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentTargetOrder!]
+
+    """
+    Filtering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    where: WorkflowAssignmentTargetWhereInput
+  ): WorkflowAssignmentTargetConnection!
+  workflowAssignmentTargetHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignmentTargetHistories returned from the connection.
+    """
+    orderBy: WorkflowAssignmentTargetHistoryOrder
+
+    """
+    Filtering options for WorkflowAssignmentTargetHistories returned from the connection.
+    """
+    where: WorkflowAssignmentTargetHistoryWhereInput
+  ): WorkflowAssignmentTargetHistoryConnection!
+  workflowDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowDefinitions returned from the connection.
+    """
+    orderBy: [WorkflowDefinitionOrder!]
+
+    """
+    Filtering options for WorkflowDefinitions returned from the connection.
+    """
+    where: WorkflowDefinitionWhereInput
+  ): WorkflowDefinitionConnection!
+  workflowDefinitionHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowDefinitionHistories returned from the connection.
+    """
+    orderBy: WorkflowDefinitionHistoryOrder
+
+    """
+    Filtering options for WorkflowDefinitionHistories returned from the connection.
+    """
+    where: WorkflowDefinitionHistoryWhereInput
+  ): WorkflowDefinitionHistoryConnection!
+  workflowEvents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowEvents returned from the connection.
+    """
+    orderBy: [WorkflowEventOrder!]
+
+    """
+    Filtering options for WorkflowEvents returned from the connection.
+    """
+    where: WorkflowEventWhereInput
+  ): WorkflowEventConnection!
+  workflowEventHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowEventHistories returned from the connection.
+    """
+    orderBy: WorkflowEventHistoryOrder
+
+    """
+    Filtering options for WorkflowEventHistories returned from the connection.
+    """
+    where: WorkflowEventHistoryWhereInput
+  ): WorkflowEventHistoryConnection!
+  workflowInstances(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowInstances returned from the connection.
+    """
+    orderBy: [WorkflowInstanceOrder!]
+
+    """
+    Filtering options for WorkflowInstances returned from the connection.
+    """
+    where: WorkflowInstanceWhereInput
+  ): WorkflowInstanceConnection!
+  workflowInstanceHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowInstanceHistories returned from the connection.
+    """
+    orderBy: WorkflowInstanceHistoryOrder
+
+    """
+    Filtering options for WorkflowInstanceHistories returned from the connection.
+    """
+    where: WorkflowInstanceHistoryWhereInput
+  ): WorkflowInstanceHistoryConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+  workflowObjectRefHistories(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefHistories returned from the connection.
+    """
+    orderBy: WorkflowObjectRefHistoryOrder
+
+    """
+    Filtering options for WorkflowObjectRefHistories returned from the connection.
+    """
+    where: WorkflowObjectRefHistoryWhereInput
+  ): WorkflowObjectRefHistoryConnection!
 }
 type Remediation implements Node {
   id: ID!
@@ -109522,6 +121892,37 @@ type Task implements Node {
     """
     where: EvidenceWhereInput
   ): EvidenceConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
 }
 """
 A connection to a list of items.
@@ -110447,6 +122848,11 @@ input TaskWhereInput {
   """
   hasEvidence: Boolean
   hasEvidenceWith: [EvidenceWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
 }
 type Template implements Node {
   id: ID!
@@ -116099,6 +128505,9 @@ input UpdateControlInput {
   addScheduledJobIDs: [ID!]
   removeScheduledJobIDs: [ID!]
   clearScheduledJobs: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateControlObjectiveInput is used for update ControlObjective object.
@@ -116334,6 +128743,266 @@ input UpdateDNSVerificationInput {
   addCustomDomainIDs: [ID!]
   removeCustomDomainIDs: [ID!]
   clearCustomDomains: Boolean
+}
+"""
+UpdateDirectoryAccountInput is used for update DirectoryAccount object.
+Input was generated by ent.
+"""
+input UpdateDirectoryAccountInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  optional secondary identifier such as Azure immutable ID
+  """
+  secondaryKey: String
+  clearSecondaryKey: Boolean
+  """
+  lower-cased primary email address, if present
+  """
+  canonicalEmail: String
+  clearCanonicalEmail: Boolean
+  """
+  provider supplied display name
+  """
+  displayName: String
+  clearDisplayName: Boolean
+  """
+  first name reported by the provider
+  """
+  givenName: String
+  clearGivenName: Boolean
+  """
+  last name reported by the provider
+  """
+  familyName: String
+  clearFamilyName: Boolean
+  """
+  title captured at sync time
+  """
+  jobTitle: String
+  clearJobTitle: Boolean
+  """
+  department captured at sync time
+  """
+  department: String
+  clearDepartment: Boolean
+  """
+  organizational unit or OU path the account lives under
+  """
+  organizationUnit: String
+  clearOrganizationUnit: Boolean
+  """
+  type of principal represented in the directory
+  """
+  accountType: DirectoryAccountDirectoryAccountType
+  clearAccountType: Boolean
+  """
+  lifecycle status returned by the directory
+  """
+  status: DirectoryAccountDirectoryAccountStatus
+  """
+  multi-factor authentication state reported by the directory
+  """
+  mfaState: DirectoryAccountDirectoryAccountMFAState
+  """
+  last IP address observed by the provider, if any
+  """
+  lastSeenIP: String
+  clearLastSeenIP: Boolean
+  """
+  timestamp of the most recent login reported by the provider
+  """
+  lastLoginAt: Time
+  clearLastLoginAt: Boolean
+  """
+  hash of the normalized profile payload for change detection
+  """
+  profileHash: String
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  clearProfile: Boolean
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  clearSourceVersion: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addGroupIDs: [ID!]
+  removeGroupIDs: [ID!]
+  clearGroups: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateDirectoryGroupInput is used for update DirectoryGroup object.
+Input was generated by ent.
+"""
+input UpdateDirectoryGroupInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  primary group email address, when applicable
+  """
+  email: String
+  clearEmail: Boolean
+  """
+  directory supplied display name
+  """
+  displayName: String
+  clearDisplayName: Boolean
+  """
+  free-form description captured at sync time
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  provider classification such as security, distribution, or dynamic
+  """
+  classification: DirectoryGroupDirectoryGroupClassification
+  """
+  lifecycle status reported by the directory
+  """
+  status: DirectoryGroupDirectoryGroupStatus
+  """
+  true when directory settings allow sharing outside the tenant
+  """
+  externalSharingAllowed: Boolean
+  clearExternalSharingAllowed: Boolean
+  """
+  member count reported by the directory
+  """
+  memberCount: Int
+  clearMemberCount: Boolean
+  """
+  hash of the normalized payload for diffing
+  """
+  profileHash: String
+  """
+  flattened attribute bag used for filtering/diffing
+  """
+  profile: Map
+  clearProfile: Boolean
+  """
+  cursor or ETag supplied by the source system for auditing
+  """
+  sourceVersion: String
+  clearSourceVersion: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateDirectoryMembershipInput is used for update DirectoryMembership object.
+Input was generated by ent.
+"""
+input UpdateDirectoryMembershipInput {
+  """
+  membership role reported by the provider
+  """
+  role: DirectoryMembershipDirectoryMembershipRole
+  clearRole: Boolean
+  """
+  mechanism used to populate the membership (api, scim, csv, etc)
+  """
+  source: String
+  clearSource: Boolean
+  """
+  first time the membership was detected
+  """
+  firstSeenAt: Time
+  clearFirstSeenAt: Boolean
+  """
+  most recent time the membership was detected
+  """
+  lastSeenAt: Time
+  clearLastSeenAt: Boolean
+  """
+  sync run identifier that most recently confirmed this membership
+  """
+  lastConfirmedRunID: String
+  clearLastConfirmedRunID: Boolean
+  """
+  raw metadata associated with this membership from the provider
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addEventIDs: [ID!]
+  removeEventIDs: [ID!]
+  clearEvents: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateDirectorySyncRunInput is used for update DirectorySyncRun object.
+Input was generated by ent.
+"""
+input UpdateDirectorySyncRunInput {
+  """
+  current state of the sync run
+  """
+  status: DirectorySyncRunDirectorySyncRunStatus
+  """
+  time the sync started
+  """
+  startedAt: Time
+  """
+  time the sync finished
+  """
+  completedAt: Time
+  clearCompletedAt: Boolean
+  """
+  cursor or checkpoint returned by the provider for the next run
+  """
+  sourceCursor: String
+  clearSourceCursor: Boolean
+  """
+  total records processed during this run
+  """
+  fullCount: Int
+  """
+  number of records that changed compared to the prior run
+  """
+  deltaCount: Int
+  """
+  serialized error information when the run failed
+  """
+  error: String
+  clearError: Boolean
+  """
+  object storage file identifier for the manifest captured during the run
+  """
+  rawManifestFileID: String
+  clearRawManifestFileID: Boolean
+  """
+  additional provider-specific stats for the run
+  """
+  stats: Map
+  clearStats: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addDirectoryAccountIDs: [ID!]
+  removeDirectoryAccountIDs: [ID!]
+  clearDirectoryAccounts: Boolean
+  addDirectoryGroupIDs: [ID!]
+  removeDirectoryGroupIDs: [ID!]
+  clearDirectoryGroups: Boolean
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -117063,6 +129732,9 @@ input UpdateFindingInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateGroupInput is used for update Group object.
@@ -117463,6 +130135,9 @@ input UpdateInternalPolicyInput {
   addCommentIDs: [ID!]
   removeCommentIDs: [ID!]
   clearComments: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateInviteInput is used for update Invite object.
@@ -118087,6 +130762,33 @@ input UpdateOrganizationInput {
   addVulnerabilityIDs: [ID!]
   removeVulnerabilityIDs: [ID!]
   clearVulnerabilities: Boolean
+  addWorkflowDefinitionIDs: [ID!]
+  removeWorkflowDefinitionIDs: [ID!]
+  clearWorkflowDefinitions: Boolean
+  addWorkflowInstanceIDs: [ID!]
+  removeWorkflowInstanceIDs: [ID!]
+  clearWorkflowInstances: Boolean
+  addWorkflowEventIDs: [ID!]
+  removeWorkflowEventIDs: [ID!]
+  clearWorkflowEvents: Boolean
+  addWorkflowAssignmentIDs: [ID!]
+  removeWorkflowAssignmentIDs: [ID!]
+  clearWorkflowAssignments: Boolean
+  addWorkflowAssignmentTargetIDs: [ID!]
+  removeWorkflowAssignmentTargetIDs: [ID!]
+  clearWorkflowAssignmentTargets: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+  addDirectoryAccountIDs: [ID!]
+  removeDirectoryAccountIDs: [ID!]
+  clearDirectoryAccounts: Boolean
+  addDirectoryGroupIDs: [ID!]
+  removeDirectoryGroupIDs: [ID!]
+  clearDirectoryGroups: Boolean
+  addDirectorySyncRunIDs: [ID!]
+  removeDirectorySyncRunIDs: [ID!]
+  clearDirectorySyncRuns: Boolean
 }
 """
 UpdateOrganizationSettingInput is used for update OrganizationSetting object.
@@ -119578,6 +132280,9 @@ input UpdateTaskInput {
   addEvidenceIDs: [ID!]
   removeEvidenceIDs: [ID!]
   clearEvidence: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
 }
 """
 UpdateTemplateInput is used for update Template object.
@@ -120279,6 +132984,262 @@ input UpdateVulnerabilityInput {
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
+}
+"""
+UpdateWorkflowAssignmentInput is used for update WorkflowAssignment object.
+Input was generated by ent.
+"""
+input UpdateWorkflowAssignmentInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  Unique key for the assignment within the workflow instance
+  """
+  assignmentKey: String
+  """
+  Role assigned to the target, e.g. APPROVER
+  """
+  role: String
+  """
+  Optional label for the assignment
+  """
+  label: String
+  clearLabel: Boolean
+  """
+  Whether this assignment is required for workflow progression
+  """
+  required: Boolean
+  """
+  Current status of the assignment
+  """
+  status: WorkflowAssignmentWorkflowAssignmentStatus
+  """
+  Optional metadata for the assignment
+  """
+  metadata: Map
+  clearMetadata: Boolean
+  """
+  Timestamp when the assignment was decided
+  """
+  decidedAt: Time
+  clearDecidedAt: Boolean
+  """
+  Optional notes about the assignment
+  """
+  notes: String
+  clearNotes: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  workflowInstanceID: ID
+  addWorkflowAssignmentTargetIDs: [ID!]
+  removeWorkflowAssignmentTargetIDs: [ID!]
+  clearWorkflowAssignmentTargets: Boolean
+  userID: ID
+  clearUser: Boolean
+  groupID: ID
+  clearGroup: Boolean
+}
+"""
+UpdateWorkflowAssignmentTargetInput is used for update WorkflowAssignmentTarget object.
+Input was generated by ent.
+"""
+input UpdateWorkflowAssignmentTargetInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  Type of the target (USER, GROUP, ROLE, RESOLVER)
+  """
+  targetType: WorkflowAssignmentTargetWorkflowTargetType
+  """
+  Resolver key when target_type is RESOLVER
+  """
+  resolverKey: String
+  clearResolverKey: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  workflowAssignmentID: ID
+  userID: ID
+  clearUser: Boolean
+  groupID: ID
+  clearGroup: Boolean
+}
+"""
+UpdateWorkflowDefinitionInput is used for update WorkflowDefinition object.
+Input was generated by ent.
+"""
+input UpdateWorkflowDefinitionInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @readOnly
+  clearInternalNotes: Boolean @readOnly
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @readOnly
+  clearSystemInternalID: Boolean
+  """
+  Name of the workflow definition
+  """
+  name: String
+  """
+  Optional description of the workflow definition
+  """
+  description: String
+  clearDescription: Boolean
+  """
+  Kind of workflow, e.g. APPROVAL, LIFECYCLE, NOTIFICATION
+  """
+  workflowKind: WorkflowDefinitionWorkflowKind
+  """
+  Type of schema this workflow applies to
+  """
+  schemaType: String
+  """
+  Revision number for this definition
+  """
+  revision: Int
+  """
+  Whether this definition is a draft
+  """
+  draft: Boolean
+  """
+  When this definition was published
+  """
+  publishedAt: Time
+  clearPublishedAt: Boolean
+  """
+  Suppress duplicate triggers within this window per object/definition
+  """
+  cooldownSeconds: Int
+  """
+  Whether this is the default workflow for the schema type
+  """
+  isDefault: Boolean
+  """
+  Whether the workflow definition is active
+  """
+  active: Boolean
+  """
+  Derived: normalized operations from definition for prefiltering; not user editable
+  """
+  triggerOperations: [String!]
+  appendTriggerOperations: [String!]
+  clearTriggerOperations: Boolean
+  """
+  Derived: normalized fields from definition for prefiltering; not user editable
+  """
+  triggerFields: [String!]
+  appendTriggerFields: [String!]
+  clearTriggerFields: Boolean
+  """
+  Typed document describing triggers, conditions, and actions
+  """
+  definitionJSON: WorkflowDefinitionDocument
+  clearDefinitionJSON: Boolean
+  """
+  Cached list of fields that should trigger workflow evaluation
+  """
+  trackedFields: [String!]
+  appendTrackedFields: [String!]
+  clearTrackedFields: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  addTagDefinitionIDs: [ID!]
+  removeTagDefinitionIDs: [ID!]
+  clearTagDefinitions: Boolean
+  addGroupIDs: [ID!]
+  removeGroupIDs: [ID!]
+  clearGroups: Boolean
+}
+"""
+UpdateWorkflowEventInput is used for update WorkflowEvent object.
+Input was generated by ent.
+"""
+input UpdateWorkflowEventInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  Type of event, typically the action kind
+  """
+  eventType: WorkflowEventWorkflowEventType
+  """
+  Payload for the event; stored raw
+  """
+  payload: WorkflowEventPayload
+  clearPayload: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  workflowInstanceID: ID
+}
+"""
+UpdateWorkflowInstanceInput is used for update WorkflowInstance object.
+Input was generated by ent.
+"""
+input UpdateWorkflowInstanceInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  appendTags: [String!]
+  clearTags: Boolean
+  """
+  Current state of the workflow instance
+  """
+  state: WorkflowInstanceWorkflowInstanceState
+  """
+  Optional context for the workflow instance
+  """
+  context: WorkflowInstanceContext
+  clearContext: Boolean
+  """
+  Timestamp when the workflow was last evaluated
+  """
+  lastEvaluatedAt: Time
+  clearLastEvaluatedAt: Boolean
+  """
+  Copy of definition JSON used for this instance
+  """
+  definitionSnapshot: WorkflowDefinitionDocument
+  clearDefinitionSnapshot: Boolean
+  ownerID: ID
+  clearOwner: Boolean
+  workflowDefinitionID: ID
+  addWorkflowAssignmentIDs: [ID!]
+  removeWorkflowAssignmentIDs: [ID!]
+  clearWorkflowAssignments: Boolean
+  addWorkflowEventIDs: [ID!]
+  removeWorkflowEventIDs: [ID!]
+  clearWorkflowEvents: Boolean
+  addWorkflowObjectRefIDs: [ID!]
+  removeWorkflowObjectRefIDs: [ID!]
+  clearWorkflowObjectRefs: Boolean
+}
+"""
+UpdateWorkflowObjectRefInput is used for update WorkflowObjectRef object.
+Input was generated by ent.
+"""
+input UpdateWorkflowObjectRefInput {
+  ownerID: ID
+  clearOwner: Boolean
 }
 type User implements Node {
   id: ID!
@@ -124820,6 +137781,4545 @@ input WebauthnWhereInput {
   hasOwner: Boolean
   hasOwnerWith: [UserWhereInput!]
 }
+type WorkflowAssignment implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  ID of the workflow instance this assignment belongs to
+  """
+  workflowInstanceID: ID!
+  """
+  Unique key for the assignment within the workflow instance
+  """
+  assignmentKey: String!
+  """
+  Role assigned to the target, e.g. APPROVER
+  """
+  role: String!
+  """
+  Optional label for the assignment
+  """
+  label: String
+  """
+  Whether this assignment is required for workflow progression
+  """
+  required: Boolean!
+  """
+  Current status of the assignment
+  """
+  status: WorkflowAssignmentWorkflowAssignmentStatus!
+  """
+  Optional metadata for the assignment
+  """
+  metadata: Map
+  """
+  Timestamp when the assignment was decided
+  """
+  decidedAt: Time
+  """
+  User who made the decision
+  """
+  actorUserID: ID
+  """
+  Group that acted on the decision (if applicable)
+  """
+  actorGroupID: ID
+  """
+  Optional notes about the assignment
+  """
+  notes: String
+  owner: Organization
+  """
+  Instance this assignment belongs to
+  """
+  workflowInstance: WorkflowInstance!
+  workflowAssignmentTargets(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentTargetOrder!]
+
+    """
+    Filtering options for WorkflowAssignmentTargets returned from the connection.
+    """
+    where: WorkflowAssignmentTargetWhereInput
+  ): WorkflowAssignmentTargetConnection!
+  """
+  User who acted on this assignment
+  """
+  user: User
+  """
+  Group that acted on this assignment
+  """
+  group: Group
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowAssignmentConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowAssignmentEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowAssignmentEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowAssignment
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowAssignmentHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowAssignmentHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  ID of the workflow instance this assignment belongs to
+  """
+  workflowInstanceID: String!
+  """
+  Unique key for the assignment within the workflow instance
+  """
+  assignmentKey: String!
+  """
+  Role assigned to the target, e.g. APPROVER
+  """
+  role: String!
+  """
+  Optional label for the assignment
+  """
+  label: String
+  """
+  Whether this assignment is required for workflow progression
+  """
+  required: Boolean!
+  """
+  Current status of the assignment
+  """
+  status: WorkflowAssignmentHistoryWorkflowAssignmentStatus!
+  """
+  Optional metadata for the assignment
+  """
+  metadata: Map
+  """
+  Timestamp when the assignment was decided
+  """
+  decidedAt: Time
+  """
+  User who made the decision
+  """
+  actorUserID: String
+  """
+  Group that acted on the decision (if applicable)
+  """
+  actorGroupID: String
+  """
+  Optional notes about the assignment
+  """
+  notes: String
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowAssignmentHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowAssignmentHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowAssignmentHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowAssignmentHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowAssignmentHistoryOpType is enum for the field operation
+"""
+enum WorkflowAssignmentHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowAssignmentHistory connections
+"""
+input WorkflowAssignmentHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowAssignmentHistories.
+  """
+  field: WorkflowAssignmentHistoryOrderField!
+}
+"""
+Properties by which WorkflowAssignmentHistory connections can be ordered.
+"""
+enum WorkflowAssignmentHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowAssignmentHistoryWhereInput is used for filtering WorkflowAssignmentHistory objects.
+Input was generated by ent.
+"""
+input WorkflowAssignmentHistoryWhereInput {
+  not: WorkflowAssignmentHistoryWhereInput
+  and: [WorkflowAssignmentHistoryWhereInput!]
+  or: [WorkflowAssignmentHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowAssignmentHistoryOpType
+  operationNEQ: WorkflowAssignmentHistoryOpType
+  operationIn: [WorkflowAssignmentHistoryOpType!]
+  operationNotIn: [WorkflowAssignmentHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: String
+  workflowInstanceIDNEQ: String
+  workflowInstanceIDIn: [String!]
+  workflowInstanceIDNotIn: [String!]
+  workflowInstanceIDGT: String
+  workflowInstanceIDGTE: String
+  workflowInstanceIDLT: String
+  workflowInstanceIDLTE: String
+  workflowInstanceIDContains: String
+  workflowInstanceIDHasPrefix: String
+  workflowInstanceIDHasSuffix: String
+  workflowInstanceIDEqualFold: String
+  workflowInstanceIDContainsFold: String
+  """
+  assignment_key field predicates
+  """
+  assignmentKey: String
+  assignmentKeyNEQ: String
+  assignmentKeyIn: [String!]
+  assignmentKeyNotIn: [String!]
+  assignmentKeyGT: String
+  assignmentKeyGTE: String
+  assignmentKeyLT: String
+  assignmentKeyLTE: String
+  assignmentKeyContains: String
+  assignmentKeyHasPrefix: String
+  assignmentKeyHasSuffix: String
+  assignmentKeyEqualFold: String
+  assignmentKeyContainsFold: String
+  """
+  role field predicates
+  """
+  role: String
+  roleNEQ: String
+  roleIn: [String!]
+  roleNotIn: [String!]
+  roleGT: String
+  roleGTE: String
+  roleLT: String
+  roleLTE: String
+  roleContains: String
+  roleHasPrefix: String
+  roleHasSuffix: String
+  roleEqualFold: String
+  roleContainsFold: String
+  """
+  label field predicates
+  """
+  label: String
+  labelNEQ: String
+  labelIn: [String!]
+  labelNotIn: [String!]
+  labelGT: String
+  labelGTE: String
+  labelLT: String
+  labelLTE: String
+  labelContains: String
+  labelHasPrefix: String
+  labelHasSuffix: String
+  labelIsNil: Boolean
+  labelNotNil: Boolean
+  labelEqualFold: String
+  labelContainsFold: String
+  """
+  required field predicates
+  """
+  required: Boolean
+  requiredNEQ: Boolean
+  """
+  status field predicates
+  """
+  status: WorkflowAssignmentHistoryWorkflowAssignmentStatus
+  statusNEQ: WorkflowAssignmentHistoryWorkflowAssignmentStatus
+  statusIn: [WorkflowAssignmentHistoryWorkflowAssignmentStatus!]
+  statusNotIn: [WorkflowAssignmentHistoryWorkflowAssignmentStatus!]
+  """
+  decided_at field predicates
+  """
+  decidedAt: Time
+  decidedAtNEQ: Time
+  decidedAtIn: [Time!]
+  decidedAtNotIn: [Time!]
+  decidedAtGT: Time
+  decidedAtGTE: Time
+  decidedAtLT: Time
+  decidedAtLTE: Time
+  decidedAtIsNil: Boolean
+  decidedAtNotNil: Boolean
+  """
+  actor_user_id field predicates
+  """
+  actorUserID: String
+  actorUserIDNEQ: String
+  actorUserIDIn: [String!]
+  actorUserIDNotIn: [String!]
+  actorUserIDGT: String
+  actorUserIDGTE: String
+  actorUserIDLT: String
+  actorUserIDLTE: String
+  actorUserIDContains: String
+  actorUserIDHasPrefix: String
+  actorUserIDHasSuffix: String
+  actorUserIDIsNil: Boolean
+  actorUserIDNotNil: Boolean
+  actorUserIDEqualFold: String
+  actorUserIDContainsFold: String
+  """
+  actor_group_id field predicates
+  """
+  actorGroupID: String
+  actorGroupIDNEQ: String
+  actorGroupIDIn: [String!]
+  actorGroupIDNotIn: [String!]
+  actorGroupIDGT: String
+  actorGroupIDGTE: String
+  actorGroupIDLT: String
+  actorGroupIDLTE: String
+  actorGroupIDContains: String
+  actorGroupIDHasPrefix: String
+  actorGroupIDHasSuffix: String
+  actorGroupIDIsNil: Boolean
+  actorGroupIDNotNil: Boolean
+  actorGroupIDEqualFold: String
+  actorGroupIDContainsFold: String
+  """
+  notes field predicates
+  """
+  notes: String
+  notesNEQ: String
+  notesIn: [String!]
+  notesNotIn: [String!]
+  notesGT: String
+  notesGTE: String
+  notesLT: String
+  notesLTE: String
+  notesContains: String
+  notesHasPrefix: String
+  notesHasSuffix: String
+  notesIsNil: Boolean
+  notesNotNil: Boolean
+  notesEqualFold: String
+  notesContainsFold: String
+}
+"""
+WorkflowAssignmentHistoryWorkflowAssignmentStatus is enum for the field status
+"""
+enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+  PENDING
+  APPROVED
+  REJECTED
+}
+"""
+Ordering options for WorkflowAssignment connections
+"""
+input WorkflowAssignmentOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowAssignments.
+  """
+  field: WorkflowAssignmentOrderField!
+}
+"""
+Properties by which WorkflowAssignment connections can be ordered.
+"""
+enum WorkflowAssignmentOrderField {
+  created_at
+  updated_at
+}
+type WorkflowAssignmentTarget implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  Assignment this target belongs to
+  """
+  workflowAssignmentID: ID!
+  """
+  Type of the target (USER, GROUP, ROLE, RESOLVER)
+  """
+  targetType: WorkflowAssignmentTargetWorkflowTargetType!
+  """
+  User target when target_type is USER
+  """
+  targetUserID: ID
+  """
+  Group target when target_type is GROUP
+  """
+  targetGroupID: ID
+  """
+  Resolver key when target_type is RESOLVER
+  """
+  resolverKey: String
+  owner: Organization
+  """
+  Assignment this target belongs to
+  """
+  workflowAssignment: WorkflowAssignment!
+  """
+  User target when target_type is USER
+  """
+  user: User
+  """
+  Group target when target_type is GROUP
+  """
+  group: Group
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowAssignmentTargetConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowAssignmentTargetEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowAssignmentTargetEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowAssignmentTarget
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowAssignmentTargetHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowAssignmentTargetHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  Assignment this target belongs to
+  """
+  workflowAssignmentID: String!
+  """
+  Type of the target (USER, GROUP, ROLE, RESOLVER)
+  """
+  targetType: WorkflowAssignmentTargetHistoryWorkflowTargetType!
+  """
+  User target when target_type is USER
+  """
+  targetUserID: String
+  """
+  Group target when target_type is GROUP
+  """
+  targetGroupID: String
+  """
+  Resolver key when target_type is RESOLVER
+  """
+  resolverKey: String
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowAssignmentTargetHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowAssignmentTargetHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowAssignmentTargetHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowAssignmentTargetHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowAssignmentTargetHistoryOpType is enum for the field operation
+"""
+enum WorkflowAssignmentTargetHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowAssignmentTargetHistory connections
+"""
+input WorkflowAssignmentTargetHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowAssignmentTargetHistories.
+  """
+  field: WorkflowAssignmentTargetHistoryOrderField!
+}
+"""
+Properties by which WorkflowAssignmentTargetHistory connections can be ordered.
+"""
+enum WorkflowAssignmentTargetHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowAssignmentTargetHistoryWhereInput is used for filtering WorkflowAssignmentTargetHistory objects.
+Input was generated by ent.
+"""
+input WorkflowAssignmentTargetHistoryWhereInput {
+  not: WorkflowAssignmentTargetHistoryWhereInput
+  and: [WorkflowAssignmentTargetHistoryWhereInput!]
+  or: [WorkflowAssignmentTargetHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowAssignmentTargetHistoryOpType
+  operationNEQ: WorkflowAssignmentTargetHistoryOpType
+  operationIn: [WorkflowAssignmentTargetHistoryOpType!]
+  operationNotIn: [WorkflowAssignmentTargetHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_assignment_id field predicates
+  """
+  workflowAssignmentID: String
+  workflowAssignmentIDNEQ: String
+  workflowAssignmentIDIn: [String!]
+  workflowAssignmentIDNotIn: [String!]
+  workflowAssignmentIDGT: String
+  workflowAssignmentIDGTE: String
+  workflowAssignmentIDLT: String
+  workflowAssignmentIDLTE: String
+  workflowAssignmentIDContains: String
+  workflowAssignmentIDHasPrefix: String
+  workflowAssignmentIDHasSuffix: String
+  workflowAssignmentIDEqualFold: String
+  workflowAssignmentIDContainsFold: String
+  """
+  target_type field predicates
+  """
+  targetType: WorkflowAssignmentTargetHistoryWorkflowTargetType
+  targetTypeNEQ: WorkflowAssignmentTargetHistoryWorkflowTargetType
+  targetTypeIn: [WorkflowAssignmentTargetHistoryWorkflowTargetType!]
+  targetTypeNotIn: [WorkflowAssignmentTargetHistoryWorkflowTargetType!]
+  """
+  target_user_id field predicates
+  """
+  targetUserID: String
+  targetUserIDNEQ: String
+  targetUserIDIn: [String!]
+  targetUserIDNotIn: [String!]
+  targetUserIDGT: String
+  targetUserIDGTE: String
+  targetUserIDLT: String
+  targetUserIDLTE: String
+  targetUserIDContains: String
+  targetUserIDHasPrefix: String
+  targetUserIDHasSuffix: String
+  targetUserIDIsNil: Boolean
+  targetUserIDNotNil: Boolean
+  targetUserIDEqualFold: String
+  targetUserIDContainsFold: String
+  """
+  target_group_id field predicates
+  """
+  targetGroupID: String
+  targetGroupIDNEQ: String
+  targetGroupIDIn: [String!]
+  targetGroupIDNotIn: [String!]
+  targetGroupIDGT: String
+  targetGroupIDGTE: String
+  targetGroupIDLT: String
+  targetGroupIDLTE: String
+  targetGroupIDContains: String
+  targetGroupIDHasPrefix: String
+  targetGroupIDHasSuffix: String
+  targetGroupIDIsNil: Boolean
+  targetGroupIDNotNil: Boolean
+  targetGroupIDEqualFold: String
+  targetGroupIDContainsFold: String
+  """
+  resolver_key field predicates
+  """
+  resolverKey: String
+  resolverKeyNEQ: String
+  resolverKeyIn: [String!]
+  resolverKeyNotIn: [String!]
+  resolverKeyGT: String
+  resolverKeyGTE: String
+  resolverKeyLT: String
+  resolverKeyLTE: String
+  resolverKeyContains: String
+  resolverKeyHasPrefix: String
+  resolverKeyHasSuffix: String
+  resolverKeyIsNil: Boolean
+  resolverKeyNotNil: Boolean
+  resolverKeyEqualFold: String
+  resolverKeyContainsFold: String
+}
+"""
+WorkflowAssignmentTargetHistoryWorkflowTargetType is enum for the field target_type
+"""
+enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+  USER
+  GROUP
+  ROLE
+  RESOLVER
+}
+"""
+Ordering options for WorkflowAssignmentTarget connections
+"""
+input WorkflowAssignmentTargetOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowAssignmentTargets.
+  """
+  field: WorkflowAssignmentTargetOrderField!
+}
+"""
+Properties by which WorkflowAssignmentTarget connections can be ordered.
+"""
+enum WorkflowAssignmentTargetOrderField {
+  created_at
+  updated_at
+}
+"""
+WorkflowAssignmentTargetWhereInput is used for filtering WorkflowAssignmentTarget objects.
+Input was generated by ent.
+"""
+input WorkflowAssignmentTargetWhereInput {
+  not: WorkflowAssignmentTargetWhereInput
+  and: [WorkflowAssignmentTargetWhereInput!]
+  or: [WorkflowAssignmentTargetWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_assignment_id field predicates
+  """
+  workflowAssignmentID: ID
+  workflowAssignmentIDNEQ: ID
+  workflowAssignmentIDIn: [ID!]
+  workflowAssignmentIDNotIn: [ID!]
+  workflowAssignmentIDGT: ID
+  workflowAssignmentIDGTE: ID
+  workflowAssignmentIDLT: ID
+  workflowAssignmentIDLTE: ID
+  workflowAssignmentIDContains: ID
+  workflowAssignmentIDHasPrefix: ID
+  workflowAssignmentIDHasSuffix: ID
+  workflowAssignmentIDEqualFold: ID
+  workflowAssignmentIDContainsFold: ID
+  """
+  target_type field predicates
+  """
+  targetType: WorkflowAssignmentTargetWorkflowTargetType
+  targetTypeNEQ: WorkflowAssignmentTargetWorkflowTargetType
+  targetTypeIn: [WorkflowAssignmentTargetWorkflowTargetType!]
+  targetTypeNotIn: [WorkflowAssignmentTargetWorkflowTargetType!]
+  """
+  target_user_id field predicates
+  """
+  targetUserID: ID
+  targetUserIDNEQ: ID
+  targetUserIDIn: [ID!]
+  targetUserIDNotIn: [ID!]
+  targetUserIDGT: ID
+  targetUserIDGTE: ID
+  targetUserIDLT: ID
+  targetUserIDLTE: ID
+  targetUserIDContains: ID
+  targetUserIDHasPrefix: ID
+  targetUserIDHasSuffix: ID
+  targetUserIDIsNil: Boolean
+  targetUserIDNotNil: Boolean
+  targetUserIDEqualFold: ID
+  targetUserIDContainsFold: ID
+  """
+  target_group_id field predicates
+  """
+  targetGroupID: ID
+  targetGroupIDNEQ: ID
+  targetGroupIDIn: [ID!]
+  targetGroupIDNotIn: [ID!]
+  targetGroupIDGT: ID
+  targetGroupIDGTE: ID
+  targetGroupIDLT: ID
+  targetGroupIDLTE: ID
+  targetGroupIDContains: ID
+  targetGroupIDHasPrefix: ID
+  targetGroupIDHasSuffix: ID
+  targetGroupIDIsNil: Boolean
+  targetGroupIDNotNil: Boolean
+  targetGroupIDEqualFold: ID
+  targetGroupIDContainsFold: ID
+  """
+  resolver_key field predicates
+  """
+  resolverKey: String
+  resolverKeyNEQ: String
+  resolverKeyIn: [String!]
+  resolverKeyNotIn: [String!]
+  resolverKeyGT: String
+  resolverKeyGTE: String
+  resolverKeyLT: String
+  resolverKeyLTE: String
+  resolverKeyContains: String
+  resolverKeyHasPrefix: String
+  resolverKeyHasSuffix: String
+  resolverKeyIsNil: Boolean
+  resolverKeyNotNil: Boolean
+  resolverKeyEqualFold: String
+  resolverKeyContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  workflow_assignment edge predicates
+  """
+  hasWorkflowAssignment: Boolean
+  hasWorkflowAssignmentWith: [WorkflowAssignmentWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+}
+"""
+WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
+"""
+enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+  USER
+  GROUP
+  ROLE
+  RESOLVER
+}
+"""
+WorkflowAssignmentWhereInput is used for filtering WorkflowAssignment objects.
+Input was generated by ent.
+"""
+input WorkflowAssignmentWhereInput {
+  not: WorkflowAssignmentWhereInput
+  and: [WorkflowAssignmentWhereInput!]
+  or: [WorkflowAssignmentWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: ID
+  workflowInstanceIDNEQ: ID
+  workflowInstanceIDIn: [ID!]
+  workflowInstanceIDNotIn: [ID!]
+  workflowInstanceIDGT: ID
+  workflowInstanceIDGTE: ID
+  workflowInstanceIDLT: ID
+  workflowInstanceIDLTE: ID
+  workflowInstanceIDContains: ID
+  workflowInstanceIDHasPrefix: ID
+  workflowInstanceIDHasSuffix: ID
+  workflowInstanceIDEqualFold: ID
+  workflowInstanceIDContainsFold: ID
+  """
+  assignment_key field predicates
+  """
+  assignmentKey: String
+  assignmentKeyNEQ: String
+  assignmentKeyIn: [String!]
+  assignmentKeyNotIn: [String!]
+  assignmentKeyGT: String
+  assignmentKeyGTE: String
+  assignmentKeyLT: String
+  assignmentKeyLTE: String
+  assignmentKeyContains: String
+  assignmentKeyHasPrefix: String
+  assignmentKeyHasSuffix: String
+  assignmentKeyEqualFold: String
+  assignmentKeyContainsFold: String
+  """
+  role field predicates
+  """
+  role: String
+  roleNEQ: String
+  roleIn: [String!]
+  roleNotIn: [String!]
+  roleGT: String
+  roleGTE: String
+  roleLT: String
+  roleLTE: String
+  roleContains: String
+  roleHasPrefix: String
+  roleHasSuffix: String
+  roleEqualFold: String
+  roleContainsFold: String
+  """
+  label field predicates
+  """
+  label: String
+  labelNEQ: String
+  labelIn: [String!]
+  labelNotIn: [String!]
+  labelGT: String
+  labelGTE: String
+  labelLT: String
+  labelLTE: String
+  labelContains: String
+  labelHasPrefix: String
+  labelHasSuffix: String
+  labelIsNil: Boolean
+  labelNotNil: Boolean
+  labelEqualFold: String
+  labelContainsFold: String
+  """
+  required field predicates
+  """
+  required: Boolean
+  requiredNEQ: Boolean
+  """
+  status field predicates
+  """
+  status: WorkflowAssignmentWorkflowAssignmentStatus
+  statusNEQ: WorkflowAssignmentWorkflowAssignmentStatus
+  statusIn: [WorkflowAssignmentWorkflowAssignmentStatus!]
+  statusNotIn: [WorkflowAssignmentWorkflowAssignmentStatus!]
+  """
+  decided_at field predicates
+  """
+  decidedAt: Time
+  decidedAtNEQ: Time
+  decidedAtIn: [Time!]
+  decidedAtNotIn: [Time!]
+  decidedAtGT: Time
+  decidedAtGTE: Time
+  decidedAtLT: Time
+  decidedAtLTE: Time
+  decidedAtIsNil: Boolean
+  decidedAtNotNil: Boolean
+  """
+  actor_user_id field predicates
+  """
+  actorUserID: ID
+  actorUserIDNEQ: ID
+  actorUserIDIn: [ID!]
+  actorUserIDNotIn: [ID!]
+  actorUserIDGT: ID
+  actorUserIDGTE: ID
+  actorUserIDLT: ID
+  actorUserIDLTE: ID
+  actorUserIDContains: ID
+  actorUserIDHasPrefix: ID
+  actorUserIDHasSuffix: ID
+  actorUserIDIsNil: Boolean
+  actorUserIDNotNil: Boolean
+  actorUserIDEqualFold: ID
+  actorUserIDContainsFold: ID
+  """
+  actor_group_id field predicates
+  """
+  actorGroupID: ID
+  actorGroupIDNEQ: ID
+  actorGroupIDIn: [ID!]
+  actorGroupIDNotIn: [ID!]
+  actorGroupIDGT: ID
+  actorGroupIDGTE: ID
+  actorGroupIDLT: ID
+  actorGroupIDLTE: ID
+  actorGroupIDContains: ID
+  actorGroupIDHasPrefix: ID
+  actorGroupIDHasSuffix: ID
+  actorGroupIDIsNil: Boolean
+  actorGroupIDNotNil: Boolean
+  actorGroupIDEqualFold: ID
+  actorGroupIDContainsFold: ID
+  """
+  notes field predicates
+  """
+  notes: String
+  notesNEQ: String
+  notesIn: [String!]
+  notesNotIn: [String!]
+  notesGT: String
+  notesGTE: String
+  notesLT: String
+  notesLTE: String
+  notesContains: String
+  notesHasPrefix: String
+  notesHasSuffix: String
+  notesIsNil: Boolean
+  notesNotNil: Boolean
+  notesEqualFold: String
+  notesContainsFold: String
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  workflow_instance edge predicates
+  """
+  hasWorkflowInstance: Boolean
+  hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  workflow_assignment_targets edge predicates
+  """
+  hasWorkflowAssignmentTargets: Boolean
+  hasWorkflowAssignmentTargetsWith: [WorkflowAssignmentTargetWhereInput!]
+  """
+  user edge predicates
+  """
+  hasUser: Boolean
+  hasUserWith: [UserWhereInput!]
+  """
+  group edge predicates
+  """
+  hasGroup: Boolean
+  hasGroupWith: [GroupWhereInput!]
+}
+"""
+WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
+"""
+enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+  PENDING
+  APPROVED
+  REJECTED
+}
+type WorkflowDefinition implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  Name of the workflow definition
+  """
+  name: String!
+  """
+  Optional description of the workflow definition
+  """
+  description: String
+  """
+  Kind of workflow, e.g. APPROVAL, LIFECYCLE, NOTIFICATION
+  """
+  workflowKind: WorkflowDefinitionWorkflowKind!
+  """
+  Type of schema this workflow applies to
+  """
+  schemaType: String!
+  """
+  Revision number for this definition
+  """
+  revision: Int!
+  """
+  Whether this definition is a draft
+  """
+  draft: Boolean!
+  """
+  When this definition was published
+  """
+  publishedAt: Time
+  """
+  Suppress duplicate triggers within this window per object/definition
+  """
+  cooldownSeconds: Int!
+  """
+  Whether this is the default workflow for the schema type
+  """
+  isDefault: Boolean!
+  """
+  Whether the workflow definition is active
+  """
+  active: Boolean!
+  """
+  Derived: normalized operations from definition for prefiltering; not user editable
+  """
+  triggerOperations: [String!]
+  """
+  Derived: normalized fields from definition for prefiltering; not user editable
+  """
+  triggerFields: [String!]
+  """
+  Typed document describing triggers, conditions, and actions
+  """
+  definitionJSON: WorkflowDefinitionDocument
+  """
+  Cached list of fields that should trigger workflow evaluation
+  """
+  trackedFields: [String!]
+  owner: Organization
+  tagDefinitions(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TagDefinitions returned from the connection.
+    """
+    orderBy: [TagDefinitionOrder!]
+
+    """
+    Filtering options for TagDefinitions returned from the connection.
+    """
+    where: TagDefinitionWhereInput
+  ): TagDefinitionConnection!
+  groups(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowDefinitionConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowDefinitionEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowDefinitionEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowDefinition
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowDefinitionHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowDefinitionHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  indicates if the record is owned by the the openlane system and not by an organization
+  """
+  systemOwned: Boolean
+  """
+  internal notes about the object creation, this field is only available to system admins
+  """
+  internalNotes: String @hidden(if: true)
+  """
+  an internal identifier for the mapping, this field is only available to system admins
+  """
+  systemInternalID: String @hidden(if: true)
+  """
+  Name of the workflow definition
+  """
+  name: String!
+  """
+  Optional description of the workflow definition
+  """
+  description: String
+  """
+  Kind of workflow, e.g. APPROVAL, LIFECYCLE, NOTIFICATION
+  """
+  workflowKind: WorkflowDefinitionHistoryWorkflowKind!
+  """
+  Type of schema this workflow applies to
+  """
+  schemaType: String!
+  """
+  Revision number for this definition
+  """
+  revision: Int!
+  """
+  Whether this definition is a draft
+  """
+  draft: Boolean!
+  """
+  When this definition was published
+  """
+  publishedAt: Time
+  """
+  Suppress duplicate triggers within this window per object/definition
+  """
+  cooldownSeconds: Int!
+  """
+  Whether this is the default workflow for the schema type
+  """
+  isDefault: Boolean!
+  """
+  Whether the workflow definition is active
+  """
+  active: Boolean!
+  """
+  Derived: normalized operations from definition for prefiltering; not user editable
+  """
+  triggerOperations: [String!]
+  """
+  Derived: normalized fields from definition for prefiltering; not user editable
+  """
+  triggerFields: [String!]
+  """
+  Typed document describing triggers, conditions, and actions
+  """
+  definitionJSON: WorkflowDefinitionDocument
+  """
+  Cached list of fields that should trigger workflow evaluation
+  """
+  trackedFields: [String!]
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowDefinitionHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowDefinitionHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowDefinitionHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowDefinitionHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowDefinitionHistoryOpType is enum for the field operation
+"""
+enum WorkflowDefinitionHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowDefinitionHistory connections
+"""
+input WorkflowDefinitionHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowDefinitionHistories.
+  """
+  field: WorkflowDefinitionHistoryOrderField!
+}
+"""
+Properties by which WorkflowDefinitionHistory connections can be ordered.
+"""
+enum WorkflowDefinitionHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowDefinitionHistoryWhereInput is used for filtering WorkflowDefinitionHistory objects.
+Input was generated by ent.
+"""
+input WorkflowDefinitionHistoryWhereInput {
+  not: WorkflowDefinitionHistoryWhereInput
+  and: [WorkflowDefinitionHistoryWhereInput!]
+  or: [WorkflowDefinitionHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowDefinitionHistoryOpType
+  operationNEQ: WorkflowDefinitionHistoryOpType
+  operationIn: [WorkflowDefinitionHistoryOpType!]
+  operationNotIn: [WorkflowDefinitionHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  workflow_kind field predicates
+  """
+  workflowKind: WorkflowDefinitionHistoryWorkflowKind
+  workflowKindNEQ: WorkflowDefinitionHistoryWorkflowKind
+  workflowKindIn: [WorkflowDefinitionHistoryWorkflowKind!]
+  workflowKindNotIn: [WorkflowDefinitionHistoryWorkflowKind!]
+  """
+  schema_type field predicates
+  """
+  schemaType: String
+  schemaTypeNEQ: String
+  schemaTypeIn: [String!]
+  schemaTypeNotIn: [String!]
+  schemaTypeGT: String
+  schemaTypeGTE: String
+  schemaTypeLT: String
+  schemaTypeLTE: String
+  schemaTypeContains: String
+  schemaTypeHasPrefix: String
+  schemaTypeHasSuffix: String
+  schemaTypeEqualFold: String
+  schemaTypeContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: Int
+  revisionNEQ: Int
+  revisionIn: [Int!]
+  revisionNotIn: [Int!]
+  revisionGT: Int
+  revisionGTE: Int
+  revisionLT: Int
+  revisionLTE: Int
+  """
+  draft field predicates
+  """
+  draft: Boolean
+  draftNEQ: Boolean
+  """
+  published_at field predicates
+  """
+  publishedAt: Time
+  publishedAtNEQ: Time
+  publishedAtIn: [Time!]
+  publishedAtNotIn: [Time!]
+  publishedAtGT: Time
+  publishedAtGTE: Time
+  publishedAtLT: Time
+  publishedAtLTE: Time
+  publishedAtIsNil: Boolean
+  publishedAtNotNil: Boolean
+  """
+  cooldown_seconds field predicates
+  """
+  cooldownSeconds: Int
+  cooldownSecondsNEQ: Int
+  cooldownSecondsIn: [Int!]
+  cooldownSecondsNotIn: [Int!]
+  cooldownSecondsGT: Int
+  cooldownSecondsGTE: Int
+  cooldownSecondsLT: Int
+  cooldownSecondsLTE: Int
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+}
+"""
+WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind
+"""
+enum WorkflowDefinitionHistoryWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+  APPROVAL
+  LIFECYCLE
+  NOTIFICATION
+}
+"""
+Ordering options for WorkflowDefinition connections
+"""
+input WorkflowDefinitionOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowDefinitions.
+  """
+  field: WorkflowDefinitionOrderField!
+}
+"""
+Properties by which WorkflowDefinition connections can be ordered.
+"""
+enum WorkflowDefinitionOrderField {
+  created_at
+  updated_at
+}
+"""
+WorkflowDefinitionWhereInput is used for filtering WorkflowDefinition objects.
+Input was generated by ent.
+"""
+input WorkflowDefinitionWhereInput {
+  not: WorkflowDefinitionWhereInput
+  and: [WorkflowDefinitionWhereInput!]
+  or: [WorkflowDefinitionWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  system_owned field predicates
+  """
+  systemOwned: Boolean
+  systemOwnedNEQ: Boolean
+  systemOwnedIsNil: Boolean
+  systemOwnedNotNil: Boolean
+  """
+  internal_notes field predicates
+  """
+  internalNotes: String
+  internalNotesNEQ: String
+  internalNotesIn: [String!]
+  internalNotesNotIn: [String!]
+  internalNotesGT: String
+  internalNotesGTE: String
+  internalNotesLT: String
+  internalNotesLTE: String
+  internalNotesContains: String
+  internalNotesHasPrefix: String
+  internalNotesHasSuffix: String
+  internalNotesIsNil: Boolean
+  internalNotesNotNil: Boolean
+  internalNotesEqualFold: String
+  internalNotesContainsFold: String
+  """
+  system_internal_id field predicates
+  """
+  systemInternalID: String
+  systemInternalIDNEQ: String
+  systemInternalIDIn: [String!]
+  systemInternalIDNotIn: [String!]
+  systemInternalIDGT: String
+  systemInternalIDGTE: String
+  systemInternalIDLT: String
+  systemInternalIDLTE: String
+  systemInternalIDContains: String
+  systemInternalIDHasPrefix: String
+  systemInternalIDHasSuffix: String
+  systemInternalIDIsNil: Boolean
+  systemInternalIDNotNil: Boolean
+  systemInternalIDEqualFold: String
+  systemInternalIDContainsFold: String
+  """
+  name field predicates
+  """
+  name: String
+  nameNEQ: String
+  nameIn: [String!]
+  nameNotIn: [String!]
+  nameGT: String
+  nameGTE: String
+  nameLT: String
+  nameLTE: String
+  nameContains: String
+  nameHasPrefix: String
+  nameHasSuffix: String
+  nameEqualFold: String
+  nameContainsFold: String
+  """
+  description field predicates
+  """
+  description: String
+  descriptionNEQ: String
+  descriptionIn: [String!]
+  descriptionNotIn: [String!]
+  descriptionGT: String
+  descriptionGTE: String
+  descriptionLT: String
+  descriptionLTE: String
+  descriptionContains: String
+  descriptionHasPrefix: String
+  descriptionHasSuffix: String
+  descriptionIsNil: Boolean
+  descriptionNotNil: Boolean
+  descriptionEqualFold: String
+  descriptionContainsFold: String
+  """
+  workflow_kind field predicates
+  """
+  workflowKind: WorkflowDefinitionWorkflowKind
+  workflowKindNEQ: WorkflowDefinitionWorkflowKind
+  workflowKindIn: [WorkflowDefinitionWorkflowKind!]
+  workflowKindNotIn: [WorkflowDefinitionWorkflowKind!]
+  """
+  schema_type field predicates
+  """
+  schemaType: String
+  schemaTypeNEQ: String
+  schemaTypeIn: [String!]
+  schemaTypeNotIn: [String!]
+  schemaTypeGT: String
+  schemaTypeGTE: String
+  schemaTypeLT: String
+  schemaTypeLTE: String
+  schemaTypeContains: String
+  schemaTypeHasPrefix: String
+  schemaTypeHasSuffix: String
+  schemaTypeEqualFold: String
+  schemaTypeContainsFold: String
+  """
+  revision field predicates
+  """
+  revision: Int
+  revisionNEQ: Int
+  revisionIn: [Int!]
+  revisionNotIn: [Int!]
+  revisionGT: Int
+  revisionGTE: Int
+  revisionLT: Int
+  revisionLTE: Int
+  """
+  draft field predicates
+  """
+  draft: Boolean
+  draftNEQ: Boolean
+  """
+  published_at field predicates
+  """
+  publishedAt: Time
+  publishedAtNEQ: Time
+  publishedAtIn: [Time!]
+  publishedAtNotIn: [Time!]
+  publishedAtGT: Time
+  publishedAtGTE: Time
+  publishedAtLT: Time
+  publishedAtLTE: Time
+  publishedAtIsNil: Boolean
+  publishedAtNotNil: Boolean
+  """
+  cooldown_seconds field predicates
+  """
+  cooldownSeconds: Int
+  cooldownSecondsNEQ: Int
+  cooldownSecondsIn: [Int!]
+  cooldownSecondsNotIn: [Int!]
+  cooldownSecondsGT: Int
+  cooldownSecondsGTE: Int
+  cooldownSecondsLT: Int
+  cooldownSecondsLTE: Int
+  """
+  is_default field predicates
+  """
+  isDefault: Boolean
+  isDefaultNEQ: Boolean
+  """
+  active field predicates
+  """
+  active: Boolean
+  activeNEQ: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  tag_definitions edge predicates
+  """
+  hasTagDefinitions: Boolean
+  hasTagDefinitionsWith: [TagDefinitionWhereInput!]
+  """
+  groups edge predicates
+  """
+  hasGroups: Boolean
+  hasGroupsWith: [GroupWhereInput!]
+}
+"""
+WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
+"""
+enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+  APPROVAL
+  LIFECYCLE
+  NOTIFICATION
+}
+type WorkflowEvent implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  ID of the workflow instance that generated the event
+  """
+  workflowInstanceID: ID!
+  """
+  Type of event, typically the action kind
+  """
+  eventType: WorkflowEventWorkflowEventType!
+  """
+  Payload for the event; stored raw
+  """
+  payload: WorkflowEventPayload
+  owner: Organization
+  workflowInstance: WorkflowInstance!
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowEventConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowEventEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowEventEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowEvent
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowEventHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowEventHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  ID of the workflow instance that generated the event
+  """
+  workflowInstanceID: String!
+  """
+  Type of event, typically the action kind
+  """
+  eventType: WorkflowEventHistoryWorkflowEventType!
+  """
+  Payload for the event; stored raw
+  """
+  payload: WorkflowEventPayload
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowEventHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowEventHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowEventHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowEventHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowEventHistoryOpType is enum for the field operation
+"""
+enum WorkflowEventHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowEventHistory connections
+"""
+input WorkflowEventHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowEventHistories.
+  """
+  field: WorkflowEventHistoryOrderField!
+}
+"""
+Properties by which WorkflowEventHistory connections can be ordered.
+"""
+enum WorkflowEventHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowEventHistoryWhereInput is used for filtering WorkflowEventHistory objects.
+Input was generated by ent.
+"""
+input WorkflowEventHistoryWhereInput {
+  not: WorkflowEventHistoryWhereInput
+  and: [WorkflowEventHistoryWhereInput!]
+  or: [WorkflowEventHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowEventHistoryOpType
+  operationNEQ: WorkflowEventHistoryOpType
+  operationIn: [WorkflowEventHistoryOpType!]
+  operationNotIn: [WorkflowEventHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: String
+  workflowInstanceIDNEQ: String
+  workflowInstanceIDIn: [String!]
+  workflowInstanceIDNotIn: [String!]
+  workflowInstanceIDGT: String
+  workflowInstanceIDGTE: String
+  workflowInstanceIDLT: String
+  workflowInstanceIDLTE: String
+  workflowInstanceIDContains: String
+  workflowInstanceIDHasPrefix: String
+  workflowInstanceIDHasSuffix: String
+  workflowInstanceIDEqualFold: String
+  workflowInstanceIDContainsFold: String
+  """
+  event_type field predicates
+  """
+  eventType: WorkflowEventHistoryWorkflowEventType
+  eventTypeNEQ: WorkflowEventHistoryWorkflowEventType
+  eventTypeIn: [WorkflowEventHistoryWorkflowEventType!]
+  eventTypeNotIn: [WorkflowEventHistoryWorkflowEventType!]
+}
+"""
+WorkflowEventHistoryWorkflowEventType is enum for the field event_type
+"""
+enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+  ACTION
+  TRIGGER
+  DECISION
+}
+"""
+Ordering options for WorkflowEvent connections
+"""
+input WorkflowEventOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowEvents.
+  """
+  field: WorkflowEventOrderField!
+}
+"""
+Properties by which WorkflowEvent connections can be ordered.
+"""
+enum WorkflowEventOrderField {
+  created_at
+  updated_at
+}
+"""
+WorkflowEventWhereInput is used for filtering WorkflowEvent objects.
+Input was generated by ent.
+"""
+input WorkflowEventWhereInput {
+  not: WorkflowEventWhereInput
+  and: [WorkflowEventWhereInput!]
+  or: [WorkflowEventWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: ID
+  workflowInstanceIDNEQ: ID
+  workflowInstanceIDIn: [ID!]
+  workflowInstanceIDNotIn: [ID!]
+  workflowInstanceIDGT: ID
+  workflowInstanceIDGTE: ID
+  workflowInstanceIDLT: ID
+  workflowInstanceIDLTE: ID
+  workflowInstanceIDContains: ID
+  workflowInstanceIDHasPrefix: ID
+  workflowInstanceIDHasSuffix: ID
+  workflowInstanceIDEqualFold: ID
+  workflowInstanceIDContainsFold: ID
+  """
+  event_type field predicates
+  """
+  eventType: WorkflowEventWorkflowEventType
+  eventTypeNEQ: WorkflowEventWorkflowEventType
+  eventTypeIn: [WorkflowEventWorkflowEventType!]
+  eventTypeNotIn: [WorkflowEventWorkflowEventType!]
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  workflow_instance edge predicates
+  """
+  hasWorkflowInstance: Boolean
+  hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+}
+"""
+WorkflowEventWorkflowEventType is enum for the field event_type
+"""
+enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+  ACTION
+  TRIGGER
+  DECISION
+}
+type WorkflowInstance implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  ID of the workflow definition this instance is based on
+  """
+  workflowDefinitionID: ID!
+  """
+  Current state of the workflow instance
+  """
+  state: WorkflowInstanceWorkflowInstanceState!
+  """
+  Optional context for the workflow instance
+  """
+  context: WorkflowInstanceContext
+  """
+  Timestamp when the workflow was last evaluated
+  """
+  lastEvaluatedAt: Time
+  """
+  Copy of definition JSON used for this instance
+  """
+  definitionSnapshot: WorkflowDefinitionDocument
+  owner: Organization
+  """
+  Definition driving this instance
+  """
+  workflowDefinition: WorkflowDefinition!
+  workflowAssignments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowAssignments returned from the connection.
+    """
+    orderBy: [WorkflowAssignmentOrder!]
+
+    """
+    Filtering options for WorkflowAssignments returned from the connection.
+    """
+    where: WorkflowAssignmentWhereInput
+  ): WorkflowAssignmentConnection!
+  workflowEvents(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowEvents returned from the connection.
+    """
+    orderBy: [WorkflowEventOrder!]
+
+    """
+    Filtering options for WorkflowEvents returned from the connection.
+    """
+    where: WorkflowEventWhereInput
+  ): WorkflowEventConnection!
+  workflowObjectRefs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for WorkflowObjectRefs returned from the connection.
+    """
+    orderBy: [WorkflowObjectRefOrder!]
+
+    """
+    Filtering options for WorkflowObjectRefs returned from the connection.
+    """
+    where: WorkflowObjectRefWhereInput
+  ): WorkflowObjectRefConnection!
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowInstanceConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowInstanceEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowInstanceEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowInstance
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowInstanceHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowInstanceHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  ID of the workflow definition this instance is based on
+  """
+  workflowDefinitionID: String!
+  """
+  Current state of the workflow instance
+  """
+  state: WorkflowInstanceHistoryWorkflowInstanceState!
+  """
+  Optional context for the workflow instance
+  """
+  context: WorkflowInstanceContext
+  """
+  Timestamp when the workflow was last evaluated
+  """
+  lastEvaluatedAt: Time
+  """
+  Copy of definition JSON used for this instance
+  """
+  definitionSnapshot: WorkflowDefinitionDocument
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowInstanceHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowInstanceHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowInstanceHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowInstanceHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowInstanceHistoryOpType is enum for the field operation
+"""
+enum WorkflowInstanceHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowInstanceHistory connections
+"""
+input WorkflowInstanceHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowInstanceHistories.
+  """
+  field: WorkflowInstanceHistoryOrderField!
+}
+"""
+Properties by which WorkflowInstanceHistory connections can be ordered.
+"""
+enum WorkflowInstanceHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowInstanceHistoryWhereInput is used for filtering WorkflowInstanceHistory objects.
+Input was generated by ent.
+"""
+input WorkflowInstanceHistoryWhereInput {
+  not: WorkflowInstanceHistoryWhereInput
+  and: [WorkflowInstanceHistoryWhereInput!]
+  or: [WorkflowInstanceHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowInstanceHistoryOpType
+  operationNEQ: WorkflowInstanceHistoryOpType
+  operationIn: [WorkflowInstanceHistoryOpType!]
+  operationNotIn: [WorkflowInstanceHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: String
+  workflowDefinitionIDNEQ: String
+  workflowDefinitionIDIn: [String!]
+  workflowDefinitionIDNotIn: [String!]
+  workflowDefinitionIDGT: String
+  workflowDefinitionIDGTE: String
+  workflowDefinitionIDLT: String
+  workflowDefinitionIDLTE: String
+  workflowDefinitionIDContains: String
+  workflowDefinitionIDHasPrefix: String
+  workflowDefinitionIDHasSuffix: String
+  workflowDefinitionIDEqualFold: String
+  workflowDefinitionIDContainsFold: String
+  """
+  state field predicates
+  """
+  state: WorkflowInstanceHistoryWorkflowInstanceState
+  stateNEQ: WorkflowInstanceHistoryWorkflowInstanceState
+  stateIn: [WorkflowInstanceHistoryWorkflowInstanceState!]
+  stateNotIn: [WorkflowInstanceHistoryWorkflowInstanceState!]
+  """
+  last_evaluated_at field predicates
+  """
+  lastEvaluatedAt: Time
+  lastEvaluatedAtNEQ: Time
+  lastEvaluatedAtIn: [Time!]
+  lastEvaluatedAtNotIn: [Time!]
+  lastEvaluatedAtGT: Time
+  lastEvaluatedAtGTE: Time
+  lastEvaluatedAtLT: Time
+  lastEvaluatedAtLTE: Time
+  lastEvaluatedAtIsNil: Boolean
+  lastEvaluatedAtNotNil: Boolean
+}
+"""
+WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
+"""
+enum WorkflowInstanceHistoryWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+  RUNNING
+  COMPLETED
+  FAILED
+  PAUSED
+}
+"""
+Ordering options for WorkflowInstance connections
+"""
+input WorkflowInstanceOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowInstances.
+  """
+  field: WorkflowInstanceOrderField!
+}
+"""
+Properties by which WorkflowInstance connections can be ordered.
+"""
+enum WorkflowInstanceOrderField {
+  created_at
+  updated_at
+}
+"""
+WorkflowInstanceWhereInput is used for filtering WorkflowInstance objects.
+Input was generated by ent.
+"""
+input WorkflowInstanceWhereInput {
+  not: WorkflowInstanceWhereInput
+  and: [WorkflowInstanceWhereInput!]
+  or: [WorkflowInstanceWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_definition_id field predicates
+  """
+  workflowDefinitionID: ID
+  workflowDefinitionIDNEQ: ID
+  workflowDefinitionIDIn: [ID!]
+  workflowDefinitionIDNotIn: [ID!]
+  workflowDefinitionIDGT: ID
+  workflowDefinitionIDGTE: ID
+  workflowDefinitionIDLT: ID
+  workflowDefinitionIDLTE: ID
+  workflowDefinitionIDContains: ID
+  workflowDefinitionIDHasPrefix: ID
+  workflowDefinitionIDHasSuffix: ID
+  workflowDefinitionIDEqualFold: ID
+  workflowDefinitionIDContainsFold: ID
+  """
+  state field predicates
+  """
+  state: WorkflowInstanceWorkflowInstanceState
+  stateNEQ: WorkflowInstanceWorkflowInstanceState
+  stateIn: [WorkflowInstanceWorkflowInstanceState!]
+  stateNotIn: [WorkflowInstanceWorkflowInstanceState!]
+  """
+  last_evaluated_at field predicates
+  """
+  lastEvaluatedAt: Time
+  lastEvaluatedAtNEQ: Time
+  lastEvaluatedAtIn: [Time!]
+  lastEvaluatedAtNotIn: [Time!]
+  lastEvaluatedAtGT: Time
+  lastEvaluatedAtGTE: Time
+  lastEvaluatedAtLT: Time
+  lastEvaluatedAtLTE: Time
+  lastEvaluatedAtIsNil: Boolean
+  lastEvaluatedAtNotNil: Boolean
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  workflow_definition edge predicates
+  """
+  hasWorkflowDefinition: Boolean
+  hasWorkflowDefinitionWith: [WorkflowDefinitionWhereInput!]
+  """
+  workflow_assignments edge predicates
+  """
+  hasWorkflowAssignments: Boolean
+  hasWorkflowAssignmentsWith: [WorkflowAssignmentWhereInput!]
+  """
+  workflow_events edge predicates
+  """
+  hasWorkflowEvents: Boolean
+  hasWorkflowEventsWith: [WorkflowEventWhereInput!]
+  """
+  workflow_object_refs edge predicates
+  """
+  hasWorkflowObjectRefs: Boolean
+  hasWorkflowObjectRefsWith: [WorkflowObjectRefWhereInput!]
+}
+"""
+WorkflowInstanceWorkflowInstanceState is enum for the field state
+"""
+enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+  RUNNING
+  COMPLETED
+  FAILED
+  PAUSED
+}
+type WorkflowObjectRef implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  Workflow instance this object is associated with
+  """
+  workflowInstanceID: ID!
+  """
+  Control referenced by this workflow instance
+  """
+  controlID: ID
+  """
+  Task referenced by this workflow instance
+  """
+  taskID: ID
+  """
+  Policy referenced by this workflow instance
+  """
+  internalPolicyID: ID
+  """
+  Finding referenced by this workflow instance
+  """
+  findingID: ID
+  """
+  Directory account referenced by this workflow instance
+  """
+  directoryAccountID: ID
+  """
+  Directory group referenced by this workflow instance
+  """
+  directoryGroupID: ID
+  """
+  Directory membership referenced by this workflow instance
+  """
+  directoryMembershipID: ID
+  owner: Organization
+  """
+  Workflow instance this object is associated with
+  """
+  workflowInstance: WorkflowInstance!
+  """
+  Control referenced by this workflow instance
+  """
+  control: Control
+  """
+  Task referenced by this workflow instance
+  """
+  task: Task
+  """
+  Policy referenced by this workflow instance
+  """
+  internalPolicy: InternalPolicy
+  """
+  Finding referenced by this workflow instance
+  """
+  finding: Finding
+  """
+  Directory account referenced by this workflow instance
+  """
+  directoryAccount: DirectoryAccount
+  """
+  Directory group referenced by this workflow instance
+  """
+  directoryGroup: DirectoryGroup
+  """
+  Directory membership referenced by this workflow instance
+  """
+  directoryMembership: DirectoryMembership
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowObjectRefConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowObjectRefEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowObjectRefEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowObjectRef
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+type WorkflowObjectRefHistory implements Node {
+  id: ID!
+  historyTime: Time!
+  ref: String
+  operation: WorkflowObjectRefHistoryOpType!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  a shortened prefixed id field to use as a human readable identifier
+  """
+  displayID: String!
+  """
+  the organization id that owns the object
+  """
+  ownerID: String
+  """
+  Workflow instance this object is associated with
+  """
+  workflowInstanceID: String!
+  """
+  Control referenced by this workflow instance
+  """
+  controlID: String
+  """
+  Task referenced by this workflow instance
+  """
+  taskID: String
+  """
+  Policy referenced by this workflow instance
+  """
+  internalPolicyID: String
+  """
+  Finding referenced by this workflow instance
+  """
+  findingID: String
+  """
+  Directory account referenced by this workflow instance
+  """
+  directoryAccountID: String
+  """
+  Directory group referenced by this workflow instance
+  """
+  directoryGroupID: String
+  """
+  Directory membership referenced by this workflow instance
+  """
+  directoryMembershipID: String
+}
+"""
+A connection to a list of items.
+"""
+type WorkflowObjectRefHistoryConnection {
+  """
+  A list of edges.
+  """
+  edges: [WorkflowObjectRefHistoryEdge]
+  """
+  Information to aid in pagination.
+  """
+  pageInfo: PageInfo!
+  """
+  Identifies the total count of items in the connection.
+  """
+  totalCount: Int!
+}
+"""
+An edge in a connection.
+"""
+type WorkflowObjectRefHistoryEdge {
+  """
+  The item at the end of the edge.
+  """
+  node: WorkflowObjectRefHistory
+  """
+  A cursor for use in pagination.
+  """
+  cursor: Cursor!
+}
+"""
+WorkflowObjectRefHistoryOpType is enum for the field operation
+"""
+enum WorkflowObjectRefHistoryOpType @goModel(model: "github.com/theopenlane/entx/history.OpType") {
+  INSERT
+  UPDATE
+  DELETE
+}
+"""
+Ordering options for WorkflowObjectRefHistory connections
+"""
+input WorkflowObjectRefHistoryOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowObjectRefHistories.
+  """
+  field: WorkflowObjectRefHistoryOrderField!
+}
+"""
+Properties by which WorkflowObjectRefHistory connections can be ordered.
+"""
+enum WorkflowObjectRefHistoryOrderField {
+  history_time
+  created_at
+  updated_at
+}
+"""
+WorkflowObjectRefHistoryWhereInput is used for filtering WorkflowObjectRefHistory objects.
+Input was generated by ent.
+"""
+input WorkflowObjectRefHistoryWhereInput {
+  not: WorkflowObjectRefHistoryWhereInput
+  and: [WorkflowObjectRefHistoryWhereInput!]
+  or: [WorkflowObjectRefHistoryWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  history_time field predicates
+  """
+  historyTime: Time
+  historyTimeNEQ: Time
+  historyTimeIn: [Time!]
+  historyTimeNotIn: [Time!]
+  historyTimeGT: Time
+  historyTimeGTE: Time
+  historyTimeLT: Time
+  historyTimeLTE: Time
+  """
+  ref field predicates
+  """
+  ref: String
+  refNEQ: String
+  refIn: [String!]
+  refNotIn: [String!]
+  refGT: String
+  refGTE: String
+  refLT: String
+  refLTE: String
+  refContains: String
+  refHasPrefix: String
+  refHasSuffix: String
+  refIsNil: Boolean
+  refNotNil: Boolean
+  refEqualFold: String
+  refContainsFold: String
+  """
+  operation field predicates
+  """
+  operation: WorkflowObjectRefHistoryOpType
+  operationNEQ: WorkflowObjectRefHistoryOpType
+  operationIn: [WorkflowObjectRefHistoryOpType!]
+  operationNotIn: [WorkflowObjectRefHistoryOpType!]
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: String
+  ownerIDNEQ: String
+  ownerIDIn: [String!]
+  ownerIDNotIn: [String!]
+  ownerIDGT: String
+  ownerIDGTE: String
+  ownerIDLT: String
+  ownerIDLTE: String
+  ownerIDContains: String
+  ownerIDHasPrefix: String
+  ownerIDHasSuffix: String
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: String
+  ownerIDContainsFold: String
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: String
+  workflowInstanceIDNEQ: String
+  workflowInstanceIDIn: [String!]
+  workflowInstanceIDNotIn: [String!]
+  workflowInstanceIDGT: String
+  workflowInstanceIDGTE: String
+  workflowInstanceIDLT: String
+  workflowInstanceIDLTE: String
+  workflowInstanceIDContains: String
+  workflowInstanceIDHasPrefix: String
+  workflowInstanceIDHasSuffix: String
+  workflowInstanceIDEqualFold: String
+  workflowInstanceIDContainsFold: String
+  """
+  control_id field predicates
+  """
+  controlID: String
+  controlIDNEQ: String
+  controlIDIn: [String!]
+  controlIDNotIn: [String!]
+  controlIDGT: String
+  controlIDGTE: String
+  controlIDLT: String
+  controlIDLTE: String
+  controlIDContains: String
+  controlIDHasPrefix: String
+  controlIDHasSuffix: String
+  controlIDIsNil: Boolean
+  controlIDNotNil: Boolean
+  controlIDEqualFold: String
+  controlIDContainsFold: String
+  """
+  task_id field predicates
+  """
+  taskID: String
+  taskIDNEQ: String
+  taskIDIn: [String!]
+  taskIDNotIn: [String!]
+  taskIDGT: String
+  taskIDGTE: String
+  taskIDLT: String
+  taskIDLTE: String
+  taskIDContains: String
+  taskIDHasPrefix: String
+  taskIDHasSuffix: String
+  taskIDIsNil: Boolean
+  taskIDNotNil: Boolean
+  taskIDEqualFold: String
+  taskIDContainsFold: String
+  """
+  internal_policy_id field predicates
+  """
+  internalPolicyID: String
+  internalPolicyIDNEQ: String
+  internalPolicyIDIn: [String!]
+  internalPolicyIDNotIn: [String!]
+  internalPolicyIDGT: String
+  internalPolicyIDGTE: String
+  internalPolicyIDLT: String
+  internalPolicyIDLTE: String
+  internalPolicyIDContains: String
+  internalPolicyIDHasPrefix: String
+  internalPolicyIDHasSuffix: String
+  internalPolicyIDIsNil: Boolean
+  internalPolicyIDNotNil: Boolean
+  internalPolicyIDEqualFold: String
+  internalPolicyIDContainsFold: String
+  """
+  finding_id field predicates
+  """
+  findingID: String
+  findingIDNEQ: String
+  findingIDIn: [String!]
+  findingIDNotIn: [String!]
+  findingIDGT: String
+  findingIDGTE: String
+  findingIDLT: String
+  findingIDLTE: String
+  findingIDContains: String
+  findingIDHasPrefix: String
+  findingIDHasSuffix: String
+  findingIDIsNil: Boolean
+  findingIDNotNil: Boolean
+  findingIDEqualFold: String
+  findingIDContainsFold: String
+  """
+  directory_account_id field predicates
+  """
+  directoryAccountID: String
+  directoryAccountIDNEQ: String
+  directoryAccountIDIn: [String!]
+  directoryAccountIDNotIn: [String!]
+  directoryAccountIDGT: String
+  directoryAccountIDGTE: String
+  directoryAccountIDLT: String
+  directoryAccountIDLTE: String
+  directoryAccountIDContains: String
+  directoryAccountIDHasPrefix: String
+  directoryAccountIDHasSuffix: String
+  directoryAccountIDIsNil: Boolean
+  directoryAccountIDNotNil: Boolean
+  directoryAccountIDEqualFold: String
+  directoryAccountIDContainsFold: String
+  """
+  directory_group_id field predicates
+  """
+  directoryGroupID: String
+  directoryGroupIDNEQ: String
+  directoryGroupIDIn: [String!]
+  directoryGroupIDNotIn: [String!]
+  directoryGroupIDGT: String
+  directoryGroupIDGTE: String
+  directoryGroupIDLT: String
+  directoryGroupIDLTE: String
+  directoryGroupIDContains: String
+  directoryGroupIDHasPrefix: String
+  directoryGroupIDHasSuffix: String
+  directoryGroupIDIsNil: Boolean
+  directoryGroupIDNotNil: Boolean
+  directoryGroupIDEqualFold: String
+  directoryGroupIDContainsFold: String
+  """
+  directory_membership_id field predicates
+  """
+  directoryMembershipID: String
+  directoryMembershipIDNEQ: String
+  directoryMembershipIDIn: [String!]
+  directoryMembershipIDNotIn: [String!]
+  directoryMembershipIDGT: String
+  directoryMembershipIDGTE: String
+  directoryMembershipIDLT: String
+  directoryMembershipIDLTE: String
+  directoryMembershipIDContains: String
+  directoryMembershipIDHasPrefix: String
+  directoryMembershipIDHasSuffix: String
+  directoryMembershipIDIsNil: Boolean
+  directoryMembershipIDNotNil: Boolean
+  directoryMembershipIDEqualFold: String
+  directoryMembershipIDContainsFold: String
+}
+"""
+Ordering options for WorkflowObjectRef connections
+"""
+input WorkflowObjectRefOrder {
+  """
+  The ordering direction.
+  """
+  direction: OrderDirection! = ASC
+  """
+  The field by which to order WorkflowObjectRefs.
+  """
+  field: WorkflowObjectRefOrderField!
+}
+"""
+Properties by which WorkflowObjectRef connections can be ordered.
+"""
+enum WorkflowObjectRefOrderField {
+  created_at
+  updated_at
+}
+"""
+WorkflowObjectRefWhereInput is used for filtering WorkflowObjectRef objects.
+Input was generated by ent.
+"""
+input WorkflowObjectRefWhereInput {
+  not: WorkflowObjectRefWhereInput
+  and: [WorkflowObjectRefWhereInput!]
+  or: [WorkflowObjectRefWhereInput!]
+  """
+  id field predicates
+  """
+  id: ID
+  idNEQ: ID
+  idIn: [ID!]
+  idNotIn: [ID!]
+  idGT: ID
+  idGTE: ID
+  idLT: ID
+  idLTE: ID
+  idEqualFold: ID
+  idContainsFold: ID
+  """
+  created_at field predicates
+  """
+  createdAt: Time
+  createdAtNEQ: Time
+  createdAtIn: [Time!]
+  createdAtNotIn: [Time!]
+  createdAtGT: Time
+  createdAtGTE: Time
+  createdAtLT: Time
+  createdAtLTE: Time
+  createdAtIsNil: Boolean
+  createdAtNotNil: Boolean
+  """
+  updated_at field predicates
+  """
+  updatedAt: Time
+  updatedAtNEQ: Time
+  updatedAtIn: [Time!]
+  updatedAtNotIn: [Time!]
+  updatedAtGT: Time
+  updatedAtGTE: Time
+  updatedAtLT: Time
+  updatedAtLTE: Time
+  updatedAtIsNil: Boolean
+  updatedAtNotNil: Boolean
+  """
+  created_by field predicates
+  """
+  createdBy: String
+  createdByNEQ: String
+  createdByIn: [String!]
+  createdByNotIn: [String!]
+  createdByGT: String
+  createdByGTE: String
+  createdByLT: String
+  createdByLTE: String
+  createdByContains: String
+  createdByHasPrefix: String
+  createdByHasSuffix: String
+  createdByIsNil: Boolean
+  createdByNotNil: Boolean
+  createdByEqualFold: String
+  createdByContainsFold: String
+  """
+  updated_by field predicates
+  """
+  updatedBy: String
+  updatedByNEQ: String
+  updatedByIn: [String!]
+  updatedByNotIn: [String!]
+  updatedByGT: String
+  updatedByGTE: String
+  updatedByLT: String
+  updatedByLTE: String
+  updatedByContains: String
+  updatedByHasPrefix: String
+  updatedByHasSuffix: String
+  updatedByIsNil: Boolean
+  updatedByNotNil: Boolean
+  updatedByEqualFold: String
+  updatedByContainsFold: String
+  """
+  display_id field predicates
+  """
+  displayID: String
+  displayIDNEQ: String
+  displayIDIn: [String!]
+  displayIDNotIn: [String!]
+  displayIDGT: String
+  displayIDGTE: String
+  displayIDLT: String
+  displayIDLTE: String
+  displayIDContains: String
+  displayIDHasPrefix: String
+  displayIDHasSuffix: String
+  displayIDEqualFold: String
+  displayIDContainsFold: String
+  """
+  owner_id field predicates
+  """
+  ownerID: ID
+  ownerIDNEQ: ID
+  ownerIDIn: [ID!]
+  ownerIDNotIn: [ID!]
+  ownerIDGT: ID
+  ownerIDGTE: ID
+  ownerIDLT: ID
+  ownerIDLTE: ID
+  ownerIDContains: ID
+  ownerIDHasPrefix: ID
+  ownerIDHasSuffix: ID
+  ownerIDIsNil: Boolean
+  ownerIDNotNil: Boolean
+  ownerIDEqualFold: ID
+  ownerIDContainsFold: ID
+  """
+  workflow_instance_id field predicates
+  """
+  workflowInstanceID: ID
+  workflowInstanceIDNEQ: ID
+  workflowInstanceIDIn: [ID!]
+  workflowInstanceIDNotIn: [ID!]
+  workflowInstanceIDGT: ID
+  workflowInstanceIDGTE: ID
+  workflowInstanceIDLT: ID
+  workflowInstanceIDLTE: ID
+  workflowInstanceIDContains: ID
+  workflowInstanceIDHasPrefix: ID
+  workflowInstanceIDHasSuffix: ID
+  workflowInstanceIDEqualFold: ID
+  workflowInstanceIDContainsFold: ID
+  """
+  control_id field predicates
+  """
+  controlID: ID
+  controlIDNEQ: ID
+  controlIDIn: [ID!]
+  controlIDNotIn: [ID!]
+  controlIDGT: ID
+  controlIDGTE: ID
+  controlIDLT: ID
+  controlIDLTE: ID
+  controlIDContains: ID
+  controlIDHasPrefix: ID
+  controlIDHasSuffix: ID
+  controlIDIsNil: Boolean
+  controlIDNotNil: Boolean
+  controlIDEqualFold: ID
+  controlIDContainsFold: ID
+  """
+  task_id field predicates
+  """
+  taskID: ID
+  taskIDNEQ: ID
+  taskIDIn: [ID!]
+  taskIDNotIn: [ID!]
+  taskIDGT: ID
+  taskIDGTE: ID
+  taskIDLT: ID
+  taskIDLTE: ID
+  taskIDContains: ID
+  taskIDHasPrefix: ID
+  taskIDHasSuffix: ID
+  taskIDIsNil: Boolean
+  taskIDNotNil: Boolean
+  taskIDEqualFold: ID
+  taskIDContainsFold: ID
+  """
+  internal_policy_id field predicates
+  """
+  internalPolicyID: ID
+  internalPolicyIDNEQ: ID
+  internalPolicyIDIn: [ID!]
+  internalPolicyIDNotIn: [ID!]
+  internalPolicyIDGT: ID
+  internalPolicyIDGTE: ID
+  internalPolicyIDLT: ID
+  internalPolicyIDLTE: ID
+  internalPolicyIDContains: ID
+  internalPolicyIDHasPrefix: ID
+  internalPolicyIDHasSuffix: ID
+  internalPolicyIDIsNil: Boolean
+  internalPolicyIDNotNil: Boolean
+  internalPolicyIDEqualFold: ID
+  internalPolicyIDContainsFold: ID
+  """
+  finding_id field predicates
+  """
+  findingID: ID
+  findingIDNEQ: ID
+  findingIDIn: [ID!]
+  findingIDNotIn: [ID!]
+  findingIDGT: ID
+  findingIDGTE: ID
+  findingIDLT: ID
+  findingIDLTE: ID
+  findingIDContains: ID
+  findingIDHasPrefix: ID
+  findingIDHasSuffix: ID
+  findingIDIsNil: Boolean
+  findingIDNotNil: Boolean
+  findingIDEqualFold: ID
+  findingIDContainsFold: ID
+  """
+  directory_account_id field predicates
+  """
+  directoryAccountID: ID
+  directoryAccountIDNEQ: ID
+  directoryAccountIDIn: [ID!]
+  directoryAccountIDNotIn: [ID!]
+  directoryAccountIDGT: ID
+  directoryAccountIDGTE: ID
+  directoryAccountIDLT: ID
+  directoryAccountIDLTE: ID
+  directoryAccountIDContains: ID
+  directoryAccountIDHasPrefix: ID
+  directoryAccountIDHasSuffix: ID
+  directoryAccountIDIsNil: Boolean
+  directoryAccountIDNotNil: Boolean
+  directoryAccountIDEqualFold: ID
+  directoryAccountIDContainsFold: ID
+  """
+  directory_group_id field predicates
+  """
+  directoryGroupID: ID
+  directoryGroupIDNEQ: ID
+  directoryGroupIDIn: [ID!]
+  directoryGroupIDNotIn: [ID!]
+  directoryGroupIDGT: ID
+  directoryGroupIDGTE: ID
+  directoryGroupIDLT: ID
+  directoryGroupIDLTE: ID
+  directoryGroupIDContains: ID
+  directoryGroupIDHasPrefix: ID
+  directoryGroupIDHasSuffix: ID
+  directoryGroupIDIsNil: Boolean
+  directoryGroupIDNotNil: Boolean
+  directoryGroupIDEqualFold: ID
+  directoryGroupIDContainsFold: ID
+  """
+  directory_membership_id field predicates
+  """
+  directoryMembershipID: ID
+  directoryMembershipIDNEQ: ID
+  directoryMembershipIDIn: [ID!]
+  directoryMembershipIDNotIn: [ID!]
+  directoryMembershipIDGT: ID
+  directoryMembershipIDGTE: ID
+  directoryMembershipIDLT: ID
+  directoryMembershipIDLTE: ID
+  directoryMembershipIDContains: ID
+  directoryMembershipIDHasPrefix: ID
+  directoryMembershipIDHasSuffix: ID
+  directoryMembershipIDIsNil: Boolean
+  directoryMembershipIDNotNil: Boolean
+  directoryMembershipIDEqualFold: ID
+  directoryMembershipIDContainsFold: ID
+  """
+  owner edge predicates
+  """
+  hasOwner: Boolean
+  hasOwnerWith: [OrganizationWhereInput!]
+  """
+  workflow_instance edge predicates
+  """
+  hasWorkflowInstance: Boolean
+  hasWorkflowInstanceWith: [WorkflowInstanceWhereInput!]
+  """
+  control edge predicates
+  """
+  hasControl: Boolean
+  hasControlWith: [ControlWhereInput!]
+  """
+  task edge predicates
+  """
+  hasTask: Boolean
+  hasTaskWith: [TaskWhereInput!]
+  """
+  internal_policy edge predicates
+  """
+  hasInternalPolicy: Boolean
+  hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  finding edge predicates
+  """
+  hasFinding: Boolean
+  hasFindingWith: [FindingWhereInput!]
+  """
+  directory_account edge predicates
+  """
+  hasDirectoryAccount: Boolean
+  hasDirectoryAccountWith: [DirectoryAccountWhereInput!]
+  """
+  directory_group edge predicates
+  """
+  hasDirectoryGroup: Boolean
+  hasDirectoryGroupWith: [DirectoryGroupWhereInput!]
+  """
+  directory_membership edge predicates
+  """
+  hasDirectoryMembership: Boolean
+  hasDirectoryMembershipWith: [DirectoryMembershipWhereInput!]
+}
 `, BuiltIn: false},
 	{Name: "../schema/entity.graphql", Input: `extend type Query {
     """
@@ -129191,6 +146691,22 @@ scalar SSOAuthorizationMap
 CredentialSet is a json of of credential keys that are used to authenticate to a third party
 """
 scalar CredentialSet
+"""
+WorkflowDefinitionDocument captures triggers, conditions, actions, and selectors that define a workflow.
+"""
+scalar WorkflowDefinitionDocument
+"""
+WorkflowDefinitionSchema is a JSON schema describing the shape of workflow definitions for validation.
+"""
+scalar WorkflowDefinitionSchema
+"""
+WorkflowInstanceContext contains runtime context for a workflow instance including assignments and object info.
+"""
+scalar WorkflowInstanceContext
+"""
+WorkflowEventPayload stores payloads emitted by workflow events and actions.
+"""
+scalar WorkflowEventPayload
 `, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """
@@ -129842,6 +147358,56 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): DNSVerificationConnection
+    """
+    Search across DirectoryAccount objects
+    """
+    directoryAccountSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryAccountConnection
+    """
+    Search across DirectoryGroup objects
+    """
+    directoryGroupSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryGroupConnection
     """
     Search across DocumentData objects
     """
@@ -130892,6 +148458,131 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): WebauthnConnection
+    """
+    Search across WorkflowAssignment objects
+    """
+    workflowAssignmentSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentConnection
+    """
+    Search across WorkflowAssignmentTarget objects
+    """
+    workflowAssignmentTargetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentTargetConnection
+    """
+    Search across WorkflowDefinition objects
+    """
+    workflowDefinitionSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowDefinitionConnection
+    """
+    Search across WorkflowEvent objects
+    """
+    workflowEventSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowEventConnection
+    """
+    Search across WorkflowInstance objects
+    """
+    workflowInstanceSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowInstanceConnection
 }
 type SearchResults{
   """
@@ -130914,6 +148605,8 @@ type SearchResults{
   customDomains: CustomDomainConnection
   customTypeEnums: CustomTypeEnumConnection
   dnsVerifications: DNSVerificationConnection
+  directoryAccounts: DirectoryAccountConnection
+  directoryGroups: DirectoryGroupConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
   entityTypes: EntityTypeConnection
@@ -130956,6 +148649,11 @@ type SearchResults{
   userSettings: UserSettingConnection
   vulnerabilities: VulnerabilityConnection
   webauthns: WebauthnConnection
+  workflowAssignments: WorkflowAssignmentConnection
+  workflowAssignmentTargets: WorkflowAssignmentTargetConnection
+  workflowDefinitions: WorkflowDefinitionConnection
+  workflowEvents: WorkflowEventConnection
+  workflowInstances: WorkflowInstanceConnection
 }
 
 extend type Query{
@@ -133045,5 +150743,623 @@ type WebauthnDeletePayload {
     deletedID: ID!
 }
 `, BuiltIn: false},
+	{Name: "../schema/workflowassignment.graphql", Input: `extend type Query {
+    """
+    Look up workflowAssignment by ID
+    """
+     workflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+    ):  WorkflowAssignment!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowAssignment
+    """
+    createWorkflowAssignment(
+        """
+        values of the workflowAssignment
+        """
+        input: CreateWorkflowAssignmentInput!
+    ): WorkflowAssignmentCreatePayload!
+    """
+    Create multiple new workflowAssignments
+    """
+    createBulkWorkflowAssignment(
+        """
+        values of the workflowAssignment
+        """
+        input: [CreateWorkflowAssignmentInput!]
+    ): WorkflowAssignmentBulkCreatePayload!
+    """
+    Create multiple new workflowAssignments via file upload
+    """
+    createBulkCSVWorkflowAssignment(
+        """
+        csv file containing values of the workflowAssignment
+        """
+        input: Upload!
+    ): WorkflowAssignmentBulkCreatePayload!
+    """
+    Update an existing workflowAssignment
+    """
+    updateWorkflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+        """
+        New values for the workflowAssignment
+        """
+        input: UpdateWorkflowAssignmentInput!
+    ): WorkflowAssignmentUpdatePayload!
+    """
+    Delete an existing workflowAssignment
+    """
+    deleteWorkflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+    ): WorkflowAssignmentDeletePayload!
+}
+
+"""
+Return response for createWorkflowAssignment mutation
+"""
+type WorkflowAssignmentCreatePayload {
+    """
+    Created workflowAssignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for updateWorkflowAssignment mutation
+"""
+type WorkflowAssignmentUpdatePayload {
+    """
+    Updated workflowAssignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for deleteWorkflowAssignment mutation
+"""
+type WorkflowAssignmentDeletePayload {
+    """
+    Deleted workflowAssignment ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowAssignment mutation
+"""
+type WorkflowAssignmentBulkCreatePayload {
+    """
+    Created workflowAssignments
+    """
+    workflowAssignments: [WorkflowAssignment!]
+}`, BuiltIn: false},
+	{Name: "../schema/workflowassignmenttarget.graphql", Input: `extend type Query {
+    """
+    Look up workflowAssignmentTarget by ID
+    """
+     workflowAssignmentTarget(
+        """
+        ID of the workflowAssignmentTarget
+        """
+        id: ID!
+    ):  WorkflowAssignmentTarget!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowAssignmentTarget
+    """
+    createWorkflowAssignmentTarget(
+        """
+        values of the workflowAssignmentTarget
+        """
+        input: CreateWorkflowAssignmentTargetInput!
+    ): WorkflowAssignmentTargetCreatePayload!
+    """
+    Create multiple new workflowAssignmentTargets
+    """
+    createBulkWorkflowAssignmentTarget(
+        """
+        values of the workflowAssignmentTarget
+        """
+        input: [CreateWorkflowAssignmentTargetInput!]
+    ): WorkflowAssignmentTargetBulkCreatePayload!
+    """
+    Create multiple new workflowAssignmentTargets via file upload
+    """
+    createBulkCSVWorkflowAssignmentTarget(
+        """
+        csv file containing values of the workflowAssignmentTarget
+        """
+        input: Upload!
+    ): WorkflowAssignmentTargetBulkCreatePayload!
+    """
+    Update an existing workflowAssignmentTarget
+    """
+    updateWorkflowAssignmentTarget(
+        """
+        ID of the workflowAssignmentTarget
+        """
+        id: ID!
+        """
+        New values for the workflowAssignmentTarget
+        """
+        input: UpdateWorkflowAssignmentTargetInput!
+    ): WorkflowAssignmentTargetUpdatePayload!
+    """
+    Delete an existing workflowAssignmentTarget
+    """
+    deleteWorkflowAssignmentTarget(
+        """
+        ID of the workflowAssignmentTarget
+        """
+        id: ID!
+    ): WorkflowAssignmentTargetDeletePayload!
+}
+
+"""
+Return response for createWorkflowAssignmentTarget mutation
+"""
+type WorkflowAssignmentTargetCreatePayload {
+    """
+    Created workflowAssignmentTarget
+    """
+    workflowAssignmentTarget: WorkflowAssignmentTarget!
+}
+
+"""
+Return response for updateWorkflowAssignmentTarget mutation
+"""
+type WorkflowAssignmentTargetUpdatePayload {
+    """
+    Updated workflowAssignmentTarget
+    """
+    workflowAssignmentTarget: WorkflowAssignmentTarget!
+}
+
+"""
+Return response for deleteWorkflowAssignmentTarget mutation
+"""
+type WorkflowAssignmentTargetDeletePayload {
+    """
+    Deleted workflowAssignmentTarget ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowAssignmentTarget mutation
+"""
+type WorkflowAssignmentTargetBulkCreatePayload {
+    """
+    Created workflowAssignmentTargets
+    """
+    workflowAssignmentTargets: [WorkflowAssignmentTarget!]
+}`, BuiltIn: false},
+	{Name: "../schema/workflowdefinition.graphql", Input: `extend type Query {
+    """
+    Look up workflowDefinition by ID
+    """
+     workflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+    ):  WorkflowDefinition!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowDefinition
+    """
+    createWorkflowDefinition(
+        """
+        values of the workflowDefinition
+        """
+        input: CreateWorkflowDefinitionInput!
+    ): WorkflowDefinitionCreatePayload!
+    """
+    Create multiple new workflowDefinitions
+    """
+    createBulkWorkflowDefinition(
+        """
+        values of the workflowDefinition
+        """
+        input: [CreateWorkflowDefinitionInput!]
+    ): WorkflowDefinitionBulkCreatePayload!
+    """
+    Create multiple new workflowDefinitions via file upload
+    """
+    createBulkCSVWorkflowDefinition(
+        """
+        csv file containing values of the workflowDefinition
+        """
+        input: Upload!
+    ): WorkflowDefinitionBulkCreatePayload!
+    """
+    Update an existing workflowDefinition
+    """
+    updateWorkflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+        """
+        New values for the workflowDefinition
+        """
+        input: UpdateWorkflowDefinitionInput!
+    ): WorkflowDefinitionUpdatePayload!
+    """
+    Delete an existing workflowDefinition
+    """
+    deleteWorkflowDefinition(
+        """
+        ID of the workflowDefinition
+        """
+        id: ID!
+    ): WorkflowDefinitionDeletePayload!
+}
+
+"""
+Return response for createWorkflowDefinition mutation
+"""
+type WorkflowDefinitionCreatePayload {
+    """
+    Created workflowDefinition
+    """
+    workflowDefinition: WorkflowDefinition!
+}
+
+"""
+Return response for updateWorkflowDefinition mutation
+"""
+type WorkflowDefinitionUpdatePayload {
+    """
+    Updated workflowDefinition
+    """
+    workflowDefinition: WorkflowDefinition!
+}
+
+"""
+Return response for deleteWorkflowDefinition mutation
+"""
+type WorkflowDefinitionDeletePayload {
+    """
+    Deleted workflowDefinition ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowDefinition mutation
+"""
+type WorkflowDefinitionBulkCreatePayload {
+    """
+    Created workflowDefinitions
+    """
+    workflowDefinitions: [WorkflowDefinition!]
+}`, BuiltIn: false},
+	{Name: "../schema/workflowevent.graphql", Input: `extend type Query {
+    """
+    Look up workflowEvent by ID
+    """
+     workflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+    ):  WorkflowEvent!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowEvent
+    """
+    createWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: CreateWorkflowEventInput!
+    ): WorkflowEventCreatePayload!
+    """
+    Create multiple new workflowEvents
+    """
+    createBulkWorkflowEvent(
+        """
+        values of the workflowEvent
+        """
+        input: [CreateWorkflowEventInput!]
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Create multiple new workflowEvents via file upload
+    """
+    createBulkCSVWorkflowEvent(
+        """
+        csv file containing values of the workflowEvent
+        """
+        input: Upload!
+    ): WorkflowEventBulkCreatePayload!
+    """
+    Update an existing workflowEvent
+    """
+    updateWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+        """
+        New values for the workflowEvent
+        """
+        input: UpdateWorkflowEventInput!
+    ): WorkflowEventUpdatePayload!
+    """
+    Delete an existing workflowEvent
+    """
+    deleteWorkflowEvent(
+        """
+        ID of the workflowEvent
+        """
+        id: ID!
+    ): WorkflowEventDeletePayload!
+}
+
+"""
+Return response for createWorkflowEvent mutation
+"""
+type WorkflowEventCreatePayload {
+    """
+    Created workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for updateWorkflowEvent mutation
+"""
+type WorkflowEventUpdatePayload {
+    """
+    Updated workflowEvent
+    """
+    workflowEvent: WorkflowEvent!
+}
+
+"""
+Return response for deleteWorkflowEvent mutation
+"""
+type WorkflowEventDeletePayload {
+    """
+    Deleted workflowEvent ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowEvent mutation
+"""
+type WorkflowEventBulkCreatePayload {
+    """
+    Created workflowEvents
+    """
+    workflowEvents: [WorkflowEvent!]
+}`, BuiltIn: false},
+	{Name: "../schema/workflowinstance.graphql", Input: `extend type Query {
+    """
+    Look up workflowInstance by ID
+    """
+     workflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+    ):  WorkflowInstance!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowInstance
+    """
+    createWorkflowInstance(
+        """
+        values of the workflowInstance
+        """
+        input: CreateWorkflowInstanceInput!
+    ): WorkflowInstanceCreatePayload!
+    """
+    Create multiple new workflowInstances
+    """
+    createBulkWorkflowInstance(
+        """
+        values of the workflowInstance
+        """
+        input: [CreateWorkflowInstanceInput!]
+    ): WorkflowInstanceBulkCreatePayload!
+    """
+    Create multiple new workflowInstances via file upload
+    """
+    createBulkCSVWorkflowInstance(
+        """
+        csv file containing values of the workflowInstance
+        """
+        input: Upload!
+    ): WorkflowInstanceBulkCreatePayload!
+    """
+    Update an existing workflowInstance
+    """
+    updateWorkflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+        """
+        New values for the workflowInstance
+        """
+        input: UpdateWorkflowInstanceInput!
+    ): WorkflowInstanceUpdatePayload!
+    """
+    Delete an existing workflowInstance
+    """
+    deleteWorkflowInstance(
+        """
+        ID of the workflowInstance
+        """
+        id: ID!
+    ): WorkflowInstanceDeletePayload!
+}
+
+"""
+Return response for createWorkflowInstance mutation
+"""
+type WorkflowInstanceCreatePayload {
+    """
+    Created workflowInstance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for updateWorkflowInstance mutation
+"""
+type WorkflowInstanceUpdatePayload {
+    """
+    Updated workflowInstance
+    """
+    workflowInstance: WorkflowInstance!
+}
+
+"""
+Return response for deleteWorkflowInstance mutation
+"""
+type WorkflowInstanceDeletePayload {
+    """
+    Deleted workflowInstance ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowInstance mutation
+"""
+type WorkflowInstanceBulkCreatePayload {
+    """
+    Created workflowInstances
+    """
+    workflowInstances: [WorkflowInstance!]
+}`, BuiltIn: false},
+	{Name: "../schema/workflowobjectref.graphql", Input: `extend type Query {
+    """
+    Look up workflowObjectRef by ID
+    """
+     workflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+    ):  WorkflowObjectRef!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowObjectRef
+    """
+    createWorkflowObjectRef(
+        """
+        values of the workflowObjectRef
+        """
+        input: CreateWorkflowObjectRefInput!
+    ): WorkflowObjectRefCreatePayload!
+    """
+    Create multiple new workflowObjectRefs
+    """
+    createBulkWorkflowObjectRef(
+        """
+        values of the workflowObjectRef
+        """
+        input: [CreateWorkflowObjectRefInput!]
+    ): WorkflowObjectRefBulkCreatePayload!
+    """
+    Create multiple new workflowObjectRefs via file upload
+    """
+    createBulkCSVWorkflowObjectRef(
+        """
+        csv file containing values of the workflowObjectRef
+        """
+        input: Upload!
+    ): WorkflowObjectRefBulkCreatePayload!
+    """
+    Update an existing workflowObjectRef
+    """
+    updateWorkflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+        """
+        New values for the workflowObjectRef
+        """
+        input: UpdateWorkflowObjectRefInput!
+    ): WorkflowObjectRefUpdatePayload!
+    """
+    Delete an existing workflowObjectRef
+    """
+    deleteWorkflowObjectRef(
+        """
+        ID of the workflowObjectRef
+        """
+        id: ID!
+    ): WorkflowObjectRefDeletePayload!
+}
+
+"""
+Return response for createWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefCreatePayload {
+    """
+    Created workflowObjectRef
+    """
+    workflowObjectRef: WorkflowObjectRef!
+}
+
+"""
+Return response for updateWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefUpdatePayload {
+    """
+    Updated workflowObjectRef
+    """
+    workflowObjectRef: WorkflowObjectRef!
+}
+
+"""
+Return response for deleteWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefDeletePayload {
+    """
+    Deleted workflowObjectRef ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowObjectRef mutation
+"""
+type WorkflowObjectRefBulkCreatePayload {
+    """
+    Created workflowObjectRefs
+    """
+    workflowObjectRefs: [WorkflowObjectRef!]
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)

@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up workflowAssignment by ID
+    """
+     workflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+    ):  WorkflowAssignment!
+}
+
+extend type Mutation{
+    """
+    Create a new workflowAssignment
+    """
+    createWorkflowAssignment(
+        """
+        values of the workflowAssignment
+        """
+        input: CreateWorkflowAssignmentInput!
+    ): WorkflowAssignmentCreatePayload!
+    """
+    Create multiple new workflowAssignments
+    """
+    createBulkWorkflowAssignment(
+        """
+        values of the workflowAssignment
+        """
+        input: [CreateWorkflowAssignmentInput!]
+    ): WorkflowAssignmentBulkCreatePayload!
+    """
+    Create multiple new workflowAssignments via file upload
+    """
+    createBulkCSVWorkflowAssignment(
+        """
+        csv file containing values of the workflowAssignment
+        """
+        input: Upload!
+    ): WorkflowAssignmentBulkCreatePayload!
+    """
+    Update an existing workflowAssignment
+    """
+    updateWorkflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+        """
+        New values for the workflowAssignment
+        """
+        input: UpdateWorkflowAssignmentInput!
+    ): WorkflowAssignmentUpdatePayload!
+    """
+    Delete an existing workflowAssignment
+    """
+    deleteWorkflowAssignment(
+        """
+        ID of the workflowAssignment
+        """
+        id: ID!
+    ): WorkflowAssignmentDeletePayload!
+}
+
+"""
+Return response for createWorkflowAssignment mutation
+"""
+type WorkflowAssignmentCreatePayload {
+    """
+    Created workflowAssignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for updateWorkflowAssignment mutation
+"""
+type WorkflowAssignmentUpdatePayload {
+    """
+    Updated workflowAssignment
+    """
+    workflowAssignment: WorkflowAssignment!
+}
+
+"""
+Return response for deleteWorkflowAssignment mutation
+"""
+type WorkflowAssignmentDeletePayload {
+    """
+    Deleted workflowAssignment ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkWorkflowAssignment mutation
+"""
+type WorkflowAssignmentBulkCreatePayload {
+    """
+    Created workflowAssignments
+    """
+    workflowAssignments: [WorkflowAssignment!]
+}

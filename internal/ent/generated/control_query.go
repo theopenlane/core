@@ -38,6 +38,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/workflowobjectref"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -75,6 +76,7 @@ type ControlQuery struct {
 	withScheduledJobs               *ScheduledJobQuery
 	withMappedToControls            *MappedControlQuery
 	withMappedFromControls          *MappedControlQuery
+	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	withControlMappings             *FindingControlQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*Control) error
@@ -99,6 +101,7 @@ type ControlQuery struct {
 	withNamedScheduledJobs          map[string]*ScheduledJobQuery
 	withNamedMappedToControls       map[string]*MappedControlQuery
 	withNamedMappedFromControls     map[string]*MappedControlQuery
+	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	withNamedControlMappings        map[string]*FindingControlQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -786,6 +789,31 @@ func (_q *ControlQuery) QueryMappedFromControls() *MappedControlQuery {
 	return query
 }
 
+// QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
+func (_q *ControlQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(control.Table, control.FieldID, selector),
+			sqlgraph.To(workflowobjectref.Table, workflowobjectref.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, true, control.WorkflowObjectRefsTable, control.WorkflowObjectRefsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.WorkflowObjectRef
+		step.Edge.Schema = schemaConfig.WorkflowObjectRef
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryControlMappings chains the current query on the "control_mappings" edge.
 func (_q *ControlQuery) QueryControlMappings() *FindingControlQuery {
 	query := (&FindingControlClient{config: _q.config}).Query()
@@ -1029,6 +1057,7 @@ func (_q *ControlQuery) Clone() *ControlQuery {
 		withScheduledJobs:          _q.withScheduledJobs.Clone(),
 		withMappedToControls:       _q.withMappedToControls.Clone(),
 		withMappedFromControls:     _q.withMappedFromControls.Clone(),
+		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
 		withControlMappings:        _q.withControlMappings.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -1323,6 +1352,17 @@ func (_q *ControlQuery) WithMappedFromControls(opts ...func(*MappedControlQuery)
 	return _q
 }
 
+// WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
+// the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *ControlQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withWorkflowObjectRefs = query
+	return _q
+}
+
 // WithControlMappings tells the query-builder to eager-load the nodes that are connected to
 // the "control_mappings" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ControlQuery) WithControlMappings(opts ...func(*FindingControlQuery)) *ControlQuery {
@@ -1419,7 +1459,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		nodes       = []*Control{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [27]bool{
+		loadedTypes = [28]bool{
 			_q.withEvidence != nil,
 			_q.withControlObjectives != nil,
 			_q.withTasks != nil,
@@ -1446,6 +1486,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			_q.withScheduledJobs != nil,
 			_q.withMappedToControls != nil,
 			_q.withMappedFromControls != nil,
+			_q.withWorkflowObjectRefs != nil,
 			_q.withControlMappings != nil,
 		}
 	)
@@ -1655,6 +1696,15 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			return nil, err
 		}
 	}
+	if query := _q.withWorkflowObjectRefs; query != nil {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Control) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
+			func(n *Control, e *WorkflowObjectRef) {
+				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
+			}); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withControlMappings; query != nil {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Control) { n.Edges.ControlMappings = []*FindingControl{} },
@@ -1799,6 +1849,13 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 		if err := _q.loadMappedFromControls(ctx, query, nodes,
 			func(n *Control) { n.appendNamedMappedFromControls(name) },
 			func(n *Control, e *MappedControl) { n.appendNamedMappedFromControls(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedWorkflowObjectRefs {
+		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
+			func(n *Control) { n.appendNamedWorkflowObjectRefs(name) },
+			func(n *Control, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -3141,6 +3198,37 @@ func (_q *ControlQuery) loadMappedFromControls(ctx context.Context, query *Mappe
 	}
 	return nil
 }
+func (_q *ControlQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*Control, init func(*Control), assign func(*Control, *WorkflowObjectRef)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Control)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	if len(query.ctx.Fields) > 0 {
+		query.ctx.AppendFieldOnce(workflowobjectref.FieldControlID)
+	}
+	query.Where(predicate.WorkflowObjectRef(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(control.WorkflowObjectRefsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.ControlID
+		node, ok := nodeids[fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "control_id" returned %v for node %v`, fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ControlQuery) loadControlMappings(ctx context.Context, query *FindingControlQuery, nodes []*Control, init func(*Control), assign func(*Control, *FindingControl)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*Control)
@@ -3565,6 +3653,20 @@ func (_q *ControlQuery) WithNamedMappedFromControls(name string, opts ...func(*M
 		_q.withNamedMappedFromControls = make(map[string]*MappedControlQuery)
 	}
 	_q.withNamedMappedFromControls[name] = query
+	return _q
+}
+
+// WithNamedWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to the "workflow_object_refs"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ControlQuery) WithNamedWorkflowObjectRefs(name string, opts ...func(*WorkflowObjectRefQuery)) *ControlQuery {
+	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedWorkflowObjectRefs == nil {
+		_q.withNamedWorkflowObjectRefs = make(map[string]*WorkflowObjectRefQuery)
+	}
+	_q.withNamedWorkflowObjectRefs[name] = query
 	return _q
 }
 

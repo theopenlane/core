@@ -979,6 +979,27 @@ func (_m *Control) ScheduledJobs(
 	return _m.QueryScheduledJobs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Control) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Control) ControlMappings(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingControlOrder, where *FindingControlWhereInput,
 ) (*FindingControlConnection, error) {
@@ -987,7 +1008,7 @@ func (_m *Control) ControlMappings(
 		WithFindingControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[24][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[25][alias]
 	if nodes, err := _m.NamedControlMappings(alias); err == nil || hasTotalCount {
 		pager, err := newFindingControlPager(opts, last != nil)
 		if err != nil {
@@ -1642,6 +1663,341 @@ func (_m *DNSVerification) CustomDomains(
 		return conn, nil
 	}
 	return _m.QueryCustomDomains().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryAccount) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *DirectoryAccount) Integration(ctx context.Context) (*Integration, error) {
+	result, err := _m.Edges.IntegrationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryIntegration().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryAccount) DirectorySyncRun(ctx context.Context) (*DirectorySyncRun, error) {
+	result, err := _m.Edges.DirectorySyncRunOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectorySyncRun().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryAccount) Groups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryGroupOrder, where *DirectoryGroupWhereInput,
+) (*DirectoryGroupConnection, error) {
+	opts := []DirectoryGroupPaginateOption{
+		WithDirectoryGroupOrder(orderBy),
+		WithDirectoryGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedGroups(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryGroupConnection{Edges: []*DirectoryGroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryAccount) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryAccount) Memberships(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryMembershipOrder, where *DirectoryMembershipWhereInput,
+) (*DirectoryMembershipConnection, error) {
+	opts := []DirectoryMembershipPaginateOption{
+		WithDirectoryMembershipOrder(orderBy),
+		WithDirectoryMembershipFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedMemberships(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryMemberships().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryGroup) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *DirectoryGroup) Integration(ctx context.Context) (*Integration, error) {
+	result, err := _m.Edges.IntegrationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryIntegration().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryGroup) DirectorySyncRun(ctx context.Context) (*DirectorySyncRun, error) {
+	result, err := _m.Edges.DirectorySyncRunOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectorySyncRun().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryGroup) Accounts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryAccountOrder, where *DirectoryAccountWhereInput,
+) (*DirectoryAccountConnection, error) {
+	opts := []DirectoryAccountPaginateOption{
+		WithDirectoryAccountOrder(orderBy),
+		WithDirectoryAccountFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedAccounts(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryAccountPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryAccountConnection{Edges: []*DirectoryAccountEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryAccounts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryGroup) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryGroup) Members(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryMembershipOrder, where *DirectoryMembershipWhereInput,
+) (*DirectoryMembershipConnection, error) {
+	opts := []DirectoryMembershipPaginateOption{
+		WithDirectoryMembershipOrder(orderBy),
+		WithDirectoryMembershipFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryMembers().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryMembership) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *DirectoryMembership) Integration(ctx context.Context) (*Integration, error) {
+	result, err := _m.Edges.IntegrationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryIntegration().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryMembership) DirectorySyncRun(ctx context.Context) (*DirectorySyncRun, error) {
+	result, err := _m.Edges.DirectorySyncRunOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectorySyncRun().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryMembership) DirectoryAccount(ctx context.Context) (*DirectoryAccount, error) {
+	result, err := _m.Edges.DirectoryAccountOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectoryAccount().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryMembership) DirectoryGroup(ctx context.Context) (*DirectoryGroup, error) {
+	result, err := _m.Edges.DirectoryGroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectoryGroup().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectoryMembership) Events(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EventOrder, where *EventWhereInput,
+) (*EventConnection, error) {
+	opts := []EventPaginateOption{
+		WithEventOrder(orderBy),
+		WithEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	if nodes, err := _m.NamedEvents(alias); err == nil || hasTotalCount {
+		pager, err := newEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &EventConnection{Edges: []*EventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectoryMembership) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectorySyncRun) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *DirectorySyncRun) Integration(ctx context.Context) (*Integration, error) {
+	result, err := _m.Edges.IntegrationOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryIntegration().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *DirectorySyncRun) DirectoryAccounts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryAccountOrder, where *DirectoryAccountWhereInput,
+) (*DirectoryAccountConnection, error) {
+	opts := []DirectoryAccountPaginateOption{
+		WithDirectoryAccountOrder(orderBy),
+		WithDirectoryAccountFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedDirectoryAccounts(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryAccountPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryAccountConnection{Edges: []*DirectoryAccountEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryAccounts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectorySyncRun) DirectoryGroups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryGroupOrder, where *DirectoryGroupWhereInput,
+) (*DirectoryGroupConnection, error) {
+	opts := []DirectoryGroupPaginateOption{
+		WithDirectoryGroupOrder(orderBy),
+		WithDirectoryGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedDirectoryGroups(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryGroupConnection{Edges: []*DirectoryGroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *DirectorySyncRun) DirectoryMemberships(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryMembershipOrder, where *DirectoryMembershipWhereInput,
+) (*DirectoryMembershipConnection, error) {
+	opts := []DirectoryMembershipPaginateOption{
+		WithDirectoryMembershipOrder(orderBy),
+		WithDirectoryMembershipFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedDirectoryMemberships(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryMemberships().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *DocumentData) Owner(ctx context.Context) (*Organization, error) {
@@ -3007,6 +3363,27 @@ func (_m *Finding) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Finding) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[19][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Finding) ControlMappings(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FindingControlOrder, where *FindingControlWhereInput,
 ) (*FindingControlConnection, error) {
@@ -3015,7 +3392,7 @@ func (_m *Finding) ControlMappings(
 		WithFindingControlFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[19][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[20][alias]
 	if nodes, err := _m.NamedControlMappings(alias); err == nil || hasTotalCount {
 		pager, err := newFindingControlPager(opts, last != nil)
 		if err != nil {
@@ -4116,6 +4493,90 @@ func (_m *Integration) ActionPlans(
 	return _m.QueryActionPlans().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Integration) DirectoryAccounts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryAccountOrder, where *DirectoryAccountWhereInput,
+) (*DirectoryAccountConnection, error) {
+	opts := []DirectoryAccountPaginateOption{
+		WithDirectoryAccountOrder(orderBy),
+		WithDirectoryAccountFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
+	if nodes, err := _m.NamedDirectoryAccounts(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryAccountPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryAccountConnection{Edges: []*DirectoryAccountEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryAccounts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Integration) DirectoryGroups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryGroupOrder, where *DirectoryGroupWhereInput,
+) (*DirectoryGroupConnection, error) {
+	opts := []DirectoryGroupPaginateOption{
+		WithDirectoryGroupOrder(orderBy),
+		WithDirectoryGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[11][alias]
+	if nodes, err := _m.NamedDirectoryGroups(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryGroupConnection{Edges: []*DirectoryGroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Integration) DirectoryMemberships(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryMembershipOrder, where *DirectoryMembershipWhereInput,
+) (*DirectoryMembershipConnection, error) {
+	opts := []DirectoryMembershipPaginateOption{
+		WithDirectoryMembershipOrder(orderBy),
+		WithDirectoryMembershipFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[12][alias]
+	if nodes, err := _m.NamedDirectoryMemberships(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryMemberships().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Integration) DirectorySyncRuns(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectorySyncRunOrder, where *DirectorySyncRunWhereInput,
+) (*DirectorySyncRunConnection, error) {
+	opts := []DirectorySyncRunPaginateOption{
+		WithDirectorySyncRunOrder(orderBy),
+		WithDirectorySyncRunFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
+	if nodes, err := _m.NamedDirectorySyncRuns(alias); err == nil || hasTotalCount {
+		pager, err := newDirectorySyncRunPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectorySyncRunConnection{Edges: []*DirectorySyncRunEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectorySyncRuns().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *InternalPolicy) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -4406,6 +4867,27 @@ func (_m *InternalPolicy) Comments(
 		return conn, nil
 	}
 	return _m.QueryComments().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *InternalPolicy) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[17][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Invite) Owner(ctx context.Context) (*Organization, error) {
@@ -6518,6 +7000,216 @@ func (_m *Organization) Vulnerabilities(
 	return _m.QueryVulnerabilities().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Organization) WorkflowDefinitions(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowDefinitionOrder, where *WorkflowDefinitionWhereInput,
+) (*WorkflowDefinitionConnection, error) {
+	opts := []WorkflowDefinitionPaginateOption{
+		WithWorkflowDefinitionOrder(orderBy),
+		WithWorkflowDefinitionFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[72][alias]
+	if nodes, err := _m.NamedWorkflowDefinitions(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowDefinitionPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowDefinitionConnection{Edges: []*WorkflowDefinitionEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowDefinitions().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) WorkflowInstances(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowInstanceOrder, where *WorkflowInstanceWhereInput,
+) (*WorkflowInstanceConnection, error) {
+	opts := []WorkflowInstancePaginateOption{
+		WithWorkflowInstanceOrder(orderBy),
+		WithWorkflowInstanceFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[73][alias]
+	if nodes, err := _m.NamedWorkflowInstances(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowInstancePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowInstanceConnection{Edges: []*WorkflowInstanceEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowInstances().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) WorkflowEvents(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowEventOrder, where *WorkflowEventWhereInput,
+) (*WorkflowEventConnection, error) {
+	opts := []WorkflowEventPaginateOption{
+		WithWorkflowEventOrder(orderBy),
+		WithWorkflowEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[74][alias]
+	if nodes, err := _m.NamedWorkflowEvents(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowEventConnection{Edges: []*WorkflowEventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) WorkflowAssignments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentOrder, where *WorkflowAssignmentWhereInput,
+) (*WorkflowAssignmentConnection, error) {
+	opts := []WorkflowAssignmentPaginateOption{
+		WithWorkflowAssignmentOrder(orderBy),
+		WithWorkflowAssignmentFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[75][alias]
+	if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowAssignmentPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowAssignmentConnection{Edges: []*WorkflowAssignmentEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowAssignments().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) WorkflowAssignmentTargets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentTargetOrder, where *WorkflowAssignmentTargetWhereInput,
+) (*WorkflowAssignmentTargetConnection, error) {
+	opts := []WorkflowAssignmentTargetPaginateOption{
+		WithWorkflowAssignmentTargetOrder(orderBy),
+		WithWorkflowAssignmentTargetFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[76][alias]
+	if nodes, err := _m.NamedWorkflowAssignmentTargets(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowAssignmentTargetPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowAssignmentTargetConnection{Edges: []*WorkflowAssignmentTargetEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowAssignmentTargets().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[77][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) DirectoryAccounts(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryAccountOrder, where *DirectoryAccountWhereInput,
+) (*DirectoryAccountConnection, error) {
+	opts := []DirectoryAccountPaginateOption{
+		WithDirectoryAccountOrder(orderBy),
+		WithDirectoryAccountFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[78][alias]
+	if nodes, err := _m.NamedDirectoryAccounts(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryAccountPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryAccountConnection{Edges: []*DirectoryAccountEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryAccounts().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) DirectoryGroups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryGroupOrder, where *DirectoryGroupWhereInput,
+) (*DirectoryGroupConnection, error) {
+	opts := []DirectoryGroupPaginateOption{
+		WithDirectoryGroupOrder(orderBy),
+		WithDirectoryGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[79][alias]
+	if nodes, err := _m.NamedDirectoryGroups(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryGroupConnection{Edges: []*DirectoryGroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) DirectoryMemberships(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectoryMembershipOrder, where *DirectoryMembershipWhereInput,
+) (*DirectoryMembershipConnection, error) {
+	opts := []DirectoryMembershipPaginateOption{
+		WithDirectoryMembershipOrder(orderBy),
+		WithDirectoryMembershipFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[80][alias]
+	if nodes, err := _m.NamedDirectoryMemberships(alias); err == nil || hasTotalCount {
+		pager, err := newDirectoryMembershipPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectoryMembershipConnection{Edges: []*DirectoryMembershipEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectoryMemberships().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Organization) DirectorySyncRuns(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*DirectorySyncRunOrder, where *DirectorySyncRunWhereInput,
+) (*DirectorySyncRunConnection, error) {
+	opts := []DirectorySyncRunPaginateOption{
+		WithDirectorySyncRunOrder(orderBy),
+		WithDirectorySyncRunFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[81][alias]
+	if nodes, err := _m.NamedDirectorySyncRuns(alias); err == nil || hasTotalCount {
+		pager, err := newDirectorySyncRunPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &DirectorySyncRunConnection{Edges: []*DirectorySyncRunEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryDirectorySyncRuns().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Organization) Members(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*OrgMembershipOrder, where *OrgMembershipWhereInput,
 ) (*OrgMembershipConnection, error) {
@@ -6526,7 +7218,7 @@ func (_m *Organization) Members(
 		WithOrgMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[72][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[82][alias]
 	if nodes, err := _m.NamedMembers(alias); err == nil || hasTotalCount {
 		pager, err := newOrgMembershipPager(opts, last != nil)
 		if err != nil {
@@ -9256,6 +9948,27 @@ func (_m *Task) Evidence(
 	return _m.QueryEvidence().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Task) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[16][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Template) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -10382,4 +11095,306 @@ func (_m *Webauthn) Owner(ctx context.Context) (*User, error) {
 		result, err = _m.QueryOwner().Only(ctx)
 	}
 	return result, err
+}
+
+func (_m *WorkflowAssignment) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowAssignment) WorkflowInstance(ctx context.Context) (*WorkflowInstance, error) {
+	result, err := _m.Edges.WorkflowInstanceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryWorkflowInstance().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *WorkflowAssignment) WorkflowAssignmentTargets(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentTargetOrder, where *WorkflowAssignmentTargetWhereInput,
+) (*WorkflowAssignmentTargetConnection, error) {
+	opts := []WorkflowAssignmentTargetPaginateOption{
+		WithWorkflowAssignmentTargetOrder(orderBy),
+		WithWorkflowAssignmentTargetFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedWorkflowAssignmentTargets(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowAssignmentTargetPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowAssignmentTargetConnection{Edges: []*WorkflowAssignmentTargetEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowAssignmentTargets().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowAssignment) User(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowAssignment) Group(ctx context.Context) (*Group, error) {
+	result, err := _m.Edges.GroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowAssignmentTarget) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowAssignmentTarget) WorkflowAssignment(ctx context.Context) (*WorkflowAssignment, error) {
+	result, err := _m.Edges.WorkflowAssignmentOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryWorkflowAssignment().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *WorkflowAssignmentTarget) User(ctx context.Context) (*User, error) {
+	result, err := _m.Edges.UserOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryUser().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowAssignmentTarget) Group(ctx context.Context) (*Group, error) {
+	result, err := _m.Edges.GroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowDefinition) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowDefinition) TagDefinitions(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TagDefinitionOrder, where *TagDefinitionWhereInput,
+) (*TagDefinitionConnection, error) {
+	opts := []TagDefinitionPaginateOption{
+		WithTagDefinitionOrder(orderBy),
+		WithTagDefinitionFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
+	if nodes, err := _m.NamedTagDefinitions(alias); err == nil || hasTotalCount {
+		pager, err := newTagDefinitionPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TagDefinitionConnection{Edges: []*TagDefinitionEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTagDefinitions().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowDefinition) Groups(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*GroupOrder, where *GroupWhereInput,
+) (*GroupConnection, error) {
+	opts := []GroupPaginateOption{
+		WithGroupOrder(orderBy),
+		WithGroupFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedGroups(alias); err == nil || hasTotalCount {
+		pager, err := newGroupPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &GroupConnection{Edges: []*GroupEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryGroups().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowEvent) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowEvent) WorkflowInstance(ctx context.Context) (*WorkflowInstance, error) {
+	result, err := _m.Edges.WorkflowInstanceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryWorkflowInstance().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *WorkflowInstance) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowInstance) WorkflowDefinition(ctx context.Context) (*WorkflowDefinition, error) {
+	result, err := _m.Edges.WorkflowDefinitionOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryWorkflowDefinition().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *WorkflowInstance) WorkflowAssignments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowAssignmentOrder, where *WorkflowAssignmentWhereInput,
+) (*WorkflowAssignmentConnection, error) {
+	opts := []WorkflowAssignmentPaginateOption{
+		WithWorkflowAssignmentOrder(orderBy),
+		WithWorkflowAssignmentFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
+	if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowAssignmentPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowAssignmentConnection{Edges: []*WorkflowAssignmentEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowAssignments().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowInstance) WorkflowEvents(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowEventOrder, where *WorkflowEventWhereInput,
+) (*WorkflowEventConnection, error) {
+	opts := []WorkflowEventPaginateOption{
+		WithWorkflowEventOrder(orderBy),
+		WithWorkflowEventFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedWorkflowEvents(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowEventPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowEventConnection{Edges: []*WorkflowEventEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowEvents().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowInstance) WorkflowObjectRefs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*WorkflowObjectRefOrder, where *WorkflowObjectRefWhereInput,
+) (*WorkflowObjectRefConnection, error) {
+	opts := []WorkflowObjectRefPaginateOption{
+		WithWorkflowObjectRefOrder(orderBy),
+		WithWorkflowObjectRefFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+		pager, err := newWorkflowObjectRefPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &WorkflowObjectRefConnection{Edges: []*WorkflowObjectRefEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryWorkflowObjectRefs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *WorkflowObjectRef) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) WorkflowInstance(ctx context.Context) (*WorkflowInstance, error) {
+	result, err := _m.Edges.WorkflowInstanceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryWorkflowInstance().Only(ctx)
+	}
+	return result, err
+}
+
+func (_m *WorkflowObjectRef) Control(ctx context.Context) (*Control, error) {
+	result, err := _m.Edges.ControlOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryControl().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Task(ctx context.Context) (*Task, error) {
+	result, err := _m.Edges.TaskOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryTask().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
+	result, err := _m.Edges.InternalPolicyOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryInternalPolicy().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) Finding(ctx context.Context) (*Finding, error) {
+	result, err := _m.Edges.FindingOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryFinding().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) DirectoryAccount(ctx context.Context) (*DirectoryAccount, error) {
+	result, err := _m.Edges.DirectoryAccountOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectoryAccount().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) DirectoryGroup(ctx context.Context) (*DirectoryGroup, error) {
+	result, err := _m.Edges.DirectoryGroupOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectoryGroup().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *WorkflowObjectRef) DirectoryMembership(ctx context.Context) (*DirectoryMembership, error) {
+	result, err := _m.Edges.DirectoryMembershipOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryDirectoryMembership().Only(ctx)
+	}
+	return result, MaskNotFound(err)
 }

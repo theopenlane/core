@@ -21,6 +21,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/directoryaccount"
+	"github.com/theopenlane/core/internal/ent/generated/directorygroup"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
@@ -64,6 +66,11 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 	"github.com/theopenlane/core/internal/ent/generated/webauthn"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignment"
+	"github.com/theopenlane/core/internal/ent/generated/workflowassignmenttarget"
+	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
+	"github.com/theopenlane/core/internal/ent/generated/workflowevent"
+	"github.com/theopenlane/core/internal/ent/generated/workflowinstance"
 )
 
 var (
@@ -652,6 +659,105 @@ func adminSearchDNSVerifications(ctx context.Context, query string, after *entgq
 				dnsverification.AcmeChallengePathContainsFold(query),           // search by AcmeChallengePath
 				dnsverification.ExpectedAcmeChallengeValueContainsFold(query),  // search by ExpectedAcmeChallengeValue
 				dnsverification.AcmeChallengeStatusReasonContainsFold(query),   // search by AcmeChallengeStatusReason
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDirectoryAccount searches for DirectoryAccount based on the query string looking for matches
+func searchDirectoryAccounts(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryAccountConnection, error) {
+	request := withTransactionalMutation(ctx).DirectoryAccount.Query().
+		Where(
+			directoryaccount.Or(
+				directoryaccount.DisplayID(query), // search equal to DisplayID
+				directoryaccount.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDirectoryAccount searches for DirectoryAccount based on the query string looking for matches
+func adminSearchDirectoryAccounts(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryAccountConnection, error) {
+	request := withTransactionalMutation(ctx).DirectoryAccount.Query().
+		Where(
+			directoryaccount.Or(
+				directoryaccount.ID(query),        // search equal to ID
+				directoryaccount.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				directoryaccount.OwnerIDContainsFold(query),            // search by OwnerID
+				directoryaccount.IntegrationIDContainsFold(query),      // search by IntegrationID
+				directoryaccount.DirectorySyncRunIDContainsFold(query), // search by DirectorySyncRunID
+				directoryaccount.ExternalIDContainsFold(query),         // search by ExternalID
+				directoryaccount.SecondaryKeyContainsFold(query),       // search by SecondaryKey
+				directoryaccount.CanonicalEmailContainsFold(query),     // search by CanonicalEmail
+				directoryaccount.DisplayNameContainsFold(query),        // search by DisplayName
+				directoryaccount.GivenNameContainsFold(query),          // search by GivenName
+				directoryaccount.FamilyNameContainsFold(query),         // search by FamilyName
+				directoryaccount.JobTitleContainsFold(query),           // search by JobTitle
+				directoryaccount.DepartmentContainsFold(query),         // search by Department
+				directoryaccount.OrganizationUnitContainsFold(query),   // search by OrganizationUnit
+				directoryaccount.LastSeenIPContainsFold(query),         // search by LastSeenIP
+				directoryaccount.ProfileHashContainsFold(query),        // search by ProfileHash
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(profile)::text LIKE $18", likeQuery)) // search by Profile
+				},
+				directoryaccount.SourceVersionContainsFold(query), // search by SourceVersion
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDirectoryGroup searches for DirectoryGroup based on the query string looking for matches
+func searchDirectoryGroups(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryGroupConnection, error) {
+	request := withTransactionalMutation(ctx).DirectoryGroup.Query().
+		Where(
+			directorygroup.Or(
+				directorygroup.DisplayID(query), // search equal to DisplayID
+				directorygroup.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchDirectoryGroup searches for DirectoryGroup based on the query string looking for matches
+func adminSearchDirectoryGroups(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryGroupConnection, error) {
+	request := withTransactionalMutation(ctx).DirectoryGroup.Query().
+		Where(
+			directorygroup.Or(
+				directorygroup.ID(query),        // search equal to ID
+				directorygroup.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				directorygroup.OwnerIDContainsFold(query),            // search by OwnerID
+				directorygroup.IntegrationIDContainsFold(query),      // search by IntegrationID
+				directorygroup.DirectorySyncRunIDContainsFold(query), // search by DirectorySyncRunID
+				directorygroup.ExternalIDContainsFold(query),         // search by ExternalID
+				directorygroup.EmailContainsFold(query),              // search by Email
+				directorygroup.DisplayNameContainsFold(query),        // search by DisplayName
+				directorygroup.ProfileHashContainsFold(query),        // search by ProfileHash
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(profile)::text LIKE $11", likeQuery)) // search by Profile
+				},
+				directorygroup.SourceVersionContainsFold(query), // search by SourceVersion
 			),
 		)
 
@@ -2591,6 +2697,231 @@ func adminSearchWebauthns(ctx context.Context, query string, after *entgql.Curso
 				func(s *sql.Selector) {
 					likeQuery := "%" + query + "%"
 					s.Where(sql.ExprP("(tags)::text LIKE $2", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowAssignment searches for WorkflowAssignment based on the query string looking for matches
+func searchWorkflowAssignments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowAssignment.Query().
+		Where(
+			workflowassignment.Or(
+				workflowassignment.DisplayID(query), // search equal to DisplayID
+				workflowassignment.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowAssignment searches for WorkflowAssignment based on the query string looking for matches
+func adminSearchWorkflowAssignments(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowAssignment.Query().
+		Where(
+			workflowassignment.Or(
+				workflowassignment.ID(query),        // search equal to ID
+				workflowassignment.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				workflowassignment.OwnerIDContainsFold(query),            // search by OwnerID
+				workflowassignment.WorkflowInstanceIDContainsFold(query), // search by WorkflowInstanceID
+				workflowassignment.AssignmentKeyContainsFold(query),      // search by AssignmentKey
+				workflowassignment.RoleContainsFold(query),               // search by Role
+				workflowassignment.LabelContainsFold(query),              // search by Label
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(metadata)::text LIKE $9", likeQuery)) // search by Metadata
+				},
+				workflowassignment.ActorUserIDContainsFold(query),  // search by ActorUserID
+				workflowassignment.ActorGroupIDContainsFold(query), // search by ActorGroupID
+				workflowassignment.NotesContainsFold(query),        // search by Notes
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowAssignmentTarget searches for WorkflowAssignmentTarget based on the query string looking for matches
+func searchWorkflowAssignmentTargets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentTargetConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.Or(
+				workflowassignmenttarget.DisplayID(query), // search equal to DisplayID
+				workflowassignmenttarget.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowAssignmentTarget searches for WorkflowAssignmentTarget based on the query string looking for matches
+func adminSearchWorkflowAssignmentTargets(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentTargetConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowAssignmentTarget.Query().
+		Where(
+			workflowassignmenttarget.Or(
+				workflowassignmenttarget.ID(query),        // search equal to ID
+				workflowassignmenttarget.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				workflowassignmenttarget.OwnerIDContainsFold(query),              // search by OwnerID
+				workflowassignmenttarget.WorkflowAssignmentIDContainsFold(query), // search by WorkflowAssignmentID
+				workflowassignmenttarget.TargetUserIDContainsFold(query),         // search by TargetUserID
+				workflowassignmenttarget.TargetGroupIDContainsFold(query),        // search by TargetGroupID
+				workflowassignmenttarget.ResolverKeyContainsFold(query),          // search by ResolverKey
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowDefinition searches for WorkflowDefinition based on the query string looking for matches
+func searchWorkflowDefinitions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowDefinitionConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowDefinition.Query().
+		Where(
+			workflowdefinition.Or(
+				workflowdefinition.DisplayID(query), // search equal to DisplayID
+				workflowdefinition.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowDefinition searches for WorkflowDefinition based on the query string looking for matches
+func adminSearchWorkflowDefinitions(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowDefinitionConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowDefinition.Query().
+		Where(
+			workflowdefinition.Or(
+				workflowdefinition.ID(query),        // search equal to ID
+				workflowdefinition.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				workflowdefinition.OwnerIDContainsFold(query),          // search by OwnerID
+				workflowdefinition.InternalNotesContainsFold(query),    // search by InternalNotes
+				workflowdefinition.SystemInternalIDContainsFold(query), // search by SystemInternalID
+				workflowdefinition.NameContainsFold(query),             // search by Name
+				workflowdefinition.DescriptionContainsFold(query),      // search by Description
+				workflowdefinition.SchemaTypeContainsFold(query),       // search by SchemaType
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(trigger_operations)::text LIKE $10", likeQuery)) // search by TriggerOperations
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(trigger_fields)::text LIKE $11", likeQuery)) // search by TriggerFields
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(definition_json)::text LIKE $12", likeQuery)) // search by DefinitionJSON
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tracked_fields)::text LIKE $13", likeQuery)) // search by TrackedFields
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowEvent searches for WorkflowEvent based on the query string looking for matches
+func searchWorkflowEvents(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowEventConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowEvent.Query().
+		Where(
+			workflowevent.Or(
+				workflowevent.DisplayID(query), // search equal to DisplayID
+				workflowevent.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowEvent searches for WorkflowEvent based on the query string looking for matches
+func adminSearchWorkflowEvents(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowEventConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowEvent.Query().
+		Where(
+			workflowevent.Or(
+				workflowevent.ID(query),        // search equal to ID
+				workflowevent.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				workflowevent.OwnerIDContainsFold(query),            // search by OwnerID
+				workflowevent.WorkflowInstanceIDContainsFold(query), // search by WorkflowInstanceID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(payload)::text LIKE $6", likeQuery)) // search by Payload
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowInstance searches for WorkflowInstance based on the query string looking for matches
+func searchWorkflowInstances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowInstanceConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowInstance.Query().
+		Where(
+			workflowinstance.Or(
+				workflowinstance.DisplayID(query), // search equal to DisplayID
+				workflowinstance.ID(query),        // search equal to ID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchWorkflowInstance searches for WorkflowInstance based on the query string looking for matches
+func adminSearchWorkflowInstances(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowInstanceConnection, error) {
+	request := withTransactionalMutation(ctx).WorkflowInstance.Query().
+		Where(
+			workflowinstance.Or(
+				workflowinstance.ID(query),        // search equal to ID
+				workflowinstance.DisplayID(query), // search equal to DisplayID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(tags)::text LIKE $3", likeQuery)) // search by Tags
+				},
+				workflowinstance.OwnerIDContainsFold(query),              // search by OwnerID
+				workflowinstance.WorkflowDefinitionIDContainsFold(query), // search by WorkflowDefinitionID
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(context)::text LIKE $6", likeQuery)) // search by Context
+				},
+				func(s *sql.Selector) {
+					likeQuery := "%" + query + "%"
+					s.Where(sql.ExprP("(definition_snapshot)::text LIKE $7", likeQuery)) // search by DefinitionSnapshot
 				},
 			),
 		)

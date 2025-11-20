@@ -67,3 +67,19 @@ scalar SSOAuthorizationMap
 CredentialSet is a json of of credential keys that are used to authenticate to a third party
 """
 scalar CredentialSet
+"""
+WorkflowDefinitionDocument captures triggers, conditions, actions, and selectors that define a workflow.
+"""
+scalar WorkflowDefinitionDocument
+"""
+WorkflowDefinitionSchema is a JSON schema describing the shape of workflow definitions for validation.
+"""
+scalar WorkflowDefinitionSchema
+"""
+WorkflowInstanceContext contains runtime context for a workflow instance including assignments and object info.
+"""
+scalar WorkflowInstanceContext
+"""
+WorkflowEventPayload stores payloads emitted by workflow events and actions.
+"""
+scalar WorkflowEventPayload

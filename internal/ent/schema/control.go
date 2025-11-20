@@ -124,6 +124,11 @@ func (c Control) Edges() []ent.Edge {
 				entgql.Skip(entgql.SkipAll),
 			},
 		}),
+		edgeFromWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: WorkflowObjectRef{},
+			ref:        "control",
+		}),
 	}
 }
 

@@ -300,6 +300,56 @@ extend type Query{
         last: Int
     ): DNSVerificationConnection
     """
+    Search across DirectoryAccount objects
+    """
+    directoryAccountSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryAccountConnection
+    """
+    Search across DirectoryGroup objects
+    """
+    directoryGroupSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): DirectoryGroupConnection
+    """
     Search across DocumentData objects
     """
     documentDataSearch(
@@ -1349,6 +1399,131 @@ extend type Query{
         """
         last: Int
     ): WebauthnConnection
+    """
+    Search across WorkflowAssignment objects
+    """
+    workflowAssignmentSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentConnection
+    """
+    Search across WorkflowAssignmentTarget objects
+    """
+    workflowAssignmentTargetSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowAssignmentTargetConnection
+    """
+    Search across WorkflowDefinition objects
+    """
+    workflowDefinitionSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowDefinitionConnection
+    """
+    Search across WorkflowEvent objects
+    """
+    workflowEventSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowEventConnection
+    """
+    Search across WorkflowInstance objects
+    """
+    workflowInstanceSearch(
+        """
+        Query string to search across objects
+        """
+        query: String!
+        """
+        Returns the elements in the list that come after the specified cursor.
+        """
+        after: Cursor
+        """
+        Returns the first _n_ elements from the list.
+        """
+        first: Int
+        """
+        Returns the elements in the list that come before the specified cursor.
+        """
+        before: Cursor
+        """
+        Returns the last _n_ elements from the list.
+        """
+        last: Int
+    ): WorkflowInstanceConnection
 }
 type SearchResults{
   """
@@ -1371,6 +1546,8 @@ type SearchResults{
   customDomains: CustomDomainConnection
   customTypeEnums: CustomTypeEnumConnection
   dnsVerifications: DNSVerificationConnection
+  directoryAccounts: DirectoryAccountConnection
+  directoryGroups: DirectoryGroupConnection
   documentData: DocumentDataConnection
   entities: EntityConnection
   entityTypes: EntityTypeConnection
@@ -1413,6 +1590,11 @@ type SearchResults{
   userSettings: UserSettingConnection
   vulnerabilities: VulnerabilityConnection
   webauthns: WebauthnConnection
+  workflowAssignments: WorkflowAssignmentConnection
+  workflowAssignmentTargets: WorkflowAssignmentTargetConnection
+  workflowDefinitions: WorkflowDefinitionConnection
+  workflowEvents: WorkflowEventConnection
+  workflowInstances: WorkflowInstanceConnection
 }
 
 extend type Query{

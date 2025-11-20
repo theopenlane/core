@@ -91,6 +91,10 @@ func (i Integration) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(i, Remediation{}),
 		defaultEdgeToWithPagination(i, Task{}),
 		defaultEdgeToWithPagination(i, ActionPlan{}),
+		defaultEdgeToWithPagination(i, DirectoryAccount{}),
+		defaultEdgeToWithPagination(i, DirectoryGroup{}),
+		defaultEdgeToWithPagination(i, DirectoryMembership{}),
+		defaultEdgeToWithPagination(i, DirectorySyncRun{}),
 	}
 }
 
