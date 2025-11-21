@@ -111,6 +111,7 @@ type OrganizationQuery struct {
 	withScheduledJobCreators               *GroupQuery
 	withStandardCreators                   *GroupQuery
 	withTemplateCreators                   *GroupQuery
+	withSubprocessorCreators               *GroupQuery
 	withParent                             *OrganizationQuery
 	withChildren                           *OrganizationQuery
 	withSetting                            *OrganizationSettingQuery
@@ -201,6 +202,7 @@ type OrganizationQuery struct {
 	withNamedScheduledJobCreators          map[string]*GroupQuery
 	withNamedStandardCreators              map[string]*GroupQuery
 	withNamedTemplateCreators              map[string]*GroupQuery
+	withNamedSubprocessorCreators          map[string]*GroupQuery
 	withNamedChildren                      map[string]*OrganizationQuery
 	withNamedPersonalAccessTokens          map[string]*PersonalAccessTokenQuery
 	withNamedAPITokens                     map[string]*APITokenQuery
@@ -648,6 +650,31 @@ func (_q *OrganizationQuery) QueryTemplateCreators() *GroupQuery {
 			sqlgraph.From(organization.Table, organization.FieldID, selector),
 			sqlgraph.To(group.Table, group.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, organization.TemplateCreatorsTable, organization.TemplateCreatorsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QuerySubprocessorCreators chains the current query on the "subprocessor_creators" edge.
+func (_q *OrganizationQuery) QuerySubprocessorCreators() *GroupQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(organization.Table, organization.FieldID, selector),
+			sqlgraph.To(group.Table, group.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, organization.SubprocessorCreatorsTable, organization.SubprocessorCreatorsColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Group
@@ -2714,6 +2741,7 @@ func (_q *OrganizationQuery) Clone() *OrganizationQuery {
 		withScheduledJobCreators:          _q.withScheduledJobCreators.Clone(),
 		withStandardCreators:              _q.withStandardCreators.Clone(),
 		withTemplateCreators:              _q.withTemplateCreators.Clone(),
+		withSubprocessorCreators:          _q.withSubprocessorCreators.Clone(),
 		withParent:                        _q.withParent.Clone(),
 		withChildren:                      _q.withChildren.Clone(),
 		withSetting:                       _q.withSetting.Clone(),
@@ -2946,6 +2974,17 @@ func (_q *OrganizationQuery) WithTemplateCreators(opts ...func(*GroupQuery)) *Or
 		opt(query)
 	}
 	_q.withTemplateCreators = query
+	return _q
+}
+
+// WithSubprocessorCreators tells the query-builder to eager-load the nodes that are connected to
+// the "subprocessor_creators" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithSubprocessorCreators(opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withSubprocessorCreators = query
 	return _q
 }
 
@@ -3847,7 +3886,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Organization{}
 		_spec       = _q.querySpec()
-		loadedTypes = [88]bool{
+		loadedTypes = [89]bool{
 			_q.withControlCreators != nil,
 			_q.withControlImplementationCreators != nil,
 			_q.withControlObjectiveCreators != nil,
@@ -3862,6 +3901,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withScheduledJobCreators != nil,
 			_q.withStandardCreators != nil,
 			_q.withTemplateCreators != nil,
+			_q.withSubprocessorCreators != nil,
 			_q.withParent != nil,
 			_q.withChildren != nil,
 			_q.withSetting != nil,
@@ -4066,6 +4106,15 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadTemplateCreators(ctx, query, nodes,
 			func(n *Organization) { n.Edges.TemplateCreators = []*Group{} },
 			func(n *Organization, e *Group) { n.Edges.TemplateCreators = append(n.Edges.TemplateCreators, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withSubprocessorCreators; query != nil {
+		if err := _q.loadSubprocessorCreators(ctx, query, nodes,
+			func(n *Organization) { n.Edges.SubprocessorCreators = []*Group{} },
+			func(n *Organization, e *Group) {
+				n.Edges.SubprocessorCreators = append(n.Edges.SubprocessorCreators, e)
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -4717,6 +4766,13 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 		if err := _q.loadTemplateCreators(ctx, query, nodes,
 			func(n *Organization) { n.appendNamedTemplateCreators(name) },
 			func(n *Organization, e *Group) { n.appendNamedTemplateCreators(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedSubprocessorCreators {
+		if err := _q.loadSubprocessorCreators(ctx, query, nodes,
+			func(n *Organization) { n.appendNamedSubprocessorCreators(name) },
+			func(n *Organization, e *Group) { n.appendNamedSubprocessorCreators(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -5658,6 +5714,37 @@ func (_q *OrganizationQuery) loadTemplateCreators(ctx context.Context, query *Gr
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "organization_template_creators" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (_q *OrganizationQuery) loadSubprocessorCreators(ctx context.Context, query *GroupQuery, nodes []*Organization, init func(*Organization), assign func(*Organization, *Group)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Organization)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Group(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(organization.SubprocessorCreatorsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.organization_subprocessor_creators
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "organization_subprocessor_creators" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "organization_subprocessor_creators" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}
@@ -8340,6 +8427,20 @@ func (_q *OrganizationQuery) WithNamedTemplateCreators(name string, opts ...func
 		_q.withNamedTemplateCreators = make(map[string]*GroupQuery)
 	}
 	_q.withNamedTemplateCreators[name] = query
+	return _q
+}
+
+// WithNamedSubprocessorCreators tells the query-builder to eager-load the nodes that are connected to the "subprocessor_creators"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *OrganizationQuery) WithNamedSubprocessorCreators(name string, opts ...func(*GroupQuery)) *OrganizationQuery {
+	query := (&GroupClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedSubprocessorCreators == nil {
+		_q.withNamedSubprocessorCreators = make(map[string]*GroupQuery)
+	}
+	_q.withNamedSubprocessorCreators[name] = query
 	return _q
 }
 

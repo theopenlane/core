@@ -203,16 +203,16 @@ func (_c *SubprocessorCreate) SetNillableLogoRemoteURL(v *string) *SubprocessorC
 	return _c
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_c *SubprocessorCreate) SetLogoLocalFileID(v string) *SubprocessorCreate {
-	_c.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *SubprocessorCreate) SetLogoFileID(v string) *SubprocessorCreate {
+	_c.mutation.SetLogoFileID(v)
 	return _c
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_c *SubprocessorCreate) SetNillableLogoLocalFileID(v *string) *SubprocessorCreate {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *SubprocessorCreate) SetNillableLogoFileID(v *string) *SubprocessorCreate {
 	if v != nil {
-		_c.SetLogoLocalFileID(*v)
+		_c.SetLogoFileID(*v)
 	}
 	return _c
 }
@@ -234,35 +234,6 @@ func (_c *SubprocessorCreate) SetNillableID(v *string) *SubprocessorCreate {
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_c *SubprocessorCreate) SetOwner(v *Organization) *SubprocessorCreate {
 	return _c.SetOwnerID(v.ID)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *SubprocessorCreate) AddFileIDs(ids ...string) *SubprocessorCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *SubprocessorCreate) AddFiles(v ...*File) *SubprocessorCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_c *SubprocessorCreate) SetLogoFileID(id string) *SubprocessorCreate {
-	_c.mutation.SetLogoFileID(id)
-	return _c
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_c *SubprocessorCreate) SetNillableLogoFileID(id *string) *SubprocessorCreate {
-	if id != nil {
-		_c = _c.SetLogoFileID(*id)
-	}
-	return _c
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
@@ -475,23 +446,6 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 		_node.OwnerID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.SubprocessorFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -507,7 +461,7 @@ func (_c *SubprocessorCreate) createSpec() (*Subprocessor, *sqlgraph.CreateSpec)
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
-		_node.LogoLocalFileID = &nodes[0]
+		_node.LogoFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterSubprocessorsIDs(); len(nodes) > 0 {

@@ -234,7 +234,6 @@ type SchemaConfig struct {
 	SubcontrolControlImplementations   string // Subcontrol-control_implementations->ControlImplementation table.
 	SubcontrolHistory                  string // SubcontrolHistory table.
 	Subprocessor                       string // Subprocessor table.
-	SubprocessorFiles                  string // Subprocessor-files->File table.
 	SubprocessorHistory                string // SubprocessorHistory table.
 	Subscriber                         string // Subscriber table.
 	SubscriberEvents                   string // Subscriber-events->Event table.
@@ -262,12 +261,10 @@ type SchemaConfig struct {
 	User                               string // User table.
 	UserGroups                         string // User-groups->Group table.
 	UserOrganizations                  string // User-organizations->Organization table.
-	UserFiles                          string // User-files->File table.
 	UserEvents                         string // User-events->Event table.
 	UserPrograms                       string // User-programs->Program table.
 	UserHistory                        string // UserHistory table.
 	UserSetting                        string // UserSetting table.
-	UserSettingFiles                   string // UserSetting-files->File table.
 	UserSettingHistory                 string // UserSettingHistory table.
 	Vulnerability                      string // Vulnerability table.
 	VulnerabilityActionPlans           string // Vulnerability-action_plans->ActionPlan table.

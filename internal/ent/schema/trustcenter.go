@@ -23,7 +23,6 @@ import (
 const (
 	trustCenterNameMaxLen        = 160
 	trustCenterDescriptionMaxLen = 1024
-	trustCenterURLMaxLen         = 2048
 )
 
 // TrustCenter holds the schema definition for the TrustCenter entity

@@ -682,11 +682,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "file": {"user": {
-	ObjectType:      "user",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "organization": {
+}, "file": {"organization": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
@@ -700,10 +696,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "entity": {
 	ObjectType:      "entity",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "user_setting": {
-	ObjectType:      "user_setting",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "organization_setting": {
@@ -732,10 +724,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "trust_center_setting": {
 	ObjectType:      "trust_center_setting",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "subprocessor": {
-	ObjectType:      "subprocessor",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "integrations": {
@@ -1503,6 +1491,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
 }, "template_creators": {
+	ObjectType:      "group",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
+}, "subprocessor_creators": {
 	ObjectType:      "group",
 	SkipEditCheck:   true,
 	CheckViewAccess: true,
@@ -2365,10 +2357,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "owner",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
-}, "files": {
-	ObjectType:      "file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "logo_file": {
 	ObjectType:      "logo_file",
 	SkipEditCheck:   false,
@@ -2621,10 +2609,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "webauthn",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
-}, "files": {
-	ObjectType:      "file",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
 }, "avatar_file": {
 	ObjectType:      "avatar_file",
 	SkipEditCheck:   false,
@@ -2689,10 +2673,6 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "default_org": {
 	ObjectType:      "default_org",
 	SkipEditCheck:   true,
-	CheckViewAccess: false,
-}, "files": {
-	ObjectType:      "file",
-	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
 }, "vulnerability": {"owner": {

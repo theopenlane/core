@@ -1907,35 +1907,6 @@ func LastAccessedAtNotNil() predicate.File {
 	return predicate.File(sql.FieldNotNull(FieldLastAccessedAt))
 }
 
-// HasUser applies the HasEdge predicate on the "user" edge.
-func HasUser() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasUserWith applies the HasEdge predicate on the "user" edge with a given conditions (other predicates).
-func HasUserWith(preds ...predicate.User) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newUserStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.User
-		step.Edge.Schema = schemaConfig.UserFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
 // HasOrganization applies the HasEdge predicate on the "organization" edge.
 func HasOrganization() predicate.File {
 	return predicate.File(func(s *sql.Selector) {
@@ -2044,35 +2015,6 @@ func HasEntityWith(preds ...predicate.Entity) predicate.File {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Entity
 		step.Edge.Schema = schemaConfig.EntityFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasUserSetting applies the HasEdge predicate on the "user_setting" edge.
-func HasUserSetting() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, UserSettingTable, UserSettingPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.UserSetting
-		step.Edge.Schema = schemaConfig.UserSettingFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasUserSettingWith applies the HasEdge predicate on the "user_setting" edge with a given conditions (other predicates).
-func HasUserSettingWith(preds ...predicate.UserSetting) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newUserSettingStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.UserSetting
-		step.Edge.Schema = schemaConfig.UserSettingFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)
@@ -2276,35 +2218,6 @@ func HasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) predicate.
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterSetting
 		step.Edge.Schema = schemaConfig.TrustCenterSettingFiles
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasSubprocessor applies the HasEdge predicate on the "subprocessor" edge.
-func HasSubprocessor() predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, SubprocessorTable, SubprocessorPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.SubprocessorFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasSubprocessorWith applies the HasEdge predicate on the "subprocessor" edge with a given conditions (other predicates).
-func HasSubprocessorWith(preds ...predicate.Subprocessor) predicate.File {
-	return predicate.File(func(s *sql.Selector) {
-		step := newSubprocessorStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.Subprocessor
-		step.Edge.Schema = schemaConfig.SubprocessorFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

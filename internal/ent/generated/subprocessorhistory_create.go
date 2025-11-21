@@ -235,16 +235,16 @@ func (_c *SubprocessorHistoryCreate) SetNillableLogoRemoteURL(v *string) *Subpro
 	return _c
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_c *SubprocessorHistoryCreate) SetLogoLocalFileID(v string) *SubprocessorHistoryCreate {
-	_c.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *SubprocessorHistoryCreate) SetLogoFileID(v string) *SubprocessorHistoryCreate {
+	_c.mutation.SetLogoFileID(v)
 	return _c
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_c *SubprocessorHistoryCreate) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryCreate {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *SubprocessorHistoryCreate) SetNillableLogoFileID(v *string) *SubprocessorHistoryCreate {
 	if v != nil {
-		_c.SetLogoLocalFileID(*v)
+		_c.SetLogoFileID(*v)
 	}
 	return _c
 }
@@ -459,9 +459,9 @@ func (_c *SubprocessorHistoryCreate) createSpec() (*SubprocessorHistory, *sqlgra
 		_spec.SetField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString, value)
 		_node.LogoRemoteURL = &value
 	}
-	if value, ok := _c.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
-		_node.LogoLocalFileID = &value
+	if value, ok := _c.mutation.LogoFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoFileID, field.TypeString, value)
+		_node.LogoFileID = &value
 	}
 	return _node, _spec
 }

@@ -246,7 +246,6 @@ func (u User) Edges() []ent.Edge {
 			cascadeDeleteOwner: true,
 		}),
 
-		defaultEdgeToWithPagination(u, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: u,
 			name:       "avatar_file",

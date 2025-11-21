@@ -2042,7 +2042,6 @@ type ComplexityRoot struct {
 		StorageScheme         func(childComplexity int) int
 		StorageVolume         func(childComplexity int) int
 		StoreKey              func(childComplexity int) int
-		Subprocessor          func(childComplexity int) int
 		SystemInternalID      func(childComplexity int) int
 		SystemOwned           func(childComplexity int) int
 		Tags                  func(childComplexity int) int
@@ -2051,8 +2050,6 @@ type ComplexityRoot struct {
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
-		User                  func(childComplexity int) int
-		UserSetting           func(childComplexity int) int
 	}
 
 	FileConnection struct {
@@ -4195,6 +4192,7 @@ type ComplexityRoot struct {
 		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
 		StripeCustomerID              func(childComplexity int) int
 		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SubprocessorCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
 		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
 		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
 		TagDefinitions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
@@ -6038,11 +6036,10 @@ type ComplexityRoot struct {
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
 		Description              func(childComplexity int) int
-		Files                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                       func(childComplexity int) int
 		InternalNotes            func(childComplexity int) int
 		LogoFile                 func(childComplexity int) int
-		LogoLocalFileID          func(childComplexity int) int
+		LogoFileID               func(childComplexity int) int
 		LogoRemoteURL            func(childComplexity int) int
 		Name                     func(childComplexity int) int
 		Owner                    func(childComplexity int) int
@@ -6089,7 +6086,7 @@ type ComplexityRoot struct {
 		HistoryTime      func(childComplexity int) int
 		ID               func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
-		LogoLocalFileID  func(childComplexity int) int
+		LogoFileID       func(childComplexity int) int
 		LogoRemoteURL    func(childComplexity int) int
 		Name             func(childComplexity int) int
 		Operation        func(childComplexity int) int
@@ -6949,7 +6946,6 @@ type ComplexityRoot struct {
 		DisplayName           func(childComplexity int) int
 		Email                 func(childComplexity int) int
 		Events                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Files                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		FirstName             func(childComplexity int) int
 		GroupMemberships      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
 		Groups                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
@@ -7048,7 +7044,6 @@ type ComplexityRoot struct {
 		CreatedBy         func(childComplexity int) int
 		DefaultOrg        func(childComplexity int) int
 		EmailConfirmed    func(childComplexity int) int
-		Files             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID                func(childComplexity int) int
 		IsTfaEnabled      func(childComplexity int) int
 		IsWebauthnAllowed func(childComplexity int) int
@@ -17408,13 +17403,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.StoreKey(childComplexity), true
 
-	case "File.subprocessor":
-		if e.complexity.File.Subprocessor == nil {
-			break
-		}
-
-		return e.complexity.File.Subprocessor(childComplexity), true
-
 	case "File.systemInternalID":
 		if e.complexity.File.SystemInternalID == nil {
 			break
@@ -17470,20 +17458,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.File.UpdatedBy(childComplexity), true
-
-	case "File.user":
-		if e.complexity.File.User == nil {
-			break
-		}
-
-		return e.complexity.File.User(childComplexity), true
-
-	case "File.userSetting":
-		if e.complexity.File.UserSetting == nil {
-			break
-		}
-
-		return e.complexity.File.UserSetting(childComplexity), true
 
 	case "FileConnection.edges":
 		if e.complexity.FileConnection.Edges == nil {
@@ -31242,6 +31216,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Organization.Subcontrols(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.SubcontrolOrder), args["where"].(*generated.SubcontrolWhereInput)), true
 
+	case "Organization.subprocessorCreators":
+		if e.complexity.Organization.SubprocessorCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_subprocessorCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.SubprocessorCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
 	case "Organization.subprocessors":
 		if e.complexity.Organization.Subprocessors == nil {
 			break
@@ -43271,18 +43257,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subprocessor.Description(childComplexity), true
 
-	case "Subprocessor.files":
-		if e.complexity.Subprocessor.Files == nil {
-			break
-		}
-
-		args, err := ec.field_Subprocessor_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Subprocessor.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
-
 	case "Subprocessor.id":
 		if e.complexity.Subprocessor.ID == nil {
 			break
@@ -43304,12 +43278,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Subprocessor.LogoFile(childComplexity), true
 
-	case "Subprocessor.logoLocalFileID":
-		if e.complexity.Subprocessor.LogoLocalFileID == nil {
+	case "Subprocessor.logoFileID":
+		if e.complexity.Subprocessor.LogoFileID == nil {
 			break
 		}
 
-		return e.complexity.Subprocessor.LogoLocalFileID(childComplexity), true
+		return e.complexity.Subprocessor.LogoFileID(childComplexity), true
 
 	case "Subprocessor.logoRemoteURL":
 		if e.complexity.Subprocessor.LogoRemoteURL == nil {
@@ -43491,12 +43465,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorHistory.InternalNotes(childComplexity), true
 
-	case "SubprocessorHistory.logoLocalFileID":
-		if e.complexity.SubprocessorHistory.LogoLocalFileID == nil {
+	case "SubprocessorHistory.logoFileID":
+		if e.complexity.SubprocessorHistory.LogoFileID == nil {
 			break
 		}
 
-		return e.complexity.SubprocessorHistory.LogoLocalFileID(childComplexity), true
+		return e.complexity.SubprocessorHistory.LogoFileID(childComplexity), true
 
 	case "SubprocessorHistory.logoRemoteURL":
 		if e.complexity.SubprocessorHistory.LogoRemoteURL == nil {
@@ -47273,18 +47247,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.User.Events(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.EventOrder), args["where"].(*generated.EventWhereInput)), true
 
-	case "User.files":
-		if e.complexity.User.Files == nil {
-			break
-		}
-
-		args, err := ec.field_User_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.User.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
-
 	case "User.firstName":
 		if e.complexity.User.FirstName == nil {
 			break
@@ -47836,18 +47798,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.UserSetting.EmailConfirmed(childComplexity), true
-
-	case "UserSetting.files":
-		if e.complexity.UserSetting.Files == nil {
-			break
-		}
-
-		args, err := ec.field_UserSetting_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.UserSetting.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
 
 	case "UserSetting.id":
 		if e.complexity.UserSetting.ID == nil {
@@ -66809,12 +66759,10 @@ input CreateFileInput {
   """
   storageProvider: String
   lastAccessedAt: Time
-  userIDs: [ID!]
   organizationIDs: [ID!]
   groupIDs: [ID!]
   contactIDs: [ID!]
   entityIDs: [ID!]
-  userSettingIDs: [ID!]
   organizationSettingIDs: [ID!]
   templateIDs: [ID!]
   documentIDs: [ID!]
@@ -66822,7 +66770,6 @@ input CreateFileInput {
   evidenceIDs: [ID!]
   eventIDs: [ID!]
   trustCenterSettingIDs: [ID!]
-  subprocessorIDs: [ID!]
   integrationIDs: [ID!]
   secretIDs: [ID!]
 }
@@ -67703,6 +67650,7 @@ input CreateOrganizationInput {
   scheduledJobCreatorIDs: [ID!]
   standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
+  subprocessorCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -68692,7 +68640,6 @@ input CreateSubprocessorInput {
   """
   logoRemoteURL: String
   ownerID: ID
-  fileIDs: [ID!]
   logoFileID: ID
   trustCenterSubprocessorIDs: [ID!]
 }
@@ -69124,7 +69071,6 @@ input CreateUserInput {
   groupIDs: [ID!]
   organizationIDs: [ID!]
   webauthnIDs: [ID!]
-  fileIDs: [ID!]
   avatarFileID: ID
   eventIDs: [ID!]
   actionPlanIDs: [ID!]
@@ -69171,7 +69117,6 @@ input CreateUserSettingInput {
   isTfaEnabled: Boolean
   userID: ID
   defaultOrgID: ID
-  fileIDs: [ID!]
 }
 """
 CreateVulnerabilityInput is used for create Vulnerability object.
@@ -79325,6 +79270,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.Exp
   REMEDIATION
   REVIEW
   RISK
+  SUBPROCESSOR
   SUBSCRIBER
   TASK
   VULNERABILITY
@@ -79628,7 +79574,6 @@ type File implements Node {
   """
   storageProvider: String
   lastAccessedAt: Time
-  user: [User!]
   organization: [Organization!]
   groups(
     """
@@ -79663,7 +79608,6 @@ type File implements Node {
   ): GroupConnection!
   contact: [Contact!]
   entity: [Entity!]
-  userSetting: [UserSetting!]
   organizationSetting: [OrganizationSetting!]
   template: [Template!]
   document: [DocumentData!]
@@ -79701,7 +79645,6 @@ type File implements Node {
     where: EventWhereInput
   ): EventConnection!
   trustCenterSetting: [TrustCenterSetting!]
-  subprocessor: [Subprocessor!]
   integrations(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -80788,11 +80731,6 @@ input FileWhereInput {
   lastAccessedAtIsNil: Boolean
   lastAccessedAtNotNil: Boolean
   """
-  user edge predicates
-  """
-  hasUser: Boolean
-  hasUserWith: [UserWhereInput!]
-  """
   organization edge predicates
   """
   hasOrganization: Boolean
@@ -80812,11 +80750,6 @@ input FileWhereInput {
   """
   hasEntity: Boolean
   hasEntityWith: [EntityWhereInput!]
-  """
-  user_setting edge predicates
-  """
-  hasUserSetting: Boolean
-  hasUserSettingWith: [UserSettingWhereInput!]
   """
   organization_setting edge predicates
   """
@@ -80852,11 +80785,6 @@ input FileWhereInput {
   """
   hasTrustCenterSetting: Boolean
   hasTrustCenterSettingWith: [TrustCenterSettingWhereInput!]
-  """
-  subprocessor edge predicates
-  """
-  hasSubprocessor: Boolean
-  hasSubprocessorWith: [SubprocessorWhereInput!]
   """
   integrations edge predicates
   """
@@ -97282,6 +97210,37 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  subprocessorCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   parent: Organization
   children(
     """
@@ -101138,6 +101097,11 @@ input OrganizationWhereInput {
   """
   hasTemplateCreators: Boolean
   hasTemplateCreatorsWith: [GroupWhereInput!]
+  """
+  subprocessor_creators edge predicates
+  """
+  hasSubprocessorCreators: Boolean
+  hasSubprocessorCreatorsWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -119950,39 +119914,8 @@ type Subprocessor implements Node {
   """
   The local logo file id, takes precedence over the logo remote URL
   """
-  logoLocalFileID: ID
+  logoFileID: ID
   owner: Organization
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
   logoFile: File
   trustCenterSubprocessors(
     """
@@ -120090,7 +120023,7 @@ type SubprocessorHistory implements Node {
   """
   The local logo file id, takes precedence over the logo remote URL
   """
-  logoLocalFileID: String
+  logoFileID: String
 }
 """
 A connection to a list of items.
@@ -120385,23 +120318,23 @@ input SubprocessorHistoryWhereInput {
   logoRemoteURLEqualFold: String
   logoRemoteURLContainsFold: String
   """
-  logo_local_file_id field predicates
+  logo_file_id field predicates
   """
-  logoLocalFileID: String
-  logoLocalFileIDNEQ: String
-  logoLocalFileIDIn: [String!]
-  logoLocalFileIDNotIn: [String!]
-  logoLocalFileIDGT: String
-  logoLocalFileIDGTE: String
-  logoLocalFileIDLT: String
-  logoLocalFileIDLTE: String
-  logoLocalFileIDContains: String
-  logoLocalFileIDHasPrefix: String
-  logoLocalFileIDHasSuffix: String
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: String
-  logoLocalFileIDContainsFold: String
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
 }
 """
 Ordering options for Subprocessor connections
@@ -120621,33 +120554,28 @@ input SubprocessorWhereInput {
   logoRemoteURLEqualFold: String
   logoRemoteURLContainsFold: String
   """
-  logo_local_file_id field predicates
+  logo_file_id field predicates
   """
-  logoLocalFileID: ID
-  logoLocalFileIDNEQ: ID
-  logoLocalFileIDIn: [ID!]
-  logoLocalFileIDNotIn: [ID!]
-  logoLocalFileIDGT: ID
-  logoLocalFileIDGTE: ID
-  logoLocalFileIDLT: ID
-  logoLocalFileIDLTE: ID
-  logoLocalFileIDContains: ID
-  logoLocalFileIDHasPrefix: ID
-  logoLocalFileIDHasSuffix: ID
-  logoLocalFileIDIsNil: Boolean
-  logoLocalFileIDNotNil: Boolean
-  logoLocalFileIDEqualFold: ID
-  logoLocalFileIDContainsFold: ID
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
   """
   owner edge predicates
   """
   hasOwner: Boolean
   hasOwnerWith: [OrganizationWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
   """
   logo_file edge predicates
   """
@@ -129383,9 +129311,6 @@ input UpdateFileInput {
   clearStorageProvider: Boolean
   lastAccessedAt: Time
   clearLastAccessedAt: Boolean
-  addUserIDs: [ID!]
-  removeUserIDs: [ID!]
-  clearUser: Boolean
   addOrganizationIDs: [ID!]
   removeOrganizationIDs: [ID!]
   clearOrganization: Boolean
@@ -129398,9 +129323,6 @@ input UpdateFileInput {
   addEntityIDs: [ID!]
   removeEntityIDs: [ID!]
   clearEntity: Boolean
-  addUserSettingIDs: [ID!]
-  removeUserSettingIDs: [ID!]
-  clearUserSetting: Boolean
   addOrganizationSettingIDs: [ID!]
   removeOrganizationSettingIDs: [ID!]
   clearOrganizationSetting: Boolean
@@ -129422,9 +129344,6 @@ input UpdateFileInput {
   addTrustCenterSettingIDs: [ID!]
   removeTrustCenterSettingIDs: [ID!]
   clearTrustCenterSetting: Boolean
-  addSubprocessorIDs: [ID!]
-  removeSubprocessorIDs: [ID!]
-  clearSubprocessor: Boolean
   addIntegrationIDs: [ID!]
   removeIntegrationIDs: [ID!]
   clearIntegrations: Boolean
@@ -130596,6 +130515,9 @@ input UpdateOrganizationInput {
   addTemplateCreatorIDs: [ID!]
   removeTemplateCreatorIDs: [ID!]
   clearTemplateCreators: Boolean
+  addSubprocessorCreatorIDs: [ID!]
+  removeSubprocessorCreatorIDs: [ID!]
+  clearSubprocessorCreators: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]
@@ -132092,9 +132014,6 @@ input UpdateSubprocessorInput {
   clearLogoRemoteURL: Boolean
   ownerID: ID
   clearOwner: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
   addTrustCenterSubprocessorIDs: [ID!]
@@ -132684,9 +132603,6 @@ input UpdateUserInput {
   addWebauthnIDs: [ID!]
   removeWebauthnIDs: [ID!]
   clearWebauthns: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
   avatarFileID: ID
   clearAvatarFile: Boolean
   addEventIDs: [ID!]
@@ -132759,9 +132675,6 @@ input UpdateUserSettingInput {
   clearUser: Boolean
   defaultOrgID: ID
   clearDefaultOrg: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
 }
 """
 UpdateVulnerabilityInput is used for update Vulnerability object.
@@ -133470,37 +133383,6 @@ type User implements Node {
     """
     where: WebauthnWhereInput
   ): WebauthnConnection!
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
   avatarFile: File
   events(
     """
@@ -134473,37 +134355,6 @@ type UserSetting implements Node {
   organization to load on user login
   """
   defaultOrg: Organization
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
 }
 """
 A connection to a list of items.
@@ -135026,11 +134877,6 @@ input UserSettingWhereInput {
   """
   hasDefaultOrg: Boolean
   hasDefaultOrgWith: [OrganizationWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
 }
 """
 UserWhereInput is used for filtering User objects.
@@ -135413,11 +135259,6 @@ input UserWhereInput {
   """
   hasWebauthns: Boolean
   hasWebauthnsWith: [WebauthnWhereInput!]
-  """
-  files edge predicates
-  """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
   """
   avatar_file edge predicates
   """

@@ -600,21 +600,6 @@ func (_u *UserUpdate) AddWebauthns(v ...*Webauthn) *UserUpdate {
 	return _u.AddWebauthnIDs(ids...)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *UserUpdate) AddFileIDs(ids ...string) *UserUpdate {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *UserUpdate) AddFiles(v ...*File) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
-}
-
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
 func (_u *UserUpdate) SetAvatarFileID(id string) *UserUpdate {
 	_u.mutation.SetAvatarFileID(id)
@@ -1006,27 +991,6 @@ func (_u *UserUpdate) RemoveWebauthns(v ...*Webauthn) *UserUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWebauthnIDs(ids...)
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *UserUpdate) ClearFiles() *UserUpdate {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *UserUpdate) RemoveFileIDs(ids ...string) *UserUpdate {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *UserUpdate) RemoveFiles(v ...*File) *UserUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearAvatarFile clears the "avatar_file" edge to the File entity.
@@ -2016,54 +1980,6 @@ func (_u *UserUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Webauthn
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -3316,21 +3232,6 @@ func (_u *UserUpdateOne) AddWebauthns(v ...*Webauthn) *UserUpdateOne {
 	return _u.AddWebauthnIDs(ids...)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *UserUpdateOne) AddFileIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *UserUpdateOne) AddFiles(v ...*File) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
-}
-
 // SetAvatarFileID sets the "avatar_file" edge to the File entity by ID.
 func (_u *UserUpdateOne) SetAvatarFileID(id string) *UserUpdateOne {
 	_u.mutation.SetAvatarFileID(id)
@@ -3722,27 +3623,6 @@ func (_u *UserUpdateOne) RemoveWebauthns(v ...*Webauthn) *UserUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveWebauthnIDs(ids...)
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *UserUpdateOne) ClearFiles() *UserUpdateOne {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *UserUpdateOne) RemoveFileIDs(ids ...string) *UserUpdateOne {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *UserUpdateOne) RemoveFiles(v ...*File) *UserUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearAvatarFile clears the "avatar_file" edge to the File entity.
@@ -4762,54 +4642,6 @@ func (_u *UserUpdateOne) sqlSave(ctx context.Context) (_node *User, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Webauthn
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

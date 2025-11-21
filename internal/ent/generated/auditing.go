@@ -4224,8 +4224,8 @@ func (_m *SubprocessorHistory) changes(new *SubprocessorHistory) []Change {
 	if !reflect.DeepEqual(_m.LogoRemoteURL, new.LogoRemoteURL) {
 		changes = append(changes, NewChange(subprocessorhistory.FieldLogoRemoteURL, _m.LogoRemoteURL, new.LogoRemoteURL))
 	}
-	if !reflect.DeepEqual(_m.LogoLocalFileID, new.LogoLocalFileID) {
-		changes = append(changes, NewChange(subprocessorhistory.FieldLogoLocalFileID, _m.LogoLocalFileID, new.LogoLocalFileID))
+	if !reflect.DeepEqual(_m.LogoFileID, new.LogoFileID) {
+		changes = append(changes, NewChange(subprocessorhistory.FieldLogoFileID, _m.LogoFileID, new.LogoFileID))
 	}
 	return changes
 }

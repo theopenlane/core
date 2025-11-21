@@ -5221,12 +5221,10 @@ type CreateFileInput struct {
 	StorageRegion          *string
 	StorageProvider        *string
 	LastAccessedAt         *time.Time
-	UserIDs                []string
 	OrganizationIDs        []string
 	GroupIDs               []string
 	ContactIDs             []string
 	EntityIDs              []string
-	UserSettingIDs         []string
 	OrganizationSettingIDs []string
 	TemplateIDs            []string
 	DocumentIDs            []string
@@ -5234,7 +5232,6 @@ type CreateFileInput struct {
 	EvidenceIDs            []string
 	EventIDs               []string
 	TrustCenterSettingIDs  []string
-	SubprocessorIDs        []string
 	IntegrationIDs         []string
 	SecretIDs              []string
 }
@@ -5295,9 +5292,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.LastAccessedAt; v != nil {
 		m.SetLastAccessedAt(*v)
 	}
-	if v := i.UserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
 	if v := i.OrganizationIDs; len(v) > 0 {
 		m.AddOrganizationIDs(v...)
 	}
@@ -5309,9 +5303,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.EntityIDs; len(v) > 0 {
 		m.AddEntityIDs(v...)
-	}
-	if v := i.UserSettingIDs; len(v) > 0 {
-		m.AddUserSettingIDs(v...)
 	}
 	if v := i.OrganizationSettingIDs; len(v) > 0 {
 		m.AddOrganizationSettingIDs(v...)
@@ -5333,9 +5324,6 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.TrustCenterSettingIDs; len(v) > 0 {
 		m.AddTrustCenterSettingIDs(v...)
-	}
-	if v := i.SubprocessorIDs; len(v) > 0 {
-		m.AddSubprocessorIDs(v...)
 	}
 	if v := i.IntegrationIDs; len(v) > 0 {
 		m.AddIntegrationIDs(v...)
@@ -5391,9 +5379,6 @@ type UpdateFileInput struct {
 	StorageProvider              *string
 	ClearLastAccessedAt          bool
 	LastAccessedAt               *time.Time
-	ClearUser                    bool
-	AddUserIDs                   []string
-	RemoveUserIDs                []string
 	ClearOrganization            bool
 	AddOrganizationIDs           []string
 	RemoveOrganizationIDs        []string
@@ -5406,9 +5391,6 @@ type UpdateFileInput struct {
 	ClearEntity                  bool
 	AddEntityIDs                 []string
 	RemoveEntityIDs              []string
-	ClearUserSetting             bool
-	AddUserSettingIDs            []string
-	RemoveUserSettingIDs         []string
 	ClearOrganizationSetting     bool
 	AddOrganizationSettingIDs    []string
 	RemoveOrganizationSettingIDs []string
@@ -5430,9 +5412,6 @@ type UpdateFileInput struct {
 	ClearTrustCenterSetting      bool
 	AddTrustCenterSettingIDs     []string
 	RemoveTrustCenterSettingIDs  []string
-	ClearSubprocessor            bool
-	AddSubprocessorIDs           []string
-	RemoveSubprocessorIDs        []string
 	ClearIntegrations            bool
 	AddIntegrationIDs            []string
 	RemoveIntegrationIDs         []string
@@ -5557,15 +5536,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.LastAccessedAt; v != nil {
 		m.SetLastAccessedAt(*v)
 	}
-	if i.ClearUser {
-		m.ClearUser()
-	}
-	if v := i.AddUserIDs; len(v) > 0 {
-		m.AddUserIDs(v...)
-	}
-	if v := i.RemoveUserIDs; len(v) > 0 {
-		m.RemoveUserIDs(v...)
-	}
 	if i.ClearOrganization {
 		m.ClearOrganization()
 	}
@@ -5601,15 +5571,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveEntityIDs; len(v) > 0 {
 		m.RemoveEntityIDs(v...)
-	}
-	if i.ClearUserSetting {
-		m.ClearUserSetting()
-	}
-	if v := i.AddUserSettingIDs; len(v) > 0 {
-		m.AddUserSettingIDs(v...)
-	}
-	if v := i.RemoveUserSettingIDs; len(v) > 0 {
-		m.RemoveUserSettingIDs(v...)
 	}
 	if i.ClearOrganizationSetting {
 		m.ClearOrganizationSetting()
@@ -5673,15 +5634,6 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveTrustCenterSettingIDs; len(v) > 0 {
 		m.RemoveTrustCenterSettingIDs(v...)
-	}
-	if i.ClearSubprocessor {
-		m.ClearSubprocessor()
-	}
-	if v := i.AddSubprocessorIDs; len(v) > 0 {
-		m.AddSubprocessorIDs(v...)
-	}
-	if v := i.RemoveSubprocessorIDs; len(v) > 0 {
-		m.RemoveSubprocessorIDs(v...)
 	}
 	if i.ClearIntegrations {
 		m.ClearIntegrations()
@@ -9799,6 +9751,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string
 	StandardCreatorIDs              []string
 	TemplateCreatorIDs              []string
+	SubprocessorCreatorIDs          []string
 	ParentID                        *string
 	SettingID                       *string
 	PersonalAccessTokenIDs          []string
@@ -9932,6 +9885,9 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.TemplateCreatorIDs; len(v) > 0 {
 		m.AddTemplateCreatorIDs(v...)
+	}
+	if v := i.SubprocessorCreatorIDs; len(v) > 0 {
+		m.AddSubprocessorCreatorIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -10194,6 +10150,9 @@ type UpdateOrganizationInput struct {
 	ClearTemplateCreators                 bool
 	AddTemplateCreatorIDs                 []string
 	RemoveTemplateCreatorIDs              []string
+	ClearSubprocessorCreators             bool
+	AddSubprocessorCreatorIDs             []string
+	RemoveSubprocessorCreatorIDs          []string
 	ClearSetting                          bool
 	SettingID                             *string
 	ClearPersonalAccessTokens             bool
@@ -10549,6 +10508,15 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveTemplateCreatorIDs; len(v) > 0 {
 		m.RemoveTemplateCreatorIDs(v...)
+	}
+	if i.ClearSubprocessorCreators {
+		m.ClearSubprocessorCreators()
+	}
+	if v := i.AddSubprocessorCreatorIDs; len(v) > 0 {
+		m.AddSubprocessorCreatorIDs(v...)
+	}
+	if v := i.RemoveSubprocessorCreatorIDs; len(v) > 0 {
+		m.RemoveSubprocessorCreatorIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -15510,7 +15478,6 @@ type CreateSubprocessorInput struct {
 	Description                *string
 	LogoRemoteURL              *string
 	OwnerID                    *string
-	FileIDs                    []string
 	LogoFileID                 *string
 	TrustCenterSubprocessorIDs []string
 }
@@ -15535,9 +15502,6 @@ func (i *CreateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
@@ -15569,9 +15533,6 @@ type UpdateSubprocessorInput struct {
 	LogoRemoteURL                    *string
 	ClearOwner                       bool
 	OwnerID                          *string
-	ClearFiles                       bool
-	AddFileIDs                       []string
-	RemoveFileIDs                    []string
 	ClearLogoFile                    bool
 	LogoFileID                       *string
 	ClearTrustCenterSubprocessors    bool
@@ -15622,15 +15583,6 @@ func (i *UpdateSubprocessorInput) Mutate(m *SubprocessorMutation) {
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
-	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
 	}
 	if i.ClearLogoFile {
 		m.ClearLogoFile()
@@ -17399,7 +17351,6 @@ type CreateUserInput struct {
 	GroupIDs                 []string
 	OrganizationIDs          []string
 	WebauthnIDs              []string
-	FileIDs                  []string
 	AvatarFileID             *string
 	EventIDs                 []string
 	ActionPlanIDs            []string
@@ -17479,9 +17430,6 @@ func (i *CreateUserInput) Mutate(m *UserMutation) {
 	}
 	if v := i.WebauthnIDs; len(v) > 0 {
 		m.AddWebauthnIDs(v...)
-	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
 	}
 	if v := i.AvatarFileID; v != nil {
 		m.SetAvatarFileID(*v)
@@ -17573,9 +17521,6 @@ type UpdateUserInput struct {
 	ClearWebauthns                 bool
 	AddWebauthnIDs                 []string
 	RemoveWebauthnIDs              []string
-	ClearFiles                     bool
-	AddFileIDs                     []string
-	RemoveFileIDs                  []string
 	ClearAvatarFile                bool
 	AvatarFileID                   *string
 	ClearEvents                    bool
@@ -17759,15 +17704,6 @@ func (i *UpdateUserInput) Mutate(m *UserMutation) {
 	if v := i.RemoveWebauthnIDs; len(v) > 0 {
 		m.RemoveWebauthnIDs(v...)
 	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
-	}
 	if i.ClearAvatarFile {
 		m.ClearAvatarFile()
 	}
@@ -17880,7 +17816,6 @@ type CreateUserSettingInput struct {
 	IsTfaEnabled   *bool
 	UserID         *string
 	DefaultOrgID   *string
-	FileIDs        []string
 }
 
 // Mutate applies the CreateUserSettingInput on the UserSettingMutation builder.
@@ -17912,9 +17847,6 @@ func (i *CreateUserSettingInput) Mutate(m *UserSettingMutation) {
 	if v := i.DefaultOrgID; v != nil {
 		m.SetDefaultOrgID(*v)
 	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
 }
 
 // SetInput applies the change-set in the CreateUserSettingInput on the UserSettingCreate builder.
@@ -17941,9 +17873,6 @@ type UpdateUserSettingInput struct {
 	UserID            *string
 	ClearDefaultOrg   bool
 	DefaultOrgID      *string
-	ClearFiles        bool
-	AddFileIDs        []string
-	RemoveFileIDs     []string
 }
 
 // Mutate applies the UpdateUserSettingInput on the UserSettingMutation builder.
@@ -17995,15 +17924,6 @@ func (i *UpdateUserSettingInput) Mutate(m *UserSettingMutation) {
 	}
 	if v := i.DefaultOrgID; v != nil {
 		m.SetDefaultOrgID(*v)
-	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
 	}
 }
 

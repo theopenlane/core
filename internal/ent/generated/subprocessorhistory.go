@@ -54,8 +54,8 @@ type SubprocessorHistory struct {
 	// URL of the logo
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
-	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
-	selectValues    sql.SelectValues
+	LogoFileID   *string `json:"logo_file_id,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -69,7 +69,7 @@ func (*SubprocessorHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case subprocessorhistory.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy, subprocessorhistory.FieldOwnerID, subprocessorhistory.FieldInternalNotes, subprocessorhistory.FieldSystemInternalID, subprocessorhistory.FieldName, subprocessorhistory.FieldDescription, subprocessorhistory.FieldLogoRemoteURL, subprocessorhistory.FieldLogoLocalFileID:
+		case subprocessorhistory.FieldID, subprocessorhistory.FieldRef, subprocessorhistory.FieldCreatedBy, subprocessorhistory.FieldUpdatedBy, subprocessorhistory.FieldDeletedBy, subprocessorhistory.FieldOwnerID, subprocessorhistory.FieldInternalNotes, subprocessorhistory.FieldSystemInternalID, subprocessorhistory.FieldName, subprocessorhistory.FieldDescription, subprocessorhistory.FieldLogoRemoteURL, subprocessorhistory.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case subprocessorhistory.FieldHistoryTime, subprocessorhistory.FieldCreatedAt, subprocessorhistory.FieldUpdatedAt, subprocessorhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -201,12 +201,12 @@ func (_m *SubprocessorHistory) assignValues(columns []string, values []any) erro
 				_m.LogoRemoteURL = new(string)
 				*_m.LogoRemoteURL = value.String
 			}
-		case subprocessorhistory.FieldLogoLocalFileID:
+		case subprocessorhistory.FieldLogoFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
 			} else if value.Valid {
-				_m.LogoLocalFileID = new(string)
-				*_m.LogoLocalFileID = value.String
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -301,8 +301,8 @@ func (_m *SubprocessorHistory) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.LogoLocalFileID; v != nil {
-		builder.WriteString("logo_local_file_id=")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')

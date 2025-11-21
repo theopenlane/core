@@ -25,11 +25,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -518,21 +515,6 @@ func (_u *FileUpdate) ClearLastAccessedAt() *FileUpdate {
 	return _u
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
-func (_u *FileUpdate) AddUserIDs(ids ...string) *FileUpdate {
-	_u.mutation.AddUserIDs(ids...)
-	return _u
-}
-
-// AddUser adds the "user" edges to the User entity.
-func (_u *FileUpdate) AddUser(v ...*User) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserIDs(ids...)
-}
-
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdate) AddOrganizationIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -591,21 +573,6 @@ func (_u *FileUpdate) AddEntity(v ...*Entity) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEntityIDs(ids...)
-}
-
-// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
-func (_u *FileUpdate) AddUserSettingIDs(ids ...string) *FileUpdate {
-	_u.mutation.AddUserSettingIDs(ids...)
-	return _u
-}
-
-// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
-func (_u *FileUpdate) AddUserSetting(v ...*UserSetting) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserSettingIDs(ids...)
 }
 
 // AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
@@ -713,21 +680,6 @@ func (_u *FileUpdate) AddTrustCenterSetting(v ...*TrustCenterSetting) *FileUpdat
 	return _u.AddTrustCenterSettingIDs(ids...)
 }
 
-// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
-func (_u *FileUpdate) AddSubprocessorIDs(ids ...string) *FileUpdate {
-	_u.mutation.AddSubprocessorIDs(ids...)
-	return _u
-}
-
-// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
-func (_u *FileUpdate) AddSubprocessor(v ...*Subprocessor) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddSubprocessorIDs(ids...)
-}
-
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *FileUpdate) AddIntegrationIDs(ids ...string) *FileUpdate {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -761,27 +713,6 @@ func (_u *FileUpdate) AddSecrets(v ...*Hush) *FileUpdate {
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdate) Mutation() *FileMutation {
 	return _u.mutation
-}
-
-// ClearUser clears all "user" edges to the User entity.
-func (_u *FileUpdate) ClearUser() *FileUpdate {
-	_u.mutation.ClearUser()
-	return _u
-}
-
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
-func (_u *FileUpdate) RemoveUserIDs(ids ...string) *FileUpdate {
-	_u.mutation.RemoveUserIDs(ids...)
-	return _u
-}
-
-// RemoveUser removes "user" edges to User entities.
-func (_u *FileUpdate) RemoveUser(v ...*User) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -866,27 +797,6 @@ func (_u *FileUpdate) RemoveEntity(v ...*Entity) *FileUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
-}
-
-// ClearUserSetting clears all "user_setting" edges to the UserSetting entity.
-func (_u *FileUpdate) ClearUserSetting() *FileUpdate {
-	_u.mutation.ClearUserSetting()
-	return _u
-}
-
-// RemoveUserSettingIDs removes the "user_setting" edge to UserSetting entities by IDs.
-func (_u *FileUpdate) RemoveUserSettingIDs(ids ...string) *FileUpdate {
-	_u.mutation.RemoveUserSettingIDs(ids...)
-	return _u
-}
-
-// RemoveUserSetting removes "user_setting" edges to UserSetting entities.
-func (_u *FileUpdate) RemoveUserSetting(v ...*UserSetting) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserSettingIDs(ids...)
 }
 
 // ClearOrganizationSetting clears all "organization_setting" edges to the OrganizationSetting entity.
@@ -1034,27 +944,6 @@ func (_u *FileUpdate) RemoveTrustCenterSetting(v ...*TrustCenterSetting) *FileUp
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterSettingIDs(ids...)
-}
-
-// ClearSubprocessor clears all "subprocessor" edges to the Subprocessor entity.
-func (_u *FileUpdate) ClearSubprocessor() *FileUpdate {
-	_u.mutation.ClearSubprocessor()
-	return _u
-}
-
-// RemoveSubprocessorIDs removes the "subprocessor" edge to Subprocessor entities by IDs.
-func (_u *FileUpdate) RemoveSubprocessorIDs(ids ...string) *FileUpdate {
-	_u.mutation.RemoveSubprocessorIDs(ids...)
-	return _u
-}
-
-// RemoveSubprocessor removes "subprocessor" edges to Subprocessor entities.
-func (_u *FileUpdate) RemoveSubprocessor(v ...*Subprocessor) *FileUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -1335,54 +1224,6 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
 	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUserIDs(); len(nodes) > 0 && !_u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -1570,54 +1411,6 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.UserSettingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUserSettingIDs(); len(nodes) > 0 && !_u.mutation.UserSettingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserSettingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1954,54 +1747,6 @@ func (_u *FileUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.SubprocessorCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedSubprocessorIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.SubprocessorIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -2597,21 +2342,6 @@ func (_u *FileUpdateOne) ClearLastAccessedAt() *FileUpdateOne {
 	return _u
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
-func (_u *FileUpdateOne) AddUserIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.AddUserIDs(ids...)
-	return _u
-}
-
-// AddUser adds the "user" edges to the User entity.
-func (_u *FileUpdateOne) AddUser(v ...*User) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserIDs(ids...)
-}
-
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_u *FileUpdateOne) AddOrganizationIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddOrganizationIDs(ids...)
@@ -2670,21 +2400,6 @@ func (_u *FileUpdateOne) AddEntity(v ...*Entity) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.AddEntityIDs(ids...)
-}
-
-// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
-func (_u *FileUpdateOne) AddUserSettingIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.AddUserSettingIDs(ids...)
-	return _u
-}
-
-// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
-func (_u *FileUpdateOne) AddUserSetting(v ...*UserSetting) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddUserSettingIDs(ids...)
 }
 
 // AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
@@ -2792,21 +2507,6 @@ func (_u *FileUpdateOne) AddTrustCenterSetting(v ...*TrustCenterSetting) *FileUp
 	return _u.AddTrustCenterSettingIDs(ids...)
 }
 
-// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
-func (_u *FileUpdateOne) AddSubprocessorIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.AddSubprocessorIDs(ids...)
-	return _u
-}
-
-// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
-func (_u *FileUpdateOne) AddSubprocessor(v ...*Subprocessor) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddSubprocessorIDs(ids...)
-}
-
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
 func (_u *FileUpdateOne) AddIntegrationIDs(ids ...string) *FileUpdateOne {
 	_u.mutation.AddIntegrationIDs(ids...)
@@ -2840,27 +2540,6 @@ func (_u *FileUpdateOne) AddSecrets(v ...*Hush) *FileUpdateOne {
 // Mutation returns the FileMutation object of the builder.
 func (_u *FileUpdateOne) Mutation() *FileMutation {
 	return _u.mutation
-}
-
-// ClearUser clears all "user" edges to the User entity.
-func (_u *FileUpdateOne) ClearUser() *FileUpdateOne {
-	_u.mutation.ClearUser()
-	return _u
-}
-
-// RemoveUserIDs removes the "user" edge to User entities by IDs.
-func (_u *FileUpdateOne) RemoveUserIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.RemoveUserIDs(ids...)
-	return _u
-}
-
-// RemoveUser removes "user" edges to User entities.
-func (_u *FileUpdateOne) RemoveUser(v ...*User) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserIDs(ids...)
 }
 
 // ClearOrganization clears all "organization" edges to the Organization entity.
@@ -2945,27 +2624,6 @@ func (_u *FileUpdateOne) RemoveEntity(v ...*Entity) *FileUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveEntityIDs(ids...)
-}
-
-// ClearUserSetting clears all "user_setting" edges to the UserSetting entity.
-func (_u *FileUpdateOne) ClearUserSetting() *FileUpdateOne {
-	_u.mutation.ClearUserSetting()
-	return _u
-}
-
-// RemoveUserSettingIDs removes the "user_setting" edge to UserSetting entities by IDs.
-func (_u *FileUpdateOne) RemoveUserSettingIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.RemoveUserSettingIDs(ids...)
-	return _u
-}
-
-// RemoveUserSetting removes "user_setting" edges to UserSetting entities.
-func (_u *FileUpdateOne) RemoveUserSetting(v ...*UserSetting) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveUserSettingIDs(ids...)
 }
 
 // ClearOrganizationSetting clears all "organization_setting" edges to the OrganizationSetting entity.
@@ -3113,27 +2771,6 @@ func (_u *FileUpdateOne) RemoveTrustCenterSetting(v ...*TrustCenterSetting) *Fil
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterSettingIDs(ids...)
-}
-
-// ClearSubprocessor clears all "subprocessor" edges to the Subprocessor entity.
-func (_u *FileUpdateOne) ClearSubprocessor() *FileUpdateOne {
-	_u.mutation.ClearSubprocessor()
-	return _u
-}
-
-// RemoveSubprocessorIDs removes the "subprocessor" edge to Subprocessor entities by IDs.
-func (_u *FileUpdateOne) RemoveSubprocessorIDs(ids ...string) *FileUpdateOne {
-	_u.mutation.RemoveSubprocessorIDs(ids...)
-	return _u
-}
-
-// RemoveSubprocessor removes "subprocessor" edges to Subprocessor entities.
-func (_u *FileUpdateOne) RemoveSubprocessor(v ...*Subprocessor) *FileUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveSubprocessorIDs(ids...)
 }
 
 // ClearIntegrations clears all "integrations" edges to the Integration entity.
@@ -3444,54 +3081,6 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 	if _u.mutation.LastAccessedAtCleared() {
 		_spec.ClearField(file.FieldLastAccessedAt, field.TypeTime)
 	}
-	if _u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUserIDs(); len(nodes) > 0 && !_u.mutation.UserCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
 	if _u.mutation.OrganizationCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -3679,54 +3268,6 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.EntityFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.UserSettingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedUserSettingIDs(); len(nodes) > 0 && !_u.mutation.UserSettingCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.UserSettingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -4063,54 +3604,6 @@ func (_u *FileUpdateOne) sqlSave(ctx context.Context) (_node *File, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.SubprocessorCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedSubprocessorIDs(); len(nodes) > 0 && !_u.mutation.SubprocessorCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.SubprocessorIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

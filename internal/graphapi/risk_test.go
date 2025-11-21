@@ -422,13 +422,13 @@ func TestMutationCreateRisk(t *testing.T) {
 			}
 
 			if tc.request.StakeholderID != nil {
-				assert.Check(t, is.Equal(*tc.request.StakeholderID, *&resp.CreateRisk.Risk.Stakeholder.ID))
+				assert.Check(t, is.Equal(*tc.request.StakeholderID, resp.CreateRisk.Risk.Stakeholder.ID))
 			} else {
 				assert.Check(t, is.Nil(resp.CreateRisk.Risk.Stakeholder))
 			}
 
 			if tc.request.DelegateID != nil {
-				assert.Check(t, is.Equal(*tc.request.DelegateID, *&resp.CreateRisk.Risk.Delegate.ID))
+				assert.Check(t, is.Equal(*tc.request.DelegateID, resp.CreateRisk.Risk.Delegate.ID))
 			} else {
 				assert.Check(t, is.Nil(resp.CreateRisk.Risk.Delegate))
 			}

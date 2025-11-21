@@ -132,9 +132,9 @@ func LogoRemoteURL(v string) predicate.Subprocessor {
 	return predicate.Subprocessor(sql.FieldEQ(FieldLogoRemoteURL, v))
 }
 
-// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
-func LogoLocalFileID(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldEQ(FieldLogoLocalFileID, v))
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoFileID, v))
 }
 
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
@@ -982,79 +982,79 @@ func LogoRemoteURLContainsFold(v string) predicate.Subprocessor {
 	return predicate.Subprocessor(sql.FieldContainsFold(FieldLogoRemoteURL, v))
 }
 
-// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEQ(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldEQ(FieldLogoLocalFileID, v))
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEQ(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNEQ(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldNEQ(FieldLogoLocalFileID, v))
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNEQ(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIn(vs ...string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldIn(FieldLogoLocalFileID, vs...))
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIn(FieldLogoFileID, vs...))
 }
 
-// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotIn(vs ...string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotIn(FieldLogoFileID, vs...))
 }
 
-// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGT(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldGT(FieldLogoLocalFileID, v))
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGT(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGTE(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldGTE(FieldLogoLocalFileID, v))
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldGTE(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLT(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldLT(FieldLogoLocalFileID, v))
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLT(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLTE(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldLTE(FieldLogoLocalFileID, v))
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldLTE(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContains(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldContains(FieldLogoLocalFileID, v))
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContains(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasPrefix(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasPrefix(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasSuffix(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldHasSuffix(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIsNil() predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldIsNull(FieldLogoLocalFileID))
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldIsNull(FieldLogoFileID))
 }
 
-// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotNil() predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldNotNull(FieldLogoLocalFileID))
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldNotNull(FieldLogoFileID))
 }
 
-// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEqualFold(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldEqualFold(FieldLogoLocalFileID, v))
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldEqualFold(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContainsFold(v string) predicate.Subprocessor {
-	return predicate.Subprocessor(sql.FieldContainsFold(FieldLogoLocalFileID, v))
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.Subprocessor {
+	return predicate.Subprocessor(sql.FieldContainsFold(FieldLogoFileID, v))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.
@@ -1078,35 +1078,6 @@ func HasOwnerWith(preds ...predicate.Organization) predicate.Subprocessor {
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Subprocessor
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
-}
-
-// HasFiles applies the HasEdge predicate on the "files" edge.
-func HasFiles() predicate.Subprocessor {
-	return predicate.Subprocessor(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.SubprocessorFiles
-		sqlgraph.HasNeighbors(s, step)
-	})
-}
-
-// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
-func HasFilesWith(preds ...predicate.File) predicate.Subprocessor {
-	return predicate.Subprocessor(func(s *sql.Selector) {
-		step := newFilesStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.SubprocessorFiles
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

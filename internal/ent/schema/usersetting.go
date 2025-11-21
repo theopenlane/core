@@ -111,7 +111,6 @@ func (u UserSetting) Edges() []ent.Edge {
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
-		defaultEdgeToWithPagination(u, File{}),
 	}
 }
 

@@ -6950,12 +6950,10 @@ type CreateFileInput struct {
 	// the storage provider the file is stored in, if applicable
 	StorageProvider        *string    `json:"storageProvider,omitempty"`
 	LastAccessedAt         *time.Time `json:"lastAccessedAt,omitempty"`
-	UserIDs                []string   `json:"userIDs,omitempty"`
 	OrganizationIDs        []string   `json:"organizationIDs,omitempty"`
 	GroupIDs               []string   `json:"groupIDs,omitempty"`
 	ContactIDs             []string   `json:"contactIDs,omitempty"`
 	EntityIDs              []string   `json:"entityIDs,omitempty"`
-	UserSettingIDs         []string   `json:"userSettingIDs,omitempty"`
 	OrganizationSettingIDs []string   `json:"organizationSettingIDs,omitempty"`
 	TemplateIDs            []string   `json:"templateIDs,omitempty"`
 	DocumentIDs            []string   `json:"documentIDs,omitempty"`
@@ -6963,7 +6961,6 @@ type CreateFileInput struct {
 	EvidenceIDs            []string   `json:"evidenceIDs,omitempty"`
 	EventIDs               []string   `json:"eventIDs,omitempty"`
 	TrustCenterSettingIDs  []string   `json:"trustCenterSettingIDs,omitempty"`
-	SubprocessorIDs        []string   `json:"subprocessorIDs,omitempty"`
 	IntegrationIDs         []string   `json:"integrationIDs,omitempty"`
 	SecretIDs              []string   `json:"secretIDs,omitempty"`
 }
@@ -7542,6 +7539,7 @@ type CreateOrganizationInput struct {
 	ScheduledJobCreatorIDs          []string                        `json:"scheduledJobCreatorIDs,omitempty"`
 	StandardCreatorIDs              []string                        `json:"standardCreatorIDs,omitempty"`
 	TemplateCreatorIDs              []string                        `json:"templateCreatorIDs,omitempty"`
+	SubprocessorCreatorIDs          []string                        `json:"subprocessorCreatorIDs,omitempty"`
 	ParentID                        *string                         `json:"parentID,omitempty"`
 	SettingID                       *string                         `json:"settingID,omitempty"`
 	PersonalAccessTokenIDs          []string                        `json:"personalAccessTokenIDs,omitempty"`
@@ -8181,7 +8179,6 @@ type CreateSubprocessorInput struct {
 	// URL of the logo
 	LogoRemoteURL              *string  `json:"logoRemoteURL,omitempty"`
 	OwnerID                    *string  `json:"ownerID,omitempty"`
-	FileIDs                    []string `json:"fileIDs,omitempty"`
 	LogoFileID                 *string  `json:"logoFileID,omitempty"`
 	TrustCenterSubprocessorIDs []string `json:"trustCenterSubprocessorIDs,omitempty"`
 }
@@ -8465,7 +8462,6 @@ type CreateUserInput struct {
 	GroupIDs                 []string `json:"groupIDs,omitempty"`
 	OrganizationIDs          []string `json:"organizationIDs,omitempty"`
 	WebauthnIDs              []string `json:"webauthnIDs,omitempty"`
-	FileIDs                  []string `json:"fileIDs,omitempty"`
 	AvatarFileID             *string  `json:"avatarFileID,omitempty"`
 	EventIDs                 []string `json:"eventIDs,omitempty"`
 	ActionPlanIDs            []string `json:"actionPlanIDs,omitempty"`
@@ -8494,10 +8490,9 @@ type CreateUserSettingInput struct {
 	// whether the user has confirmed their email address
 	EmailConfirmed *bool `json:"emailConfirmed,omitempty"`
 	// whether the user has two factor authentication enabled
-	IsTfaEnabled *bool    `json:"isTfaEnabled,omitempty"`
-	UserID       *string  `json:"userID,omitempty"`
-	DefaultOrgID *string  `json:"defaultOrgID,omitempty"`
-	FileIDs      []string `json:"fileIDs,omitempty"`
+	IsTfaEnabled *bool   `json:"isTfaEnabled,omitempty"`
+	UserID       *string `json:"userID,omitempty"`
+	DefaultOrgID *string `json:"defaultOrgID,omitempty"`
 }
 
 // CreateVulnerabilityInput is used for create Vulnerability object.
@@ -15309,12 +15304,10 @@ type File struct {
 	// the storage provider the file is stored in, if applicable
 	StorageProvider     *string                `json:"storageProvider,omitempty"`
 	LastAccessedAt      *time.Time             `json:"lastAccessedAt,omitempty"`
-	User                []*User                `json:"user,omitempty"`
 	Organization        []*Organization        `json:"organization,omitempty"`
 	Groups              *GroupConnection       `json:"groups"`
 	Contact             []*Contact             `json:"contact,omitempty"`
 	Entity              []*Entity              `json:"entity,omitempty"`
-	UserSetting         []*UserSetting         `json:"userSetting,omitempty"`
 	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty"`
 	Template            []*Template            `json:"template,omitempty"`
 	Document            []*DocumentData        `json:"document,omitempty"`
@@ -15322,7 +15315,6 @@ type File struct {
 	Evidence            []*Evidence            `json:"evidence,omitempty"`
 	Events              *EventConnection       `json:"events"`
 	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
-	Subprocessor        []*Subprocessor        `json:"subprocessor,omitempty"`
 	Integrations        *IntegrationConnection `json:"integrations"`
 	Secrets             *HushConnection        `json:"secrets"`
 	PresignedURL        *string                `json:"presignedURL,omitempty"`
@@ -16159,9 +16151,6 @@ type FileWhereInput struct {
 	LastAccessedAtLte    *time.Time   `json:"lastAccessedAtLTE,omitempty"`
 	LastAccessedAtIsNil  *bool        `json:"lastAccessedAtIsNil,omitempty"`
 	LastAccessedAtNotNil *bool        `json:"lastAccessedAtNotNil,omitempty"`
-	// user edge predicates
-	HasUser     *bool             `json:"hasUser,omitempty"`
-	HasUserWith []*UserWhereInput `json:"hasUserWith,omitempty"`
 	// organization edge predicates
 	HasOrganization     *bool                     `json:"hasOrganization,omitempty"`
 	HasOrganizationWith []*OrganizationWhereInput `json:"hasOrganizationWith,omitempty"`
@@ -16174,9 +16163,6 @@ type FileWhereInput struct {
 	// entity edge predicates
 	HasEntity     *bool               `json:"hasEntity,omitempty"`
 	HasEntityWith []*EntityWhereInput `json:"hasEntityWith,omitempty"`
-	// user_setting edge predicates
-	HasUserSetting     *bool                    `json:"hasUserSetting,omitempty"`
-	HasUserSettingWith []*UserSettingWhereInput `json:"hasUserSettingWith,omitempty"`
 	// organization_setting edge predicates
 	HasOrganizationSetting     *bool                            `json:"hasOrganizationSetting,omitempty"`
 	HasOrganizationSettingWith []*OrganizationSettingWhereInput `json:"hasOrganizationSettingWith,omitempty"`
@@ -16198,9 +16184,6 @@ type FileWhereInput struct {
 	// trust_center_setting edge predicates
 	HasTrustCenterSetting     *bool                           `json:"hasTrustCenterSetting,omitempty"`
 	HasTrustCenterSettingWith []*TrustCenterSettingWhereInput `json:"hasTrustCenterSettingWith,omitempty"`
-	// subprocessor edge predicates
-	HasSubprocessor     *bool                     `json:"hasSubprocessor,omitempty"`
-	HasSubprocessorWith []*SubprocessorWhereInput `json:"hasSubprocessorWith,omitempty"`
 	// integrations edge predicates
 	HasIntegrations     *bool                    `json:"hasIntegrations,omitempty"`
 	HasIntegrationsWith []*IntegrationWhereInput `json:"hasIntegrationsWith,omitempty"`
@@ -26341,6 +26324,7 @@ type Organization struct {
 	ScheduledJobCreators          *GroupConnection                      `json:"scheduledJobCreators"`
 	StandardCreators              *GroupConnection                      `json:"standardCreators"`
 	TemplateCreators              *GroupConnection                      `json:"templateCreators"`
+	SubprocessorCreators          *GroupConnection                      `json:"subprocessorCreators"`
 	Parent                        *Organization                         `json:"parent,omitempty"`
 	Children                      *OrganizationConnection               `json:"children"`
 	Setting                       *OrganizationSetting                  `json:"setting,omitempty"`
@@ -27810,6 +27794,9 @@ type OrganizationWhereInput struct {
 	// template_creators edge predicates
 	HasTemplateCreators     *bool              `json:"hasTemplateCreators,omitempty"`
 	HasTemplateCreatorsWith []*GroupWhereInput `json:"hasTemplateCreatorsWith,omitempty"`
+	// subprocessor_creators edge predicates
+	HasSubprocessorCreators     *bool              `json:"hasSubprocessorCreators,omitempty"`
+	HasSubprocessorCreatorsWith []*GroupWhereInput `json:"hasSubprocessorCreatorsWith,omitempty"`
 	// parent edge predicates
 	HasParent     *bool                     `json:"hasParent,omitempty"`
 	HasParentWith []*OrganizationWhereInput `json:"hasParentWith,omitempty"`
@@ -36738,9 +36725,8 @@ type Subprocessor struct {
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
-	LogoLocalFileID          *string                            `json:"logoLocalFileID,omitempty"`
+	LogoFileID               *string                            `json:"logoFileID,omitempty"`
 	Owner                    *Organization                      `json:"owner,omitempty"`
-	Files                    *FileConnection                    `json:"files"`
 	LogoFile                 *File                              `json:"logoFile,omitempty"`
 	TrustCenterSubprocessors *TrustCenterSubprocessorConnection `json:"trustCenterSubprocessors"`
 }
@@ -36815,7 +36801,7 @@ type SubprocessorHistory struct {
 	// URL of the logo
 	LogoRemoteURL *string `json:"logoRemoteURL,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
-	LogoLocalFileID *string `json:"logoLocalFileID,omitempty"`
+	LogoFileID *string `json:"logoFileID,omitempty"`
 }
 
 func (SubprocessorHistory) IsNode() {}
@@ -37046,22 +37032,22 @@ type SubprocessorHistoryWhereInput struct {
 	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
 	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
 	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
-	// logo_local_file_id field predicates
-	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
-	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
-	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
-	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
-	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
-	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
-	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
-	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
-	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
-	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
-	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
-	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
-	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
-	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
-	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 }
 
 // Ordering options for Subprocessor connections
@@ -37248,28 +37234,25 @@ type SubprocessorWhereInput struct {
 	LogoRemoteURLNotNil       *bool    `json:"logoRemoteURLNotNil,omitempty"`
 	LogoRemoteURLEqualFold    *string  `json:"logoRemoteURLEqualFold,omitempty"`
 	LogoRemoteURLContainsFold *string  `json:"logoRemoteURLContainsFold,omitempty"`
-	// logo_local_file_id field predicates
-	LogoLocalFileID             *string  `json:"logoLocalFileID,omitempty"`
-	LogoLocalFileIdneq          *string  `json:"logoLocalFileIDNEQ,omitempty"`
-	LogoLocalFileIDIn           []string `json:"logoLocalFileIDIn,omitempty"`
-	LogoLocalFileIDNotIn        []string `json:"logoLocalFileIDNotIn,omitempty"`
-	LogoLocalFileIdgt           *string  `json:"logoLocalFileIDGT,omitempty"`
-	LogoLocalFileIdgte          *string  `json:"logoLocalFileIDGTE,omitempty"`
-	LogoLocalFileIdlt           *string  `json:"logoLocalFileIDLT,omitempty"`
-	LogoLocalFileIdlte          *string  `json:"logoLocalFileIDLTE,omitempty"`
-	LogoLocalFileIDContains     *string  `json:"logoLocalFileIDContains,omitempty"`
-	LogoLocalFileIDHasPrefix    *string  `json:"logoLocalFileIDHasPrefix,omitempty"`
-	LogoLocalFileIDHasSuffix    *string  `json:"logoLocalFileIDHasSuffix,omitempty"`
-	LogoLocalFileIDIsNil        *bool    `json:"logoLocalFileIDIsNil,omitempty"`
-	LogoLocalFileIDNotNil       *bool    `json:"logoLocalFileIDNotNil,omitempty"`
-	LogoLocalFileIDEqualFold    *string  `json:"logoLocalFileIDEqualFold,omitempty"`
-	LogoLocalFileIDContainsFold *string  `json:"logoLocalFileIDContainsFold,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// logo_file edge predicates
 	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
 	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
@@ -43569,9 +43552,6 @@ type UpdateFileInput struct {
 	ClearStorageProvider         *bool      `json:"clearStorageProvider,omitempty"`
 	LastAccessedAt               *time.Time `json:"lastAccessedAt,omitempty"`
 	ClearLastAccessedAt          *bool      `json:"clearLastAccessedAt,omitempty"`
-	AddUserIDs                   []string   `json:"addUserIDs,omitempty"`
-	RemoveUserIDs                []string   `json:"removeUserIDs,omitempty"`
-	ClearUser                    *bool      `json:"clearUser,omitempty"`
 	AddOrganizationIDs           []string   `json:"addOrganizationIDs,omitempty"`
 	RemoveOrganizationIDs        []string   `json:"removeOrganizationIDs,omitempty"`
 	ClearOrganization            *bool      `json:"clearOrganization,omitempty"`
@@ -43584,9 +43564,6 @@ type UpdateFileInput struct {
 	AddEntityIDs                 []string   `json:"addEntityIDs,omitempty"`
 	RemoveEntityIDs              []string   `json:"removeEntityIDs,omitempty"`
 	ClearEntity                  *bool      `json:"clearEntity,omitempty"`
-	AddUserSettingIDs            []string   `json:"addUserSettingIDs,omitempty"`
-	RemoveUserSettingIDs         []string   `json:"removeUserSettingIDs,omitempty"`
-	ClearUserSetting             *bool      `json:"clearUserSetting,omitempty"`
 	AddOrganizationSettingIDs    []string   `json:"addOrganizationSettingIDs,omitempty"`
 	RemoveOrganizationSettingIDs []string   `json:"removeOrganizationSettingIDs,omitempty"`
 	ClearOrganizationSetting     *bool      `json:"clearOrganizationSetting,omitempty"`
@@ -43608,9 +43585,6 @@ type UpdateFileInput struct {
 	AddTrustCenterSettingIDs     []string   `json:"addTrustCenterSettingIDs,omitempty"`
 	RemoveTrustCenterSettingIDs  []string   `json:"removeTrustCenterSettingIDs,omitempty"`
 	ClearTrustCenterSetting      *bool      `json:"clearTrustCenterSetting,omitempty"`
-	AddSubprocessorIDs           []string   `json:"addSubprocessorIDs,omitempty"`
-	RemoveSubprocessorIDs        []string   `json:"removeSubprocessorIDs,omitempty"`
-	ClearSubprocessor            *bool      `json:"clearSubprocessor,omitempty"`
 	AddIntegrationIDs            []string   `json:"addIntegrationIDs,omitempty"`
 	RemoveIntegrationIDs         []string   `json:"removeIntegrationIDs,omitempty"`
 	ClearIntegrations            *bool      `json:"clearIntegrations,omitempty"`
@@ -44502,6 +44476,9 @@ type UpdateOrganizationInput struct {
 	AddTemplateCreatorIDs                 []string                        `json:"addTemplateCreatorIDs,omitempty"`
 	RemoveTemplateCreatorIDs              []string                        `json:"removeTemplateCreatorIDs,omitempty"`
 	ClearTemplateCreators                 *bool                           `json:"clearTemplateCreators,omitempty"`
+	AddSubprocessorCreatorIDs             []string                        `json:"addSubprocessorCreatorIDs,omitempty"`
+	RemoveSubprocessorCreatorIDs          []string                        `json:"removeSubprocessorCreatorIDs,omitempty"`
+	ClearSubprocessorCreators             *bool                           `json:"clearSubprocessorCreators,omitempty"`
 	SettingID                             *string                         `json:"settingID,omitempty"`
 	ClearSetting                          *bool                           `json:"clearSetting,omitempty"`
 	AddPersonalAccessTokenIDs             []string                        `json:"addPersonalAccessTokenIDs,omitempty"`
@@ -45651,9 +45628,6 @@ type UpdateSubprocessorInput struct {
 	ClearLogoRemoteURL               *bool    `json:"clearLogoRemoteURL,omitempty"`
 	OwnerID                          *string  `json:"ownerID,omitempty"`
 	ClearOwner                       *bool    `json:"clearOwner,omitempty"`
-	AddFileIDs                       []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                    []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                       *bool    `json:"clearFiles,omitempty"`
 	LogoFileID                       *string  `json:"logoFileID,omitempty"`
 	ClearLogoFile                    *bool    `json:"clearLogoFile,omitempty"`
 	AddTrustCenterSubprocessorIDs    []string `json:"addTrustCenterSubprocessorIDs,omitempty"`
@@ -46086,9 +46060,6 @@ type UpdateUserInput struct {
 	AddWebauthnIDs                 []string `json:"addWebauthnIDs,omitempty"`
 	RemoveWebauthnIDs              []string `json:"removeWebauthnIDs,omitempty"`
 	ClearWebauthns                 *bool    `json:"clearWebauthns,omitempty"`
-	AddFileIDs                     []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs                  []string `json:"removeFileIDs,omitempty"`
-	ClearFiles                     *bool    `json:"clearFiles,omitempty"`
 	AvatarFileID                   *string  `json:"avatarFileID,omitempty"`
 	ClearAvatarFile                *bool    `json:"clearAvatarFile,omitempty"`
 	AddEventIDs                    []string `json:"addEventIDs,omitempty"`
@@ -46140,15 +46111,12 @@ type UpdateUserSettingInput struct {
 	// whether the user has confirmed their email address
 	EmailConfirmed *bool `json:"emailConfirmed,omitempty"`
 	// whether the user has two factor authentication enabled
-	IsTfaEnabled      *bool    `json:"isTfaEnabled,omitempty"`
-	ClearIsTfaEnabled *bool    `json:"clearIsTfaEnabled,omitempty"`
-	UserID            *string  `json:"userID,omitempty"`
-	ClearUser         *bool    `json:"clearUser,omitempty"`
-	DefaultOrgID      *string  `json:"defaultOrgID,omitempty"`
-	ClearDefaultOrg   *bool    `json:"clearDefaultOrg,omitempty"`
-	AddFileIDs        []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs     []string `json:"removeFileIDs,omitempty"`
-	ClearFiles        *bool    `json:"clearFiles,omitempty"`
+	IsTfaEnabled      *bool   `json:"isTfaEnabled,omitempty"`
+	ClearIsTfaEnabled *bool   `json:"clearIsTfaEnabled,omitempty"`
+	UserID            *string `json:"userID,omitempty"`
+	ClearUser         *bool   `json:"clearUser,omitempty"`
+	DefaultOrgID      *string `json:"defaultOrgID,omitempty"`
+	ClearDefaultOrg   *bool   `json:"clearDefaultOrg,omitempty"`
 }
 
 // UpdateVulnerabilityInput is used for update Vulnerability object.
@@ -46531,7 +46499,6 @@ type User struct {
 	Groups               *GroupConnection               `json:"groups"`
 	Organizations        *OrganizationConnection        `json:"organizations"`
 	Webauthns            *WebauthnConnection            `json:"webauthns"`
-	Files                *FileConnection                `json:"files"`
 	AvatarFile           *File                          `json:"avatarFile,omitempty"`
 	Events               *EventConnection               `json:"events"`
 	ActionPlans          *ActionPlanConnection          `json:"actionPlans"`
@@ -47025,8 +46992,7 @@ type UserSetting struct {
 	IsTfaEnabled *bool `json:"isTfaEnabled,omitempty"`
 	User         *User `json:"user,omitempty"`
 	// organization to load on user login
-	DefaultOrg *Organization   `json:"defaultOrg,omitempty"`
-	Files      *FileConnection `json:"files"`
+	DefaultOrg *Organization `json:"defaultOrg,omitempty"`
 }
 
 func (UserSetting) IsNode() {}
@@ -47425,9 +47391,6 @@ type UserSettingWhereInput struct {
 	// default_org edge predicates
 	HasDefaultOrg     *bool                     `json:"hasDefaultOrg,omitempty"`
 	HasDefaultOrgWith []*OrganizationWhereInput `json:"hasDefaultOrgWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 }
 
 // Return response for updateUser mutation
@@ -47757,9 +47720,6 @@ type UserWhereInput struct {
 	// webauthns edge predicates
 	HasWebauthns     *bool                 `json:"hasWebauthns,omitempty"`
 	HasWebauthnsWith []*WebauthnWhereInput `json:"hasWebauthnsWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
 	// avatar_file edge predicates
 	HasAvatarFile     *bool             `json:"hasAvatarFile,omitempty"`
 	HasAvatarFileWith []*FileWhereInput `json:"hasAvatarFileWith,omitempty"`

@@ -71,8 +71,6 @@ const (
 	FieldStorageProvider = "storage_provider"
 	// FieldLastAccessedAt holds the string denoting the last_accessed_at field in the database.
 	FieldLastAccessedAt = "last_accessed_at"
-	// EdgeUser holds the string denoting the user edge name in mutations.
-	EdgeUser = "user"
 	// EdgeOrganization holds the string denoting the organization edge name in mutations.
 	EdgeOrganization = "organization"
 	// EdgeGroups holds the string denoting the groups edge name in mutations.
@@ -81,8 +79,6 @@ const (
 	EdgeContact = "contact"
 	// EdgeEntity holds the string denoting the entity edge name in mutations.
 	EdgeEntity = "entity"
-	// EdgeUserSetting holds the string denoting the user_setting edge name in mutations.
-	EdgeUserSetting = "user_setting"
 	// EdgeOrganizationSetting holds the string denoting the organization_setting edge name in mutations.
 	EdgeOrganizationSetting = "organization_setting"
 	// EdgeTemplate holds the string denoting the template edge name in mutations.
@@ -97,19 +93,12 @@ const (
 	EdgeEvents = "events"
 	// EdgeTrustCenterSetting holds the string denoting the trust_center_setting edge name in mutations.
 	EdgeTrustCenterSetting = "trust_center_setting"
-	// EdgeSubprocessor holds the string denoting the subprocessor edge name in mutations.
-	EdgeSubprocessor = "subprocessor"
 	// EdgeIntegrations holds the string denoting the integrations edge name in mutations.
 	EdgeIntegrations = "integrations"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
 	// Table holds the table name of the file in the database.
 	Table = "files"
-	// UserTable is the table that holds the user relation/edge. The primary key declared below.
-	UserTable = "user_files"
-	// UserInverseTable is the table name for the User entity.
-	// It exists in this package in order to avoid circular dependency with the "user" package.
-	UserInverseTable = "users"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
 	OrganizationTable = "organization_files"
 	// OrganizationInverseTable is the table name for the Organization entity.
@@ -130,11 +119,6 @@ const (
 	// EntityInverseTable is the table name for the Entity entity.
 	// It exists in this package in order to avoid circular dependency with the "entity" package.
 	EntityInverseTable = "entities"
-	// UserSettingTable is the table that holds the user_setting relation/edge. The primary key declared below.
-	UserSettingTable = "user_setting_files"
-	// UserSettingInverseTable is the table name for the UserSetting entity.
-	// It exists in this package in order to avoid circular dependency with the "usersetting" package.
-	UserSettingInverseTable = "user_settings"
 	// OrganizationSettingTable is the table that holds the organization_setting relation/edge. The primary key declared below.
 	OrganizationSettingTable = "organization_setting_files"
 	// OrganizationSettingInverseTable is the table name for the OrganizationSetting entity.
@@ -170,11 +154,6 @@ const (
 	// TrustCenterSettingInverseTable is the table name for the TrustCenterSetting entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
 	TrustCenterSettingInverseTable = "trust_center_settings"
-	// SubprocessorTable is the table that holds the subprocessor relation/edge. The primary key declared below.
-	SubprocessorTable = "subprocessor_files"
-	// SubprocessorInverseTable is the table name for the Subprocessor entity.
-	// It exists in this package in order to avoid circular dependency with the "subprocessor" package.
-	SubprocessorInverseTable = "subprocessors"
 	// IntegrationsTable is the table that holds the integrations relation/edge.
 	IntegrationsTable = "integrations"
 	// IntegrationsInverseTable is the table name for the Integration entity.
@@ -235,9 +214,6 @@ var ForeignKeys = []string{
 }
 
 var (
-	// UserPrimaryKey and UserColumn2 are the table columns denoting the
-	// primary key for the user relation (M2M).
-	UserPrimaryKey = []string{"user_id", "file_id"}
 	// OrganizationPrimaryKey and OrganizationColumn2 are the table columns denoting the
 	// primary key for the organization relation (M2M).
 	OrganizationPrimaryKey = []string{"organization_id", "file_id"}
@@ -250,9 +226,6 @@ var (
 	// EntityPrimaryKey and EntityColumn2 are the table columns denoting the
 	// primary key for the entity relation (M2M).
 	EntityPrimaryKey = []string{"entity_id", "file_id"}
-	// UserSettingPrimaryKey and UserSettingColumn2 are the table columns denoting the
-	// primary key for the user_setting relation (M2M).
-	UserSettingPrimaryKey = []string{"user_setting_id", "file_id"}
 	// OrganizationSettingPrimaryKey and OrganizationSettingColumn2 are the table columns denoting the
 	// primary key for the organization_setting relation (M2M).
 	OrganizationSettingPrimaryKey = []string{"organization_setting_id", "file_id"}
@@ -274,9 +247,6 @@ var (
 	// TrustCenterSettingPrimaryKey and TrustCenterSettingColumn2 are the table columns denoting the
 	// primary key for the trust_center_setting relation (M2M).
 	TrustCenterSettingPrimaryKey = []string{"trust_center_setting_id", "file_id"}
-	// SubprocessorPrimaryKey and SubprocessorColumn2 are the table columns denoting the
-	// primary key for the subprocessor relation (M2M).
-	SubprocessorPrimaryKey = []string{"subprocessor_id", "file_id"}
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"file_id", "hush_id"}
@@ -457,20 +427,6 @@ func ByLastAccessedAt(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLastAccessedAt, opts...).ToFunc()
 }
 
-// ByUserCount orders the results by user count.
-func ByUserCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserStep(), opts...)
-	}
-}
-
-// ByUser orders the results by user terms.
-func ByUser(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByOrganizationCount orders the results by organization count.
 func ByOrganizationCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -524,20 +480,6 @@ func ByEntityCount(opts ...sql.OrderTermOption) OrderOption {
 func ByEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newEntityStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
-// ByUserSettingCount orders the results by user_setting count.
-func ByUserSettingCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newUserSettingStep(), opts...)
-	}
-}
-
-// ByUserSetting orders the results by user_setting terms.
-func ByUserSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newUserSettingStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -639,20 +581,6 @@ func ByTrustCenterSetting(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOptio
 	}
 }
 
-// BySubprocessorCount orders the results by subprocessor count.
-func BySubprocessorCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newSubprocessorStep(), opts...)
-	}
-}
-
-// BySubprocessor orders the results by subprocessor terms.
-func BySubprocessor(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newSubprocessorStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByIntegrationsCount orders the results by integrations count.
 func ByIntegrationsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -680,13 +608,6 @@ func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newSecretsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newUserStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UserTable, UserPrimaryKey...),
-	)
-}
 func newOrganizationStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -713,13 +634,6 @@ func newEntityStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(EntityInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, EntityTable, EntityPrimaryKey...),
-	)
-}
-func newUserSettingStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(UserSettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, UserSettingTable, UserSettingPrimaryKey...),
 	)
 }
 func newOrganizationSettingStep() *sqlgraph.Step {
@@ -769,13 +683,6 @@ func newTrustCenterSettingStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterSettingInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2M, true, TrustCenterSettingTable, TrustCenterSettingPrimaryKey...),
-	)
-}
-func newSubprocessorStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(SubprocessorInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, SubprocessorTable, SubprocessorPrimaryKey...),
 	)
 }
 func newIntegrationsStep() *sqlgraph.Step {

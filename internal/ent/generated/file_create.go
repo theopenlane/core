@@ -22,11 +22,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/subprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/template"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
-	"github.com/theopenlane/core/internal/ent/generated/user"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
 )
 
 // FileCreate is the builder for creating a File entity.
@@ -394,21 +391,6 @@ func (_c *FileCreate) SetNillableID(v *string) *FileCreate {
 	return _c
 }
 
-// AddUserIDs adds the "user" edge to the User entity by IDs.
-func (_c *FileCreate) AddUserIDs(ids ...string) *FileCreate {
-	_c.mutation.AddUserIDs(ids...)
-	return _c
-}
-
-// AddUser adds the "user" edges to the User entity.
-func (_c *FileCreate) AddUser(v ...*User) *FileCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddUserIDs(ids...)
-}
-
 // AddOrganizationIDs adds the "organization" edge to the Organization entity by IDs.
 func (_c *FileCreate) AddOrganizationIDs(ids ...string) *FileCreate {
 	_c.mutation.AddOrganizationIDs(ids...)
@@ -467,21 +449,6 @@ func (_c *FileCreate) AddEntity(v ...*Entity) *FileCreate {
 		ids[i] = v[i].ID
 	}
 	return _c.AddEntityIDs(ids...)
-}
-
-// AddUserSettingIDs adds the "user_setting" edge to the UserSetting entity by IDs.
-func (_c *FileCreate) AddUserSettingIDs(ids ...string) *FileCreate {
-	_c.mutation.AddUserSettingIDs(ids...)
-	return _c
-}
-
-// AddUserSetting adds the "user_setting" edges to the UserSetting entity.
-func (_c *FileCreate) AddUserSetting(v ...*UserSetting) *FileCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddUserSettingIDs(ids...)
 }
 
 // AddOrganizationSettingIDs adds the "organization_setting" edge to the OrganizationSetting entity by IDs.
@@ -587,21 +554,6 @@ func (_c *FileCreate) AddTrustCenterSetting(v ...*TrustCenterSetting) *FileCreat
 		ids[i] = v[i].ID
 	}
 	return _c.AddTrustCenterSettingIDs(ids...)
-}
-
-// AddSubprocessorIDs adds the "subprocessor" edge to the Subprocessor entity by IDs.
-func (_c *FileCreate) AddSubprocessorIDs(ids ...string) *FileCreate {
-	_c.mutation.AddSubprocessorIDs(ids...)
-	return _c
-}
-
-// AddSubprocessor adds the "subprocessor" edges to the Subprocessor entity.
-func (_c *FileCreate) AddSubprocessor(v ...*Subprocessor) *FileCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddSubprocessorIDs(ids...)
 }
 
 // AddIntegrationIDs adds the "integrations" edge to the Integration entity by IDs.
@@ -872,23 +824,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		_spec.SetField(file.FieldLastAccessedAt, field.TypeTime, value)
 		_node.LastAccessedAt = &value
 	}
-	if nodes := _c.mutation.UserIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(user.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.UserFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
 	if nodes := _c.mutation.OrganizationIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -952,23 +887,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.EntityFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.UserSettingIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(usersetting.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.UserSettingFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1088,23 +1006,6 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.SubprocessorIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(subprocessor.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

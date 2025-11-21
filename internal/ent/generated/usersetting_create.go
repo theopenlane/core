@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/user"
 	"github.com/theopenlane/core/internal/ent/generated/usersetting"
@@ -278,21 +277,6 @@ func (_c *UserSettingCreate) SetDefaultOrg(v *Organization) *UserSettingCreate {
 	return _c.SetDefaultOrgID(v.ID)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *UserSettingCreate) AddFileIDs(ids ...string) *UserSettingCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *UserSettingCreate) AddFiles(v ...*File) *UserSettingCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
-}
-
 // Mutation returns the UserSettingMutation object of the builder.
 func (_c *UserSettingCreate) Mutation() *UserSettingMutation {
 	return _c.mutation
@@ -524,23 +508,6 @@ func (_c *UserSettingCreate) createSpec() (*UserSetting, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.user_setting_default_org = &nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
-	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   usersetting.FilesTable,
-			Columns: usersetting.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.UserSettingFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

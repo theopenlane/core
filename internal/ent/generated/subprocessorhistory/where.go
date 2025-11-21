@@ -140,9 +140,9 @@ func LogoRemoteURL(v string) predicate.SubprocessorHistory {
 	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoRemoteURL, v))
 }
 
-// LogoLocalFileID applies equality check predicate on the "logo_local_file_id" field. It's identical to LogoLocalFileIDEQ.
-func LogoLocalFileID(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoFileID, v))
 }
 
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
@@ -1125,79 +1125,79 @@ func LogoRemoteURLContainsFold(v string) predicate.SubprocessorHistory {
 	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldLogoRemoteURL, v))
 }
 
-// LogoLocalFileIDEQ applies the EQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEQ(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoLocalFileID, v))
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEQ(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDNEQ applies the NEQ predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNEQ(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldLogoLocalFileID, v))
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNEQ(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDIn applies the In predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIn(vs ...string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldIn(FieldLogoLocalFileID, vs...))
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIn(FieldLogoFileID, vs...))
 }
 
-// LogoLocalFileIDNotIn applies the NotIn predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotIn(vs ...string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldLogoLocalFileID, vs...))
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotIn(FieldLogoFileID, vs...))
 }
 
-// LogoLocalFileIDGT applies the GT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGT(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldGT(FieldLogoLocalFileID, v))
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGT(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDGTE applies the GTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDGTE(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldGTE(FieldLogoLocalFileID, v))
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldGTE(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDLT applies the LT predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLT(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldLT(FieldLogoLocalFileID, v))
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLT(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDLTE applies the LTE predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDLTE(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldLTE(FieldLogoLocalFileID, v))
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldLTE(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDContains applies the Contains predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContains(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldContains(FieldLogoLocalFileID, v))
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContains(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDHasPrefix applies the HasPrefix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasPrefix(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldLogoLocalFileID, v))
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasPrefix(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDHasSuffix applies the HasSuffix predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDHasSuffix(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldLogoLocalFileID, v))
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldHasSuffix(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDIsNil applies the IsNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDIsNil() predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldLogoLocalFileID))
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldIsNull(FieldLogoFileID))
 }
 
-// LogoLocalFileIDNotNil applies the NotNil predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDNotNil() predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldLogoLocalFileID))
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldNotNull(FieldLogoFileID))
 }
 
-// LogoLocalFileIDEqualFold applies the EqualFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDEqualFold(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldLogoLocalFileID, v))
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldEqualFold(FieldLogoFileID, v))
 }
 
-// LogoLocalFileIDContainsFold applies the ContainsFold predicate on the "logo_local_file_id" field.
-func LogoLocalFileIDContainsFold(v string) predicate.SubprocessorHistory {
-	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldLogoLocalFileID, v))
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.SubprocessorHistory {
+	return predicate.SubprocessorHistory(sql.FieldContainsFold(FieldLogoFileID, v))
 }
 
 // And groups predicates with the AND operator between them.

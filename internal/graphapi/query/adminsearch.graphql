@@ -1118,7 +1118,7 @@ query AdminSearch($query: String!) {
           name
           description
           logoRemoteURL
-          logoLocalFileID
+          logoFileID
         }
       }
     }

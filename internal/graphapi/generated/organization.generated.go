@@ -110,6 +110,8 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "subprocessorCreators":
+				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -337,6 +339,8 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "subprocessorCreators":
+				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -593,6 +597,8 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_standardCreators(ctx, field)
 			case "templateCreators":
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
+			case "subprocessorCreators":
+				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":

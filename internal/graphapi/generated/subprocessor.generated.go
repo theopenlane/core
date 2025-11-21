@@ -78,12 +78,10 @@ func (ec *executionContext) fieldContext_SubprocessorBulkCreatePayload_subproces
 				return ec.fieldContext_Subprocessor_description(ctx, field)
 			case "logoRemoteURL":
 				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "files":
-				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			case "trustCenterSubprocessors":
@@ -174,12 +172,10 @@ func (ec *executionContext) fieldContext_SubprocessorCreatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_description(ctx, field)
 			case "logoRemoteURL":
 				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "files":
-				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			case "trustCenterSubprocessors":
@@ -270,12 +266,10 @@ func (ec *executionContext) fieldContext_SubprocessorUpdatePayload_subprocessor(
 				return ec.fieldContext_Subprocessor_description(ctx, field)
 			case "logoRemoteURL":
 				return ec.fieldContext_Subprocessor_logoRemoteURL(ctx, field)
-			case "logoLocalFileID":
-				return ec.fieldContext_Subprocessor_logoLocalFileID(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Subprocessor_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Subprocessor_owner(ctx, field)
-			case "files":
-				return ec.fieldContext_Subprocessor_files(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_Subprocessor_logoFile(ctx, field)
 			case "trustCenterSubprocessors":

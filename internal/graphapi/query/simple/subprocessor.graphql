@@ -5,7 +5,7 @@ mutation CreateSubprocessor($input: CreateSubprocessorInput!, $logoFile: Upload)
       createdBy
       description
       id
-      logoLocalFileID
+      logoFileID
       logoRemoteURL
       name
       ownerID
@@ -38,7 +38,7 @@ query GetAllSubprocessors {
         createdBy
         description
         id
-        logoLocalFileID
+        logoFileID
         logoRemoteURL
         name
         ownerID
@@ -57,7 +57,7 @@ query GetSubprocessorByID($subprocessorId: ID!) {
     createdBy
     description
     id
-    logoLocalFileID
+    logoFileID
     logoRemoteURL
     name
     ownerID
@@ -83,7 +83,7 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
         createdBy
         description
         id
-        logoLocalFileID
+        logoFileID
         logoRemoteURL
         name
         ownerID
@@ -97,13 +97,17 @@ query GetSubprocessors($first: Int, $last: Int, $where: SubprocessorWhereInput) 
 }
 
 mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocessorInput!, $logoFile: Upload) {
-  updateSubprocessor(id: $updateSubprocessorId, input: $input, logoFile: $logoFile) {
+  updateSubprocessor(
+    id: $updateSubprocessorId
+    input: $input
+    logoFile: $logoFile
+  ) {
     subprocessor {
       createdAt
       createdBy
       description
       id
-      logoLocalFileID
+      logoFileID
       logoRemoteURL
       name
       ownerID

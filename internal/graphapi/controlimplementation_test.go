@@ -615,7 +615,7 @@ func TestMutationUpdateControlImplementation(t *testing.T) {
 			} else if tc.request.Verified != nil && *tc.request.Verified {
 				// default value is time.Now() in the model if verified is true
 				assert.Check(t, resp.UpdateControlImplementation.ControlImplementation.VerificationDate != nil)
-				diff := resp.UpdateControlImplementation.ControlImplementation.VerificationDate.Sub(time.Now())
+				diff := time.Until(*resp.UpdateControlImplementation.ControlImplementation.VerificationDate)
 				assert.Check(t, diff >= -time.Hour && diff <= time.Hour, "time difference is not within 1 hour")
 			}
 

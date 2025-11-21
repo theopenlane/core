@@ -54,8 +54,6 @@ const (
 	EdgeUser = "user"
 	// EdgeDefaultOrg holds the string denoting the default_org edge name in mutations.
 	EdgeDefaultOrg = "default_org"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
 	// Table holds the table name of the usersetting in the database.
 	Table = "user_settings"
 	// UserTable is the table that holds the user relation/edge.
@@ -72,11 +70,6 @@ const (
 	DefaultOrgInverseTable = "organizations"
 	// DefaultOrgColumn is the table column denoting the default_org relation/edge.
 	DefaultOrgColumn = "user_setting_default_org"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "user_setting_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
 )
 
 // Columns holds all SQL columns for usersetting fields.
@@ -105,12 +98,6 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"user_setting_default_org",
 }
-
-var (
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"user_setting_id", "file_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -264,20 +251,6 @@ func ByDefaultOrgField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newDefaultOrgStep(), sql.OrderByField(field, opts...))
 	}
 }
-
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
 func newUserStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -290,13 +263,6 @@ func newDefaultOrgStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(DefaultOrgInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, false, DefaultOrgTable, DefaultOrgColumn),
-	)
-}
-func newFilesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 

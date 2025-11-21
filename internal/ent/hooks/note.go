@@ -7,7 +7,6 @@ import (
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
@@ -23,8 +22,6 @@ func HookNoteFiles() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
-
-				m.AddFileIDs(fileIDs...)
 			}
 
 			return next.Mutate(ctx, m)
@@ -33,7 +30,7 @@ func HookNoteFiles() ent.Hook {
 }
 
 // checkNoteFiles checks if note files are provided and sets the local file ID(s)
-func checkNoteFiles[T utils.GenericMutation](ctx context.Context, m T) (context.Context, error) {
+func checkNoteFiles(ctx context.Context, m *generated.NoteMutation) (context.Context, error) {
 	key := "noteFiles"
 
 	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
@@ -41,9 +38,16 @@ func checkNoteFiles[T utils.GenericMutation](ctx context.Context, m T) (context.
 		return ctx, nil
 	}
 
+	fileIDs := make([]string, len(files))
+	for i, f := range files {
+		fileIDs[i] = f.ID
+	}
+
+	m.AddFileIDs(fileIDs...)
+
 	adapter := pkgobjects.NewGenericMutationAdapter(m,
-		func(mut T) (string, bool) { return mut.ID() },
-		func(mut T) string { return mut.Type() },
+		func(mut *generated.NoteMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.NoteMutation) string { return mut.Type() },
 	)
 
 	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)

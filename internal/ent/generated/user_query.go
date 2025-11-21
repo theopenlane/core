@@ -55,7 +55,6 @@ type UserQuery struct {
 	withGroups                       *GroupQuery
 	withOrganizations                *OrganizationQuery
 	withWebauthns                    *WebauthnQuery
-	withFiles                        *FileQuery
 	withAvatarFile                   *FileQuery
 	withEvents                       *EventQuery
 	withActionPlans                  *ActionPlanQuery
@@ -80,7 +79,6 @@ type UserQuery struct {
 	withNamedGroups                  map[string]*GroupQuery
 	withNamedOrganizations           map[string]*OrganizationQuery
 	withNamedWebauthns               map[string]*WebauthnQuery
-	withNamedFiles                   map[string]*FileQuery
 	withNamedEvents                  map[string]*EventQuery
 	withNamedActionPlans             map[string]*ActionPlanQuery
 	withNamedSubcontrols             map[string]*SubcontrolQuery
@@ -349,31 +347,6 @@ func (_q *UserQuery) QueryWebauthns() *WebauthnQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Webauthn
 		step.Edge.Schema = schemaConfig.Webauthn
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryFiles chains the current query on the "files" edge.
-func (_q *UserQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(user.Table, user.FieldID, selector),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, user.FilesTable, user.FilesPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.UserFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -931,7 +904,6 @@ func (_q *UserQuery) Clone() *UserQuery {
 		withGroups:                  _q.withGroups.Clone(),
 		withOrganizations:           _q.withOrganizations.Clone(),
 		withWebauthns:               _q.withWebauthns.Clone(),
-		withFiles:                   _q.withFiles.Clone(),
 		withAvatarFile:              _q.withAvatarFile.Clone(),
 		withEvents:                  _q.withEvents.Clone(),
 		withActionPlans:             _q.withActionPlans.Clone(),
@@ -1049,17 +1021,6 @@ func (_q *UserQuery) WithWebauthns(opts ...func(*WebauthnQuery)) *UserQuery {
 		opt(query)
 	}
 	_q.withWebauthns = query
-	return _q
-}
-
-// WithFiles tells the query-builder to eager-load the nodes that are connected to
-// the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithFiles(opts ...func(*FileQuery)) *UserQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withFiles = query
 	return _q
 }
 
@@ -1301,7 +1262,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	var (
 		nodes       = []*User{}
 		_spec       = _q.querySpec()
-		loadedTypes = [24]bool{
+		loadedTypes = [23]bool{
 			_q.withPersonalAccessTokens != nil,
 			_q.withTfaSettings != nil,
 			_q.withSetting != nil,
@@ -1311,7 +1272,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			_q.withGroups != nil,
 			_q.withOrganizations != nil,
 			_q.withWebauthns != nil,
-			_q.withFiles != nil,
 			_q.withAvatarFile != nil,
 			_q.withEvents != nil,
 			_q.withActionPlans != nil,
@@ -1418,13 +1378,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadWebauthns(ctx, query, nodes,
 			func(n *User) { n.Edges.Webauthns = []*Webauthn{} },
 			func(n *User, e *Webauthn) { n.Edges.Webauthns = append(n.Edges.Webauthns, e) }); err != nil {
-			return nil, err
-		}
-	}
-	if query := _q.withFiles; query != nil {
-		if err := _q.loadFiles(ctx, query, nodes,
-			func(n *User) { n.Edges.Files = []*File{} },
-			func(n *User, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1584,13 +1537,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 		if err := _q.loadWebauthns(ctx, query, nodes,
 			func(n *User) { n.appendNamedWebauthns(name) },
 			func(n *User, e *Webauthn) { n.appendNamedWebauthns(name, e) }); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedFiles {
-		if err := _q.loadFiles(ctx, query, nodes,
-			func(n *User) { n.appendNamedFiles(name) },
-			func(n *User, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2022,68 +1968,6 @@ func (_q *UserQuery) loadWebauthns(ctx context.Context, query *WebauthnQuery, no
 			return fmt.Errorf(`unexpected referenced foreign-key "owner_id" returned %v for node %v`, fk, n.ID)
 		}
 		assign(node, n)
-	}
-	return nil
-}
-func (_q *UserQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*User, init func(*User), assign func(*User, *File)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*User)
-	nids := make(map[string]map[*User]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(user.FilesTable)
-		joinT.Schema(_q.schemaConfig.UserFiles)
-		s.Join(joinT).On(s.C(file.FieldID), joinT.C(user.FilesPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(user.FilesPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(user.FilesPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*User]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
 	}
 	return nil
 }
@@ -2791,20 +2675,6 @@ func (_q *UserQuery) WithNamedWebauthns(name string, opts ...func(*WebauthnQuery
 		_q.withNamedWebauthns = make(map[string]*WebauthnQuery)
 	}
 	_q.withNamedWebauthns[name] = query
-	return _q
-}
-
-// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *UserQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *UserQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedFiles == nil {
-		_q.withNamedFiles = make(map[string]*FileQuery)
-	}
-	_q.withNamedFiles[name] = query
 	return _q
 }
 

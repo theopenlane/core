@@ -265,7 +265,7 @@ func TestQueryStandards(t *testing.T) {
 		})
 	}
 
-	systemOwnedIDs := append(notPublicStandardIDs)
+	systemOwnedIDs := notPublicStandardIDs
 
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: systemOwnedIDs}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.StandardDeleteOne]{client: suite.client.db.Standard, IDs: orgOwnedStandardIDs}).MustDelete(testUser1.UserCtx, t)
