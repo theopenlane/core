@@ -134,9 +134,9 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		if au.OrganizationID != "" {
 			return au.OrganizationID, nil
 		}
-		
-		if len(u.OrganizationIDs) == 1 {
-			return au.OrganizationIDs[0]
+
+		if len(au.OrganizationIDs) == 1 {
+			return au.OrganizationIDs[0], nil
 		}
 	}
 
