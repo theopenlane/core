@@ -1063,72 +1063,55 @@ func (e OrganizationEdges) WorkflowInstancesOrErr() ([]*WorkflowInstance, error)
 // WorkflowEventsOrErr returns the WorkflowEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowEventsOrErr() ([]*WorkflowEvent, error) {
-	if e.loadedTypes[79] {
-		return e.WorkflowEvents, nil
-	}
+
 	return nil, &NotLoadedError{edge: "workflow_events"}
 }
 
 // WorkflowAssignmentsOrErr returns the WorkflowAssignments value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowAssignmentsOrErr() ([]*WorkflowAssignment, error) {
-	if e.loadedTypes[80] {
-		return e.WorkflowAssignments, nil
-	}
+
 	return nil, &NotLoadedError{edge: "workflow_assignments"}
 }
 
 // WorkflowAssignmentTargetsOrErr returns the WorkflowAssignmentTargets value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowAssignmentTargetsOrErr() ([]*WorkflowAssignmentTarget, error) {
-	if e.loadedTypes[81] {
-		return e.WorkflowAssignmentTargets, nil
-	}
+
 	return nil, &NotLoadedError{edge: "workflow_assignment_targets"}
 }
 
 // WorkflowObjectRefsOrErr returns the WorkflowObjectRefs value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) WorkflowObjectRefsOrErr() ([]*WorkflowObjectRef, error) {
-	if e.loadedTypes[82] {
-		return e.WorkflowObjectRefs, nil
-	}
 	return nil, &NotLoadedError{edge: "workflow_object_refs"}
 }
 
 // DirectoryAccountsOrErr returns the DirectoryAccounts value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryAccountsOrErr() ([]*DirectoryAccount, error) {
-	if e.loadedTypes[83] {
-		return e.DirectoryAccounts, nil
-	}
+
 	return nil, &NotLoadedError{edge: "directory_accounts"}
 }
 
 // DirectoryGroupsOrErr returns the DirectoryGroups value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryGroupsOrErr() ([]*DirectoryGroup, error) {
-	if e.loadedTypes[84] {
-		return e.DirectoryGroups, nil
-	}
+
 	return nil, &NotLoadedError{edge: "directory_groups"}
 }
 
 // DirectoryMembershipsOrErr returns the DirectoryMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectoryMembershipsOrErr() ([]*DirectoryMembership, error) {
-	if e.loadedTypes[85] {
-		return e.DirectoryMemberships, nil
-	}
+
 	return nil, &NotLoadedError{edge: "directory_memberships"}
 }
 
 // DirectorySyncRunsOrErr returns the DirectorySyncRuns value or an error if the edge
 // was not loaded in eager-loading.
 func (e OrganizationEdges) DirectorySyncRunsOrErr() ([]*DirectorySyncRun, error) {
-	if e.loadedTypes[86] {
-		return e.DirectorySyncRuns, nil
-	}
+
 	return nil, &NotLoadedError{edge: "directory_sync_runs"}
 }
 

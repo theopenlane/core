@@ -7035,7 +7035,8 @@ func (_m *Organization) WorkflowEvents(
 		WithWorkflowEventFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[74][alias]
+	var totalCount int
+	var hasTotalCount bool
 	if nodes, err := _m.NamedWorkflowEvents(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowEventPager(opts, last != nil)
 		if err != nil {
@@ -7056,8 +7057,10 @@ func (_m *Organization) WorkflowAssignments(
 		WithWorkflowAssignmentFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[75][alias]
-	if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
+
+	var totalCount int
+	var hasTotalCount bool
+		if nodes, err := _m.NamedWorkflowAssignments(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowAssignmentPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -7077,7 +7080,8 @@ func (_m *Organization) WorkflowAssignmentTargets(
 		WithWorkflowAssignmentTargetFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[76][alias]
+	var totalCount int
+	var hasTotalCount bool
 	if nodes, err := _m.NamedWorkflowAssignmentTargets(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowAssignmentTargetPager(opts, last != nil)
 		if err != nil {
@@ -7098,8 +7102,9 @@ func (_m *Organization) WorkflowObjectRefs(
 		WithWorkflowObjectRefFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[77][alias]
-	if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
+	var totalCount int
+	var hasTotalCount bool
+		if nodes, err := _m.NamedWorkflowObjectRefs(alias); err == nil || hasTotalCount {
 		pager, err := newWorkflowObjectRefPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -7119,8 +7124,9 @@ func (_m *Organization) DirectoryAccounts(
 		WithDirectoryAccountFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[78][alias]
-	if nodes, err := _m.NamedDirectoryAccounts(alias); err == nil || hasTotalCount {
+	var totalCount int
+	var hasTotalCount bool
+		if nodes, err := _m.NamedDirectoryAccounts(alias); err == nil || hasTotalCount {
 		pager, err := newDirectoryAccountPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -7140,8 +7146,9 @@ func (_m *Organization) DirectoryGroups(
 		WithDirectoryGroupFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[79][alias]
-	if nodes, err := _m.NamedDirectoryGroups(alias); err == nil || hasTotalCount {
+	var totalCount int
+	var hasTotalCount bool
+		if nodes, err := _m.NamedDirectoryGroups(alias); err == nil || hasTotalCount {
 		pager, err := newDirectoryGroupPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -7161,8 +7168,9 @@ func (_m *Organization) DirectoryMemberships(
 		WithDirectoryMembershipFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[80][alias]
-	if nodes, err := _m.NamedDirectoryMemberships(alias); err == nil || hasTotalCount {
+	var totalCount int
+	var hasTotalCount bool
+		if nodes, err := _m.NamedDirectoryMemberships(alias); err == nil || hasTotalCount {
 		pager, err := newDirectoryMembershipPager(opts, last != nil)
 		if err != nil {
 			return nil, err
@@ -7182,7 +7190,8 @@ func (_m *Organization) DirectorySyncRuns(
 		WithDirectorySyncRunFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[81][alias]
+	var totalCount int
+	var hasTotalCount bool
 	if nodes, err := _m.NamedDirectorySyncRuns(alias); err == nil || hasTotalCount {
 		pager, err := newDirectorySyncRunPager(opts, last != nil)
 		if err != nil {

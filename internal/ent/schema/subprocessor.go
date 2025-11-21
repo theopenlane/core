@@ -81,11 +81,6 @@ func (Subprocessor) Fields() []ent.Field {
 func (t Subprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
-			// newObjectOwnedMixin[generated.Subprocessor](t,
-			// 		withParents(Organization{}),
-			// 		withAllowAnonymousTrustCenterAccess(true),
-			// 		withOrganizationOwner(true),
-			// ),
 			newOrgOwnedMixin(t,
 				withAllowAnonymousTrustCenterAccess(true),
 			),

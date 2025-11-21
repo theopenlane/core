@@ -3966,16 +3966,7 @@ func (_q *OrganizationQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			_q.withVulnerabilities != nil,
 			_q.withNotifications != nil,
 			_q.withWorkflowDefinitions != nil,
-			_q.withWorkflowInstances != nil,
-			_q.withWorkflowEvents != nil,
-			_q.withWorkflowAssignments != nil,
-			_q.withWorkflowAssignmentTargets != nil,
-			_q.withWorkflowObjectRefs != nil,
-			_q.withDirectoryAccounts != nil,
-			_q.withDirectoryGroups != nil,
-			_q.withDirectoryMemberships != nil,
-			_q.withDirectorySyncRuns != nil,
-			_q.withMembers != nil,
+
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
