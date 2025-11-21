@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -47,6 +48,7 @@ func HookTrustCenter() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+
 			// Remove all spaces and non-alphanumeric characters from org.Name, then lowercase
 			cleanedName := reg.ReplaceAllString(org.Name, "")
 			slug := strings.ToLower(cleanedName)
@@ -58,9 +60,27 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			settingID, _ := m.SettingID()
-			if settingID != "" {
-				logx.FromContext(ctx).Debug().Msg("trust center setting ID provided, skipping default setting creation")
+			settingIDs := m.SettingIDs()
+
+			createLive, createPreview := false, false
+			switch len(settingIDs) {
+			case 0:
+				createLive, createPreview = true, true
+			case 1:
+				setting, err := m.Client().TrustCenterSetting.Get(ctx, settingIDs[0])
+				if err != nil {
+					return nil, err
+				}
+
+				switch setting.Environment {
+				case enums.TrustCenterEnvironmentLive:
+					createPreview = true
+				case enums.TrustCenterEnvironmentPreview:
+					createLive = true
+				}
+
+			default:
+				logx.FromContext(ctx).Debug().Msg("trust center setting IDs provided, skipping default setting creation")
 
 				return retVal, nil
 			}
@@ -73,16 +93,50 @@ func HookTrustCenter() ent.Hook {
 				return retVal, err
 			}
 
-			setting, err := m.Client().TrustCenterSetting.Create().
-				SetTrustCenterID(id).
-				SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
-				SetOverview(defaultOverview).
-				Save(ctx)
-			if err != nil {
-				return nil, err
+			if createLive {
+				setting, err := m.Client().TrustCenterSetting.Create().
+					SetTrustCenterID(id).
+					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+					SetOverview(defaultOverview).
+					SetEnvironment(enums.TrustCenterEnvironmentLive).
+					Save(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
+
+					return nil, err
+				}
+
+				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetSettingID(setting.ID).Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to set live setting ID on trust center")
+
+					return nil, err
+				}
+
+				trustCenter.Edges.Setting = setting
 			}
 
-			trustCenter.Edges.Setting = setting
+			if createPreview {
+				// create preview settings with same values but environment set to "preview"
+				previewSetting, err := m.Client().TrustCenterSetting.Create().
+					SetTrustCenterID(id).
+					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+					SetOverview(defaultOverview).
+					SetEnvironment(enums.TrustCenterEnvironmentPreview).
+					Save(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
+
+					return nil, err
+				}
+
+				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetPreviewSettingID(previewSetting.ID).Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to set preview setting ID on trust center")
+
+					return nil, err
+				}
+
+				trustCenter.Edges.PreviewSetting = previewSetting
+			}
 
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 

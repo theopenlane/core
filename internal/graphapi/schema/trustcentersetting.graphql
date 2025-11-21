@@ -23,7 +23,7 @@ extend type Mutation{
         faviconFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
-    Update an existing trustCenterSetting
+    Update an existing trustCenterSetting by targeting the ID
     """
     updateTrustCenterSetting(
         """
@@ -37,6 +37,21 @@ extend type Mutation{
         logoFile: Upload
         faviconFile: Upload
     ): TrustCenterSettingUpdatePayload!
+    """
+    Update an existing trustCenterSetting preview settings
+    """
+    updateTrustCenterPreviewSetting(
+        """
+        New values for the trustCenterSetting
+        """
+        input: UpdateTrustCenterSettingInput!
+        logoFile: Upload
+        faviconFile: Upload
+    ): TrustCenterSettingUpdatePayload!
+    """
+    Publish changes from preview to live environment
+    """
+    publishTrustCenterSetting: TrustCenterSettingUpdatePayload!
     """
     Delete an existing trustCenterSetting
     """

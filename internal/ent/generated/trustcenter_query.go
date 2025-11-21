@@ -37,7 +37,9 @@ type TrustCenterQuery struct {
 	predicates                        []predicate.TrustCenter
 	withOwner                         *OrganizationQuery
 	withCustomDomain                  *CustomDomainQuery
+	withPreviewDomain                 *CustomDomainQuery
 	withSetting                       *TrustCenterSettingQuery
+	withPreviewSetting                *TrustCenterSettingQuery
 	withWatermarkConfig               *TrustCenterWatermarkConfigQuery
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
 	withTrustCenterDocs               *TrustCenterDocQuery
@@ -138,6 +140,31 @@ func (_q *TrustCenterQuery) QueryCustomDomain() *CustomDomainQuery {
 	return query
 }
 
+// QueryPreviewDomain chains the current query on the "preview_domain" edge.
+func (_q *TrustCenterQuery) QueryPreviewDomain() *CustomDomainQuery {
+	query := (&CustomDomainClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewDomainTable, trustcenter.PreviewDomainColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QuerySetting chains the current query on the "setting" edge.
 func (_q *TrustCenterQuery) QuerySetting() *TrustCenterSettingQuery {
 	query := (&TrustCenterSettingClient{config: _q.config}).Query()
@@ -152,11 +179,36 @@ func (_q *TrustCenterQuery) QuerySetting() *TrustCenterSettingQuery {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
 			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryPreviewSetting chains the current query on the "preview_setting" edge.
+func (_q *TrustCenterQuery) QueryPreviewSetting() *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, selector),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewSettingTable, trustcenter.PreviewSettingColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -507,7 +559,9 @@ func (_q *TrustCenterQuery) Clone() *TrustCenterQuery {
 		predicates:                   append([]predicate.TrustCenter{}, _q.predicates...),
 		withOwner:                    _q.withOwner.Clone(),
 		withCustomDomain:             _q.withCustomDomain.Clone(),
+		withPreviewDomain:            _q.withPreviewDomain.Clone(),
 		withSetting:                  _q.withSetting.Clone(),
+		withPreviewSetting:           _q.withPreviewSetting.Clone(),
 		withWatermarkConfig:          _q.withWatermarkConfig.Clone(),
 		withTrustCenterSubprocessors: _q.withTrustCenterSubprocessors.Clone(),
 		withTrustCenterDocs:          _q.withTrustCenterDocs.Clone(),
@@ -543,6 +597,17 @@ func (_q *TrustCenterQuery) WithCustomDomain(opts ...func(*CustomDomainQuery)) *
 	return _q
 }
 
+// WithPreviewDomain tells the query-builder to eager-load the nodes that are connected to
+// the "preview_domain" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithPreviewDomain(opts ...func(*CustomDomainQuery)) *TrustCenterQuery {
+	query := (&CustomDomainClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPreviewDomain = query
+	return _q
+}
+
 // WithSetting tells the query-builder to eager-load the nodes that are connected to
 // the "setting" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *TrustCenterQuery) WithSetting(opts ...func(*TrustCenterSettingQuery)) *TrustCenterQuery {
@@ -551,6 +616,17 @@ func (_q *TrustCenterQuery) WithSetting(opts ...func(*TrustCenterSettingQuery)) 
 		opt(query)
 	}
 	_q.withSetting = query
+	return _q
+}
+
+// WithPreviewSetting tells the query-builder to eager-load the nodes that are connected to
+// the "preview_setting" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterQuery) WithPreviewSetting(opts ...func(*TrustCenterSettingQuery)) *TrustCenterQuery {
+	query := (&TrustCenterSettingClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withPreviewSetting = query
 	return _q
 }
 
@@ -705,10 +781,12 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 		nodes       = []*TrustCenter{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [11]bool{
 			_q.withOwner != nil,
 			_q.withCustomDomain != nil,
+			_q.withPreviewDomain != nil,
 			_q.withSetting != nil,
+			_q.withPreviewSetting != nil,
 			_q.withWatermarkConfig != nil,
 			_q.withTrustCenterSubprocessors != nil,
 			_q.withTrustCenterDocs != nil,
@@ -717,7 +795,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			_q.withPosts != nil,
 		}
 	)
-	if _q.withWatermarkConfig != nil {
+	if _q.withSetting != nil || _q.withPreviewSetting != nil || _q.withWatermarkConfig != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -758,9 +836,21 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			return nil, err
 		}
 	}
+	if query := _q.withPreviewDomain; query != nil {
+		if err := _q.loadPreviewDomain(ctx, query, nodes, nil,
+			func(n *TrustCenter, e *CustomDomain) { n.Edges.PreviewDomain = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withSetting; query != nil {
 		if err := _q.loadSetting(ctx, query, nodes, nil,
 			func(n *TrustCenter, e *TrustCenterSetting) { n.Edges.Setting = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withPreviewSetting; query != nil {
+		if err := _q.loadPreviewSetting(ctx, query, nodes, nil,
+			func(n *TrustCenter, e *TrustCenterSetting) { n.Edges.PreviewSetting = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -910,30 +1000,96 @@ func (_q *TrustCenterQuery) loadCustomDomain(ctx context.Context, query *CustomD
 	}
 	return nil
 }
-func (_q *TrustCenterQuery) loadSetting(ctx context.Context, query *TrustCenterSettingQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterSetting)) error {
-	fks := make([]driver.Value, 0, len(nodes))
-	nodeids := make(map[string]*TrustCenter)
+func (_q *TrustCenterQuery) loadPreviewDomain(ctx context.Context, query *CustomDomainQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *CustomDomain)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenter)
 	for i := range nodes {
-		fks = append(fks, nodes[i].ID)
-		nodeids[nodes[i].ID] = nodes[i]
+		fk := nodes[i].PreviewDomainID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
 	}
-	if len(query.ctx.Fields) > 0 {
-		query.ctx.AppendFieldOnce(trustcentersetting.FieldTrustCenterID)
+	if len(ids) == 0 {
+		return nil
 	}
-	query.Where(predicate.TrustCenterSetting(func(s *sql.Selector) {
-		s.Where(sql.InValues(s.C(trustcenter.SettingColumn), fks...))
-	}))
+	query.Where(customdomain.IDIn(ids...))
 	neighbors, err := query.All(ctx)
 	if err != nil {
 		return err
 	}
 	for _, n := range neighbors {
-		fk := n.TrustCenterID
-		node, ok := nodeids[fk]
+		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected referenced foreign-key "trust_center_id" returned %v for node %v`, fk, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "preview_domain_id" returned %v`, n.ID)
 		}
-		assign(node, n)
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TrustCenterQuery) loadSetting(ctx context.Context, query *TrustCenterSettingQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterSetting)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenter)
+	for i := range nodes {
+		if nodes[i].trust_center_setting == nil {
+			continue
+		}
+		fk := *nodes[i].trust_center_setting
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcentersetting.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_setting" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TrustCenterQuery) loadPreviewSetting(ctx context.Context, query *TrustCenterSettingQuery, nodes []*TrustCenter, init func(*TrustCenter), assign func(*TrustCenter, *TrustCenterSetting)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenter)
+	for i := range nodes {
+		if nodes[i].trust_center_preview_setting == nil {
+			continue
+		}
+		fk := *nodes[i].trust_center_preview_setting
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(trustcentersetting.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "trust_center_preview_setting" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
 	}
 	return nil
 }
@@ -1156,6 +1312,9 @@ func (_q *TrustCenterQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withCustomDomain != nil {
 			_spec.Node.AddColumnOnce(trustcenter.FieldCustomDomainID)
+		}
+		if _q.withPreviewDomain != nil {
+			_spec.Node.AddColumnOnce(trustcenter.FieldPreviewDomainID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {

@@ -373,6 +373,8 @@ type MutationResolver interface {
 	SubmitTrustCenterNDAResponse(ctx context.Context, input model.SubmitTrustCenterNDAResponseInput) (*model.SubmitTrustCenterNDAResponsePayload, error)
 	CreateTrustCenterSetting(ctx context.Context, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingCreatePayload, error)
 	UpdateTrustCenterSetting(ctx context.Context, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
+	UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error)
+	PublishTrustCenterSetting(ctx context.Context) (*model.TrustCenterSettingUpdatePayload, error)
 	DeleteTrustCenterSetting(ctx context.Context, id string) (*model.TrustCenterSettingDeletePayload, error)
 	CreateTrustCenterSubprocessor(ctx context.Context, input generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorCreatePayload, error)
 	CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error)
@@ -5346,6 +5348,27 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPost_args(ctx contex
 		return nil, err
 	}
 	args["noteFiles"] = arg2
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateTrustCenterPreviewSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "faviconFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["faviconFile"] = arg2
 	return args, nil
 }
 
@@ -22251,6 +22274,84 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustCenterSetting(ctx c
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateTrustCenterPreviewSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateTrustCenterPreviewSetting,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateTrustCenterPreviewSetting(ctx, fc.Args["input"].(generated.UpdateTrustCenterSettingInput), fc.Args["logoFile"].(*graphql.Upload), fc.Args["faviconFile"].(*graphql.Upload))
+		},
+		nil,
+		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateTrustCenterPreviewSetting(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "trustCenterSetting":
+				return ec.fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateTrustCenterPreviewSetting_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_publishTrustCenterSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_publishTrustCenterSetting,
+		func(ctx context.Context) (any, error) {
+			return ec.resolvers.Mutation().PublishTrustCenterSetting(ctx)
+		},
+		nil,
+		ec.marshalNTrustCenterSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSettingUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_publishTrustCenterSetting(_ context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "trustCenterSetting":
+				return ec.fieldContext_TrustCenterSettingUpdatePayload_trustCenterSetting(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSettingUpdatePayload", field.Name)
+		},
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_deleteTrustCenterSetting(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -27423,6 +27524,20 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateTrustCenterSetting":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateTrustCenterSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateTrustCenterPreviewSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateTrustCenterPreviewSetting(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "publishTrustCenterSetting":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_publishTrustCenterSetting(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

@@ -2445,6 +2445,7 @@ func adminSearchTrustCenters(ctx context.Context, query string, after *entgql.Cu
 				trustcenter.OwnerIDContainsFold(query),                  // search by OwnerID
 				trustcenter.SlugContainsFold(query),                     // search by Slug
 				trustcenter.CustomDomainIDContainsFold(query),           // search by CustomDomainID
+				trustcenter.PreviewDomainIDContainsFold(query),          // search by PreviewDomainID
 				trustcenter.PirschDomainIDContainsFold(query),           // search by PirschDomainID
 				trustcenter.PirschIdentificationCodeContainsFold(query), // search by PirschIdentificationCode
 			),

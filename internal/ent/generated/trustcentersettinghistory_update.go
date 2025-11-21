@@ -602,6 +602,9 @@ func (_u *TrustCenterSettingHistoryUpdate) sqlSave(ctx context.Context) (_node i
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
 	}
+	if _u.mutation.EnvironmentCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
+	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -1225,6 +1228,9 @@ func (_u *TrustCenterSettingHistoryUpdateOne) sqlSave(ctx context.Context) (_nod
 	}
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString)
+	}
+	if _u.mutation.EnvironmentCleared() {
+		_spec.ClearField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterSettingHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

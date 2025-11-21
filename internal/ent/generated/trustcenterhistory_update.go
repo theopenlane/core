@@ -182,6 +182,26 @@ func (_u *TrustCenterHistoryUpdate) ClearCustomDomainID() *TrustCenterHistoryUpd
 	return _u
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) SetPreviewDomainID(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePreviewDomainID(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) ClearPreviewDomainID() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPreviewDomainID()
+	return _u
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_u *TrustCenterHistoryUpdate) SetPirschDomainID(v string) *TrustCenterHistoryUpdate {
 	_u.mutation.SetPirschDomainID(v)
@@ -345,6 +365,12 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PreviewDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewDomainID, field.TypeString)
 	}
 	if value, ok := _u.mutation.PirschDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
@@ -529,6 +555,26 @@ func (_u *TrustCenterHistoryUpdateOne) SetNillableCustomDomainID(v *string) *Tru
 // ClearCustomDomainID clears the value of the "custom_domain_id" field.
 func (_u *TrustCenterHistoryUpdateOne) ClearCustomDomainID() *TrustCenterHistoryUpdateOne {
 	_u.mutation.ClearCustomDomainID()
+	return _u
+}
+
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPreviewDomainID(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePreviewDomainID(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPreviewDomainID() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPreviewDomainID()
 	return _u
 }
 
@@ -725,6 +771,12 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PreviewDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewDomainID, field.TypeString)
 	}
 	if value, ok := _u.mutation.PirschDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)

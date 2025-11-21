@@ -6933,6 +6933,9 @@ var (
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_setting", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_preview_setting", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_watermark_config", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCentersTable holds the schema information for the "trust_centers" table.
@@ -6954,8 +6957,26 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Symbol:     "trust_centers_custom_domains_preview_domain",
 				Columns:    []*schema.Column{TrustCentersColumns[13]},
+				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_trust_center_settings_setting",
+				Columns:    []*schema.Column{TrustCentersColumns[14]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_trust_center_settings_preview_setting",
+				Columns:    []*schema.Column{TrustCentersColumns[15]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Columns:    []*schema.Column{TrustCentersColumns[16]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7147,6 +7168,7 @@ var (
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "slug", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
+		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
 	}
@@ -7172,6 +7194,7 @@ var (
 		{Name: "updated_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "title", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "overview", Type: field.TypeString, Nullable: true, Size: 1024},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
@@ -7184,7 +7207,7 @@ var (
 		{Name: "accent_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
-		{Name: "trust_center_id", Type: field.TypeString, Unique: true, Nullable: true},
+		{Name: "environment", Type: field.TypeEnum, Nullable: true, Enums: []string{"LIVE", "PREVIEW"}, Default: "LIVE"},
 		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
 		{Name: "favicon_local_file_id", Type: field.TypeString, Nullable: true},
 	}
@@ -7195,29 +7218,23 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterSettingsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_settings_trust_centers_setting",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[19]},
-				RefColumns: []*schema.Column{TrustCentersColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
 				Symbol:     "trust_center_settings_files_logo_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[20]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[21]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_settings_files_favicon_file",
-				Columns:    []*schema.Column{TrustCenterSettingsColumns[21]},
+				Columns:    []*schema.Column{TrustCenterSettingsColumns[22]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
 		Indexes: []*schema.Index{
 			{
-				Name:    "trustcentersetting_trust_center_id",
+				Name:    "trustcentersetting_trust_center_id_environment",
 				Unique:  true,
-				Columns: []*schema.Column{TrustCenterSettingsColumns[19]},
+				Columns: []*schema.Column{TrustCenterSettingsColumns[7], TrustCenterSettingsColumns[20]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7251,6 +7268,7 @@ var (
 		{Name: "accent_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_background_color", Type: field.TypeString, Nullable: true},
 		{Name: "secondary_foreground_color", Type: field.TypeString, Nullable: true},
+		{Name: "environment", Type: field.TypeEnum, Nullable: true, Enums: []string{"LIVE", "PREVIEW"}, Default: "LIVE"},
 	}
 	// TrustCenterSettingHistoryTable holds the schema information for the "trust_center_setting_history" table.
 	TrustCenterSettingHistoryTable = &schema.Table{
@@ -12187,7 +12205,10 @@ func init() {
 	}
 	TrustCentersTable.ForeignKeys[0].RefTable = OrganizationsTable
 	TrustCentersTable.ForeignKeys[1].RefTable = CustomDomainsTable
-	TrustCentersTable.ForeignKeys[2].RefTable = TrustCenterWatermarkConfigsTable
+	TrustCentersTable.ForeignKeys[2].RefTable = CustomDomainsTable
+	TrustCentersTable.ForeignKeys[3].RefTable = TrustCenterSettingsTable
+	TrustCentersTable.ForeignKeys[4].RefTable = TrustCenterSettingsTable
+	TrustCentersTable.ForeignKeys[5].RefTable = TrustCenterWatermarkConfigsTable
 	TrustCenterCompliancesTable.ForeignKeys[0].RefTable = StandardsTable
 	TrustCenterCompliancesTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
@@ -12202,9 +12223,8 @@ func init() {
 	TrustCenterHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_history",
 	}
-	TrustCenterSettingsTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustCenterSettingsTable.ForeignKeys[0].RefTable = FilesTable
 	TrustCenterSettingsTable.ForeignKeys[1].RefTable = FilesTable
-	TrustCenterSettingsTable.ForeignKeys[2].RefTable = FilesTable
 	TrustCenterSettingHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_setting_history",
 	}

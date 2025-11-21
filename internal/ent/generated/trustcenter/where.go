@@ -112,6 +112,11 @@ func CustomDomainID(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldCustomDomainID, v))
 }
 
+// PreviewDomainID applies equality check predicate on the "preview_domain_id" field. It's identical to PreviewDomainIDEQ.
+func PreviewDomainID(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPreviewDomainID, v))
+}
+
 // PirschDomainID applies equality check predicate on the "pirsch_domain_id" field. It's identical to PirschDomainIDEQ.
 func PirschDomainID(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldPirschDomainID, v))
@@ -732,6 +737,81 @@ func CustomDomainIDContainsFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldContainsFold(FieldCustomDomainID, v))
 }
 
+// PreviewDomainIDEQ applies the EQ predicate on the "preview_domain_id" field.
+func PreviewDomainIDEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEQ(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDNEQ applies the NEQ predicate on the "preview_domain_id" field.
+func PreviewDomainIDNEQ(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNEQ(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDIn applies the In predicate on the "preview_domain_id" field.
+func PreviewDomainIDIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIn(FieldPreviewDomainID, vs...))
+}
+
+// PreviewDomainIDNotIn applies the NotIn predicate on the "preview_domain_id" field.
+func PreviewDomainIDNotIn(vs ...string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotIn(FieldPreviewDomainID, vs...))
+}
+
+// PreviewDomainIDGT applies the GT predicate on the "preview_domain_id" field.
+func PreviewDomainIDGT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGT(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDGTE applies the GTE predicate on the "preview_domain_id" field.
+func PreviewDomainIDGTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldGTE(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDLT applies the LT predicate on the "preview_domain_id" field.
+func PreviewDomainIDLT(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLT(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDLTE applies the LTE predicate on the "preview_domain_id" field.
+func PreviewDomainIDLTE(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldLTE(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDContains applies the Contains predicate on the "preview_domain_id" field.
+func PreviewDomainIDContains(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContains(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDHasPrefix applies the HasPrefix predicate on the "preview_domain_id" field.
+func PreviewDomainIDHasPrefix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasPrefix(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDHasSuffix applies the HasSuffix predicate on the "preview_domain_id" field.
+func PreviewDomainIDHasSuffix(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldHasSuffix(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDIsNil applies the IsNil predicate on the "preview_domain_id" field.
+func PreviewDomainIDIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldPreviewDomainID))
+}
+
+// PreviewDomainIDNotNil applies the NotNil predicate on the "preview_domain_id" field.
+func PreviewDomainIDNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldPreviewDomainID))
+}
+
+// PreviewDomainIDEqualFold applies the EqualFold predicate on the "preview_domain_id" field.
+func PreviewDomainIDEqualFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldEqualFold(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDContainsFold applies the ContainsFold predicate on the "preview_domain_id" field.
+func PreviewDomainIDContainsFold(v string) predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldContainsFold(FieldPreviewDomainID, v))
+}
+
 // PirschDomainIDEQ applies the EQ predicate on the "pirsch_domain_id" field.
 func PirschDomainIDEQ(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldEQ(FieldPirschDomainID, v))
@@ -940,16 +1020,45 @@ func HasCustomDomainWith(preds ...predicate.CustomDomain) predicate.TrustCenter 
 	})
 }
 
+// HasPreviewDomain applies the HasEdge predicate on the "preview_domain" edge.
+func HasPreviewDomain() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, PreviewDomainTable, PreviewDomainColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPreviewDomainWith applies the HasEdge predicate on the "preview_domain" edge with a given conditions (other predicates).
+func HasPreviewDomainWith(preds ...predicate.CustomDomain) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newPreviewDomainStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasSetting applies the HasEdge predicate on the "setting" edge.
 func HasSetting() predicate.TrustCenter {
 	return predicate.TrustCenter(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, SettingTable, SettingColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
@@ -960,7 +1069,36 @@ func HasSettingWith(preds ...predicate.TrustCenterSetting) predicate.TrustCenter
 		step := newSettingStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasPreviewSetting applies the HasEdge predicate on the "preview_setting" edge.
+func HasPreviewSetting() predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, PreviewSettingTable, PreviewSettingColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPreviewSettingWith applies the HasEdge predicate on the "preview_setting" edge with a given conditions (other predicates).
+func HasPreviewSettingWith(preds ...predicate.TrustCenterSetting) predicate.TrustCenter {
+	return predicate.TrustCenter(func(s *sql.Selector) {
+		step := newPreviewSettingStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

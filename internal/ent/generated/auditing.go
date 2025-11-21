@@ -4458,6 +4458,9 @@ func (_m *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
 	if !reflect.DeepEqual(_m.CustomDomainID, new.CustomDomainID) {
 		changes = append(changes, NewChange(trustcenterhistory.FieldCustomDomainID, _m.CustomDomainID, new.CustomDomainID))
 	}
+	if !reflect.DeepEqual(_m.PreviewDomainID, new.PreviewDomainID) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldPreviewDomainID, _m.PreviewDomainID, new.PreviewDomainID))
+	}
 	if !reflect.DeepEqual(_m.PirschDomainID, new.PirschDomainID) {
 		changes = append(changes, NewChange(trustcenterhistory.FieldPirschDomainID, _m.PirschDomainID, new.PirschDomainID))
 	}
@@ -4679,6 +4682,9 @@ func (_m *TrustCenterSettingHistory) changes(new *TrustCenterSettingHistory) []C
 	}
 	if !reflect.DeepEqual(_m.SecondaryForegroundColor, new.SecondaryForegroundColor) {
 		changes = append(changes, NewChange(trustcentersettinghistory.FieldSecondaryForegroundColor, _m.SecondaryForegroundColor, new.SecondaryForegroundColor))
+	}
+	if !reflect.DeepEqual(_m.Environment, new.Environment) {
+		changes = append(changes, NewChange(trustcentersettinghistory.FieldEnvironment, _m.Environment, new.Environment))
 	}
 	return changes
 }

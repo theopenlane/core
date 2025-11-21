@@ -29404,6 +29404,25 @@ func (c *TrustCenterClient) QueryCustomDomain(_m *TrustCenter) *CustomDomainQuer
 	return query
 }
 
+// QueryPreviewDomain queries the preview_domain edge of a TrustCenter.
+func (c *TrustCenterClient) QueryPreviewDomain(_m *TrustCenter) *CustomDomainQuery {
+	query := (&CustomDomainClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(customdomain.Table, customdomain.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewDomainTable, trustcenter.PreviewDomainColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.CustomDomain
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QuerySetting queries the setting edge of a TrustCenter.
 func (c *TrustCenterClient) QuerySetting(_m *TrustCenter) *TrustCenterSettingQuery {
 	query := (&TrustCenterSettingClient{config: c.config}).Query()
@@ -29412,11 +29431,30 @@ func (c *TrustCenterClient) QuerySetting(_m *TrustCenter) *TrustCenterSettingQue
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
 			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.SettingTable, trustcenter.SettingColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenterSetting
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryPreviewSetting queries the preview_setting edge of a TrustCenter.
+func (c *TrustCenterClient) QueryPreviewSetting(_m *TrustCenter) *TrustCenterSettingQuery {
+	query := (&TrustCenterSettingClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenter.Table, trustcenter.FieldID, id),
+			sqlgraph.To(trustcentersetting.Table, trustcentersetting.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenter.PreviewSettingTable, trustcenter.PreviewSettingColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterSetting
+		step.Edge.Schema = schemaConfig.TrustCenter
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -30440,25 +30478,6 @@ func (c *TrustCenterSettingClient) GetX(ctx context.Context, id string) *TrustCe
 		panic(err)
 	}
 	return obj
-}
-
-// QueryTrustCenter queries the trust_center edge of a TrustCenterSetting.
-func (c *TrustCenterSettingClient) QueryTrustCenter(_m *TrustCenterSetting) *TrustCenterQuery {
-	query := (&TrustCenterClient{config: c.config}).Query()
-	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
-		id := _m.ID
-		step := sqlgraph.NewStep(
-			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, id),
-			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, trustcentersetting.TrustCenterTable, trustcentersetting.TrustCenterColumn),
-		)
-		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
-		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
-		return fromV, nil
-	}
-	return query
 }
 
 // QueryFiles queries the files edge of a TrustCenterSetting.

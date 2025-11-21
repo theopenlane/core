@@ -10028,10 +10028,26 @@ func (_m *TrustCenter) CustomDomain(ctx context.Context) (*CustomDomain, error) 
 	return result, MaskNotFound(err)
 }
 
+func (_m *TrustCenter) PreviewDomain(ctx context.Context) (*CustomDomain, error) {
+	result, err := _m.Edges.PreviewDomainOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryPreviewDomain().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *TrustCenter) Setting(ctx context.Context) (*TrustCenterSetting, error) {
 	result, err := _m.Edges.SettingOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QuerySetting().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *TrustCenter) PreviewSetting(ctx context.Context) (*TrustCenterSetting, error) {
+	result, err := _m.Edges.PreviewSettingOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryPreviewSetting().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }
@@ -10052,7 +10068,7 @@ func (_m *TrustCenter) TrustCenterSubprocessors(
 		WithTrustCenterSubprocessorFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[4][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
 	if nodes, err := _m.NamedTrustCenterSubprocessors(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterSubprocessorPager(opts, last != nil)
 		if err != nil {
@@ -10073,7 +10089,7 @@ func (_m *TrustCenter) TrustCenterDocs(
 		WithTrustCenterDocFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[5][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
 	if nodes, err := _m.NamedTrustCenterDocs(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterDocPager(opts, last != nil)
 		if err != nil {
@@ -10094,7 +10110,7 @@ func (_m *TrustCenter) TrustCenterCompliances(
 		WithTrustCenterComplianceFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[6][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
 	if nodes, err := _m.NamedTrustCenterCompliances(alias); err == nil || hasTotalCount {
 		pager, err := newTrustCenterCompliancePager(opts, last != nil)
 		if err != nil {
@@ -10115,7 +10131,7 @@ func (_m *TrustCenter) Templates(
 		WithTemplateFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[7][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
 	if nodes, err := _m.NamedTemplates(alias); err == nil || hasTotalCount {
 		pager, err := newTemplatePager(opts, last != nil)
 		if err != nil {
@@ -10136,7 +10152,7 @@ func (_m *TrustCenter) Posts(
 		WithNoteFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[10][alias]
 	if nodes, err := _m.NamedPosts(alias); err == nil || hasTotalCount {
 		pager, err := newNotePager(opts, last != nil)
 		if err != nil {
@@ -10189,14 +10205,6 @@ func (_m *TrustCenterDoc) OriginalFile(ctx context.Context) (*File, error) {
 	return result, MaskNotFound(err)
 }
 
-func (_m *TrustCenterSetting) TrustCenter(ctx context.Context) (*TrustCenter, error) {
-	result, err := _m.Edges.TrustCenterOrErr()
-	if IsNotLoaded(err) {
-		result, err = _m.QueryTrustCenter().Only(ctx)
-	}
-	return result, MaskNotFound(err)
-}
-
 func (_m *TrustCenterSetting) Files(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
 ) (*FileConnection, error) {
@@ -10205,7 +10213,7 @@ func (_m *TrustCenterSetting) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[1][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[0][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {

@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -62,6 +61,8 @@ type TrustCenterSetting struct {
 	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
 	// secondary foreground color for the trust center
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
+	// environment of the trust center
+	Environment enums.TrustCenterEnvironment `json:"environment,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterSettingQuery when eager-loading is set.
 	Edges        TrustCenterSettingEdges `json:"edges"`
@@ -70,8 +71,6 @@ type TrustCenterSetting struct {
 
 // TrustCenterSettingEdges holds the relations/edges for other nodes in the graph.
 type TrustCenterSettingEdges struct {
-	// TrustCenter holds the value of the trust_center edge.
-	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
@@ -80,28 +79,17 @@ type TrustCenterSettingEdges struct {
 	FaviconFile *File `json:"favicon_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [3]map[string]int
 
 	namedFiles map[string][]*File
-}
-
-// TrustCenterOrErr returns the TrustCenter value or an error if the edge
-// was not loaded in eager-loading, or loaded but was not found.
-func (e TrustCenterSettingEdges) TrustCenterOrErr() (*TrustCenter, error) {
-	if e.TrustCenter != nil {
-		return e.TrustCenter, nil
-	} else if e.loadedTypes[0] {
-		return nil, &NotFoundError{label: trustcenter.Label}
-	}
-	return nil, &NotLoadedError{edge: "trust_center"}
 }
 
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[1] {
+	if e.loadedTypes[0] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -112,7 +100,7 @@ func (e TrustCenterSettingEdges) FilesOrErr() ([]*File, error) {
 func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -123,7 +111,7 @@ func (e TrustCenterSettingEdges) LogoFileOrErr() (*File, error) {
 func (e TrustCenterSettingEdges) FaviconFileOrErr() (*File, error) {
 	if e.FaviconFile != nil {
 		return e.FaviconFile, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "favicon_file"}
@@ -134,7 +122,7 @@ func (*TrustCenterSetting) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor:
+		case trustcentersetting.FieldID, trustcentersetting.FieldCreatedBy, trustcentersetting.FieldUpdatedBy, trustcentersetting.FieldDeletedBy, trustcentersetting.FieldTrustCenterID, trustcentersetting.FieldTitle, trustcentersetting.FieldOverview, trustcentersetting.FieldLogoRemoteURL, trustcentersetting.FieldLogoLocalFileID, trustcentersetting.FieldFaviconRemoteURL, trustcentersetting.FieldFaviconLocalFileID, trustcentersetting.FieldThemeMode, trustcentersetting.FieldPrimaryColor, trustcentersetting.FieldFont, trustcentersetting.FieldForegroundColor, trustcentersetting.FieldBackgroundColor, trustcentersetting.FieldAccentColor, trustcentersetting.FieldSecondaryBackgroundColor, trustcentersetting.FieldSecondaryForegroundColor, trustcentersetting.FieldEnvironment:
 			values[i] = new(sql.NullString)
 		case trustcentersetting.FieldCreatedAt, trustcentersetting.FieldUpdatedAt, trustcentersetting.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -289,6 +277,12 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.SecondaryForegroundColor = value.String
 			}
+		case trustcentersetting.FieldEnvironment:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment", values[i])
+			} else if value.Valid {
+				_m.Environment = enums.TrustCenterEnvironment(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -300,11 +294,6 @@ func (_m *TrustCenterSetting) assignValues(columns []string, values []any) error
 // This includes values selected through modifiers, order, etc.
 func (_m *TrustCenterSetting) Value(name string) (ent.Value, error) {
 	return _m.selectValues.Get(name)
-}
-
-// QueryTrustCenter queries the "trust_center" edge of the TrustCenterSetting entity.
-func (_m *TrustCenterSetting) QueryTrustCenter() *TrustCenterQuery {
-	return NewTrustCenterSettingClient(_m.config).QueryTrustCenter(_m)
 }
 
 // QueryFiles queries the "files" edge of the TrustCenterSetting entity.
@@ -415,6 +404,9 @@ func (_m *TrustCenterSetting) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("secondary_foreground_color=")
 	builder.WriteString(_m.SecondaryForegroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("environment=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Environment))
 	builder.WriteByte(')')
 	return builder.String()
 }

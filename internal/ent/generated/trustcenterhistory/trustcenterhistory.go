@@ -43,6 +43,8 @@ const (
 	FieldSlug = "slug"
 	// FieldCustomDomainID holds the string denoting the custom_domain_id field in the database.
 	FieldCustomDomainID = "custom_domain_id"
+	// FieldPreviewDomainID holds the string denoting the preview_domain_id field in the database.
+	FieldPreviewDomainID = "preview_domain_id"
 	// FieldPirschDomainID holds the string denoting the pirsch_domain_id field in the database.
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
@@ -67,6 +69,7 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldSlug,
 	FieldCustomDomainID,
+	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
 }
@@ -180,6 +183,11 @@ func BySlug(opts ...sql.OrderTermOption) OrderOption {
 // ByCustomDomainID orders the results by the custom_domain_id field.
 func ByCustomDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCustomDomainID, opts...).ToFunc()
+}
+
+// ByPreviewDomainID orders the results by the preview_domain_id field.
+func ByPreviewDomainID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewDomainID, opts...).ToFunc()
 }
 
 // ByPirschDomainID orders the results by the pirsch_domain_id field.

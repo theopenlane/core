@@ -67,7 +67,9 @@ type TrustCenterSettingHistory struct {
 	SecondaryBackgroundColor string `json:"secondary_background_color,omitempty"`
 	// secondary foreground color for the trust center
 	SecondaryForegroundColor string `json:"secondary_foreground_color,omitempty"`
-	selectValues             sql.SelectValues
+	// environment of the trust center
+	Environment  enums.TrustCenterEnvironment `json:"environment,omitempty"`
+	selectValues sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -77,7 +79,7 @@ func (*TrustCenterSettingHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcentersettinghistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor:
+		case trustcentersettinghistory.FieldID, trustcentersettinghistory.FieldRef, trustcentersettinghistory.FieldCreatedBy, trustcentersettinghistory.FieldUpdatedBy, trustcentersettinghistory.FieldDeletedBy, trustcentersettinghistory.FieldTrustCenterID, trustcentersettinghistory.FieldTitle, trustcentersettinghistory.FieldOverview, trustcentersettinghistory.FieldLogoRemoteURL, trustcentersettinghistory.FieldLogoLocalFileID, trustcentersettinghistory.FieldFaviconRemoteURL, trustcentersettinghistory.FieldFaviconLocalFileID, trustcentersettinghistory.FieldThemeMode, trustcentersettinghistory.FieldPrimaryColor, trustcentersettinghistory.FieldFont, trustcentersettinghistory.FieldForegroundColor, trustcentersettinghistory.FieldBackgroundColor, trustcentersettinghistory.FieldAccentColor, trustcentersettinghistory.FieldSecondaryBackgroundColor, trustcentersettinghistory.FieldSecondaryForegroundColor, trustcentersettinghistory.FieldEnvironment:
 			values[i] = new(sql.NullString)
 		case trustcentersettinghistory.FieldHistoryTime, trustcentersettinghistory.FieldCreatedAt, trustcentersettinghistory.FieldUpdatedAt, trustcentersettinghistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -250,6 +252,12 @@ func (_m *TrustCenterSettingHistory) assignValues(columns []string, values []any
 			} else if value.Valid {
 				_m.SecondaryForegroundColor = value.String
 			}
+		case trustcentersettinghistory.FieldEnvironment:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field environment", values[i])
+			} else if value.Valid {
+				_m.Environment = enums.TrustCenterEnvironment(value.String)
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -365,6 +373,9 @@ func (_m *TrustCenterSettingHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("secondary_foreground_color=")
 	builder.WriteString(_m.SecondaryForegroundColor)
+	builder.WriteString(", ")
+	builder.WriteString("environment=")
+	builder.WriteString(fmt.Sprintf("%v", _m.Environment))
 	builder.WriteByte(')')
 	return builder.String()
 }

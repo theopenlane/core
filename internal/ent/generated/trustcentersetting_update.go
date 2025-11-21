@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/pkg/enums"
 
@@ -406,11 +405,6 @@ func (_u *TrustCenterSettingUpdate) ClearSecondaryForegroundColor() *TrustCenter
 	return _u
 }
 
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterSettingUpdate) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdate {
-	return _u.SetTrustCenterID(v.ID)
-}
-
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *TrustCenterSettingUpdate) AddFileIDs(ids ...string) *TrustCenterSettingUpdate {
 	_u.mutation.AddFileIDs(ids...)
@@ -467,12 +461,6 @@ func (_u *TrustCenterSettingUpdate) SetFaviconFile(v *File) *TrustCenterSettingU
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdate) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
-}
-
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterSettingUpdate) ClearTrustCenter() *TrustCenterSettingUpdate {
-	_u.mutation.ClearTrustCenter()
-	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -663,6 +651,12 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentersetting.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentersetting.FieldTrustCenterID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 	}
@@ -735,36 +729,8 @@ func (_u *TrustCenterSettingUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString)
 	}
-	if _u.mutation.TrustCenterCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if _u.mutation.EnvironmentCleared() {
+		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
 	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1272,11 +1238,6 @@ func (_u *TrustCenterSettingUpdateOne) ClearSecondaryForegroundColor() *TrustCen
 	return _u
 }
 
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterSettingUpdateOne) SetTrustCenter(v *TrustCenter) *TrustCenterSettingUpdateOne {
-	return _u.SetTrustCenterID(v.ID)
-}
-
 // AddFileIDs adds the "files" edge to the File entity by IDs.
 func (_u *TrustCenterSettingUpdateOne) AddFileIDs(ids ...string) *TrustCenterSettingUpdateOne {
 	_u.mutation.AddFileIDs(ids...)
@@ -1333,12 +1294,6 @@ func (_u *TrustCenterSettingUpdateOne) SetFaviconFile(v *File) *TrustCenterSetti
 // Mutation returns the TrustCenterSettingMutation object of the builder.
 func (_u *TrustCenterSettingUpdateOne) Mutation() *TrustCenterSettingMutation {
 	return _u.mutation
-}
-
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustCenterSettingUpdateOne) ClearTrustCenter() *TrustCenterSettingUpdateOne {
-	_u.mutation.ClearTrustCenter()
-	return _u
 }
 
 // ClearFiles clears all "files" edges to the File entity.
@@ -1559,6 +1514,12 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.DeletedByCleared() {
 		_spec.ClearField(trustcentersetting.FieldDeletedBy, field.TypeString)
 	}
+	if value, ok := _u.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentersetting.FieldTrustCenterID, field.TypeString, value)
+	}
+	if _u.mutation.TrustCenterIDCleared() {
+		_spec.ClearField(trustcentersetting.FieldTrustCenterID, field.TypeString)
+	}
 	if value, ok := _u.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 	}
@@ -1631,36 +1592,8 @@ func (_u *TrustCenterSettingUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.SecondaryForegroundColorCleared() {
 		_spec.ClearField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString)
 	}
-	if _u.mutation.TrustCenterCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	if _u.mutation.EnvironmentCleared() {
+		_spec.ClearField(trustcentersetting.FieldEnvironment, field.TypeEnum)
 	}
 	if _u.mutation.FilesCleared() {
 		edge := &sqlgraph.EdgeSpec{

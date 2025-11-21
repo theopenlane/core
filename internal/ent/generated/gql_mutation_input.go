@@ -16478,7 +16478,9 @@ type CreateTrustCenterInput struct {
 	PirschIdentificationCode   *string
 	OwnerID                    *string
 	CustomDomainID             *string
+	PreviewDomainID            *string
 	SettingID                  *string
+	PreviewSettingID           *string
 	WatermarkConfigID          *string
 	TrustCenterSubprocessorIDs []string
 	TrustCenterDocIDs          []string
@@ -16504,8 +16506,14 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.CustomDomainID; v != nil {
 		m.SetCustomDomainID(*v)
 	}
+	if v := i.PreviewDomainID; v != nil {
+		m.SetPreviewDomainID(*v)
+	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
+	}
+	if v := i.PreviewSettingID; v != nil {
+		m.SetPreviewSettingID(*v)
 	}
 	if v := i.WatermarkConfigID; v != nil {
 		m.SetWatermarkConfigID(*v)
@@ -16546,8 +16554,12 @@ type UpdateTrustCenterInput struct {
 	OwnerID                          *string
 	ClearCustomDomain                bool
 	CustomDomainID                   *string
+	ClearPreviewDomain               bool
+	PreviewDomainID                  *string
 	ClearSetting                     bool
 	SettingID                        *string
+	ClearPreviewSetting              bool
+	PreviewSettingID                 *string
 	ClearWatermarkConfig             bool
 	WatermarkConfigID                *string
 	ClearTrustCenterSubprocessors    bool
@@ -16602,11 +16614,23 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.CustomDomainID; v != nil {
 		m.SetCustomDomainID(*v)
 	}
+	if i.ClearPreviewDomain {
+		m.ClearPreviewDomain()
+	}
+	if v := i.PreviewDomainID; v != nil {
+		m.SetPreviewDomainID(*v)
+	}
 	if i.ClearSetting {
 		m.ClearSetting()
 	}
 	if v := i.SettingID; v != nil {
 		m.SetSettingID(*v)
+	}
+	if i.ClearPreviewSetting {
+		m.ClearPreviewSetting()
+	}
+	if v := i.PreviewSettingID; v != nil {
+		m.SetPreviewSettingID(*v)
 	}
 	if i.ClearWatermarkConfig {
 		m.ClearWatermarkConfig()
@@ -16873,6 +16897,7 @@ func (c *TrustCenterDocUpdateOne) SetInput(i UpdateTrustCenterDocInput) *TrustCe
 
 // CreateTrustCenterSettingInput represents a mutation input for creating trustcentersettings.
 type CreateTrustCenterSettingInput struct {
+	TrustCenterID            *string
 	Title                    *string
 	Overview                 *string
 	LogoRemoteURL            *string
@@ -16885,7 +16910,7 @@ type CreateTrustCenterSettingInput struct {
 	AccentColor              *string
 	SecondaryBackgroundColor *string
 	SecondaryForegroundColor *string
-	TrustCenterID            *string
+	Environment              *enums.TrustCenterEnvironment
 	FileIDs                  []string
 	LogoFileID               *string
 	FaviconFileID            *string
@@ -16893,6 +16918,9 @@ type CreateTrustCenterSettingInput struct {
 
 // Mutate applies the CreateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
 func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if v := i.Title; v != nil {
 		m.SetTitle(*v)
 	}
@@ -16929,8 +16957,8 @@ func (i *CreateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	if v := i.SecondaryForegroundColor; v != nil {
 		m.SetSecondaryForegroundColor(*v)
 	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
+	if v := i.Environment; v != nil {
+		m.SetEnvironment(*v)
 	}
 	if v := i.FileIDs; len(v) > 0 {
 		m.AddFileIDs(v...)
@@ -16951,6 +16979,8 @@ func (c *TrustCenterSettingCreate) SetInput(i CreateTrustCenterSettingInput) *Tr
 
 // UpdateTrustCenterSettingInput represents a mutation input for updating trustcentersettings.
 type UpdateTrustCenterSettingInput struct {
+	ClearTrustCenterID            bool
+	TrustCenterID                 *string
 	ClearTitle                    bool
 	Title                         *string
 	ClearOverview                 bool
@@ -16975,8 +17005,6 @@ type UpdateTrustCenterSettingInput struct {
 	SecondaryBackgroundColor      *string
 	ClearSecondaryForegroundColor bool
 	SecondaryForegroundColor      *string
-	ClearTrustCenter              bool
-	TrustCenterID                 *string
 	ClearFiles                    bool
 	AddFileIDs                    []string
 	RemoveFileIDs                 []string
@@ -16988,6 +17016,12 @@ type UpdateTrustCenterSettingInput struct {
 
 // Mutate applies the UpdateTrustCenterSettingInput on the TrustCenterSettingMutation builder.
 func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
+	if i.ClearTrustCenterID {
+		m.ClearTrustCenterID()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
 	if i.ClearTitle {
 		m.ClearTitle()
 	}
@@ -17059,12 +17093,6 @@ func (i *UpdateTrustCenterSettingInput) Mutate(m *TrustCenterSettingMutation) {
 	}
 	if v := i.SecondaryForegroundColor; v != nil {
 		m.SetSecondaryForegroundColor(*v)
-	}
-	if i.ClearTrustCenter {
-		m.ClearTrustCenter()
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
 	}
 	if i.ClearFiles {
 		m.ClearFiles()

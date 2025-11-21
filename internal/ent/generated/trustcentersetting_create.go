@@ -10,7 +10,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/pkg/enums"
 )
@@ -316,6 +315,20 @@ func (_c *TrustCenterSettingCreate) SetNillableSecondaryForegroundColor(v *strin
 	return _c
 }
 
+// SetEnvironment sets the "environment" field.
+func (_c *TrustCenterSettingCreate) SetEnvironment(v enums.TrustCenterEnvironment) *TrustCenterSettingCreate {
+	_c.mutation.SetEnvironment(v)
+	return _c
+}
+
+// SetNillableEnvironment sets the "environment" field if the given value is not nil.
+func (_c *TrustCenterSettingCreate) SetNillableEnvironment(v *enums.TrustCenterEnvironment) *TrustCenterSettingCreate {
+	if v != nil {
+		_c.SetEnvironment(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingCreate) SetID(v string) *TrustCenterSettingCreate {
 	_c.mutation.SetID(v)
@@ -328,11 +341,6 @@ func (_c *TrustCenterSettingCreate) SetNillableID(v *string) *TrustCenterSetting
 		_c.SetID(*v)
 	}
 	return _c
-}
-
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_c *TrustCenterSettingCreate) SetTrustCenter(v *TrustCenter) *TrustCenterSettingCreate {
-	return _c.SetTrustCenterID(v.ID)
 }
 
 // AddFileIDs adds the "files" edge to the File entity by IDs.
@@ -443,6 +451,10 @@ func (_c *TrustCenterSettingCreate) defaults() error {
 		v := trustcentersetting.DefaultThemeMode
 		_c.mutation.SetThemeMode(v)
 	}
+	if _, ok := _c.mutation.Environment(); !ok {
+		v := trustcentersetting.DefaultEnvironment
+		_c.mutation.SetEnvironment(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersetting.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersetting.DefaultID (forgotten import generated/runtime?)")
@@ -515,6 +527,11 @@ func (_c *TrustCenterSettingCreate) check() error {
 			return &ValidationError{Name: "secondary_foreground_color", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.secondary_foreground_color": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.Environment(); ok {
+		if err := trustcentersetting.EnvironmentValidator(v); err != nil {
+			return &ValidationError{Name: "environment", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSetting.environment": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -575,6 +592,10 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 		_spec.SetField(trustcentersetting.FieldDeletedBy, field.TypeString, value)
 		_node.DeletedBy = value
 	}
+	if value, ok := _c.mutation.TrustCenterID(); ok {
+		_spec.SetField(trustcentersetting.FieldTrustCenterID, field.TypeString, value)
+		_node.TrustCenterID = value
+	}
 	if value, ok := _c.mutation.Title(); ok {
 		_spec.SetField(trustcentersetting.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -623,23 +644,9 @@ func (_c *TrustCenterSettingCreate) createSpec() (*TrustCenterSetting, *sqlgraph
 		_spec.SetField(trustcentersetting.FieldSecondaryForegroundColor, field.TypeString, value)
 		_node.SecondaryForegroundColor = value
 	}
-	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _c.schemaConfig.TrustCenterSetting
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_node.TrustCenterID = nodes[0]
-		_spec.Edges = append(_spec.Edges, edge)
+	if value, ok := _c.mutation.Environment(); ok {
+		_spec.SetField(trustcentersetting.FieldEnvironment, field.TypeEnum, value)
+		_node.Environment = value
 	}
 	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

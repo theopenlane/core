@@ -79,7 +79,7 @@ func TestQueryTrustCenterByID(t *testing.T) {
 			assert.Check(t, is.Equal(testUser1.OrganizationID, *resp.TrustCenter.OwnerID))
 
 			setting := resp.TrustCenter.GetSetting()
-			assert.Check(t, setting != nil)
+			assert.Assert(t, setting != nil)
 			assert.Check(t, setting.Title != nil)
 			assert.Check(t, setting.Overview != nil)
 			assert.Check(t, setting.PrimaryColor != nil)
