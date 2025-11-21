@@ -255,9 +255,10 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 
 			// check DownloadURL optional
 			if tc.request.DownloadURL != nil {
-				assert.Check(t, is.Equal(tc.request.DownloadURL, resp.CreateJobTemplate.JobTemplate.DownloadURL))
+				assert.Check(t, is.Equal(*tc.request.DownloadURL, *resp.CreateJobTemplate.JobTemplate.DownloadURL))
 			} else {
-				assert.Check(t, resp.CreateJobTemplate.JobTemplate.DownloadURL == nil)
+				assert.Check(t, resp.CreateJobTemplate.JobTemplate.DownloadURL != nil)
+				assert.Check(t, is.Equal("", *resp.CreateJobTemplate.JobTemplate.DownloadURL))
 			}
 
 			if tc.request.Description != nil {
@@ -304,7 +305,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		{
 			name: "update DownloadURL to nil",
 			request: testclient.UpdateJobTemplateInput{
-				DownloadURL: nil,
+				ClearDownloadURL: lo.ToPtr(true),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -344,10 +345,11 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 				assert.Check(t, is.Equal(*tc.request.Description, *resp.UpdateJobTemplate.JobTemplate.Description))
 			}
 
-			if tc.request.DownloadURL != nil {
-				assert.Check(t, is.Equal(*tc.request.DownloadURL, resp.UpdateJobTemplate.JobTemplate.DownloadURL))
-			} else {
-				assert.Check(t, resp.UpdateJobTemplate.JobTemplate.DownloadURL == nil)
+			if tc.request.ClearDownloadURL != nil && *tc.request.ClearDownloadURL {
+				assert.Check(t, resp.UpdateJobTemplate.JobTemplate.DownloadURL != nil)
+				assert.Check(t, is.Equal("", *resp.UpdateJobTemplate.JobTemplate.DownloadURL))
+			} else if tc.request.DownloadURL != nil {
+				assert.Check(t, is.Equal(*tc.request.DownloadURL, *resp.UpdateJobTemplate.JobTemplate.DownloadURL))
 			}
 
 			if tc.request.Cron != nil {
