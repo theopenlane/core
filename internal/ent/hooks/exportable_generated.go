@@ -17,7 +17,7 @@ var ExportableSchemas = map[string]bool{
 	"REMEDIATION":          true,
 	"REVIEW":               true,
 	"RISK":                 true,
-	"SUBPROCESSOR":    true,
+	"SUBPROCESSOR":         true,
 	"SUBSCRIBER":           true,
 	"TASK":                 true,
 	"VULNERABILITY":        true,

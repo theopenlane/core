@@ -645,7 +645,7 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[32]: // vulnerability_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[32]: // workflow_definition_groups
+		case group.ForeignKeys[33]: // workflow_definition_groups
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -1018,7 +1018,7 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 				_m.vulnerability_viewers = new(string)
 				*_m.vulnerability_viewers = value.String
 			}
-		case group.ForeignKeys[32]:
+		case group.ForeignKeys[33]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_definition_groups", values[i])
 			} else if value.Valid {

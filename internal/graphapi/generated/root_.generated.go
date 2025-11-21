@@ -79270,6 +79270,7 @@ enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.Exp
   REMEDIATION
   REVIEW
   RISK
+  SUBPROCESSOR
   SUBSCRIBER
   TASK
   VULNERABILITY
