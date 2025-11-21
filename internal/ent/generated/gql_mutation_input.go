@@ -2929,7 +2929,6 @@ type UpdateCustomTypeEnumInput struct {
 	InternalNotes           *string
 	ClearSystemInternalID   bool
 	SystemInternalID        *string
-	Name                    *string
 	ClearDescription        bool
 	Description             *string
 	ClearColor              bool
@@ -2978,9 +2977,6 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
 	}
 	if i.ClearDescription {
 		m.ClearDescription()
@@ -15809,7 +15805,6 @@ type UpdateTagDefinitionInput struct {
 	InternalNotes         *string
 	ClearSystemInternalID bool
 	SystemInternalID      *string
-	Name                  *string
 	ClearAliases          bool
 	Aliases               []string
 	AppendAliases         []string
@@ -15834,9 +15829,6 @@ func (i *UpdateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
 	}
 	if i.ClearAliases {
 		m.ClearAliases()

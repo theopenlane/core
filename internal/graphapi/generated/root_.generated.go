@@ -125860,10 +125860,6 @@ input UpdateCustomTypeEnumInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
-  The name of the enum value, for example evidence request
-  """
-  name: String
-  """
   The description of the custom type
   """
   description: String
@@ -129364,10 +129360,6 @@ input UpdateTagDefinitionInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
-  """
-  The name of the tag definition
-  """
-  name: String
   """
   common aliases or misspellings for the tag definition
   """

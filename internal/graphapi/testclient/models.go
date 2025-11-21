@@ -43081,8 +43081,6 @@ type UpdateCustomTypeEnumInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	// The name of the enum value, for example evidence request
-	Name *string `json:"name,omitempty"`
 	// The description of the custom type
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
@@ -45731,8 +45729,6 @@ type UpdateTagDefinitionInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	// The name of the tag definition
-	Name *string `json:"name,omitempty"`
 	// common aliases or misspellings for the tag definition
 	Aliases       []string `json:"aliases,omitempty"`
 	AppendAliases []string `json:"appendAliases,omitempty"`

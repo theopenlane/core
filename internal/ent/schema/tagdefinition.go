@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -48,6 +49,7 @@ func (TagDefinition) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("The name of the tag definition").
+			Immutable().
 			Annotations(entx.FieldSearchable()).
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
@@ -115,7 +117,9 @@ func (TagDefinition) Annotations() []schema.Annotation {
 
 // Hooks of the TagDefinition
 func (TagDefinition) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTagDefintion(),
+	}
 }
 
 // Interceptors of the TagDefinition

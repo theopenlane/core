@@ -172,20 +172,6 @@ func (_u *CustomTypeEnumUpdate) ClearSystemInternalID() *CustomTypeEnumUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *CustomTypeEnumUpdate) SetName(v string) *CustomTypeEnumUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *CustomTypeEnumUpdate) SetNillableName(v *string) *CustomTypeEnumUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetDescription sets the "description" field.
 func (_u *CustomTypeEnumUpdate) SetDescription(v string) *CustomTypeEnumUpdate {
 	_u.mutation.SetDescription(v)
@@ -610,11 +596,6 @@ func (_u *CustomTypeEnumUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomTypeEnumUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := customtypeenum.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "CustomTypeEnum.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Color(); ok {
 		if err := customtypeenum.ColorValidator(v); err != nil {
 			return &ValidationError{Name: "color", err: fmt.Errorf(`generated: validator failed for field "CustomTypeEnum.color": %w`, err)}
@@ -685,9 +666,6 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customtypeenum.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(customtypeenum.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(customtypeenum.FieldDescription, field.TypeString, value)
@@ -1320,20 +1298,6 @@ func (_u *CustomTypeEnumUpdateOne) ClearSystemInternalID() *CustomTypeEnumUpdate
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *CustomTypeEnumUpdateOne) SetName(v string) *CustomTypeEnumUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *CustomTypeEnumUpdateOne) SetNillableName(v *string) *CustomTypeEnumUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetDescription sets the "description" field.
 func (_u *CustomTypeEnumUpdateOne) SetDescription(v string) *CustomTypeEnumUpdateOne {
 	_u.mutation.SetDescription(v)
@@ -1771,11 +1735,6 @@ func (_u *CustomTypeEnumUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *CustomTypeEnumUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := customtypeenum.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "CustomTypeEnum.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Color(); ok {
 		if err := customtypeenum.ColorValidator(v); err != nil {
 			return &ValidationError{Name: "color", err: fmt.Errorf(`generated: validator failed for field "CustomTypeEnum.color": %w`, err)}
@@ -1863,9 +1822,6 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(customtypeenum.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(customtypeenum.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Description(); ok {
 		_spec.SetField(customtypeenum.FieldDescription, field.TypeString, value)

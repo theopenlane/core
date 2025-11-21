@@ -61,6 +61,7 @@ func (CustomTypeEnum) Fields() []ent.Field {
 			Comment("The name of the enum value, for example evidence request").
 			Annotations(entx.FieldSearchable()).
 			NotEmpty().
+			Immutable().
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}),

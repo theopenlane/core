@@ -7824,6 +7824,7 @@ func init() {
 	tagdefinitionMixinHooks2 := tagdefinitionMixin[2].Hooks()
 	tagdefinitionMixinHooks5 := tagdefinitionMixin[5].Hooks()
 	tagdefinitionMixinHooks6 := tagdefinitionMixin[6].Hooks()
+	tagdefinitionHooks := schema.TagDefinition{}.Hooks()
 
 	tagdefinition.Hooks[1] = tagdefinitionMixinHooks0[0]
 
@@ -7834,6 +7835,8 @@ func init() {
 	tagdefinition.Hooks[4] = tagdefinitionMixinHooks5[0]
 
 	tagdefinition.Hooks[5] = tagdefinitionMixinHooks6[0]
+
+	tagdefinition.Hooks[6] = tagdefinitionHooks[0]
 	tagdefinitionMixinInters1 := tagdefinitionMixin[1].Interceptors()
 	tagdefinitionMixinInters2 := tagdefinitionMixin[2].Interceptors()
 	tagdefinitionMixinInters5 := tagdefinitionMixin[5].Interceptors()
