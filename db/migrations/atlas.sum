@@ -1,4 +1,4 @@
-h1:+im4UWS6QGKJ+I+8MPcinaERh52JzgyVMOp+waczP2w=
+h1:8ZveBbLKahOBsVZcuFa1uatEZcbsi5vaQuoLFc38m1Y=
 20250414203514_init.sql h1:NmCV8ML7NQDnzWVgI8QwOPofl3cp1WGzZWzPQhilEbY=
 20250418204249_control_objective.sql h1:NVX8qKq77/54YdYSQZMyI+HS5RXNahqyyDtNHf9oMnQ=
 20250421141003_aauid_not_unique_per_machine.sql h1:/ZFOjmdeEiPZl23+/MIjK1sxFWSi8PrMvV3kJ4iqbW4=
@@ -83,3 +83,4 @@ h1:+im4UWS6QGKJ+I+8MPcinaERh52JzgyVMOp+waczP2w=
 20251119165100_assessments.sql h1:qanjdShL52ZS9I7oV4SdbrWkFsnuhbb3J+JPhaPk3Zc=
 20251120182429_workflowsanddirectory.sql h1:dg3k2RmrD8z1UtYBy9co6rXa6cs43SgpZnw5Gmp8F3Y=
 20251121012545_file_edges.sql h1:c0LNV4eMCryfnqnIjGqOorE7tfUizyMKp5Uiyrjz0KM=
+20251121190314_trust_center_preview.sql h1:L5aAWbWK82G3w4e5XCKCD0Dh7tKPVo0StMdDjC9lOJE=
