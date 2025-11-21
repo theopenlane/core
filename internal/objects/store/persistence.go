@@ -123,11 +123,6 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		return "", nil
 	}
 
-	// If an org is already selected in context, use it directly
-	if orgID, err := auth.GetOrganizationIDFromContext(ctx); err == nil && orgID != "" {
-		return orgID, nil
-	}
-
 	// If the actor is a system admin, prefer deriving the organization from the
 	// correlated object rather than using the admin's org from context
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
@@ -135,12 +130,14 @@ func getOrgOwnerID(ctx context.Context, f pkgobjects.File) (string, error) {
 		return "", err
 	}
 
-	if orgIDs, err := auth.GetOrganizationIDsFromContext(ctx); err == nil && len(orgIDs) == 1 {
-		return orgIDs[0], nil
-	}
-
-	if !au.IsSystemAdmin && au.OrganizationID != "" {
-		return au.OrganizationID, nil
+	if !au.IsSystemAdmin {
+		if au.OrganizationID != "" {
+			return au.OrganizationID, nil
+		}
+		
+		if len(u.OrganizationIDs) == 1 {
+			return au.OrganizationIDs[0]
+		}
 	}
 
 	// derive table name from correlated object type using snake_case to match DB naming
