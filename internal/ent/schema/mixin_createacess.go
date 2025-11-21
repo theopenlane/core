@@ -1,13 +1,18 @@
 package schema
 
 import (
+	"bufio"
+	"bytes"
 	"fmt"
+	"os"
+	"regexp"
 	"strings"
 
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/mixin"
+	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -15,25 +20,83 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 )
 
-// createObjectTypes is a list of object types that access can be granted specifically for creation
-// outside of the normal organization edit permissions
-// TODO (sfunk): see if we can pull the annotations from the other schemas to make this dynamic
-var createObjectTypes = []string{
-	"control",
-	"control_implementation",
-	"control_objective",
-	"evidence",
-	"group",
-	"internal_policy",
-	"mapped_control",
-	"narrative",
-	"procedure",
-	"program",
-	"risk",
-	"scheduled_job",
-	"standard",
-	"template",
-	"subprocessor",
+// fgaModelPath is the path to the FGA model file on disk
+var fgaModelPath = "../../../fga/model/model.fga"
+
+// loadCreateObjectTypes loads the list of object types that support group-based create permissions.
+// It reads the FGA model from disk at runtime and returns only the parsed types.
+// If reading or parsing fails, it returns an empty list (no fallback to defaults).
+func loadCreateObjectTypes() []string {
+	model, err := os.ReadFile(fgaModelPath)
+	if err != nil {
+		log.Debug().Err(err).Msgf("failed to read FGA model from %s", fgaModelPath)
+		return nil
+	}
+
+	parsed, err := creatorTypesFromModel(model)
+	if err != nil {
+		return nil
+	}
+
+	return parsed
+}
+
+// creatorTypesFromModel parses the FGA model file and returns a list of object types
+// that have a creator relation granting access via group membership.
+// Only relations defined as "define [object]_creator: [group#member]" are included.
+// Returns a slice of object type names, or an error if parsing fails.
+func creatorTypesFromModel(model []byte) ([]string, error) {
+	var (
+		types     []string
+		inOrgType bool
+		creatorRE = regexp.MustCompile(`^define\s+([a-z0-9_]+)_creator:\s*(.+)$`)
+	)
+
+	scanner := bufio.NewScanner(bytes.NewReader(model))
+
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+
+		if line == "" || strings.HasPrefix(line, "#") {
+			continue
+		}
+
+		if strings.HasPrefix(line, "type ") {
+			// detect if we are entering or leaving the organization relations section
+			if strings.HasPrefix(line, "type organization") {
+				inOrgType = true
+				continue
+			}
+
+			if inOrgType {
+				break
+			}
+
+			continue
+		}
+
+		if !inOrgType {
+			continue
+		}
+
+		matches := creatorRE.FindStringSubmatch(line)
+		if len(matches) != 3 {
+			continue
+		}
+
+		// only include creator relations that grant access via group membership
+		if !strings.Contains(matches[2], "group#member") {
+			continue
+		}
+
+		types = append(types, matches[1])
+	}
+
+	if err := scanner.Err(); err != nil {
+		return nil, err
+	}
+
+	return types, nil
 }
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity
@@ -43,8 +106,8 @@ var createObjectTypes = []string{
 //	#     define [object]_creator: [group#member]
 //	#     define can_create_[object]: can_edit or [object]_creator
 //
-// once these exist in the model, the object type can be added to the createObjectTypes list
-// above and the mixin will automatically add the edges and hooks to the schema that will create
+// once these exist in the model, the object type will be picked up automatically by the createObjectTypes list
+// above and the mixin will add the edges and hooks to the schema that will create
 // the tuples upon association with the organization
 type GroupBasedCreateAccessMixin struct {
 	mixin.Schema
@@ -59,7 +122,7 @@ func NewGroupBasedCreateAccessMixin() GroupBasedCreateAccessMixin {
 func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 	edges := []ent.Edge{}
 
-	for _, t := range createObjectTypes {
+	for _, t := range loadCreateObjectTypes() {
 		toName := strings.ToLower(fmt.Sprintf("%s_creators", t))
 
 		edge := edge.To(toName, Group.Type).
@@ -81,7 +144,7 @@ func (c GroupBasedCreateAccessMixin) Edges() []ent.Edge {
 func (c GroupBasedCreateAccessMixin) Hooks() []ent.Hook {
 	var h []ent.Hook
 
-	for _, objectType := range createObjectTypes {
+	for _, objectType := range loadCreateObjectTypes() {
 		idField := fmt.Sprintf("%s_creator_id", objectType)
 
 		relation := fgax.Relation(objectType + "_creator")

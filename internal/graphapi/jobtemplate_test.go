@@ -149,6 +149,15 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateJobTemplateInput{
+				Title:    "Test Job Template",
+				Platform: enums.JobPlatformTypeGo,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, with DownloadURL",
+			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
 				DownloadURL: lo.ToPtr(testScriptURL),
@@ -171,10 +180,9 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateJobTemplateInput{
-				Title:       "Test Job Template",
-				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
-				OwnerID:     lo.ToPtr(testUser1.OrganizationID),
+				Title:    "Test Job Template",
+				Platform: enums.JobPlatformTypeGo,
+				OwnerID:  lo.ToPtr(testUser1.OrganizationID),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -182,9 +190,8 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateJobTemplateInput{
-				Title:       "Test Job Template",
-				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				Title:    "Test Job Template",
+				Platform: enums.JobPlatformTypeGo,
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -192,9 +199,8 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "user not authorized, not enough permissions",
 			request: testclient.CreateJobTemplateInput{
-				Title:       "Test Job Template",
-				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				Title:    "Test Job Template",
+				Platform: enums.JobPlatformTypeGo,
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -203,8 +209,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "missing required field, title",
 			request: testclient.CreateJobTemplateInput{
-				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				Platform: enums.JobPlatformTypeGo,
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -213,21 +218,11 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 		{
 			name: "missing required field, platform",
 			request: testclient.CreateJobTemplateInput{
-				Title:       "Test Job Template",
-				DownloadURL: lo.ToPtr(testScriptURL),
+				Title: "Test Job Template",
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not a valid JobTemplateJobPlatformType",
-		},
-		{
-			name: "missing required field, download url",
-			request: testclient.CreateJobTemplateInput{
-				Title:    "Test Job Template",
-				Platform: enums.JobPlatformTypeGo,
-			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
 		},
 		{
 			name: "invalid cron",
@@ -248,7 +243,6 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			resp, err := tc.client.CreateJobTemplate(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-
 				return
 			}
 
@@ -258,9 +252,14 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			// check required fields
 			assert.Check(t, is.Equal(tc.request.Title, resp.CreateJobTemplate.JobTemplate.Title))
 			assert.Check(t, is.Equal(tc.request.Platform, resp.CreateJobTemplate.JobTemplate.Platform))
-			assert.Check(t, is.Equal(tc.request.DownloadURL, resp.CreateJobTemplate.JobTemplate.DownloadURL))
 
-			// check optional fields with if checks if they were provided or not
+			// check DownloadURL optional
+			if tc.request.DownloadURL != nil {
+				assert.Check(t, is.Equal(tc.request.DownloadURL, resp.CreateJobTemplate.JobTemplate.DownloadURL))
+			} else {
+				assert.Check(t, resp.CreateJobTemplate.JobTemplate.DownloadURL == nil)
+			}
+
 			if tc.request.Description != nil {
 				assert.Check(t, is.Equal(*tc.request.Description, *resp.CreateJobTemplate.JobTemplate.Description))
 			}
@@ -303,6 +302,14 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
+			name: "update DownloadURL to nil",
+			request: testclient.UpdateJobTemplateInput{
+				DownloadURL: nil,
+			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateJobTemplateInput{
 				Description: lo.ToPtr("Test Description Updated not allowed"),
@@ -327,7 +334,6 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 			resp, err := tc.client.UpdateJobTemplate(tc.ctx, jobTemplate.ID, tc.request)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
-
 				return
 			}
 
@@ -340,6 +346,8 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 
 			if tc.request.DownloadURL != nil {
 				assert.Check(t, is.Equal(*tc.request.DownloadURL, resp.UpdateJobTemplate.JobTemplate.DownloadURL))
+			} else {
+				assert.Check(t, resp.UpdateJobTemplate.JobTemplate.DownloadURL == nil)
 			}
 
 			if tc.request.Cron != nil {
