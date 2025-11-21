@@ -2236,7 +2236,7 @@ func adminSearchSubprocessors(ctx context.Context, query string, after *entgql.C
 				subprocessor.NameContainsFold(query),             // search by Name
 				subprocessor.DescriptionContainsFold(query),      // search by Description
 				subprocessor.LogoRemoteURLContainsFold(query),    // search by LogoRemoteURL
-				subprocessor.LogoLocalFileIDContainsFold(query),  // search by LogoLocalFileID
+				subprocessor.LogoFileIDContainsFold(query),       // search by LogoFileID
 			),
 		)
 

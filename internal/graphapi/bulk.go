@@ -1604,25 +1604,6 @@ func (r *mutationResolver) bulkDeleteInternalPolicy(ctx context.Context, ids []s
 	}, nil
 }
 
-// bulkCreateInvite uses the CreateBulk function to create multiple Invite entities
-func (r *mutationResolver) bulkCreateInvite(ctx context.Context, input []*generated.CreateInviteInput) (*model.InviteBulkCreatePayload, error) {
-	c := withTransactionalMutation(ctx)
-	builders := make([]*generated.InviteCreate, len(input))
-	for i, data := range input {
-		builders[i] = c.Invite.Create().SetInput(*data)
-	}
-
-	res, err := c.Invite.CreateBulk(builders...).Save(ctx)
-	if err != nil {
-		return nil, parseRequestError(ctx, err, action{action: ActionCreate, object: "invite"})
-	}
-
-	// return response
-	return &model.InviteBulkCreatePayload{
-		Invites: res,
-	}, nil
-}
-
 // bulkDeleteInvite deletes multiple Invite entities by their IDs
 func (r *mutationResolver) bulkDeleteInvite(ctx context.Context, ids []string) (*model.InviteBulkDeletePayload, error) {
 	if len(ids) == 0 {

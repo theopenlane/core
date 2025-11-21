@@ -16,7 +16,7 @@ query GetAllSubprocessorHistories {
         description
         historyTime
         id
-        logoLocalFileID
+        logoFileID
         logoRemoteURL
         name
         operation
@@ -47,7 +47,7 @@ query GetSubprocessorHistories($first: Int, $last: Int, $where: SubprocessorHist
         description
         historyTime
         id
-        logoLocalFileID
+        logoFileID
         logoRemoteURL
         name
         operation

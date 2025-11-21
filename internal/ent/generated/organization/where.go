@@ -1523,6 +1523,35 @@ func HasTemplateCreatorsWith(preds ...predicate.Group) predicate.Organization {
 	})
 }
 
+// HasSubprocessorCreators applies the HasEdge predicate on the "subprocessor_creators" edge.
+func HasSubprocessorCreators() predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorCreatorsTable, SubprocessorCreatorsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasSubprocessorCreatorsWith applies the HasEdge predicate on the "subprocessor_creators" edge with a given conditions (other predicates).
+func HasSubprocessorCreatorsWith(preds ...predicate.Group) predicate.Organization {
+	return predicate.Organization(func(s *sql.Selector) {
+		step := newSubprocessorCreatorsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Group
+		step.Edge.Schema = schemaConfig.Group
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasParent applies the HasEdge predicate on the "parent" edge.
 func HasParent() predicate.Organization {
 	return predicate.Organization(func(s *sql.Selector) {

@@ -392,7 +392,7 @@ func getObjectIDFromEntValue(m ent.Value) (string, error) {
 // this is intended to be used in place of GetAuthorizedObjectIDs when you already have the object ids
 // and just need to filter them based on the user's permissions
 func filterAuthorizedObjectIDs(ctx context.Context, objectType string, objectIDs []string) ([]string, error) {
-	logx.FromContext(ctx).Debug().Str("object_type", objectType).Strs("object_ids", objectIDs).Msg("filterAuthorizedObjectIDs")
+	logx.FromContext(ctx).Debug().Str("object_type", objectType).Strs("object_ids", objectIDs).Msg("filtering authorized object ids")
 
 	var (
 		context   *map[string]any

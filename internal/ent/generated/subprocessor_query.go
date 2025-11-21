@@ -30,12 +30,10 @@ type SubprocessorQuery struct {
 	inters                            []Interceptor
 	predicates                        []predicate.Subprocessor
 	withOwner                         *OrganizationQuery
-	withFiles                         *FileQuery
 	withLogoFile                      *FileQuery
 	withTrustCenterSubprocessors      *TrustCenterSubprocessorQuery
 	loadTotal                         []func(context.Context, []*Subprocessor) error
 	modifiers                         []func(*sql.Selector)
-	withNamedFiles                    map[string]*FileQuery
 	withNamedTrustCenterSubprocessors map[string]*TrustCenterSubprocessorQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -92,31 +90,6 @@ func (_q *SubprocessorQuery) QueryOwner() *OrganizationQuery {
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.Organization
 		step.Edge.Schema = schemaConfig.Subprocessor
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
-}
-
-// QueryFiles chains the current query on the "files" edge.
-func (_q *SubprocessorQuery) QueryFiles() *FileQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(subprocessor.Table, subprocessor.FieldID, selector),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, subprocessor.FilesTable, subprocessor.FilesPrimaryKey...),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.SubprocessorFiles
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
 	}
@@ -366,7 +339,6 @@ func (_q *SubprocessorQuery) Clone() *SubprocessorQuery {
 		inters:                       append([]Interceptor{}, _q.inters...),
 		predicates:                   append([]predicate.Subprocessor{}, _q.predicates...),
 		withOwner:                    _q.withOwner.Clone(),
-		withFiles:                    _q.withFiles.Clone(),
 		withLogoFile:                 _q.withLogoFile.Clone(),
 		withTrustCenterSubprocessors: _q.withTrustCenterSubprocessors.Clone(),
 		// clone intermediate query.
@@ -384,17 +356,6 @@ func (_q *SubprocessorQuery) WithOwner(opts ...func(*OrganizationQuery)) *Subpro
 		opt(query)
 	}
 	_q.withOwner = query
-	return _q
-}
-
-// WithFiles tells the query-builder to eager-load the nodes that are connected to
-// the "files" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *SubprocessorQuery) WithFiles(opts ...func(*FileQuery)) *SubprocessorQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withFiles = query
 	return _q
 }
 
@@ -504,9 +465,8 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	var (
 		nodes       = []*Subprocessor{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
+		loadedTypes = [3]bool{
 			_q.withOwner != nil,
-			_q.withFiles != nil,
 			_q.withLogoFile != nil,
 			_q.withTrustCenterSubprocessors != nil,
 		}
@@ -540,13 +500,6 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			return nil, err
 		}
 	}
-	if query := _q.withFiles; query != nil {
-		if err := _q.loadFiles(ctx, query, nodes,
-			func(n *Subprocessor) { n.Edges.Files = []*File{} },
-			func(n *Subprocessor, e *File) { n.Edges.Files = append(n.Edges.Files, e) }); err != nil {
-			return nil, err
-		}
-	}
 	if query := _q.withLogoFile; query != nil {
 		if err := _q.loadLogoFile(ctx, query, nodes, nil,
 			func(n *Subprocessor, e *File) { n.Edges.LogoFile = e }); err != nil {
@@ -559,13 +512,6 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Subprocessor, e *TrustCenterSubprocessor) {
 				n.Edges.TrustCenterSubprocessors = append(n.Edges.TrustCenterSubprocessors, e)
 			}); err != nil {
-			return nil, err
-		}
-	}
-	for name, query := range _q.withNamedFiles {
-		if err := _q.loadFiles(ctx, query, nodes,
-			func(n *Subprocessor) { n.appendNamedFiles(name) },
-			func(n *Subprocessor, e *File) { n.appendNamedFiles(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -613,76 +559,14 @@ func (_q *SubprocessorQuery) loadOwner(ctx context.Context, query *OrganizationQ
 	}
 	return nil
 }
-func (_q *SubprocessorQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
-	edgeIDs := make([]driver.Value, len(nodes))
-	byID := make(map[string]*Subprocessor)
-	nids := make(map[string]map[*Subprocessor]struct{})
-	for i, node := range nodes {
-		edgeIDs[i] = node.ID
-		byID[node.ID] = node
-		if init != nil {
-			init(node)
-		}
-	}
-	query.Where(func(s *sql.Selector) {
-		joinT := sql.Table(subprocessor.FilesTable)
-		joinT.Schema(_q.schemaConfig.SubprocessorFiles)
-		s.Join(joinT).On(s.C(file.FieldID), joinT.C(subprocessor.FilesPrimaryKey[1]))
-		s.Where(sql.InValues(joinT.C(subprocessor.FilesPrimaryKey[0]), edgeIDs...))
-		columns := s.SelectedColumns()
-		s.Select(joinT.C(subprocessor.FilesPrimaryKey[0]))
-		s.AppendSelect(columns...)
-		s.SetDistinct(false)
-	})
-	if err := query.prepareQuery(ctx); err != nil {
-		return err
-	}
-	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
-		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
-			assign := spec.Assign
-			values := spec.ScanValues
-			spec.ScanValues = func(columns []string) ([]any, error) {
-				values, err := values(columns[1:])
-				if err != nil {
-					return nil, err
-				}
-				return append([]any{new(sql.NullString)}, values...), nil
-			}
-			spec.Assign = func(columns []string, values []any) error {
-				outValue := values[0].(*sql.NullString).String
-				inValue := values[1].(*sql.NullString).String
-				if nids[inValue] == nil {
-					nids[inValue] = map[*Subprocessor]struct{}{byID[outValue]: {}}
-					return assign(columns[1:], values[1:])
-				}
-				nids[inValue][byID[outValue]] = struct{}{}
-				return nil
-			}
-		})
-	})
-	neighbors, err := withInterceptors[[]*File](ctx, query, qr, query.inters)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected "files" node returned %v`, n.ID)
-		}
-		for kn := range nodes {
-			assign(kn, n)
-		}
-	}
-	return nil
-}
 func (_q *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery, nodes []*Subprocessor, init func(*Subprocessor), assign func(*Subprocessor, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Subprocessor)
 	for i := range nodes {
-		if nodes[i].LogoLocalFileID == nil {
+		if nodes[i].LogoFileID == nil {
 			continue
 		}
-		fk := *nodes[i].LogoLocalFileID
+		fk := *nodes[i].LogoFileID
 		if _, ok := nodeids[fk]; !ok {
 			ids = append(ids, fk)
 		}
@@ -699,7 +583,7 @@ func (_q *SubprocessorQuery) loadLogoFile(ctx context.Context, query *FileQuery,
 	for _, n := range neighbors {
 		nodes, ok := nodeids[n.ID]
 		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "logo_local_file_id" returned %v`, n.ID)
+			return fmt.Errorf(`unexpected foreign-key "logo_file_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -772,7 +656,7 @@ func (_q *SubprocessorQuery) querySpec() *sqlgraph.QuerySpec {
 			_spec.Node.AddColumnOnce(subprocessor.FieldOwnerID)
 		}
 		if _q.withLogoFile != nil {
-			_spec.Node.AddColumnOnce(subprocessor.FieldLogoLocalFileID)
+			_spec.Node.AddColumnOnce(subprocessor.FieldLogoFileID)
 		}
 	}
 	if ps := _q.predicates; len(ps) > 0 {
@@ -840,20 +724,6 @@ func (_q *SubprocessorQuery) sqlQuery(ctx context.Context) *sql.Selector {
 func (_q *SubprocessorQuery) Modify(modifiers ...func(s *sql.Selector)) *SubprocessorSelect {
 	_q.modifiers = append(_q.modifiers, modifiers...)
 	return _q.Select()
-}
-
-// WithNamedFiles tells the query-builder to eager-load the nodes that are connected to the "files"
-// edge with the given name. The optional arguments are used to configure the query builder of the edge.
-func (_q *SubprocessorQuery) WithNamedFiles(name string, opts ...func(*FileQuery)) *SubprocessorQuery {
-	query := (&FileClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	if _q.withNamedFiles == nil {
-		_q.withNamedFiles = make(map[string]*FileQuery)
-	}
-	_q.withNamedFiles[name] = query
-	return _q
 }
 
 // WithNamedTrustCenterSubprocessors tells the query-builder to eager-load the nodes that are connected to the "trust_center_subprocessors"

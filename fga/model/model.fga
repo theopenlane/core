@@ -122,6 +122,9 @@ type organization
     define assessment_creator: [user,group#member]
     define can_create_assessment: can_edit or assessment_creator
 
+    define subprocessor_creator: [group#member]
+    define can_create_subprocessor: can_edit or subprocessor_creator
+
     # additional relations
     define user_in_context: [user]
 
@@ -151,7 +154,7 @@ type group
 
 
 # files have their permissions defined by the parent object (like a control or a procedure), users with access to the parent object will have access to the file
-# user:* and service:* are used for public files (e.g. trust center logos/favicons) that are available to all users
+# user:* and service:* are used for public files (e.g. trust center logos/favicons etc) that are available to all users
 type file
   relations
     define can_view: [user:*, service:*, user, service, organization#member] or parent_viewer or tc_doc_viewer
@@ -592,20 +595,22 @@ type custom_domain
 type subprocessor
   relations
     #  user:* is used for system-owned public subprocessors that are available to all users
-    define can_view: [user:*, service:*] or viewer or parent_viewer
-    define can_edit: editor or parent_editor
-    define can_delete: editor or parent_editor
+    define can_view: [user:*, service:*] or viewer or system_admin from system
+    define can_edit: editor or system_admin from system
+    define can_delete: editor or parent_editor or system_admin from system
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
+    define admin: [user,service] or can_delete from parent
     define parent_viewer: member from parent
     define parent_editor: admin from parent or owner from parent
-    define viewer: [user, service] or editor
-    define editor: [user, service]
-    define parent: [organization]
+    define viewer: [user, service] or editor or parent_viewer
+    define editor: [user, service, organization#owner] or admin or parent_editor
+    define parent: [organization, user]
+    define system: [system]
 
 type assessment
   relations
     define can_view: [user] or can_edit or (viewer but not blocked)
-    define can_edit: [user] or owner or delegate or (editor but not blocked)  
+    define can_edit: [user] or owner or delegate or (editor but not blocked)
     define can_delete: [user] or owner or (editor but not blocked)
     define parent: [organization]
     # allow users or groups to be assigned edit/view permissions directly

@@ -84,8 +84,6 @@ func (ec *executionContext) fieldContext_UserSettingBulkCreatePayload_userSettin
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
 				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			case "files":
-				return ec.fieldContext_UserSetting_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},
@@ -178,8 +176,6 @@ func (ec *executionContext) fieldContext_UserSettingCreatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
 				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			case "files":
-				return ec.fieldContext_UserSetting_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},
@@ -243,8 +239,6 @@ func (ec *executionContext) fieldContext_UserSettingUpdatePayload_userSetting(_ 
 				return ec.fieldContext_UserSetting_user(ctx, field)
 			case "defaultOrg":
 				return ec.fieldContext_UserSetting_defaultOrg(ctx, field)
-			case "files":
-				return ec.fieldContext_UserSetting_files(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type UserSetting", field.Name)
 		},

@@ -52,9 +52,18 @@ func AddFilePermissions(ctx context.Context) (context.Context, error) {
 
 			const avatarFileKey = "avatarFile"
 			if f.FieldName == avatarFileKey {
-				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				au, err := auth.GetAuthenticatedUserFromContext(ctx)
 				if err != nil {
 					return ctx, err
+				}
+
+				orgID := au.OrganizationID
+				if orgID == "" {
+					if len(au.OrganizationIDs) == 1 {
+						orgID = au.OrganizationIDs[0]
+					} else {
+						return ctx, ErrMissingOrganizationID
+					}
 				}
 
 				orgReq := fgax.GetTupleKey(fgax.TupleRequest{

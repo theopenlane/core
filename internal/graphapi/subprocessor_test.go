@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -11,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/objects/storage"
 )
 
 func TestQuerySubprocessorByID(t *testing.T) {
@@ -168,9 +170,21 @@ func TestQuerySubprocessors(t *testing.T) {
 }
 
 func TestMutationCreateSubprocessor(t *testing.T) {
+	createImageUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
 	testCases := []struct {
 		name            string
 		request         testclient.CreateSubprocessorInput
+		upload          *graphql.Upload
 		client          *testclient.TestClient
 		ctx             context.Context
 		expectedErr     string
@@ -186,11 +200,12 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			ctx:             testUser1.UserCtx,
 		},
 		{
-			name: "happy path with description",
+			name: "happy path with description and logo upload",
 			request: testclient.CreateSubprocessorInput{
 				Name:        "Test Subprocessor with Description",
 				Description: lo.ToPtr("This is a test subprocessor"),
 			},
+			upload:          createImageUpload(),
 			expectedOwnerID: lo.ToPtr(testUser1.OrganizationID),
 			client:          suite.client.api,
 			ctx:             testUser1.UserCtx,
@@ -236,7 +251,11 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, nil)
+			if tc.upload != nil {
+				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+			}
+
+			resp, err := tc.client.CreateSubprocessor(tc.ctx, tc.request, tc.upload)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -256,6 +275,12 @@ func TestMutationCreateSubprocessor(t *testing.T) {
 			} else {
 				assert.Check(t, resp.CreateSubprocessor.Subprocessor.Owner != nil)
 				assert.Check(t, is.Equal(*tc.expectedOwnerID, resp.CreateSubprocessor.Subprocessor.Owner.ID))
+			}
+
+			if tc.upload != nil {
+				assert.Check(t, resp.CreateSubprocessor.Subprocessor.LogoFileID != nil)
+				assert.Assert(t, resp.CreateSubprocessor.Subprocessor.LogoFile != nil)
+				assert.Check(t, resp.CreateSubprocessor.Subprocessor.LogoFile.ID != "")
 			}
 
 			// Clean up

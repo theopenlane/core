@@ -28,6 +28,8 @@ var (
 	ExportTypeReview ExportType = "REVIEW"
 	// ExportTypeRisk indicates the risk.
 	ExportTypeRisk ExportType = "RISK"
+	// ExportTypeSubprocessor indicates the subprocessor.
+	ExportTypeSubprocessor ExportType = "SUBPROCESSOR"
 	// ExportTypeSubscriber indicates the subscriber.
 	ExportTypeSubscriber ExportType = "SUBSCRIBER"
 	// ExportTypeTask indicates the task.
@@ -50,6 +52,7 @@ func (ExportType) Values() []string {
 		string(ExportTypeRemediation),
 		string(ExportTypeReview),
 		string(ExportTypeRisk),
+		string(ExportTypeSubprocessor),
 		string(ExportTypeSubscriber),
 		string(ExportTypeTask),
 		string(ExportTypeVulnerability),
@@ -82,6 +85,8 @@ func ToExportType(r string) *ExportType {
 		return &ExportTypeReview
 	case ExportTypeRisk.String():
 		return &ExportTypeRisk
+	case ExportTypeSubprocessor.String():
+		return &ExportTypeSubprocessor
 	case ExportTypeSubscriber.String():
 		return &ExportTypeSubscriber
 	case ExportTypeTask.String():

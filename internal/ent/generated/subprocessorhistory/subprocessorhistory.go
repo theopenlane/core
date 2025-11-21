@@ -51,8 +51,8 @@ const (
 	FieldDescription = "description"
 	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
 	FieldLogoRemoteURL = "logo_remote_url"
-	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
-	FieldLogoLocalFileID = "logo_local_file_id"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// Table holds the table name of the subprocessorhistory in the database.
 	Table = "subprocessor_history"
 )
@@ -77,7 +77,7 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldLogoRemoteURL,
-	FieldLogoLocalFileID,
+	FieldLogoFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -213,9 +213,9 @@ func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
 }
 
-// ByLogoLocalFileID orders the results by the logo_local_file_id field.
-func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
 }
 
 var (

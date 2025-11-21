@@ -586,13 +586,13 @@ func TestMutationUpdateTemplate(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			// Set up mock expectations for file uploads if files are provided
-			if tc.templateFiles != nil && len(tc.templateFiles) > 0 && tc.expectedErr == "" {
+			if len(tc.templateFiles) > 0 && tc.expectedErr == "" {
 				uploads := make([]graphql.Upload, len(tc.templateFiles))
 				for i, file := range tc.templateFiles {
 					uploads[i] = *file
 				}
 				expectUpload(t, suite.client.mockProvider, uploads)
-			} else if tc.templateFiles != nil && len(tc.templateFiles) > 0 {
+			} else if len(tc.templateFiles) > 0 {
 				// For error cases with files, we still need to set up the mock but expect it not to be called
 				expectUploadCheckOnly(t, suite.client.mockProvider)
 			}
@@ -661,7 +661,7 @@ func TestMutationUpdateTemplate(t *testing.T) {
 			}
 
 			// Verify file uploads if files were provided
-			if tc.templateFiles != nil && len(tc.templateFiles) > 0 {
+			if len(tc.templateFiles) > 0 {
 				t.Logf("Number of files: %+v", updatedTemplate.Files.Edges)
 				assert.Check(t, is.Len(updatedTemplate.Files.Edges, len(tc.templateFiles)))
 

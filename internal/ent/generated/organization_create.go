@@ -537,6 +537,21 @@ func (_c *OrganizationCreate) AddTemplateCreators(v ...*Group) *OrganizationCrea
 	return _c.AddTemplateCreatorIDs(ids...)
 }
 
+// AddSubprocessorCreatorIDs adds the "subprocessor_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddSubprocessorCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddSubprocessorCreatorIDs(ids...)
+	return _c
+}
+
+// AddSubprocessorCreators adds the "subprocessor_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddSubprocessorCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddSubprocessorCreatorIDs(ids...)
+}
+
 // SetParentID sets the "parent" edge to the Organization entity by ID.
 func (_c *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
 	_c.mutation.SetParentID(id)
@@ -2092,6 +2107,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.SubprocessorCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorCreatorsTable,
+			Columns: []string{organization.SubprocessorCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

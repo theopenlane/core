@@ -236,23 +236,23 @@ func (_u *SubprocessorHistoryUpdate) ClearLogoRemoteURL() *SubprocessorHistoryUp
 	return _u
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *SubprocessorHistoryUpdate) SetLogoLocalFileID(v string) *SubprocessorHistoryUpdate {
-	_u.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *SubprocessorHistoryUpdate) SetLogoFileID(v string) *SubprocessorHistoryUpdate {
+	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *SubprocessorHistoryUpdate) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryUpdate {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *SubprocessorHistoryUpdate) SetNillableLogoFileID(v *string) *SubprocessorHistoryUpdate {
 	if v != nil {
-		_u.SetLogoLocalFileID(*v)
+		_u.SetLogoFileID(*v)
 	}
 	return _u
 }
 
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *SubprocessorHistoryUpdate) ClearLogoLocalFileID() *SubprocessorHistoryUpdate {
-	_u.mutation.ClearLogoLocalFileID()
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *SubprocessorHistoryUpdate) ClearLogoFileID() *SubprocessorHistoryUpdate {
+	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
@@ -398,11 +398,11 @@ func (_u *SubprocessorHistoryUpdate) sqlSave(ctx context.Context) (_node int, er
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoFileID, field.TypeString, value)
 	}
-	if _u.mutation.LogoLocalFileIDCleared() {
-		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -632,23 +632,23 @@ func (_u *SubprocessorHistoryUpdateOne) ClearLogoRemoteURL() *SubprocessorHistor
 	return _u
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *SubprocessorHistoryUpdateOne) SetLogoLocalFileID(v string) *SubprocessorHistoryUpdateOne {
-	_u.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *SubprocessorHistoryUpdateOne) SetLogoFileID(v string) *SubprocessorHistoryUpdateOne {
+	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *SubprocessorHistoryUpdateOne) SetNillableLogoLocalFileID(v *string) *SubprocessorHistoryUpdateOne {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *SubprocessorHistoryUpdateOne) SetNillableLogoFileID(v *string) *SubprocessorHistoryUpdateOne {
 	if v != nil {
-		_u.SetLogoLocalFileID(*v)
+		_u.SetLogoFileID(*v)
 	}
 	return _u
 }
 
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *SubprocessorHistoryUpdateOne) ClearLogoLocalFileID() *SubprocessorHistoryUpdateOne {
-	_u.mutation.ClearLogoLocalFileID()
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *SubprocessorHistoryUpdateOne) ClearLogoFileID() *SubprocessorHistoryUpdateOne {
+	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
@@ -824,11 +824,11 @@ func (_u *SubprocessorHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Sub
 	if _u.mutation.LogoRemoteURLCleared() {
 		_spec.ClearField(subprocessorhistory.FieldLogoRemoteURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.LogoLocalFileID(); ok {
-		_spec.SetField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString, value)
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(subprocessorhistory.FieldLogoFileID, field.TypeString, value)
 	}
-	if _u.mutation.LogoLocalFileIDCleared() {
-		_spec.ClearField(subprocessorhistory.FieldLogoLocalFileID, field.TypeString)
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(subprocessorhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.SubprocessorHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

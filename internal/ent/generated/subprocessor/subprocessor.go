@@ -43,12 +43,10 @@ const (
 	FieldDescription = "description"
 	// FieldLogoRemoteURL holds the string denoting the logo_remote_url field in the database.
 	FieldLogoRemoteURL = "logo_remote_url"
-	// FieldLogoLocalFileID holds the string denoting the logo_local_file_id field in the database.
-	FieldLogoLocalFileID = "logo_local_file_id"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
@@ -62,18 +60,13 @@ const (
 	OwnerInverseTable = "organizations"
 	// OwnerColumn is the table column denoting the owner relation/edge.
 	OwnerColumn = "owner_id"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "subprocessor_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
 	LogoFileTable = "subprocessors"
 	// LogoFileInverseTable is the table name for the File entity.
 	// It exists in this package in order to avoid circular dependency with the "file" package.
 	LogoFileInverseTable = "files"
 	// LogoFileColumn is the table column denoting the logo_file relation/edge.
-	LogoFileColumn = "logo_local_file_id"
+	LogoFileColumn = "logo_file_id"
 	// TrustCenterSubprocessorsTable is the table that holds the trust_center_subprocessors relation/edge.
 	TrustCenterSubprocessorsTable = "trust_center_subprocessors"
 	// TrustCenterSubprocessorsInverseTable is the table name for the TrustCenterSubprocessor entity.
@@ -100,14 +93,8 @@ var Columns = []string{
 	FieldName,
 	FieldDescription,
 	FieldLogoRemoteURL,
-	FieldLogoLocalFileID,
+	FieldLogoFileID,
 }
-
-var (
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"subprocessor_id", "file_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -125,7 +112,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [9]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -219,29 +206,15 @@ func ByLogoRemoteURL(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldLogoRemoteURL, opts...).ToFunc()
 }
 
-// ByLogoLocalFileID orders the results by the logo_local_file_id field.
-func ByLogoLocalFileID(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldLogoLocalFileID, opts...).ToFunc()
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newOwnerStep(), sql.OrderByField(field, opts...))
-	}
-}
-
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -270,13 +243,6 @@ func newOwnerStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(OwnerInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, OwnerTable, OwnerColumn),
-	)
-}
-func newFilesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 func newLogoFileStep() *sqlgraph.Step {

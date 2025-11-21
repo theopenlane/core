@@ -5589,11 +5589,13 @@ func init() {
 
 	organization.Hooks[18] = organizationMixinHooks6[13]
 
-	organization.Hooks[19] = organizationHooks[0]
+	organization.Hooks[19] = organizationMixinHooks6[14]
 
-	organization.Hooks[20] = organizationHooks[1]
+	organization.Hooks[20] = organizationHooks[0]
 
-	organization.Hooks[21] = organizationHooks[2]
+	organization.Hooks[21] = organizationHooks[1]
+
+	organization.Hooks[22] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationMixinInters2 := organizationMixin[2].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
@@ -7539,6 +7541,8 @@ func init() {
 	subprocessor.Hooks[6] = subprocessorMixinHooks7[0]
 
 	subprocessor.Hooks[7] = subprocessorHooks[0]
+
+	subprocessor.Hooks[8] = subprocessorHooks[1]
 	subprocessorMixinInters1 := subprocessorMixin[1].Interceptors()
 	subprocessorMixinInters2 := subprocessorMixin[2].Interceptors()
 	subprocessorMixinInters6 := subprocessorMixin[6].Interceptors()

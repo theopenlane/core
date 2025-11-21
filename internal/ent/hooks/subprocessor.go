@@ -22,9 +22,8 @@ func HookSubprocessor() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
-
-				m.AddFileIDs(fileIDs...)
 			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
@@ -42,14 +41,12 @@ func checkSubprocessorLogoFile(ctx context.Context, m *generated.SubprocessorMut
 		return ctx, ErrTooManyLogoFiles
 	}
 
-	m.SetLogoLocalFileID(logoFiles[0].ID)
+	m.SetLogoFileID(logoFiles[0].ID)
 
 	adapter := pkgobjects.NewGenericMutationAdapter(m,
 		func(mut *generated.SubprocessorMutation) (string, bool) { return mut.ID() },
 		func(mut *generated.SubprocessorMutation) string { return mut.Type() },
 	)
 
-	ctx, _ = pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey, "subprocessor")
-
-	return ctx, nil
+	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
 }

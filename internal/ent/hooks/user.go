@@ -91,8 +91,6 @@ func HookUser() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
-
-				m.AddFileIDs(fileIDs...)
 			}
 
 			// user settings are required, if this is empty generate a default setting schema

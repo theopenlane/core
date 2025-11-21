@@ -3880,7 +3880,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessor.FieldName:             {Type: field.TypeString, Column: subprocessor.FieldName},
 			subprocessor.FieldDescription:      {Type: field.TypeString, Column: subprocessor.FieldDescription},
 			subprocessor.FieldLogoRemoteURL:    {Type: field.TypeString, Column: subprocessor.FieldLogoRemoteURL},
-			subprocessor.FieldLogoLocalFileID:  {Type: field.TypeString, Column: subprocessor.FieldLogoLocalFileID},
+			subprocessor.FieldLogoFileID:       {Type: field.TypeString, Column: subprocessor.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[112] = &sqlgraph.Node{
@@ -3911,7 +3911,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			subprocessorhistory.FieldName:             {Type: field.TypeString, Column: subprocessorhistory.FieldName},
 			subprocessorhistory.FieldDescription:      {Type: field.TypeString, Column: subprocessorhistory.FieldDescription},
 			subprocessorhistory.FieldLogoRemoteURL:    {Type: field.TypeString, Column: subprocessorhistory.FieldLogoRemoteURL},
-			subprocessorhistory.FieldLogoLocalFileID:  {Type: field.TypeString, Column: subprocessorhistory.FieldLogoLocalFileID},
+			subprocessorhistory.FieldLogoFileID:       {Type: field.TypeString, Column: subprocessorhistory.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[113] = &sqlgraph.Node{
@@ -7076,18 +7076,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"File",
 	)
 	graph.MustAddE(
-		"user",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserTable,
-			Columns: file.UserPrimaryKey,
-			Bidi:    false,
-		},
-		"File",
-		"User",
-	)
-	graph.MustAddE(
 		"organization",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -7134,18 +7122,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"Entity",
-	)
-	graph.MustAddE(
-		"user_setting",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.UserSettingTable,
-			Columns: file.UserSettingPrimaryKey,
-			Bidi:    false,
-		},
-		"File",
-		"UserSetting",
 	)
 	graph.MustAddE(
 		"organization_setting",
@@ -7230,18 +7206,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"File",
 		"TrustCenterSetting",
-	)
-	graph.MustAddE(
-		"subprocessor",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.SubprocessorTable,
-			Columns: file.SubprocessorPrimaryKey,
-			Bidi:    false,
-		},
-		"File",
-		"Subprocessor",
 	)
 	graph.MustAddE(
 		"integrations",
@@ -9458,6 +9422,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 			Inverse: false,
 			Table:   organization.TemplateCreatorsTable,
 			Columns: []string{organization.TemplateCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"subprocessor_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.SubprocessorCreatorsTable,
+			Columns: []string{organization.SubprocessorCreatorsColumn},
 			Bidi:    false,
 		},
 		"Organization",
@@ -11996,18 +11972,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Organization",
 	)
 	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"Subprocessor",
-		"File",
-	)
-	graph.MustAddE(
 		"logo_file",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -12728,18 +12692,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Webauthn",
 	)
 	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   user.FilesTable,
-			Columns: user.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"User",
-		"File",
-	)
-	graph.MustAddE(
 		"avatar_file",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -12930,18 +12882,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"UserSetting",
 		"Organization",
-	)
-	graph.MustAddE(
-		"files",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   usersetting.FilesTable,
-			Columns: usersetting.FilesPrimaryKey,
-			Bidi:    false,
-		},
-		"UserSetting",
-		"File",
 	)
 	graph.MustAddE(
 		"owner",
@@ -21611,20 +21551,6 @@ func (f *FileFilter) WhereLastAccessedAt(p entql.TimeP) {
 	f.Where(p.Field(file.FieldLastAccessedAt))
 }
 
-// WhereHasUser applies a predicate to check if query has an edge user.
-func (f *FileFilter) WhereHasUser() {
-	f.Where(entql.HasEdge("user"))
-}
-
-// WhereHasUserWith applies a predicate to check if query has an edge user with a given conditions (other predicates).
-func (f *FileFilter) WhereHasUserWith(preds ...predicate.User) {
-	f.Where(entql.HasEdgeWith("user", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasOrganization applies a predicate to check if query has an edge organization.
 func (f *FileFilter) WhereHasOrganization() {
 	f.Where(entql.HasEdge("organization"))
@@ -21675,20 +21601,6 @@ func (f *FileFilter) WhereHasEntity() {
 // WhereHasEntityWith applies a predicate to check if query has an edge entity with a given conditions (other predicates).
 func (f *FileFilter) WhereHasEntityWith(preds ...predicate.Entity) {
 	f.Where(entql.HasEdgeWith("entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasUserSetting applies a predicate to check if query has an edge user_setting.
-func (f *FileFilter) WhereHasUserSetting() {
-	f.Where(entql.HasEdge("user_setting"))
-}
-
-// WhereHasUserSettingWith applies a predicate to check if query has an edge user_setting with a given conditions (other predicates).
-func (f *FileFilter) WhereHasUserSettingWith(preds ...predicate.UserSetting) {
-	f.Where(entql.HasEdgeWith("user_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -21787,20 +21699,6 @@ func (f *FileFilter) WhereHasTrustCenterSetting() {
 // WhereHasTrustCenterSettingWith applies a predicate to check if query has an edge trust_center_setting with a given conditions (other predicates).
 func (f *FileFilter) WhereHasTrustCenterSettingWith(preds ...predicate.TrustCenterSetting) {
 	f.Where(entql.HasEdgeWith("trust_center_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasSubprocessor applies a predicate to check if query has an edge subprocessor.
-func (f *FileFilter) WhereHasSubprocessor() {
-	f.Where(entql.HasEdge("subprocessor"))
-}
-
-// WhereHasSubprocessorWith applies a predicate to check if query has an edge subprocessor with a given conditions (other predicates).
-func (f *FileFilter) WhereHasSubprocessorWith(preds ...predicate.Subprocessor) {
-	f.Where(entql.HasEdgeWith("subprocessor", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -30032,6 +29930,20 @@ func (f *OrganizationFilter) WhereHasTemplateCreatorsWith(preds ...predicate.Gro
 	})))
 }
 
+// WhereHasSubprocessorCreators applies a predicate to check if query has an edge subprocessor_creators.
+func (f *OrganizationFilter) WhereHasSubprocessorCreators() {
+	f.Where(entql.HasEdge("subprocessor_creators"))
+}
+
+// WhereHasSubprocessorCreatorsWith applies a predicate to check if query has an edge subprocessor_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasSubprocessorCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("subprocessor_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasParent applies a predicate to check if query has an edge parent.
 func (f *OrganizationFilter) WhereHasParent() {
 	f.Where(entql.HasEdge("parent"))
@@ -37307,9 +37219,9 @@ func (f *SubprocessorFilter) WhereLogoRemoteURL(p entql.StringP) {
 	f.Where(p.Field(subprocessor.FieldLogoRemoteURL))
 }
 
-// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
-func (f *SubprocessorFilter) WhereLogoLocalFileID(p entql.StringP) {
-	f.Where(p.Field(subprocessor.FieldLogoLocalFileID))
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *SubprocessorFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessor.FieldLogoFileID))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -37320,20 +37232,6 @@ func (f *SubprocessorFilter) WhereHasOwner() {
 // WhereHasOwnerWith applies a predicate to check if query has an edge owner with a given conditions (other predicates).
 func (f *SubprocessorFilter) WhereHasOwnerWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("owner", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *SubprocessorFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *SubprocessorFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -37493,9 +37391,9 @@ func (f *SubprocessorHistoryFilter) WhereLogoRemoteURL(p entql.StringP) {
 	f.Where(p.Field(subprocessorhistory.FieldLogoRemoteURL))
 }
 
-// WhereLogoLocalFileID applies the entql string predicate on the logo_local_file_id field.
-func (f *SubprocessorHistoryFilter) WhereLogoLocalFileID(p entql.StringP) {
-	f.Where(p.Field(subprocessorhistory.FieldLogoLocalFileID))
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *SubprocessorHistoryFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(subprocessorhistory.FieldLogoFileID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -40810,20 +40708,6 @@ func (f *UserFilter) WhereHasWebauthnsWith(preds ...predicate.Webauthn) {
 	})))
 }
 
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *UserFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *UserFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
 // WhereHasAvatarFile applies a predicate to check if query has an edge avatar_file.
 func (f *UserFilter) WhereHasAvatarFile() {
 	f.Where(entql.HasEdge("avatar_file"))
@@ -41347,20 +41231,6 @@ func (f *UserSettingFilter) WhereHasDefaultOrg() {
 // WhereHasDefaultOrgWith applies a predicate to check if query has an edge default_org with a given conditions (other predicates).
 func (f *UserSettingFilter) WhereHasDefaultOrgWith(preds ...predicate.Organization) {
 	f.Where(entql.HasEdgeWith("default_org", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
-}
-
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *UserSettingFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
-}
-
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *UserSettingFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

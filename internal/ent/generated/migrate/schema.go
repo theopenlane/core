@@ -2793,6 +2793,7 @@ var (
 		{Name: "organization_scheduled_job_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_standard_creators", Type: field.TypeString, Nullable: true},
 		{Name: "organization_template_creators", Type: field.TypeString, Nullable: true},
+		{Name: "organization_subprocessor_creators", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_blocked_groups", Type: field.TypeString, Nullable: true},
 		{Name: "remediation_editors", Type: field.TypeString, Nullable: true},
@@ -2950,69 +2951,69 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_organizations_groups",
+				Symbol:     "groups_organizations_subprocessor_creators",
 				Columns:    []*schema.Column{GroupsColumns[42]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_blocked_groups",
+				Symbol:     "groups_organizations_groups",
 				Columns:    []*schema.Column{GroupsColumns[43]},
-				RefColumns: []*schema.Column{RemediationsColumns[0]},
+				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_editors",
+				Symbol:     "groups_remediations_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[44]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_remediations_viewers",
+				Symbol:     "groups_remediations_editors",
 				Columns:    []*schema.Column{GroupsColumns[45]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_blocked_groups",
+				Symbol:     "groups_remediations_viewers",
 				Columns:    []*schema.Column{GroupsColumns[46]},
-				RefColumns: []*schema.Column{ReviewsColumns[0]},
+				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_editors",
+				Symbol:     "groups_reviews_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[47]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_reviews_viewers",
+				Symbol:     "groups_reviews_editors",
 				Columns:    []*schema.Column{GroupsColumns[48]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_blocked_groups",
+				Symbol:     "groups_reviews_viewers",
 				Columns:    []*schema.Column{GroupsColumns[49]},
-				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
+				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_editors",
+				Symbol:     "groups_vulnerabilities_blocked_groups",
 				Columns:    []*schema.Column{GroupsColumns[50]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_vulnerabilities_viewers",
+				Symbol:     "groups_vulnerabilities_editors",
 				Columns:    []*schema.Column{GroupsColumns[51]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "groups_workflow_definitions_groups",
+				Symbol:     "groups_vulnerabilities_viewers",
 				Columns:    []*schema.Column{GroupsColumns[52]},
-				RefColumns: []*schema.Column{WorkflowDefinitionsColumns[0]},
+				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -3020,12 +3021,12 @@ var (
 			{
 				Name:    "group_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[7], GroupsColumns[43]},
 			},
 			{
 				Name:    "group_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -3033,7 +3034,7 @@ var (
 			{
 				Name:    "group_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[42]},
+				Columns: []*schema.Column{GroupsColumns[9], GroupsColumns[43]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6412,7 +6413,7 @@ var (
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
-		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubprocessorsTable holds the schema information for the "subprocessors" table.
 	SubprocessorsTable = &schema.Table{
@@ -6472,7 +6473,7 @@ var (
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true, Size: 2147483647},
 		{Name: "logo_remote_url", Type: field.TypeString, Nullable: true, Size: 2048},
-		{Name: "logo_local_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// SubprocessorHistoryTable holds the schema information for the "subprocessor_history" table.
 	SubprocessorHistoryTable = &schema.Table{
@@ -11330,31 +11331,6 @@ var (
 			},
 		},
 	}
-	// SubprocessorFilesColumns holds the columns for the "subprocessor_files" table.
-	SubprocessorFilesColumns = []*schema.Column{
-		{Name: "subprocessor_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// SubprocessorFilesTable holds the schema information for the "subprocessor_files" table.
-	SubprocessorFilesTable = &schema.Table{
-		Name:       "subprocessor_files",
-		Columns:    SubprocessorFilesColumns,
-		PrimaryKey: []*schema.Column{SubprocessorFilesColumns[0], SubprocessorFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "subprocessor_files_subprocessor_id",
-				Columns:    []*schema.Column{SubprocessorFilesColumns[0]},
-				RefColumns: []*schema.Column{SubprocessorsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "subprocessor_files_file_id",
-				Columns:    []*schema.Column{SubprocessorFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// SubscriberEventsColumns holds the columns for the "subscriber_events" table.
 	SubscriberEventsColumns = []*schema.Column{
 		{Name: "subscriber_id", Type: field.TypeString},
@@ -11455,31 +11431,6 @@ var (
 			},
 		},
 	}
-	// UserFilesColumns holds the columns for the "user_files" table.
-	UserFilesColumns = []*schema.Column{
-		{Name: "user_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// UserFilesTable holds the schema information for the "user_files" table.
-	UserFilesTable = &schema.Table{
-		Name:       "user_files",
-		Columns:    UserFilesColumns,
-		PrimaryKey: []*schema.Column{UserFilesColumns[0], UserFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_files_user_id",
-				Columns:    []*schema.Column{UserFilesColumns[0]},
-				RefColumns: []*schema.Column{UsersColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_files_file_id",
-				Columns:    []*schema.Column{UserFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
 	// UserEventsColumns holds the columns for the "user_events" table.
 	UserEventsColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
@@ -11501,31 +11452,6 @@ var (
 				Symbol:     "user_events_event_id",
 				Columns:    []*schema.Column{UserEventsColumns[1]},
 				RefColumns: []*schema.Column{EventsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-		},
-	}
-	// UserSettingFilesColumns holds the columns for the "user_setting_files" table.
-	UserSettingFilesColumns = []*schema.Column{
-		{Name: "user_setting_id", Type: field.TypeString},
-		{Name: "file_id", Type: field.TypeString},
-	}
-	// UserSettingFilesTable holds the schema information for the "user_setting_files" table.
-	UserSettingFilesTable = &schema.Table{
-		Name:       "user_setting_files",
-		Columns:    UserSettingFilesColumns,
-		PrimaryKey: []*schema.Column{UserSettingFilesColumns[0], UserSettingFilesColumns[1]},
-		ForeignKeys: []*schema.ForeignKey{
-			{
-				Symbol:     "user_setting_files_user_setting_id",
-				Columns:    []*schema.Column{UserSettingFilesColumns[0]},
-				RefColumns: []*schema.Column{UserSettingsColumns[0]},
-				OnDelete:   schema.Cascade,
-			},
-			{
-				Symbol:     "user_setting_files_file_id",
-				Columns:    []*schema.Column{UserSettingFilesColumns[1]},
-				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.Cascade,
 			},
 		},
@@ -11821,14 +11747,11 @@ var (
 		SubcontrolRisksTable,
 		SubcontrolProceduresTable,
 		SubcontrolControlImplementationsTable,
-		SubprocessorFilesTable,
 		SubscriberEventsTable,
 		TaskEvidenceTable,
 		TemplateFilesTable,
 		TrustCenterSettingFilesTable,
-		UserFilesTable,
 		UserEventsTable,
-		UserSettingFilesTable,
 		VulnerabilityActionPlansTable,
 	}
 )
@@ -12012,13 +11935,13 @@ func init() {
 	GroupsTable.ForeignKeys[21].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[22].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[23].RefTable = OrganizationsTable
-	GroupsTable.ForeignKeys[24].RefTable = RemediationsTable
+	GroupsTable.ForeignKeys[24].RefTable = OrganizationsTable
 	GroupsTable.ForeignKeys[25].RefTable = RemediationsTable
 	GroupsTable.ForeignKeys[26].RefTable = RemediationsTable
-	GroupsTable.ForeignKeys[27].RefTable = ReviewsTable
+	GroupsTable.ForeignKeys[27].RefTable = RemediationsTable
 	GroupsTable.ForeignKeys[28].RefTable = ReviewsTable
 	GroupsTable.ForeignKeys[29].RefTable = ReviewsTable
-	GroupsTable.ForeignKeys[30].RefTable = VulnerabilitiesTable
+	GroupsTable.ForeignKeys[30].RefTable = ReviewsTable
 	GroupsTable.ForeignKeys[31].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[32].RefTable = VulnerabilitiesTable
 	GroupsTable.ForeignKeys[33].RefTable = WorkflowDefinitionsTable
@@ -12579,8 +12502,6 @@ func init() {
 	SubcontrolProceduresTable.ForeignKeys[1].RefTable = ProceduresTable
 	SubcontrolControlImplementationsTable.ForeignKeys[0].RefTable = SubcontrolsTable
 	SubcontrolControlImplementationsTable.ForeignKeys[1].RefTable = ControlImplementationsTable
-	SubprocessorFilesTable.ForeignKeys[0].RefTable = SubprocessorsTable
-	SubprocessorFilesTable.ForeignKeys[1].RefTable = FilesTable
 	SubscriberEventsTable.ForeignKeys[0].RefTable = SubscribersTable
 	SubscriberEventsTable.ForeignKeys[1].RefTable = EventsTable
 	TaskEvidenceTable.ForeignKeys[0].RefTable = TasksTable
@@ -12589,12 +12510,8 @@ func init() {
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingFilesTable.ForeignKeys[0].RefTable = TrustCenterSettingsTable
 	TrustCenterSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
-	UserFilesTable.ForeignKeys[0].RefTable = UsersTable
-	UserFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
-	UserSettingFilesTable.ForeignKeys[0].RefTable = UserSettingsTable
-	UserSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
 	VulnerabilityActionPlansTable.ForeignKeys[0].RefTable = VulnerabilitiesTable
 	VulnerabilityActionPlansTable.ForeignKeys[1].RefTable = ActionPlansTable
 }

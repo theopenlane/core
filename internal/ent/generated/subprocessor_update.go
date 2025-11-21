@@ -239,58 +239,29 @@ func (_u *SubprocessorUpdate) ClearLogoRemoteURL() *SubprocessorUpdate {
 	return _u
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *SubprocessorUpdate) SetLogoLocalFileID(v string) *SubprocessorUpdate {
-	_u.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *SubprocessorUpdate) SetLogoFileID(v string) *SubprocessorUpdate {
+	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *SubprocessorUpdate) SetNillableLogoLocalFileID(v *string) *SubprocessorUpdate {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *SubprocessorUpdate) SetNillableLogoFileID(v *string) *SubprocessorUpdate {
 	if v != nil {
-		_u.SetLogoLocalFileID(*v)
+		_u.SetLogoFileID(*v)
 	}
 	return _u
 }
 
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *SubprocessorUpdate) ClearLogoLocalFileID() *SubprocessorUpdate {
-	_u.mutation.ClearLogoLocalFileID()
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *SubprocessorUpdate) ClearLogoFileID() *SubprocessorUpdate {
+	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SubprocessorUpdate) SetOwner(v *Organization) *SubprocessorUpdate {
 	return _u.SetOwnerID(v.ID)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *SubprocessorUpdate) AddFileIDs(ids ...string) *SubprocessorUpdate {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *SubprocessorUpdate) AddFiles(v ...*File) *SubprocessorUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_u *SubprocessorUpdate) SetLogoFileID(id string) *SubprocessorUpdate {
-	_u.mutation.SetLogoFileID(id)
-	return _u
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_u *SubprocessorUpdate) SetNillableLogoFileID(id *string) *SubprocessorUpdate {
-	if id != nil {
-		_u = _u.SetLogoFileID(*id)
-	}
-	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
@@ -322,27 +293,6 @@ func (_u *SubprocessorUpdate) Mutation() *SubprocessorMutation {
 func (_u *SubprocessorUpdate) ClearOwner() *SubprocessorUpdate {
 	_u.mutation.ClearOwner()
 	return _u
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *SubprocessorUpdate) ClearFiles() *SubprocessorUpdate {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *SubprocessorUpdate) RemoveFileIDs(ids ...string) *SubprocessorUpdate {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *SubprocessorUpdate) RemoveFiles(v ...*File) *SubprocessorUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -544,54 +494,6 @@ func (_u *SubprocessorUpdate) sqlSave(ctx context.Context) (_node int, err error
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subprocessor
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -904,58 +806,29 @@ func (_u *SubprocessorUpdateOne) ClearLogoRemoteURL() *SubprocessorUpdateOne {
 	return _u
 }
 
-// SetLogoLocalFileID sets the "logo_local_file_id" field.
-func (_u *SubprocessorUpdateOne) SetLogoLocalFileID(v string) *SubprocessorUpdateOne {
-	_u.mutation.SetLogoLocalFileID(v)
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *SubprocessorUpdateOne) SetLogoFileID(v string) *SubprocessorUpdateOne {
+	_u.mutation.SetLogoFileID(v)
 	return _u
 }
 
-// SetNillableLogoLocalFileID sets the "logo_local_file_id" field if the given value is not nil.
-func (_u *SubprocessorUpdateOne) SetNillableLogoLocalFileID(v *string) *SubprocessorUpdateOne {
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *SubprocessorUpdateOne) SetNillableLogoFileID(v *string) *SubprocessorUpdateOne {
 	if v != nil {
-		_u.SetLogoLocalFileID(*v)
+		_u.SetLogoFileID(*v)
 	}
 	return _u
 }
 
-// ClearLogoLocalFileID clears the value of the "logo_local_file_id" field.
-func (_u *SubprocessorUpdateOne) ClearLogoLocalFileID() *SubprocessorUpdateOne {
-	_u.mutation.ClearLogoLocalFileID()
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *SubprocessorUpdateOne) ClearLogoFileID() *SubprocessorUpdateOne {
+	_u.mutation.ClearLogoFileID()
 	return _u
 }
 
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *SubprocessorUpdateOne) SetOwner(v *Organization) *SubprocessorUpdateOne {
 	return _u.SetOwnerID(v.ID)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *SubprocessorUpdateOne) AddFileIDs(ids ...string) *SubprocessorUpdateOne {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *SubprocessorUpdateOne) AddFiles(v ...*File) *SubprocessorUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
-}
-
-// SetLogoFileID sets the "logo_file" edge to the File entity by ID.
-func (_u *SubprocessorUpdateOne) SetLogoFileID(id string) *SubprocessorUpdateOne {
-	_u.mutation.SetLogoFileID(id)
-	return _u
-}
-
-// SetNillableLogoFileID sets the "logo_file" edge to the File entity by ID if the given value is not nil.
-func (_u *SubprocessorUpdateOne) SetNillableLogoFileID(id *string) *SubprocessorUpdateOne {
-	if id != nil {
-		_u = _u.SetLogoFileID(*id)
-	}
-	return _u
 }
 
 // SetLogoFile sets the "logo_file" edge to the File entity.
@@ -987,27 +860,6 @@ func (_u *SubprocessorUpdateOne) Mutation() *SubprocessorMutation {
 func (_u *SubprocessorUpdateOne) ClearOwner() *SubprocessorUpdateOne {
 	_u.mutation.ClearOwner()
 	return _u
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *SubprocessorUpdateOne) ClearFiles() *SubprocessorUpdateOne {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *SubprocessorUpdateOne) RemoveFileIDs(ids ...string) *SubprocessorUpdateOne {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *SubprocessorUpdateOne) RemoveFiles(v ...*File) *SubprocessorUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // ClearLogoFile clears the "logo_file" edge to the File entity.
@@ -1239,54 +1091,6 @@ func (_u *SubprocessorUpdateOne) sqlSave(ctx context.Context) (_node *Subprocess
 			},
 		}
 		edge.Schema = _u.schemaConfig.Subprocessor
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   subprocessor.FilesTable,
-			Columns: subprocessor.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.SubprocessorFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

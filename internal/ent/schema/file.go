@@ -104,12 +104,10 @@ func (File) Fields() []ent.Field {
 // Edges of the File
 func (f File) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeFrom(f, User{}),
 		defaultEdgeFrom(f, Organization{}),
 		defaultEdgeFromWithPagination(f, Group{}),
 		defaultEdgeFrom(f, Contact{}),
 		defaultEdgeFrom(f, Entity{}),
-		defaultEdgeFrom(f, UserSetting{}),
 		defaultEdgeFrom(f, OrganizationSetting{}),
 		defaultEdgeFrom(f, Template{}),
 		defaultEdgeFrom(f, DocumentData{}),
@@ -117,7 +115,6 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeFrom(f, TrustCenterSetting{}),
-		defaultEdgeFrom(f, Subprocessor{}),
 
 		defaultEdgeToWithPagination(f, Integration{}),
 		defaultEdgeToWithPagination(f, Hush{}),

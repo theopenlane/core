@@ -28,8 +28,6 @@ func HookTrustCenterSetting() ent.Hook {
 				if err != nil {
 					return nil, err
 				}
-
-				m.AddFileIDs(fileIDs...)
 			}
 
 			return next.Mutate(ctx, m)

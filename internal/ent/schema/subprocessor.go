@@ -4,10 +4,13 @@ import (
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/entsql"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/mixin"
@@ -15,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/iam/entfga"
 )
 
 // Subprocessor holds the schema definition for the Subprocessor entity
@@ -62,7 +66,7 @@ func (Subprocessor) Fields() []ent.Field {
 			Validate(validator.ValidateURL()).
 			Optional().
 			Nillable(),
-		field.String("logo_local_file_id").
+		field.String("logo_file_id").
 			Comment("The local logo file id, takes precedence over the logo remote URL").
 			Optional().
 			Annotations(
@@ -77,6 +81,11 @@ func (Subprocessor) Fields() []ent.Field {
 func (t Subprocessor) Mixin() []ent.Mixin {
 	return mixinConfig{
 		additionalMixins: []ent.Mixin{
+			// newObjectOwnedMixin[generated.Subprocessor](t,
+			// 		withParents(Organization{}),
+			// 		withAllowAnonymousTrustCenterAccess(true),
+			// 		withOrganizationOwner(true),
+			// ),
 			newOrgOwnedMixin(t,
 				withAllowAnonymousTrustCenterAccess(true),
 			),
@@ -88,12 +97,11 @@ func (t Subprocessor) Mixin() []ent.Mixin {
 // Edges of the Subprocessor
 func (t Subprocessor) Edges() []ent.Edge {
 	return []ent.Edge{
-		defaultEdgeToWithPagination(t, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			name:       "logo_file",
 			t:          File.Type,
-			field:      "logo_local_file_id",
+			field:      "logo_file_id",
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: t,
@@ -105,6 +113,10 @@ func (t Subprocessor) Edges() []ent.Edge {
 // Hooks of the Subprocessor
 func (Subprocessor) Hooks() []ent.Hook {
 	return []ent.Hook{
+		hook.On(
+			hooks.OrgOwnedTuplesHookWithAdmin(),
+			ent.OpCreate,
+		),
 		hooks.HookSubprocessor(),
 	}
 }
@@ -113,7 +125,9 @@ func (Subprocessor) Hooks() []ent.Hook {
 func (t Subprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CheckCreateAccess(),
 			policy.CheckOrgWriteAccess(),
+			entfga.CheckEditAccess[*generated.SubprocessorMutation](),
 		),
 	)
 }
@@ -136,5 +150,13 @@ func (Subprocessor) Modules() []models.OrgModule {
 func (t Subprocessor) Interceptors() []ent.Interceptor {
 	return []ent.Interceptor{
 		interceptors.TraverseSubprocessor(),
+	}
+}
+
+// Annotations of the Subprocessor
+func (Subprocessor) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		entfga.SelfAccessChecks(),
+		entx.Exportable{},
 	}
 }

@@ -77,6 +77,8 @@ const (
 	EdgeStandardCreators = "standard_creators"
 	// EdgeTemplateCreators holds the string denoting the template_creators edge name in mutations.
 	EdgeTemplateCreators = "template_creators"
+	// EdgeSubprocessorCreators holds the string denoting the subprocessor_creators edge name in mutations.
+	EdgeSubprocessorCreators = "subprocessor_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -325,6 +327,13 @@ const (
 	TemplateCreatorsInverseTable = "groups"
 	// TemplateCreatorsColumn is the table column denoting the template_creators relation/edge.
 	TemplateCreatorsColumn = "organization_template_creators"
+	// SubprocessorCreatorsTable is the table that holds the subprocessor_creators relation/edge.
+	SubprocessorCreatorsTable = "groups"
+	// SubprocessorCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	SubprocessorCreatorsInverseTable = "groups"
+	// SubprocessorCreatorsColumn is the table column denoting the subprocessor_creators relation/edge.
+	SubprocessorCreatorsColumn = "organization_subprocessor_creators"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -884,7 +893,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [22]ent.Hook
+	Hooks        [23]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1196,6 +1205,20 @@ func ByTemplateCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func ByTemplateCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTemplateCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// BySubprocessorCreatorsCount orders the results by subprocessor_creators count.
+func BySubprocessorCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newSubprocessorCreatorsStep(), opts...)
+	}
+}
+
+// BySubprocessorCreators orders the results by subprocessor_creators terms.
+func BySubprocessorCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newSubprocessorCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2309,6 +2332,13 @@ func newTemplateCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TemplateCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TemplateCreatorsTable, TemplateCreatorsColumn),
+	)
+}
+func newSubprocessorCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(SubprocessorCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorCreatorsTable, SubprocessorCreatorsColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

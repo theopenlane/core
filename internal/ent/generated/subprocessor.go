@@ -49,7 +49,7 @@ type Subprocessor struct {
 	// URL of the logo
 	LogoRemoteURL *string `json:"logo_remote_url,omitempty"`
 	// The local logo file id, takes precedence over the logo remote URL
-	LogoLocalFileID *string `json:"logo_local_file_id,omitempty"`
+	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the SubprocessorQuery when eager-loading is set.
 	Edges        SubprocessorEdges `json:"edges"`
@@ -60,19 +60,16 @@ type Subprocessor struct {
 type SubprocessorEdges struct {
 	// Owner holds the value of the owner edge.
 	Owner *Organization `json:"owner,omitempty"`
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
 	// LogoFile holds the value of the logo_file edge.
 	LogoFile *File `json:"logo_file,omitempty"`
 	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
 	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trust_center_subprocessors,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [3]map[string]int
 
-	namedFiles                    map[string][]*File
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 }
 
@@ -87,21 +84,12 @@ func (e SubprocessorEdges) OwnerOrErr() (*Organization, error) {
 	return nil, &NotLoadedError{edge: "owner"}
 }
 
-// FilesOrErr returns the Files value or an error if the edge
-// was not loaded in eager-loading.
-func (e SubprocessorEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[1] {
-		return e.Files, nil
-	}
-	return nil, &NotLoadedError{edge: "files"}
-}
-
 // LogoFileOrErr returns the LogoFile value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e SubprocessorEdges) LogoFileOrErr() (*File, error) {
 	if e.LogoFile != nil {
 		return e.LogoFile, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[1] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "logo_file"}
@@ -110,7 +98,7 @@ func (e SubprocessorEdges) LogoFileOrErr() (*File, error) {
 // TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e SubprocessorEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
-	if e.loadedTypes[3] {
+	if e.loadedTypes[2] {
 		return e.TrustCenterSubprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
@@ -125,7 +113,7 @@ func (*Subprocessor) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case subprocessor.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy, subprocessor.FieldOwnerID, subprocessor.FieldInternalNotes, subprocessor.FieldSystemInternalID, subprocessor.FieldName, subprocessor.FieldDescription, subprocessor.FieldLogoRemoteURL, subprocessor.FieldLogoLocalFileID:
+		case subprocessor.FieldID, subprocessor.FieldCreatedBy, subprocessor.FieldUpdatedBy, subprocessor.FieldDeletedBy, subprocessor.FieldOwnerID, subprocessor.FieldInternalNotes, subprocessor.FieldSystemInternalID, subprocessor.FieldName, subprocessor.FieldDescription, subprocessor.FieldLogoRemoteURL, subprocessor.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case subprocessor.FieldCreatedAt, subprocessor.FieldUpdatedAt, subprocessor.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -239,12 +227,12 @@ func (_m *Subprocessor) assignValues(columns []string, values []any) error {
 				_m.LogoRemoteURL = new(string)
 				*_m.LogoRemoteURL = value.String
 			}
-		case subprocessor.FieldLogoLocalFileID:
+		case subprocessor.FieldLogoFileID:
 			if value, ok := values[i].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field logo_local_file_id", values[i])
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
 			} else if value.Valid {
-				_m.LogoLocalFileID = new(string)
-				*_m.LogoLocalFileID = value.String
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -262,11 +250,6 @@ func (_m *Subprocessor) Value(name string) (ent.Value, error) {
 // QueryOwner queries the "owner" edge of the Subprocessor entity.
 func (_m *Subprocessor) QueryOwner() *OrganizationQuery {
 	return NewSubprocessorClient(_m.config).QueryOwner(_m)
-}
-
-// QueryFiles queries the "files" edge of the Subprocessor entity.
-func (_m *Subprocessor) QueryFiles() *FileQuery {
-	return NewSubprocessorClient(_m.config).QueryFiles(_m)
 }
 
 // QueryLogoFile queries the "logo_file" edge of the Subprocessor entity.
@@ -350,36 +333,12 @@ func (_m *Subprocessor) String() string {
 		builder.WriteString(*v)
 	}
 	builder.WriteString(", ")
-	if v := _m.LogoLocalFileID; v != nil {
-		builder.WriteString("logo_local_file_id=")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
 		builder.WriteString(*v)
 	}
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedFiles returns the Files named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *Subprocessor) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedFiles[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *Subprocessor) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
-	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
-	}
 }
 
 // NamedTrustCenterSubprocessors returns the TrustCenterSubprocessors named value or an error if the edge was not

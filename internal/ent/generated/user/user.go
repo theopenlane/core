@@ -88,8 +88,6 @@ const (
 	EdgeOrganizations = "organizations"
 	// EdgeWebauthns holds the string denoting the webauthns edge name in mutations.
 	EdgeWebauthns = "webauthns"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
 	// EdgeAvatarFile holds the string denoting the avatar_file edge name in mutations.
 	EdgeAvatarFile = "avatar_file"
 	// EdgeEvents holds the string denoting the events edge name in mutations.
@@ -179,11 +177,6 @@ const (
 	WebauthnsInverseTable = "webauthns"
 	// WebauthnsColumn is the table column denoting the webauthns relation/edge.
 	WebauthnsColumn = "owner_id"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "user_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
 	// AvatarFileTable is the table that holds the avatar_file relation/edge.
 	AvatarFileTable = "users"
 	// AvatarFileInverseTable is the table name for the File entity.
@@ -318,9 +311,6 @@ var (
 	// OrganizationsPrimaryKey and OrganizationsColumn2 are the table columns denoting the
 	// primary key for the organizations relation (M2M).
 	OrganizationsPrimaryKey = []string{"user_id", "organization_id"}
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"user_id", "file_id"}
 	// EventsPrimaryKey and EventsColumn2 are the table columns denoting the
 	// primary key for the events relation (M2M).
 	EventsPrimaryKey = []string{"user_id", "event_id"}
@@ -666,20 +656,6 @@ func ByWebauthns(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
-	}
-}
-
 // ByAvatarFileField orders the results by avatar_file field.
 func ByAvatarFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -929,13 +905,6 @@ func newWebauthnsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(WebauthnsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, WebauthnsTable, WebauthnsColumn),
-	)
-}
-func newFilesStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
 	)
 }
 func newAvatarFileStep() *sqlgraph.Step {

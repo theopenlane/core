@@ -99,8 +99,6 @@ type UserEdges struct {
 	Organizations []*Organization `json:"organizations,omitempty"`
 	// Webauthns holds the value of the webauthns edge.
 	Webauthns []*Webauthn `json:"webauthns,omitempty"`
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
 	// AvatarFile holds the value of the avatar_file edge.
 	AvatarFile *File `json:"avatar_file,omitempty"`
 	// Events holds the value of the events edge.
@@ -131,9 +129,9 @@ type UserEdges struct {
 	ProgramMemberships []*ProgramMembership `json:"program_memberships,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [24]bool
+	loadedTypes [23]bool
 	// totalCount holds the count of the edges above.
-	totalCount [18]map[string]int
+	totalCount [17]map[string]int
 
 	namedPersonalAccessTokens    map[string][]*PersonalAccessToken
 	namedTfaSettings             map[string][]*TFASetting
@@ -143,7 +141,6 @@ type UserEdges struct {
 	namedGroups                  map[string][]*Group
 	namedOrganizations           map[string][]*Organization
 	namedWebauthns               map[string][]*Webauthn
-	namedFiles                   map[string][]*File
 	namedEvents                  map[string][]*Event
 	namedActionPlans             map[string][]*ActionPlan
 	namedSubcontrols             map[string][]*Subcontrol
@@ -242,21 +239,12 @@ func (e UserEdges) WebauthnsOrErr() ([]*Webauthn, error) {
 	return nil, &NotLoadedError{edge: "webauthns"}
 }
 
-// FilesOrErr returns the Files value or an error if the edge
-// was not loaded in eager-loading.
-func (e UserEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[9] {
-		return e.Files, nil
-	}
-	return nil, &NotLoadedError{edge: "files"}
-}
-
 // AvatarFileOrErr returns the AvatarFile value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e UserEdges) AvatarFileOrErr() (*File, error) {
 	if e.AvatarFile != nil {
 		return e.AvatarFile, nil
-	} else if e.loadedTypes[10] {
+	} else if e.loadedTypes[9] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "avatar_file"}
@@ -265,7 +253,7 @@ func (e UserEdges) AvatarFileOrErr() (*File, error) {
 // EventsOrErr returns the Events value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) EventsOrErr() ([]*Event, error) {
-	if e.loadedTypes[11] {
+	if e.loadedTypes[10] {
 		return e.Events, nil
 	}
 	return nil, &NotLoadedError{edge: "events"}
@@ -274,7 +262,7 @@ func (e UserEdges) EventsOrErr() ([]*Event, error) {
 // ActionPlansOrErr returns the ActionPlans value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
-	if e.loadedTypes[12] {
+	if e.loadedTypes[11] {
 		return e.ActionPlans, nil
 	}
 	return nil, &NotLoadedError{edge: "action_plans"}
@@ -283,7 +271,7 @@ func (e UserEdges) ActionPlansOrErr() ([]*ActionPlan, error) {
 // SubcontrolsOrErr returns the Subcontrols value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
-	if e.loadedTypes[13] {
+	if e.loadedTypes[12] {
 		return e.Subcontrols, nil
 	}
 	return nil, &NotLoadedError{edge: "subcontrols"}
@@ -292,7 +280,7 @@ func (e UserEdges) SubcontrolsOrErr() ([]*Subcontrol, error) {
 // AssignerTasksOrErr returns the AssignerTasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) AssignerTasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[14] {
+	if e.loadedTypes[13] {
 		return e.AssignerTasks, nil
 	}
 	return nil, &NotLoadedError{edge: "assigner_tasks"}
@@ -301,7 +289,7 @@ func (e UserEdges) AssignerTasksOrErr() ([]*Task, error) {
 // AssigneeTasksOrErr returns the AssigneeTasks value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
-	if e.loadedTypes[15] {
+	if e.loadedTypes[14] {
 		return e.AssigneeTasks, nil
 	}
 	return nil, &NotLoadedError{edge: "assignee_tasks"}
@@ -310,7 +298,7 @@ func (e UserEdges) AssigneeTasksOrErr() ([]*Task, error) {
 // ProgramsOrErr returns the Programs value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
-	if e.loadedTypes[16] {
+	if e.loadedTypes[15] {
 		return e.Programs, nil
 	}
 	return nil, &NotLoadedError{edge: "programs"}
@@ -319,7 +307,7 @@ func (e UserEdges) ProgramsOrErr() ([]*Program, error) {
 // ProgramsOwnedOrErr returns the ProgramsOwned value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramsOwnedOrErr() ([]*Program, error) {
-	if e.loadedTypes[17] {
+	if e.loadedTypes[16] {
 		return e.ProgramsOwned, nil
 	}
 	return nil, &NotLoadedError{edge: "programs_owned"}
@@ -328,7 +316,7 @@ func (e UserEdges) ProgramsOwnedOrErr() ([]*Program, error) {
 // ImpersonationEventsOrErr returns the ImpersonationEvents value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[18] {
+	if e.loadedTypes[17] {
 		return e.ImpersonationEvents, nil
 	}
 	return nil, &NotLoadedError{edge: "impersonation_events"}
@@ -337,7 +325,7 @@ func (e UserEdges) ImpersonationEventsOrErr() ([]*ImpersonationEvent, error) {
 // TargetedImpersonationsOrErr returns the TargetedImpersonations value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) TargetedImpersonationsOrErr() ([]*ImpersonationEvent, error) {
-	if e.loadedTypes[19] {
+	if e.loadedTypes[18] {
 		return e.TargetedImpersonations, nil
 	}
 	return nil, &NotLoadedError{edge: "targeted_impersonations"}
@@ -346,7 +334,7 @@ func (e UserEdges) TargetedImpersonationsOrErr() ([]*ImpersonationEvent, error) 
 // NotificationsOrErr returns the Notifications value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) NotificationsOrErr() ([]*Notification, error) {
-	if e.loadedTypes[20] {
+	if e.loadedTypes[19] {
 		return e.Notifications, nil
 	}
 	return nil, &NotLoadedError{edge: "notifications"}
@@ -355,7 +343,7 @@ func (e UserEdges) NotificationsOrErr() ([]*Notification, error) {
 // GroupMembershipsOrErr returns the GroupMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
-	if e.loadedTypes[21] {
+	if e.loadedTypes[20] {
 		return e.GroupMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "group_memberships"}
@@ -364,7 +352,7 @@ func (e UserEdges) GroupMembershipsOrErr() ([]*GroupMembership, error) {
 // OrgMembershipsOrErr returns the OrgMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
-	if e.loadedTypes[22] {
+	if e.loadedTypes[21] {
 		return e.OrgMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "org_memberships"}
@@ -373,7 +361,7 @@ func (e UserEdges) OrgMembershipsOrErr() ([]*OrgMembership, error) {
 // ProgramMembershipsOrErr returns the ProgramMemberships value or an error if the edge
 // was not loaded in eager-loading.
 func (e UserEdges) ProgramMembershipsOrErr() ([]*ProgramMembership, error) {
-	if e.loadedTypes[23] {
+	if e.loadedTypes[22] {
 		return e.ProgramMemberships, nil
 	}
 	return nil, &NotLoadedError{edge: "program_memberships"}
@@ -636,11 +624,6 @@ func (_m *User) QueryOrganizations() *OrganizationQuery {
 // QueryWebauthns queries the "webauthns" edge of the User entity.
 func (_m *User) QueryWebauthns() *WebauthnQuery {
 	return NewUserClient(_m.config).QueryWebauthns(_m)
-}
-
-// QueryFiles queries the "files" edge of the User entity.
-func (_m *User) QueryFiles() *FileQuery {
-	return NewUserClient(_m.config).QueryFiles(_m)
 }
 
 // QueryAvatarFile queries the "avatar_file" edge of the User entity.
@@ -1021,30 +1004,6 @@ func (_m *User) appendNamedWebauthns(name string, edges ...*Webauthn) {
 		_m.Edges.namedWebauthns[name] = []*Webauthn{}
 	} else {
 		_m.Edges.namedWebauthns[name] = append(_m.Edges.namedWebauthns[name], edges...)
-	}
-}
-
-// NamedFiles returns the Files named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *User) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedFiles[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *User) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
-	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
 	}
 }
 
