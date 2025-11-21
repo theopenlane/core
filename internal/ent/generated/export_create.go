@@ -134,6 +134,14 @@ func (_c *ExportCreate) SetFormat(v enums.ExportFormat) *ExportCreate {
 	return _c
 }
 
+// SetNillableFormat sets the "format" field if the given value is not nil.
+func (_c *ExportCreate) SetNillableFormat(v *enums.ExportFormat) *ExportCreate {
+	if v != nil {
+		_c.SetFormat(*v)
+	}
+	return _c
+}
+
 // SetStatus sets the "status" field.
 func (_c *ExportCreate) SetStatus(v enums.ExportStatus) *ExportCreate {
 	_c.mutation.SetStatus(v)
@@ -295,6 +303,10 @@ func (_c *ExportCreate) defaults() error {
 		}
 		v := export.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
+	}
+	if _, ok := _c.mutation.Format(); !ok {
+		v := export.DefaultFormat
+		_c.mutation.SetFormat(v)
 	}
 	if _, ok := _c.mutation.Status(); !ok {
 		v := export.DefaultStatus

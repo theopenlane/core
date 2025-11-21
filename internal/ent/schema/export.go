@@ -39,6 +39,7 @@ func (Export) Fields() []ent.Field {
 			GoType(enums.ExportType("")),
 		field.Enum("format").
 			Comment("the format of export, e.g., csv and others").
+			Default(enums.ExportFormatCsv.String()).
 			Immutable().
 			Annotations(
 				entgql.OrderField("format"),

@@ -5100,7 +5100,7 @@ func (c *EvidenceUpdateOne) SetInput(i UpdateEvidenceInput) *EvidenceUpdateOne {
 // CreateExportInput represents a mutation input for creating exports.
 type CreateExportInput struct {
 	ExportType enums.ExportType
-	Format     enums.ExportFormat
+	Format     *enums.ExportFormat
 	Fields     []string
 	Filters    *string
 	OwnerID    *string
@@ -5111,7 +5111,9 @@ type CreateExportInput struct {
 // Mutate applies the CreateExportInput on the ExportMutation builder.
 func (i *CreateExportInput) Mutate(m *ExportMutation) {
 	m.SetExportType(i.ExportType)
-	m.SetFormat(i.Format)
+	if v := i.Format; v != nil {
+		m.SetFormat(*v)
+	}
 	if v := i.Fields; v != nil {
 		m.SetFields(v)
 	}

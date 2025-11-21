@@ -6899,7 +6899,7 @@ type CreateExportInput struct {
 	// the type of export, e.g., control, policy, etc.
 	ExportType enums.ExportType `json:"exportType"`
 	// the format of export, e.g., csv and others
-	Format enums.ExportFormat `json:"format"`
+	Format *enums.ExportFormat `json:"format,omitempty"`
 	// the specific fields to include in the export (defaults to only the id if not provided)
 	Fields []string `json:"fields,omitempty"`
 	// the specific filters to run against the exported data. This should be a well formatted graphql query
