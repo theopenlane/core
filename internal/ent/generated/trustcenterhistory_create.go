@@ -187,6 +187,20 @@ func (_c *TrustCenterHistoryCreate) SetNillableCustomDomainID(v *string) *TrustC
 	return _c
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_c *TrustCenterHistoryCreate) SetPreviewDomainID(v string) *TrustCenterHistoryCreate {
+	_c.mutation.SetPreviewDomainID(v)
+	return _c
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillablePreviewDomainID(v *string) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetPreviewDomainID(*v)
+	}
+	return _c
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_c *TrustCenterHistoryCreate) SetPirschDomainID(v string) *TrustCenterHistoryCreate {
 	_c.mutation.SetPirschDomainID(v)
@@ -401,6 +415,10 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
 		_node.CustomDomainID = value
+	}
+	if value, ok := _c.mutation.PreviewDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)
+		_node.PreviewDomainID = value
 	}
 	if value, ok := _c.mutation.PirschDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)

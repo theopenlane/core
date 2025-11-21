@@ -45,6 +45,8 @@ type TrustCenterHistory struct {
 	Slug string `json:"slug,omitempty"`
 	// custom domain id for the trust center
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
+	// preview domain id for the trust center
+	PreviewDomainID string `json:"preview_domain_id,omitempty"`
 	// Pirsch domain ID
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
@@ -61,7 +63,7 @@ func (*TrustCenterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode:
+		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode:
 			values[i] = new(sql.NullString)
 		case trustcenterhistory.FieldHistoryTime, trustcenterhistory.FieldCreatedAt, trustcenterhistory.FieldUpdatedAt, trustcenterhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -166,6 +168,12 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
 			}
+		case trustcenterhistory.FieldPreviewDomainID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_domain_id", values[i])
+			} else if value.Valid {
+				_m.PreviewDomainID = value.String
+			}
 		case trustcenterhistory.FieldPirschDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pirsch_domain_id", values[i])
@@ -252,6 +260,9 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("custom_domain_id=")
 	builder.WriteString(_m.CustomDomainID)
+	builder.WriteString(", ")
+	builder.WriteString("preview_domain_id=")
+	builder.WriteString(_m.PreviewDomainID)
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_domain_id=")
 	builder.WriteString(_m.PirschDomainID)

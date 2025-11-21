@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.
@@ -36,6 +37,90 @@ func (r *mutationResolver) UpdateTrustCenterSetting(ctx context.Context, id stri
 	req := res.Update().SetInput(input)
 
 	res, err = req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+	}
+
+	return &model.TrustCenterSettingUpdatePayload{
+		TrustCenterSetting: res,
+	}, nil
+}
+
+// UpdateTrustCenterPreviewSetting is the resolver for the updateTrustCenterPreviewSetting field.
+func (r *mutationResolver) UpdateTrustCenterPreviewSetting(ctx context.Context, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) (*model.TrustCenterSettingUpdatePayload, error) {
+	previewSetting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
+		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
+	).Only(ctx)
+	if err != nil {
+		if !generated.IsNotFound(err) {
+			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		}
+
+		// if not found, get the trust center to create new preview settings
+		trustCenter, err := withTransactionalMutation(ctx).TrustCenter.Query().Only(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		}
+
+		// create new preview settings
+		previewSetting, err = withTransactionalMutation(ctx).TrustCenterSetting.Create().
+			SetTrustCenterID(trustCenter.ID).
+			SetEnvironment(enums.TrustCenterEnvironmentPreview).
+			Save(ctx)
+		if err != nil {
+			return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+		}
+	}
+
+	req := previewSetting.Update().SetInput(input)
+
+	res, err := req.Save(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+	}
+
+	return &model.TrustCenterSettingUpdatePayload{
+		TrustCenterSetting: res,
+	}, nil
+}
+
+// PublishTrustCenterSetting is the resolver for the publishTrustCenterSetting field.
+func (r *mutationResolver) PublishTrustCenterSetting(ctx context.Context) (*model.TrustCenterSettingUpdatePayload, error) {
+	previewSetting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
+		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentPreview),
+	).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+	}
+
+	liveSetting, err := withTransactionalMutation(ctx).TrustCenterSetting.Query().Where(
+		trustcentersetting.EnvironmentEQ(enums.TrustCenterEnvironmentLive),
+	).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
+	}
+
+	// copy fields from preview to live
+	input := generated.UpdateTrustCenterSettingInput{
+		Title:                    &previewSetting.Title,
+		Overview:                 &previewSetting.Overview,
+		ThemeMode:                &previewSetting.ThemeMode,
+		PrimaryColor:             &previewSetting.PrimaryColor,
+		Font:                     &previewSetting.Font,
+		ForegroundColor:          &previewSetting.ForegroundColor,
+		BackgroundColor:          &previewSetting.BackgroundColor,
+		AccentColor:              &previewSetting.AccentColor,
+		SecondaryBackgroundColor: &previewSetting.SecondaryBackgroundColor,
+		SecondaryForegroundColor: &previewSetting.SecondaryForegroundColor,
+		LogoFileID:               previewSetting.LogoLocalFileID,
+		FaviconFileID:            previewSetting.FaviconLocalFileID,
+		LogoRemoteURL:            previewSetting.LogoRemoteURL,
+		FaviconRemoteURL:         previewSetting.FaviconRemoteURL,
+	}
+
+	req := liveSetting.Update().SetInput(input)
+
+	res, err := req.Save(ctx)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "trustcentersetting"})
 	}

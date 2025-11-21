@@ -120,6 +120,11 @@ func CustomDomainID(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldCustomDomainID, v))
 }
 
+// PreviewDomainID applies equality check predicate on the "preview_domain_id" field. It's identical to PreviewDomainIDEQ.
+func PreviewDomainID(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldPreviewDomainID, v))
+}
+
 // PirschDomainID applies equality check predicate on the "pirsch_domain_id" field. It's identical to PirschDomainIDEQ.
 func PirschDomainID(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldEQ(FieldPirschDomainID, v))
@@ -873,6 +878,81 @@ func CustomDomainIDEqualFold(v string) predicate.TrustCenterHistory {
 // CustomDomainIDContainsFold applies the ContainsFold predicate on the "custom_domain_id" field.
 func CustomDomainIDContainsFold(v string) predicate.TrustCenterHistory {
 	return predicate.TrustCenterHistory(sql.FieldContainsFold(FieldCustomDomainID, v))
+}
+
+// PreviewDomainIDEQ applies the EQ predicate on the "preview_domain_id" field.
+func PreviewDomainIDEQ(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEQ(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDNEQ applies the NEQ predicate on the "preview_domain_id" field.
+func PreviewDomainIDNEQ(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNEQ(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDIn applies the In predicate on the "preview_domain_id" field.
+func PreviewDomainIDIn(vs ...string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIn(FieldPreviewDomainID, vs...))
+}
+
+// PreviewDomainIDNotIn applies the NotIn predicate on the "preview_domain_id" field.
+func PreviewDomainIDNotIn(vs ...string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotIn(FieldPreviewDomainID, vs...))
+}
+
+// PreviewDomainIDGT applies the GT predicate on the "preview_domain_id" field.
+func PreviewDomainIDGT(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldGT(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDGTE applies the GTE predicate on the "preview_domain_id" field.
+func PreviewDomainIDGTE(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldGTE(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDLT applies the LT predicate on the "preview_domain_id" field.
+func PreviewDomainIDLT(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldLT(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDLTE applies the LTE predicate on the "preview_domain_id" field.
+func PreviewDomainIDLTE(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldLTE(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDContains applies the Contains predicate on the "preview_domain_id" field.
+func PreviewDomainIDContains(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldContains(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDHasPrefix applies the HasPrefix predicate on the "preview_domain_id" field.
+func PreviewDomainIDHasPrefix(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldHasPrefix(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDHasSuffix applies the HasSuffix predicate on the "preview_domain_id" field.
+func PreviewDomainIDHasSuffix(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldHasSuffix(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDIsNil applies the IsNil predicate on the "preview_domain_id" field.
+func PreviewDomainIDIsNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldIsNull(FieldPreviewDomainID))
+}
+
+// PreviewDomainIDNotNil applies the NotNil predicate on the "preview_domain_id" field.
+func PreviewDomainIDNotNil() predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldNotNull(FieldPreviewDomainID))
+}
+
+// PreviewDomainIDEqualFold applies the EqualFold predicate on the "preview_domain_id" field.
+func PreviewDomainIDEqualFold(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldEqualFold(FieldPreviewDomainID, v))
+}
+
+// PreviewDomainIDContainsFold applies the ContainsFold predicate on the "preview_domain_id" field.
+func PreviewDomainIDContainsFold(v string) predicate.TrustCenterHistory {
+	return predicate.TrustCenterHistory(sql.FieldContainsFold(FieldPreviewDomainID, v))
 }
 
 // PirschDomainIDEQ applies the EQ predicate on the "pirsch_domain_id" field.

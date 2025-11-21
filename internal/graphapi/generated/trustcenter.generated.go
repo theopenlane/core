@@ -70,6 +70,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_slug(ctx, field)
 			case "customDomainID":
 				return ec.fieldContext_TrustCenter_customDomainID(ctx, field)
+			case "previewDomainID":
+				return ec.fieldContext_TrustCenter_previewDomainID(ctx, field)
 			case "pirschDomainID":
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
@@ -78,8 +80,12 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_owner(ctx, field)
 			case "customDomain":
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
+			case "previewDomain":
+				return ec.fieldContext_TrustCenter_previewDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "previewSetting":
+				return ec.fieldContext_TrustCenter_previewSetting(ctx, field)
 			case "watermarkConfig":
 				return ec.fieldContext_TrustCenter_watermarkConfig(ctx, field)
 			case "trustCenterSubprocessors":
@@ -170,6 +176,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_slug(ctx, field)
 			case "customDomainID":
 				return ec.fieldContext_TrustCenter_customDomainID(ctx, field)
+			case "previewDomainID":
+				return ec.fieldContext_TrustCenter_previewDomainID(ctx, field)
 			case "pirschDomainID":
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
@@ -178,8 +186,12 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_owner(ctx, field)
 			case "customDomain":
 				return ec.fieldContext_TrustCenter_customDomain(ctx, field)
+			case "previewDomain":
+				return ec.fieldContext_TrustCenter_previewDomain(ctx, field)
 			case "setting":
 				return ec.fieldContext_TrustCenter_setting(ctx, field)
+			case "previewSetting":
+				return ec.fieldContext_TrustCenter_previewSetting(ctx, field)
 			case "watermarkConfig":
 				return ec.fieldContext_TrustCenter_watermarkConfig(ctx, field)
 			case "trustCenterSubprocessors":
