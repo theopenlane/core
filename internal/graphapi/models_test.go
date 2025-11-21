@@ -1711,17 +1711,13 @@ type JobTemplateBuilder struct {
 	WindmillPath string
 }
 
-const testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
+var testScriptURL = "https://raw.githubusercontent.com/theopenlane/jobs-examples/refs/heads/main/basic/print.go"
 
 func (j *JobTemplateBuilder) MustNew(ctx context.Context, t *testing.T) *ent.JobTemplate {
 	ctx = setContext(ctx, j.client.db)
 
 	if j.Title == "" {
 		j.Title = "Test Job Template"
-	}
-
-	if j.DownloadURL == "" {
-		j.DownloadURL = testScriptURL
 	}
 
 	if j.Platform == "" {

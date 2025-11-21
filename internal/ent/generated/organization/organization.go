@@ -79,6 +79,8 @@ const (
 	EdgeTemplateCreators = "template_creators"
 	// EdgeSubprocessorCreators holds the string denoting the subprocessor_creators edge name in mutations.
 	EdgeSubprocessorCreators = "subprocessor_creators"
+	// EdgeJobRunnerRegistrationTokenCreators holds the string denoting the job_runner_registration_token_creators edge name in mutations.
+	EdgeJobRunnerRegistrationTokenCreators = "job_runner_registration_token_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -334,6 +336,13 @@ const (
 	SubprocessorCreatorsInverseTable = "groups"
 	// SubprocessorCreatorsColumn is the table column denoting the subprocessor_creators relation/edge.
 	SubprocessorCreatorsColumn = "organization_subprocessor_creators"
+	// JobRunnerRegistrationTokenCreatorsTable is the table that holds the job_runner_registration_token_creators relation/edge.
+	JobRunnerRegistrationTokenCreatorsTable = "groups"
+	// JobRunnerRegistrationTokenCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	JobRunnerRegistrationTokenCreatorsInverseTable = "groups"
+	// JobRunnerRegistrationTokenCreatorsColumn is the table column denoting the job_runner_registration_token_creators relation/edge.
+	JobRunnerRegistrationTokenCreatorsColumn = "organization_job_runner_registration_token_creators"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -893,7 +902,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [23]ent.Hook
+	Hooks        [24]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1219,6 +1228,20 @@ func BySubprocessorCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySubprocessorCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubprocessorCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByJobRunnerRegistrationTokenCreatorsCount orders the results by job_runner_registration_token_creators count.
+func ByJobRunnerRegistrationTokenCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newJobRunnerRegistrationTokenCreatorsStep(), opts...)
+	}
+}
+
+// ByJobRunnerRegistrationTokenCreators orders the results by job_runner_registration_token_creators terms.
+func ByJobRunnerRegistrationTokenCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newJobRunnerRegistrationTokenCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2339,6 +2362,13 @@ func newSubprocessorCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubprocessorCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorCreatorsTable, SubprocessorCreatorsColumn),
+	)
+}
+func newJobRunnerRegistrationTokenCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(JobRunnerRegistrationTokenCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, JobRunnerRegistrationTokenCreatorsTable, JobRunnerRegistrationTokenCreatorsColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

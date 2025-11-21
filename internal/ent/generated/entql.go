@@ -9692,6 +9692,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"job_runner_registration_token_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"parent",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -30623,6 +30635,20 @@ func (f *OrganizationFilter) WhereHasSubprocessorCreators() {
 // WhereHasSubprocessorCreatorsWith applies a predicate to check if query has an edge subprocessor_creators with a given conditions (other predicates).
 func (f *OrganizationFilter) WhereHasSubprocessorCreatorsWith(preds ...predicate.Group) {
 	f.Where(entql.HasEdgeWith("subprocessor_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasJobRunnerRegistrationTokenCreators applies a predicate to check if query has an edge job_runner_registration_token_creators.
+func (f *OrganizationFilter) WhereHasJobRunnerRegistrationTokenCreators() {
+	f.Where(entql.HasEdge("job_runner_registration_token_creators"))
+}
+
+// WhereHasJobRunnerRegistrationTokenCreatorsWith applies a predicate to check if query has an edge job_runner_registration_token_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasJobRunnerRegistrationTokenCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("job_runner_registration_token_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}

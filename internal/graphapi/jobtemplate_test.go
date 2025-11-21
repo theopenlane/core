@@ -160,7 +160,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				DownloadURL: &testScriptURL,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -172,7 +172,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Description: lo.ToPtr("Test Description"),
 				Cron:        lo.ToPtr("0 0 * * * *"),
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				DownloadURL: &testScriptURL,
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -229,7 +229,7 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 			request: testclient.CreateJobTemplateInput{
 				Title:       "Test Job Template",
 				Platform:    enums.JobPlatformTypeGo,
-				DownloadURL: lo.ToPtr(testScriptURL),
+				DownloadURL: &testScriptURL,
 				Cron:        lo.ToPtr("0 0 * * * a"),
 			},
 			client:      suite.client.api,
@@ -295,7 +295,7 @@ func TestMutationUpdateJobTemplate(t *testing.T) {
 		{
 			name: "happy path, update multiple fields",
 			request: testclient.UpdateJobTemplateInput{
-				DownloadURL: lo.ToPtr(testScriptURL),
+				DownloadURL: &testScriptURL,
 				Cron:        lo.ToPtr("0 0 * * * *"),
 			},
 			client: suite.client.apiWithPAT,

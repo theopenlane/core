@@ -552,6 +552,21 @@ func (_c *OrganizationCreate) AddSubprocessorCreators(v ...*Group) *Organization
 	return _c.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationCreate {
+	_c.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _c
+}
+
+// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
+func (_c *OrganizationCreate) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+}
+
 // SetParentID sets the "parent" edge to the Organization entity by ID.
 func (_c *OrganizationCreate) SetParentID(id string) *OrganizationCreate {
 	_c.mutation.SetParentID(id)
@@ -2124,6 +2139,23 @@ func (_c *OrganizationCreate) createSpec() (*Organization, *sqlgraph.CreateSpec)
 			Inverse: false,
 			Table:   organization.SubprocessorCreatorsTable,
 			Columns: []string{organization.SubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

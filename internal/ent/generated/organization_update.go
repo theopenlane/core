@@ -552,6 +552,21 @@ func (_u *OrganizationUpdate) AddSubprocessorCreators(v ...*Group) *Organization
 	return _u.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _u
+}
+
+// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+}
+
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdate) AddChildIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddChildIDs(ids...)
@@ -1973,6 +1988,27 @@ func (_u *OrganizationUpdate) RemoveSubprocessorCreators(v ...*Group) *Organizat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorCreatorIDs(ids...)
+}
+
+// ClearJobRunnerRegistrationTokenCreators clears all "job_runner_registration_token_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearJobRunnerRegistrationTokenCreators() *OrganizationUpdate {
+	_u.mutation.ClearJobRunnerRegistrationTokenCreators()
+	return _u
+}
+
+// RemoveJobRunnerRegistrationTokenCreatorIDs removes the "job_runner_registration_token_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveJobRunnerRegistrationTokenCreators removes "job_runner_registration_token_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -4351,6 +4387,54 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.SubprocessorCreatorsTable,
 			Columns: []string{organization.SubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -8326,6 +8410,21 @@ func (_u *OrganizationUpdateOne) AddSubprocessorCreators(v ...*Group) *Organizat
 	return _u.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddJobRunnerRegistrationTokenCreatorIDs adds the "job_runner_registration_token_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _u
+}
+
+// AddJobRunnerRegistrationTokenCreators adds the "job_runner_registration_token_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddJobRunnerRegistrationTokenCreatorIDs(ids...)
+}
+
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdateOne) AddChildIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddChildIDs(ids...)
@@ -9747,6 +9846,27 @@ func (_u *OrganizationUpdateOne) RemoveSubprocessorCreators(v ...*Group) *Organi
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorCreatorIDs(ids...)
+}
+
+// ClearJobRunnerRegistrationTokenCreators clears all "job_runner_registration_token_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearJobRunnerRegistrationTokenCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearJobRunnerRegistrationTokenCreators()
+	return _u
+}
+
+// RemoveJobRunnerRegistrationTokenCreatorIDs removes the "job_runner_registration_token_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveJobRunnerRegistrationTokenCreators removes "job_runner_registration_token_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveJobRunnerRegistrationTokenCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveJobRunnerRegistrationTokenCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -12155,6 +12275,54 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.SubprocessorCreatorsTable,
 			Columns: []string{organization.SubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedJobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 && !_u.mutation.JobRunnerRegistrationTokenCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.JobRunnerRegistrationTokenCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.JobRunnerRegistrationTokenCreatorsTable,
+			Columns: []string{organization.JobRunnerRegistrationTokenCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
