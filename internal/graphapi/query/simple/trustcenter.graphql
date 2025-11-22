@@ -112,6 +112,19 @@ query GetTrustCenterByID($trustCenterId: ID!) {
       cnameRecord
       dnsVerificationID
     }
+    previewDomain {
+      cnameRecord
+      dnsVerification {
+        dnsTxtRecord
+        dnsTxtValue
+        dnsVerificationStatus
+        dnsVerificationStatusReason
+        acmeChallengePath
+        expectedAcmeChallengeValue
+        acmeChallengeStatus
+        acmeChallengeStatusReason
+      }
+    }
     setting {
       id
       overview
@@ -186,7 +199,10 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
   }
 }
 
-mutation UpdateTrustCenter($updateTrustCenterId: ID!, $input: UpdateTrustCenterInput!) {
+mutation UpdateTrustCenter(
+  $updateTrustCenterId: ID!
+  $input: UpdateTrustCenterInput!
+) {
   updateTrustCenter(id: $updateTrustCenterId, input: $input) {
     trustCenter {
       createdAt

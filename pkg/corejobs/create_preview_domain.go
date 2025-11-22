@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/pkg/corejobs/internal/olclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
+	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/keygen"
 )
 
@@ -57,8 +58,9 @@ type CreatePreviewDomainWorker struct {
 
 	Config PreviewDomainConfig `koanf:"config" json:"config" jsonschema:"description=the configuration for preview domain creation"`
 
-	cfClient intcloudflare.Client
-	olClient olclient.OpenlaneClient
+	cfClient    intcloudflare.Client
+	olClient    olclient.OpenlaneClient
+	riverClient riverqueue.JobClient
 }
 
 func (w *CreatePreviewDomainWorker) WithCloudflareClient(cl intcloudflare.Client) *CreatePreviewDomainWorker {
@@ -68,6 +70,13 @@ func (w *CreatePreviewDomainWorker) WithCloudflareClient(cl intcloudflare.Client
 
 func (w *CreatePreviewDomainWorker) WithOpenlaneClient(cl olclient.OpenlaneClient) *CreatePreviewDomainWorker {
 	w.olClient = cl
+	return w
+}
+
+// WithRiverClient sets the River client for the worker
+// and returns the worker for method chaining
+func (w *CreatePreviewDomainWorker) WithRiverClient(cl riverqueue.JobClient) *CreatePreviewDomainWorker {
+	w.riverClient = cl
 	return w
 }
 
@@ -82,6 +91,10 @@ func (w *CreatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[Cre
 
 	if job.Args.TrustCenterCnameTarget == "" {
 		return newMissingRequiredArg("trust_center_cname_target", CreatePreviewDomainArgs{}.Kind())
+	}
+
+	if w.riverClient == nil {
+		return fmt.Errorf("river client is not set on worker")
 	}
 
 	if w.cfClient == nil {
@@ -174,6 +187,13 @@ func (w *CreatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[Cre
 		Str("record_name", record.Name).
 		Str("record_target", record.Content).
 		Msg("created record")
+
+	if _, err = w.riverClient.Insert(ctx, ValidatePreviewDomainArgs{
+		TrustCenterID:            job.Args.TrustCenterID,
+		TrustCenterPreviewZoneID: job.Args.TrustCenterPreviewZoneID,
+	}, nil); err != nil {
+		return err
+	}
 
 	return nil
 }
