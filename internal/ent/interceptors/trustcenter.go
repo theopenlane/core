@@ -55,8 +55,14 @@ func InterceptorTrustCenterChild() ent.Interceptor {
 
 		orgIDs, err := auth.GetOrganizationIDsFromContext(ctx)
 		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Msg("failed to get organization IDs in InterceptorTrustCenterChild")
 			return err
 		}
+
+		logx.FromContext(ctx).Debug().
+			Strs("org_ids", orgIDs).
+			Str("query_type", q.Type()).
+			Msg("InterceptorTrustCenterChild filtering by org IDs")
 
 		q.WhereP(func(s *sql.Selector) {
 			t := sql.Table(trustcenter.Table)

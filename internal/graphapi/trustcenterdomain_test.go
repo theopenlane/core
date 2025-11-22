@@ -102,3 +102,45 @@ func TestMutationCreateTrustCenterDomainMappableDomainNotExists(t *testing.T) {
 		assert.ErrorContains(t, err, notFoundErrorMsg)
 	})
 }
+
+func TestMutationDeleteTrustCenterDomainSettingPersists(t *testing.T) {
+	// Create a new user to avoid slug conflicts
+	testUser := suite.userBuilder(t.Context(), t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+	mappableDomain := (&MappableDomainBuilder{client: suite.client, Name: testutils.TrustCenterCnameTarget}).MustNew(systemAdminUser.UserCtx, t)
+
+	t.Run("trust center setting persists after custom domain deletion", func(t *testing.T) {
+		// Create a custom domain for the trust center
+		domain := gofakeit.DomainName()
+		createResp, err := suite.client.api.CreateTrustCenterDomain(testUser.UserCtx, testclient.CreateTrustCenterDomainInput{
+			CnameRecord:   domain,
+			TrustCenterID: trustCenter.ID,
+		})
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
+		assert.Check(t, is.Equal(domain, createResp.CreateTrustCenterDomain.CustomDomain.CnameRecord))
+
+		customDomainID := createResp.CreateTrustCenterDomain.CustomDomain.ID
+
+		// Delete the custom domain
+		deleteResp, err := suite.client.api.DeleteCustomDomain(testUser.UserCtx, customDomainID)
+		assert.NilError(t, err)
+		assert.Assert(t, deleteResp != nil)
+		assert.Check(t, is.Equal(customDomainID, deleteResp.DeleteCustomDomain.DeletedID))
+
+		// Fetch the trust center and verify the setting is not null
+		trustCenterResp, err := suite.client.api.GetTrustCenterByID(testUser.UserCtx, trustCenter.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, trustCenterResp != nil)
+		assert.Check(t, is.Equal(trustCenter.ID, trustCenterResp.TrustCenter.ID))
+
+		// Verify the setting is not null
+		setting := trustCenterResp.TrustCenter.GetSetting()
+		assert.Assert(t, setting != nil, "trust center setting should not be null after custom domain deletion")
+		assert.Check(t, setting.ID != "")
+	})
+
+	// Cleanup
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: mappableDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser.UserCtx, t)
+}
