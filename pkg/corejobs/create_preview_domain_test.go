@@ -8,8 +8,11 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/dns"
 	"github.com/cloudflare/cloudflare-go/v6/zones"
 	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
+
+	rivermocks "github.com/theopenlane/riverboat/pkg/riverqueue/mocks"
 
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
@@ -129,6 +132,7 @@ func TestCreatePreviewDomainWorker(t *testing.T) {
 			ctx := context.Background()
 			cfMock := cfmocks.NewMockClient(t)
 			olMock := olmocks.NewMockOpenlaneGraphClient(t)
+			riverMock := rivermocks.NewMockJobClient(t)
 
 			// Setup mocks for happy path and error cases
 			if tc.trustCenterID != "" && tc.trustCenterPreviewZoneID != "" && tc.trustCenterCnameTarget != "" {
@@ -200,6 +204,13 @@ func TestCreatePreviewDomainWorker(t *testing.T) {
 										Name:    "preview-domain",
 										Content: cnameTarget,
 									}, tc.createRecordError)
+
+									if tc.createRecordError == nil {
+										riverMock.EXPECT().Insert(mock.Anything, mock.MatchedBy(func(args corejobs.ValidatePreviewDomainArgs) bool {
+											return args.TrustCenterID == tc.trustCenterID &&
+												args.TrustCenterPreviewZoneID == tc.trustCenterPreviewZoneID
+										}), mock.Anything).Return(&rivertype.JobInsertResult{}, nil)
+									}
 								}
 							}
 						}
@@ -215,6 +226,7 @@ func TestCreatePreviewDomainWorker(t *testing.T) {
 
 			worker.WithCloudflareClient(cfMock)
 			worker.WithOpenlaneClient(olMock)
+			worker.WithRiverClient(riverMock)
 
 			err := worker.Work(ctx, &river.Job[corejobs.CreatePreviewDomainArgs]{
 				Args: corejobs.CreatePreviewDomainArgs{
