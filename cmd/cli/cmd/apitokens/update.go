@@ -26,7 +26,7 @@ func init() {
 	updateCmd.Flags().StringP("id", "i", "", "api token id to update")
 	updateCmd.Flags().StringP("name", "n", "", "name of the api token token")
 	updateCmd.Flags().StringP("description", "d", "", "description of the api token")
-	updateCmd.Flags().StringSlice("scopes", []string{}, "scopes to add to the api token")
+	updateCmd.Flags().StringSlice("scopes", []string{}, "scopes to add to the api token"+scopeFlagConfig())
 }
 
 // updateValidation validates the required fields for the command
@@ -57,14 +57,9 @@ func updateValidation() (id string, input openlaneclient.UpdateAPITokenInput, er
 
 // update an existing api token
 func update(ctx context.Context) error {
-	// attempt to setup with token, otherwise fall back to JWT with session
-	client, err := cmd.TokenAuth(ctx, cmd.Config)
-	if err != nil || client == nil {
-		// setup http client
-		client, err = cmd.SetupClientWithAuth(ctx)
-		cobra.CheckErr(err)
-		defer cmd.StoreSessionCookies(client)
-	}
+	client, err := cmd.SetupClientWithAuth(ctx)
+	cobra.CheckErr(err)
+	defer cmd.StoreSessionCookies(client)
 
 	id, input, err := updateValidation()
 	cobra.CheckErr(err)

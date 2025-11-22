@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
@@ -10,6 +11,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/pkg/logx"
@@ -59,7 +61,7 @@ func HookCreateAPIToken() ent.Hook {
 			}
 
 			// create the relationship tuples in fga for the token
-			tuples, err := createScopeTuples(token.Scopes, orgID, token.ID)
+			tuples, err := createScopeTuples(ctx, token.Scopes, orgID, token.ID)
 			if err != nil {
 				return retVal, err
 			}
@@ -112,7 +114,7 @@ func HookUpdateAPIToken() ent.Hook {
 				return at, err
 			}
 
-			tuples, err := createScopeTuples(newScopes, at.OwnerID, at.ID)
+			tuples, err := createScopeTuples(ctx, newScopes, at.OwnerID, at.ID)
 			if err != nil {
 				return retVal, err
 			}
@@ -132,26 +134,30 @@ func HookUpdateAPIToken() ent.Hook {
 }
 
 // createScopeTuples creates the relationship tuples for the token
-func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.TupleKey, err error) {
-	// create the relationship tuples in fga for the token
-	// TODO (sfunk): this shouldn't be a static list
-	for _, scope := range scopes {
-		var relation string
+func createScopeTuples(ctx context.Context, scopes []string, orgID, tokenID string) ([]fgax.TupleKey, error) {
+	scopeSet, err := fgamodel.DefaultServiceScopeSet()
+	if err != nil {
+		return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
+	}
 
-		switch scope {
-		case "read":
-			relation = "can_view"
-		case "write":
-			relation = "can_edit"
-		case "delete":
-			relation = "can_delete"
-		case "group_manager":
-			relation = "group_manager"
+	var tuples []fgax.TupleKey
+
+	for _, scope := range scopes {
+		relation := fgamodel.NormalizeScope(scope)
+
+		if relation == "" {
+			logx.FromContext(ctx).Warn().Str("scope", scope).Msg("ignoring empty scope on api token")
+
+			continue
+		}
+
+		if _, ok := scopeSet[relation]; !ok {
+			return nil, fmt.Errorf("scope %q (%s) is not assignable to service subjects", scope, relation)
 		}
 
 		req := fgax.TupleRequest{
 			SubjectID:   tokenID,
-			SubjectType: "service",
+			SubjectType: auth.ServiceSubjectType,
 			ObjectID:    orgID,
 			ObjectType:  generated.TypeOrganization,
 			Relation:    relation,
@@ -160,7 +166,7 @@ func createScopeTuples(scopes []string, orgID, tokenID string) (tuples []fgax.Tu
 		tuples = append(tuples, fgax.GetTupleKey(req))
 	}
 
-	return
+	return tuples, nil
 }
 
 // getNewScopes returns the new scopes that were added to the token during an update

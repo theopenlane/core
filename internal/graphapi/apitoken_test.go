@@ -368,3 +368,51 @@ func TestLastUsedAPIToken(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Check(t, !out.APIToken.LastUsedAt.IsZero())
 }
+
+func TestAPITokenScopeEnforcement(t *testing.T) {
+	orgUser := suite.userBuilder(context.Background(), t)
+	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
+
+	// create scoped tokens (read-only vs write)
+	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"read"}}).MustNew(orgCtx, t)
+	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"write"}}).MustNew(orgCtx, t)
+
+	makeClient := func(token string) *testclient.TestClient {
+		authHeader := openlaneclient.Authorization{
+			BearerToken: token,
+		}
+
+		c, err := testutils.TestClientWithAuth(
+			suite.client.db,
+			suite.client.objectStore,
+			openlaneclient.WithCredentials(authHeader),
+		)
+		requireNoError(err)
+
+		return c
+	}
+
+	readClient := makeClient(readToken.Token)
+	writeClient := makeClient(writeToken.Token)
+
+	// read-only scope can fetch org details
+	_, err := readClient.GetOrganizationByID(context.Background(), orgUser.OrganizationID)
+	assert.NilError(t, err)
+
+	// read-only scope cannot create a group (requires edit)
+	_, err = readClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+		Name: gofakeit.AppName(),
+	})
+	assert.ErrorContains(t, err, "permission denied")
+
+	// write scope can create a group
+	groupResp, err := writeClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
+		Name: gofakeit.AppName(),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, groupResp != nil)
+	assert.Check(t, groupResp.CreateGroup.Group.ID != "")
+
+	(&Cleanup[*generated.GroupDeleteOne]{client: suite.client.db.Group, IDs: []string{groupResp.CreateGroup.Group.ID}}).MustDelete(orgCtx, t)
+	(&Cleanup[*generated.APITokenDeleteOne]{client: suite.client.db.APIToken, IDs: []string{readToken.ID, writeToken.ID}}).MustDelete(orgCtx, t)
+}

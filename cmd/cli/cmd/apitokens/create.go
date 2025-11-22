@@ -28,7 +28,7 @@ func init() {
 	createCmd.Flags().StringP("name", "n", "", "name of the api token token")
 	createCmd.Flags().StringP("description", "d", "", "description of the api token")
 	createCmd.Flags().DurationP("expiration", "e", 0, "duration of the api token to be valid, leave empty to never expire")
-	createCmd.Flags().StringSlice("scopes", []string{"read", "write"}, "scopes to associate with the api token")
+	createCmd.Flags().StringSlice("scopes", []string{"can_view", "can_edit"}, "scopes to associate with the api token"+scopeFlagConfig())
 }
 
 // createValidation validates the required fields for the command
@@ -58,14 +58,9 @@ func createValidation() (input openlaneclient.CreateAPITokenInput, err error) {
 
 // create a new api token
 func create(ctx context.Context) error {
-	// attempt to setup with token, otherwise fall back to JWT with session
-	client, err := cmd.TokenAuth(ctx, cmd.Config)
-	if err != nil || client == nil {
-		// setup http client
-		client, err = cmd.SetupClientWithAuth(ctx)
-		cobra.CheckErr(err)
-		defer cmd.StoreSessionCookies(client)
-	}
+	client, err := cmd.SetupClientWithAuth(ctx)
+	cobra.CheckErr(err)
+	defer cmd.StoreSessionCookies(client)
 
 	input, err := createValidation()
 	cobra.CheckErr(err)
