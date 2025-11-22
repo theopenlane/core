@@ -8,6 +8,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -960,6 +961,46 @@ func PirschIdentificationCodeEqualFold(v string) predicate.TrustCenter {
 // PirschIdentificationCodeContainsFold applies the ContainsFold predicate on the "pirsch_identification_code" field.
 func PirschIdentificationCodeContainsFold(v string) predicate.TrustCenter {
 	return predicate.TrustCenter(sql.FieldContainsFold(FieldPirschIdentificationCode, v))
+}
+
+// PreviewStatusEQ applies the EQ predicate on the "preview_status" field.
+func PreviewStatusEQ(v enums.TrustCenterPreviewStatus) predicate.TrustCenter {
+	vc := v
+	return predicate.TrustCenter(sql.FieldEQ(FieldPreviewStatus, vc))
+}
+
+// PreviewStatusNEQ applies the NEQ predicate on the "preview_status" field.
+func PreviewStatusNEQ(v enums.TrustCenterPreviewStatus) predicate.TrustCenter {
+	vc := v
+	return predicate.TrustCenter(sql.FieldNEQ(FieldPreviewStatus, vc))
+}
+
+// PreviewStatusIn applies the In predicate on the "preview_status" field.
+func PreviewStatusIn(vs ...enums.TrustCenterPreviewStatus) predicate.TrustCenter {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenter(sql.FieldIn(FieldPreviewStatus, v...))
+}
+
+// PreviewStatusNotIn applies the NotIn predicate on the "preview_status" field.
+func PreviewStatusNotIn(vs ...enums.TrustCenterPreviewStatus) predicate.TrustCenter {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenter(sql.FieldNotIn(FieldPreviewStatus, v...))
+}
+
+// PreviewStatusIsNil applies the IsNil predicate on the "preview_status" field.
+func PreviewStatusIsNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldIsNull(FieldPreviewStatus))
+}
+
+// PreviewStatusNotNil applies the NotNil predicate on the "preview_status" field.
+func PreviewStatusNotNil() predicate.TrustCenter {
+	return predicate.TrustCenter(sql.FieldNotNull(FieldPreviewStatus))
 }
 
 // HasOwner applies the HasEdge predicate on the "owner" edge.

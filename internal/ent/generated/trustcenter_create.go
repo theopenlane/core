@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterCreate is the builder for creating a TrustCenter entity.
@@ -198,6 +199,20 @@ func (_c *TrustCenterCreate) SetPirschIdentificationCode(v string) *TrustCenterC
 func (_c *TrustCenterCreate) SetNillablePirschIdentificationCode(v *string) *TrustCenterCreate {
 	if v != nil {
 		_c.SetPirschIdentificationCode(*v)
+	}
+	return _c
+}
+
+// SetPreviewStatus sets the "preview_status" field.
+func (_c *TrustCenterCreate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterCreate {
+	_c.mutation.SetPreviewStatus(v)
+	return _c
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterCreate {
+	if v != nil {
+		_c.SetPreviewStatus(*v)
 	}
 	return _c
 }
@@ -418,6 +433,10 @@ func (_c *TrustCenterCreate) defaults() error {
 		v := trustcenter.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.PreviewStatus(); !ok {
+		v := trustcenter.DefaultPreviewStatus
+		_c.mutation.SetPreviewStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenter.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenter.DefaultID (forgotten import generated/runtime?)")
@@ -433,6 +452,11 @@ func (_c *TrustCenterCreate) check() error {
 	if v, ok := _c.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
 		}
 	}
 	return nil
@@ -510,6 +534,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
 		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
+	}
+	if value, ok := _c.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+		_node.PreviewStatus = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -6931,6 +6931,7 @@ var (
 		{Name: "slug", Type: field.TypeString, Nullable: true, Size: 160},
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
+		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "custom_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
@@ -6946,37 +6947,37 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_centers_organizations_trust_centers",
-				Columns:    []*schema.Column{TrustCentersColumns[11]},
+				Columns:    []*schema.Column{TrustCentersColumns[12]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_centers_custom_domains_custom_domain",
-				Columns:    []*schema.Column{TrustCentersColumns[12]},
-				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
-				OnDelete:   schema.SetNull,
-			},
-			{
-				Symbol:     "trust_centers_custom_domains_preview_domain",
 				Columns:    []*schema.Column{TrustCentersColumns[13]},
 				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_settings_setting",
+				Symbol:     "trust_centers_custom_domains_preview_domain",
 				Columns:    []*schema.Column{TrustCentersColumns[14]},
-				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				RefColumns: []*schema.Column{CustomDomainsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_settings_preview_setting",
+				Symbol:     "trust_centers_trust_center_settings_setting",
 				Columns:    []*schema.Column{TrustCentersColumns[15]},
 				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Symbol:     "trust_centers_trust_center_settings_preview_setting",
 				Columns:    []*schema.Column{TrustCentersColumns[16]},
+				RefColumns: []*schema.Column{TrustCenterSettingsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_centers_trust_center_watermark_configs_watermark_config",
+				Columns:    []*schema.Column{TrustCentersColumns[17]},
 				RefColumns: []*schema.Column{TrustCenterWatermarkConfigsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -6985,7 +6986,7 @@ var (
 			{
 				Name:    "trustcenter_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCentersColumns[11]},
+				Columns: []*schema.Column{TrustCentersColumns[12]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7171,6 +7172,7 @@ var (
 		{Name: "preview_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_domain_id", Type: field.TypeString, Nullable: true},
 		{Name: "pirsch_identification_code", Type: field.TypeString, Nullable: true},
+		{Name: "preview_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE"}, Default: "NONE"},
 	}
 	// TrustCenterHistoryTable holds the schema information for the "trust_center_history" table.
 	TrustCenterHistoryTable = &schema.Table{

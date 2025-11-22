@@ -76,6 +76,8 @@ func (ec *executionContext) fieldContext_TrustCenterCreatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "previewStatus":
+				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "owner":
 				return ec.fieldContext_TrustCenter_owner(ctx, field)
 			case "customDomain":
@@ -182,6 +184,8 @@ func (ec *executionContext) fieldContext_TrustCenterUpdatePayload_trustCenter(_ 
 				return ec.fieldContext_TrustCenter_pirschDomainID(ctx, field)
 			case "pirschIdentificationCode":
 				return ec.fieldContext_TrustCenter_pirschIdentificationCode(ctx, field)
+			case "previewStatus":
+				return ec.fieldContext_TrustCenter_previewStatus(ctx, field)
 			case "owner":
 				return ec.fieldContext_TrustCenter_owner(ctx, field)
 			case "customDomain":

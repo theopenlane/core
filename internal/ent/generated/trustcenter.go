@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenter is the model entity for the TrustCenter schema.
@@ -48,6 +49,8 @@ type TrustCenter struct {
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
+	// preview status of the trust center
+	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
 	Edges                         TrustCenterEdges `json:"edges"`
@@ -212,7 +215,7 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenter.FieldTags:
 			values[i] = new([]byte)
-		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode:
+		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode, trustcenter.FieldPreviewStatus:
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -322,6 +325,12 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field pirsch_identification_code", values[i])
 			} else if value.Valid {
 				_m.PirschIdentificationCode = value.String
+			}
+		case trustcenter.FieldPreviewStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_status", values[i])
+			} else if value.Valid {
+				_m.PreviewStatus = enums.TrustCenterPreviewStatus(value.String)
 			}
 		case trustcenter.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -473,6 +482,9 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_identification_code=")
 	builder.WriteString(_m.PirschIdentificationCode)
+	builder.WriteString(", ")
+	builder.WriteString("preview_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))
 	builder.WriteByte(')')
 	return builder.String()
 }
