@@ -102,7 +102,10 @@ func main() {
 			genhooks.GenSchema(graphSchemaDir),
 			genhooks.GenQuery(graphQueryDir),
 			genhooks.GenQuery(graphSimpleQueryDir),
-			genhooks.GenSearchSchema(graphSchemaDir, graphQueryDir),
+			genhooks.GenSearchSchema(
+				genhooks.WithGraphQueryDir(graphQueryDir),
+				genhooks.WithGraphSchemaDir(graphSchemaDir),
+				genhooks.WithIncludeAdminSearch(false)),
 			accessMapExt.Hook(),
 			exportenums.New().Hook(),
 		},

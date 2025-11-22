@@ -49,6 +49,7 @@ func main() {
 			searchgen.WithEntGeneratedPackage(entPackage),
 			searchgen.WithModelPackage(modelImport),
 			searchgen.WithRulePackage(rulePackage),
+			searchgen.WithIncludeAdminSearch(false),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")
