@@ -2,7 +2,7 @@ include:
   - docker-compose-pg.yml
 services:
   migrate:
-    image: openfga/openfga:v1.11.0
+    image: openfga/openfga:v1.11.1
     command: migrate
     depends_on:
       postgres:
@@ -16,7 +16,7 @@ services:
     depends_on:
       migrate:
         condition: service_completed_successfully
-    image: openfga/openfga:v1.11.0
+    image: openfga/openfga:v1.11.1
     environment:
       - OPENFGA_DATASTORE_ENGINE=postgres
       - OPENFGA_DATASTORE_URI=postgres://postgres:password@postgres:5432/openfga?sslmode=disable
