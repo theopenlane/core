@@ -133,6 +133,12 @@ func serve(ctx context.Context) error {
 	// add email verifier
 	verifier := so.Config.Settings.EntConfig.EmailValidation.NewVerifier()
 
+	// Set trust center config for hooks
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewZoneID: so.Config.Settings.Server.TrustCenterPreviewZoneID,
+		CnameTarget:   so.Config.Settings.Server.TrustCenterCnameTarget,
+	})
+
 	// add additional ent dependencies
 	entOpts = append(
 		entOpts,
