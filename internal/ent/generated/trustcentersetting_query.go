@@ -15,7 +15,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -28,7 +27,6 @@ type TrustCenterSettingQuery struct {
 	order           []trustcentersetting.OrderOption
 	inters          []Interceptor
 	predicates      []predicate.TrustCenterSetting
-	withTrustCenter *TrustCenterQuery
 	withFiles       *FileQuery
 	withLogoFile    *FileQuery
 	withFaviconFile *FileQuery
@@ -69,31 +67,6 @@ func (_q *TrustCenterSettingQuery) Unique(unique bool) *TrustCenterSettingQuery 
 func (_q *TrustCenterSettingQuery) Order(o ...trustcentersetting.OrderOption) *TrustCenterSettingQuery {
 	_q.order = append(_q.order, o...)
 	return _q
-}
-
-// QueryTrustCenter chains the current query on the "trust_center" edge.
-func (_q *TrustCenterSettingQuery) QueryTrustCenter() *TrustCenterQuery {
-	query := (&TrustCenterClient{config: _q.config}).Query()
-	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
-		if err := _q.prepareQuery(ctx); err != nil {
-			return nil, err
-		}
-		selector := _q.sqlQuery(ctx)
-		if err := selector.Err(); err != nil {
-			return nil, err
-		}
-		step := sqlgraph.NewStep(
-			sqlgraph.From(trustcentersetting.Table, trustcentersetting.FieldID, selector),
-			sqlgraph.To(trustcenter.Table, trustcenter.FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, trustcentersetting.TrustCenterTable, trustcentersetting.TrustCenterColumn),
-		)
-		schemaConfig := _q.schemaConfig
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
-		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
-		return fromU, nil
-	}
-	return query
 }
 
 // QueryFiles chains the current query on the "files" edge.
@@ -363,7 +336,6 @@ func (_q *TrustCenterSettingQuery) Clone() *TrustCenterSettingQuery {
 		order:           append([]trustcentersetting.OrderOption{}, _q.order...),
 		inters:          append([]Interceptor{}, _q.inters...),
 		predicates:      append([]predicate.TrustCenterSetting{}, _q.predicates...),
-		withTrustCenter: _q.withTrustCenter.Clone(),
 		withFiles:       _q.withFiles.Clone(),
 		withLogoFile:    _q.withLogoFile.Clone(),
 		withFaviconFile: _q.withFaviconFile.Clone(),
@@ -372,17 +344,6 @@ func (_q *TrustCenterSettingQuery) Clone() *TrustCenterSettingQuery {
 		path:      _q.path,
 		modifiers: append([]func(*sql.Selector){}, _q.modifiers...),
 	}
-}
-
-// WithTrustCenter tells the query-builder to eager-load the nodes that are connected to
-// the "trust_center" edge. The optional arguments are used to configure the query builder of the edge.
-func (_q *TrustCenterSettingQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) *TrustCenterSettingQuery {
-	query := (&TrustCenterClient{config: _q.config}).Query()
-	for _, opt := range opts {
-		opt(query)
-	}
-	_q.withTrustCenter = query
-	return _q
 }
 
 // WithFiles tells the query-builder to eager-load the nodes that are connected to
@@ -502,8 +463,7 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	var (
 		nodes       = []*TrustCenterSetting{}
 		_spec       = _q.querySpec()
-		loadedTypes = [4]bool{
-			_q.withTrustCenter != nil,
+		loadedTypes = [3]bool{
 			_q.withFiles != nil,
 			_q.withLogoFile != nil,
 			_q.withFaviconFile != nil,
@@ -531,12 +491,6 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	}
 	if len(nodes) == 0 {
 		return nodes, nil
-	}
-	if query := _q.withTrustCenter; query != nil {
-		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
-			func(n *TrustCenterSetting, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
-			return nil, err
-		}
 	}
 	if query := _q.withFiles; query != nil {
 		if err := _q.loadFiles(ctx, query, nodes,
@@ -572,35 +526,6 @@ func (_q *TrustCenterSettingQuery) sqlAll(ctx context.Context, hooks ...queryHoo
 	return nodes, nil
 }
 
-func (_q *TrustCenterSettingQuery) loadTrustCenter(ctx context.Context, query *TrustCenterQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *TrustCenter)) error {
-	ids := make([]string, 0, len(nodes))
-	nodeids := make(map[string][]*TrustCenterSetting)
-	for i := range nodes {
-		fk := nodes[i].TrustCenterID
-		if _, ok := nodeids[fk]; !ok {
-			ids = append(ids, fk)
-		}
-		nodeids[fk] = append(nodeids[fk], nodes[i])
-	}
-	if len(ids) == 0 {
-		return nil
-	}
-	query.Where(trustcenter.IDIn(ids...))
-	neighbors, err := query.All(ctx)
-	if err != nil {
-		return err
-	}
-	for _, n := range neighbors {
-		nodes, ok := nodeids[n.ID]
-		if !ok {
-			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
-		}
-		for i := range nodes {
-			assign(nodes[i], n)
-		}
-	}
-	return nil
-}
 func (_q *TrustCenterSettingQuery) loadFiles(ctx context.Context, query *FileQuery, nodes []*TrustCenterSetting, init func(*TrustCenterSetting), assign func(*TrustCenterSetting, *File)) error {
 	edgeIDs := make([]driver.Value, len(nodes))
 	byID := make(map[string]*TrustCenterSetting)
@@ -757,9 +682,6 @@ func (_q *TrustCenterSettingQuery) querySpec() *sqlgraph.QuerySpec {
 			if fields[i] != trustcentersetting.FieldID {
 				_spec.Node.Columns = append(_spec.Node.Columns, fields[i])
 			}
-		}
-		if _q.withTrustCenter != nil {
-			_spec.Node.AddColumnOnce(trustcentersetting.FieldTrustCenterID)
 		}
 		if _q.withLogoFile != nil {
 			_spec.Node.AddColumnOnce(trustcentersetting.FieldLogoLocalFileID)

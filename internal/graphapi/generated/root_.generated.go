@@ -3726,6 +3726,7 @@ type ComplexityRoot struct {
 		DeleteWorkflowEvent                   func(childComplexity int, id string) int
 		DeleteWorkflowInstance                func(childComplexity int, id string) int
 		DeleteWorkflowObjectRef               func(childComplexity int, id string) int
+		PublishTrustCenterSetting             func(childComplexity int) int
 		SendTrustCenterNDAEmail               func(childComplexity int, input model.SendTrustCenterNDAInput) int
 		SubmitTrustCenterNDAResponse          func(childComplexity int, input model.SubmitTrustCenterNDAResponseInput) int
 		TransferOrganizationOwnership         func(childComplexity int, newOwnerEmail string) int
@@ -3806,6 +3807,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterDoc                  func(childComplexity int, id string, input generated.UpdateTrustCenterDocInput, trustCenterDocFile *graphql.Upload, watermarkedTrustCenterDocFile *graphql.Upload) int
 		UpdateTrustCenterNda                  func(childComplexity int, id string, templateFiles []*graphql.Upload) int
 		UpdateTrustCenterPost                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
+		UpdateTrustCenterPreviewSetting       func(childComplexity int, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSetting              func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor         func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateTrustCenterWatermarkConfig      func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
@@ -6340,6 +6342,9 @@ type ComplexityRoot struct {
 		PirschDomainID           func(childComplexity int) int
 		PirschIdentificationCode func(childComplexity int) int
 		Posts                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		PreviewDomain            func(childComplexity int) int
+		PreviewDomainID          func(childComplexity int) int
+		PreviewSetting           func(childComplexity int) int
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -6541,6 +6546,7 @@ type ComplexityRoot struct {
 		OwnerID                  func(childComplexity int) int
 		PirschDomainID           func(childComplexity int) int
 		PirschIdentificationCode func(childComplexity int) int
+		PreviewDomainID          func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -6572,6 +6578,7 @@ type ComplexityRoot struct {
 		BackgroundColor          func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		Environment              func(childComplexity int) int
 		FaviconFile              func(childComplexity int) int
 		FaviconLocalFileID       func(childComplexity int) int
 		FaviconRemoteURL         func(childComplexity int) int
@@ -6588,7 +6595,6 @@ type ComplexityRoot struct {
 		SecondaryForegroundColor func(childComplexity int) int
 		ThemeMode                func(childComplexity int) int
 		Title                    func(childComplexity int) int
-		TrustCenter              func(childComplexity int) int
 		TrustCenterID            func(childComplexity int) int
 		UpdatedAt                func(childComplexity int) int
 		UpdatedBy                func(childComplexity int) int
@@ -6622,6 +6628,7 @@ type ComplexityRoot struct {
 		BackgroundColor          func(childComplexity int) int
 		CreatedAt                func(childComplexity int) int
 		CreatedBy                func(childComplexity int) int
+		Environment              func(childComplexity int) int
 		FaviconLocalFileID       func(childComplexity int) int
 		FaviconRemoteURL         func(childComplexity int) int
 		Font                     func(childComplexity int) int
@@ -27807,6 +27814,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.DeleteWorkflowObjectRef(childComplexity, args["id"].(string)), true
 
+	case "Mutation.publishTrustCenterSetting":
+		if e.complexity.Mutation.PublishTrustCenterSetting == nil {
+			break
+		}
+
+		return e.complexity.Mutation.PublishTrustCenterSetting(childComplexity), true
+
 	case "Mutation.sendTrustCenterNDAEmail":
 		if e.complexity.Mutation.SendTrustCenterNDAEmail == nil {
 			break
@@ -28766,6 +28780,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateTrustCenterPost(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateTrustCenterPreviewSetting":
+		if e.complexity.Mutation.UpdateTrustCenterPreviewSetting == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateTrustCenterPreviewSetting_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateTrustCenterPreviewSetting(childComplexity, args["input"].(generated.UpdateTrustCenterSettingInput), args["logoFile"].(*graphql.Upload), args["faviconFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateTrustCenterSetting":
 		if e.complexity.Mutation.UpdateTrustCenterSetting == nil {
@@ -43771,6 +43797,27 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.Posts(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
+	case "TrustCenter.previewDomain":
+		if e.complexity.TrustCenter.PreviewDomain == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PreviewDomain(childComplexity), true
+
+	case "TrustCenter.previewDomainID":
+		if e.complexity.TrustCenter.PreviewDomainID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PreviewDomainID(childComplexity), true
+
+	case "TrustCenter.previewSetting":
+		if e.complexity.TrustCenter.PreviewSetting == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PreviewSetting(childComplexity), true
+
 	case "TrustCenter.setting":
 		if e.complexity.TrustCenter.Setting == nil {
 			break
@@ -44589,6 +44636,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterHistory.PirschIdentificationCode(childComplexity), true
 
+	case "TrustCenterHistory.previewDomainID":
+		if e.complexity.TrustCenterHistory.PreviewDomainID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.PreviewDomainID(childComplexity), true
+
 	case "TrustCenterHistory.ref":
 		if e.complexity.TrustCenterHistory.Ref == nil {
 			break
@@ -44700,6 +44754,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSetting.CreatedBy(childComplexity), true
+
+	case "TrustCenterSetting.environment":
+		if e.complexity.TrustCenterSetting.Environment == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSetting.Environment(childComplexity), true
 
 	case "TrustCenterSetting.faviconFile":
 		if e.complexity.TrustCenterSetting.FaviconFile == nil {
@@ -44818,13 +44879,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterSetting.Title(childComplexity), true
 
-	case "TrustCenterSetting.trustCenter":
-		if e.complexity.TrustCenterSetting.TrustCenter == nil {
-			break
-		}
-
-		return e.complexity.TrustCenterSetting.TrustCenter(childComplexity), true
-
 	case "TrustCenterSetting.trustCenterID":
 		if e.complexity.TrustCenterSetting.TrustCenterID == nil {
 			break
@@ -44929,6 +44983,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSettingHistory.CreatedBy(childComplexity), true
+
+	case "TrustCenterSettingHistory.environment":
+		if e.complexity.TrustCenterSettingHistory.Environment == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSettingHistory.Environment(childComplexity), true
 
 	case "TrustCenterSettingHistory.faviconLocalFileID":
 		if e.complexity.TrustCenterSettingHistory.FaviconLocalFileID == nil {
@@ -65936,7 +65997,9 @@ input CreateTrustCenterInput {
   pirschIdentificationCode: String
   ownerID: ID
   customDomainID: ID
+  previewDomainID: ID
   settingID: ID
+  previewSettingID: ID
   watermarkConfigID: ID
   trustCenterSubprocessorIDs: [ID!]
   trustCenterDocIDs: [ID!]
@@ -65949,6 +66012,10 @@ CreateTrustCenterSettingInput is used for create TrustCenterSetting object.
 Input was generated by ent.
 """
 input CreateTrustCenterSettingInput {
+  """
+  the ID of the trust center the settings belong to
+  """
+  trustCenterID: String
   """
   title of the trust center
   """
@@ -65997,7 +66064,10 @@ input CreateTrustCenterSettingInput {
   secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
-  trustCenterID: ID
+  """
+  environment of the trust center
+  """
+  environment: TrustCenterSettingTrustCenterEnvironment
   fileIDs: [ID!]
   logoFileID: ID
   faviconFileID: ID
@@ -120705,6 +120775,10 @@ type TrustCenter implements Node {
   """
   customDomainID: ID
   """
+  preview domain id for the trust center
+  """
+  previewDomainID: ID
+  """
   Pirsch domain ID
   """
   pirschDomainID: String
@@ -120714,7 +120788,9 @@ type TrustCenter implements Node {
   pirschIdentificationCode: String
   owner: Organization
   customDomain: CustomDomain
+  previewDomain: CustomDomain
   setting: TrustCenterSetting
+  previewSetting: TrustCenterSetting
   watermarkConfig: TrustCenterWatermarkConfig
   trustCenterSubprocessors(
     """
@@ -122042,6 +122118,10 @@ type TrustCenterHistory implements Node {
   """
   customDomainID: String
   """
+  preview domain id for the trust center
+  """
+  previewDomainID: String
+  """
   Pirsch domain ID
   """
   pirschDomainID: String
@@ -122283,6 +122363,24 @@ input TrustCenterHistoryWhereInput {
   customDomainIDEqualFold: String
   customDomainIDContainsFold: String
   """
+  preview_domain_id field predicates
+  """
+  previewDomainID: String
+  previewDomainIDNEQ: String
+  previewDomainIDIn: [String!]
+  previewDomainIDNotIn: [String!]
+  previewDomainIDGT: String
+  previewDomainIDGTE: String
+  previewDomainIDLT: String
+  previewDomainIDLTE: String
+  previewDomainIDContains: String
+  previewDomainIDHasPrefix: String
+  previewDomainIDHasSuffix: String
+  previewDomainIDIsNil: Boolean
+  previewDomainIDNotNil: Boolean
+  previewDomainIDEqualFold: String
+  previewDomainIDContainsFold: String
+  """
   pirsch_domain_id field predicates
   """
   pirschDomainID: String
@@ -122348,7 +122446,7 @@ type TrustCenterSetting implements Node {
   """
   the ID of the trust center the settings belong to
   """
-  trustCenterID: ID
+  trustCenterID: String
   """
   title of the trust center
   """
@@ -122405,7 +122503,10 @@ type TrustCenterSetting implements Node {
   secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
-  trustCenter: TrustCenter
+  """
+  environment of the trust center
+  """
+  environment: TrustCenterSettingTrustCenterEnvironment
   files(
     """
     Returns the elements in the list that come after the specified cursor.
@@ -122539,6 +122640,10 @@ type TrustCenterSettingHistory implements Node {
   secondary foreground color for the trust center
   """
   secondaryForegroundColor: String
+  """
+  environment of the trust center
+  """
+  environment: TrustCenterSettingHistoryTrustCenterEnvironment
 }
 """
 A connection to a list of items.
@@ -122598,6 +122703,13 @@ enum TrustCenterSettingHistoryOrderField {
   history_time
   created_at
   updated_at
+}
+"""
+TrustCenterSettingHistoryTrustCenterEnvironment is enum for the field environment
+"""
+enum TrustCenterSettingHistoryTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+  LIVE
+  PREVIEW
 }
 """
 TrustCenterSettingHistoryTrustCenterThemeMode is enum for the field theme_mode
@@ -122986,6 +123098,15 @@ input TrustCenterSettingHistoryWhereInput {
   secondaryForegroundColorNotNil: Boolean
   secondaryForegroundColorEqualFold: String
   secondaryForegroundColorContainsFold: String
+  """
+  environment field predicates
+  """
+  environment: TrustCenterSettingHistoryTrustCenterEnvironment
+  environmentNEQ: TrustCenterSettingHistoryTrustCenterEnvironment
+  environmentIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
+  environmentNotIn: [TrustCenterSettingHistoryTrustCenterEnvironment!]
+  environmentIsNil: Boolean
+  environmentNotNil: Boolean
 }
 """
 Ordering options for TrustCenterSetting connections
@@ -123006,6 +123127,13 @@ Properties by which TrustCenterSetting connections can be ordered.
 enum TrustCenterSettingOrderField {
   created_at
   updated_at
+}
+"""
+TrustCenterSettingTrustCenterEnvironment is enum for the field environment
+"""
+enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+  LIVE
+  PREVIEW
 }
 """
 TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
@@ -123100,21 +123228,21 @@ input TrustCenterSettingWhereInput {
   """
   trust_center_id field predicates
   """
-  trustCenterID: ID
-  trustCenterIDNEQ: ID
-  trustCenterIDIn: [ID!]
-  trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
-  trustCenterIDContains: ID
-  trustCenterIDHasPrefix: ID
-  trustCenterIDHasSuffix: ID
+  trustCenterID: String
+  trustCenterIDNEQ: String
+  trustCenterIDIn: [String!]
+  trustCenterIDNotIn: [String!]
+  trustCenterIDGT: String
+  trustCenterIDGTE: String
+  trustCenterIDLT: String
+  trustCenterIDLTE: String
+  trustCenterIDContains: String
+  trustCenterIDHasPrefix: String
+  trustCenterIDHasSuffix: String
   trustCenterIDIsNil: Boolean
   trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: ID
-  trustCenterIDContainsFold: ID
+  trustCenterIDEqualFold: String
+  trustCenterIDContainsFold: String
   """
   title field predicates
   """
@@ -123359,10 +123487,14 @@ input TrustCenterSettingWhereInput {
   secondaryForegroundColorEqualFold: String
   secondaryForegroundColorContainsFold: String
   """
-  trust_center edge predicates
+  environment field predicates
   """
-  hasTrustCenter: Boolean
-  hasTrustCenterWith: [TrustCenterWhereInput!]
+  environment: TrustCenterSettingTrustCenterEnvironment
+  environmentNEQ: TrustCenterSettingTrustCenterEnvironment
+  environmentIn: [TrustCenterSettingTrustCenterEnvironment!]
+  environmentNotIn: [TrustCenterSettingTrustCenterEnvironment!]
+  environmentIsNil: Boolean
+  environmentNotNil: Boolean
   """
   files edge predicates
   """
@@ -124726,6 +124858,24 @@ input TrustCenterWhereInput {
   customDomainIDEqualFold: ID
   customDomainIDContainsFold: ID
   """
+  preview_domain_id field predicates
+  """
+  previewDomainID: ID
+  previewDomainIDNEQ: ID
+  previewDomainIDIn: [ID!]
+  previewDomainIDNotIn: [ID!]
+  previewDomainIDGT: ID
+  previewDomainIDGTE: ID
+  previewDomainIDLT: ID
+  previewDomainIDLTE: ID
+  previewDomainIDContains: ID
+  previewDomainIDHasPrefix: ID
+  previewDomainIDHasSuffix: ID
+  previewDomainIDIsNil: Boolean
+  previewDomainIDNotNil: Boolean
+  previewDomainIDEqualFold: ID
+  previewDomainIDContainsFold: ID
+  """
   pirsch_domain_id field predicates
   """
   pirschDomainID: String
@@ -124772,10 +124922,20 @@ input TrustCenterWhereInput {
   hasCustomDomain: Boolean
   hasCustomDomainWith: [CustomDomainWhereInput!]
   """
+  preview_domain edge predicates
+  """
+  hasPreviewDomain: Boolean
+  hasPreviewDomainWith: [CustomDomainWhereInput!]
+  """
   setting edge predicates
   """
   hasSetting: Boolean
   hasSettingWith: [TrustCenterSettingWhereInput!]
+  """
+  preview_setting edge predicates
+  """
+  hasPreviewSetting: Boolean
+  hasPreviewSettingWith: [TrustCenterSettingWhereInput!]
   """
   watermark_config edge predicates
   """
@@ -129401,8 +129561,12 @@ input UpdateTrustCenterInput {
   clearOwner: Boolean
   customDomainID: ID
   clearCustomDomain: Boolean
+  previewDomainID: ID
+  clearPreviewDomain: Boolean
   settingID: ID
   clearSetting: Boolean
+  previewSettingID: ID
+  clearPreviewSetting: Boolean
   watermarkConfigID: ID
   clearWatermarkConfig: Boolean
   addTrustCenterSubprocessorIDs: [ID!]
@@ -129426,6 +129590,11 @@ UpdateTrustCenterSettingInput is used for update TrustCenterSetting object.
 Input was generated by ent.
 """
 input UpdateTrustCenterSettingInput {
+  """
+  the ID of the trust center the settings belong to
+  """
+  trustCenterID: String
+  clearTrustCenterID: Boolean
   """
   title of the trust center
   """
@@ -129486,8 +129655,6 @@ input UpdateTrustCenterSettingInput {
   """
   secondaryForegroundColor: String
   clearSecondaryForegroundColor: Boolean
-  trustCenterID: ID
-  clearTrustCenter: Boolean
   addFileIDs: [ID!]
   removeFileIDs: [ID!]
   clearFiles: Boolean
@@ -146268,7 +146435,7 @@ extend type Mutation{
         faviconFile: Upload
     ): TrustCenterSettingCreatePayload!
     """
-    Update an existing trustCenterSetting
+    Update an existing trustCenterSetting by targeting the ID
     """
     updateTrustCenterSetting(
         """
@@ -146282,6 +146449,21 @@ extend type Mutation{
         logoFile: Upload
         faviconFile: Upload
     ): TrustCenterSettingUpdatePayload!
+    """
+    Update an existing trustCenterSetting preview settings
+    """
+    updateTrustCenterPreviewSetting(
+        """
+        New values for the trustCenterSetting
+        """
+        input: UpdateTrustCenterSettingInput!
+        logoFile: Upload
+        faviconFile: Upload
+    ): TrustCenterSettingUpdatePayload!
+    """
+    Publish changes from preview to live environment
+    """
+    publishTrustCenterSetting: TrustCenterSettingUpdatePayload!
     """
     Delete an existing trustCenterSetting
     """

@@ -60,8 +60,8 @@ const (
 	FieldSecondaryBackgroundColor = "secondary_background_color"
 	// FieldSecondaryForegroundColor holds the string denoting the secondary_foreground_color field in the database.
 	FieldSecondaryForegroundColor = "secondary_foreground_color"
-	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
-	EdgeTrustCenter = "trust_center"
+	// FieldEnvironment holds the string denoting the environment field in the database.
+	FieldEnvironment = "environment"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
 	EdgeFiles = "files"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
@@ -70,13 +70,6 @@ const (
 	EdgeFaviconFile = "favicon_file"
 	// Table holds the table name of the trustcentersetting in the database.
 	Table = "trust_center_settings"
-	// TrustCenterTable is the table that holds the trust_center relation/edge.
-	TrustCenterTable = "trust_center_settings"
-	// TrustCenterInverseTable is the table name for the TrustCenter entity.
-	// It exists in this package in order to avoid circular dependency with the "trustcenter" package.
-	TrustCenterInverseTable = "trust_centers"
-	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
-	TrustCenterColumn = "trust_center_id"
 	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
 	FilesTable = "trust_center_setting_files"
 	// FilesInverseTable is the table name for the File entity.
@@ -122,6 +115,7 @@ var Columns = []string{
 	FieldAccentColor,
 	FieldSecondaryBackgroundColor,
 	FieldSecondaryForegroundColor,
+	FieldEnvironment,
 }
 
 var (
@@ -190,6 +184,18 @@ func ThemeModeValidator(tm enums.TrustCenterThemeMode) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcentersetting: invalid enum value for theme_mode field: %q", tm)
+	}
+}
+
+const DefaultEnvironment enums.TrustCenterEnvironment = "LIVE"
+
+// EnvironmentValidator is a validator for the "environment" field enum values. It is called by the builders before save.
+func EnvironmentValidator(e enums.TrustCenterEnvironment) error {
+	switch e.String() {
+	case "LIVE", "PREVIEW":
+		return nil
+	default:
+		return fmt.Errorf("trustcentersetting: invalid enum value for environment field: %q", e)
 	}
 }
 
@@ -306,11 +312,9 @@ func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecondaryForegroundColor, opts...).ToFunc()
 }
 
-// ByTrustCenterField orders the results by trust_center field.
-func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
-	}
+// ByEnvironment orders the results by the environment field.
+func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironment, opts...).ToFunc()
 }
 
 // ByFilesCount orders the results by files count.
@@ -340,13 +344,6 @@ func ByFaviconFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newFaviconFileStep(), sql.OrderByField(field, opts...))
 	}
 }
-func newTrustCenterStep() *sqlgraph.Step {
-	return sqlgraph.NewStep(
-		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustCenterInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, true, TrustCenterTable, TrustCenterColumn),
-	)
-}
 func newFilesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -374,4 +371,11 @@ var (
 	_ graphql.Marshaler = (*enums.TrustCenterThemeMode)(nil)
 	// enums.TrustCenterThemeMode must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TrustCenterThemeMode)(nil)
+)
+
+var (
+	// enums.TrustCenterEnvironment must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterEnvironment)(nil)
+	// enums.TrustCenterEnvironment must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterEnvironment)(nil)
 )

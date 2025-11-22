@@ -350,6 +350,20 @@ func (_c *TrustCenterSettingHistoryCreate) SetNillableSecondaryForegroundColor(v
 	return _c
 }
 
+// SetEnvironment sets the "environment" field.
+func (_c *TrustCenterSettingHistoryCreate) SetEnvironment(v enums.TrustCenterEnvironment) *TrustCenterSettingHistoryCreate {
+	_c.mutation.SetEnvironment(v)
+	return _c
+}
+
+// SetNillableEnvironment sets the "environment" field if the given value is not nil.
+func (_c *TrustCenterSettingHistoryCreate) SetNillableEnvironment(v *enums.TrustCenterEnvironment) *TrustCenterSettingHistoryCreate {
+	if v != nil {
+		_c.SetEnvironment(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterSettingHistoryCreate) SetID(v string) *TrustCenterSettingHistoryCreate {
 	_c.mutation.SetID(v)
@@ -426,6 +440,10 @@ func (_c *TrustCenterSettingHistoryCreate) defaults() error {
 		v := trustcentersettinghistory.DefaultThemeMode
 		_c.mutation.SetThemeMode(v)
 	}
+	if _, ok := _c.mutation.Environment(); !ok {
+		v := trustcentersettinghistory.DefaultEnvironment
+		_c.mutation.SetEnvironment(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcentersettinghistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcentersettinghistory.DefaultID (forgotten import generated/runtime?)")
@@ -452,6 +470,11 @@ func (_c *TrustCenterSettingHistoryCreate) check() error {
 	if v, ok := _c.mutation.ThemeMode(); ok {
 		if err := trustcentersettinghistory.ThemeModeValidator(v); err != nil {
 			return &ValidationError{Name: "theme_mode", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.theme_mode": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.Environment(); ok {
+		if err := trustcentersettinghistory.EnvironmentValidator(v); err != nil {
+			return &ValidationError{Name: "environment", err: fmt.Errorf(`generated: validator failed for field "TrustCenterSettingHistory.environment": %w`, err)}
 		}
 	}
 	return nil
@@ -585,6 +608,10 @@ func (_c *TrustCenterSettingHistoryCreate) createSpec() (*TrustCenterSettingHist
 	if value, ok := _c.mutation.SecondaryForegroundColor(); ok {
 		_spec.SetField(trustcentersettinghistory.FieldSecondaryForegroundColor, field.TypeString, value)
 		_node.SecondaryForegroundColor = value
+	}
+	if value, ok := _c.mutation.Environment(); ok {
+		_spec.SetField(trustcentersettinghistory.FieldEnvironment, field.TypeEnum, value)
+		_node.Environment = value
 	}
 	return _node, _spec
 }
