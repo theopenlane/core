@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -248,6 +249,26 @@ func (_u *TrustCenterUpdate) SetNillablePirschIdentificationCode(v *string) *Tru
 // ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
 func (_u *TrustCenterUpdate) ClearPirschIdentificationCode() *TrustCenterUpdate {
 	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterUpdate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdate {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterUpdate) ClearPreviewStatus() *TrustCenterUpdate {
+	_u.mutation.ClearPreviewStatus()
 	return _u
 }
 
@@ -593,6 +614,11 @@ func (_u *TrustCenterUpdate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -672,6 +698,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1333,6 +1365,26 @@ func (_u *TrustCenterUpdateOne) ClearPirschIdentificationCode() *TrustCenterUpda
 	return _u
 }
 
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterUpdateOne) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdateOne {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterUpdateOne) ClearPreviewStatus() *TrustCenterUpdateOne {
+	_u.mutation.ClearPreviewStatus()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1688,6 +1740,11 @@ func (_u *TrustCenterUpdateOne) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1784,6 +1841,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

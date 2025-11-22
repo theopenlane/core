@@ -4161,6 +4161,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldPreviewDomainID:          {Type: field.TypeString, Column: trustcenter.FieldPreviewDomainID},
 			trustcenter.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenter.FieldPirschDomainID},
 			trustcenter.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenter.FieldPirschIdentificationCode},
+			trustcenter.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenter.FieldPreviewStatus},
 		},
 	}
 	graph.Nodes[121] = &sqlgraph.Node{
@@ -4296,6 +4297,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldPreviewDomainID:          {Type: field.TypeString, Column: trustcenterhistory.FieldPreviewDomainID},
 			trustcenterhistory.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldPirschDomainID},
 			trustcenterhistory.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenterhistory.FieldPirschIdentificationCode},
+			trustcenterhistory.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenterhistory.FieldPreviewStatus},
 		},
 	}
 	graph.Nodes[126] = &sqlgraph.Node{
@@ -38821,6 +38823,11 @@ func (f *TrustCenterFilter) WherePirschIdentificationCode(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldPirschIdentificationCode))
 }
 
+// WherePreviewStatus applies the entql string predicate on the preview_status field.
+func (f *TrustCenterFilter) WherePreviewStatus(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPreviewStatus))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *TrustCenterFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -39593,6 +39600,11 @@ func (f *TrustCenterHistoryFilter) WherePirschDomainID(p entql.StringP) {
 // WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
 func (f *TrustCenterHistoryFilter) WherePirschIdentificationCode(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldPirschIdentificationCode))
+}
+
+// WherePreviewStatus applies the entql string predicate on the preview_status field.
+func (f *TrustCenterHistoryFilter) WherePreviewStatus(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldPreviewStatus))
 }
 
 // addPredicate implements the predicateAdder interface.
