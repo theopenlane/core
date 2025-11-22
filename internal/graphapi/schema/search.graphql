@@ -1,30 +1,5 @@
 extend type Query{
     """
-    Search across APIToken objects
-    """
-    apiTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): APITokenConnection
-    """
     Search across ActionPlan objects
     """
     actionPlanSearch(
@@ -175,31 +150,6 @@ extend type Query{
         last: Int
     ): ControlConnection
     """
-    Search across ControlImplementation objects
-    """
-    controlImplementationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ControlImplementationConnection
-    """
     Search across ControlObjective objects
     """
     controlObjectiveSearch(
@@ -224,31 +174,6 @@ extend type Query{
         """
         last: Int
     ): ControlObjectiveConnection
-    """
-    Search across CustomDomain objects
-    """
-    customDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): CustomDomainConnection
     """
     Search across CustomTypeEnum objects
     """
@@ -275,106 +200,6 @@ extend type Query{
         last: Int
     ): CustomTypeEnumConnection
     """
-    Search across DNSVerification objects
-    """
-    dnsVerificationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DNSVerificationConnection
-    """
-    Search across DirectoryAccount objects
-    """
-    directoryAccountSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryAccountConnection
-    """
-    Search across DirectoryGroup objects
-    """
-    directoryGroupSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryGroupConnection
-    """
-    Search across DocumentData objects
-    """
-    documentDataSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DocumentDataConnection
-    """
     Search across Entity objects
     """
     entitySearch(
@@ -400,56 +225,6 @@ extend type Query{
         last: Int
     ): EntityConnection
     """
-    Search across EntityType objects
-    """
-    entityTypeSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EntityTypeConnection
-    """
-    Search across Event objects
-    """
-    eventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EventConnection
-    """
     Search across Evidence objects
     """
     evidenceSearch(
@@ -474,31 +249,6 @@ extend type Query{
         """
         last: Int
     ): EvidenceConnection
-    """
-    Search across File objects
-    """
-    fileSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): FileConnection
     """
     Search across Finding objects
     """
@@ -549,31 +299,6 @@ extend type Query{
         """
         last: Int
     ): GroupConnection
-    """
-    Search across Integration objects
-    """
-    integrationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): IntegrationConnection
     """
     Search across InternalPolicy objects
     """
@@ -650,56 +375,6 @@ extend type Query{
         last: Int
     ): JobRunnerConnection
     """
-    Search across JobRunnerRegistrationToken objects
-    """
-    jobRunnerRegistrationTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerRegistrationTokenConnection
-    """
-    Search across JobRunnerToken objects
-    """
-    jobRunnerTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerTokenConnection
-    """
     Search across JobTemplate objects
     """
     jobTemplateSearch(
@@ -724,56 +399,6 @@ extend type Query{
         """
         last: Int
     ): JobTemplateConnection
-    """
-    Search across MappableDomain objects
-    """
-    mappableDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappableDomainConnection
-    """
-    Search across MappedControl objects
-    """
-    mappedControlSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappedControlConnection
     """
     Search across Narrative objects
     """
@@ -800,31 +425,6 @@ extend type Query{
         last: Int
     ): NarrativeConnection
     """
-    Search across OrgSubscription objects
-    """
-    orgSubscriptionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrgSubscriptionConnection
-    """
     Search across Organization objects
     """
     organizationSearch(
@@ -849,56 +449,6 @@ extend type Query{
         """
         last: Int
     ): OrganizationConnection
-    """
-    Search across OrganizationSetting objects
-    """
-    organizationSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrganizationSettingConnection
-    """
-    Search across PersonalAccessToken objects
-    """
-    personalAccessTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): PersonalAccessTokenConnection
     """
     Search across Procedure objects
     """
@@ -1225,131 +775,6 @@ extend type Query{
         last: Int
     ): TemplateConnection
     """
-    Search across TrustCenter objects
-    """
-    trustCenterSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterConnection
-    """
-    Search across TrustCenterCompliance objects
-    """
-    trustCenterComplianceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterComplianceConnection
-    """
-    Search across TrustCenterDoc objects
-    """
-    trustCenterDocSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterDocConnection
-    """
-    Search across User objects
-    """
-    userSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserConnection
-    """
-    Search across UserSetting objects
-    """
-    userSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserSettingConnection
-    """
     Search across Vulnerability objects
     """
     vulnerabilitySearch(
@@ -1374,156 +799,6 @@ extend type Query{
         """
         last: Int
     ): VulnerabilityConnection
-    """
-    Search across Webauthn objects
-    """
-    webauthnSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WebauthnConnection
-    """
-    Search across WorkflowAssignment objects
-    """
-    workflowAssignmentSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentConnection
-    """
-    Search across WorkflowAssignmentTarget objects
-    """
-    workflowAssignmentTargetSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentTargetConnection
-    """
-    Search across WorkflowDefinition objects
-    """
-    workflowDefinitionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowDefinitionConnection
-    """
-    Search across WorkflowEvent objects
-    """
-    workflowEventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowEventConnection
-    """
-    Search across WorkflowInstance objects
-    """
-    workflowInstanceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowInstanceConnection
 }
 type SearchResults{
   """
@@ -1534,42 +809,24 @@ type SearchResults{
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
-  apiTokens: APITokenConnection
   actionPlans: ActionPlanConnection
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
   contacts: ContactConnection
   controls: ControlConnection
-  controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
-  customDomains: CustomDomainConnection
   customTypeEnums: CustomTypeEnumConnection
-  dnsVerifications: DNSVerificationConnection
-  directoryAccounts: DirectoryAccountConnection
-  directoryGroups: DirectoryGroupConnection
-  documentData: DocumentDataConnection
   entities: EntityConnection
-  entityTypes: EntityTypeConnection
-  events: EventConnection
   evidences: EvidenceConnection
-  files: FileConnection
   findings: FindingConnection
   groups: GroupConnection
-  integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
   jobRunners: JobRunnerConnection
-  jobRunnerRegistrationTokens: JobRunnerRegistrationTokenConnection
-  jobRunnerTokens: JobRunnerTokenConnection
   jobTemplates: JobTemplateConnection
-  mappableDomains: MappableDomainConnection
-  mappedControls: MappedControlConnection
   narratives: NarrativeConnection
-  orgSubscriptions: OrgSubscriptionConnection
   organizations: OrganizationConnection
-  organizationSettings: OrganizationSettingConnection
-  personalAccessTokens: PersonalAccessTokenConnection
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection
@@ -1583,18 +840,7 @@ type SearchResults{
   tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection
-  trustCenters: TrustCenterConnection
-  trustCenterCompliances: TrustCenterComplianceConnection
-  trustCenterDocs: TrustCenterDocConnection
-  users: UserConnection
-  userSettings: UserSettingConnection
   vulnerabilities: VulnerabilityConnection
-  webauthns: WebauthnConnection
-  workflowAssignments: WorkflowAssignmentConnection
-  workflowAssignmentTargets: WorkflowAssignmentTargetConnection
-  workflowDefinitions: WorkflowDefinitionConnection
-  workflowEvents: WorkflowEventConnection
-  workflowInstances: WorkflowInstanceConnection
 }
 
 extend type Query{
@@ -1602,31 +848,6 @@ extend type Query{
     Search across all objects
     """
     search(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): SearchResults
-    """
-    Admin search across all objects
-    """
-    adminSearch(
         """
         Query string to search across objects
         """

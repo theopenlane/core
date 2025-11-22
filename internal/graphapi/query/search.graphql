@@ -1,21 +1,6 @@
 query GlobalSearch($query: String!) {
   search(query: $query) {
     totalCount
-    apiTokens {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     actionPlans {
       totalCount
       pageInfo {
@@ -121,21 +106,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    controlImplementations {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     controlObjectives {
       totalCount
       pageInfo {
@@ -155,21 +125,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    customDomains {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     customTypeEnums {
       totalCount
       pageInfo {
@@ -183,68 +138,6 @@ query GlobalSearch($query: String!) {
           id
           name
           objectType
-        }
-      }
-    }
-    dnsVerifications {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    directoryAccounts {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    directoryGroups {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    documentData {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
         }
       }
     }
@@ -266,36 +159,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    entityTypes {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    events {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     evidences {
       totalCount
       pageInfo {
@@ -309,21 +172,6 @@ query GlobalSearch($query: String!) {
           displayID
           id
           name
-          tags
-        }
-      }
-    }
-    files {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
           tags
         }
       }
@@ -361,21 +209,6 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
-          tags
-        }
-      }
-    }
-    integrations {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
           tags
         }
       }
@@ -430,36 +263,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    jobRunnerRegistrationTokens {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    jobRunnerTokens {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     jobTemplates {
       totalCount
       pageInfo {
@@ -475,36 +278,6 @@ query GlobalSearch($query: String!) {
           id
           tags
           title
-        }
-      }
-    }
-    mappableDomains {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    mappedControls {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
         }
       }
     }
@@ -526,21 +299,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    orgSubscriptions {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     organizations {
       totalCount
       pageInfo {
@@ -554,36 +312,6 @@ query GlobalSearch($query: String!) {
           displayName
           id
           name
-          tags
-        }
-      }
-    }
-    organizationSettings {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    personalAccessTokens {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
           tags
         }
       }
@@ -818,82 +546,6 @@ query GlobalSearch($query: String!) {
         }
       }
     }
-    trustCenters {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    trustCenterCompliances {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    trustCenterDocs {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    users {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    userSettings {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
     vulnerabilities {
       totalCount
       pageInfo {
@@ -910,101 +562,6 @@ query GlobalSearch($query: String!) {
           externalOwnerID
           id
           severity
-          tags
-        }
-      }
-    }
-    webauthns {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          id
-          tags
-        }
-      }
-    }
-    workflowAssignments {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    workflowAssignmentTargets {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    workflowDefinitions {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    workflowEvents {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
-          tags
-        }
-      }
-    }
-    workflowInstances {
-      totalCount
-      pageInfo {
-        hasNextPage
-        hasPreviousPage
-        startCursor
-        endCursor
-      }
-      edges {
-        node {
-          displayID
-          id
           tags
         }
       }

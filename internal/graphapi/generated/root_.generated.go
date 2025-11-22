@@ -4774,359 +4774,268 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		APIToken                              func(childComplexity int, id string) int
-		APITokenSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		APITokens                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
-		ActionPlan                            func(childComplexity int, id string) int
-		ActionPlanHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) int
-		ActionPlanSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ActionPlans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AdminAPITokenSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminActionPlanSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminAssessmentResponseSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminAssessmentSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminAssetSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminContactSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlImplementationSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlObjectiveSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminControlSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminCustomDomainSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminCustomTypeEnumSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminDNSVerificationSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminDirectoryAccountSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminDirectoryGroupSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminDocumentDataSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEntitySearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEntityTypeSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEventSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminEvidenceSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminFileSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminFindingSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminGroupSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminIntegrationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminInternalPolicySearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminInviteSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminJobRunnerRegistrationTokenSearch func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminJobRunnerSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminJobRunnerTokenSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminJobTemplateSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminMappableDomainSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminMappedControlSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminNarrativeSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrgSubscriptionSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrganizationSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminOrganizationSettingSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminPersonalAccessTokenSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminProcedureSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminProgramSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminRemediationSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminReviewSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminRiskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminScanSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminStandardSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSubcontrolSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSubprocessorSearch               func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminSubscriberSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTagDefinitionSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTaskSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTrustCenterComplianceSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTrustCenterDocSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminTrustCenterSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminUserSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminUserSettingSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminVulnerabilitySearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWebauthnSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWorkflowAssignmentSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWorkflowAssignmentTargetSearch   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWorkflowDefinitionSearch         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWorkflowEventSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AdminWorkflowInstanceSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Assessment                            func(childComplexity int, id string) int
-		AssessmentHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) int
-		AssessmentResponse                    func(childComplexity int, id string) int
-		AssessmentResponseHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentResponseHistoryOrder, where *generated.AssessmentResponseHistoryWhereInput) int
-		AssessmentResponseSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		AssessmentResponses                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
-		AssessmentSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Assessments                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
-		Asset                                 func(childComplexity int, id string) int
-		AssetHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssetHistoryOrder, where *generated.AssetHistoryWhereInput) int
-		AssetSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Assets                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		AuditLogs                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) int
-		Contact                               func(childComplexity int, id string) int
-		ContactHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
-		ContactSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Contacts                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		Control                               func(childComplexity int, id string) int
-		ControlCategories                     func(childComplexity int) int
-		ControlCategoriesByFramework          func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
-		ControlHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
-		ControlImplementation                 func(childComplexity int, id string) int
-		ControlImplementationHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
-		ControlImplementationSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlImplementations                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjective                      func(childComplexity int, id string) int
-		ControlObjectiveHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
-		ControlObjectiveSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlObjectives                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		ControlSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		ControlSubcategories                  func(childComplexity int) int
-		ControlSubcategoriesByFramework       func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
-		Controls                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		ControlsGroupByCategory               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) int
-		CustomDomain                          func(childComplexity int, id string) int
-		CustomDomainHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
-		CustomDomainSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		CustomDomains                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		CustomTypeEnum                        func(childComplexity int, id string) int
-		CustomTypeEnumSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		CustomTypeEnums                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
-		DNSVerification                       func(childComplexity int, id string) int
-		DNSVerificationHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) int
-		DNSVerificationSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		DNSVerifications                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
-		DirectoryAccount                      func(childComplexity int, id string) int
-		DirectoryAccountHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryAccountHistoryOrder, where *generated.DirectoryAccountHistoryWhereInput) int
-		DirectoryAccountSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		DirectoryAccounts                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DirectoryGroup                        func(childComplexity int, id string) int
-		DirectoryGroupHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryGroupHistoryOrder, where *generated.DirectoryGroupHistoryWhereInput) int
-		DirectoryGroupSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		DirectoryGroups                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
-		DirectoryMembership                   func(childComplexity int, id string) int
-		DirectoryMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryMembershipHistoryOrder, where *generated.DirectoryMembershipHistoryWhereInput) int
-		DirectoryMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRun                      func(childComplexity int, id string) int
-		DirectorySyncRuns                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
-		DocumentData                          func(childComplexity int, id string) int
-		DocumentDataHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
-		DocumentDataSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		DocumentDataSlice                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Entities                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		Entity                                func(childComplexity int, id string) int
-		EntityHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
-		EntitySearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		EntityType                            func(childComplexity int, id string) int
-		EntityTypeHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
-		EntityTypeSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		EntityTypes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Event                                 func(childComplexity int, id string) int
-		EventSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Events                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                              func(childComplexity int, id string) int
-		EvidenceHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
-		EvidenceSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Evidences                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		Export                                func(childComplexity int, id string) int
-		Exports                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
-		File                                  func(childComplexity int, id string) int
-		FileHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
-		FileSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Files                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Finding                               func(childComplexity int, id string) int
-		FindingControl                        func(childComplexity int, id string) int
-		FindingControlHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingControlHistoryOrder, where *generated.FindingControlHistoryWhereInput) int
-		FindingControls                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
-		FindingHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingHistoryOrder, where *generated.FindingHistoryWhereInput) int
-		FindingSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Findings                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		Group                                 func(childComplexity int, id string) int
-		GroupHistories                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
-		GroupMembership                       func(childComplexity int, id string) int
-		GroupMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) int
-		GroupMemberships                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
-		GroupSearch                           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		GroupSetting                          func(childComplexity int, id string) int
-		GroupSettingHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) int
-		GroupSettings                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) int
-		Groups                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Hush                                  func(childComplexity int, id string) int
-		HushHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
-		Hushes                                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Integration                           func(childComplexity int, id string) int
-		IntegrationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
-		IntegrationSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Integrations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicy                        func(childComplexity int, id string) int
-		InternalPolicyHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) int
-		InternalPolicySearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Invite                                func(childComplexity int, id string) int
-		InviteSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Invites                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		JobResult                             func(childComplexity int, id string) int
-		JobResults                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
-		JobRunner                             func(childComplexity int, id string) int
-		JobRunnerRegistrationToken            func(childComplexity int, id string) int
-		JobRunnerRegistrationTokenSearch      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobRunnerRegistrationTokens           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
-		JobRunnerSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobRunnerToken                        func(childComplexity int, id string) int
-		JobRunnerTokenSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobRunnerTokens                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		JobRunners                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		JobTemplate                           func(childComplexity int, id string) int
-		JobTemplateHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobTemplateHistoryOrder, where *generated.JobTemplateHistoryWhereInput) int
-		JobTemplateSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		JobTemplates                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
-		MappableDomain                        func(childComplexity int, id string) int
-		MappableDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
-		MappableDomainSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		MappableDomains                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
-		MappedControl                         func(childComplexity int, id string) int
-		MappedControlHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
-		MappedControlSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		MappedControls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
-		Narrative                             func(childComplexity int, id string) int
-		NarrativeHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) int
-		NarrativeSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Narratives                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Node                                  func(childComplexity int, id string) int
-		Nodes                                 func(childComplexity int, ids []string) int
-		Note                                  func(childComplexity int, id string) int
-		NoteHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) int
-		Notes                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		OrgMembership                         func(childComplexity int, id string) int
-		OrgMembershipHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) int
-		OrgMemberships                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		OrgSubscription                       func(childComplexity int, id string) int
-		OrgSubscriptionHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) int
-		OrgSubscriptionSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrgSubscriptions                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
-		Organization                          func(childComplexity int, id string) int
-		OrganizationHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
-		OrganizationSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrganizationSetting                   func(childComplexity int, id string) int
-		OrganizationSettingHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) int
-		OrganizationSettingSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		OrganizationSettings                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) int
-		Organizations                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		PersonalAccessToken                   func(childComplexity int, id string) int
-		PersonalAccessTokenSearch             func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		PersonalAccessTokens                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		Procedure                             func(childComplexity int, id string) int
-		ProcedureHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) int
-		ProcedureSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Procedures                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		Program                               func(childComplexity int, id string) int
-		ProgramHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) int
-		ProgramMembership                     func(childComplexity int, id string) int
-		ProgramMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) int
-		ProgramMemberships                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
-		ProgramSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Programs                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Remediation                           func(childComplexity int, id string) int
-		RemediationHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RemediationHistoryOrder, where *generated.RemediationHistoryWhereInput) int
-		RemediationSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Remediations                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Review                                func(childComplexity int, id string) int
-		ReviewHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ReviewHistoryOrder, where *generated.ReviewHistoryWhereInput) int
-		ReviewSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Reviews                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		Risk                                  func(childComplexity int, id string) int
-		RiskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
-		RiskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Risks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scan                                  func(childComplexity int, id string) int
-		ScanHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScanHistoryOrder, where *generated.ScanHistoryWhereInput) int
-		ScanSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Scans                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJob                          func(childComplexity int, id string) int
-		ScheduledJobHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
-		ScheduledJobRun                       func(childComplexity int, id string) int
-		ScheduledJobRuns                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		Search                                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Self                                  func(childComplexity int) int
-		Standard                              func(childComplexity int, id string) int
-		StandardHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) int
-		StandardSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Standards                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
-		Subcontrol                            func(childComplexity int, id string) int
-		SubcontrolHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
-		SubcontrolSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Subcontrols                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		Subprocessor                          func(childComplexity int, id string) int
-		SubprocessorHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubprocessorHistoryOrder, where *generated.SubprocessorHistoryWhereInput) int
-		SubprocessorSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Subprocessors                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
-		Subscriber                            func(childComplexity int, email string) int
-		SubscriberSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Subscribers                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
-		TagDefinition                         func(childComplexity int, id string) int
-		TagDefinitionSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		TagDefinitions                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
-		Task                                  func(childComplexity int, id string) int
-		TaskHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
-		TaskSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Tasks                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		Template                              func(childComplexity int, id string) int
-		TemplateHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
-		TemplateSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Templates                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		TfaSetting                            func(childComplexity int, id *string) int
-		TfaSettings                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
-		TrustCenter                           func(childComplexity int, id string) int
-		TrustCenterCompliance                 func(childComplexity int, id string) int
-		TrustCenterComplianceHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterComplianceHistoryOrder, where *generated.TrustCenterComplianceHistoryWhereInput) int
-		TrustCenterComplianceSearch           func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		TrustCenterCompliances                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
-		TrustCenterDoc                        func(childComplexity int, id string) int
-		TrustCenterDocHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterDocHistoryOrder, where *generated.TrustCenterDocHistoryWhereInput) int
-		TrustCenterDocSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		TrustCenterDocs                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
-		TrustCenterHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterHistoryOrder, where *generated.TrustCenterHistoryWhereInput) int
-		TrustCenterSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		TrustCenterSetting                    func(childComplexity int, id string) int
-		TrustCenterSettingHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSettingHistoryOrder, where *generated.TrustCenterSettingHistoryWhereInput) int
-		TrustCenterSettings                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) int
-		TrustCenterSubprocessor               func(childComplexity int, id string) int
-		TrustCenterSubprocessorHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSubprocessorHistoryOrder, where *generated.TrustCenterSubprocessorHistoryWhereInput) int
-		TrustCenterSubprocessors              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
-		TrustCenterWatermarkConfig            func(childComplexity int, id string) int
-		TrustCenterWatermarkConfigHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterWatermarkConfigHistoryOrder, where *generated.TrustCenterWatermarkConfigHistoryWhereInput) int
-		TrustCenterWatermarkConfigs           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
-		TrustCenters                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
-		User                                  func(childComplexity int, id string) int
-		UserHistories                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
-		UserSearch                            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		UserSetting                           func(childComplexity int, id string) int
-		UserSettingHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) int
-		UserSettingSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		UserSettings                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
-		Users                                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		Vulnerabilities                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
-		Vulnerability                         func(childComplexity int, id string) int
-		VulnerabilityHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VulnerabilityHistoryOrder, where *generated.VulnerabilityHistoryWhereInput) int
-		VulnerabilitySearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WebauthnSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		Webauthns                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
-		WorkflowAssignment                    func(childComplexity int, id string) int
-		WorkflowAssignmentHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentHistoryOrder, where *generated.WorkflowAssignmentHistoryWhereInput) int
-		WorkflowAssignmentSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WorkflowAssignmentTarget              func(childComplexity int, id string) int
-		WorkflowAssignmentTargetHistories     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentTargetHistoryOrder, where *generated.WorkflowAssignmentTargetHistoryWhereInput) int
-		WorkflowAssignmentTargetSearch        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WorkflowAssignmentTargets             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
-		WorkflowAssignments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
-		WorkflowDefinition                    func(childComplexity int, id string) int
-		WorkflowDefinitionHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowDefinitionHistoryOrder, where *generated.WorkflowDefinitionHistoryWhereInput) int
-		WorkflowDefinitionSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WorkflowDefinitions                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
-		WorkflowEvent                         func(childComplexity int, id string) int
-		WorkflowEventHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowEventHistoryOrder, where *generated.WorkflowEventHistoryWhereInput) int
-		WorkflowEventSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WorkflowEvents                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
-		WorkflowInstance                      func(childComplexity int, id string) int
-		WorkflowInstanceHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowInstanceHistoryOrder, where *generated.WorkflowInstanceHistoryWhereInput) int
-		WorkflowInstanceSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
-		WorkflowInstances                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
-		WorkflowObjectRef                     func(childComplexity int, id string) int
-		WorkflowObjectRefHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowObjectRefHistoryOrder, where *generated.WorkflowObjectRefHistoryWhereInput) int
-		WorkflowObjectRefs                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		APIToken                            func(childComplexity int, id string) int
+		APITokens                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
+		ActionPlan                          func(childComplexity int, id string) int
+		ActionPlanHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ActionPlanHistoryOrder, where *generated.ActionPlanHistoryWhereInput) int
+		ActionPlanSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ActionPlans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		Assessment                          func(childComplexity int, id string) int
+		AssessmentHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentHistoryOrder, where *generated.AssessmentHistoryWhereInput) int
+		AssessmentResponse                  func(childComplexity int, id string) int
+		AssessmentResponseHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssessmentResponseHistoryOrder, where *generated.AssessmentResponseHistoryWhereInput) int
+		AssessmentResponseSearch            func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		AssessmentResponses                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		AssessmentSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Assessments                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Asset                               func(childComplexity int, id string) int
+		AssetHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.AssetHistoryOrder, where *generated.AssetHistoryWhereInput) int
+		AssetSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Assets                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AuditLogs                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, where *generated.AuditLogWhereInput, orderBy *generated.AuditLogOrder) int
+		Contact                             func(childComplexity int, id string) int
+		ContactHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ContactHistoryOrder, where *generated.ContactHistoryWhereInput) int
+		ContactSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Contacts                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		Control                             func(childComplexity int, id string) int
+		ControlCategories                   func(childComplexity int) int
+		ControlCategoriesByFramework        func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
+		ControlHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlHistoryOrder, where *generated.ControlHistoryWhereInput) int
+		ControlImplementation               func(childComplexity int, id string) int
+		ControlImplementationHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlImplementationHistoryOrder, where *generated.ControlImplementationHistoryWhereInput) int
+		ControlImplementations              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjective                    func(childComplexity int, id string) int
+		ControlObjectiveHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ControlObjectiveHistoryOrder, where *generated.ControlObjectiveHistoryWhereInput) int
+		ControlObjectiveSearch              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ControlObjectives                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		ControlSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		ControlSubcategories                func(childComplexity int) int
+		ControlSubcategoriesByFramework     func(childComplexity int, orderBy []*model.ControlCategoryOrder, where *generated.ControlWhereInput) int
+		Controls                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		ControlsGroupByCategory             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput, category *string) int
+		CustomDomain                        func(childComplexity int, id string) int
+		CustomDomainHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.CustomDomainHistoryOrder, where *generated.CustomDomainHistoryWhereInput) int
+		CustomDomains                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		CustomTypeEnum                      func(childComplexity int, id string) int
+		CustomTypeEnumSearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		CustomTypeEnums                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
+		DNSVerification                     func(childComplexity int, id string) int
+		DNSVerificationHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DNSVerificationHistoryOrder, where *generated.DNSVerificationHistoryWhereInput) int
+		DNSVerifications                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
+		DirectoryAccount                    func(childComplexity int, id string) int
+		DirectoryAccountHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryAccountHistoryOrder, where *generated.DirectoryAccountHistoryWhereInput) int
+		DirectoryAccounts                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroup                      func(childComplexity int, id string) int
+		DirectoryGroupHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryGroupHistoryOrder, where *generated.DirectoryGroupHistoryWhereInput) int
+		DirectoryGroups                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMembership                 func(childComplexity int, id string) int
+		DirectoryMembershipHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DirectoryMembershipHistoryOrder, where *generated.DirectoryMembershipHistoryWhereInput) int
+		DirectoryMemberships                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRun                    func(childComplexity int, id string) int
+		DirectorySyncRuns                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		DocumentData                        func(childComplexity int, id string) int
+		DocumentDataHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DocumentDataHistoryOrder, where *generated.DocumentDataHistoryWhereInput) int
+		DocumentDataSlice                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Entities                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		Entity                              func(childComplexity int, id string) int
+		EntityHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityHistoryOrder, where *generated.EntityHistoryWhereInput) int
+		EntitySearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		EntityType                          func(childComplexity int, id string) int
+		EntityTypeHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EntityTypeHistoryOrder, where *generated.EntityTypeHistoryWhereInput) int
+		EntityTypes                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Event                               func(childComplexity int, id string) int
+		Events                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Evidence                            func(childComplexity int, id string) int
+		EvidenceHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.EvidenceHistoryOrder, where *generated.EvidenceHistoryWhereInput) int
+		EvidenceSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Evidences                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		Export                              func(childComplexity int, id string) int
+		Exports                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
+		File                                func(childComplexity int, id string) int
+		FileHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FileHistoryOrder, where *generated.FileHistoryWhereInput) int
+		Files                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Finding                             func(childComplexity int, id string) int
+		FindingControl                      func(childComplexity int, id string) int
+		FindingControlHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingControlHistoryOrder, where *generated.FindingControlHistoryWhereInput) int
+		FindingControls                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingControlOrder, where *generated.FindingControlWhereInput) int
+		FindingHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.FindingHistoryOrder, where *generated.FindingHistoryWhereInput) int
+		FindingSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Findings                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		Group                               func(childComplexity int, id string) int
+		GroupHistories                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupHistoryOrder, where *generated.GroupHistoryWhereInput) int
+		GroupMembership                     func(childComplexity int, id string) int
+		GroupMembershipHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupMembershipHistoryOrder, where *generated.GroupMembershipHistoryWhereInput) int
+		GroupMemberships                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupMembershipOrder, where *generated.GroupMembershipWhereInput) int
+		GroupSearch                         func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		GroupSetting                        func(childComplexity int, id string) int
+		GroupSettingHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.GroupSettingHistoryOrder, where *generated.GroupSettingHistoryWhereInput) int
+		GroupSettings                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupSettingOrder, where *generated.GroupSettingWhereInput) int
+		Groups                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Hush                                func(childComplexity int, id string) int
+		HushHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.HushHistoryOrder, where *generated.HushHistoryWhereInput) int
+		Hushes                              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Integration                         func(childComplexity int, id string) int
+		IntegrationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.IntegrationHistoryOrder, where *generated.IntegrationHistoryWhereInput) int
+		Integrations                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicy                      func(childComplexity int, id string) int
+		InternalPolicyHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.InternalPolicyHistoryOrder, where *generated.InternalPolicyHistoryWhereInput) int
+		InternalPolicySearch                func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Invite                              func(childComplexity int, id string) int
+		InviteSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Invites                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		JobResult                           func(childComplexity int, id string) int
+		JobResults                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
+		JobRunner                           func(childComplexity int, id string) int
+		JobRunnerRegistrationToken          func(childComplexity int, id string) int
+		JobRunnerRegistrationTokens         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
+		JobRunnerSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobRunnerToken                      func(childComplexity int, id string) int
+		JobRunnerTokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		JobRunners                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		JobTemplate                         func(childComplexity int, id string) int
+		JobTemplateHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.JobTemplateHistoryOrder, where *generated.JobTemplateHistoryWhereInput) int
+		JobTemplateSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		JobTemplates                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
+		MappableDomain                      func(childComplexity int, id string) int
+		MappableDomainHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappableDomainHistoryOrder, where *generated.MappableDomainHistoryWhereInput) int
+		MappableDomains                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappableDomainOrder, where *generated.MappableDomainWhereInput) int
+		MappedControl                       func(childComplexity int, id string) int
+		MappedControlHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.MappedControlHistoryOrder, where *generated.MappedControlHistoryWhereInput) int
+		MappedControls                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Narrative                           func(childComplexity int, id string) int
+		NarrativeHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NarrativeHistoryOrder, where *generated.NarrativeHistoryWhereInput) int
+		NarrativeSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Narratives                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Node                                func(childComplexity int, id string) int
+		Nodes                               func(childComplexity int, ids []string) int
+		Note                                func(childComplexity int, id string) int
+		NoteHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.NoteHistoryOrder, where *generated.NoteHistoryWhereInput) int
+		Notes                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OrgMembership                       func(childComplexity int, id string) int
+		OrgMembershipHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgMembershipHistoryOrder, where *generated.OrgMembershipHistoryWhereInput) int
+		OrgMemberships                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		OrgSubscription                     func(childComplexity int, id string) int
+		OrgSubscriptionHistories            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionHistoryOrder, where *generated.OrgSubscriptionHistoryWhereInput) int
+		OrgSubscriptions                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrgSubscriptionOrder, where *generated.OrgSubscriptionWhereInput) int
+		Organization                        func(childComplexity int, id string) int
+		OrganizationHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationHistoryOrder, where *generated.OrganizationHistoryWhereInput) int
+		OrganizationSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		OrganizationSetting                 func(childComplexity int, id string) int
+		OrganizationSettingHistories        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.OrganizationSettingHistoryOrder, where *generated.OrganizationSettingHistoryWhereInput) int
+		OrganizationSettings                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationSettingOrder, where *generated.OrganizationSettingWhereInput) int
+		Organizations                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		PersonalAccessToken                 func(childComplexity int, id string) int
+		PersonalAccessTokens                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		Procedure                           func(childComplexity int, id string) int
+		ProcedureHistories                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProcedureHistoryOrder, where *generated.ProcedureHistoryWhereInput) int
+		ProcedureSearch                     func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Procedures                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		Program                             func(childComplexity int, id string) int
+		ProgramHistories                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramHistoryOrder, where *generated.ProgramHistoryWhereInput) int
+		ProgramMembership                   func(childComplexity int, id string) int
+		ProgramMembershipHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ProgramMembershipHistoryOrder, where *generated.ProgramMembershipHistoryWhereInput) int
+		ProgramMemberships                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramMembershipOrder, where *generated.ProgramMembershipWhereInput) int
+		ProgramSearch                       func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Programs                            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediation                         func(childComplexity int, id string) int
+		RemediationHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RemediationHistoryOrder, where *generated.RemediationHistoryWhereInput) int
+		RemediationSearch                   func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Remediations                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Review                              func(childComplexity int, id string) int
+		ReviewHistories                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ReviewHistoryOrder, where *generated.ReviewHistoryWhereInput) int
+		ReviewSearch                        func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Reviews                             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		Risk                                func(childComplexity int, id string) int
+		RiskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.RiskHistoryOrder, where *generated.RiskHistoryWhereInput) int
+		RiskSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Risks                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scan                                func(childComplexity int, id string) int
+		ScanHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScanHistoryOrder, where *generated.ScanHistoryWhereInput) int
+		ScanSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Scans                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScheduledJob                        func(childComplexity int, id string) int
+		ScheduledJobHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.ScheduledJobHistoryOrder, where *generated.ScheduledJobHistoryWhereInput) int
+		ScheduledJobRun                     func(childComplexity int, id string) int
+		ScheduledJobRuns                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
+		ScheduledJobs                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		Search                              func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Self                                func(childComplexity int) int
+		Standard                            func(childComplexity int, id string) int
+		StandardHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.StandardHistoryOrder, where *generated.StandardHistoryWhereInput) int
+		StandardSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Standards                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		Subcontrol                          func(childComplexity int, id string) int
+		SubcontrolHistories                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubcontrolHistoryOrder, where *generated.SubcontrolHistoryWhereInput) int
+		SubcontrolSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subcontrols                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		Subprocessor                        func(childComplexity int, id string) int
+		SubprocessorHistories               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.SubprocessorHistoryOrder, where *generated.SubprocessorHistoryWhereInput) int
+		SubprocessorSearch                  func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subprocessors                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
+		Subscriber                          func(childComplexity int, email string) int
+		SubscriberSearch                    func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Subscribers                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		TagDefinition                       func(childComplexity int, id string) int
+		TagDefinitionSearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		TagDefinitions                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Task                                func(childComplexity int, id string) int
+		TaskHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TaskHistoryOrder, where *generated.TaskHistoryWhereInput) int
+		TaskSearch                          func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Tasks                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		Template                            func(childComplexity int, id string) int
+		TemplateHistories                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TemplateHistoryOrder, where *generated.TemplateHistoryWhereInput) int
+		TemplateSearch                      func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Templates                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TfaSetting                          func(childComplexity int, id *string) int
+		TfaSettings                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TFASettingOrder, where *generated.TFASettingWhereInput) int
+		TrustCenter                         func(childComplexity int, id string) int
+		TrustCenterCompliance               func(childComplexity int, id string) int
+		TrustCenterComplianceHistories      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterComplianceHistoryOrder, where *generated.TrustCenterComplianceHistoryWhereInput) int
+		TrustCenterCompliances              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDoc                      func(childComplexity int, id string) int
+		TrustCenterDocHistories             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterDocHistoryOrder, where *generated.TrustCenterDocHistoryWhereInput) int
+		TrustCenterDocs                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
+		TrustCenterHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterHistoryOrder, where *generated.TrustCenterHistoryWhereInput) int
+		TrustCenterSetting                  func(childComplexity int, id string) int
+		TrustCenterSettingHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSettingHistoryOrder, where *generated.TrustCenterSettingHistoryWhereInput) int
+		TrustCenterSettings                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSettingOrder, where *generated.TrustCenterSettingWhereInput) int
+		TrustCenterSubprocessor             func(childComplexity int, id string) int
+		TrustCenterSubprocessorHistories    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterSubprocessorHistoryOrder, where *generated.TrustCenterSubprocessorHistoryWhereInput) int
+		TrustCenterSubprocessors            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterSubprocessorOrder, where *generated.TrustCenterSubprocessorWhereInput) int
+		TrustCenterWatermarkConfig          func(childComplexity int, id string) int
+		TrustCenterWatermarkConfigHistories func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustCenterWatermarkConfigHistoryOrder, where *generated.TrustCenterWatermarkConfigHistoryWhereInput) int
+		TrustCenterWatermarkConfigs         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
+		TrustCenters                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
+		User                                func(childComplexity int, id string) int
+		UserHistories                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserHistoryOrder, where *generated.UserHistoryWhereInput) int
+		UserSetting                         func(childComplexity int, id string) int
+		UserSettingHistories                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.UserSettingHistoryOrder, where *generated.UserSettingHistoryWhereInput) int
+		UserSettings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserSettingOrder, where *generated.UserSettingWhereInput) int
+		Users                               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Vulnerabilities                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		Vulnerability                       func(childComplexity int, id string) int
+		VulnerabilityHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.VulnerabilityHistoryOrder, where *generated.VulnerabilityHistoryWhereInput) int
+		VulnerabilitySearch                 func(childComplexity int, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) int
+		Webauthns                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WebauthnOrder, where *generated.WebauthnWhereInput) int
+		WorkflowAssignment                  func(childComplexity int, id string) int
+		WorkflowAssignmentHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentHistoryOrder, where *generated.WorkflowAssignmentHistoryWhereInput) int
+		WorkflowAssignmentTarget            func(childComplexity int, id string) int
+		WorkflowAssignmentTargetHistories   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowAssignmentTargetHistoryOrder, where *generated.WorkflowAssignmentTargetHistoryWhereInput) int
+		WorkflowAssignmentTargets           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
+		WorkflowAssignments                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
+		WorkflowDefinition                  func(childComplexity int, id string) int
+		WorkflowDefinitionHistories         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowDefinitionHistoryOrder, where *generated.WorkflowDefinitionHistoryWhereInput) int
+		WorkflowDefinitions                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
+		WorkflowEvent                       func(childComplexity int, id string) int
+		WorkflowEventHistories              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowEventHistoryOrder, where *generated.WorkflowEventHistoryWhereInput) int
+		WorkflowEvents                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
+		WorkflowInstance                    func(childComplexity int, id string) int
+		WorkflowInstanceHistories           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowInstanceHistoryOrder, where *generated.WorkflowInstanceHistoryWhereInput) int
+		WorkflowInstances                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
+		WorkflowObjectRef                   func(childComplexity int, id string) int
+		WorkflowObjectRefHistories          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.WorkflowObjectRefHistoryOrder, where *generated.WorkflowObjectRefHistoryWhereInput) int
+		WorkflowObjectRefs                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	Remediation struct {
@@ -5711,70 +5620,41 @@ type ComplexityRoot struct {
 	}
 
 	SearchResults struct {
-		APITokens                   func(childComplexity int) int
-		ActionPlans                 func(childComplexity int) int
-		AssessmentResponses         func(childComplexity int) int
-		Assessments                 func(childComplexity int) int
-		Assets                      func(childComplexity int) int
-		Contacts                    func(childComplexity int) int
-		ControlImplementations      func(childComplexity int) int
-		ControlObjectives           func(childComplexity int) int
-		Controls                    func(childComplexity int) int
-		CustomDomains               func(childComplexity int) int
-		CustomTypeEnums             func(childComplexity int) int
-		DNSVerifications            func(childComplexity int) int
-		DirectoryAccounts           func(childComplexity int) int
-		DirectoryGroups             func(childComplexity int) int
-		DocumentData                func(childComplexity int) int
-		Entities                    func(childComplexity int) int
-		EntityTypes                 func(childComplexity int) int
-		Events                      func(childComplexity int) int
-		Evidences                   func(childComplexity int) int
-		Files                       func(childComplexity int) int
-		Findings                    func(childComplexity int) int
-		Groups                      func(childComplexity int) int
-		Integrations                func(childComplexity int) int
-		InternalPolicies            func(childComplexity int) int
-		Invites                     func(childComplexity int) int
-		JobRunnerRegistrationTokens func(childComplexity int) int
-		JobRunnerTokens             func(childComplexity int) int
-		JobRunners                  func(childComplexity int) int
-		JobTemplates                func(childComplexity int) int
-		MappableDomains             func(childComplexity int) int
-		MappedControls              func(childComplexity int) int
-		Narratives                  func(childComplexity int) int
-		OrgSubscriptions            func(childComplexity int) int
-		OrganizationSettings        func(childComplexity int) int
-		Organizations               func(childComplexity int) int
-		Page                        func(childComplexity int) int
-		PersonalAccessTokens        func(childComplexity int) int
-		Procedures                  func(childComplexity int) int
-		Programs                    func(childComplexity int) int
-		Remediations                func(childComplexity int) int
-		Reviews                     func(childComplexity int) int
-		Risks                       func(childComplexity int) int
-		Scans                       func(childComplexity int) int
-		SearchContext               func(childComplexity int) int
-		Standards                   func(childComplexity int) int
-		Subcontrols                 func(childComplexity int) int
-		Subprocessors               func(childComplexity int) int
-		Subscribers                 func(childComplexity int) int
-		TagDefinitions              func(childComplexity int) int
-		Tasks                       func(childComplexity int) int
-		Templates                   func(childComplexity int) int
-		TotalCount                  func(childComplexity int) int
-		TrustCenterCompliances      func(childComplexity int) int
-		TrustCenterDocs             func(childComplexity int) int
-		TrustCenters                func(childComplexity int) int
-		UserSettings                func(childComplexity int) int
-		Users                       func(childComplexity int) int
-		Vulnerabilities             func(childComplexity int) int
-		Webauthns                   func(childComplexity int) int
-		WorkflowAssignmentTargets   func(childComplexity int) int
-		WorkflowAssignments         func(childComplexity int) int
-		WorkflowDefinitions         func(childComplexity int) int
-		WorkflowEvents              func(childComplexity int) int
-		WorkflowInstances           func(childComplexity int) int
+		ActionPlans         func(childComplexity int) int
+		AssessmentResponses func(childComplexity int) int
+		Assessments         func(childComplexity int) int
+		Assets              func(childComplexity int) int
+		Contacts            func(childComplexity int) int
+		ControlObjectives   func(childComplexity int) int
+		Controls            func(childComplexity int) int
+		CustomTypeEnums     func(childComplexity int) int
+		Entities            func(childComplexity int) int
+		Evidences           func(childComplexity int) int
+		Findings            func(childComplexity int) int
+		Groups              func(childComplexity int) int
+		InternalPolicies    func(childComplexity int) int
+		Invites             func(childComplexity int) int
+		JobRunners          func(childComplexity int) int
+		JobTemplates        func(childComplexity int) int
+		Narratives          func(childComplexity int) int
+		Organizations       func(childComplexity int) int
+		Page                func(childComplexity int) int
+		Procedures          func(childComplexity int) int
+		Programs            func(childComplexity int) int
+		Remediations        func(childComplexity int) int
+		Reviews             func(childComplexity int) int
+		Risks               func(childComplexity int) int
+		Scans               func(childComplexity int) int
+		SearchContext       func(childComplexity int) int
+		Standards           func(childComplexity int) int
+		Subcontrols         func(childComplexity int) int
+		Subprocessors       func(childComplexity int) int
+		Subscribers         func(childComplexity int) int
+		TagDefinitions      func(childComplexity int) int
+		Tasks               func(childComplexity int) int
+		Templates           func(childComplexity int) int
+		TotalCount          func(childComplexity int) int
+		Vulnerabilities     func(childComplexity int) int
 	}
 
 	SearchSnippet struct {
@@ -34193,18 +34073,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.APIToken(childComplexity, args["id"].(string)), true
 
-	case "Query.apiTokenSearch":
-		if e.complexity.Query.APITokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_apiTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.APITokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.apiTokens":
 		if e.complexity.Query.APITokens == nil {
 			break
@@ -34264,750 +34132,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.ActionPlans(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.ActionPlanOrder), args["where"].(*generated.ActionPlanWhereInput)), true
-
-	case "Query.adminAPITokenSearch":
-		if e.complexity.Query.AdminAPITokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminAPITokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminAPITokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminActionPlanSearch":
-		if e.complexity.Query.AdminActionPlanSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminActionPlanSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminActionPlanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminAssessmentResponseSearch":
-		if e.complexity.Query.AdminAssessmentResponseSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminAssessmentResponseSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminAssessmentResponseSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminAssessmentSearch":
-		if e.complexity.Query.AdminAssessmentSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminAssessmentSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminAssessmentSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminAssetSearch":
-		if e.complexity.Query.AdminAssetSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminAssetSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminAssetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminContactSearch":
-		if e.complexity.Query.AdminContactSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminContactSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminContactSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminControlImplementationSearch":
-		if e.complexity.Query.AdminControlImplementationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminControlImplementationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminControlImplementationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminControlObjectiveSearch":
-		if e.complexity.Query.AdminControlObjectiveSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminControlObjectiveSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminControlObjectiveSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminControlSearch":
-		if e.complexity.Query.AdminControlSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminControlSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminControlSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminCustomDomainSearch":
-		if e.complexity.Query.AdminCustomDomainSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminCustomDomainSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminCustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminCustomTypeEnumSearch":
-		if e.complexity.Query.AdminCustomTypeEnumSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminCustomTypeEnumSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminCustomTypeEnumSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminDNSVerificationSearch":
-		if e.complexity.Query.AdminDNSVerificationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminDNSVerificationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminDNSVerificationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminDirectoryAccountSearch":
-		if e.complexity.Query.AdminDirectoryAccountSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminDirectoryAccountSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminDirectoryAccountSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminDirectoryGroupSearch":
-		if e.complexity.Query.AdminDirectoryGroupSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminDirectoryGroupSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminDirectoryGroupSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminDocumentDataSearch":
-		if e.complexity.Query.AdminDocumentDataSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminDocumentDataSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminDocumentDataSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminEntitySearch":
-		if e.complexity.Query.AdminEntitySearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminEntitySearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminEntitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminEntityTypeSearch":
-		if e.complexity.Query.AdminEntityTypeSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminEntityTypeSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminEntityTypeSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminEventSearch":
-		if e.complexity.Query.AdminEventSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminEventSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminEventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminEvidenceSearch":
-		if e.complexity.Query.AdminEvidenceSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminEvidenceSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminEvidenceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminFileSearch":
-		if e.complexity.Query.AdminFileSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminFileSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminFileSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminFindingSearch":
-		if e.complexity.Query.AdminFindingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminFindingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminFindingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminGroupSearch":
-		if e.complexity.Query.AdminGroupSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminGroupSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminGroupSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminIntegrationSearch":
-		if e.complexity.Query.AdminIntegrationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminIntegrationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminIntegrationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminInternalPolicySearch":
-		if e.complexity.Query.AdminInternalPolicySearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminInternalPolicySearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminInternalPolicySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminInviteSearch":
-		if e.complexity.Query.AdminInviteSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminInviteSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminInviteSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminJobRunnerRegistrationTokenSearch":
-		if e.complexity.Query.AdminJobRunnerRegistrationTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminJobRunnerRegistrationTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminJobRunnerRegistrationTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminJobRunnerSearch":
-		if e.complexity.Query.AdminJobRunnerSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminJobRunnerSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminJobRunnerSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminJobRunnerTokenSearch":
-		if e.complexity.Query.AdminJobRunnerTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminJobRunnerTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminJobRunnerTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminJobTemplateSearch":
-		if e.complexity.Query.AdminJobTemplateSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminJobTemplateSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminJobTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminMappableDomainSearch":
-		if e.complexity.Query.AdminMappableDomainSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminMappableDomainSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminMappableDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminMappedControlSearch":
-		if e.complexity.Query.AdminMappedControlSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminMappedControlSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminMappedControlSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminNarrativeSearch":
-		if e.complexity.Query.AdminNarrativeSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminNarrativeSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminNarrativeSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminOrgSubscriptionSearch":
-		if e.complexity.Query.AdminOrgSubscriptionSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminOrgSubscriptionSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminOrgSubscriptionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminOrganizationSearch":
-		if e.complexity.Query.AdminOrganizationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminOrganizationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminOrganizationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminOrganizationSettingSearch":
-		if e.complexity.Query.AdminOrganizationSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminOrganizationSettingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminOrganizationSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminPersonalAccessTokenSearch":
-		if e.complexity.Query.AdminPersonalAccessTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminPersonalAccessTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminPersonalAccessTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminProcedureSearch":
-		if e.complexity.Query.AdminProcedureSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminProcedureSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminProcedureSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminProgramSearch":
-		if e.complexity.Query.AdminProgramSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminProgramSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminProgramSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminRemediationSearch":
-		if e.complexity.Query.AdminRemediationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminRemediationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminRemediationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminReviewSearch":
-		if e.complexity.Query.AdminReviewSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminReviewSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminReviewSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminRiskSearch":
-		if e.complexity.Query.AdminRiskSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminRiskSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminRiskSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminScanSearch":
-		if e.complexity.Query.AdminScanSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminScanSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminScanSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminSearch":
-		if e.complexity.Query.AdminSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminStandardSearch":
-		if e.complexity.Query.AdminStandardSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminStandardSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminStandardSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminSubcontrolSearch":
-		if e.complexity.Query.AdminSubcontrolSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminSubcontrolSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminSubcontrolSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminSubprocessorSearch":
-		if e.complexity.Query.AdminSubprocessorSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminSubprocessorSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminSubprocessorSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminSubscriberSearch":
-		if e.complexity.Query.AdminSubscriberSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminSubscriberSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminSubscriberSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTagDefinitionSearch":
-		if e.complexity.Query.AdminTagDefinitionSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTagDefinitionSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTagDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTaskSearch":
-		if e.complexity.Query.AdminTaskSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTaskSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTaskSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTemplateSearch":
-		if e.complexity.Query.AdminTemplateSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTemplateSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTemplateSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTrustCenterComplianceSearch":
-		if e.complexity.Query.AdminTrustCenterComplianceSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTrustCenterComplianceSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTrustCenterComplianceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTrustCenterDocSearch":
-		if e.complexity.Query.AdminTrustCenterDocSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTrustCenterDocSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTrustCenterDocSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminTrustCenterSearch":
-		if e.complexity.Query.AdminTrustCenterSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminTrustCenterSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminTrustCenterSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminUserSearch":
-		if e.complexity.Query.AdminUserSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminUserSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminUserSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminUserSettingSearch":
-		if e.complexity.Query.AdminUserSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminUserSettingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminUserSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminVulnerabilitySearch":
-		if e.complexity.Query.AdminVulnerabilitySearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminVulnerabilitySearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminVulnerabilitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWebauthnSearch":
-		if e.complexity.Query.AdminWebauthnSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWebauthnSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWebauthnSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWorkflowAssignmentSearch":
-		if e.complexity.Query.AdminWorkflowAssignmentSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWorkflowAssignmentSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWorkflowAssignmentSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWorkflowAssignmentTargetSearch":
-		if e.complexity.Query.AdminWorkflowAssignmentTargetSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWorkflowAssignmentTargetSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWorkflowAssignmentTargetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWorkflowDefinitionSearch":
-		if e.complexity.Query.AdminWorkflowDefinitionSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWorkflowDefinitionSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWorkflowDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWorkflowEventSearch":
-		if e.complexity.Query.AdminWorkflowEventSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWorkflowEventSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWorkflowEventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
-	case "Query.adminWorkflowInstanceSearch":
-		if e.complexity.Query.AdminWorkflowInstanceSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_adminWorkflowInstanceSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.AdminWorkflowInstanceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.assessment":
 		if e.complexity.Query.Assessment == nil {
@@ -35280,18 +34404,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.ControlImplementationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.ControlImplementationHistoryOrder), args["where"].(*generated.ControlImplementationHistoryWhereInput)), true
 
-	case "Query.controlImplementationSearch":
-		if e.complexity.Query.ControlImplementationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_controlImplementationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.ControlImplementationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.controlImplementations":
 		if e.complexity.Query.ControlImplementations == nil {
 			break
@@ -35431,18 +34543,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.CustomDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.CustomDomainHistoryOrder), args["where"].(*generated.CustomDomainHistoryWhereInput)), true
 
-	case "Query.customDomainSearch":
-		if e.complexity.Query.CustomDomainSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_customDomainSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.CustomDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.customDomains":
 		if e.complexity.Query.CustomDomains == nil {
 			break
@@ -35515,18 +34615,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.DNSVerificationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DNSVerificationHistoryOrder), args["where"].(*generated.DNSVerificationHistoryWhereInput)), true
 
-	case "Query.dnsVerificationSearch":
-		if e.complexity.Query.DNSVerificationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_dnsVerificationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.DNSVerificationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.dnsVerifications":
 		if e.complexity.Query.DNSVerifications == nil {
 			break
@@ -35563,18 +34651,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.DirectoryAccountHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DirectoryAccountHistoryOrder), args["where"].(*generated.DirectoryAccountHistoryWhereInput)), true
 
-	case "Query.directoryAccountSearch":
-		if e.complexity.Query.DirectoryAccountSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_directoryAccountSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.DirectoryAccountSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.directoryAccounts":
 		if e.complexity.Query.DirectoryAccounts == nil {
 			break
@@ -35610,18 +34686,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.DirectoryGroupHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DirectoryGroupHistoryOrder), args["where"].(*generated.DirectoryGroupHistoryWhereInput)), true
-
-	case "Query.directoryGroupSearch":
-		if e.complexity.Query.DirectoryGroupSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_directoryGroupSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.DirectoryGroupSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.directoryGroups":
 		if e.complexity.Query.DirectoryGroups == nil {
@@ -35719,18 +34783,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.DocumentDataHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.DocumentDataHistoryOrder), args["where"].(*generated.DocumentDataHistoryWhereInput)), true
 
-	case "Query.documentDataSearch":
-		if e.complexity.Query.DocumentDataSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_documentDataSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.DocumentDataSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.documentDataSlice":
 		if e.complexity.Query.DocumentDataSlice == nil {
 			break
@@ -35815,18 +34867,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.EntityTypeHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.EntityTypeHistoryOrder), args["where"].(*generated.EntityTypeHistoryWhereInput)), true
 
-	case "Query.entityTypeSearch":
-		if e.complexity.Query.EntityTypeSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_entityTypeSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.EntityTypeSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.entityTypes":
 		if e.complexity.Query.EntityTypes == nil {
 			break
@@ -35850,18 +34890,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.Event(childComplexity, args["id"].(string)), true
-
-	case "Query.eventSearch":
-		if e.complexity.Query.EventSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_eventSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.EventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.events":
 		if e.complexity.Query.Events == nil {
@@ -35970,18 +34998,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.FileHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.FileHistoryOrder), args["where"].(*generated.FileHistoryWhereInput)), true
-
-	case "Query.fileSearch":
-		if e.complexity.Query.FileSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_fileSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.FileSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.files":
 		if e.complexity.Query.Files == nil {
@@ -36259,18 +35275,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.IntegrationHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.IntegrationHistoryOrder), args["where"].(*generated.IntegrationHistoryWhereInput)), true
 
-	case "Query.integrationSearch":
-		if e.complexity.Query.IntegrationSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_integrationSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.IntegrationSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.integrations":
 		if e.complexity.Query.Integrations == nil {
 			break
@@ -36415,18 +35419,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.JobRunnerRegistrationToken(childComplexity, args["id"].(string)), true
 
-	case "Query.jobRunnerRegistrationTokenSearch":
-		if e.complexity.Query.JobRunnerRegistrationTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerRegistrationTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.JobRunnerRegistrationTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.jobRunnerRegistrationTokens":
 		if e.complexity.Query.JobRunnerRegistrationTokens == nil {
 			break
@@ -36462,18 +35454,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.JobRunnerToken(childComplexity, args["id"].(string)), true
-
-	case "Query.jobRunnerTokenSearch":
-		if e.complexity.Query.JobRunnerTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_jobRunnerTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.JobRunnerTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.jobRunnerTokens":
 		if e.complexity.Query.JobRunnerTokens == nil {
@@ -36571,18 +35551,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.MappableDomainHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappableDomainHistoryOrder), args["where"].(*generated.MappableDomainHistoryWhereInput)), true
 
-	case "Query.mappableDomainSearch":
-		if e.complexity.Query.MappableDomainSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_mappableDomainSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.MappableDomainSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.mappableDomains":
 		if e.complexity.Query.MappableDomains == nil {
 			break
@@ -36618,18 +35586,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.MappedControlHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.MappedControlHistoryOrder), args["where"].(*generated.MappedControlHistoryWhereInput)), true
-
-	case "Query.mappedControlSearch":
-		if e.complexity.Query.MappedControlSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_mappedControlSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.MappedControlSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.mappedControls":
 		if e.complexity.Query.MappedControls == nil {
@@ -36811,18 +35767,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.OrgSubscriptionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrgSubscriptionHistoryOrder), args["where"].(*generated.OrgSubscriptionHistoryWhereInput)), true
 
-	case "Query.orgSubscriptionSearch":
-		if e.complexity.Query.OrgSubscriptionSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_orgSubscriptionSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.OrgSubscriptionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.orgSubscriptions":
 		if e.complexity.Query.OrgSubscriptions == nil {
 			break
@@ -36895,18 +35839,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.OrganizationSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.OrganizationSettingHistoryOrder), args["where"].(*generated.OrganizationSettingHistoryWhereInput)), true
 
-	case "Query.organizationSettingSearch":
-		if e.complexity.Query.OrganizationSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_organizationSettingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.OrganizationSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.organizationSettings":
 		if e.complexity.Query.OrganizationSettings == nil {
 			break
@@ -36942,18 +35874,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.PersonalAccessToken(childComplexity, args["id"].(string)), true
-
-	case "Query.personalAccessTokenSearch":
-		if e.complexity.Query.PersonalAccessTokenSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_personalAccessTokenSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.PersonalAccessTokenSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.personalAccessTokens":
 		if e.complexity.Query.PersonalAccessTokens == nil {
@@ -37742,18 +36662,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterComplianceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterComplianceHistoryOrder), args["where"].(*generated.TrustCenterComplianceHistoryWhereInput)), true
 
-	case "Query.trustCenterComplianceSearch":
-		if e.complexity.Query.TrustCenterComplianceSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_trustCenterComplianceSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.TrustCenterComplianceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.trustCenterCompliances":
 		if e.complexity.Query.TrustCenterCompliances == nil {
 			break
@@ -37790,18 +36698,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.TrustCenterDocHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterDocHistoryOrder), args["where"].(*generated.TrustCenterDocHistoryWhereInput)), true
 
-	case "Query.trustCenterDocSearch":
-		if e.complexity.Query.TrustCenterDocSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_trustCenterDocSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.TrustCenterDocSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.trustCenterDocs":
 		if e.complexity.Query.TrustCenterDocs == nil {
 			break
@@ -37825,18 +36721,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.TrustCenterHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.TrustCenterHistoryOrder), args["where"].(*generated.TrustCenterHistoryWhereInput)), true
-
-	case "Query.trustCenterSearch":
-		if e.complexity.Query.TrustCenterSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_trustCenterSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.TrustCenterSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.trustCenterSetting":
 		if e.complexity.Query.TrustCenterSetting == nil {
@@ -37982,18 +36866,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.UserHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.UserHistoryOrder), args["where"].(*generated.UserHistoryWhereInput)), true
 
-	case "Query.userSearch":
-		if e.complexity.Query.UserSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_userSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.UserSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.userSetting":
 		if e.complexity.Query.UserSetting == nil {
 			break
@@ -38017,18 +36889,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.UserSettingHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.UserSettingHistoryOrder), args["where"].(*generated.UserSettingHistoryWhereInput)), true
-
-	case "Query.userSettingSearch":
-		if e.complexity.Query.UserSettingSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_userSettingSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.UserSettingSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.userSettings":
 		if e.complexity.Query.UserSettings == nil {
@@ -38102,18 +36962,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.VulnerabilitySearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
-	case "Query.webauthnSearch":
-		if e.complexity.Query.WebauthnSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_webauthnSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WebauthnSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.webauthns":
 		if e.complexity.Query.Webauthns == nil {
 			break
@@ -38150,18 +36998,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.WorkflowAssignmentHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowAssignmentHistoryOrder), args["where"].(*generated.WorkflowAssignmentHistoryWhereInput)), true
 
-	case "Query.workflowAssignmentSearch":
-		if e.complexity.Query.WorkflowAssignmentSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_workflowAssignmentSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WorkflowAssignmentSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.workflowAssignmentTarget":
 		if e.complexity.Query.WorkflowAssignmentTarget == nil {
 			break
@@ -38185,18 +37021,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.WorkflowAssignmentTargetHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowAssignmentTargetHistoryOrder), args["where"].(*generated.WorkflowAssignmentTargetHistoryWhereInput)), true
-
-	case "Query.workflowAssignmentTargetSearch":
-		if e.complexity.Query.WorkflowAssignmentTargetSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_workflowAssignmentTargetSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WorkflowAssignmentTargetSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.workflowAssignmentTargets":
 		if e.complexity.Query.WorkflowAssignmentTargets == nil {
@@ -38246,18 +37070,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.WorkflowDefinitionHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowDefinitionHistoryOrder), args["where"].(*generated.WorkflowDefinitionHistoryWhereInput)), true
 
-	case "Query.workflowDefinitionSearch":
-		if e.complexity.Query.WorkflowDefinitionSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_workflowDefinitionSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WorkflowDefinitionSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.workflowDefinitions":
 		if e.complexity.Query.WorkflowDefinitions == nil {
 			break
@@ -38294,18 +37106,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Query.WorkflowEventHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowEventHistoryOrder), args["where"].(*generated.WorkflowEventHistoryWhereInput)), true
 
-	case "Query.workflowEventSearch":
-		if e.complexity.Query.WorkflowEventSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_workflowEventSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WorkflowEventSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
-
 	case "Query.workflowEvents":
 		if e.complexity.Query.WorkflowEvents == nil {
 			break
@@ -38341,18 +37141,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Query.WorkflowInstanceHistories(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].(*generated.WorkflowInstanceHistoryOrder), args["where"].(*generated.WorkflowInstanceHistoryWhereInput)), true
-
-	case "Query.workflowInstanceSearch":
-		if e.complexity.Query.WorkflowInstanceSearch == nil {
-			break
-		}
-
-		args, err := ec.field_Query_workflowInstanceSearch_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.WorkflowInstanceSearch(childComplexity, args["query"].(string), args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int)), true
 
 	case "Query.workflowInstances":
 		if e.complexity.Query.WorkflowInstances == nil {
@@ -41442,13 +40230,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchContext.Snippets(childComplexity), true
 
-	case "SearchResults.apiTokens":
-		if e.complexity.SearchResults.APITokens == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.APITokens(childComplexity), true
-
 	case "SearchResults.actionPlans":
 		if e.complexity.SearchResults.ActionPlans == nil {
 			break
@@ -41484,13 +40265,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Contacts(childComplexity), true
 
-	case "SearchResults.controlImplementations":
-		if e.complexity.SearchResults.ControlImplementations == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.ControlImplementations(childComplexity), true
-
 	case "SearchResults.controlObjectives":
 		if e.complexity.SearchResults.ControlObjectives == nil {
 			break
@@ -41505,47 +40279,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Controls(childComplexity), true
 
-	case "SearchResults.customDomains":
-		if e.complexity.SearchResults.CustomDomains == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.CustomDomains(childComplexity), true
-
 	case "SearchResults.customTypeEnums":
 		if e.complexity.SearchResults.CustomTypeEnums == nil {
 			break
 		}
 
 		return e.complexity.SearchResults.CustomTypeEnums(childComplexity), true
-
-	case "SearchResults.dnsVerifications":
-		if e.complexity.SearchResults.DNSVerifications == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.DNSVerifications(childComplexity), true
-
-	case "SearchResults.directoryAccounts":
-		if e.complexity.SearchResults.DirectoryAccounts == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.DirectoryAccounts(childComplexity), true
-
-	case "SearchResults.directoryGroups":
-		if e.complexity.SearchResults.DirectoryGroups == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.DirectoryGroups(childComplexity), true
-
-	case "SearchResults.documentData":
-		if e.complexity.SearchResults.DocumentData == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.DocumentData(childComplexity), true
 
 	case "SearchResults.entities":
 		if e.complexity.SearchResults.Entities == nil {
@@ -41554,33 +40293,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Entities(childComplexity), true
 
-	case "SearchResults.entityTypes":
-		if e.complexity.SearchResults.EntityTypes == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.EntityTypes(childComplexity), true
-
-	case "SearchResults.events":
-		if e.complexity.SearchResults.Events == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.Events(childComplexity), true
-
 	case "SearchResults.evidences":
 		if e.complexity.SearchResults.Evidences == nil {
 			break
 		}
 
 		return e.complexity.SearchResults.Evidences(childComplexity), true
-
-	case "SearchResults.files":
-		if e.complexity.SearchResults.Files == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.Files(childComplexity), true
 
 	case "SearchResults.findings":
 		if e.complexity.SearchResults.Findings == nil {
@@ -41596,13 +40314,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.Groups(childComplexity), true
 
-	case "SearchResults.integrations":
-		if e.complexity.SearchResults.Integrations == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.Integrations(childComplexity), true
-
 	case "SearchResults.internalPolicies":
 		if e.complexity.SearchResults.InternalPolicies == nil {
 			break
@@ -41616,20 +40327,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Invites(childComplexity), true
-
-	case "SearchResults.jobRunnerRegistrationTokens":
-		if e.complexity.SearchResults.JobRunnerRegistrationTokens == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.JobRunnerRegistrationTokens(childComplexity), true
-
-	case "SearchResults.jobRunnerTokens":
-		if e.complexity.SearchResults.JobRunnerTokens == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.JobRunnerTokens(childComplexity), true
 
 	case "SearchResults.jobRunners":
 		if e.complexity.SearchResults.JobRunners == nil {
@@ -41645,40 +40342,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.JobTemplates(childComplexity), true
 
-	case "SearchResults.mappableDomains":
-		if e.complexity.SearchResults.MappableDomains == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.MappableDomains(childComplexity), true
-
-	case "SearchResults.mappedControls":
-		if e.complexity.SearchResults.MappedControls == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.MappedControls(childComplexity), true
-
 	case "SearchResults.narratives":
 		if e.complexity.SearchResults.Narratives == nil {
 			break
 		}
 
 		return e.complexity.SearchResults.Narratives(childComplexity), true
-
-	case "SearchResults.orgSubscriptions":
-		if e.complexity.SearchResults.OrgSubscriptions == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.OrgSubscriptions(childComplexity), true
-
-	case "SearchResults.organizationSettings":
-		if e.complexity.SearchResults.OrganizationSettings == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.OrganizationSettings(childComplexity), true
 
 	case "SearchResults.organizations":
 		if e.complexity.SearchResults.Organizations == nil {
@@ -41693,13 +40362,6 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.SearchResults.Page(childComplexity), true
-
-	case "SearchResults.personalAccessTokens":
-		if e.complexity.SearchResults.PersonalAccessTokens == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.PersonalAccessTokens(childComplexity), true
 
 	case "SearchResults.procedures":
 		if e.complexity.SearchResults.Procedures == nil {
@@ -41806,89 +40468,12 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SearchResults.TotalCount(childComplexity), true
 
-	case "SearchResults.trustCenterCompliances":
-		if e.complexity.SearchResults.TrustCenterCompliances == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.TrustCenterCompliances(childComplexity), true
-
-	case "SearchResults.trustCenterDocs":
-		if e.complexity.SearchResults.TrustCenterDocs == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.TrustCenterDocs(childComplexity), true
-
-	case "SearchResults.trustCenters":
-		if e.complexity.SearchResults.TrustCenters == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.TrustCenters(childComplexity), true
-
-	case "SearchResults.userSettings":
-		if e.complexity.SearchResults.UserSettings == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.UserSettings(childComplexity), true
-
-	case "SearchResults.users":
-		if e.complexity.SearchResults.Users == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.Users(childComplexity), true
-
 	case "SearchResults.vulnerabilities":
 		if e.complexity.SearchResults.Vulnerabilities == nil {
 			break
 		}
 
 		return e.complexity.SearchResults.Vulnerabilities(childComplexity), true
-
-	case "SearchResults.webauthns":
-		if e.complexity.SearchResults.Webauthns == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.Webauthns(childComplexity), true
-
-	case "SearchResults.workflowAssignmentTargets":
-		if e.complexity.SearchResults.WorkflowAssignmentTargets == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.WorkflowAssignmentTargets(childComplexity), true
-
-	case "SearchResults.workflowAssignments":
-		if e.complexity.SearchResults.WorkflowAssignments == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.WorkflowAssignments(childComplexity), true
-
-	case "SearchResults.workflowDefinitions":
-		if e.complexity.SearchResults.WorkflowDefinitions == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.WorkflowDefinitions(childComplexity), true
-
-	case "SearchResults.workflowEvents":
-		if e.complexity.SearchResults.WorkflowEvents == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.WorkflowEvents(childComplexity), true
-
-	case "SearchResults.workflowInstances":
-		if e.complexity.SearchResults.WorkflowInstances == nil {
-			break
-		}
-
-		return e.complexity.SearchResults.WorkflowInstances(childComplexity), true
 
 	case "SearchSnippet.field":
 		if e.complexity.SearchSnippet.Field == nil {
@@ -52132,1533 +50717,6 @@ type ActionPlanBulkDeletePayload {
     Deleted actionPlan IDs
     """
     deletedIDs: [ID!]!
-}`, BuiltIn: false},
-	{Name: "../schema/adminsearch.graphql", Input: `extend type Query{
-    """
-    Search across APIToken objects
-    """
-    adminAPITokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): APITokenConnection
-    """
-    Search across ActionPlan objects
-    """
-    adminActionPlanSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ActionPlanConnection
-    """
-    Search across Assessment objects
-    """
-    adminAssessmentSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): AssessmentConnection
-    """
-    Search across AssessmentResponse objects
-    """
-    adminAssessmentResponseSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): AssessmentResponseConnection
-    """
-    Search across Asset objects
-    """
-    adminAssetSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): AssetConnection
-    """
-    Search across Contact objects
-    """
-    adminContactSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ContactConnection
-    """
-    Search across Control objects
-    """
-    adminControlSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ControlConnection
-    """
-    Search across ControlImplementation objects
-    """
-    adminControlImplementationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ControlImplementationConnection
-    """
-    Search across ControlObjective objects
-    """
-    adminControlObjectiveSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ControlObjectiveConnection
-    """
-    Search across CustomDomain objects
-    """
-    adminCustomDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): CustomDomainConnection
-    """
-    Search across CustomTypeEnum objects
-    """
-    adminCustomTypeEnumSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): CustomTypeEnumConnection
-    """
-    Search across DNSVerification objects
-    """
-    adminDNSVerificationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DNSVerificationConnection
-    """
-    Search across DirectoryAccount objects
-    """
-    adminDirectoryAccountSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryAccountConnection
-    """
-    Search across DirectoryGroup objects
-    """
-    adminDirectoryGroupSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryGroupConnection
-    """
-    Search across DocumentData objects
-    """
-    adminDocumentDataSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DocumentDataConnection
-    """
-    Search across Entity objects
-    """
-    adminEntitySearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EntityConnection
-    """
-    Search across EntityType objects
-    """
-    adminEntityTypeSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EntityTypeConnection
-    """
-    Search across Event objects
-    """
-    adminEventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EventConnection
-    """
-    Search across Evidence objects
-    """
-    adminEvidenceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EvidenceConnection
-    """
-    Search across File objects
-    """
-    adminFileSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): FileConnection
-    """
-    Search across Finding objects
-    """
-    adminFindingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): FindingConnection
-    """
-    Search across Group objects
-    """
-    adminGroupSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): GroupConnection
-    """
-    Search across Integration objects
-    """
-    adminIntegrationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): IntegrationConnection
-    """
-    Search across InternalPolicy objects
-    """
-    adminInternalPolicySearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): InternalPolicyConnection
-    """
-    Search across Invite objects
-    """
-    adminInviteSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): InviteConnection
-    """
-    Search across JobRunner objects
-    """
-    adminJobRunnerSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerConnection
-    """
-    Search across JobRunnerRegistrationToken objects
-    """
-    adminJobRunnerRegistrationTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerRegistrationTokenConnection
-    """
-    Search across JobRunnerToken objects
-    """
-    adminJobRunnerTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerTokenConnection
-    """
-    Search across JobTemplate objects
-    """
-    adminJobTemplateSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobTemplateConnection
-    """
-    Search across MappableDomain objects
-    """
-    adminMappableDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappableDomainConnection
-    """
-    Search across MappedControl objects
-    """
-    adminMappedControlSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappedControlConnection
-    """
-    Search across Narrative objects
-    """
-    adminNarrativeSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): NarrativeConnection
-    """
-    Search across OrgSubscription objects
-    """
-    adminOrgSubscriptionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrgSubscriptionConnection
-    """
-    Search across Organization objects
-    """
-    adminOrganizationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrganizationConnection
-    """
-    Search across OrganizationSetting objects
-    """
-    adminOrganizationSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrganizationSettingConnection
-    """
-    Search across PersonalAccessToken objects
-    """
-    adminPersonalAccessTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): PersonalAccessTokenConnection
-    """
-    Search across Procedure objects
-    """
-    adminProcedureSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ProcedureConnection
-    """
-    Search across Program objects
-    """
-    adminProgramSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ProgramConnection
-    """
-    Search across Remediation objects
-    """
-    adminRemediationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): RemediationConnection
-    """
-    Search across Review objects
-    """
-    adminReviewSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ReviewConnection
-    """
-    Search across Risk objects
-    """
-    adminRiskSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): RiskConnection
-    """
-    Search across Scan objects
-    """
-    adminScanSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ScanConnection
-    """
-    Search across Standard objects
-    """
-    adminStandardSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): StandardConnection
-    """
-    Search across Subcontrol objects
-    """
-    adminSubcontrolSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): SubcontrolConnection
-    """
-    Search across Subprocessor objects
-    """
-    adminSubprocessorSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): SubprocessorConnection
-    """
-    Search across Subscriber objects
-    """
-    adminSubscriberSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): SubscriberConnection
-    """
-    Search across TagDefinition objects
-    """
-    adminTagDefinitionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TagDefinitionConnection
-    """
-    Search across Task objects
-    """
-    adminTaskSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TaskConnection
-    """
-    Search across Template objects
-    """
-    adminTemplateSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TemplateConnection
-    """
-    Search across TrustCenter objects
-    """
-    adminTrustCenterSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterConnection
-    """
-    Search across TrustCenterCompliance objects
-    """
-    adminTrustCenterComplianceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterComplianceConnection
-    """
-    Search across TrustCenterDoc objects
-    """
-    adminTrustCenterDocSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterDocConnection
-    """
-    Search across User objects
-    """
-    adminUserSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserConnection
-    """
-    Search across UserSetting objects
-    """
-    adminUserSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserSettingConnection
-    """
-    Search across Vulnerability objects
-    """
-    adminVulnerabilitySearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): VulnerabilityConnection
-    """
-    Search across Webauthn objects
-    """
-    adminWebauthnSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WebauthnConnection
-    """
-    Search across WorkflowAssignment objects
-    """
-    adminWorkflowAssignmentSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentConnection
-    """
-    Search across WorkflowAssignmentTarget objects
-    """
-    adminWorkflowAssignmentTargetSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentTargetConnection
-    """
-    Search across WorkflowDefinition objects
-    """
-    adminWorkflowDefinitionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowDefinitionConnection
-    """
-    Search across WorkflowEvent objects
-    """
-    adminWorkflowEventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowEventConnection
-    """
-    Search across WorkflowInstance objects
-    """
-    adminWorkflowInstanceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowInstanceConnection
 }`, BuiltIn: false},
 	{Name: "../schema/apitoken.graphql", Input: `extend type Query {
     """
@@ -146900,31 +143958,6 @@ type ScheduledJobRunDeletePayload {
 `, BuiltIn: false},
 	{Name: "../schema/search.graphql", Input: `extend type Query{
     """
-    Search across APIToken objects
-    """
-    apiTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): APITokenConnection
-    """
     Search across ActionPlan objects
     """
     actionPlanSearch(
@@ -147075,31 +144108,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): ControlConnection
     """
-    Search across ControlImplementation objects
-    """
-    controlImplementationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): ControlImplementationConnection
-    """
     Search across ControlObjective objects
     """
     controlObjectiveSearch(
@@ -147124,31 +144132,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): ControlObjectiveConnection
-    """
-    Search across CustomDomain objects
-    """
-    customDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): CustomDomainConnection
     """
     Search across CustomTypeEnum objects
     """
@@ -147175,106 +144158,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): CustomTypeEnumConnection
     """
-    Search across DNSVerification objects
-    """
-    dnsVerificationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DNSVerificationConnection
-    """
-    Search across DirectoryAccount objects
-    """
-    directoryAccountSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryAccountConnection
-    """
-    Search across DirectoryGroup objects
-    """
-    directoryGroupSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DirectoryGroupConnection
-    """
-    Search across DocumentData objects
-    """
-    documentDataSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): DocumentDataConnection
-    """
     Search across Entity objects
     """
     entitySearch(
@@ -147300,56 +144183,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): EntityConnection
     """
-    Search across EntityType objects
-    """
-    entityTypeSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EntityTypeConnection
-    """
-    Search across Event objects
-    """
-    eventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): EventConnection
-    """
     Search across Evidence objects
     """
     evidenceSearch(
@@ -147374,31 +144207,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): EvidenceConnection
-    """
-    Search across File objects
-    """
-    fileSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): FileConnection
     """
     Search across Finding objects
     """
@@ -147449,31 +144257,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): GroupConnection
-    """
-    Search across Integration objects
-    """
-    integrationSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): IntegrationConnection
     """
     Search across InternalPolicy objects
     """
@@ -147550,56 +144333,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): JobRunnerConnection
     """
-    Search across JobRunnerRegistrationToken objects
-    """
-    jobRunnerRegistrationTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerRegistrationTokenConnection
-    """
-    Search across JobRunnerToken objects
-    """
-    jobRunnerTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): JobRunnerTokenConnection
-    """
     Search across JobTemplate objects
     """
     jobTemplateSearch(
@@ -147624,56 +144357,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): JobTemplateConnection
-    """
-    Search across MappableDomain objects
-    """
-    mappableDomainSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappableDomainConnection
-    """
-    Search across MappedControl objects
-    """
-    mappedControlSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): MappedControlConnection
     """
     Search across Narrative objects
     """
@@ -147700,31 +144383,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): NarrativeConnection
     """
-    Search across OrgSubscription objects
-    """
-    orgSubscriptionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrgSubscriptionConnection
-    """
     Search across Organization objects
     """
     organizationSearch(
@@ -147749,56 +144407,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): OrganizationConnection
-    """
-    Search across OrganizationSetting objects
-    """
-    organizationSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): OrganizationSettingConnection
-    """
-    Search across PersonalAccessToken objects
-    """
-    personalAccessTokenSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): PersonalAccessTokenConnection
     """
     Search across Procedure objects
     """
@@ -148125,131 +144733,6 @@ type ScheduledJobRunDeletePayload {
         last: Int
     ): TemplateConnection
     """
-    Search across TrustCenter objects
-    """
-    trustCenterSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterConnection
-    """
-    Search across TrustCenterCompliance objects
-    """
-    trustCenterComplianceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterComplianceConnection
-    """
-    Search across TrustCenterDoc objects
-    """
-    trustCenterDocSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): TrustCenterDocConnection
-    """
-    Search across User objects
-    """
-    userSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserConnection
-    """
-    Search across UserSetting objects
-    """
-    userSettingSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): UserSettingConnection
-    """
     Search across Vulnerability objects
     """
     vulnerabilitySearch(
@@ -148274,156 +144757,6 @@ type ScheduledJobRunDeletePayload {
         """
         last: Int
     ): VulnerabilityConnection
-    """
-    Search across Webauthn objects
-    """
-    webauthnSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WebauthnConnection
-    """
-    Search across WorkflowAssignment objects
-    """
-    workflowAssignmentSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentConnection
-    """
-    Search across WorkflowAssignmentTarget objects
-    """
-    workflowAssignmentTargetSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowAssignmentTargetConnection
-    """
-    Search across WorkflowDefinition objects
-    """
-    workflowDefinitionSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowDefinitionConnection
-    """
-    Search across WorkflowEvent objects
-    """
-    workflowEventSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowEventConnection
-    """
-    Search across WorkflowInstance objects
-    """
-    workflowInstanceSearch(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): WorkflowInstanceConnection
 }
 type SearchResults{
   """
@@ -148434,42 +144767,24 @@ type SearchResults{
   Identifies the total count of items in the connection.
   """
   totalCount: Int!
-  apiTokens: APITokenConnection
   actionPlans: ActionPlanConnection
   assessments: AssessmentConnection
   assessmentResponses: AssessmentResponseConnection
   assets: AssetConnection
   contacts: ContactConnection
   controls: ControlConnection
-  controlImplementations: ControlImplementationConnection
   controlObjectives: ControlObjectiveConnection
-  customDomains: CustomDomainConnection
   customTypeEnums: CustomTypeEnumConnection
-  dnsVerifications: DNSVerificationConnection
-  directoryAccounts: DirectoryAccountConnection
-  directoryGroups: DirectoryGroupConnection
-  documentData: DocumentDataConnection
   entities: EntityConnection
-  entityTypes: EntityTypeConnection
-  events: EventConnection
   evidences: EvidenceConnection
-  files: FileConnection
   findings: FindingConnection
   groups: GroupConnection
-  integrations: IntegrationConnection
   internalPolicies: InternalPolicyConnection
   invites: InviteConnection
   jobRunners: JobRunnerConnection
-  jobRunnerRegistrationTokens: JobRunnerRegistrationTokenConnection
-  jobRunnerTokens: JobRunnerTokenConnection
   jobTemplates: JobTemplateConnection
-  mappableDomains: MappableDomainConnection
-  mappedControls: MappedControlConnection
   narratives: NarrativeConnection
-  orgSubscriptions: OrgSubscriptionConnection
   organizations: OrganizationConnection
-  organizationSettings: OrganizationSettingConnection
-  personalAccessTokens: PersonalAccessTokenConnection
   procedures: ProcedureConnection
   programs: ProgramConnection
   remediations: RemediationConnection
@@ -148483,18 +144798,7 @@ type SearchResults{
   tagDefinitions: TagDefinitionConnection
   tasks: TaskConnection
   templates: TemplateConnection
-  trustCenters: TrustCenterConnection
-  trustCenterCompliances: TrustCenterComplianceConnection
-  trustCenterDocs: TrustCenterDocConnection
-  users: UserConnection
-  userSettings: UserSettingConnection
   vulnerabilities: VulnerabilityConnection
-  webauthns: WebauthnConnection
-  workflowAssignments: WorkflowAssignmentConnection
-  workflowAssignmentTargets: WorkflowAssignmentTargetConnection
-  workflowDefinitions: WorkflowDefinitionConnection
-  workflowEvents: WorkflowEventConnection
-  workflowInstances: WorkflowInstanceConnection
 }
 
 extend type Query{
@@ -148502,31 +144806,6 @@ extend type Query{
     Search across all objects
     """
     search(
-        """
-        Query string to search across objects
-        """
-        query: String!
-        """
-        Returns the elements in the list that come after the specified cursor.
-        """
-        after: Cursor
-        """
-        Returns the first _n_ elements from the list.
-        """
-        first: Int
-        """
-        Returns the elements in the list that come before the specified cursor.
-        """
-        before: Cursor
-        """
-        Returns the last _n_ elements from the list.
-        """
-        last: Int
-    ): SearchResults
-    """
-    Admin search across all objects
-    """
-    adminSearch(
         """
         Query string to search across objects
         """

@@ -21,68 +21,39 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
 
 	var (
-		errors                            []error
-		apitokenResults                   *generated.APITokenConnection
-		actionplanResults                 *generated.ActionPlanConnection
-		assessmentResults                 *generated.AssessmentConnection
-		assessmentresponseResults         *generated.AssessmentResponseConnection
-		assetResults                      *generated.AssetConnection
-		contactResults                    *generated.ContactConnection
-		controlResults                    *generated.ControlConnection
-		controlimplementationResults      *generated.ControlImplementationConnection
-		controlobjectiveResults           *generated.ControlObjectiveConnection
-		customdomainResults               *generated.CustomDomainConnection
-		customtypeenumResults             *generated.CustomTypeEnumConnection
-		dnsverificationResults            *generated.DNSVerificationConnection
-		directoryaccountResults           *generated.DirectoryAccountConnection
-		directorygroupResults             *generated.DirectoryGroupConnection
-		documentdataResults               *generated.DocumentDataConnection
-		entityResults                     *generated.EntityConnection
-		entitytypeResults                 *generated.EntityTypeConnection
-		eventResults                      *generated.EventConnection
-		evidenceResults                   *generated.EvidenceConnection
-		fileResults                       *generated.FileConnection
-		findingResults                    *generated.FindingConnection
-		groupResults                      *generated.GroupConnection
-		integrationResults                *generated.IntegrationConnection
-		internalpolicyResults             *generated.InternalPolicyConnection
-		inviteResults                     *generated.InviteConnection
-		jobrunnerResults                  *generated.JobRunnerConnection
-		jobrunnerregistrationtokenResults *generated.JobRunnerRegistrationTokenConnection
-		jobrunnertokenResults             *generated.JobRunnerTokenConnection
-		jobtemplateResults                *generated.JobTemplateConnection
-		mappabledomainResults             *generated.MappableDomainConnection
-		mappedcontrolResults              *generated.MappedControlConnection
-		narrativeResults                  *generated.NarrativeConnection
-		orgsubscriptionResults            *generated.OrgSubscriptionConnection
-		organizationResults               *generated.OrganizationConnection
-		organizationsettingResults        *generated.OrganizationSettingConnection
-		personalaccesstokenResults        *generated.PersonalAccessTokenConnection
-		procedureResults                  *generated.ProcedureConnection
-		programResults                    *generated.ProgramConnection
-		remediationResults                *generated.RemediationConnection
-		reviewResults                     *generated.ReviewConnection
-		riskResults                       *generated.RiskConnection
-		scanResults                       *generated.ScanConnection
-		standardResults                   *generated.StandardConnection
-		subcontrolResults                 *generated.SubcontrolConnection
-		subprocessorResults               *generated.SubprocessorConnection
-		subscriberResults                 *generated.SubscriberConnection
-		tagdefinitionResults              *generated.TagDefinitionConnection
-		taskResults                       *generated.TaskConnection
-		templateResults                   *generated.TemplateConnection
-		trustcenterResults                *generated.TrustCenterConnection
-		trustcentercomplianceResults      *generated.TrustCenterComplianceConnection
-		trustcenterdocResults             *generated.TrustCenterDocConnection
-		userResults                       *generated.UserConnection
-		usersettingResults                *generated.UserSettingConnection
-		vulnerabilityResults              *generated.VulnerabilityConnection
-		webauthnResults                   *generated.WebauthnConnection
-		workflowassignmentResults         *generated.WorkflowAssignmentConnection
-		workflowassignmenttargetResults   *generated.WorkflowAssignmentTargetConnection
-		workflowdefinitionResults         *generated.WorkflowDefinitionConnection
-		workfloweventResults              *generated.WorkflowEventConnection
-		workflowinstanceResults           *generated.WorkflowInstanceConnection
+		errors                    []error
+		actionplanResults         *generated.ActionPlanConnection
+		assessmentResults         *generated.AssessmentConnection
+		assessmentresponseResults *generated.AssessmentResponseConnection
+		assetResults              *generated.AssetConnection
+		contactResults            *generated.ContactConnection
+		controlResults            *generated.ControlConnection
+		controlobjectiveResults   *generated.ControlObjectiveConnection
+		customtypeenumResults     *generated.CustomTypeEnumConnection
+		entityResults             *generated.EntityConnection
+		evidenceResults           *generated.EvidenceConnection
+		findingResults            *generated.FindingConnection
+		groupResults              *generated.GroupConnection
+		internalpolicyResults     *generated.InternalPolicyConnection
+		inviteResults             *generated.InviteConnection
+		jobrunnerResults          *generated.JobRunnerConnection
+		jobtemplateResults        *generated.JobTemplateConnection
+		narrativeResults          *generated.NarrativeConnection
+		organizationResults       *generated.OrganizationConnection
+		procedureResults          *generated.ProcedureConnection
+		programResults            *generated.ProgramConnection
+		remediationResults        *generated.RemediationConnection
+		reviewResults             *generated.ReviewConnection
+		riskResults               *generated.RiskConnection
+		scanResults               *generated.ScanConnection
+		standardResults           *generated.StandardConnection
+		subcontrolResults         *generated.SubcontrolConnection
+		subprocessorResults       *generated.SubprocessorConnection
+		subscriberResults         *generated.SubscriberConnection
+		tagdefinitionResults      *generated.TagDefinitionConnection
+		taskResults               *generated.TaskConnection
+		templateResults           *generated.TemplateConnection
+		vulnerabilityResults      *generated.VulnerabilityConnection
 	)
 
 	highlightTracker := newContextTracker(query)
@@ -90,18 +61,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 	hasSearchContext := graphutils.CheckForRequestedField(ctx, "searchContext")
 
 	r.withPool().SubmitMultipleAndWait([]func(){
-		func() {
-			var err error
-			apitokenResults, err = searchAPITokens(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, apitokenResults, highlightTracker)
-			}
-		},
 		func() {
 			var err error
 			actionplanResults, err = searchActionPlans(ctx, query, after, first, before, last)
@@ -176,18 +135,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			controlimplementationResults, err = searchControlImplementations(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, controlimplementationResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			controlobjectiveResults, err = searchControlObjectives(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -196,18 +143,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, controlobjectiveResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			customdomainResults, err = searchCustomDomains(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, customdomainResults, highlightTracker)
 			}
 		},
 		func() {
@@ -224,54 +159,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			dnsverificationResults, err = searchDNSVerifications(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, dnsverificationResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			directoryaccountResults, err = searchDirectoryAccounts(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, directoryaccountResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			directorygroupResults, err = searchDirectoryGroups(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, directorygroupResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			documentdataResults, err = searchDocumentData(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, documentdataResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			entityResults, err = searchEntities(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -284,30 +171,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			entitytypeResults, err = searchEntityTypes(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, entitytypeResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			eventResults, err = searchEvents(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, eventResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			evidenceResults, err = searchEvidences(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -316,18 +179,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, evidenceResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			fileResults, err = searchFiles(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, fileResults, highlightTracker)
 			}
 		},
 		func() {
@@ -352,18 +203,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, groupResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			integrationResults, err = searchIntegrations(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, integrationResults, highlightTracker)
 			}
 		},
 		func() {
@@ -404,30 +243,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			jobrunnerregistrationtokenResults, err = searchJobRunnerRegistrationTokens(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, jobrunnerregistrationtokenResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			jobrunnertokenResults, err = searchJobRunnerTokens(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, jobrunnertokenResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			jobtemplateResults, err = searchJobTemplates(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -436,30 +251,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, jobtemplateResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			mappabledomainResults, err = searchMappableDomains(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, mappabledomainResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			mappedcontrolResults, err = searchMappedControls(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, mappedcontrolResults, highlightTracker)
 			}
 		},
 		func() {
@@ -476,18 +267,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			orgsubscriptionResults, err = searchOrgSubscriptions(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, orgsubscriptionResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			organizationResults, err = searchOrganizations(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -496,30 +275,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, organizationResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			organizationsettingResults, err = searchOrganizationSettings(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, organizationsettingResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			personalaccesstokenResults, err = searchPersonalAccessTokens(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, personalaccesstokenResults, highlightTracker)
 			}
 		},
 		func() {
@@ -680,66 +435,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
-			trustcenterResults, err = searchTrustCenters(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, trustcenterResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			trustcentercomplianceResults, err = searchTrustCenterCompliances(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, trustcentercomplianceResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			trustcenterdocResults, err = searchTrustCenterDocs(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, trustcenterdocResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			userResults, err = searchUsers(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, userResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			usersettingResults, err = searchUserSettings(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, usersettingResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
 			vulnerabilityResults, err = searchVulnerabilities(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -748,78 +443,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 			if hasSearchContext {
 				highlightSearchContext(ctx, query, vulnerabilityResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			webauthnResults, err = searchWebauthns(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, webauthnResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			workflowassignmentResults, err = searchWorkflowAssignments(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, workflowassignmentResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			workflowassignmenttargetResults, err = searchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, workflowassignmenttargetResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			workflowdefinitionResults, err = searchWorkflowDefinitions(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, workflowdefinitionResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			workfloweventResults, err = searchWorkflowEvents(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, workfloweventResults, highlightTracker)
-			}
-		},
-		func() {
-			var err error
-			workflowinstanceResults, err = searchWorkflowInstances(ctx, query, after, first, before, last)
-			// ignore not found errors
-			if err != nil && !generated.IsNotFound(err) {
-				errors = append(errors, err)
-			}
-
-			if hasSearchContext {
-				highlightSearchContext(ctx, query, workflowinstanceResults, highlightTracker)
 			}
 		},
 	})
@@ -833,11 +456,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 	res := &model.SearchResults{
 		TotalCount:    0,
 		SearchContext: highlightTracker.getContexts(),
-	}
-	if apitokenResults != nil && len(apitokenResults.Edges) > 0 {
-		res.APITokens = apitokenResults
-
-		res.TotalCount += apitokenResults.TotalCount
 	}
 	if actionplanResults != nil && len(actionplanResults.Edges) > 0 {
 		res.ActionPlans = actionplanResults
@@ -869,70 +487,25 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += controlResults.TotalCount
 	}
-	if controlimplementationResults != nil && len(controlimplementationResults.Edges) > 0 {
-		res.ControlImplementations = controlimplementationResults
-
-		res.TotalCount += controlimplementationResults.TotalCount
-	}
 	if controlobjectiveResults != nil && len(controlobjectiveResults.Edges) > 0 {
 		res.ControlObjectives = controlobjectiveResults
 
 		res.TotalCount += controlobjectiveResults.TotalCount
-	}
-	if customdomainResults != nil && len(customdomainResults.Edges) > 0 {
-		res.CustomDomains = customdomainResults
-
-		res.TotalCount += customdomainResults.TotalCount
 	}
 	if customtypeenumResults != nil && len(customtypeenumResults.Edges) > 0 {
 		res.CustomTypeEnums = customtypeenumResults
 
 		res.TotalCount += customtypeenumResults.TotalCount
 	}
-	if dnsverificationResults != nil && len(dnsverificationResults.Edges) > 0 {
-		res.DNSVerifications = dnsverificationResults
-
-		res.TotalCount += dnsverificationResults.TotalCount
-	}
-	if directoryaccountResults != nil && len(directoryaccountResults.Edges) > 0 {
-		res.DirectoryAccounts = directoryaccountResults
-
-		res.TotalCount += directoryaccountResults.TotalCount
-	}
-	if directorygroupResults != nil && len(directorygroupResults.Edges) > 0 {
-		res.DirectoryGroups = directorygroupResults
-
-		res.TotalCount += directorygroupResults.TotalCount
-	}
-	if documentdataResults != nil && len(documentdataResults.Edges) > 0 {
-		res.DocumentData = documentdataResults
-
-		res.TotalCount += documentdataResults.TotalCount
-	}
 	if entityResults != nil && len(entityResults.Edges) > 0 {
 		res.Entities = entityResults
 
 		res.TotalCount += entityResults.TotalCount
 	}
-	if entitytypeResults != nil && len(entitytypeResults.Edges) > 0 {
-		res.EntityTypes = entitytypeResults
-
-		res.TotalCount += entitytypeResults.TotalCount
-	}
-	if eventResults != nil && len(eventResults.Edges) > 0 {
-		res.Events = eventResults
-
-		res.TotalCount += eventResults.TotalCount
-	}
 	if evidenceResults != nil && len(evidenceResults.Edges) > 0 {
 		res.Evidences = evidenceResults
 
 		res.TotalCount += evidenceResults.TotalCount
-	}
-	if fileResults != nil && len(fileResults.Edges) > 0 {
-		res.Files = fileResults
-
-		res.TotalCount += fileResults.TotalCount
 	}
 	if findingResults != nil && len(findingResults.Edges) > 0 {
 		res.Findings = findingResults
@@ -943,11 +516,6 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Groups = groupResults
 
 		res.TotalCount += groupResults.TotalCount
-	}
-	if integrationResults != nil && len(integrationResults.Edges) > 0 {
-		res.Integrations = integrationResults
-
-		res.TotalCount += integrationResults.TotalCount
 	}
 	if internalpolicyResults != nil && len(internalpolicyResults.Edges) > 0 {
 		res.InternalPolicies = internalpolicyResults
@@ -964,55 +532,20 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += jobrunnerResults.TotalCount
 	}
-	if jobrunnerregistrationtokenResults != nil && len(jobrunnerregistrationtokenResults.Edges) > 0 {
-		res.JobRunnerRegistrationTokens = jobrunnerregistrationtokenResults
-
-		res.TotalCount += jobrunnerregistrationtokenResults.TotalCount
-	}
-	if jobrunnertokenResults != nil && len(jobrunnertokenResults.Edges) > 0 {
-		res.JobRunnerTokens = jobrunnertokenResults
-
-		res.TotalCount += jobrunnertokenResults.TotalCount
-	}
 	if jobtemplateResults != nil && len(jobtemplateResults.Edges) > 0 {
 		res.JobTemplates = jobtemplateResults
 
 		res.TotalCount += jobtemplateResults.TotalCount
-	}
-	if mappabledomainResults != nil && len(mappabledomainResults.Edges) > 0 {
-		res.MappableDomains = mappabledomainResults
-
-		res.TotalCount += mappabledomainResults.TotalCount
-	}
-	if mappedcontrolResults != nil && len(mappedcontrolResults.Edges) > 0 {
-		res.MappedControls = mappedcontrolResults
-
-		res.TotalCount += mappedcontrolResults.TotalCount
 	}
 	if narrativeResults != nil && len(narrativeResults.Edges) > 0 {
 		res.Narratives = narrativeResults
 
 		res.TotalCount += narrativeResults.TotalCount
 	}
-	if orgsubscriptionResults != nil && len(orgsubscriptionResults.Edges) > 0 {
-		res.OrgSubscriptions = orgsubscriptionResults
-
-		res.TotalCount += orgsubscriptionResults.TotalCount
-	}
 	if organizationResults != nil && len(organizationResults.Edges) > 0 {
 		res.Organizations = organizationResults
 
 		res.TotalCount += organizationResults.TotalCount
-	}
-	if organizationsettingResults != nil && len(organizationsettingResults.Edges) > 0 {
-		res.OrganizationSettings = organizationsettingResults
-
-		res.TotalCount += organizationsettingResults.TotalCount
-	}
-	if personalaccesstokenResults != nil && len(personalaccesstokenResults.Edges) > 0 {
-		res.PersonalAccessTokens = personalaccesstokenResults
-
-		res.TotalCount += personalaccesstokenResults.TotalCount
 	}
 	if procedureResults != nil && len(procedureResults.Edges) > 0 {
 		res.Procedures = procedureResults
@@ -1079,78 +612,13 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 
 		res.TotalCount += templateResults.TotalCount
 	}
-	if trustcenterResults != nil && len(trustcenterResults.Edges) > 0 {
-		res.TrustCenters = trustcenterResults
-
-		res.TotalCount += trustcenterResults.TotalCount
-	}
-	if trustcentercomplianceResults != nil && len(trustcentercomplianceResults.Edges) > 0 {
-		res.TrustCenterCompliances = trustcentercomplianceResults
-
-		res.TotalCount += trustcentercomplianceResults.TotalCount
-	}
-	if trustcenterdocResults != nil && len(trustcenterdocResults.Edges) > 0 {
-		res.TrustCenterDocs = trustcenterdocResults
-
-		res.TotalCount += trustcenterdocResults.TotalCount
-	}
-	if userResults != nil && len(userResults.Edges) > 0 {
-		res.Users = userResults
-
-		res.TotalCount += userResults.TotalCount
-	}
-	if usersettingResults != nil && len(usersettingResults.Edges) > 0 {
-		res.UserSettings = usersettingResults
-
-		res.TotalCount += usersettingResults.TotalCount
-	}
 	if vulnerabilityResults != nil && len(vulnerabilityResults.Edges) > 0 {
 		res.Vulnerabilities = vulnerabilityResults
 
 		res.TotalCount += vulnerabilityResults.TotalCount
 	}
-	if webauthnResults != nil && len(webauthnResults.Edges) > 0 {
-		res.Webauthns = webauthnResults
-
-		res.TotalCount += webauthnResults.TotalCount
-	}
-	if workflowassignmentResults != nil && len(workflowassignmentResults.Edges) > 0 {
-		res.WorkflowAssignments = workflowassignmentResults
-
-		res.TotalCount += workflowassignmentResults.TotalCount
-	}
-	if workflowassignmenttargetResults != nil && len(workflowassignmenttargetResults.Edges) > 0 {
-		res.WorkflowAssignmentTargets = workflowassignmenttargetResults
-
-		res.TotalCount += workflowassignmenttargetResults.TotalCount
-	}
-	if workflowdefinitionResults != nil && len(workflowdefinitionResults.Edges) > 0 {
-		res.WorkflowDefinitions = workflowdefinitionResults
-
-		res.TotalCount += workflowdefinitionResults.TotalCount
-	}
-	if workfloweventResults != nil && len(workfloweventResults.Edges) > 0 {
-		res.WorkflowEvents = workfloweventResults
-
-		res.TotalCount += workfloweventResults.TotalCount
-	}
-	if workflowinstanceResults != nil && len(workflowinstanceResults.Edges) > 0 {
-		res.WorkflowInstances = workflowinstanceResults
-
-		res.TotalCount += workflowinstanceResults.TotalCount
-	}
 
 	return res, nil
-}
-func (r *queryResolver) APITokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.APITokenConnection, error) {
-	apitokenResults, err := searchAPITokens(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return apitokenResults, nil
 }
 func (r *queryResolver) ActionPlanSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ActionPlanConnection, error) {
 	actionplanResults, err := searchActionPlans(ctx, query, after, first, before, last)
@@ -1212,16 +680,6 @@ func (r *queryResolver) ControlSearch(ctx context.Context, query string, after *
 	// return the results
 	return controlResults, nil
 }
-func (r *queryResolver) ControlImplementationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlImplementationConnection, error) {
-	controlimplementationResults, err := searchControlImplementations(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return controlimplementationResults, nil
-}
 func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ControlObjectiveConnection, error) {
 	controlobjectiveResults, err := searchControlObjectives(ctx, query, after, first, before, last)
 
@@ -1231,16 +689,6 @@ func (r *queryResolver) ControlObjectiveSearch(ctx context.Context, query string
 
 	// return the results
 	return controlobjectiveResults, nil
-}
-func (r *queryResolver) CustomDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomDomainConnection, error) {
-	customdomainResults, err := searchCustomDomains(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return customdomainResults, nil
 }
 func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.CustomTypeEnumConnection, error) {
 	customtypeenumResults, err := searchCustomTypeEnums(ctx, query, after, first, before, last)
@@ -1252,46 +700,6 @@ func (r *queryResolver) CustomTypeEnumSearch(ctx context.Context, query string, 
 	// return the results
 	return customtypeenumResults, nil
 }
-func (r *queryResolver) DNSVerificationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DNSVerificationConnection, error) {
-	dnsverificationResults, err := searchDNSVerifications(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return dnsverificationResults, nil
-}
-func (r *queryResolver) DirectoryAccountSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryAccountConnection, error) {
-	directoryaccountResults, err := searchDirectoryAccounts(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return directoryaccountResults, nil
-}
-func (r *queryResolver) DirectoryGroupSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DirectoryGroupConnection, error) {
-	directorygroupResults, err := searchDirectoryGroups(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return directorygroupResults, nil
-}
-func (r *queryResolver) DocumentDataSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.DocumentDataConnection, error) {
-	documentdataResults, err := searchDocumentData(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return documentdataResults, nil
-}
 func (r *queryResolver) EntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityConnection, error) {
 	entityResults, err := searchEntities(ctx, query, after, first, before, last)
 
@@ -1302,26 +710,6 @@ func (r *queryResolver) EntitySearch(ctx context.Context, query string, after *e
 	// return the results
 	return entityResults, nil
 }
-func (r *queryResolver) EntityTypeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EntityTypeConnection, error) {
-	entitytypeResults, err := searchEntityTypes(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return entitytypeResults, nil
-}
-func (r *queryResolver) EventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EventConnection, error) {
-	eventResults, err := searchEvents(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return eventResults, nil
-}
 func (r *queryResolver) EvidenceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.EvidenceConnection, error) {
 	evidenceResults, err := searchEvidences(ctx, query, after, first, before, last)
 
@@ -1331,16 +719,6 @@ func (r *queryResolver) EvidenceSearch(ctx context.Context, query string, after 
 
 	// return the results
 	return evidenceResults, nil
-}
-func (r *queryResolver) FileSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FileConnection, error) {
-	fileResults, err := searchFiles(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return fileResults, nil
 }
 func (r *queryResolver) FindingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.FindingConnection, error) {
 	findingResults, err := searchFindings(ctx, query, after, first, before, last)
@@ -1361,16 +739,6 @@ func (r *queryResolver) GroupSearch(ctx context.Context, query string, after *en
 
 	// return the results
 	return groupResults, nil
-}
-func (r *queryResolver) IntegrationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.IntegrationConnection, error) {
-	integrationResults, err := searchIntegrations(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return integrationResults, nil
 }
 func (r *queryResolver) InternalPolicySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.InternalPolicyConnection, error) {
 	internalpolicyResults, err := searchInternalPolicies(ctx, query, after, first, before, last)
@@ -1402,26 +770,6 @@ func (r *queryResolver) JobRunnerSearch(ctx context.Context, query string, after
 	// return the results
 	return jobrunnerResults, nil
 }
-func (r *queryResolver) JobRunnerRegistrationTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerRegistrationTokenConnection, error) {
-	jobrunnerregistrationtokenResults, err := searchJobRunnerRegistrationTokens(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return jobrunnerregistrationtokenResults, nil
-}
-func (r *queryResolver) JobRunnerTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobRunnerTokenConnection, error) {
-	jobrunnertokenResults, err := searchJobRunnerTokens(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return jobrunnertokenResults, nil
-}
 func (r *queryResolver) JobTemplateSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.JobTemplateConnection, error) {
 	jobtemplateResults, err := searchJobTemplates(ctx, query, after, first, before, last)
 
@@ -1431,26 +779,6 @@ func (r *queryResolver) JobTemplateSearch(ctx context.Context, query string, aft
 
 	// return the results
 	return jobtemplateResults, nil
-}
-func (r *queryResolver) MappableDomainSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappableDomainConnection, error) {
-	mappabledomainResults, err := searchMappableDomains(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return mappabledomainResults, nil
-}
-func (r *queryResolver) MappedControlSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.MappedControlConnection, error) {
-	mappedcontrolResults, err := searchMappedControls(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return mappedcontrolResults, nil
 }
 func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.NarrativeConnection, error) {
 	narrativeResults, err := searchNarratives(ctx, query, after, first, before, last)
@@ -1462,16 +790,6 @@ func (r *queryResolver) NarrativeSearch(ctx context.Context, query string, after
 	// return the results
 	return narrativeResults, nil
 }
-func (r *queryResolver) OrgSubscriptionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrgSubscriptionConnection, error) {
-	orgsubscriptionResults, err := searchOrgSubscriptions(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return orgsubscriptionResults, nil
-}
 func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationConnection, error) {
 	organizationResults, err := searchOrganizations(ctx, query, after, first, before, last)
 
@@ -1481,26 +799,6 @@ func (r *queryResolver) OrganizationSearch(ctx context.Context, query string, af
 
 	// return the results
 	return organizationResults, nil
-}
-func (r *queryResolver) OrganizationSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.OrganizationSettingConnection, error) {
-	organizationsettingResults, err := searchOrganizationSettings(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return organizationsettingResults, nil
-}
-func (r *queryResolver) PersonalAccessTokenSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.PersonalAccessTokenConnection, error) {
-	personalaccesstokenResults, err := searchPersonalAccessTokens(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return personalaccesstokenResults, nil
 }
 func (r *queryResolver) ProcedureSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.ProcedureConnection, error) {
 	procedureResults, err := searchProcedures(ctx, query, after, first, before, last)
@@ -1632,56 +930,6 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 	// return the results
 	return templateResults, nil
 }
-func (r *queryResolver) TrustCenterSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterConnection, error) {
-	trustcenterResults, err := searchTrustCenters(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return trustcenterResults, nil
-}
-func (r *queryResolver) TrustCenterComplianceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterComplianceConnection, error) {
-	trustcentercomplianceResults, err := searchTrustCenterCompliances(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return trustcentercomplianceResults, nil
-}
-func (r *queryResolver) TrustCenterDocSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustCenterDocConnection, error) {
-	trustcenterdocResults, err := searchTrustCenterDocs(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return trustcenterdocResults, nil
-}
-func (r *queryResolver) UserSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserConnection, error) {
-	userResults, err := searchUsers(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return userResults, nil
-}
-func (r *queryResolver) UserSettingSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.UserSettingConnection, error) {
-	usersettingResults, err := searchUserSettings(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return usersettingResults, nil
-}
 func (r *queryResolver) VulnerabilitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.VulnerabilityConnection, error) {
 	vulnerabilityResults, err := searchVulnerabilities(ctx, query, after, first, before, last)
 
@@ -1691,64 +939,4 @@ func (r *queryResolver) VulnerabilitySearch(ctx context.Context, query string, a
 
 	// return the results
 	return vulnerabilityResults, nil
-}
-func (r *queryResolver) WebauthnSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WebauthnConnection, error) {
-	webauthnResults, err := searchWebauthns(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return webauthnResults, nil
-}
-func (r *queryResolver) WorkflowAssignmentSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentConnection, error) {
-	workflowassignmentResults, err := searchWorkflowAssignments(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return workflowassignmentResults, nil
-}
-func (r *queryResolver) WorkflowAssignmentTargetSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowAssignmentTargetConnection, error) {
-	workflowassignmenttargetResults, err := searchWorkflowAssignmentTargets(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return workflowassignmenttargetResults, nil
-}
-func (r *queryResolver) WorkflowDefinitionSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowDefinitionConnection, error) {
-	workflowdefinitionResults, err := searchWorkflowDefinitions(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return workflowdefinitionResults, nil
-}
-func (r *queryResolver) WorkflowEventSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowEventConnection, error) {
-	workfloweventResults, err := searchWorkflowEvents(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return workfloweventResults, nil
-}
-func (r *queryResolver) WorkflowInstanceSearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.WorkflowInstanceConnection, error) {
-	workflowinstanceResults, err := searchWorkflowInstances(ctx, query, after, first, before, last)
-
-	if err != nil {
-		return nil, ErrSearchFailed
-	}
-
-	// return the results
-	return workflowinstanceResults, nil
 }
