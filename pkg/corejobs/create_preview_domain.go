@@ -2,6 +2,7 @@ package corejobs
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"strings"
 
@@ -15,6 +16,16 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/openlaneclient"
 	"github.com/theopenlane/utils/keygen"
+)
+
+const (
+	// previewDomainRandomStringLength is the length of the random string used in preview domain names
+	previewDomainRandomStringLength = 9
+)
+
+var (
+	// ErrNoMappableDomainFound is returned when no mappable domain is found for the given target
+	ErrNoMappableDomainFound = errors.New("no mappable domain found")
 )
 
 // CreatePreviewDomainArgs for the worker to process the preview domain creation
@@ -117,14 +128,14 @@ func (w *CreatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[Cre
 	}
 
 	if len(mappableDomain.MappableDomains.Edges) == 0 {
-		return fmt.Errorf("no mappable domain found for %s", job.Args.TrustCenterCnameTarget)
+		return fmt.Errorf("%w: %s", ErrNoMappableDomainFound, job.Args.TrustCenterCnameTarget)
 	}
 
 	log.Debug().
 		Str("mappable_domain_id", mappableDomain.MappableDomains.Edges[0].Node.ID).
 		Msg("got mappable domain")
 
-	previewDomain := createPreviewDomain(ctx, zone.Name, *trustCenter.TrustCenter.Slug)
+	previewDomain := createPreviewDomain(zone.Name, *trustCenter.TrustCenter.Slug)
 
 	customDomain, err := w.olClient.CreateCustomDomain(ctx, openlaneclient.CreateCustomDomainInput{
 		CnameRecord:      previewDomain,
@@ -168,7 +179,7 @@ func (w *CreatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[Cre
 }
 
 // create domain like $slug-$randomstring.$zoneName
-func createPreviewDomain(ctx context.Context, zoneName string, trustCenterSlug string) string {
-	randomString := keygen.AlphaNumeric(9)
+func createPreviewDomain(zoneName string, trustCenterSlug string) string {
+	randomString := keygen.AlphaNumeric(previewDomainRandomStringLength)
 	return fmt.Sprintf("%s-%s.%s", strings.ToLower(trustCenterSlug), strings.ToLower(randomString), zoneName)
 }
