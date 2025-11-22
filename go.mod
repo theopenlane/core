@@ -28,7 +28,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.1
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.11
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.92.0
-	github.com/brianvoe/gofakeit/v7 v7.9.0
+	github.com/brianvoe/gofakeit/v7 v7.10.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.3.0
 	github.com/didasy/tldr v0.7.0
