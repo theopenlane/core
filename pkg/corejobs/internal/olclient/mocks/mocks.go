@@ -53225,6 +53225,89 @@ func (_c *MockOpenlaneGraphClient_GetWorkflowObjectRefs_Call) RunAndReturn(run f
 	return _c
 }
 
+// GlobalSearch provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) GlobalSearch(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GlobalSearch, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, query, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, query)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for GlobalSearch")
+	}
+
+	var r0 *openlaneclient.GlobalSearch
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) (*openlaneclient.GlobalSearch, error)); ok {
+		return returnFunc(ctx, query, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, ...clientv2.RequestInterceptor) *openlaneclient.GlobalSearch); ok {
+		r0 = returnFunc(ctx, query, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.GlobalSearch)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, query, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_GlobalSearch_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'GlobalSearch'
+type MockOpenlaneGraphClient_GlobalSearch_Call struct {
+	*mock.Call
+}
+
+// GlobalSearch is a helper method to define mock.On call
+//   - ctx context.Context
+//   - query string
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) GlobalSearch(ctx interface{}, query interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_GlobalSearch_Call {
+	return &MockOpenlaneGraphClient_GlobalSearch_Call{Call: _e.mock.On("GlobalSearch",
+		append([]interface{}{ctx, query}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_GlobalSearch_Call) Run(run func(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_GlobalSearch_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 2 {
+			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		}
+		arg2 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GlobalSearch_Call) Return(globalSearch *openlaneclient.GlobalSearch, err error) *MockOpenlaneGraphClient_GlobalSearch_Call {
+	_c.Call.Return(globalSearch, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_GlobalSearch_Call) RunAndReturn(run func(ctx context.Context, query string, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.GlobalSearch, error)) *MockOpenlaneGraphClient_GlobalSearch_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // SendTrustCenterNDAEmail provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) SendTrustCenterNDAEmail(ctx context.Context, input openlaneclient.SendTrustCenterNDAInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.SendTrustCenterNDAEmail, error) {
 	var tmpRet mock.Arguments
