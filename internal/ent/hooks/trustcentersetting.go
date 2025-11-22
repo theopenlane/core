@@ -7,12 +7,28 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
 var ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 var ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
+var ErrMissingTrustCenterID = errors.New("trust center id is required")
+
+var trustCenterConfig TrustCenterConfig
+
+// SetTrustCenterConfig sets the trust center configuration
+func SetTrustCenterConfig(cfg TrustCenterConfig) {
+	trustCenterConfig = cfg
+}
+
+// TrustCenterConfig holds the trust center configuration
+type TrustCenterConfig struct {
+	PreviewZoneID string
+	CnameTarget   string
+}
 
 func HookTrustCenterSetting() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
@@ -33,6 +49,41 @@ func HookTrustCenterSetting() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne)
+}
+
+func HookTrustCenterSettingCreatePreview() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterSettingFunc(func(ctx context.Context, m *generated.TrustCenterSettingMutation) (generated.Value, error) {
+			logx.FromContext(ctx).Debug().Msg("trust center setting create preview hook")
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// check the environment
+			if env, ok := m.Environment(); !ok || env != enums.TrustCenterEnvironmentPreview {
+				return v, nil
+			}
+
+			trustCenterID, hasTc := m.TrustCenterID()
+			if !hasTc {
+				// should never happen
+				return nil, ErrMissingTrustCenterID
+			}
+
+			// Insert job to create preview domain with config values
+			if _, err = m.Job.Insert(ctx, corejobs.CreatePreviewDomainArgs{
+				TrustCenterID:            trustCenterID,
+				TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+				TrustCenterCnameTarget:   trustCenterConfig.CnameTarget,
+			}, nil); err != nil {
+				return nil, err
+			}
+
+			return v, nil
+
+		})
+	}, ent.OpCreate)
 }
 
 func checkTrustCenterFiles(ctx context.Context, m *generated.TrustCenterSettingMutation) (context.Context, error) {
