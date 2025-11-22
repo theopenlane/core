@@ -15046,6 +15046,10 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetPirschIdentificationCode(pirschIdentificationCode)
 	}
 
+	if previewStatus, exists := m.PreviewStatus(); exists {
+		create = create.SetPreviewStatus(previewStatus)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15155,6 +15159,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPirschIdentificationCode(trustcenter.PirschIdentificationCode)
 		}
 
+		if previewStatus, exists := m.PreviewStatus(); exists {
+			create = create.SetPreviewStatus(previewStatus)
+		} else {
+			create = create.SetPreviewStatus(trustcenter.PreviewStatus)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15203,6 +15213,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetPreviewDomainID(trustcenter.PreviewDomainID).
 			SetPirschDomainID(trustcenter.PirschDomainID).
 			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).
+			SetPreviewStatus(trustcenter.PreviewStatus).
 			Save(ctx)
 		if err != nil {
 			return err

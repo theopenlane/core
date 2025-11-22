@@ -13773,6 +13773,10 @@ input CreateTrustCenterInput {
 	Pirsch ID code
 	"""
 	pirschIdentificationCode: String
+	"""
+	preview status of the trust center
+	"""
+	previewStatus: TrustCenterTrustCenterPreviewStatus
 	ownerID: ID
 	customDomainID: ID
 	previewDomainID: ID
@@ -77049,6 +77053,10 @@ type TrustCenter implements Node {
 	Pirsch ID code
 	"""
 	pirschIdentificationCode: String
+	"""
+	preview status of the trust center
+	"""
+	previewStatus: TrustCenterTrustCenterPreviewStatus
 	owner: Organization
 	customDomain: CustomDomain
 	previewDomain: CustomDomain
@@ -78519,6 +78527,10 @@ type TrustCenterHistory implements Node {
 	Pirsch ID code
 	"""
 	pirschIdentificationCode: String
+	"""
+	preview status of the trust center
+	"""
+	previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
 }
 """
 A connection to a list of items.
@@ -78578,6 +78590,16 @@ enum TrustCenterHistoryOrderField {
 	history_time
 	created_at
 	updated_at
+}
+"""
+TrustCenterHistoryTrustCenterPreviewStatus is enum for the field preview_status
+"""
+enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+	PROVISIONING
+	READY
+	FAILED
+	DEPROVISIONING
+	NONE
 }
 """
 TrustCenterHistoryWhereInput is used for filtering TrustCenterHistory objects.
@@ -78806,6 +78828,15 @@ input TrustCenterHistoryWhereInput {
 	pirschIdentificationCodeNotNil: Boolean
 	pirschIdentificationCodeEqualFold: String
 	pirschIdentificationCodeContainsFold: String
+	"""
+	preview_status field predicates
+	"""
+	previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
+	previewStatusNEQ: TrustCenterHistoryTrustCenterPreviewStatus
+	previewStatusIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
+	previewStatusNotIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
+	previewStatusIsNil: Boolean
+	previewStatusNotNil: Boolean
 }
 type TrustCenterNDACreatePayload {
 	template: Template!
@@ -80463,6 +80494,16 @@ input TrustCenterSubprocessorWhereInput {
 	hasSubprocessorWith: [SubprocessorWhereInput!]
 }
 """
+TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
+"""
+enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+	PROVISIONING
+	READY
+	FAILED
+	DEPROVISIONING
+	NONE
+}
+"""
 Return response for updateTrustCenter mutation
 """
 type TrustCenterUpdatePayload {
@@ -81433,6 +81474,15 @@ input TrustCenterWhereInput {
 	pirschIdentificationCodeNotNil: Boolean
 	pirschIdentificationCodeEqualFold: String
 	pirschIdentificationCodeContainsFold: String
+	"""
+	preview_status field predicates
+	"""
+	previewStatus: TrustCenterTrustCenterPreviewStatus
+	previewStatusNEQ: TrustCenterTrustCenterPreviewStatus
+	previewStatusIn: [TrustCenterTrustCenterPreviewStatus!]
+	previewStatusNotIn: [TrustCenterTrustCenterPreviewStatus!]
+	previewStatusIsNil: Boolean
+	previewStatusNotNil: Boolean
 	"""
 	owner edge predicates
 	"""
@@ -86114,6 +86164,11 @@ input UpdateTrustCenterInput {
 	"""
 	pirschIdentificationCode: String
 	clearPirschIdentificationCode: Boolean
+	"""
+	preview status of the trust center
+	"""
+	previewStatus: TrustCenterTrustCenterPreviewStatus
+	clearPreviewStatus: Boolean
 	ownerID: ID
 	clearOwner: Boolean
 	customDomainID: ID

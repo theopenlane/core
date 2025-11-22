@@ -4467,6 +4467,9 @@ func (_m *TrustCenterHistory) changes(new *TrustCenterHistory) []Change {
 	if !reflect.DeepEqual(_m.PirschIdentificationCode, new.PirschIdentificationCode) {
 		changes = append(changes, NewChange(trustcenterhistory.FieldPirschIdentificationCode, _m.PirschIdentificationCode, new.PirschIdentificationCode))
 	}
+	if !reflect.DeepEqual(_m.PreviewStatus, new.PreviewStatus) {
+		changes = append(changes, NewChange(trustcenterhistory.FieldPreviewStatus, _m.PreviewStatus, new.PreviewStatus))
+	}
 	return changes
 }
 

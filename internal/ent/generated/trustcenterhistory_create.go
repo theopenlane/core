@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -229,6 +230,20 @@ func (_c *TrustCenterHistoryCreate) SetNillablePirschIdentificationCode(v *strin
 	return _c
 }
 
+// SetPreviewStatus sets the "preview_status" field.
+func (_c *TrustCenterHistoryCreate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryCreate {
+	_c.mutation.SetPreviewStatus(v)
+	return _c
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_c *TrustCenterHistoryCreate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterHistoryCreate {
+	if v != nil {
+		_c.SetPreviewStatus(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterHistoryCreate) SetID(v string) *TrustCenterHistoryCreate {
 	_c.mutation.SetID(v)
@@ -305,6 +320,10 @@ func (_c *TrustCenterHistoryCreate) defaults() error {
 		v := trustcenterhistory.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.PreviewStatus(); !ok {
+		v := trustcenterhistory.DefaultPreviewStatus
+		_c.mutation.SetPreviewStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenterhistory.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenterhistory.DefaultID (forgotten import generated/runtime?)")
@@ -326,6 +345,11 @@ func (_c *TrustCenterHistoryCreate) check() error {
 	if v, ok := _c.mutation.Operation(); ok {
 		if err := trustcenterhistory.OperationValidator(v); err != nil {
 			return &ValidationError{Name: "operation", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.operation": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PreviewStatus(); ok {
+		if err := trustcenterhistory.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.preview_status": %w`, err)}
 		}
 	}
 	return nil
@@ -427,6 +451,10 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	if value, ok := _c.mutation.PirschIdentificationCode(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
+	}
+	if value, ok := _c.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)
+		_node.PreviewStatus = value
 	}
 	return _node, _spec
 }

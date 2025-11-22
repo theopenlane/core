@@ -3,11 +3,14 @@
 package trustcenter
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -41,6 +44,8 @@ const (
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
 	FieldPirschIdentificationCode = "pirsch_identification_code"
+	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
+	FieldPreviewStatus = "preview_status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeCustomDomain holds the string denoting the custom_domain edge name in mutations.
@@ -160,6 +165,7 @@ var Columns = []string{
 	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
+	FieldPreviewStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "trust_centers"
@@ -207,6 +213,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultPreviewStatus enums.TrustCenterPreviewStatus = "NONE"
+
+// PreviewStatusValidator is a validator for the "preview_status" field enum values. It is called by the builders before save.
+func PreviewStatusValidator(ps enums.TrustCenterPreviewStatus) error {
+	switch ps.String() {
+	case "PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("trustcenter: invalid enum value for preview_status field: %q", ps)
+	}
+}
 
 // OrderOption defines the ordering options for the TrustCenter queries.
 type OrderOption func(*sql.Selector)
@@ -274,6 +292,11 @@ func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByPirschIdentificationCode orders the results by the pirsch_identification_code field.
 func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
+}
+
+// ByPreviewStatus orders the results by the preview_status field.
+func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewStatus, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -464,3 +487,10 @@ func newPostsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
 	)
 }
+
+var (
+	// enums.TrustCenterPreviewStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterPreviewStatus)(nil)
+	// enums.TrustCenterPreviewStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterPreviewStatus)(nil)
+)
