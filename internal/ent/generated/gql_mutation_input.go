@@ -9629,6 +9629,52 @@ func (c *NoteUpdateOne) SetInput(i UpdateNoteInput) *NoteUpdateOne {
 	return c
 }
 
+// CreateNotificationInput represents a mutation input for creating notifications.
+type CreateNotificationInput struct {
+	Tags             []string
+	NotificationType enums.NotificationType
+	ObjectType       string
+	Title            string
+	Body             string
+	Data             map[string]interface{}
+	ReadAt           *models.DateTime
+	Channels         []enums.Channel
+	Topic            *string
+	OwnerID          *string
+}
+
+// Mutate applies the CreateNotificationInput on the NotificationMutation builder.
+func (i *CreateNotificationInput) Mutate(m *NotificationMutation) {
+	if v := i.Tags; v != nil {
+		m.SetTags(v)
+	}
+	m.SetNotificationType(i.NotificationType)
+	m.SetObjectType(i.ObjectType)
+	m.SetTitle(i.Title)
+	m.SetBody(i.Body)
+	if v := i.Data; v != nil {
+		m.SetData(v)
+	}
+	if v := i.ReadAt; v != nil {
+		m.SetReadAt(*v)
+	}
+	if v := i.Channels; v != nil {
+		m.SetChannels(v)
+	}
+	if v := i.Topic; v != nil {
+		m.SetTopic(*v)
+	}
+	if v := i.OwnerID; v != nil {
+		m.SetOwnerID(*v)
+	}
+}
+
+// SetInput applies the change-set in the CreateNotificationInput on the NotificationCreate builder.
+func (c *NotificationCreate) SetInput(i CreateNotificationInput) *NotificationCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
 // CreateOnboardingInput represents a mutation input for creating onboardings.
 type CreateOnboardingInput struct {
 	CompanyName    string

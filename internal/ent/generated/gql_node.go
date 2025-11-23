@@ -81,6 +81,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -518,6 +519,11 @@ var notehistoryImplementors = []string{"NoteHistory", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*NoteHistory) IsNode() {}
+
+var notificationImplementors = []string{"Notification", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Notification) IsNode() {}
 
 var onboardingImplementors = []string{"Onboarding", "Node"}
 
@@ -1576,6 +1582,15 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(notehistory.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notehistoryImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case notification.Table:
+		query := c.Notification.Query().
+			Where(notification.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, notificationImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -3432,6 +3447,22 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.NoteHistory.Query().
 			Where(notehistory.IDIn(ids...))
 		query, err := query.CollectFields(ctx, notehistoryImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case notification.Table:
+		query := c.Notification.Query().
+			Where(notification.IDIn(ids...))
+		query, err := query.CollectFields(ctx, notificationImplementors...)
 		if err != nil {
 			return nil, err
 		}

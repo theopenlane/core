@@ -92,6 +92,22 @@ func (ec *executionContext) marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
+func (ec *executionContext) unmarshalNChannel2string(ctx context.Context, v any) (string, error) {
+	res, err := graphql.UnmarshalString(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalNChannel2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
+	_ = sel
+	res := graphql.MarshalString(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+		}
+	}
+	return res
+}
+
 func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
 	var res models.DateTime
 	err := res.UnmarshalGQL(v)
@@ -293,6 +309,42 @@ func (ec *executionContext) marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋco
 	ret := make(graphql.Array, len(v))
 	for i := range v {
 		ret[i] = ec.marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx, sel, v[i])
+	}
+
+	for _, e := range ret {
+		if e == graphql.Null {
+			return graphql.Null
+		}
+	}
+
+	return ret
+}
+
+func (ec *executionContext) unmarshalOChannel2ᚕstringᚄ(ctx context.Context, v any) ([]string, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var vSlice []any
+	vSlice = graphql.CoerceList(v)
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNChannel2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalOChannel2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNChannel2string(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {

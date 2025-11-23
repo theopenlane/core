@@ -132,7 +132,8 @@ func (Notification) Annotations() []schema.Annotation {
 		entx.SchemaGenSkip(true),
 		// skip query gen, this is used for subscriptions only
 		entx.QueryGenSkip(true),
-		entgql.Skip(entgql.SkipAll),
+		entgql.Skip(entgql.SkipMutationUpdateInput | entgql.SkipWhereInput | entgql.SkipOrderField),
+		entgql.Mutations(entgql.MutationCreate()), // only allow creation via mutations, updates are not supported
 	}
 }
 
