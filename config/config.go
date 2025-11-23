@@ -143,6 +143,8 @@ type Server struct {
 	// TrustCenterCnameTarget is the cname target for the trust center
 	// Used for mapping the vanity domains to the trust centers
 	TrustCenterCnameTarget string `json:"trustcentercnametarget" koanf:"trustcentercnametarget" default:""`
+	// TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
+	TrustCenterPreviewZoneID string `json:"trustcenterpreviewzoneid" koanf:"trustcenterpreviewzoneid" default:""`
 }
 
 // KeyWatcher contains settings for the key watcher that manages JWT signing keys

@@ -167,6 +167,7 @@ func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 func (TrustCenterSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterSetting(),
+		hooks.HookTrustCenterSettingCreatePreview(),
 	}
 }
 

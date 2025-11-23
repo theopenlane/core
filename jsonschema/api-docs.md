@@ -176,6 +176,7 @@ Server settings for the echo server
 |**defaulttrustcenterdomain**|`string`|DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set<br/>|no|
 |[**fieldlevelencryption**](#serverfieldlevelencryption)|`object`||no|
 |**trustcentercnametarget**|`string`|TrustCenterCnameTarget is the cname target for the trust center<br/>Used for mapping the vanity domains to the trust centers<br/>|no|
+|**trustcenterpreviewzoneid**|`string`|TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**

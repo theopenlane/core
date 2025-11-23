@@ -213,6 +213,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget }}
       trustcentercnametarget: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid }}
+      trustcenterpreviewzoneid: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.entconfig }}
     entconfig:
