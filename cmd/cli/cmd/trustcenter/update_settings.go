@@ -191,6 +191,10 @@ func consoleSettingsOutput(e any) error {
 		e = v.UpdateTrustCenterSetting.TrustCenterSetting
 	case *openlaneclient.GetTrustCenterSettingByID:
 		e = v.TrustCenterSetting
+	case *openlaneclient.CreateTrustCenterSetting:
+		e = v.CreateTrustCenterSetting.TrustCenterSetting
+	case *openlaneclient.CreateTrustCenterPreviewSetting:
+		e = v.CreateTrustCenterPreviewSetting.TrustCenterSetting
 	}
 
 	s, err := json.Marshal(e)
