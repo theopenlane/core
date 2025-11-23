@@ -18,7 +18,6 @@ import (
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/getkin/kin-openapi/openapi3gen"
 	"github.com/rs/zerolog/log"
-	fgamodel "github.com/theopenlane/core/fga/model"
 
 	"github.com/theopenlane/core/internal/httpserve/specs"
 )
@@ -64,7 +63,10 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 			AuthorizationURL: "https://api.theopenlane.io/oauth2/authorize",
 			TokenURL:         "https://api.theopenlane.io/oauth2/token",
 			RefreshURL:       "https://api.theopenlane.io/oauth2/refresh",
-			Scopes:           getOAuthScopes(),
+			Scopes: map[string]string{
+				"read":  "Read access",
+				"write": "Write access",
+			},
 		}).Scheme(),
 	}
 
@@ -115,26 +117,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	addSchemaDescriptions(spec)
 
 	return spec, nil
-}
-
-func getOAuthScopes() map[string]string {
-	scopeDescriptions := make(map[string]string)
-
-	modelScopes, err := fgamodel.DefaultServiceScopes()
-	if err != nil {
-		log.Warn().Err(err).Msg("failed to load oauth scopes from fga model, falling back to defaults")
-		modelScopes = []string{"can_view", "can_edit"}
-	}
-
-	for _, scope := range modelScopes {
-		scopeDescriptions[scope] = humanizeScope(scope)
-	}
-
-	for alias, relation := range fgamodel.ScopeAliases() {
-		scopeDescriptions[alias] = fmt.Sprintf("alias for %s", relation)
-	}
-
-	return scopeDescriptions
 }
 
 func humanizeScope(scope string) string {

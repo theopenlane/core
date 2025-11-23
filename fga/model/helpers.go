@@ -31,17 +31,12 @@ var (
 		"delete": "can_delete",
 	}
 
-	defaultScopesOnce sync.Once
-	defaultScopes     []string
-	defaultScopesErr  error
-)
-
-var (
 	parseOnce sync.Once
 	parseErr  error
 	parsed    *openfga.AuthorizationModel
 )
 
+// GetAuthorizationModel returns the parsed embedded authorization model
 func GetAuthorizationModel() (*openfga.AuthorizationModel, error) {
 	parseOnce.Do(func() {
 		protoModel, err := language.TransformDSLToProto(string(embeddedModel))
@@ -102,18 +97,9 @@ func RelationsForService() ([]string, error) {
 	return relations, nil
 }
 
-// DefaultServiceScopes returns the cached relations for service subjects
-func DefaultServiceScopes() ([]string, error) {
-	defaultScopesOnce.Do(func() {
-		defaultScopes, defaultScopesErr = RelationsForService()
-	})
-
-	return defaultScopes, defaultScopesErr
-}
-
 // DefaultServiceScopeSet returns the default service scopes as a set
 func DefaultServiceScopeSet() (map[string]struct{}, error) {
-	scopes, err := DefaultServiceScopes()
+	scopes, err := RelationsForService()
 	if err != nil {
 		return nil, err
 	}
@@ -165,7 +151,7 @@ func ScopeAliases() map[string]string {
 
 // ScopeOptions groups available scopes by object (verb mapped back via alias map)
 func ScopeOptions() (map[string][]string, error) {
-	rels, err := DefaultServiceScopes()
+	rels, err := RelationsForService()
 	if err != nil {
 		return nil, err
 	}
