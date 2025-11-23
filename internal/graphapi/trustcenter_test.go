@@ -9,11 +9,14 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
+	"github.com/riverqueue/river/riverdriver/riverpgxv5"
+	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/iam/auth"
@@ -289,6 +292,8 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 
 			if tc.request.CustomDomainID != nil {
 				assert.Check(t, is.Equal(*tc.request.CustomDomainID, *resp.CreateTrustCenter.TrustCenter.CustomDomainID))
+			} else {
+				assert.Check(t, is.Equal(*resp.CreateTrustCenter.TrustCenter.CustomDomainID, ""))
 			}
 
 			// Verify slug is the lowercased, alphanumeric version of the org name
@@ -1020,4 +1025,315 @@ func TestMutationUpdateTrustCenterSetting(t *testing.T) {
 	// Clean up
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter2.ID}).MustDelete(testUser2.UserCtx, t)
+}
+
+// TestTrustCenterCreateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id is set during creation
+func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name                  string
+		request               testclient.CreateTrustCenterInput
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectCreatePirschJob bool
+		expectedErr           string
+	}{
+		{
+			name: "create trust center with custom domain - should trigger CreatePirschDomain job",
+			request: testclient.CreateTrustCenterInput{
+				CustomDomainID: &customDomain.ID,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectCreatePirschJob: true,
+		},
+		{
+			name:                  "create trust center without custom domain - should NOT trigger CreatePirschDomain job",
+			request:               testclient.CreateTrustCenterInput{},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectCreatePirschJob: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			require.NoError(t, err)
+
+			resp, err := tc.client.CreateTrustCenter(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectCreatePirschJob {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: corejobs.CreatePirschDomainArgs{
+								TrustCenterID: resp.CreateTrustCenter.TrustCenter.ID,
+							},
+						},
+					})
+				require.NotNil(t, jobs)
+				require.Len(t, jobs, 1)
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
+			}
+
+			// Clean up
+			(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: resp.CreateTrustCenter.TrustCenter.ID}).MustDelete(tc.ctx, t)
+		})
+	}
+
+	// Clean up custom domain
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+// TestTrustCenterUpdateHookWithCustomDomain tests that CreatePirschDomain job is called when custom_domain_id changes from empty to non-empty
+func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	testCases := []struct {
+		name                  string
+		trustCenterID         string
+		request               testclient.UpdateTrustCenterInput
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectCreatePirschJob bool
+		expectedErr           string
+	}{
+		{
+			name:          "update trust center to add custom domain - should trigger CreatePirschDomain job",
+			trustCenterID: trustCenter.ID,
+			request: testclient.UpdateTrustCenterInput{
+				CustomDomainID: &customDomain.ID,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectCreatePirschJob: true,
+		},
+		{
+			name:          "update trust center without changing custom domain - should NOT trigger CreatePirschDomain job",
+			trustCenterID: trustCenter.ID,
+			request: testclient.UpdateTrustCenterInput{
+				Tags: []string{"test", "tag"},
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectCreatePirschJob: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			require.NoError(t, err)
+
+			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectCreatePirschJob {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: corejobs.CreatePirschDomainArgs{
+								TrustCenterID: tc.trustCenterID,
+							},
+						},
+					})
+				require.NotNil(t, jobs)
+				require.Len(t, jobs, 1)
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+// TestTrustCenterUpdateHookWithPirschDomainUpdate tests that UpdatePirschDomain job is called when custom_domain_id changes from one domain to another
+func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
+	// Create two custom domains
+	customDomain1 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// Create trust center with first custom domain
+	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain1.ID}).MustNew(testUser1.UserCtx, t)
+
+	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	fakePirschDomainID := "fake-pirsch-domain-id-for-update-test"
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
+	require.NoError(t, err)
+
+	testCases := []struct {
+		name                  string
+		trustCenterID         string
+		request               testclient.UpdateTrustCenterInput
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectUpdatePirschJob bool
+		expectedErr           string
+	}{
+		{
+			name:          "update trust center to change custom domain - should trigger UpdatePirschDomain job",
+			trustCenterID: trustCenterWithDomain.ID,
+			request: testclient.UpdateTrustCenterInput{
+				CustomDomainID: &customDomain2.ID,
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectUpdatePirschJob: true,
+		},
+		{
+			name:          "update trust center without changing custom domain - should NOT trigger UpdatePirschDomain job",
+			trustCenterID: trustCenterWithDomain.ID,
+			request: testclient.UpdateTrustCenterInput{
+				Tags: []string{"test", "tag"},
+			},
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectUpdatePirschJob: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			require.NoError(t, err)
+
+			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectUpdatePirschJob {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: corejobs.UpdatePirschDomainArgs{
+								TrustCenterID: tc.trustCenterID,
+							},
+						},
+					})
+				require.NotNil(t, jobs)
+				require.Len(t, jobs, 1)
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.UpdatePirschDomainArgs{}, nil)
+			}
+		})
+	}
+
+	// Clean up
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenterWithDomain.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain1.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain1.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain2.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+// TestTrustCenterDeleteHookWithPirschDomain tests that DeletePirschDomain job is called when pirsch_domain_id exists during deletion
+func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
+	// Create trust center with custom domain for testUser1
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	trustCenterWithDomain := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+
+	// Manually set pirsch_domain_id to simulate what would happen after the CreatePirschDomain job completes
+	// This is necessary because the job runs asynchronously and we need the field set for the delete hook to trigger
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	fakePirschDomainID := "fake-pirsch-domain-id-123"
+	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
+	require.NoError(t, err)
+
+	// Create trust center without custom domain for testUser2 (different organization)
+	trustCenterWithoutDomain := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
+
+	testCases := []struct {
+		name                  string
+		trustCenterID         string
+		client                *testclient.TestClient
+		ctx                   context.Context
+		expectDeletePirschJob bool
+		expectedErr           string
+	}{
+		{
+			name:                  "delete trust center with pirsch domain - should trigger DeletePirschDomain job",
+			trustCenterID:         trustCenterWithDomain.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			expectDeletePirschJob: true,
+		},
+		{
+			name:                  "delete trust center without pirsch domain - should NOT trigger DeletePirschDomain job",
+			trustCenterID:         trustCenterWithoutDomain.ID,
+			client:                suite.client.api,
+			ctx:                   testUser2.UserCtx,
+			expectDeletePirschJob: false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			// Clear any existing jobs
+			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
+			require.NoError(t, err)
+
+			resp, err := tc.client.DeleteTrustCenter(tc.ctx, tc.trustCenterID)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// Verify the job was or was not created based on expectation
+			if tc.expectDeletePirschJob {
+				jobs := rivertest.RequireManyInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()),
+					[]rivertest.ExpectedJob{
+						{
+							Args: corejobs.DeletePirschDomainArgs{},
+						},
+					})
+				require.NotNil(t, jobs)
+				require.Len(t, jobs, 1)
+				// Verify the job has encoded args (PirschDomainID should be set)
+				require.NotEmpty(t, jobs[0].EncodedArgs)
+			} else {
+				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.DeletePirschDomainArgs{}, nil)
+			}
+		})
+	}
+
+	// Clean up custom domain
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }

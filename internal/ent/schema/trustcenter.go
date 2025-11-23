@@ -177,6 +177,8 @@ func (TrustCenter) Hooks() []ent.Hook {
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
+		hooks.HookTrustCenterUpdate(),
+		hooks.HookTrustCenterDelete(),
 	}
 }
 
