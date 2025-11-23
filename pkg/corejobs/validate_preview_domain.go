@@ -128,8 +128,22 @@ func (w *ValidatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[V
 	// Check if the TXT record exists
 	txtRecordExists := false
 	for _, record := range listRes.Result {
-		// Check if this is a TXT record with the expected value
-		if string(record.Type) == "TXT" && record.Content == dnsVerification.DNSTxtValue {
+		// Check if this is a TXT record with the expected name
+		if record.Type == dns.RecordResponseTypeTXT && record.Name == dnsVerification.DNSTxtRecord {
+			if record.Content != dnsVerification.DNSTxtValue {
+				// update the txt record if the contents don't match
+				_, err := w.cfClient.Record().Edit(ctx, record.ID, dns.RecordEditParams{
+					ZoneID: cloudflare.F(job.Args.TrustCenterPreviewZoneID),
+					Body: dns.TXTRecordParam{
+						Name:    cloudflare.F(dnsVerification.DNSTxtRecord),
+						Content: cloudflare.F(dnsVerification.DNSTxtValue),
+						Type:    cloudflare.F(dns.TXTRecordTypeTXT),
+					},
+				})
+				if err != nil {
+					return err
+				}
+			}
 			txtRecordExists = true
 			break
 		}

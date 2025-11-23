@@ -27,6 +27,8 @@ const (
 var (
 	// ErrNoMappableDomainFound is returned when no mappable domain is found for the given target
 	ErrNoMappableDomainFound = errors.New("no mappable domain found")
+	// ErrRiverClientNotSet is returned when the river client is not set on the worker
+	ErrRiverClientNotSet = errors.New("river client is not set on worker")
 )
 
 // CreatePreviewDomainArgs for the worker to process the preview domain creation
@@ -94,7 +96,7 @@ func (w *CreatePreviewDomainWorker) Work(ctx context.Context, job *river.Job[Cre
 	}
 
 	if w.riverClient == nil {
-		return fmt.Errorf("river client is not set on worker")
+		return ErrRiverClientNotSet
 	}
 
 	if w.cfClient == nil {

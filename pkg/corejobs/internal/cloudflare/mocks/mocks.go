@@ -441,6 +441,95 @@ func (_m *MockRecordService) EXPECT() *MockRecordService_Expecter {
 	return &MockRecordService_Expecter{mock: &_m.Mock}
 }
 
+// Edit provides a mock function for the type MockRecordService
+func (_mock *MockRecordService) Edit(ctx context.Context, dnsRecordID string, params dns.RecordEditParams, opts ...option.RequestOption) (*dns.RecordResponse, error) {
+	var tmpRet mock.Arguments
+	if len(opts) > 0 {
+		tmpRet = _mock.Called(ctx, dnsRecordID, params, opts)
+	} else {
+		tmpRet = _mock.Called(ctx, dnsRecordID, params)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for Edit")
+	}
+
+	var r0 *dns.RecordResponse
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, dns.RecordEditParams, ...option.RequestOption) (*dns.RecordResponse, error)); ok {
+		return returnFunc(ctx, dnsRecordID, params, opts...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, dns.RecordEditParams, ...option.RequestOption) *dns.RecordResponse); ok {
+		r0 = returnFunc(ctx, dnsRecordID, params, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*dns.RecordResponse)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, dns.RecordEditParams, ...option.RequestOption) error); ok {
+		r1 = returnFunc(ctx, dnsRecordID, params, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockRecordService_Edit_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Edit'
+type MockRecordService_Edit_Call struct {
+	*mock.Call
+}
+
+// Edit is a helper method to define mock.On call
+//   - ctx context.Context
+//   - dnsRecordID string
+//   - params dns.RecordEditParams
+//   - opts ...option.RequestOption
+func (_e *MockRecordService_Expecter) Edit(ctx interface{}, dnsRecordID interface{}, params interface{}, opts ...interface{}) *MockRecordService_Edit_Call {
+	return &MockRecordService_Edit_Call{Call: _e.mock.On("Edit",
+		append([]interface{}{ctx, dnsRecordID, params}, opts...)...)}
+}
+
+func (_c *MockRecordService_Edit_Call) Run(run func(ctx context.Context, dnsRecordID string, params dns.RecordEditParams, opts ...option.RequestOption)) *MockRecordService_Edit_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 dns.RecordEditParams
+		if args[2] != nil {
+			arg2 = args[2].(dns.RecordEditParams)
+		}
+		var arg3 []option.RequestOption
+		var variadicArgs []option.RequestOption
+		if len(args) > 3 {
+			variadicArgs = args[3].([]option.RequestOption)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockRecordService_Edit_Call) Return(res *dns.RecordResponse, err error) *MockRecordService_Edit_Call {
+	_c.Call.Return(res, err)
+	return _c
+}
+
+func (_c *MockRecordService_Edit_Call) RunAndReturn(run func(ctx context.Context, dnsRecordID string, params dns.RecordEditParams, opts ...option.RequestOption) (*dns.RecordResponse, error)) *MockRecordService_Edit_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // List provides a mock function for the type MockRecordService
 func (_mock *MockRecordService) List(ctx context.Context, params dns.RecordListParams, opts ...option.RequestOption) (*pagination.V4PagePaginationArray[dns.RecordResponse], error) {
 	var tmpRet mock.Arguments
