@@ -385,6 +385,7 @@ server:
         certkey: server.key
         enabled: false
     trustcentercnametarget: ""
+    trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
     domain: ""
