@@ -234,14 +234,18 @@ func HookTrustCenterUpdate() ent.Hook {
 			}
 
 			if mutationCustomDomainIDExists && previousCustomDomainID == "" && mutationCustomDomainID != "" {
-				_, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
+				if _, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
 					TrustCenterID: tcID,
-				}, nil)
-				if err != nil {
+				}, nil); err != nil {
+					return nil, err
+				}
+			} else if mutationCustomDomainIDExists && mutationCustomDomainID != previousCustomDomainID {
+				if _, err := m.Job.Insert(ctx, corejobs.UpdatePirschDomainArgs{
+					TrustCenterID: tcID,
+				}, nil); err != nil {
 					return nil, err
 				}
 			}
-			// TODO(acookin): update the pirsch domain if the custom domain has changed
 
 			return next.Mutate(ctx, m)
 		})
