@@ -29,6 +29,7 @@ type ZonesService interface {
 type RecordService interface {
 	New(ctx context.Context, params dns.RecordNewParams, opts ...option.RequestOption) (res *dns.RecordResponse, err error)
 	List(ctx context.Context, params dns.RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[dns.RecordResponse], err error)
+	Delete(ctx context.Context, dnsRecordID string, body dns.RecordDeleteParams, opts ...option.RequestOption) (res *dns.RecordDeleteResponse, err error)
 }
 
 // Client defines the interface for the Cloudflare client.

@@ -441,6 +441,95 @@ func (_m *MockRecordService) EXPECT() *MockRecordService_Expecter {
 	return &MockRecordService_Expecter{mock: &_m.Mock}
 }
 
+// Delete provides a mock function for the type MockRecordService
+func (_mock *MockRecordService) Delete(ctx context.Context, dnsRecordID string, body dns.RecordDeleteParams, opts ...option.RequestOption) (*dns.RecordDeleteResponse, error) {
+	var tmpRet mock.Arguments
+	if len(opts) > 0 {
+		tmpRet = _mock.Called(ctx, dnsRecordID, body, opts)
+	} else {
+		tmpRet = _mock.Called(ctx, dnsRecordID, body)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for Delete")
+	}
+
+	var r0 *dns.RecordDeleteResponse
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, dns.RecordDeleteParams, ...option.RequestOption) (*dns.RecordDeleteResponse, error)); ok {
+		return returnFunc(ctx, dnsRecordID, body, opts...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, dns.RecordDeleteParams, ...option.RequestOption) *dns.RecordDeleteResponse); ok {
+		r0 = returnFunc(ctx, dnsRecordID, body, opts...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*dns.RecordDeleteResponse)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, dns.RecordDeleteParams, ...option.RequestOption) error); ok {
+		r1 = returnFunc(ctx, dnsRecordID, body, opts...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockRecordService_Delete_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'Delete'
+type MockRecordService_Delete_Call struct {
+	*mock.Call
+}
+
+// Delete is a helper method to define mock.On call
+//   - ctx context.Context
+//   - dnsRecordID string
+//   - body dns.RecordDeleteParams
+//   - opts ...option.RequestOption
+func (_e *MockRecordService_Expecter) Delete(ctx interface{}, dnsRecordID interface{}, body interface{}, opts ...interface{}) *MockRecordService_Delete_Call {
+	return &MockRecordService_Delete_Call{Call: _e.mock.On("Delete",
+		append([]interface{}{ctx, dnsRecordID, body}, opts...)...)}
+}
+
+func (_c *MockRecordService_Delete_Call) Run(run func(ctx context.Context, dnsRecordID string, body dns.RecordDeleteParams, opts ...option.RequestOption)) *MockRecordService_Delete_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 dns.RecordDeleteParams
+		if args[2] != nil {
+			arg2 = args[2].(dns.RecordDeleteParams)
+		}
+		var arg3 []option.RequestOption
+		var variadicArgs []option.RequestOption
+		if len(args) > 3 {
+			variadicArgs = args[3].([]option.RequestOption)
+		}
+		arg3 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockRecordService_Delete_Call) Return(res *dns.RecordDeleteResponse, err error) *MockRecordService_Delete_Call {
+	_c.Call.Return(res, err)
+	return _c
+}
+
+func (_c *MockRecordService_Delete_Call) RunAndReturn(run func(ctx context.Context, dnsRecordID string, body dns.RecordDeleteParams, opts ...option.RequestOption) (*dns.RecordDeleteResponse, error)) *MockRecordService_Delete_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // List provides a mock function for the type MockRecordService
 func (_mock *MockRecordService) List(ctx context.Context, params dns.RecordListParams, opts ...option.RequestOption) (*pagination.V4PagePaginationArray[dns.RecordResponse], error) {
 	var tmpRet mock.Arguments
