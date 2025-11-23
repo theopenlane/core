@@ -119,19 +119,6 @@ func NewOpenAPISpec() (*openapi3.T, error) {
 	return spec, nil
 }
 
-func humanizeScope(scope string) string {
-	switch scope {
-	case "can_view":
-		return "Read/view access"
-	case "can_edit":
-		return "Write/edit access"
-	case "can_delete":
-		return "Delete access"
-	default:
-		return strings.ReplaceAll(scope, "_", " ") + " access"
-	}
-}
-
 var (
 	// ErrFailedToGetFilePath is returned when runtime.Caller fails to get the current file path
 	ErrFailedToGetFilePath = fmt.Errorf("failed to get current file path")

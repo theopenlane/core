@@ -348,7 +348,7 @@ func TestMutationDeleteAPIToken(t *testing.T) {
 
 func TestLastUsedAPIToken(t *testing.T) {
 	// create new API token
-	token := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:evidence", "read:apitoken"}}).MustNew(testUser1.UserCtx, t)
+	token := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:evidence", "read:api_token"}}).MustNew(testUser1.UserCtx, t)
 
 	// check that the last used is empty
 	res, err := suite.client.api.GetAPITokenByID(testUser1.UserCtx, token.ID)
