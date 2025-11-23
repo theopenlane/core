@@ -7,6 +7,7 @@ import (
 	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
 	"github.com/cloudflare/cloudflare-go/v6/dns"
 	"github.com/cloudflare/cloudflare-go/v6/option"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/cloudflare/cloudflare-go/v6/zones"
 )
 
@@ -27,6 +28,8 @@ type ZonesService interface {
 
 type RecordService interface {
 	New(ctx context.Context, params dns.RecordNewParams, opts ...option.RequestOption) (res *dns.RecordResponse, err error)
+	List(ctx context.Context, params dns.RecordListParams, opts ...option.RequestOption) (res *pagination.V4PagePaginationArray[dns.RecordResponse], err error)
+	Edit(ctx context.Context, dnsRecordID string, params dns.RecordEditParams, opts ...option.RequestOption) (res *dns.RecordResponse, err error)
 }
 
 // Client defines the interface for the Cloudflare client.

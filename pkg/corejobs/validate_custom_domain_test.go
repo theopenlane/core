@@ -3,9 +3,13 @@ package corejobs_test
 import (
 	"context"
 	"testing"
+	"time"
 
 	"github.com/cloudflare/cloudflare-go/v6/custom_hostnames"
+	"github.com/cloudflare/cloudflare-go/v6/dns"
+	"github.com/cloudflare/cloudflare-go/v6/packages/pagination"
 	"github.com/riverqueue/river"
+	"github.com/riverqueue/river/rivertype"
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
@@ -410,4 +414,164 @@ func TestValidateCustomDomainWorkerAllDomains(t *testing.T) {
 
 	require.NoError(t, err)
 
+}
+
+func TestValidatePreviewDomainWorker_UpdateTxtRecord(t *testing.T) {
+	t.Parallel()
+
+	trustCenterID := "trustcenterid123"
+	zoneID := "cfzoneid123"
+	dnsTxtRecord := "_acme-challenge.preview.example.com"
+	dnsTxtValue := "verification-value-123"
+	oldTxtValue := "old-verification-value"
+	recordID := "recordid123"
+
+	testCases := []struct {
+		name                      string
+		trustCenterID             string
+		trustCenterPreviewZoneID  string
+		getTrustCenterResponse    *openlaneclient.GetTrustCenterByID
+		listRecordsResponse       *pagination.V4PagePaginationArray[dns.RecordResponse]
+		editRecordResponse        *dns.RecordResponse
+		updateTrustCenterResponse *openlaneclient.UpdateTrustCenter
+		expectEdit                bool
+		expectSnooze              bool
+	}{
+		{
+			name:                     "txt record exists with different content - update it",
+			trustCenterID:            trustCenterID,
+			trustCenterPreviewZoneID: zoneID,
+			getTrustCenterResponse: &openlaneclient.GetTrustCenterByID{
+				TrustCenter: openlaneclient.GetTrustCenterByID_TrustCenter{
+					ID: trustCenterID,
+					PreviewDomain: &openlaneclient.GetTrustCenterByID_TrustCenter_PreviewDomain{
+						CnameRecord: "preview.example.com",
+						DNSVerification: &openlaneclient.GetTrustCenterByID_TrustCenter_PreviewDomain_DNSVerification{
+							DNSTxtRecord:          dnsTxtRecord,
+							DNSTxtValue:           dnsTxtValue,
+							DNSVerificationStatus: enums.DNSVerificationStatusPending,
+							AcmeChallengeStatus:   enums.SSLVerificationStatusPendingValidation,
+						},
+					},
+				},
+			},
+			listRecordsResponse: &pagination.V4PagePaginationArray[dns.RecordResponse]{
+				Result: []dns.RecordResponse{
+					{
+						ID:      recordID,
+						Name:    dnsTxtRecord,
+						Content: oldTxtValue, // Different content
+						Type:    "TXT",
+					},
+				},
+			},
+			editRecordResponse: &dns.RecordResponse{
+				ID:      recordID,
+				Name:    dnsTxtRecord,
+				Content: dnsTxtValue,
+				Type:    "TXT",
+			},
+			expectEdit:   true,
+			expectSnooze: true,
+		},
+		{
+			name:                     "txt record exists with different content - verification active - update record and trust center",
+			trustCenterID:            trustCenterID,
+			trustCenterPreviewZoneID: zoneID,
+			getTrustCenterResponse: &openlaneclient.GetTrustCenterByID{
+				TrustCenter: openlaneclient.GetTrustCenterByID_TrustCenter{
+					ID: trustCenterID,
+					PreviewDomain: &openlaneclient.GetTrustCenterByID_TrustCenter_PreviewDomain{
+						CnameRecord: "preview.example.com",
+						DNSVerification: &openlaneclient.GetTrustCenterByID_TrustCenter_PreviewDomain_DNSVerification{
+							DNSTxtRecord:          dnsTxtRecord,
+							DNSTxtValue:           dnsTxtValue,
+							DNSVerificationStatus: enums.DNSVerificationStatusActive,
+							AcmeChallengeStatus:   enums.SSLVerificationStatusActive,
+						},
+					},
+				},
+			},
+			listRecordsResponse: &pagination.V4PagePaginationArray[dns.RecordResponse]{
+				Result: []dns.RecordResponse{
+					{
+						ID:      recordID,
+						Name:    dnsTxtRecord,
+						Content: oldTxtValue, // Different content
+						Type:    "TXT",
+					},
+				},
+			},
+			editRecordResponse: &dns.RecordResponse{
+				ID:      recordID,
+				Name:    dnsTxtRecord,
+				Content: dnsTxtValue,
+				Type:    "TXT",
+			},
+			updateTrustCenterResponse: &openlaneclient.UpdateTrustCenter{},
+			expectEdit:                true,
+			expectSnooze:              false,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			ctx := context.Background()
+			cfMock := cfmocks.NewMockClient(t)
+			olMock := olmocks.NewMockOpenlaneGraphClient(t)
+
+			// Setup mocks
+			olMock.EXPECT().GetTrustCenterByID(mock.Anything, tc.trustCenterID).Return(tc.getTrustCenterResponse, nil)
+
+			cfRecordsMock := cfmocks.NewMockRecordService(t)
+			cfMock.EXPECT().Record().Return(cfRecordsMock)
+
+			cfRecordsMock.EXPECT().List(mock.Anything, mock.MatchedBy(func(params dns.RecordListParams) bool {
+				return params.ZoneID.Value == tc.trustCenterPreviewZoneID
+			})).Return(tc.listRecordsResponse, nil)
+
+			if tc.expectEdit {
+				cfRecordsMock.EXPECT().Edit(mock.Anything, recordID, mock.MatchedBy(func(params dns.RecordEditParams) bool {
+					return params.ZoneID.Value == tc.trustCenterPreviewZoneID
+				})).Return(tc.editRecordResponse, nil)
+			}
+
+			// If verification is active, expect update trust center call
+			if tc.updateTrustCenterResponse != nil {
+				olMock.EXPECT().UpdateTrustCenter(mock.Anything, tc.trustCenterID, mock.MatchedBy(func(input openlaneclient.UpdateTrustCenterInput) bool {
+					return input.PreviewStatus != nil && *input.PreviewStatus == enums.TrustCenterPreviewStatusReady
+				})).Return(tc.updateTrustCenterResponse, nil)
+			}
+
+			worker := &corejobs.ValidatePreviewDomainWorker{
+				Config: corejobs.ValidatePreviewDomainConfig{
+					CloudflareAPIKey: "test",
+					MaxSnoozes:       30,
+					SnoozeDuration:   5 * time.Second,
+				},
+			}
+
+			worker.WithCloudflareClient(cfMock)
+			worker.WithOpenlaneClient(olMock)
+
+			job := &river.Job[corejobs.ValidatePreviewDomainArgs]{
+				JobRow: &rivertype.JobRow{
+					Metadata: []byte(`{}`),
+				},
+				Args: corejobs.ValidatePreviewDomainArgs{
+					TrustCenterID:            tc.trustCenterID,
+					TrustCenterPreviewZoneID: tc.trustCenterPreviewZoneID,
+				},
+			}
+
+			err := worker.Work(ctx, job)
+
+			if tc.expectSnooze {
+				require.Error(t, err)
+				require.Contains(t, err.Error(), "JobSnoozeError")
+			} else {
+				require.NoError(t, err)
+			}
+		})
+	}
 }
