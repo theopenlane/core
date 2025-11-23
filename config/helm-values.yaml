@@ -134,6 +134,8 @@ coreConfiguration:
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: ""  # @schema type:string
+    # -- TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
+    trustcenterpreviewzoneid: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
   entconfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
