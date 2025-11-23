@@ -16,9 +16,9 @@ func TestRelationsForService(t *testing.T) {
 	require.Contains(t, rels, "can_edit_control")
 	require.Contains(t, rels, "can_view_evidence")
 	require.Contains(t, rels, "can_edit_evidence")
-	require.Contains(t, rels, "can_view_api_token")
-	require.Contains(t, rels, "can_edit_api_token")
-	require.Contains(t, rels, "can_delete_api_token")
+	require.Contains(t, rels, "can_view_apitoken")
+	require.Contains(t, rels, "can_edit_apitoken")
+	require.Contains(t, rels, "can_delete_apitoken")
 }
 
 func TestNormalizeScope(t *testing.T) {
@@ -27,6 +27,8 @@ func TestNormalizeScope(t *testing.T) {
 	require.Equal(t, "can_delete", NormalizeScope("delete"))
 	require.Equal(t, "can_edit_control", NormalizeScope("write:control"))
 	require.Equal(t, "can_view_evidence", NormalizeScope("read:evidence"))
+	require.Equal(t, "can_view_apitoken", NormalizeScope("read:apitoken"))
+	require.Equal(t, "can_edit_apitoken", NormalizeScope("write:apitoken"))
 }
 
 func TestScopeOptions(t *testing.T) {

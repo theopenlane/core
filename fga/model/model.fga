@@ -138,9 +138,9 @@ type organization
     define can_edit_search: [service]
     define can_delete_search: [service]
     # API Token
-    define can_view_api_token: [service]
-    define can_edit_api_token: [service]
-    define can_delete_api_token: [service]
+    define can_view_apitoken: [service]
+    define can_edit_apitoken: [service]
+    define can_delete_apitoken: [service]
     # Organization
     define can_view_organization: [service]
     define can_edit_organization: [service]
