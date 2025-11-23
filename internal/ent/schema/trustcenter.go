@@ -179,6 +179,7 @@ func (t TrustCenter) Edges() []ent.Edge {
 func (TrustCenter) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenter(),
+		hooks.HookTrustCenterDelete(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,

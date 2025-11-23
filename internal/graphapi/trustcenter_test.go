@@ -12,6 +12,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
@@ -637,6 +638,115 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTrustCenter.DeletedID))
 		})
 	}
+}
+
+func TestMutationDeleteTrustCenterWithCustomDomain(t *testing.T) {
+	t.Parallel()
+
+	// Create a new test user
+	testUser := suite.userBuilder(context.Background(), t)
+
+	// Create a custom domain
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create a trust center with the custom domain
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser.UserCtx, t)
+
+	// Delete the trust center
+	resp, err := suite.client.api.DeleteTrustCenter(testUser.UserCtx, trustCenter.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(trustCenter.ID, resp.DeleteTrustCenter.DeletedID))
+
+	// Verify the custom domain was also deleted
+	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+	exists, err := suite.client.db.CustomDomain.Query().Where(customdomain.ID(customDomain.ID)).Exist(dbCtx)
+	assert.NilError(t, err)
+	assert.Check(t, !exists, "custom domain should have been deleted")
+
+	// Clean up the mappable domain
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+func TestMutationDeleteTrustCenterWithPreviewDomain(t *testing.T) {
+	t.Parallel()
+
+	// Create a new test user
+	testUser := suite.userBuilder(context.Background(), t)
+
+	// Create a preview domain (custom domain)
+	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create a trust center and manually set the preview domain ID
+	// We need to use the database directly to set the preview domain
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+	trustCenter, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
+		SetPreviewDomainID(previewDomain.ID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// Delete the trust center
+	resp, err := suite.client.api.DeleteTrustCenter(testUser.UserCtx, trustCenter.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(trustCenter.ID, resp.DeleteTrustCenter.DeletedID))
+
+	// Verify a job was queued to delete the preview domain
+	// Note: We can't easily verify the exact job args without accessing the river queue,
+	// but we can verify the preview domain still exists (it will be deleted by the job worker)
+	exists, err := suite.client.db.CustomDomain.Query().Where(customdomain.ID(previewDomain.ID)).Exist(dbCtx)
+	assert.NilError(t, err)
+	assert.Check(t, exists, "preview domain should still exist (will be deleted by job)")
+
+	// Clean up the preview domain and mappable domain
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: previewDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+func TestMutationDeleteTrustCenterWithBothDomains(t *testing.T) {
+	t.Parallel()
+
+	// Create a new test user
+	testUser := suite.userBuilder(context.Background(), t)
+
+	// Create a custom domain
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create a preview domain
+	previewDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
+
+	// Create a trust center with the custom domain
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser.UserCtx, t)
+
+	// Set the preview domain ID
+	dbCtx := setContext(testUser.UserCtx, suite.client.db)
+	trustCenter, err := suite.client.db.TrustCenter.UpdateOneID(trustCenter.ID).
+		SetPreviewDomainID(previewDomain.ID).
+		Save(dbCtx)
+	assert.NilError(t, err)
+
+	// Delete the trust center
+	resp, err := suite.client.api.DeleteTrustCenter(testUser.UserCtx, trustCenter.ID)
+	assert.NilError(t, err)
+	assert.Assert(t, resp != nil)
+	assert.Check(t, is.Equal(trustCenter.ID, resp.DeleteTrustCenter.DeletedID))
+
+	// Verify the custom domain was deleted
+	customDomainExists, err := suite.client.db.CustomDomain.Query().Where(customdomain.ID(customDomain.ID)).Exist(dbCtx)
+	assert.NilError(t, err)
+	assert.Check(t, !customDomainExists, "custom domain should have been deleted")
+
+	// Verify the preview domain still exists (will be deleted by job)
+	previewDomainExists, err := suite.client.db.CustomDomain.Query().Where(customdomain.ID(previewDomain.ID)).Exist(dbCtx)
+	assert.NilError(t, err)
+	assert.Check(t, previewDomainExists, "preview domain should still exist (will be deleted by job)")
+
+	// Clean up the preview domain and mappable domains
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: previewDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: previewDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
