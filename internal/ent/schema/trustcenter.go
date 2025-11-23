@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -72,6 +73,11 @@ func (TrustCenter) Fields() []ent.Field {
 		field.String("pirsch_identification_code").
 			Comment("Pirsch ID code").
 			Optional(),
+		field.Enum("preview_status").
+			GoType(enums.TrustCenterPreviewStatus("")).
+			Default(enums.TrustCenterPreviewStatusNone.String()).
+			Optional().
+			Comment("preview status of the trust center"),
 	}
 }
 

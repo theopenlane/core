@@ -6345,6 +6345,7 @@ type ComplexityRoot struct {
 		PreviewDomain            func(childComplexity int) int
 		PreviewDomainID          func(childComplexity int) int
 		PreviewSetting           func(childComplexity int) int
+		PreviewStatus            func(childComplexity int) int
 		Setting                  func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -6547,6 +6548,7 @@ type ComplexityRoot struct {
 		PirschDomainID           func(childComplexity int) int
 		PirschIdentificationCode func(childComplexity int) int
 		PreviewDomainID          func(childComplexity int) int
+		PreviewStatus            func(childComplexity int) int
 		Ref                      func(childComplexity int) int
 		Slug                     func(childComplexity int) int
 		Tags                     func(childComplexity int) int
@@ -43818,6 +43820,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenter.PreviewSetting(childComplexity), true
 
+	case "TrustCenter.previewStatus":
+		if e.complexity.TrustCenter.PreviewStatus == nil {
+			break
+		}
+
+		return e.complexity.TrustCenter.PreviewStatus(childComplexity), true
+
 	case "TrustCenter.setting":
 		if e.complexity.TrustCenter.Setting == nil {
 			break
@@ -44642,6 +44651,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterHistory.PreviewDomainID(childComplexity), true
+
+	case "TrustCenterHistory.previewStatus":
+		if e.complexity.TrustCenterHistory.PreviewStatus == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterHistory.PreviewStatus(childComplexity), true
 
 	case "TrustCenterHistory.ref":
 		if e.complexity.TrustCenterHistory.Ref == nil {
@@ -65995,6 +66011,10 @@ input CreateTrustCenterInput {
   Pirsch ID code
   """
   pirschIdentificationCode: String
+  """
+  preview status of the trust center
+  """
+  previewStatus: TrustCenterTrustCenterPreviewStatus
   ownerID: ID
   customDomainID: ID
   previewDomainID: ID
@@ -120786,6 +120806,10 @@ type TrustCenter implements Node {
   Pirsch ID code
   """
   pirschIdentificationCode: String
+  """
+  preview status of the trust center
+  """
+  previewStatus: TrustCenterTrustCenterPreviewStatus
   owner: Organization
   customDomain: CustomDomain
   previewDomain: CustomDomain
@@ -122129,6 +122153,10 @@ type TrustCenterHistory implements Node {
   Pirsch ID code
   """
   pirschIdentificationCode: String
+  """
+  preview status of the trust center
+  """
+  previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
 }
 """
 A connection to a list of items.
@@ -122188,6 +122216,16 @@ enum TrustCenterHistoryOrderField {
   history_time
   created_at
   updated_at
+}
+"""
+TrustCenterHistoryTrustCenterPreviewStatus is enum for the field preview_status
+"""
+enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+  PROVISIONING
+  READY
+  FAILED
+  DEPROVISIONING
+  NONE
 }
 """
 TrustCenterHistoryWhereInput is used for filtering TrustCenterHistory objects.
@@ -122416,6 +122454,15 @@ input TrustCenterHistoryWhereInput {
   pirschIdentificationCodeNotNil: Boolean
   pirschIdentificationCodeEqualFold: String
   pirschIdentificationCodeContainsFold: String
+  """
+  preview_status field predicates
+  """
+  previewStatus: TrustCenterHistoryTrustCenterPreviewStatus
+  previewStatusNEQ: TrustCenterHistoryTrustCenterPreviewStatus
+  previewStatusIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
+  previewStatusNotIn: [TrustCenterHistoryTrustCenterPreviewStatus!]
+  previewStatusIsNil: Boolean
+  previewStatusNotNil: Boolean
 }
 """
 Ordering options for TrustCenter connections
@@ -123985,6 +124032,16 @@ input TrustCenterSubprocessorWhereInput {
   hasSubprocessor: Boolean
   hasSubprocessorWith: [SubprocessorWhereInput!]
 }
+"""
+TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
+"""
+enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+  PROVISIONING
+  READY
+  FAILED
+  DEPROVISIONING
+  NONE
+}
 type TrustCenterWatermarkConfig implements Node {
   id: ID!
   createdAt: Time
@@ -124911,6 +124968,15 @@ input TrustCenterWhereInput {
   pirschIdentificationCodeNotNil: Boolean
   pirschIdentificationCodeEqualFold: String
   pirschIdentificationCodeContainsFold: String
+  """
+  preview_status field predicates
+  """
+  previewStatus: TrustCenterTrustCenterPreviewStatus
+  previewStatusNEQ: TrustCenterTrustCenterPreviewStatus
+  previewStatusIn: [TrustCenterTrustCenterPreviewStatus!]
+  previewStatusNotIn: [TrustCenterTrustCenterPreviewStatus!]
+  previewStatusIsNil: Boolean
+  previewStatusNotNil: Boolean
   """
   owner edge predicates
   """
@@ -129557,6 +129623,11 @@ input UpdateTrustCenterInput {
   """
   pirschIdentificationCode: String
   clearPirschIdentificationCode: Boolean
+  """
+  preview status of the trust center
+  """
+  previewStatus: TrustCenterTrustCenterPreviewStatus
+  clearPreviewStatus: Boolean
   ownerID: ID
   clearOwner: Boolean
   customDomainID: ID

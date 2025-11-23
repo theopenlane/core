@@ -61323,6 +61323,11 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, trustcenter.FieldPirschIdentificationCode)
 				fieldSeen[trustcenter.FieldPirschIdentificationCode] = struct{}{}
 			}
+		case "previewStatus":
+			if _, ok := fieldSeen[trustcenter.FieldPreviewStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPreviewStatus)
+				fieldSeen[trustcenter.FieldPreviewStatus] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:
@@ -62135,6 +62140,11 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcenterhistory.FieldPirschIdentificationCode]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschIdentificationCode)
 				fieldSeen[trustcenterhistory.FieldPirschIdentificationCode] = struct{}{}
+			}
+		case "previewStatus":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPreviewStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPreviewStatus)
+				fieldSeen[trustcenterhistory.FieldPreviewStatus] = struct{}{}
 			}
 		case "id":
 		case "__typename":

@@ -8336,19 +8336,21 @@ type CreateTrustCenterInput struct {
 	// Pirsch domain ID
 	PirschDomainID *string `json:"pirschDomainID,omitempty"`
 	// Pirsch ID code
-	PirschIdentificationCode   *string                        `json:"pirschIdentificationCode,omitempty"`
-	OwnerID                    *string                        `json:"ownerID,omitempty"`
-	CustomDomainID             *string                        `json:"customDomainID,omitempty"`
-	PreviewDomainID            *string                        `json:"previewDomainID,omitempty"`
-	SettingID                  *string                        `json:"settingID,omitempty"`
-	PreviewSettingID           *string                        `json:"previewSettingID,omitempty"`
-	WatermarkConfigID          *string                        `json:"watermarkConfigID,omitempty"`
-	TrustCenterSubprocessorIDs []string                       `json:"trustCenterSubprocessorIDs,omitempty"`
-	TrustCenterDocIDs          []string                       `json:"trustCenterDocIDs,omitempty"`
-	TrustCenterComplianceIDs   []string                       `json:"trustCenterComplianceIDs,omitempty"`
-	TemplateIDs                []string                       `json:"templateIDs,omitempty"`
-	PostIDs                    []string                       `json:"postIDs,omitempty"`
-	CreateTrustCenterSetting   *CreateTrustCenterSettingInput `json:"createTrustCenterSetting,omitempty"`
+	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
+	// preview status of the trust center
+	PreviewStatus              *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
+	OwnerID                    *string                         `json:"ownerID,omitempty"`
+	CustomDomainID             *string                         `json:"customDomainID,omitempty"`
+	PreviewDomainID            *string                         `json:"previewDomainID,omitempty"`
+	SettingID                  *string                         `json:"settingID,omitempty"`
+	PreviewSettingID           *string                         `json:"previewSettingID,omitempty"`
+	WatermarkConfigID          *string                         `json:"watermarkConfigID,omitempty"`
+	TrustCenterSubprocessorIDs []string                        `json:"trustCenterSubprocessorIDs,omitempty"`
+	TrustCenterDocIDs          []string                        `json:"trustCenterDocIDs,omitempty"`
+	TrustCenterComplianceIDs   []string                        `json:"trustCenterComplianceIDs,omitempty"`
+	TemplateIDs                []string                        `json:"templateIDs,omitempty"`
+	PostIDs                    []string                        `json:"postIDs,omitempty"`
+	CreateTrustCenterSetting   *CreateTrustCenterSettingInput  `json:"createTrustCenterSetting,omitempty"`
 }
 
 type CreateTrustCenterNDAInput struct {
@@ -39241,7 +39243,9 @@ type TrustCenter struct {
 	// Pirsch domain ID
 	PirschDomainID *string `json:"pirschDomainID,omitempty"`
 	// Pirsch ID code
-	PirschIdentificationCode *string                            `json:"pirschIdentificationCode,omitempty"`
+	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
+	// preview status of the trust center
+	PreviewStatus            *enums.TrustCenterPreviewStatus    `json:"previewStatus,omitempty"`
 	Owner                    *Organization                      `json:"owner,omitempty"`
 	CustomDomain             *CustomDomain                      `json:"customDomain,omitempty"`
 	PreviewDomain            *CustomDomain                      `json:"previewDomain,omitempty"`
@@ -40201,6 +40205,8 @@ type TrustCenterHistory struct {
 	PirschDomainID *string `json:"pirschDomainID,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode *string `json:"pirschIdentificationCode,omitempty"`
+	// preview status of the trust center
+	PreviewStatus *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
 }
 
 func (TrustCenterHistory) IsNode() {}
@@ -40428,6 +40434,13 @@ type TrustCenterHistoryWhereInput struct {
 	PirschIdentificationCodeNotNil       *bool    `json:"pirschIdentificationCodeNotNil,omitempty"`
 	PirschIdentificationCodeEqualFold    *string  `json:"pirschIdentificationCodeEqualFold,omitempty"`
 	PirschIdentificationCodeContainsFold *string  `json:"pirschIdentificationCodeContainsFold,omitempty"`
+	// preview_status field predicates
+	PreviewStatus       *enums.TrustCenterPreviewStatus  `json:"previewStatus,omitempty"`
+	PreviewStatusNeq    *enums.TrustCenterPreviewStatus  `json:"previewStatusNEQ,omitempty"`
+	PreviewStatusIn     []enums.TrustCenterPreviewStatus `json:"previewStatusIn,omitempty"`
+	PreviewStatusNotIn  []enums.TrustCenterPreviewStatus `json:"previewStatusNotIn,omitempty"`
+	PreviewStatusIsNil  *bool                            `json:"previewStatusIsNil,omitempty"`
+	PreviewStatusNotNil *bool                            `json:"previewStatusNotNil,omitempty"`
 }
 
 type TrustCenterNDACreatePayload struct {
@@ -42403,6 +42416,13 @@ type TrustCenterWhereInput struct {
 	PirschIdentificationCodeNotNil       *bool    `json:"pirschIdentificationCodeNotNil,omitempty"`
 	PirschIdentificationCodeEqualFold    *string  `json:"pirschIdentificationCodeEqualFold,omitempty"`
 	PirschIdentificationCodeContainsFold *string  `json:"pirschIdentificationCodeContainsFold,omitempty"`
+	// preview_status field predicates
+	PreviewStatus       *enums.TrustCenterPreviewStatus  `json:"previewStatus,omitempty"`
+	PreviewStatusNeq    *enums.TrustCenterPreviewStatus  `json:"previewStatusNEQ,omitempty"`
+	PreviewStatusIn     []enums.TrustCenterPreviewStatus `json:"previewStatusIn,omitempty"`
+	PreviewStatusNotIn  []enums.TrustCenterPreviewStatus `json:"previewStatusNotIn,omitempty"`
+	PreviewStatusIsNil  *bool                            `json:"previewStatusIsNil,omitempty"`
+	PreviewStatusNotNil *bool                            `json:"previewStatusNotNil,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -45879,35 +45899,38 @@ type UpdateTrustCenterInput struct {
 	PirschDomainID      *string `json:"pirschDomainID,omitempty"`
 	ClearPirschDomainID *bool   `json:"clearPirschDomainID,omitempty"`
 	// Pirsch ID code
-	PirschIdentificationCode         *string  `json:"pirschIdentificationCode,omitempty"`
-	ClearPirschIdentificationCode    *bool    `json:"clearPirschIdentificationCode,omitempty"`
-	OwnerID                          *string  `json:"ownerID,omitempty"`
-	ClearOwner                       *bool    `json:"clearOwner,omitempty"`
-	CustomDomainID                   *string  `json:"customDomainID,omitempty"`
-	ClearCustomDomain                *bool    `json:"clearCustomDomain,omitempty"`
-	PreviewDomainID                  *string  `json:"previewDomainID,omitempty"`
-	ClearPreviewDomain               *bool    `json:"clearPreviewDomain,omitempty"`
-	SettingID                        *string  `json:"settingID,omitempty"`
-	ClearSetting                     *bool    `json:"clearSetting,omitempty"`
-	PreviewSettingID                 *string  `json:"previewSettingID,omitempty"`
-	ClearPreviewSetting              *bool    `json:"clearPreviewSetting,omitempty"`
-	WatermarkConfigID                *string  `json:"watermarkConfigID,omitempty"`
-	ClearWatermarkConfig             *bool    `json:"clearWatermarkConfig,omitempty"`
-	AddTrustCenterSubprocessorIDs    []string `json:"addTrustCenterSubprocessorIDs,omitempty"`
-	RemoveTrustCenterSubprocessorIDs []string `json:"removeTrustCenterSubprocessorIDs,omitempty"`
-	ClearTrustCenterSubprocessors    *bool    `json:"clearTrustCenterSubprocessors,omitempty"`
-	AddTrustCenterDocIDs             []string `json:"addTrustCenterDocIDs,omitempty"`
-	RemoveTrustCenterDocIDs          []string `json:"removeTrustCenterDocIDs,omitempty"`
-	ClearTrustCenterDocs             *bool    `json:"clearTrustCenterDocs,omitempty"`
-	AddTrustCenterComplianceIDs      []string `json:"addTrustCenterComplianceIDs,omitempty"`
-	RemoveTrustCenterComplianceIDs   []string `json:"removeTrustCenterComplianceIDs,omitempty"`
-	ClearTrustCenterCompliances      *bool    `json:"clearTrustCenterCompliances,omitempty"`
-	AddTemplateIDs                   []string `json:"addTemplateIDs,omitempty"`
-	RemoveTemplateIDs                []string `json:"removeTemplateIDs,omitempty"`
-	ClearTemplates                   *bool    `json:"clearTemplates,omitempty"`
-	AddPostIDs                       []string `json:"addPostIDs,omitempty"`
-	RemovePostIDs                    []string `json:"removePostIDs,omitempty"`
-	ClearPosts                       *bool    `json:"clearPosts,omitempty"`
+	PirschIdentificationCode      *string `json:"pirschIdentificationCode,omitempty"`
+	ClearPirschIdentificationCode *bool   `json:"clearPirschIdentificationCode,omitempty"`
+	// preview status of the trust center
+	PreviewStatus                    *enums.TrustCenterPreviewStatus `json:"previewStatus,omitempty"`
+	ClearPreviewStatus               *bool                           `json:"clearPreviewStatus,omitempty"`
+	OwnerID                          *string                         `json:"ownerID,omitempty"`
+	ClearOwner                       *bool                           `json:"clearOwner,omitempty"`
+	CustomDomainID                   *string                         `json:"customDomainID,omitempty"`
+	ClearCustomDomain                *bool                           `json:"clearCustomDomain,omitempty"`
+	PreviewDomainID                  *string                         `json:"previewDomainID,omitempty"`
+	ClearPreviewDomain               *bool                           `json:"clearPreviewDomain,omitempty"`
+	SettingID                        *string                         `json:"settingID,omitempty"`
+	ClearSetting                     *bool                           `json:"clearSetting,omitempty"`
+	PreviewSettingID                 *string                         `json:"previewSettingID,omitempty"`
+	ClearPreviewSetting              *bool                           `json:"clearPreviewSetting,omitempty"`
+	WatermarkConfigID                *string                         `json:"watermarkConfigID,omitempty"`
+	ClearWatermarkConfig             *bool                           `json:"clearWatermarkConfig,omitempty"`
+	AddTrustCenterSubprocessorIDs    []string                        `json:"addTrustCenterSubprocessorIDs,omitempty"`
+	RemoveTrustCenterSubprocessorIDs []string                        `json:"removeTrustCenterSubprocessorIDs,omitempty"`
+	ClearTrustCenterSubprocessors    *bool                           `json:"clearTrustCenterSubprocessors,omitempty"`
+	AddTrustCenterDocIDs             []string                        `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs          []string                        `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs             *bool                           `json:"clearTrustCenterDocs,omitempty"`
+	AddTrustCenterComplianceIDs      []string                        `json:"addTrustCenterComplianceIDs,omitempty"`
+	RemoveTrustCenterComplianceIDs   []string                        `json:"removeTrustCenterComplianceIDs,omitempty"`
+	ClearTrustCenterCompliances      *bool                           `json:"clearTrustCenterCompliances,omitempty"`
+	AddTemplateIDs                   []string                        `json:"addTemplateIDs,omitempty"`
+	RemoveTemplateIDs                []string                        `json:"removeTemplateIDs,omitempty"`
+	ClearTemplates                   *bool                           `json:"clearTemplates,omitempty"`
+	AddPostIDs                       []string                        `json:"addPostIDs,omitempty"`
+	RemovePostIDs                    []string                        `json:"removePostIDs,omitempty"`
+	ClearPosts                       *bool                           `json:"clearPosts,omitempty"`
 	// adds a post for the trust center feed
 	AddPost *CreateNoteInput `json:"addPost,omitempty"`
 	// delete a post from the trust center feed
