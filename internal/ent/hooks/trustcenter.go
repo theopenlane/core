@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
@@ -116,6 +117,18 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			if createPreview {
+				if trustCenter.PreviewDomainID != "" {
+					// delete the old preview if it exists
+					if _, err = m.Job.Insert(
+						ctx,
+						corejobs.DeletePreviewDomainArgs{
+							CustomDomainID:           trustCenter.PreviewDomainID,
+							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+						}, nil,
+					); err != nil {
+						return nil, err
+					}
+				}
 				// create preview settings with same values but environment set to "preview"
 				previewSetting, err := m.Client().TrustCenterSetting.Create().
 					SetTrustCenterID(id).
@@ -163,3 +176,56 @@ const defaultOverview = `
 
 This is the default overview for your trust center. You can customize this by editing the trust center settings.
 `
+
+// HookTrustCenterDelete runs on trust center delete mutations
+func HookTrustCenterDelete() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
+			if !isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
+			}
+
+			// Get the trust center ID
+			id, ok := m.ID()
+			if !ok {
+				return next.Mutate(ctx, m)
+			}
+
+			// Query the trust center to get its custom domain and preview domain IDs
+			trustCenter, err := m.Client().TrustCenter.Get(ctx, id)
+			if err != nil {
+				return nil, err
+			}
+
+			// Store the domain IDs before deletion
+			customDomainID := trustCenter.CustomDomainID
+			previewDomainID := trustCenter.PreviewDomainID
+
+			// Execute the trust center deletion first
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// After successful deletion, clean up the domains
+			// If the custom domain ID is set, delete the custom domain
+			if customDomainID != "" {
+				if err := m.Client().CustomDomain.DeleteOneID(customDomainID).Exec(ctx); err != nil {
+					return nil, err
+				}
+			}
+
+			// If preview domain is set, kick off the delete preview job
+			if previewDomainID != "" {
+				if _, err := m.Job.Insert(ctx, corejobs.DeletePreviewDomainArgs{
+					CustomDomainID:           previewDomainID,
+					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
+			return retVal, nil
+		})
+	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdate|ent.OpUpdateOne)
+}
