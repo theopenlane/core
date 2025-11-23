@@ -9,6 +9,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
+	fgamodel "github.com/theopenlane/core/fga/model"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
@@ -140,8 +141,19 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 }
 
 func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing.T) *testclient.TestClient {
-	// setup client with an API token
-	apiToken := (&APITokenBuilder{client: suite.client}).MustNew(ctx, t)
+	// setup client with an API token with comprehensive scopes for testing
+	// Get all available scopes from the FGA model
+	scopeOpts, err := fgamodel.ScopeOptions()
+	requireNoError(err)
+
+	var scopes []string
+	for obj, verbs := range scopeOpts {
+		for _, verb := range verbs {
+			scopes = append(scopes, verb+":"+obj)
+		}
+	}
+
+	apiToken := (&APITokenBuilder{client: suite.client, Scopes: scopes}).MustNew(ctx, t)
 
 	authHeaderAPIToken := openlaneclient.Authorization{
 		BearerToken: apiToken.Token,

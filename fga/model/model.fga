@@ -130,84 +130,165 @@ type organization
     define can_view_user: [service]
     define can_edit_user: [service]
     define can_view_service: [service]
+    define can_delete_user: [service]
     define can_edit_service: [service]
+
+    # Search
     define can_view_search: [service]
     define can_edit_search: [service]
+    define can_delete_search: [service]
+    # API Token
+    define can_view_api_token: [service]
+    define can_edit_api_token: [service]
+    define can_delete_api_token: [service]
+    # Organization
     define can_view_organization: [service]
     define can_edit_organization: [service]
+    define can_delete_organization: [service]
+    # Group
     define can_view_group: [service]
     define can_edit_group: [service]
+    define can_delete_group: [service]
+    # File
     define can_view_file: [service]
     define can_edit_file: [service]
+    define can_delete_file: [service]
+    # Program
     define can_view_program: [service]
     define can_edit_program: [service]
+    define can_delete_program: [service]
+    # Control
     define can_view_control: [service]
     define can_edit_control: [service]
+    define can_delete_control: [service]
+    # Subcontrol
     define can_view_subcontrol: [service]
     define can_edit_subcontrol: [service]
+    define can_delete_subcontrol: [service]
+    # Control Objective
     define can_view_control_objective: [service]
     define can_edit_control_objective: [service]
+    define can_delete_control_objective: [service]
+    # Control Implementation
     define can_view_control_implementation: [service]
     define can_edit_control_implementation: [service]
+    define can_delete_control_implementation: [service]
+    # Mapped Control
     define can_view_mapped_control: [service]
     define can_edit_mapped_control: [service]
+    define can_delete_mapped_control: [service]
+    # Risk
     define can_view_risk: [service]
     define can_edit_risk: [service]
+    define can_delete_risk: [service]
+    # Narrative
     define can_view_narrative: [service]
     define can_edit_narrative: [service]
+    define can_delete_narrative: [service]
+    # Action Plan
     define can_view_action_plan: [service]
     define can_edit_action_plan: [service]
+    define can_delete_action_plan: [service]
+    # Internal Policy
     define can_view_internal_policy: [service]
     define can_edit_internal_policy: [service]
+    define can_delete_internal_policy: [service]
+    # Procedure
     define can_view_procedure: [service]
     define can_edit_procedure: [service]
+    define can_delete_procedure: [service]
+    # Template
     define can_view_template: [service]
     define can_edit_template: [service]
+    define can_delete_template: [service]
+    # Document Data
     define can_view_document_data: [service]
     define can_edit_document_data: [service]
+    define can_delete_document_data: [service]
+    # Contact
     define can_view_contact: [service]
     define can_edit_contact: [service]
+    define can_delete_contact: [service]
+    # Controlobjective (custom object)
+    define can_view_controlobjective: [service]
+    define can_edit_controlobjective: [service]
+    define can_delete_controlobjective: [service]
+    # Entity (custom object)
+    define can_view_entity: [service]
+    define can_edit_entity: [service]
+    define can_delete_entity: [service]
+    # Task
     define can_view_task: [service]
     define can_edit_task: [service]
+    define can_delete_task: [service]
+    # Note
     define can_view_note: [service]
     define can_edit_note: [service]
+    define can_delete_note: [service]
+    # Evidence
     define can_view_evidence: [service]
     define can_edit_evidence: [service]
+    define can_delete_evidence: [service]
+    # Standard
     define can_view_standard: [service]
     define can_edit_standard: [service]
+    define can_delete_standard: [service]
+    # Job Runner
     define can_view_job_runner: [service]
     define can_edit_job_runner: [service]
+    define can_delete_job_runner: [service]
+    # Job Template
     define can_view_job_template: [service]
     define can_edit_job_template: [service]
+    define can_delete_job_template: [service]
+    # Scheduled Job
     define can_view_scheduled_job: [service]
     define can_edit_scheduled_job: [service]
+    define can_delete_scheduled_job: [service]
+    # Trust Center
     define can_view_trust_center: [service]
     define can_edit_trust_center: [service]
+    define can_delete_trust_center: [service]
+    # Trust Center Setting
     define can_view_trust_center_setting: [service]
     define can_edit_trust_center_setting: [service]
+    define can_delete_trust_center_setting: [service]
+    # Trust Center Compliance
     define can_view_trust_center_compliance: [service]
     define can_edit_trust_center_compliance: [service]
+    define can_delete_trust_center_compliance: [service]
+    # Trust Center Subprocessor
     define can_view_trust_center_subprocessor: [service]
     define can_edit_trust_center_subprocessor: [service]
+    define can_delete_trust_center_subprocessor: [service]
+    # Trust Center Doc
     define can_view_trust_center_doc: [service]
     define can_edit_trust_center_doc: [service]
+    define can_delete_trust_center_doc: [service]
+    # Trust Center Watermark Config
     define can_view_trust_center_watermark_config: [service]
     define can_edit_trust_center_watermark_config: [service]
+    define can_delete_trust_center_watermark_config: [service]
+    # Export
     define can_view_export: [service]
     define can_edit_export: [service]
+    define can_delete_export: [service]
+    # Custom Domain
     define can_view_custom_domain: [service]
     define can_edit_custom_domain: [service]
+    define can_delete_custom_domain: [service]
+    # Subprocessor
     define can_view_subprocessor: [service]
     define can_edit_subprocessor: [service]
+    define can_delete_subprocessor: [service]
+    # Assessment
     define can_view_assessment: [service]
     define can_edit_assessment: [service]
+    define can_delete_assessment: [service]
+    # Assessment Response
     define can_view_assessment_response: [service]
     define can_edit_assessment_response: [service]
-
-# groups are a subset of an organization that can be used to define more fine-grained access to objects
-# users must be members of the organization to be members of a group
-# groups are all visible to all members of the organization, unless they are blocked
-# groups can only be edited by admins of the group or the parent organization owner
+    define can_delete_assessment_response: [service]
 # groups are commonly used to assigned view/edit permissions to other objects within the organization for group members
 type group
   relations

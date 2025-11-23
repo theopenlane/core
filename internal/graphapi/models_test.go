@@ -800,14 +800,13 @@ func (at *APITokenBuilder) MustNew(ctx context.Context, t *testing.T) *ent.APITo
 		at.Description = gofakeit.HipsterSentence()
 	}
 
-	if at.Scopes == nil {
-		at.Scopes = []string{"read", "write", "group_manager"}
-	}
-
 	request := at.client.db.APIToken.Create().
 		SetName(at.Name).
-		SetDescription(at.Description).
-		SetScopes(at.Scopes)
+		SetDescription(at.Description)
+
+	if at.Scopes != nil {
+		request.SetScopes(at.Scopes)
+	}
 
 	if at.ExpiresAt != nil {
 		request.SetExpiresAt(*at.ExpiresAt)

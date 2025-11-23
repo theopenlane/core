@@ -38,9 +38,25 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 		return privacy.Allow
 	}
 
+	// Check API token scope first if applicable
+	mut, ok := m.(genericMutation)
+	if ok {
+		objectType := mut.Type()
+		if err := CheckAPITokenScope(ctx, objectType, relation, mut.Op()); err != nil {
+			if err == privacy.Allow {
+				return privacy.Allow
+			}
+			// If it returns permission denied for API token, return that error
+			if errors.Is(err, generated.ErrPermissionDenied) {
+				return err
+			}
+			// If it returns nil or skip, continue to org check
+		}
+	}
+
 	orgID, err := auth.GetOrganizationIDFromContext(ctx)
 	if err == nil {
-		if relation == fgax.CanView {
+		if relation == fgax.CanView && !auth.IsAPITokenAuthentication(ctx) {
 			// if the relation is view, we can skip the check
 			return privacy.Allow
 		}
@@ -49,7 +65,6 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	}
 
 	// else we need to get the object id from the mutation and get the owner id, this should only happen on deletes when using personal access tokens
-	mut, ok := m.(genericMutation)
 	if ok {
 		orgID, ok = mut.OwnerID()
 		if ok && orgID != "" {

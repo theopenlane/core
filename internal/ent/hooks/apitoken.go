@@ -79,7 +79,7 @@ func HookCreateAPIToken() ent.Hook {
 
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
-				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
+				if err := batchWriteTuples(ctx, m.Authz, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
@@ -95,6 +95,18 @@ func HookCreateAPIToken() ent.Hook {
 func HookUpdateAPIToken() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.APITokenFunc(func(ctx context.Context, m *generated.APITokenMutation) (generated.Value, error) {
+			var oldScopes []string
+			var scopesModified bool
+
+			// Only query old scopes if scopes are being modified and this is an UpdateOne operation
+			if _, scopesModified = m.Scopes(); scopesModified && m.Op().Is(ent.OpUpdateOne) {
+				var err error
+				oldScopes, err = m.OldScopes(ctx)
+				if err != nil {
+					return nil, err
+				}
+			}
+
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
@@ -108,23 +120,31 @@ func HookUpdateAPIToken() ent.Hook {
 
 			at.Token = redacted
 
-			// create the relationship tuples in fga for the token
-			newScopes, err := getNewScopes(ctx, m)
-			if err != nil {
-				return at, err
-			}
+			// Only update scope tuples if scopes were modified
+			if scopesModified {
+				scopeSet, err := fgamodel.DefaultServiceScopeSet()
+				if err != nil {
+					return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
+				}
 
-			tuples, err := createScopeTuples(ctx, newScopes, at.OwnerID, at.ID)
-			if err != nil {
-				return retVal, err
-			}
+				addedScopes, removedScopes := diffScopes(oldScopes, at.Scopes)
 
-			// create the relationship tuples if we have any
-			if len(tuples) > 0 {
-				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
-
+				addTuples, err := scopeTuples(ctx, addedScopes, at.OwnerID, at.ID, scopeSet)
+				if err != nil {
 					return nil, err
+				}
+
+				removeTuples, err := scopeTuples(ctx, removedScopes, at.OwnerID, at.ID, scopeSet)
+				if err != nil {
+					return nil, err
+				}
+
+				if len(addTuples) > 0 || len(removeTuples) > 0 {
+					if err := batchWriteTuples(ctx, m.Authz, addTuples, removeTuples); err != nil {
+						logx.FromContext(ctx).Error().Err(err).Msg("failed to update api token scope tuples")
+
+						return nil, err
+					}
 				}
 			}
 
@@ -140,6 +160,11 @@ func createScopeTuples(ctx context.Context, scopes []string, orgID, tokenID stri
 		return nil, fmt.Errorf("failed to load available token scopes from model: %w", err)
 	}
 
+	return scopeTuples(ctx, scopes, orgID, tokenID, scopeSet)
+}
+
+// scopeTuples creates relationship tuples for the given scopes
+func scopeTuples(ctx context.Context, scopes []string, orgID, tokenID string, scopeSet map[string]struct{}) ([]fgax.TupleKey, error) {
 	var tuples []fgax.TupleKey
 
 	for _, scope := range scopes {
@@ -152,7 +177,7 @@ func createScopeTuples(ctx context.Context, scopes []string, orgID, tokenID stri
 		}
 
 		if _, ok := scopeSet[relation]; !ok {
-			return nil, fmt.Errorf("scope %q (%s) is not assignable to service subjects", scope, relation)
+			return nil, fmt.Errorf("%w: %q (%s)", ErrInvalidScope, scope, relation)
 		}
 
 		req := fgax.TupleRequest{
@@ -169,27 +194,49 @@ func createScopeTuples(ctx context.Context, scopes []string, orgID, tokenID stri
 	return tuples, nil
 }
 
-// getNewScopes returns the new scopes that were added to the token during an update
-// NOTE: there is an AppendedScopes on the mutation, but this is not populated
-// so calculating the new scopes for now
-func getNewScopes(ctx context.Context, m *generated.APITokenMutation) ([]string, error) {
-	scopes, ok := m.Scopes()
-	if !ok {
-		return nil, nil
-	}
+// diffScopes returns the added and removed scopes between two scope slices
+func diffScopes(oldScopes, newScopes []string) (added []string, removed []string) {
+	// lo for the win
+	added, _ = lo.Difference(newScopes, oldScopes)
+	removed, _ = lo.Difference(oldScopes, newScopes)
 
-	oldScopes, err := m.OldScopes(ctx)
-	if err != nil {
-		return nil, err
-	}
+	return
+}
 
-	var newScopes []string
+const (
+	// maxFGATuplesPerBatch is the maximum number of tuples that can be written to FGA in a single batch
+	maxFGATuplesPerBatch = 100
+)
 
-	for _, scope := range scopes {
-		if !lo.Contains(oldScopes, scope) {
-			newScopes = append(newScopes, scope)
+// batchWriteTuples writes tuples to FGA in batches of maxFGATuplesPerBatch to avoid exceeding OpenFGA's limit
+func batchWriteTuples(ctx context.Context, authz fgax.Client, addTuples, removeTuples []fgax.TupleKey) error {
+	// Process additions in batches
+	for i := 0; i < len(addTuples); i += maxFGATuplesPerBatch {
+		end := i + maxFGATuplesPerBatch
+		if end > len(addTuples) {
+			end = len(addTuples)
+		}
+
+		batch := addTuples[i:end]
+
+		if _, err := authz.WriteTupleKeys(ctx, batch, nil); err != nil {
+			return err
 		}
 	}
 
-	return newScopes, nil
+	// Process removals in batches
+	for i := 0; i < len(removeTuples); i += maxFGATuplesPerBatch {
+		end := i + maxFGATuplesPerBatch
+		if end > len(removeTuples) {
+			end = len(removeTuples)
+		}
+
+		batch := removeTuples[i:end]
+
+		if _, err := authz.WriteTupleKeys(ctx, nil, batch); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }

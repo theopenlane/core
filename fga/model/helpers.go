@@ -14,6 +14,13 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 )
 
+const (
+	// relationPartsCount is the expected number of parts when splitting a relation like "can_view_object"
+	relationPartsCount = 3
+	// scopePartsCount is the expected number of parts when splitting a scope like "write:control"
+	scopePartsCount = 2
+)
+
 //go:embed model.fga
 var embeddedModel []byte
 
@@ -76,8 +83,8 @@ func RelationsForService() ([]string, error) {
 		}
 
 		for rel, meta := range *td.Metadata.Relations {
-			parts := strings.SplitN(rel, "_", 3)
-			if len(parts) != 3 || parts[0] != "can" {
+			parts := strings.SplitN(rel, "_", relationPartsCount)
+			if len(parts) != relationPartsCount || parts[0] != "can" {
 				continue
 			}
 
@@ -137,7 +144,7 @@ func NormalizeScope(scope string) string {
 		return verb
 	}
 
-	if parts := strings.SplitN(normalized, ":", 2); len(parts) == 2 && parts[1] != "" {
+	if parts := strings.SplitN(normalized, ":", scopePartsCount); len(parts) == scopePartsCount && parts[1] != "" {
 		return mapVerb(parts[0]) + "_" + parts[1]
 	}
 
@@ -171,8 +178,8 @@ func ScopeOptions() (map[string][]string, error) {
 	opts := make(map[string][]string)
 
 	for _, rel := range rels {
-		parts := strings.SplitN(rel, "_", 3)
-		if len(parts) != 3 || parts[0] != "can" {
+		parts := strings.SplitN(rel, "_", relationPartsCount)
+		if len(parts) != relationPartsCount || parts[0] != "can" {
 			continue
 		}
 

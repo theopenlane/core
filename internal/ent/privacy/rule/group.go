@@ -22,6 +22,18 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 			return privacy.Skipf("mutation is not a create operation, skipping")
 		}
 
+		// Check API token scope first if applicable
+		if err := CheckAPITokenScope(ctx, m.Type(), "", m.Op()); err != nil {
+			if err == privacy.Allow {
+				return privacy.Allow
+			}
+			// If it returns permission denied for API token, return that error
+			if err == generated.ErrPermissionDenied {
+				return err
+			}
+			// If it returns nil, continue to regular check
+		}
+
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)
 		if err != nil {
 			logx.FromContext(ctx).Info().Err(err).Msg("unable to get authenticated user context")

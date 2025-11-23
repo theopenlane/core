@@ -99,6 +99,8 @@ var (
 	ErrTemplateNotFound = errors.New("template does not exist")
 	// ErrTemplateNotQuestionnaire is returned when an assessment tries to use a wrong template type
 	ErrTemplateNotQuestionnaire = errors.New("template must be a questionnaire")
+	// ErrInvalidScope is returned when a scope is not assignable to service subjects
+	ErrInvalidScope = errors.New("scope is not assignable to service subjects")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
