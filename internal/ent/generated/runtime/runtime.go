@@ -5591,11 +5591,15 @@ func init() {
 
 	organization.Hooks[19] = organizationMixinHooks6[14]
 
-	organization.Hooks[20] = organizationHooks[0]
+	organization.Hooks[20] = organizationMixinHooks6[15]
 
-	organization.Hooks[21] = organizationHooks[1]
+	organization.Hooks[21] = organizationMixinHooks6[16]
 
-	organization.Hooks[22] = organizationHooks[2]
+	organization.Hooks[22] = organizationHooks[0]
+
+	organization.Hooks[23] = organizationHooks[1]
+
+	organization.Hooks[24] = organizationHooks[2]
 	organizationMixinInters1 := organizationMixin[1].Interceptors()
 	organizationMixinInters2 := organizationMixin[2].Interceptors()
 	organizationInters := schema.Organization{}.Interceptors()
@@ -8763,10 +8767,12 @@ func init() {
 	trustcenterwatermarkconfigMixinInters1 := trustcenterwatermarkconfigMixin[1].Interceptors()
 	trustcenterwatermarkconfigMixinInters2 := trustcenterwatermarkconfigMixin[2].Interceptors()
 	trustcenterwatermarkconfigMixinInters5 := trustcenterwatermarkconfigMixin[5].Interceptors()
+	trustcenterwatermarkconfigInters := schema.TrustCenterWatermarkConfig{}.Interceptors()
 	trustcenterwatermarkconfig.Interceptors[0] = trustcenterwatermarkconfigMixinInters1[0]
 	trustcenterwatermarkconfig.Interceptors[1] = trustcenterwatermarkconfigMixinInters2[0]
 	trustcenterwatermarkconfig.Interceptors[2] = trustcenterwatermarkconfigMixinInters5[0]
 	trustcenterwatermarkconfig.Interceptors[3] = trustcenterwatermarkconfigMixinInters5[1]
+	trustcenterwatermarkconfig.Interceptors[4] = trustcenterwatermarkconfigInters[0]
 	trustcenterwatermarkconfigMixinFields0 := trustcenterwatermarkconfigMixin[0].Fields()
 	_ = trustcenterwatermarkconfigMixinFields0
 	trustcenterwatermarkconfigMixinFields3 := trustcenterwatermarkconfigMixin[3].Fields()

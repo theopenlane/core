@@ -60,42 +60,44 @@ type Group struct {
 	ScimGroupMailing *string `json:"scim_group_mailing,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the GroupQuery when eager-loading is set.
-	Edges                                        GroupEdges `json:"edges"`
-	assessment_blocked_groups                    *string
-	assessment_editors                           *string
-	assessment_viewers                           *string
-	asset_blocked_groups                         *string
-	asset_editors                                *string
-	asset_viewers                                *string
-	finding_blocked_groups                       *string
-	finding_editors                              *string
-	finding_viewers                              *string
-	organization_control_creators                *string
-	organization_control_implementation_creators *string
-	organization_control_objective_creators      *string
-	organization_evidence_creators               *string
-	organization_group_creators                  *string
-	organization_internal_policy_creators        *string
-	organization_mapped_control_creators         *string
-	organization_narrative_creators              *string
-	organization_procedure_creators              *string
-	organization_program_creators                *string
-	organization_risk_creators                   *string
-	organization_scheduled_job_creators          *string
-	organization_standard_creators               *string
-	organization_template_creators               *string
-	organization_subprocessor_creators           *string
-	remediation_blocked_groups                   *string
-	remediation_editors                          *string
-	remediation_viewers                          *string
-	review_blocked_groups                        *string
-	review_editors                               *string
-	review_viewers                               *string
-	vulnerability_blocked_groups                 *string
-	vulnerability_editors                        *string
-	vulnerability_viewers                        *string
-	workflow_definition_groups                   *string
-	selectValues                                 sql.SelectValues
+	Edges                                           GroupEdges `json:"edges"`
+	assessment_blocked_groups                       *string
+	assessment_editors                              *string
+	assessment_viewers                              *string
+	asset_blocked_groups                            *string
+	asset_editors                                   *string
+	asset_viewers                                   *string
+	finding_blocked_groups                          *string
+	finding_editors                                 *string
+	finding_viewers                                 *string
+	organization_control_creators                   *string
+	organization_control_implementation_creators    *string
+	organization_control_objective_creators         *string
+	organization_evidence_creators                  *string
+	organization_group_creators                     *string
+	organization_internal_policy_creators           *string
+	organization_mapped_control_creators            *string
+	organization_narrative_creators                 *string
+	organization_procedure_creators                 *string
+	organization_program_creators                   *string
+	organization_risk_creators                      *string
+	organization_scheduled_job_creators             *string
+	organization_standard_creators                  *string
+	organization_template_creators                  *string
+	organization_subprocessor_creators              *string
+	organization_trust_center_doc_creators          *string
+	organization_trust_center_subprocessor_creators *string
+	remediation_blocked_groups                      *string
+	remediation_editors                             *string
+	remediation_viewers                             *string
+	review_blocked_groups                           *string
+	review_editors                                  *string
+	review_viewers                                  *string
+	vulnerability_blocked_groups                    *string
+	vulnerability_editors                           *string
+	vulnerability_viewers                           *string
+	workflow_definition_groups                      *string
+	selectValues                                    sql.SelectValues
 }
 
 // GroupEdges holds the relations/edges for other nodes in the graph.
@@ -627,25 +629,29 @@ func (*Group) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullString)
 		case group.ForeignKeys[23]: // organization_subprocessor_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[24]: // remediation_blocked_groups
+		case group.ForeignKeys[24]: // organization_trust_center_doc_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[25]: // remediation_editors
+		case group.ForeignKeys[25]: // organization_trust_center_subprocessor_creators
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[26]: // remediation_viewers
+		case group.ForeignKeys[26]: // remediation_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[27]: // review_blocked_groups
+		case group.ForeignKeys[27]: // remediation_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[28]: // review_editors
+		case group.ForeignKeys[28]: // remediation_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[29]: // review_viewers
+		case group.ForeignKeys[29]: // review_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[30]: // vulnerability_blocked_groups
+		case group.ForeignKeys[30]: // review_editors
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[31]: // vulnerability_editors
+		case group.ForeignKeys[31]: // review_viewers
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[32]: // vulnerability_viewers
+		case group.ForeignKeys[32]: // vulnerability_blocked_groups
 			values[i] = new(sql.NullString)
-		case group.ForeignKeys[33]: // workflow_definition_groups
+		case group.ForeignKeys[33]: // vulnerability_editors
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[34]: // vulnerability_viewers
+			values[i] = new(sql.NullString)
+		case group.ForeignKeys[35]: // workflow_definition_groups
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -957,68 +963,82 @@ func (_m *Group) assignValues(columns []string, values []any) error {
 			}
 		case group.ForeignKeys[24]:
 			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field organization_trust_center_doc_creators", values[i])
+			} else if value.Valid {
+				_m.organization_trust_center_doc_creators = new(string)
+				*_m.organization_trust_center_doc_creators = value.String
+			}
+		case group.ForeignKeys[25]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field organization_trust_center_subprocessor_creators", values[i])
+			} else if value.Valid {
+				_m.organization_trust_center_subprocessor_creators = new(string)
+				*_m.organization_trust_center_subprocessor_creators = value.String
+			}
+		case group.ForeignKeys[26]:
+			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.remediation_blocked_groups = new(string)
 				*_m.remediation_blocked_groups = value.String
 			}
-		case group.ForeignKeys[25]:
+		case group.ForeignKeys[27]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_editors", values[i])
 			} else if value.Valid {
 				_m.remediation_editors = new(string)
 				*_m.remediation_editors = value.String
 			}
-		case group.ForeignKeys[26]:
+		case group.ForeignKeys[28]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field remediation_viewers", values[i])
 			} else if value.Valid {
 				_m.remediation_viewers = new(string)
 				*_m.remediation_viewers = value.String
 			}
-		case group.ForeignKeys[27]:
+		case group.ForeignKeys[29]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.review_blocked_groups = new(string)
 				*_m.review_blocked_groups = value.String
 			}
-		case group.ForeignKeys[28]:
+		case group.ForeignKeys[30]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_editors", values[i])
 			} else if value.Valid {
 				_m.review_editors = new(string)
 				*_m.review_editors = value.String
 			}
-		case group.ForeignKeys[29]:
+		case group.ForeignKeys[31]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field review_viewers", values[i])
 			} else if value.Valid {
 				_m.review_viewers = new(string)
 				*_m.review_viewers = value.String
 			}
-		case group.ForeignKeys[30]:
+		case group.ForeignKeys[32]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_blocked_groups", values[i])
 			} else if value.Valid {
 				_m.vulnerability_blocked_groups = new(string)
 				*_m.vulnerability_blocked_groups = value.String
 			}
-		case group.ForeignKeys[31]:
+		case group.ForeignKeys[33]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_editors", values[i])
 			} else if value.Valid {
 				_m.vulnerability_editors = new(string)
 				*_m.vulnerability_editors = value.String
 			}
-		case group.ForeignKeys[32]:
+		case group.ForeignKeys[34]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field vulnerability_viewers", values[i])
 			} else if value.Valid {
 				_m.vulnerability_viewers = new(string)
 				*_m.vulnerability_viewers = value.String
 			}
-		case group.ForeignKeys[33]:
+		case group.ForeignKeys[35]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field workflow_definition_groups", values[i])
 			} else if value.Valid {

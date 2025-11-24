@@ -36,3 +36,9 @@
 - user: group:evidence-creator#member
   relation: evidence_creator
   object: organization:openlane
+- user: user:ulid-of-member
+  relation: member
+  object: group:trust-center-doc-creators
+- user: group:trust-center-doc-creators#member
+  relation: trust_center_doc_creator
+  object: organization:openlane

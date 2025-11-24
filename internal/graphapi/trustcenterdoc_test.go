@@ -6,7 +6,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -1125,7 +1124,7 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	// Clean up any existing trust center docs
 	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
 	d, err := suite.client.db.TrustCenterDoc.Query().All(deletectx)
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	for _, doc := range d {
 		suite.client.db.TrustCenterDoc.DeleteOneID(doc.ID).ExecX(deletectx)
 	}
@@ -1320,8 +1319,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 					return
 				}
 
-				require.NoError(t, err)
-				require.NotNil(t, trustCenterDoc)
+				assert.NilError(t, err)
+				assert.Assert(t, trustCenterDoc != nil)
 
 				assert.Check(t, trustCenterDoc.ID != "")
 				assert.Check(t, trustCenterDoc.OriginalFileID == nil, "Original file ID should be nil")
@@ -1358,8 +1357,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *upload)
-		require.NoError(t, err)
-		require.NotNil(t, createResp)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
 
 		trustCenterDoc := createResp.CreateTrustCenterDoc.TrustCenterDoc
 		assert.Check(t, trustCenterDoc.OriginalFileID != nil, "Original file ID should be set")
@@ -1371,8 +1370,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 			ClearOriginalFileID().
 			ClearFileID().
 			Save(allowCtx)
-		require.NoError(t, err)
-		require.NotNil(t, updatedDoc)
+		assert.NilError(t, err)
+		assert.Assert(t, updatedDoc != nil)
 
 		assert.Check(t, updatedDoc.OriginalFileID == nil, "Original file ID should be nil after clearing")
 		assert.Check(t, updatedDoc.FileID == nil, "File ID should be nil after clearing")

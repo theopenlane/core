@@ -34,6 +34,8 @@ tests:
           can_create_standard: true
           can_create_template: true
           can_create_evidence: true
+          can_create_trust_center_doc: true
+          can_create_trust_center_subprocessor: true
       - user: user:ulid-of-member
         object: organization:openlane
         context:
@@ -62,6 +64,8 @@ tests:
           can_create_standard: false
           can_create_template: false
           can_create_evidence: true # group tuple set to allow
+          can_create_trust_center_doc: true # group tuple set to allow
+          can_create_trust_center_subprocessor: false
       - user: service:ulid-of-service-editor
         object: organization:openlane # parent org
         assertions:
@@ -88,6 +92,8 @@ tests:
           can_create_scheduled_job: true
           can_create_template: true
           can_create_evidence: true
+          can_create_trust_center_doc: true
+          can_create_trust_center_subprocessor: true
       - user: service:ulid-of-service-viewer
         object: organization:openlane # parent org
         assertions:
@@ -114,6 +120,8 @@ tests:
           can_create_scheduled_job: false
           can_create_template: false
           can_create_evidence: false
+          can_create_trust_center_doc: false
+          can_create_trust_center_subprocessor: false
       - user: user:ulid-of-admin
         object: organization:openlane # parent org
         context:
@@ -137,6 +145,12 @@ tests:
           can_create_standard: true
           can_create_scheduled_job: true
           can_create_evidence: true
+          can_create_template: true
+          can_create_mapped_control: true
+          can_create_control_objective: true
+          can_create_group: true
+          can_create_trust_center_doc: true
+          can_create_trust_center_subprocessor: true
       - user: user:ulid-of-audit-log-viewer
         object: organization:openlane # parent org
         context:
@@ -177,6 +191,8 @@ tests:
           can_create_risk: true
           can_create_template: true
           can_create_evidence: true
+          can_create_trust_center_doc: true
+          can_create_trust_center_subprocessor: true
       - user: user:ulid-of-member
         object: organization:foo # child org
         context:

@@ -6,7 +6,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
@@ -336,8 +335,8 @@ func TestMutationCreateTemplate(t *testing.T) {
 				return
 			}
 
-			require.Nil(t, err)
-			require.NotNil(t, resp)
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
 
 			// Verify basic template fields
 			template := resp.CreateTemplate.Template

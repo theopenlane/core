@@ -552,6 +552,36 @@ func (_u *OrganizationUpdate) AddSubprocessorCreators(v ...*Group) *Organization
 	return _u.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddTrustCenterDocCreatorIDs adds the "trust_center_doc_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddTrustCenterDocCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTrustCenterDocCreatorIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocCreators adds the "trust_center_doc_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddTrustCenterDocCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocCreatorIDs(ids...)
+}
+
+// AddTrustCenterSubprocessorCreatorIDs adds the "trust_center_subprocessor_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdate) AddTrustCenterSubprocessorCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.AddTrustCenterSubprocessorCreatorIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSubprocessorCreators adds the "trust_center_subprocessor_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) AddTrustCenterSubprocessorCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSubprocessorCreatorIDs(ids...)
+}
+
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdate) AddChildIDs(ids ...string) *OrganizationUpdate {
 	_u.mutation.AddChildIDs(ids...)
@@ -1973,6 +2003,48 @@ func (_u *OrganizationUpdate) RemoveSubprocessorCreators(v ...*Group) *Organizat
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorCreatorIDs(ids...)
+}
+
+// ClearTrustCenterDocCreators clears all "trust_center_doc_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearTrustCenterDocCreators() *OrganizationUpdate {
+	_u.mutation.ClearTrustCenterDocCreators()
+	return _u
+}
+
+// RemoveTrustCenterDocCreatorIDs removes the "trust_center_doc_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveTrustCenterDocCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTrustCenterDocCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocCreators removes "trust_center_doc_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveTrustCenterDocCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocCreatorIDs(ids...)
+}
+
+// ClearTrustCenterSubprocessorCreators clears all "trust_center_subprocessor_creators" edges to the Group entity.
+func (_u *OrganizationUpdate) ClearTrustCenterSubprocessorCreators() *OrganizationUpdate {
+	_u.mutation.ClearTrustCenterSubprocessorCreators()
+	return _u
+}
+
+// RemoveTrustCenterSubprocessorCreatorIDs removes the "trust_center_subprocessor_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdate) RemoveTrustCenterSubprocessorCreatorIDs(ids ...string) *OrganizationUpdate {
+	_u.mutation.RemoveTrustCenterSubprocessorCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSubprocessorCreators removes "trust_center_subprocessor_creators" edges to Group entities.
+func (_u *OrganizationUpdate) RemoveTrustCenterSubprocessorCreators(v ...*Group) *OrganizationUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSubprocessorCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -4351,6 +4423,102 @@ func (_u *OrganizationUpdate) sqlSave(ctx context.Context) (_node int, err error
 			Inverse: false,
 			Table:   organization.SubprocessorCreatorsTable,
 			Columns: []string{organization.SubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSubprocessorCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
@@ -8326,6 +8494,36 @@ func (_u *OrganizationUpdateOne) AddSubprocessorCreators(v ...*Group) *Organizat
 	return _u.AddSubprocessorCreatorIDs(ids...)
 }
 
+// AddTrustCenterDocCreatorIDs adds the "trust_center_doc_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddTrustCenterDocCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTrustCenterDocCreatorIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocCreators adds the "trust_center_doc_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddTrustCenterDocCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocCreatorIDs(ids...)
+}
+
+// AddTrustCenterSubprocessorCreatorIDs adds the "trust_center_subprocessor_creators" edge to the Group entity by IDs.
+func (_u *OrganizationUpdateOne) AddTrustCenterSubprocessorCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.AddTrustCenterSubprocessorCreatorIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterSubprocessorCreators adds the "trust_center_subprocessor_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) AddTrustCenterSubprocessorCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterSubprocessorCreatorIDs(ids...)
+}
+
 // AddChildIDs adds the "children" edge to the Organization entity by IDs.
 func (_u *OrganizationUpdateOne) AddChildIDs(ids ...string) *OrganizationUpdateOne {
 	_u.mutation.AddChildIDs(ids...)
@@ -9747,6 +9945,48 @@ func (_u *OrganizationUpdateOne) RemoveSubprocessorCreators(v ...*Group) *Organi
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveSubprocessorCreatorIDs(ids...)
+}
+
+// ClearTrustCenterDocCreators clears all "trust_center_doc_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearTrustCenterDocCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearTrustCenterDocCreators()
+	return _u
+}
+
+// RemoveTrustCenterDocCreatorIDs removes the "trust_center_doc_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterDocCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTrustCenterDocCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocCreators removes "trust_center_doc_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterDocCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocCreatorIDs(ids...)
+}
+
+// ClearTrustCenterSubprocessorCreators clears all "trust_center_subprocessor_creators" edges to the Group entity.
+func (_u *OrganizationUpdateOne) ClearTrustCenterSubprocessorCreators() *OrganizationUpdateOne {
+	_u.mutation.ClearTrustCenterSubprocessorCreators()
+	return _u
+}
+
+// RemoveTrustCenterSubprocessorCreatorIDs removes the "trust_center_subprocessor_creators" edge to Group entities by IDs.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterSubprocessorCreatorIDs(ids ...string) *OrganizationUpdateOne {
+	_u.mutation.RemoveTrustCenterSubprocessorCreatorIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterSubprocessorCreators removes "trust_center_subprocessor_creators" edges to Group entities.
+func (_u *OrganizationUpdateOne) RemoveTrustCenterSubprocessorCreators(v ...*Group) *OrganizationUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterSubprocessorCreatorIDs(ids...)
 }
 
 // ClearChildren clears all "children" edges to the Organization entity.
@@ -12155,6 +12395,102 @@ func (_u *OrganizationUpdateOne) sqlSave(ctx context.Context) (_node *Organizati
 			Inverse: false,
 			Table:   organization.SubprocessorCreatorsTable,
 			Columns: []string{organization.SubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterSubprocessorCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterSubprocessorCreatorsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Group
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterSubprocessorCreatorsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(group.FieldID, field.TypeString),

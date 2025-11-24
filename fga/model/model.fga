@@ -125,6 +125,12 @@ type organization
     define subprocessor_creator: [group#member]
     define can_create_subprocessor: can_edit or subprocessor_creator
 
+    define trust_center_doc_creator: [group#member]
+    define can_create_trust_center_doc: can_edit or trust_center_doc_creator
+
+    define trust_center_subprocessor_creator: [group#member]
+    define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
+
     # additional relations
     define user_in_context: [user]
 
@@ -442,7 +448,7 @@ type note
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk]
     define editor: [organization#owner]
     define owner : [user, service]
 type evidence

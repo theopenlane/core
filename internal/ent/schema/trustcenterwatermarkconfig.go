@@ -10,6 +10,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
@@ -142,6 +143,9 @@ func (TrustCenterWatermarkConfig) Hooks() []ent.Hook {
 func (TrustCenterWatermarkConfig) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				TrustCenter{}.Name(),
+			}),
 			entfga.CheckEditAccess[*generated.TrustCenterWatermarkConfigMutation](),
 		),
 	)
@@ -176,5 +180,7 @@ func (TrustCenterWatermarkConfig) Annotations() []schema.Annotation {
 
 // Interceptors of the TrustCenterWatermarkConfig
 func (TrustCenterWatermarkConfig) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterChild(),
+	}
 }

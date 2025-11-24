@@ -3,8 +3,9 @@ package graphapi
 import (
 	"testing"
 
-	"github.com/stretchr/testify/assert"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestGetControlIDFromRefCode(t *testing.T) {
@@ -24,9 +25,9 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 
 		id, isSubcontrol := getControlIDFromRefCode("REF-1", controls)
 
-		assert.NotNil(t, id)
-		assert.Equal(t, "control-1", *id)
-		assert.False(t, isSubcontrol)
+		assert.Assert(t, id != nil)
+		assert.Check(t, is.Equal("control-1", *id))
+		assert.Check(t, is.Equal(false, isSubcontrol))
 	})
 
 	t.Run("match by control alias", func(t *testing.T) {
@@ -40,9 +41,9 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 
 		id, isSubcontrol := getControlIDFromRefCode("ALIAS-2", controls)
 
-		assert.NotNil(t, id)
-		assert.Equal(t, "control-1", *id)
-		assert.False(t, isSubcontrol)
+		assert.Assert(t, id != nil)
+		assert.Check(t, is.Equal("control-1", *id))
+		assert.Check(t, is.Equal(false, isSubcontrol))
 	})
 
 	t.Run("match by subcontrol refCode", func(t *testing.T) {
@@ -64,9 +65,9 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 
 		id, isSubcontrol := getControlIDFromRefCode("SUBREF-1", controls)
 
-		assert.NotNil(t, id)
-		assert.Equal(t, "control-1", *id)
-		assert.True(t, isSubcontrol)
+		assert.Assert(t, id != nil)
+		assert.Check(t, is.Equal("control-1", *id))
+		assert.Check(t, is.Equal(true, isSubcontrol))
 	})
 
 	t.Run("match by subcontrol alias", func(t *testing.T) {
@@ -88,9 +89,9 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 
 		id, isSubcontrol := getControlIDFromRefCode("SUBALIAS-1", controls)
 
-		assert.NotNil(t, id)
-		assert.Equal(t, "control-1", *id)
-		assert.True(t, isSubcontrol)
+		assert.Assert(t, id != nil)
+		assert.Check(t, is.Equal("control-1", *id))
+		assert.Check(t, is.Equal(true, isSubcontrol))
 	})
 
 	t.Run("no match found", func(t *testing.T) {
@@ -103,7 +104,7 @@ func TestGetControlIDFromRefCode(t *testing.T) {
 
 		id, isSubcontrol := getControlIDFromRefCode("NON-EXIST	ENT", controls)
 
-		assert.Nil(t, id)
-		assert.False(t, isSubcontrol)
+		assert.Assert(t, id == nil)
+		assert.Check(t, is.Equal(false, isSubcontrol))
 	})
 }

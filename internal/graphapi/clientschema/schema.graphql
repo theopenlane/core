@@ -12508,6 +12508,8 @@ input CreateOrganizationInput {
 	standardCreatorIDs: [ID!]
 	templateCreatorIDs: [ID!]
 	subprocessorCreatorIDs: [ID!]
+	trustCenterDocCreatorIDs: [ID!]
+	trustCenterSubprocessorCreatorIDs: [ID!]
 	parentID: ID
 	settingID: ID
 	personalAccessTokenIDs: [ID!]
@@ -47872,6 +47874,68 @@ type Organization implements Node {
 		"""
 		where: GroupWhereInput
 	): GroupConnection!
+	trustCenterDocCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
+	trustCenterSubprocessorCreators(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Groups returned from the connection.
+		"""
+		orderBy: [GroupOrder!]
+
+		"""
+		Filtering options for Groups returned from the connection.
+		"""
+		where: GroupWhereInput
+	): GroupConnection!
 	parent: Organization
 	children(
 		"""
@@ -51827,6 +51891,16 @@ input OrganizationWhereInput {
 	"""
 	hasSubprocessorCreators: Boolean
 	hasSubprocessorCreatorsWith: [GroupWhereInput!]
+	"""
+	trust_center_doc_creators edge predicates
+	"""
+	hasTrustCenterDocCreators: Boolean
+	hasTrustCenterDocCreatorsWith: [GroupWhereInput!]
+	"""
+	trust_center_subprocessor_creators edge predicates
+	"""
+	hasTrustCenterSubprocessorCreators: Boolean
+	hasTrustCenterSubprocessorCreatorsWith: [GroupWhereInput!]
 	"""
 	parent edge predicates
 	"""
@@ -84324,6 +84398,12 @@ input UpdateOrganizationInput {
 	addSubprocessorCreatorIDs: [ID!]
 	removeSubprocessorCreatorIDs: [ID!]
 	clearSubprocessorCreators: Boolean
+	addTrustCenterDocCreatorIDs: [ID!]
+	removeTrustCenterDocCreatorIDs: [ID!]
+	clearTrustCenterDocCreators: Boolean
+	addTrustCenterSubprocessorCreatorIDs: [ID!]
+	removeTrustCenterSubprocessorCreatorIDs: [ID!]
+	clearTrustCenterSubprocessorCreators: Boolean
 	settingID: ID
 	clearSetting: Boolean
 	addPersonalAccessTokenIDs: [ID!]
