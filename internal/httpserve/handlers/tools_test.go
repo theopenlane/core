@@ -47,6 +47,7 @@ import (
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
 
@@ -111,6 +112,7 @@ type HandlerTestSuite struct {
 	sharedOTPManager     *totp.Client
 	sharedPondPool       *soiree.PondPool
 	registeredRoutes     map[string]struct{}
+	sharedAuthMiddleware echo.MiddlewareFunc
 
 	// OpenAPI operations for reuse in tests
 	startImpersonationOp *openapi3.Operation
@@ -278,6 +280,36 @@ func (suite *HandlerTestSuite) createImpersonationOperation(operationID, descrip
 	operation.OperationID = operationID
 	operation.Security = handlers.BearerSecurity()
 	return operation
+}
+
+// registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
+func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	suite.e.Add(method, path, func(c echo.Context) error {
+		return handlerFunc(c, &handlers.OpenAPIContext{
+			Operation: operation,
+			Registry:  suite.router.SchemaRegistry,
+		})
+	}, suite.sharedAuthMiddleware)
+}
+
+// createAuthMiddleware creates authentication middleware for tests
+func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
+	// get keys from the token manager
+	keys, err := suite.db.TokenManager.Keys()
+	require.NoError(suite.T(), err)
+
+	// local validator to avoid JWK cache issues
+	validator := tokens.NewJWKSValidator(keys, "http://localhost:17608", "http://localhost:17608")
+
+	opts := []authmiddleware.Option{
+		authmiddleware.WithDBClient(suite.db),
+		authmiddleware.WithAllowAnonymous(true),
+		authmiddleware.WithValidator(validator),
+	}
+
+	conf := authmiddleware.NewAuthOptions(opts...)
+
+	return authmiddleware.Authenticate(&conf)
 }
 
 // registerTestHandler is a helper to register test handlers with OpenAPI context
