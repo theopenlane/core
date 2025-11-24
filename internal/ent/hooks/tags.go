@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 // tagMutation is an interface for mutations that have tags
@@ -45,6 +46,16 @@ func HookTags() ent.Hook {
 			newTags := slices.Concat(tags, appendTags)
 			uniqueTags := lo.Uniq(newTags)
 
+			// only auto-create tags when we have an organization ID in context
+			// this ensures we do not create global tags automatically from internal requests without
+			// organization context
+			orgID, err := auth.GetOrganizationIDFromContext(ctx)
+			if err != nil || orgID == "" {
+				logx.FromContext(ctx).Debug().Msg("no organization ID in context, skipping tag definition creation")
+
+				return next.Mutate(ctx, m)
+			}
+
 			// for each tag, create the tag definition if it does not already exist
 			for _, tag := range uniqueTags {
 				if tag == "" {
@@ -62,7 +73,8 @@ func HookTags() ent.Hook {
 					}
 
 					input := generated.CreateTagDefinitionInput{
-						Name: tag,
+						Name:    tag,
+						OwnerID: &orgID,
 					}
 
 					if err := mut.Client().TagDefinition.Create().

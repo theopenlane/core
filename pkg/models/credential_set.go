@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"io"
+	"time"
 
 	"github.com/rs/zerolog/log"
 )
@@ -19,6 +20,18 @@ type CredentialSet struct {
 	AccountID string `json:"accountID"`
 	// APIToken for Cloudflare R2
 	APIToken string `json:"apiToken"`
+	// ProviderData stores provider-specific metadata or attributes
+	ProviderData map[string]any `json:"providerData,omitempty"`
+	// OAuthAccessToken holds the OAuth access token when applicable
+	OAuthAccessToken string `json:"oauthAccessToken,omitempty"`
+	// OAuthRefreshToken holds the OAuth refresh token when applicable
+	OAuthRefreshToken string `json:"oauthRefreshToken,omitempty"`
+	// OAuthTokenType stores the OAuth token type (e.g., Bearer)
+	OAuthTokenType string `json:"oauthTokenType,omitempty"`
+	// OAuthExpiry stores the token expiry timestamp
+	OAuthExpiry *time.Time `json:"oauthExpiry,omitempty"`
+	// Claims stores serialized ID token claims if available
+	Claims map[string]any `json:"claims,omitempty"`
 }
 
 // String returns a string representation of the CredentialSet with sensitive fields masked for logging
@@ -43,6 +56,12 @@ func (c CredentialSet) String() string {
 
 	if c.APIToken != "" {
 		masked["apiToken"] = "***"
+	}
+	if c.OAuthAccessToken != "" {
+		masked["oauthAccessToken"] = "***"
+	}
+	if c.OAuthRefreshToken != "" {
+		masked["oauthRefreshToken"] = "***"
 	}
 
 	data, _ := json.Marshal(masked)

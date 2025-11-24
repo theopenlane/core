@@ -1,0 +1,9 @@
+services:
+  mailhog:
+    image: mailhog/mailhog
+    restart: always
+    ports:
+      - "9125:1025"
+      - "9225:8025"
+    networks:
+      - default

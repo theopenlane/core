@@ -20,6 +20,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/internal/graphapi/directives"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/iam/auth"
 )
 
 const (
@@ -115,9 +116,20 @@ type SystemOwnedMutation interface {
 	InternalNotes() (string, bool)
 	ClearInternalNotes()
 	SetInternalNotes(string)
+	OwnerID() (string, bool)
+	SetOwnerID(string)
+}
+
+// OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
+type OrgOwnedMutation interface {
+	utils.GenericMutation
+
+	OwnerID() (string, bool)
+	SetOwnerID(string)
 }
 
 // HookSystemOwnedCreate will automatically set the system_owned field to true if the user is a system admin
+// and ensure there is an owner id when creating not system owned objects
 func HookSystemOwnedCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
@@ -128,11 +140,38 @@ func HookSystemOwnedCreate() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
+			mut, ok := m.(SystemOwnedMutation)
+			if !ok && mut == nil {
+				return next.Mutate(ctx, m)
+			}
+
 			if admin {
-				mut, ok := m.(SystemOwnedMutation)
-				if ok && mut != nil {
-					mut.SetSystemOwned(true)
+				mut.SetSystemOwned(true)
+
+				return next.Mutate(ctx, m)
+			}
+
+			// if its not a system admin, ensure the system owned field is false
+			mut.SetSystemOwned(false)
+
+			// ensure there is an owner id set for non system owned objects
+			orgMut, ok := m.(OrgOwnedMutation)
+			if !ok && orgMut == nil {
+				return next.Mutate(ctx, m)
+			}
+
+			ownerID, ok := orgMut.OwnerID()
+			if !ok || ownerID == "" {
+				logx.FromContext(ctx).Debug().Msg("non system admin creating object without owner ID, attempting to set")
+
+				orgID, err := auth.GetOrganizationIDFromContext(ctx)
+				if err != nil || orgID == "" {
+					logx.FromContext(ctx).Error().Err(err).Msg("unable to get organization ID from context for non system admin creating object")
+
+					return nil, generated.ErrPermissionDenied
 				}
+
+				mut.SetOwnerID(orgID)
 			}
 
 			return next.Mutate(ctx, m)

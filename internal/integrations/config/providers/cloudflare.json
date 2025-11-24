@@ -1,0 +1,71 @@
+{
+  "name": "cloudflare",
+  "displayName": "Cloudflare",
+  "category": "security",
+  "authType": "apikey",
+  "active": true,
+  "logoUrl": "https://developers.cloudflare.com/resources/logo/favicon.ico",
+  "docsUrl": "https://developers.cloudflare.com/fundamentals/api/",
+  "apiKey": {
+    "keyLabel": "API Token",
+    "headerName": "Authorization"
+  },
+  "labels": {
+    "vendor": "cloudflare",
+    "product": "zero-trust"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "apiToken",
+      "accountId"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Cloudflare account."
+      },
+      "apiToken": {
+        "type": "string",
+        "title": "API Token",
+        "description": "Scoped token with access to account settings, Zero Trust policies, and scanning features."
+      },
+      "accountId": {
+        "type": "string",
+        "title": "Account ID",
+        "description": "Cloudflare account identifier targeted by this integration."
+      },
+      "zoneIds": {
+        "type": "array",
+        "title": "Zone IDs",
+        "description": "Optional subset of zones to include when collecting findings.",
+        "items": {
+          "type": "string"
+        }
+      },
+      "email": {
+        "type": "string",
+        "title": "Account Email",
+        "description": "Optional email associated with the API token (required for legacy key authentication)."
+      },
+      "apiKey": {
+        "type": "string",
+        "title": "Global API Key",
+        "description": "Optional global API key when using email/key authentication instead of scoped tokens."
+      },
+      "enableScanner": {
+        "type": "boolean",
+        "title": "Enable Scanner",
+        "description": "Toggle Cloudflare's scanning utility if the account is licensed for it.",
+        "default": false
+      },
+      "scannerLabel": {
+        "type": "string",
+        "title": "Scanner Label",
+        "description": "Optional label recorded with scan jobs for traceability."
+      }
+    }
+  }
+}

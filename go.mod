@@ -15,6 +15,7 @@ tool (
 require (
 	ariga.io/entcache v0.1.0
 	cloud.google.com/go/secretmanager v1.16.0
+	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20251120142408-49be309024df
 	github.com/99designs/gqlgen v0.17.83
@@ -96,7 +97,7 @@ require (
 	github.com/theopenlane/entx v0.17.1
 	github.com/theopenlane/gqlgen-plugins v0.12.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.22.2
+	github.com/theopenlane/iam v0.22.5
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.1
 	github.com/theopenlane/utils v0.6.1
@@ -115,21 +116,23 @@ require (
 	golang.org/x/term v0.37.0
 	golang.org/x/text v0.31.0
 	golang.org/x/tools v0.39.0
+	google.golang.org/api v0.256.0
 	gopkg.in/yaml.v3 v3.0.1
 	gotest.tools/v3 v3.5.2
 )
 
 require (
+	cloud.google.com/go/longrunning v0.7.0 // indirect
 	github.com/aws/aws-sdk-go-v2/service/signin v1.0.1 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
+	github.com/google/go-github/v79 v79.0.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
 	github.com/slack-go/slack v0.17.3 // indirect
 	github.com/spf13/cast v1.10.0 // indirect
-	golang.org/x/image v0.33.0 // indirect
-	google.golang.org/api v0.256.0 // indirect
+	golang.org/x/image v0.32.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
@@ -195,7 +198,6 @@ require (
 	github.com/ebitengine/purego v0.9.0 // indirect
 	github.com/fatih/structs v1.1.0 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
-	github.com/google/go-github/v74 v74.0.0 // indirect
 	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510 // indirect
 	github.com/hashicorp/hcl/v2 v2.24.0 // indirect
 	github.com/huandu/xstrings v1.5.0 // indirect
@@ -378,8 +380,8 @@ require (
 	golang.org/x/sys v0.38.0 // indirect
 	golang.org/x/time v0.14.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	google.golang.org/genproto/googleapis/api v0.0.0-20251111163417-95abcf5c77ba // indirect
-	google.golang.org/genproto/googleapis/rpc v0.0.0-20251111163417-95abcf5c77ba // indirect
+	google.golang.org/genproto/googleapis/api v0.0.0-20251022142026-3a174f9686a8 // indirect
+	google.golang.org/genproto/googleapis/rpc v0.0.0-20251103181224-f26f9409b101 // indirect
 	google.golang.org/grpc v1.77.0 // indirect
 	google.golang.org/protobuf v1.36.10 // indirect
 )

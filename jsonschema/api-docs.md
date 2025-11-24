@@ -25,7 +25,7 @@ Config contains the configuration for the core server
 |[**subscription**](#subscription)|`object`|||
 |[**keywatcher**](#keywatcher)|`object`|KeyWatcher contains settings for the key watcher that manages JWT signing keys<br/>||
 |[**slack**](#slack)|`object`|Slack contains settings for Slack notifications<br/>||
-|[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations<br/>||
+|[**integrationoauthprovider**](#integrationoauthprovider)|`object`|IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -135,10 +135,7 @@ Config contains the configuration for the core server
     },
     "keywatcher": {},
     "slack": {},
-    "integrationoauthprovider": {
-        "github": {},
-        "slack": {}
-    }
+    "integrationoauthprovider": {}
 }
 ```
 
@@ -931,6 +928,7 @@ OauthProviderConfig represents the configuration for OAuth providers such as Git
 |**createnewmodel**|`boolean`|force create a new model<br/>|no|
 |**modelfile**|`string`|path to the fga model file<br/>|no|
 |[**credentials**](#authzcredentials)|`object`||no|
+|**maxbatchwritesize**|`integer`|maximum number of writes per batch in a transaction<br/>|no|
 
 **Additional Properties:** not allowed  
 **Example**
@@ -1738,70 +1736,15 @@ Slack contains settings for Slack notifications
 <a name="integrationoauthprovider"></a>
 ## integrationoauthprovider: object
 
-IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations
+IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
 
 
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**redirecturl**|`string`|RedirectURL is the base URL for integration OAuth callbacks<br/>||
-|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration<br/>||
-|[**github**](#integrationoauthprovidergithub)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
-|[**slack**](#integrationoauthproviderslack)|`object`|IntegrationProviderConfig contains OAuth configuration for a specific integration provider<br/>||
+|**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
+|**providerspecpath**|`string`|ProviderSpecPath is the path to the declarative provider spec configuration file.<br/>||
 
 **Additional Properties:** not allowed  
-**Example**
-
-```json
-{
-    "github": {},
-    "slack": {}
-}
-```
-
-<a name="integrationoauthprovidergithub"></a>
-### integrationoauthprovider\.github: object
-
-IntegrationProviderConfig contains OAuth configuration for a specific integration provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**clientid**|`string`|ClientID is the OAuth2 client ID<br/>||
-|**clientsecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
-|**clientendpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
-|[**scopes**](#integrationoauthprovidergithubscopes)|`string[]`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationoauthprovidergithubscopes"></a>
-#### integrationoauthprovider\.github\.scopes: array
-
-**Items**
-
-**Item Type:** `string`  
-<a name="integrationoauthproviderslack"></a>
-### integrationoauthprovider\.slack: object
-
-IntegrationProviderConfig contains OAuth configuration for a specific integration provider
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**clientid**|`string`|ClientID is the OAuth2 client ID<br/>||
-|**clientsecret**|`string`|ClientSecret is the OAuth2 client secret<br/>||
-|**clientendpoint**|`string`|ClientEndpoint is the base URL for the OAuth endpoints<br/>||
-|[**scopes**](#integrationoauthproviderslackscopes)|`string[]`|||
-
-**Additional Properties:** not allowed  
-<a name="integrationoauthproviderslackscopes"></a>
-#### integrationoauthprovider\.slack\.scopes: array
-
-**Items**
-
-**Item Type:** `string`  
 
