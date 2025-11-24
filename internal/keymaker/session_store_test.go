@@ -1,7 +1,6 @@
 package keymaker
 
 import (
-	"context"
 	"errors"
 	"testing"
 
@@ -18,11 +17,11 @@ func TestMemorySessionStoreSaveAndTake(t *testing.T) {
 		AuthSession: &fakeAuthSession{state: "state-1", provider: types.ProviderType("acme")},
 	}
 
-	if err := store.Save(context.Background(), session); err != nil {
+	if err := store.Save(session); err != nil {
 		t.Fatalf("Save error: %v", err)
 	}
 
-	retrieved, err := store.Take(context.Background(), "state-1")
+	retrieved, err := store.Take("state-1")
 	if err != nil {
 		t.Fatalf("Take error: %v", err)
 	}
@@ -31,7 +30,7 @@ func TestMemorySessionStoreSaveAndTake(t *testing.T) {
 		t.Fatalf("expected state %s, got %s", session.State, retrieved.State)
 	}
 
-	_, err = store.Take(context.Background(), "state-1")
+	_, err = store.Take("state-1")
 	if !errors.Is(err, integrations.ErrAuthorizationStateNotFound) {
 		t.Fatalf("expected ErrAuthorizationStateNotFound, got %v", err)
 	}
@@ -42,11 +41,11 @@ func TestMemorySessionStoreSaveValidatesInput(t *testing.T) {
 
 	store := NewMemorySessionStore()
 
-	if err := store.Save(context.Background(), ActivationSession{}); !errors.Is(err, integrations.ErrStateRequired) {
+	if err := store.Save(ActivationSession{}); !errors.Is(err, integrations.ErrStateRequired) {
 		t.Fatalf("expected ErrStateRequired, got %v", err)
 	}
 
-	err := store.Save(context.Background(), ActivationSession{State: "state"})
+	err := store.Save(ActivationSession{State: "state"})
 	if !errors.Is(err, integrations.ErrAuthSessionInvalid) {
 		t.Fatalf("expected ErrAuthSessionInvalid, got %v", err)
 	}
@@ -56,7 +55,7 @@ func TestMemorySessionStoreTakeValidatesState(t *testing.T) {
 	t.Parallel()
 
 	store := NewMemorySessionStore()
-	_, err := store.Take(context.Background(), "")
+	_, err := store.Take("")
 	if !errors.Is(err, integrations.ErrStateRequired) {
 		t.Fatalf("expected ErrStateRequired, got %v", err)
 	}

@@ -1,7 +1,6 @@
 package config
 
 import (
-	"context"
 	"errors"
 	"testing"
 	"testing/fstest"
@@ -29,7 +28,7 @@ oauth:
 	}
 
 	loader := NewFSLoader(fsys, "providers")
-	specs, err := loader.Load(context.Background())
+	specs, err := loader.Load()
 	if err != nil {
 		t.Fatalf("Load() error = %v", err)
 	}
@@ -54,7 +53,7 @@ func TestFSLoader_LoadUnsupportedSchemaVersion(t *testing.T) {
 	}
 
 	loader := NewFSLoader(fsys, "providers")
-	_, err := loader.Load(context.Background())
+	_, err := loader.Load()
 	if err == nil {
 		t.Fatalf("expected schema version error")
 	}

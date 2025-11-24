@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
 	"github.com/theopenlane/iam/auth"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
+	"github.com/theopenlane/core/pkg/logx"
 	openapi "github.com/theopenlane/core/pkg/openapi"
 )
 
@@ -86,22 +86,27 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 	if !ok {
 		return h.BadRequest(ctx, ErrInvalidProvider, openapiCtx)
 	}
+
 	if !spec.Active {
 		return h.BadRequest(ctx, ErrProviderDisabled, openapiCtx)
 	}
+
 	if spec.AuthType != types.AuthKindOAuth2 && spec.AuthType != types.AuthKindOIDC {
 		return h.BadRequest(ctx, ErrUnsupportedAuthType, openapiCtx)
 	}
 
 	integration, err := h.IntegrationStore.EnsureIntegration(userCtx, user.OrganizationID, providerType)
 	if err != nil {
-		log.Error().Err(err).Str("org_id", user.OrganizationID).Str("provider", string(providerType)).Msg("failed to ensure integration record")
+		logx.FromContext(userCtx).Error().Err(err).Str("org_id", user.OrganizationID).Str("provider", string(providerType)).Msg("failed to ensure integration record")
+
 		return h.InternalServerError(ctx, err, openapiCtx)
 	}
 
 	state, err := h.generateOAuthState(user.OrganizationID, string(providerType))
 	if err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
+		logx.FromContext(userCtx).Error().Err(err).Msg("error generating oauth state")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	scopes := mergeScopes(spec, in.Scopes)
@@ -114,8 +119,8 @@ func (h *Handler) StartOAuthFlow(ctx echo.Context, openapiCtx *OpenAPIContext) e
 		State:         state,
 	})
 	if err != nil {
-		log.Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
-		return h.InternalServerError(ctx, err, openapiCtx)
+		logx.FromContext(userCtx).Error().Err(err).Str("provider", string(providerType)).Msg("failed to begin OAuth flow")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	cfg := h.getOauthCookieConfig()
@@ -149,43 +154,44 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 		return h.InternalServerError(ctx, errKeymakerNotConfigured, openapiCtx)
 	}
 
+	reqCtx := ctx.Request().Context()
+
 	stateCookie, err := sessions.GetCookie(ctx.Request(), oauthStateCookieName)
 	if err != nil || stateCookie.Value == "" || stateCookie.Value != in.State {
-		log.Error().Err(err).Msg("oauth state cookie mismatch")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("oauth state cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
 	if in.State != stateCookie.Value {
-		log.Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
+		logx.FromContext(reqCtx).Error().Str("payload state", in.State).Str("cookie state", stateCookie.Value).Msg("State cookies do not match")
 
 		return h.BadRequest(ctx, ErrInvalidState, openapiCtx)
 	}
 
 	orgCookie, err := sessions.GetCookie(ctx.Request(), oauthOrgIDCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get oauth_org_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_org_id cookie")
 		return h.BadRequest(ctx, ErrMissingOrganizationContext, openapiCtx)
 	}
 
 	userCookie, err := sessions.GetCookie(ctx.Request(), oauthUserIDCookieName)
 	if err != nil {
-		log.Error().Err(err).Msg("failed to get oauth_user_id cookie")
+		logx.FromContext(reqCtx).Error().Err(err).Msg("failed to get oauth_user_id cookie")
 		return h.BadRequest(ctx, ErrMissingUserContext, openapiCtx)
 	}
 
-	reqCtx := ctx.Request().Context()
 	user, err := auth.GetAuthenticatedUserFromContext(reqCtx)
 	if err != nil {
 		return h.Unauthorized(ctx, err, openapiCtx)
 	}
 
 	if user.OrganizationID != orgCookie.Value {
-		log.Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", user.OrganizationID).Msg("oauth organization cookie mismatch")
+		logx.FromContext(reqCtx).Error().Str("cookieOrgID", orgCookie.Value).Str("userOrgID", user.OrganizationID).Msg("oauth organization cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidOrganizationContext, openapiCtx)
 	}
 
 	if user.SubjectID != userCookie.Value {
-		log.Error().Str("cookieUserID", userCookie.Value).Str("userID", user.SubjectID).Msg("oauth user cookie mismatch")
+		logx.FromContext(reqCtx).Error().Str("cookieUserID", userCookie.Value).Str("userID", user.SubjectID).Msg("oauth user cookie mismatch")
 		return h.BadRequest(ctx, ErrInvalidUserContext, openapiCtx)
 	}
 
@@ -202,7 +208,7 @@ func (h *Handler) HandleOAuthCallback(ctx echo.Context, openapiCtx *OpenAPIConte
 			errors.Is(err, integrations.ErrAuthorizationCodeRequired):
 			return h.BadRequest(ctx, err, openapiCtx)
 		default:
-			log.Error().Err(err).Msg("failed to complete oauth callback")
+			logx.FromContext(reqCtx).Error().Err(err).Msg("failed to complete oauth callback")
 			return h.InternalServerError(ctx, err, openapiCtx)
 		}
 	}
@@ -302,6 +308,7 @@ func (h *Handler) RefreshIntegrationToken(ctx context.Context, orgID, provider s
 	if err != nil {
 		return nil, err
 	}
+
 	return integrationTokenFromPayload(provider, payload)
 }
 

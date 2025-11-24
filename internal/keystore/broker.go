@@ -30,10 +30,10 @@ type Broker struct {
 
 // cacheKey uniquely identifies a cached credential entry
 type cacheKey struct {
-	// OrgID identifies the organization owning the credential
-	OrgID string
-	// Provider identifies which provider issued the credential
-	Provider types.ProviderType
+	// orgID identifies the organization owning the credential
+	orgID string
+	// provider identifies which provider issued the credential
+	provider types.ProviderType
 }
 
 // cachedCredential holds a credential payload and its expiry time
@@ -126,7 +126,7 @@ func (b *Broker) getCached(orgID string, provider types.ProviderType) (types.Cre
 	b.mu.RLock()
 	defer b.mu.RUnlock()
 
-	entry, ok := b.cache[cacheKey{OrgID: orgID, Provider: provider}]
+	entry, ok := b.cache[cacheKey{orgID: orgID, provider: provider}]
 	if !ok {
 		return types.CredentialPayload{}, false
 	}
@@ -145,7 +145,7 @@ func (b *Broker) setCached(orgID string, provider types.ProviderType, payload ty
 
 	expiry := cacheExpiry(payload, b.now)
 
-	b.cache[cacheKey{OrgID: orgID, Provider: provider}] = cachedCredential{
+	b.cache[cacheKey{orgID: orgID, provider: provider}] = cachedCredential{
 		payload: payload,
 		expires: expiry,
 	}

@@ -87,8 +87,8 @@ func (m *OperationManager) Run(ctx context.Context, req types.OperationRequest) 
 	}
 
 	key := operationKey{
-		Provider: req.Provider,
-		Name:     req.Name,
+		provider: req.Provider,
+		name:     req.Name,
 	}
 
 	m.mu.RLock()
@@ -166,7 +166,7 @@ func (m *OperationManager) Descriptors() map[types.ProviderType][]types.Operatio
 
 	grouped := map[types.ProviderType][]types.OperationDescriptor{}
 	for key, descriptor := range m.descriptors {
-		grouped[key.Provider] = append(grouped[key.Provider], descriptor)
+		grouped[key.provider] = append(grouped[key.provider], descriptor)
 	}
 
 	for provider, descriptors := range grouped {
@@ -180,10 +180,10 @@ func (m *OperationManager) Descriptors() map[types.ProviderType][]types.Operatio
 
 // operationKey uniquely identifies an operation by provider and name
 type operationKey struct {
-	// Provider identifies which provider publishes the operation
-	Provider types.ProviderType
-	// Name identifies the specific operation within the provider
-	Name types.OperationName
+	// provider identifies which provider publishes the operation
+	provider types.ProviderType
+	// name identifies the specific operation within the provider
+	name types.OperationName
 }
 
 // operationDescriptorKey extracts and validates the unique key from an operation descriptor
@@ -199,8 +199,8 @@ func operationDescriptorKey(descriptor types.OperationDescriptor) (operationKey,
 	}
 
 	return operationKey{
-		Provider: descriptor.Provider,
-		Name:     descriptor.Name,
+		provider: descriptor.Provider,
+		name:     descriptor.Name,
 	}, nil
 }
 

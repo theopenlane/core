@@ -184,7 +184,7 @@ func (s *Service) BeginAuthorization(ctx context.Context, req BeginRequest) (Beg
 
 	activation.ExpiresAt = activation.CreatedAt.Add(s.sessionTTL)
 
-	if err := s.sessions.Save(ctx, activation); err != nil {
+	if err := s.sessions.Save(activation); err != nil {
 		return BeginResponse{}, fmt.Errorf("keymaker: save auth session: %w", err)
 	}
 
@@ -204,7 +204,7 @@ func (s *Service) CompleteAuthorization(ctx context.Context, req CompleteRequest
 		return CompleteResult{}, integrations.ErrAuthorizationCodeRequired
 	}
 
-	activation, err := s.sessions.Take(ctx, req.State)
+	activation, err := s.sessions.Take(req.State)
 	if err != nil {
 		return CompleteResult{}, err
 	}

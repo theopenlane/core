@@ -1,7 +1,6 @@
 package keymaker
 
 import (
-	"context"
 	"strings"
 	"sync"
 	"time"
@@ -36,8 +35,8 @@ type ActivationSession struct {
 
 // SessionStore persists activation sessions until the provider callback is completed
 type SessionStore interface {
-	Save(ctx context.Context, session ActivationSession) error
-	Take(ctx context.Context, state string) (ActivationSession, error)
+	Save(session ActivationSession) error
+	Take(state string) (ActivationSession, error)
 }
 
 // MemorySessionStore stores activation sessions in memory and is safe for concurrent use
@@ -56,7 +55,7 @@ func NewMemorySessionStore() *MemorySessionStore {
 }
 
 // Save records the provided activation session
-func (m *MemorySessionStore) Save(_ context.Context, session ActivationSession) error {
+func (m *MemorySessionStore) Save(session ActivationSession) error {
 	if strings.TrimSpace(session.State) == "" {
 		return integrations.ErrStateRequired
 	}
@@ -75,7 +74,7 @@ func (m *MemorySessionStore) Save(_ context.Context, session ActivationSession) 
 }
 
 // Take retrieves and deletes the session associated with the given state
-func (m *MemorySessionStore) Take(_ context.Context, state string) (ActivationSession, error) {
+func (m *MemorySessionStore) Take(state string) (ActivationSession, error) {
 	if strings.TrimSpace(state) == "" {
 		return ActivationSession{}, integrations.ErrStateRequired
 	}

@@ -110,10 +110,11 @@ type defenderPricingDetails struct {
 }
 
 func listSecurityPricings(ctx context.Context, token string) (defenderPricingResponse, error) {
-	const endpoint = "https://management.azure.com/providers/Microsoft.Security/pricings?api-version=2023-01-01"
+	const endpoint = "https://management.azure.com/providers/Microsoft.Security/pricings?api-version=2024-01-01"
 	var resp defenderPricingResponse
 	if err := helpers.HTTPGetJSON(ctx, nil, endpoint, token, nil, &resp); err != nil {
 		return defenderPricingResponse{}, err
 	}
+
 	return resp, nil
 }

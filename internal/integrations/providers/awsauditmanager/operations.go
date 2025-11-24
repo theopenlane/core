@@ -3,8 +3,8 @@ package awsauditmanager
 import (
 	"context"
 	"fmt"
-	"strings"
 
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -24,15 +24,14 @@ func awsAuditOperations() []types.OperationDescriptor {
 }
 
 func runAWSAuditHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
-	_ = ctx
 	meta := input.Credential.Data.ProviderData
 	if len(meta) == 0 {
 		return types.OperationResult{}, ErrMetadataMissing
 	}
 
-	account := strings.TrimSpace(stringValue(meta, "accountId"))
-	region := strings.TrimSpace(stringValue(meta, "region"))
-	roleArn := strings.TrimSpace(stringValue(meta, "roleArn"))
+	account := helpers.StringValue(meta, "accountId")
+	region := helpers.StringValue(meta, "region")
+	roleArn := helpers.StringValue(meta, "roleArn")
 
 	if roleArn == "" {
 		return types.OperationResult{}, ErrRoleARNMissing
@@ -59,15 +58,4 @@ func runAWSAuditHealth(ctx context.Context, input types.OperationInput) (types.O
 		Summary: summary,
 		Details: details,
 	}, nil
-}
-
-func stringValue(data map[string]any, key string) string {
-	if len(data) == 0 {
-		return ""
-	}
-	value, ok := data[key]
-	if !ok {
-		return ""
-	}
-	return strings.TrimSpace(fmt.Sprintf("%v", value))
 }

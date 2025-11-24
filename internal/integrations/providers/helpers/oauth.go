@@ -2,6 +2,8 @@ package helpers
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"net/http"
 	"strings"
@@ -59,9 +61,11 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 		httpsling.Get(url),
 		httpsling.Header(httpsling.HeaderAccept, "application/json"),
 	}
+
 	if bearer != "" {
 		options = append(options, httpsling.BearerAuth(bearer))
 	}
+
 	if len(headers) > 0 {
 		options = append(options, httpsling.HeadersFromMap(headers))
 	}
@@ -70,6 +74,7 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	if err != nil {
 		return err
 	}
+
 	defer resp.Body.Close()
 
 	if resp.StatusCode >= http.StatusBadRequest {
@@ -77,4 +82,18 @@ func HTTPGetJSON(ctx context.Context, client *http.Client, url string, bearer st
 	}
 
 	return nil
+}
+
+// RandomState generates a URL-safe random string using crypto/rand
+func RandomState(bytes int) (string, error) {
+	if bytes <= 0 {
+		bytes = 32
+	}
+
+	buf := make([]byte, bytes)
+	if _, err := rand.Read(buf); err != nil {
+		return "", fmt.Errorf("integrations/helpers: random state: %w", err)
+	}
+
+	return base64.RawURLEncoding.EncodeToString(buf), nil
 }

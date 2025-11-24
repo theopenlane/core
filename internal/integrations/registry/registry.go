@@ -165,7 +165,7 @@ func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.O
 
 // LoadRegistry loads provider specs using the supplied loader and builder catalog.
 func LoadRegistry(ctx context.Context, loader *config.FSLoader) (*Registry, error) {
-	specs, err := loader.Load(ctx)
+	specs, err := loader.Load()
 	if err != nil {
 		return nil, err
 	}

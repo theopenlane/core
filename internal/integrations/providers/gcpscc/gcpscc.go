@@ -1,7 +1,6 @@
 package gcpscc
 
 import (
-	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 	"context"
 	"encoding/json"
 	"errors"
@@ -9,6 +8,8 @@ import (
 	"maps"
 	"strings"
 	"time"
+
+	cloudscc "cloud.google.com/go/securitycenter/apiv2"
 
 	"github.com/go-viper/mapstructure/v2"
 	"golang.org/x/oauth2"
@@ -78,7 +79,7 @@ func Builder() providers.Builder {
 	return providers.BuilderFunc{
 		ProviderType: TypeGCPSCC,
 		BuildFunc: func(_ context.Context, spec config.ProviderSpec) (providers.Provider, error) {
-			if spec.WorkloadIdentity == nil {
+			if spec.GoogleWorkloadIdentity == nil {
 				return nil, providers.ErrSpecWorkloadIdentityRequired
 			}
 
@@ -88,17 +89,17 @@ func Builder() providers.Builder {
 }
 
 func newProvider(spec config.ProviderSpec) *Provider {
-	defaultScopes := append([]string(nil), spec.WorkloadIdentity.Scopes...)
+	defaultScopes := append([]string(nil), spec.GoogleWorkloadIdentity.Scopes...)
 	if len(defaultScopes) == 0 {
 		defaultScopes = []string{defaultScope}
 	}
 
-	lifetime := spec.WorkloadIdentity.TokenLifetime
+	lifetime := spec.GoogleWorkloadIdentity.TokenLifetime
 	if lifetime <= 0 {
 		lifetime = defaultImpersonationLife
 	}
 
-	subjectTokenType := spec.WorkloadIdentity.SubjectTokenType
+	subjectTokenType := spec.GoogleWorkloadIdentity.SubjectTokenType
 	if strings.TrimSpace(subjectTokenType) == "" {
 		subjectTokenType = defaultSubjectTokenType
 	}
@@ -106,8 +107,8 @@ func newProvider(spec config.ProviderSpec) *Provider {
 	defaults := workloadDefaults{
 		scopes:            defaultScopes,
 		tokenLifetime:     clampLifetime(lifetime),
-		audience:          spec.WorkloadIdentity.Audience,
-		targetServiceAcct: spec.WorkloadIdentity.TargetServiceAccount,
+		audience:          spec.GoogleWorkloadIdentity.Audience,
+		targetServiceAcct: spec.GoogleWorkloadIdentity.TargetServiceAccount,
 		subjectTokenType:  subjectTokenType,
 	}
 

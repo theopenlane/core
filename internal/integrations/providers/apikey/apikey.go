@@ -8,6 +8,7 @@ import (
 
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -63,7 +64,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 					SupportsClientPooling: false,
 					SupportsMetadataForm:  len(spec.CredentialsSchema) > 0,
 				},
-				operations: sanitizeOperationDescriptors(provider, cfg.operations),
+				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
 			}, nil
 		},
 	}
@@ -120,6 +121,7 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		if token := strings.TrimSpace(subject.Credential.Data.APIToken); token != "" {
 			return subject.Credential, nil
 		}
+
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
@@ -151,13 +153,17 @@ func sanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 		if descriptor.Run == nil {
 			continue
 		}
+
 		if descriptor.Name == "" {
 			continue
 		}
+
 		if descriptor.Provider == types.ProviderUnknown {
 			descriptor.Provider = provider
 		}
+
 		out = append(out, descriptor)
 	}
+
 	return out
 }

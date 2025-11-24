@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"maps"
-	"strings"
 
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -44,7 +44,7 @@ func Builder(provider types.ProviderType, opts ...ProviderOption) providers.Buil
 
 			return &Provider{
 				provider:   provider,
-				operations: sanitizeOperationDescriptors(provider, cfg.operations),
+				operations: helpers.SanitizeOperationDescriptors(provider, cfg.operations),
 				caps: types.ProviderCapabilities{
 					SupportsRefreshTokens: false,
 					SupportsClientPooling: false,
@@ -105,21 +105,21 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 		return types.CredentialPayload{}, ErrProviderMetadataRequired
 	}
 
-	roleArn := stringValue(meta, "roleArn")
+	roleArn := helpers.StringValue(meta, "roleArn")
 	if roleArn == "" {
 		return types.CredentialPayload{}, ErrRoleARNRequired
 	}
 
-	region := stringValue(meta, "region")
+	region := helpers.StringValue(meta, "region")
 	if region == "" {
 		return types.CredentialPayload{}, ErrRegionRequired
 	}
 
 	sanitized := maps.Clone(meta)
 
-	accessKey := stringValue(meta, "accessKeyId")
-	secretKey := stringValue(meta, "secretAccessKey")
-	sessionToken := stringValue(meta, "sessionToken")
+	accessKey := helpers.StringValue(meta, "accessKeyId")
+	secretKey := helpers.StringValue(meta, "secretAccessKey")
+	sessionToken := helpers.StringValue(meta, "sessionToken")
 
 	if accessKey != "" {
 		sanitized["accessKeyId"] = accessKey
@@ -143,39 +143,10 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 	return builder.Build()
 }
 
-func stringValue(data map[string]any, key string) string {
-	if len(data) == 0 {
-		return ""
-	}
-
-	value, ok := data[key]
-	if !ok {
-		return ""
-	}
-	return strings.TrimSpace(fmt.Sprint(value))
-}
-
 func cloneProviderData(data map[string]any) map[string]any {
 	if len(data) == 0 {
 		return nil
 	}
+
 	return maps.Clone(data)
-}
-
-func sanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
-		if descriptor.Run == nil || descriptor.Name == "" {
-			continue
-		}
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
-		}
-		out = append(out, descriptor)
-	}
-	return out
 }

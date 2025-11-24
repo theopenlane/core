@@ -297,7 +297,7 @@ type recordingSessionStore struct {
 	takeResponse ActivationSession
 }
 
-func (s *recordingSessionStore) Save(_ context.Context, session ActivationSession) error {
+func (s *recordingSessionStore) Save(session ActivationSession) error {
 	if s.saveErr != nil {
 		return s.saveErr
 	}
@@ -305,7 +305,7 @@ func (s *recordingSessionStore) Save(_ context.Context, session ActivationSessio
 	return nil
 }
 
-func (s *recordingSessionStore) Take(_ context.Context, _ string) (ActivationSession, error) {
+func (s *recordingSessionStore) Take(_ string) (ActivationSession, error) {
 	if s.takeErr != nil {
 		return ActivationSession{}, s.takeErr
 	}

@@ -6,14 +6,14 @@ import (
 )
 
 type (
-	AuthType             = types.AuthKind
-	WorkloadIdentitySpec = config.WorkloadIdentitySpec
-	GitHubAppSpec        = config.GitHubAppSpec
-	PersistenceSpec      = config.PersistenceSpec
-	ClientDescriptor     = types.ClientDescriptor
-	ClientName           = types.ClientName
-	OperationDescriptor  = types.OperationDescriptor
-	OperationName        = types.OperationName
-	OperationRequest     = types.OperationRequest
-	OperationResult      = types.OperationResult
+	AuthType                   = types.AuthKind
+	GoogleWorkloadIdentitySpec = config.GoogleWorkloadIdentitySpec
+	GitHubAppSpec              = config.GitHubAppSpec
+	PersistenceSpec            = config.PersistenceSpec
+	ClientDescriptor           = types.ClientDescriptor
+	ClientName                 = types.ClientName
+	OperationDescriptor        = types.OperationDescriptor
+	OperationName              = types.OperationName
+	OperationRequest           = types.OperationRequest
+	OperationResult            = types.OperationResult
 )

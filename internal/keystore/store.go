@@ -50,7 +50,7 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 	}
 
 	systemCtx := privacy.DecisionContext(ctx, privacy.Allow)
-	systemCtx = contextx.With(systemCtx, auth.OrgSubscriptionContextKey{})
+	systemCtx = contextx.With(systemCtx, auth.KeyStoreContextKey{})
 
 	integrationRecord, err := s.ensureIntegration(systemCtx, orgID, payload.Provider)
 	if err != nil {
@@ -77,23 +77,23 @@ func (s *Store) SaveCredential(ctx context.Context, orgID string, payload types.
 			return types.CredentialPayload{}, err
 		}
 
-		_, createErr := s.db.Hush.Create().
+		createErr := s.db.Hush.Create().
 			SetOwnerID(orgID).
 			SetName(secretName).
 			SetSecretName(secretName).
 			SetKind(string(payload.Kind)).
 			SetCredentialSet(envelope).
 			AddIntegrations(integrationRecord).
-			Save(systemCtx)
+			Exec(systemCtx)
 		if createErr != nil {
 			logx.FromContext(systemCtx).Error().Err(createErr).Msg("failed to create credential record")
 			return types.CredentialPayload{}, createErr
 		}
 	} else {
-		_, updateErr := existing.Update().
+		updateErr := existing.Update().
 			SetCredentialSet(envelope).
 			SetKind(string(payload.Kind)).
-			Save(systemCtx)
+			Exec(systemCtx)
 		if updateErr != nil {
 			logx.FromContext(systemCtx).Error().Err(updateErr).Msg("failed to update credential record")
 			return types.CredentialPayload{}, updateErr
@@ -180,24 +180,29 @@ func (s *Store) DeleteIntegration(ctx context.Context, orgID string, integration
 		return types.ProviderUnknown, "", err
 	}
 
+	defer func() {
+		if err != nil {
+			_ = tx.Rollback()
+			return
+		}
+
+		if cerr := tx.Commit(); cerr != nil {
+			err = cerr
+		}
+	}()
+
 	if len(record.Edges.Secrets) > 0 {
 		secretIDs := make([]string, 0, len(record.Edges.Secrets))
 		for _, secret := range record.Edges.Secrets {
 			secretIDs = append(secretIDs, secret.ID)
 		}
 
-		if _, err := tx.Hush.Delete().Where(hushschema.IDIn(secretIDs...)).Exec(ctx); err != nil {
-			tx.Rollback() //nolint:errcheck
+		if _, err = tx.Hush.Delete().Where(hushschema.IDIn(secretIDs...)).Exec(ctx); err != nil {
 			return types.ProviderUnknown, "", err
 		}
 	}
 
-	if err := tx.Integration.DeleteOneID(record.ID).Exec(ctx); err != nil {
-		tx.Rollback() //nolint:errcheck
-		return types.ProviderUnknown, "", err
-	}
-
-	if err := tx.Commit(); err != nil {
+	if err = tx.Integration.DeleteOneID(record.ID).Exec(ctx); err != nil {
 		return types.ProviderUnknown, "", err
 	}
 

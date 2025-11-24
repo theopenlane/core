@@ -25,7 +25,7 @@ func (h *Handler) DisconnectIntegration(ctx echo.Context, openapi *OpenAPIContex
 
 	user, err := auth.GetAuthenticatedUserFromContext(userCtx)
 	if err != nil {
-		return h.Unauthorized(ctx, err, openapi)
+		return h.Unauthorized(ctx, ErrUnauthorized, openapi)
 	}
 
 	if h.IntegrationStore == nil {

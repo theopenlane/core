@@ -14,6 +14,7 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/handlers/internal/jsonschemautil"
 	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/pkg/logx"
 	credentialmodels "github.com/theopenlane/core/pkg/models"
 	openapi "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/utils/rout"
@@ -80,10 +81,14 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	}
 
 	if err := h.persistCredentialConfiguration(requestCtx, orgID, providerType, attrs); err != nil {
-		return h.InternalServerError(ctx, err, openapiCtx)
+		logx.FromContext(requestCtx).Error().Err(err).Msg("error persisting credential configuration")
+
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapiCtx)
 	}
 
 	if err := h.runIntegrationHealthCheck(requestCtx, orgID, providerType); err != nil {
+		logx.FromContext(requestCtx).Error().Err(err).Msg("error running integration health check")
+
 		switch {
 		case errors.Is(err, errIntegrationOperationsNotConfigured),
 			errors.Is(err, errIntegrationRegistryNotConfigured):
@@ -101,6 +106,7 @@ func (h *Handler) ConfigureIntegrationProvider(ctx echo.Context, openapiCtx *Ope
 	return h.Success(ctx, out)
 }
 
+// persistCredentialConfiguration saves the provider credential configuration for the organization
 func (h *Handler) persistCredentialConfiguration(ctx context.Context, orgID string, provider types.ProviderType, data map[string]any) error {
 	if h.IntegrationStore == nil {
 		return errIntegrationStoreNotConfigured
@@ -200,14 +206,8 @@ func normalizeServiceAccountKey(input string) string {
 
 const defaultHealthOperation types.OperationName = "health.default"
 
+// runIntegrationHealthCheck performs a health check operation for the given provider if supported
 func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, provider types.ProviderType) error {
-	if h.IntegrationOperations == nil {
-		return errIntegrationOperationsNotConfigured
-	}
-	if h.IntegrationRegistry == nil {
-		return errIntegrationRegistryNotConfigured
-	}
-
 	if !h.providerHasHealthOperation(provider) {
 		return nil
 	}
@@ -233,11 +233,8 @@ func (h *Handler) runIntegrationHealthCheck(ctx context.Context, orgID string, p
 	return nil
 }
 
+// providerHasHealthOperation checks if the provider has a health check operation defined
 func (h *Handler) providerHasHealthOperation(provider types.ProviderType) bool {
-	if h.IntegrationRegistry == nil {
-		return false
-	}
-
 	for _, descriptor := range h.IntegrationRegistry.OperationDescriptors(provider) {
 		if descriptor.Name == defaultHealthOperation {
 			return true

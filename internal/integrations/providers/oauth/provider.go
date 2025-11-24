@@ -11,8 +11,8 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/client/rp"
 
 	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/helpers"
 	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/pkg/models"
 )
@@ -186,36 +186,18 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 
 // WithOperations configures provider-managed operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
-	sanitized := sanitizeOperationDescriptors(descriptors)
 	return func(p *Provider) {
-		if len(sanitized) == 0 {
-			return
-		}
+		sanitized := helpers.SanitizeOperationDescriptors(p.providerType, descriptors)
 
 		ops := make([]types.OperationDescriptor, len(sanitized))
 		for i, descriptor := range sanitized {
 			if descriptor.Provider == types.ProviderUnknown {
 				descriptor.Provider = p.providerType
 			}
+
 			ops[i] = descriptor
 		}
+
 		p.operations = ops
 	}
-}
-
-// sanitizeOperationDescriptors filters out invalid operation descriptors
-func sanitizeOperationDescriptors(descriptors []types.OperationDescriptor) []types.OperationDescriptor {
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
-		if descriptor.Run == nil || descriptor.Name == "" {
-			continue
-		}
-		out = append(out, descriptor)
-	}
-
-	return out
 }

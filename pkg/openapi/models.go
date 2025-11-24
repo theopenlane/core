@@ -2406,20 +2406,20 @@ type IntegrationOperationMetadata struct {
 
 // IntegrationProviderMetadata describes the data required for rendering integration forms.
 type IntegrationProviderMetadata struct {
-	Name              string                         `json:"name"`
-	DisplayName       string                         `json:"displayName"`
-	Category          string                         `json:"category"`
-	AuthType          keystore.AuthType              `json:"authType"`
-	Active            bool                           `json:"active"`
-	LogoURL           string                         `json:"logoUrl,omitempty"`
-	DocsURL           string                         `json:"docsUrl,omitempty"`
-	OAuth             *IntegrationOAuthMetadata      `json:"oauth,omitempty"`
-	WorkloadIdentity  *keystore.WorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
-	GitHubApp         *keystore.GitHubAppSpec        `json:"githubApp,omitempty"`
-	Persistence       *keystore.PersistenceSpec      `json:"persistence,omitempty"`
-	CredentialsSchema map[string]any                 `json:"credentialsSchema,omitempty"`
-	Labels            map[string]string              `json:"labels,omitempty"`
-	Operations        []IntegrationOperationMetadata `json:"operations,omitempty"`
+	Name                   string                               `json:"name"`
+	DisplayName            string                               `json:"displayName"`
+	Category               string                               `json:"category"`
+	AuthType               keystore.AuthType                    `json:"authType"`
+	Active                 bool                                 `json:"active"`
+	LogoURL                string                               `json:"logoUrl,omitempty"`
+	DocsURL                string                               `json:"docsUrl,omitempty"`
+	OAuth                  *IntegrationOAuthMetadata            `json:"oauth,omitempty"`
+	GoogleWorkloadIdentity *keystore.GoogleWorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
+	GitHubApp              *keystore.GitHubAppSpec              `json:"githubApp,omitempty"`
+	Persistence            *keystore.PersistenceSpec            `json:"persistence,omitempty"`
+	CredentialsSchema      map[string]any                       `json:"credentialsSchema,omitempty"`
+	Labels                 map[string]string                    `json:"labels,omitempty"`
+	Operations             []IntegrationOperationMetadata       `json:"operations,omitempty"`
 }
 
 // ExampleIntegrationConfigPayload demonstrates a full integration configuration request.

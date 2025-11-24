@@ -31,7 +31,7 @@ type ProviderSpec struct {
 	// UserInfo describes optional user info lookups
 	UserInfo *UserInfoSpec `json:"userInfo,omitempty"`
 	// WorkloadIdentity contains Google WIF defaults
-	WorkloadIdentity *WorkloadIdentitySpec `json:"workloadIdentity,omitempty"`
+	GoogleWorkloadIdentity *GoogleWorkloadIdentitySpec `json:"googleWorkloadIdentity,omitempty"`
 	// GitHubApp configures GitHub App providers
 	GitHubApp *GitHubAppSpec `json:"githubApp,omitempty"`
 	// AWSSTS configures AWS federation defaults
@@ -73,10 +73,12 @@ func ToProviderConfigs(specs map[types.ProviderType]ProviderSpec) map[types.Prov
 	if len(specs) == 0 {
 		return nil
 	}
+
 	out := make(map[types.ProviderType]types.ProviderConfig, len(specs))
 	for provider, spec := range specs {
 		out[provider] = spec.ToProviderConfig()
 	}
+
 	return out
 }
 
@@ -142,8 +144,8 @@ type UserInfoSpec struct {
 	SecondaryEmailURL string `json:"secondaryEmailUrl,omitempty"`
 }
 
-// WorkloadIdentitySpec configures Google WIF defaults
-type WorkloadIdentitySpec struct {
+// GoogleWorkloadIdentitySpec configures Google WIF defaults
+type GoogleWorkloadIdentitySpec struct {
 	// Audience is the default audience for STS exchanges
 	Audience string `json:"audience,omitempty"`
 	// TargetServiceAccount is the default service account to impersonate
