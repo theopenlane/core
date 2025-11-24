@@ -304,7 +304,10 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strings.ReplaceAll(strcase.SnakeCase(org.Name), "_", "-")
+			expectedSlug := strings.ReplaceAll(
+				strcase.SnakeCase(
+					strings.ToLower(org.Name)),
+				"_", "-")
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
 
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)

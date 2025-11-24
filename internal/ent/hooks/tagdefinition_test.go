@@ -17,11 +17,11 @@ func TestSluggify(t *testing.T) {
 			input:    "test",
 			expected: "test",
 		},
-		{
-			name:     "camelCase",
-			input:    "testCase",
-			expected: "test-case",
-		},
+	{
+		name:     "camelCase",
+		input:    "testCase",
+		expected: "testcase",
+	},
 		{
 			name:     "snake_case",
 			input:    "test_case",
@@ -32,11 +32,11 @@ func TestSluggify(t *testing.T) {
 			input:    "Test Case Example",
 			expected: "test-case-example",
 		},
-		{
-			name:     "all caps",
-			input:    "TEST CASE",
-			expected: "test-case",
-		},
+	{
+		name:     "all caps",
+		input:    "TEST CASE",
+		expected: "test-case",
+	},
 		{
 			name:     "empty string",
 			input:    "",

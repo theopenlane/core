@@ -144,12 +144,13 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "view only user allowed",
+			name: "view only user not allowed",
 			request: testclient.CreateTagDefinitionInput{
 				Name: "sames",
 			},
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 
 		{
@@ -392,14 +393,15 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update allowed by view only user",
+			name: "update not allowed by view only user",
 			request: testclient.UpdateTagDefinitionInput{
 				Color:         lo.ToPtr("#accef0"),
 				AppendAliases: []string{"new-alias"},
 			},
-			reqID:  tagDefinition.ID,
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			reqID:       tagDefinition.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, clear aliases",
@@ -483,25 +485,32 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
-		{
-			name:       "view only user can delete, authorized",
-			idToDelete: tagDefinition1.ID,
-			client:     suite.client.api,
-			ctx:        viewOnlyUser.UserCtx,
-		},
-		{
-			name:       "happy path, delete",
-			idToDelete: tagDefinition2.ID,
-			client:     suite.client.api,
-			ctx:        testUser1.UserCtx,
-		},
-		{
-			name:        "already deleted, not found",
-			idToDelete:  tagDefinition1.ID,
-			client:      suite.client.api,
-			ctx:         testUser1.UserCtx,
-			expectedErr: "not found",
-		},
+	{
+		name:        "view only user cannot delete, not authorized",
+		idToDelete:  tagDefinition1.ID,
+		client:      suite.client.api,
+		ctx:         viewOnlyUser.UserCtx,
+		expectedErr: notAuthorizedErrorMsg,
+	},
+	{
+		name:       "happy path, delete tagDefinition1",
+		idToDelete: tagDefinition1.ID,
+		client:     suite.client.api,
+		ctx:        testUser1.UserCtx,
+	},
+	{
+		name:        "already deleted, not found",
+		idToDelete:  tagDefinition1.ID,
+		client:      suite.client.api,
+		ctx:         testUser1.UserCtx,
+		expectedErr: "not found",
+	},
+	{
+		name:       "happy path, delete tagDefinition2",
+		idToDelete: tagDefinition2.ID,
+		client:     suite.client.api,
+		ctx:        testUser1.UserCtx,
+	},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: tagDefinition3.ID,

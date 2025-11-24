@@ -2,14 +2,20 @@ package hooks
 
 import (
 	"context"
+	"errors"
+	"fmt"
 	"slices"
 
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/iam/fgax"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
+	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -49,6 +55,12 @@ func HookTags() ent.Hook {
 					Where(tagdefinition.NameEqualFold(tag)).
 					Exist(ctx)
 				if !exists {
+					if err := rule.CheckCurrentOrgAccess(ctx, m, fgax.CanEdit); err != nil {
+						if errors.Is(err, privacy.Deny) {
+							return nil, fmt.Errorf("insufficient permissions to create tag definition '%s': only users with write access can create new tags", tag) //nolint:err113
+						}
+					}
+
 					input := generated.CreateTagDefinitionInput{
 						Name: tag,
 					}

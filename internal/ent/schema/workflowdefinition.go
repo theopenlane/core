@@ -2,9 +2,12 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/entx/accessmap"
 
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
@@ -95,6 +98,9 @@ func (WorkflowDefinition) Edges() []ent.Edge {
 			name:       "target_tags",
 			edgeSchema: TagDefinition{},
 			comment:    "Tags this workflow targets for scoping",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: WorkflowDefinition{},
