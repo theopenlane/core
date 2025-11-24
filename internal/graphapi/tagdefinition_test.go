@@ -10,6 +10,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -394,4 +395,37 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTagDefinition.DeletedID))
 		})
 	}
+}
+
+func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
+	// create a tag definition
+	tagDef := (&TagDefinitionBuilder{
+		client: suite.client,
+		Name:   "test-tag",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a workflow definition that uses the tag definition
+	workflowResp, err := suite.client.api.CreateWorkflowDefinition(testUser1.UserCtx, testclient.CreateWorkflowDefinitionInput{
+		Name:             "Test Workflow",
+		WorkflowKind:     enums.WorkflowKindApproval,
+		SchemaType:       "control",
+		TagDefinitionIDs: []string{tagDef.ID},
+	})
+	assert.NilError(t, err)
+	workflowID := workflowResp.CreateWorkflowDefinition.WorkflowDefinition.ID
+
+	t.Run("delete tag definition in use by workflow definition", func(t *testing.T) {
+		_, err := suite.client.api.DeleteTagDefinition(testUser1.UserCtx, tagDef.ID)
+		assert.ErrorContains(t, err, "tag definition is in use")
+	})
+
+	// clean up the workflow definition using the tag
+	(&Cleanup[*generated.WorkflowDefinitionDeleteOne]{client: suite.client.db.WorkflowDefinition, ID: workflowID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("tag definition deletion works if no workflow definition using it", func(t *testing.T) {
+		resp, err := suite.client.api.DeleteTagDefinition(testUser1.UserCtx, tagDef.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(tagDef.ID, resp.DeleteTagDefinition.DeletedID))
+	})
 }

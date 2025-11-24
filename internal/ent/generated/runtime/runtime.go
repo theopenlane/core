@@ -1521,6 +1521,7 @@ func init() {
 	customtypeenumMixinHooks2 := customtypeenumMixin[2].Hooks()
 	customtypeenumMixinHooks5 := customtypeenumMixin[5].Hooks()
 	customtypeenumMixinHooks6 := customtypeenumMixin[6].Hooks()
+	customtypeenumHooks := schema.CustomTypeEnum{}.Hooks()
 
 	customtypeenum.Hooks[1] = customtypeenumMixinHooks0[0]
 
@@ -1531,6 +1532,8 @@ func init() {
 	customtypeenum.Hooks[4] = customtypeenumMixinHooks5[0]
 
 	customtypeenum.Hooks[5] = customtypeenumMixinHooks6[0]
+
+	customtypeenum.Hooks[6] = customtypeenumHooks[0]
 	customtypeenumMixinInters1 := customtypeenumMixin[1].Interceptors()
 	customtypeenumMixinInters2 := customtypeenumMixin[2].Interceptors()
 	customtypeenumMixinInters5 := customtypeenumMixin[5].Interceptors()
@@ -7837,6 +7840,8 @@ func init() {
 	tagdefinition.Hooks[5] = tagdefinitionMixinHooks6[0]
 
 	tagdefinition.Hooks[6] = tagdefinitionHooks[0]
+
+	tagdefinition.Hooks[7] = tagdefinitionHooks[1]
 	tagdefinitionMixinInters1 := tagdefinitionMixin[1].Interceptors()
 	tagdefinitionMixinInters2 := tagdefinitionMixin[2].Interceptors()
 	tagdefinitionMixinInters5 := tagdefinitionMixin[5].Interceptors()

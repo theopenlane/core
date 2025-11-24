@@ -2854,6 +2854,7 @@ type CreateCustomTypeEnumInput struct {
 	Name              string
 	Description       *string
 	Color             *string
+	Icon              *string
 	OwnerID           *string
 	TaskIDs           []string
 	ControlIDs        []string
@@ -2884,6 +2885,9 @@ func (i *CreateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
+	}
+	if v := i.Icon; v != nil {
+		m.SetIcon(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2933,6 +2937,8 @@ type UpdateCustomTypeEnumInput struct {
 	Description             *string
 	ClearColor              bool
 	Color                   *string
+	ClearIcon               bool
+	Icon                    *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearTasks              bool
@@ -2989,6 +2995,12 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
+	}
+	if i.ClearIcon {
+		m.ClearIcon()
+	}
+	if v := i.Icon; v != nil {
+		m.SetIcon(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()

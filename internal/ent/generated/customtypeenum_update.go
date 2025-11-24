@@ -212,6 +212,26 @@ func (_u *CustomTypeEnumUpdate) ClearColor() *CustomTypeEnumUpdate {
 	return _u
 }
 
+// SetIcon sets the "icon" field.
+func (_u *CustomTypeEnumUpdate) SetIcon(v string) *CustomTypeEnumUpdate {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdate) SetNillableIcon(v *string) *CustomTypeEnumUpdate {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *CustomTypeEnumUpdate) ClearIcon() *CustomTypeEnumUpdate {
+	_u.mutation.ClearIcon()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomTypeEnumUpdate) SetOwner(v *Organization) *CustomTypeEnumUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -678,6 +698,12 @@ func (_u *CustomTypeEnumUpdate) sqlSave(ctx context.Context) (_node int, err err
 	}
 	if _u.mutation.ColorCleared() {
 		_spec.ClearField(customtypeenum.FieldColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.Icon(); ok {
+		_spec.SetField(customtypeenum.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(customtypeenum.FieldIcon, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -1338,6 +1364,26 @@ func (_u *CustomTypeEnumUpdateOne) ClearColor() *CustomTypeEnumUpdateOne {
 	return _u
 }
 
+// SetIcon sets the "icon" field.
+func (_u *CustomTypeEnumUpdateOne) SetIcon(v string) *CustomTypeEnumUpdateOne {
+	_u.mutation.SetIcon(v)
+	return _u
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_u *CustomTypeEnumUpdateOne) SetNillableIcon(v *string) *CustomTypeEnumUpdateOne {
+	if v != nil {
+		_u.SetIcon(*v)
+	}
+	return _u
+}
+
+// ClearIcon clears the value of the "icon" field.
+func (_u *CustomTypeEnumUpdateOne) ClearIcon() *CustomTypeEnumUpdateOne {
+	_u.mutation.ClearIcon()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *CustomTypeEnumUpdateOne) SetOwner(v *Organization) *CustomTypeEnumUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1834,6 +1880,12 @@ func (_u *CustomTypeEnumUpdateOne) sqlSave(ctx context.Context) (_node *CustomTy
 	}
 	if _u.mutation.ColorCleared() {
 		_spec.ClearField(customtypeenum.FieldColor, field.TypeString)
+	}
+	if value, ok := _u.mutation.Icon(); ok {
+		_spec.SetField(customtypeenum.FieldIcon, field.TypeString, value)
+	}
+	if _u.mutation.IconCleared() {
+		_spec.ClearField(customtypeenum.FieldIcon, field.TypeString)
 	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{

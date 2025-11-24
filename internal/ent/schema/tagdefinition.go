@@ -119,6 +119,7 @@ func (TagDefinition) Annotations() []schema.Annotation {
 func (TagDefinition) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTagDefintion(),
+		hooks.HookTagDefinitionDelete(),
 	}
 }
 

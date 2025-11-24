@@ -223,6 +223,20 @@ func (_c *CustomTypeEnumCreate) SetNillableColor(v *string) *CustomTypeEnumCreat
 	return _c
 }
 
+// SetIcon sets the "icon" field.
+func (_c *CustomTypeEnumCreate) SetIcon(v string) *CustomTypeEnumCreate {
+	_c.mutation.SetIcon(v)
+	return _c
+}
+
+// SetNillableIcon sets the "icon" field if the given value is not nil.
+func (_c *CustomTypeEnumCreate) SetNillableIcon(v *string) *CustomTypeEnumCreate {
+	if v != nil {
+		_c.SetIcon(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *CustomTypeEnumCreate) SetID(v string) *CustomTypeEnumCreate {
 	_c.mutation.SetID(v)
@@ -570,6 +584,10 @@ func (_c *CustomTypeEnumCreate) createSpec() (*CustomTypeEnum, *sqlgraph.CreateS
 	if value, ok := _c.mutation.Color(); ok {
 		_spec.SetField(customtypeenum.FieldColor, field.TypeString, value)
 		_node.Color = value
+	}
+	if value, ok := _c.mutation.Icon(); ok {
+		_spec.SetField(customtypeenum.FieldIcon, field.TypeString, value)
+		_node.Icon = value
 	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
