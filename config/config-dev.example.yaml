@@ -191,9 +191,9 @@ subscription:
   stripewebhookurl: https://localhost:17608/v1/stripe/webhook
   stripewebhooksecret: ""
 
-integrationOauthProvider:
-  successRedirectUrl: "http://localhost:3004/"
-  providerSpecPath: internal/integrations/config/providers
+integrationoauthprovider:
+  successredirecturl: "http://localhost:3004/"
+  providerspecpath: internal/integrations/config/providers
   github:
     clientendpoint: http://localhost:17608
     clientid: ""
