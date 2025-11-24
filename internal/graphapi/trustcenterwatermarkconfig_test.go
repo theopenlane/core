@@ -165,7 +165,13 @@ func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 
 func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	watermarkConfig := (&TrustCenterWatermarkConfigBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, trustCenter.ID)
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+		Only(allowCtx)
+
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name        string
@@ -225,7 +231,14 @@ func TestQueryTrustCenterWatermarkConfig(t *testing.T) {
 
 func TestMutationUpdateTrustCenterWatermarkConfig(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
-	watermarkConfig := (&TrustCenterWatermarkConfigBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t, trustCenter.ID)
+
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	watermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+		Only(allowCtx)
+
+	assert.NilError(t, err)
+
 	createPNGUpload := func() *graphql.Upload {
 		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 		assert.NilError(t, err)
