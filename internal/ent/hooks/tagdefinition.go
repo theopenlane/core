@@ -8,6 +8,7 @@ import (
 	"sync"
 
 	"entgo.io/ent"
+
 	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -16,6 +17,13 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/workflowdefinition"
 	"github.com/theopenlane/core/pkg/logx"
 )
+
+func sluggify(s string) string {
+	return strings.ReplaceAll(
+		strcase.SnakeCase(
+			strings.ToLower(s)),
+		"_", "-")
+}
 
 var (
 	// ErrTagDefinitionInUse is returned when a tag definition is in use and cannot be deleted
@@ -30,39 +38,30 @@ func HookTagDefintion() ent.Hook {
 				return next.Mutate(ctx, m)
 			}
 
-			ownerID, ok := m.OwnerID()
-			if !ok {
-				return next.Mutate(ctx, m)
-			}
-
 			tagDefs, err := m.Client().TagDefinition.Query().
-				Where(tagdefinition.OwnerID(ownerID)).
 				All(ctx)
 			if err != nil {
-				logx.FromContext(ctx).Warn().Err(err).Msg("error querying tag definitions")
-				return next.Mutate(ctx, m)
+				logx.FromContext(ctx).Warn().Err(err).Msg("error fetching all org tags")
+				return nil, errors.New("an error occurred while fetching all tags") //nolint:err113
 			}
 
 			for _, tagDef := range tagDefs {
 				if strings.EqualFold(tagDef.Name, name) {
-					return next.Mutate(ctx, m)
+					// tag with this exact name already exists, return it instead of creating a duplicate
+					return tagDef, nil
 				}
 
 				for _, alias := range tagDef.Aliases {
 					if strings.EqualFold(alias, name) {
-						// found a match! Update the mutation to use the actual tag name
-						logx.FromContext(ctx).Debug().
-							Str("provided_name", name).
-							Str("actual_name", tagDef.Name).
-							Msg("resolved alias to tag name")
-
-						m.SetName(tagDef.Name)
-						return next.Mutate(ctx, m)
+						// we found a match - the provided name is an alias of an existing tag
+						// so we should not create a new tag definition
+						// return the existing tag definition instead of creating a new one
+						return tagDef, nil
 					}
 				}
 			}
 
-			m.SetSlug(strcase.LowerCamelCase(name))
+			m.SetSlug(sluggify(name))
 
 			return next.Mutate(ctx, m)
 		})

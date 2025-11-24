@@ -3,7 +3,6 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
-	"regexp"
 	"strings"
 	"testing"
 
@@ -12,17 +11,19 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
@@ -303,7 +304,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strings.ToLower(regexp.MustCompile(`[^a-zA-Z0-9]`).ReplaceAllString(org.Name, ""))
+			expectedSlug := strings.ReplaceAll(strcase.SnakeCase(org.Name), "_", "-")
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
 
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
