@@ -206,3 +206,29 @@ tasks:
     cmds:
       - task: windmill
       - task: windmill:open
+
+  mailhog:
+    dir: ..
+    desc: brings up the compose environment for mailhog
+    cmds:
+      - "docker compose -f ./docker/docker-compose-mailhog.yml up -d"
+
+  mailhog:down:
+    dir: ..
+    desc: brings the mailhog compose environment down
+    cmds:
+      - docker compose down
+
+  mailhog:open:
+    dir: ..
+    desc: opens the mailhog web interface in a browser
+    cmds:
+      - 'open "http://localhost:9225"'
+
+  mailhog:up:
+    dir: ..
+    desc: brings the mailhog compose environment up and opens the web interface
+    aliases: [mailhogup]
+    cmds:
+      - task: mailhog
+      - task: mailhog:open
