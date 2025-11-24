@@ -10801,7 +10801,7 @@ input CreateExportInput {
   """
   the format of export, e.g., csv and others
   """
-  format: ExportExportFormat!
+  format: ExportExportFormat
   """
   the specific fields to include in the export (defaults to only the id if not provided)
   """
