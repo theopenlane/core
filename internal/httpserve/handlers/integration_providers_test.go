@@ -156,7 +156,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	var resp models.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Len(t, resp.Providers, 2)
+	assert.Len(t, resp.Providers, 1)
 
 	providersByName := make(map[string]models.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
@@ -164,8 +164,7 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	}
 
 	require.Contains(t, providersByName, "gcp_scc")
-	require.Contains(t, providersByName, "inactive_provider")
+	require.NotContains(t, providersByName, "inactive_provider")
 
 	assert.True(t, providersByName["gcp_scc"].Active)
-	assert.False(t, providersByName["inactive_provider"].Active)
 }
