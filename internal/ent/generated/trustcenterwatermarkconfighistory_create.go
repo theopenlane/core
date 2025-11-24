@@ -168,6 +168,20 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableTrustCenterID(v *s
 	return _c
 }
 
+// SetIsEnabled sets the "is_enabled" field.
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetIsEnabled(v bool) *TrustCenterWatermarkConfigHistoryCreate {
+	_c.mutation.SetIsEnabled(v)
+	return _c
+}
+
+// SetNillableIsEnabled sets the "is_enabled" field if the given value is not nil.
+func (_c *TrustCenterWatermarkConfigHistoryCreate) SetNillableIsEnabled(v *bool) *TrustCenterWatermarkConfigHistoryCreate {
+	if v != nil {
+		_c.SetIsEnabled(*v)
+	}
+	return _c
+}
+
 // SetLogoID sets the "logo_id" field.
 func (_c *TrustCenterWatermarkConfigHistoryCreate) SetLogoID(v string) *TrustCenterWatermarkConfigHistoryCreate {
 	_c.mutation.SetLogoID(v)
@@ -338,6 +352,10 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) defaults() error {
 		v := trustcenterwatermarkconfighistory.DefaultUpdatedAt()
 		_c.mutation.SetUpdatedAt(v)
 	}
+	if _, ok := _c.mutation.IsEnabled(); !ok {
+		v := trustcenterwatermarkconfighistory.DefaultIsEnabled
+		_c.mutation.SetIsEnabled(v)
+	}
 	if _, ok := _c.mutation.FontSize(); !ok {
 		v := trustcenterwatermarkconfighistory.DefaultFontSize
 		_c.mutation.SetFontSize(v)
@@ -465,6 +483,10 @@ func (_c *TrustCenterWatermarkConfigHistoryCreate) createSpec() (*TrustCenterWat
 	if value, ok := _c.mutation.TrustCenterID(); ok {
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldTrustCenterID, field.TypeString, value)
 		_node.TrustCenterID = value
+	}
+	if value, ok := _c.mutation.IsEnabled(); ok {
+		_spec.SetField(trustcenterwatermarkconfighistory.FieldIsEnabled, field.TypeBool, value)
+		_node.IsEnabled = value
 	}
 	if value, ok := _c.mutation.LogoID(); ok {
 		_spec.SetField(trustcenterwatermarkconfighistory.FieldLogoID, field.TypeString, value)

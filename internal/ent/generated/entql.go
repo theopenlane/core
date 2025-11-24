@@ -4441,6 +4441,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldDeletedBy},
 			trustcenterwatermarkconfig.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldOwnerID},
 			trustcenterwatermarkconfig.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldTrustCenterID},
+			trustcenterwatermarkconfig.FieldIsEnabled:     {Type: field.TypeBool, Column: trustcenterwatermarkconfig.FieldIsEnabled},
 			trustcenterwatermarkconfig.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldLogoID},
 			trustcenterwatermarkconfig.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldText},
 			trustcenterwatermarkconfig.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldFontSize},
@@ -4472,6 +4473,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldDeletedBy},
 			trustcenterwatermarkconfighistory.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldOwnerID},
 			trustcenterwatermarkconfighistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldTrustCenterID},
+			trustcenterwatermarkconfighistory.FieldIsEnabled:     {Type: field.TypeBool, Column: trustcenterwatermarkconfighistory.FieldIsEnabled},
 			trustcenterwatermarkconfighistory.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldLogoID},
 			trustcenterwatermarkconfighistory.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldText},
 			trustcenterwatermarkconfighistory.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldFontSize},
@@ -40319,6 +40321,11 @@ func (f *TrustCenterWatermarkConfigFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldTrustCenterID))
 }
 
+// WhereIsEnabled applies the entql bool predicate on the is_enabled field.
+func (f *TrustCenterWatermarkConfigFilter) WhereIsEnabled(p entql.BoolP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldIsEnabled))
+}
+
 // WhereLogoID applies the entql string predicate on the logo_id field.
 func (f *TrustCenterWatermarkConfigFilter) WhereLogoID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldLogoID))
@@ -40489,6 +40496,11 @@ func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOwnerID(p entql.StringP) 
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TrustCenterWatermarkConfigHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldTrustCenterID))
+}
+
+// WhereIsEnabled applies the entql bool predicate on the is_enabled field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereIsEnabled(p entql.BoolP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldIsEnabled))
 }
 
 // WhereLogoID applies the entql string predicate on the logo_id field.

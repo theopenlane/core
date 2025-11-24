@@ -7383,6 +7383,7 @@ var (
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_enabled", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "text", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "font_size", Type: field.TypeFloat64, Nullable: true, Default: 48},
 		{Name: "opacity", Type: field.TypeFloat64, Nullable: true, Default: 0.3},
@@ -7400,13 +7401,13 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "trust_center_watermark_configs_organizations_trust_center_watermark_configs",
-				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[14]},
+				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[15]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_watermark_configs_files_file",
-				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[15]},
+				Columns:    []*schema.Column{TrustCenterWatermarkConfigsColumns[16]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7415,7 +7416,7 @@ var (
 			{
 				Name:    "trustcenterwatermarkconfig_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[14]},
+				Columns: []*schema.Column{TrustCenterWatermarkConfigsColumns[15]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -7444,6 +7445,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "is_enabled", Type: field.TypeBool, Nullable: true, Default: true},
 		{Name: "logo_id", Type: field.TypeString, Nullable: true},
 		{Name: "text", Type: field.TypeString, Nullable: true, Size: 255},
 		{Name: "font_size", Type: field.TypeFloat64, Nullable: true, Default: 48},

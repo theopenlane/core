@@ -8412,6 +8412,8 @@ type CreateTrustCenterSubprocessorInput struct {
 type CreateTrustCenterWatermarkConfigInput struct {
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// text to watermark the document with
 	Text *string `json:"text,omitempty"`
 	// font size of the watermark text
@@ -41725,6 +41727,8 @@ type TrustCenterWatermarkConfig struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// ID of the file containing the document
 	LogoID *string `json:"logoID,omitempty"`
 	// text to watermark the document with
@@ -41796,6 +41800,8 @@ type TrustCenterWatermarkConfigHistory struct {
 	OwnerID *string `json:"ownerID,omitempty"`
 	// ID of the trust center
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled *bool `json:"isEnabled,omitempty"`
 	// ID of the file containing the document
 	LogoID *string `json:"logoID,omitempty"`
 	// text to watermark the document with
@@ -41973,6 +41979,11 @@ type TrustCenterWatermarkConfigHistoryWhereInput struct {
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// is_enabled field predicates
+	IsEnabled       *bool `json:"isEnabled,omitempty"`
+	IsEnabledNeq    *bool `json:"isEnabledNEQ,omitempty"`
+	IsEnabledIsNil  *bool `json:"isEnabledIsNil,omitempty"`
+	IsEnabledNotNil *bool `json:"isEnabledNotNil,omitempty"`
 	// logo_id field predicates
 	LogoID             *string  `json:"logoID,omitempty"`
 	LogoIdneq          *string  `json:"logoIDNEQ,omitempty"`
@@ -42180,6 +42191,11 @@ type TrustCenterWatermarkConfigWhereInput struct {
 	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
 	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
 	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
+	// is_enabled field predicates
+	IsEnabled       *bool `json:"isEnabled,omitempty"`
+	IsEnabledNeq    *bool `json:"isEnabledNEQ,omitempty"`
+	IsEnabledIsNil  *bool `json:"isEnabledIsNil,omitempty"`
+	IsEnabledNotNil *bool `json:"isEnabledNotNil,omitempty"`
 	// logo_id field predicates
 	LogoID             *string  `json:"logoID,omitempty"`
 	LogoIdneq          *string  `json:"logoIDNEQ,omitempty"`
@@ -46045,6 +46061,9 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 	// ID of the trust center
 	TrustCenterID      *string `json:"trustCenterID,omitempty"`
 	ClearTrustCenterID *bool   `json:"clearTrustCenterID,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled      *bool `json:"isEnabled,omitempty"`
+	ClearIsEnabled *bool `json:"clearIsEnabled,omitempty"`
 	// text to watermark the document with
 	Text      *string `json:"text,omitempty"`
 	ClearText *bool   `json:"clearText,omitempty"`

@@ -61,6 +61,10 @@ func (TrustCenterWatermarkConfig) Fields() []ent.Field {
 			Comment("ID of the trust center").
 			NotEmpty().
 			Optional(),
+		field.Bool("is_enabled").
+			Comment("whether the watermarking is enabled for all trust center documents, default is true").
+			Default(true).
+			Optional(),
 		field.String("logo_id").
 			Comment("ID of the file containing the document").
 			Annotations(

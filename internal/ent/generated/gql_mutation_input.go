@@ -17252,6 +17252,7 @@ func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubproces
 // CreateTrustCenterWatermarkConfigInput represents a mutation input for creating trustcenterwatermarkconfigs.
 type CreateTrustCenterWatermarkConfigInput struct {
 	TrustCenterID  *string
+	IsEnabled      *bool
 	Text           *string
 	FontSize       *float64
 	Opacity        *float64
@@ -17267,6 +17268,9 @@ type CreateTrustCenterWatermarkConfigInput struct {
 func (i *CreateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkConfigMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.IsEnabled; v != nil {
+		m.SetIsEnabled(*v)
 	}
 	if v := i.Text; v != nil {
 		m.SetText(*v)
@@ -17307,6 +17311,8 @@ func (c *TrustCenterWatermarkConfigCreate) SetInput(i CreateTrustCenterWatermark
 type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearTrustCenterID   bool
 	TrustCenterID        *string
+	ClearIsEnabled       bool
+	IsEnabled            *bool
 	ClearText            bool
 	Text                 *string
 	ClearFontSize        bool
@@ -17333,6 +17339,12 @@ func (i *UpdateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkCo
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearIsEnabled {
+		m.ClearIsEnabled()
+	}
+	if v := i.IsEnabled; v != nil {
+		m.SetIsEnabled(*v)
 	}
 	if i.ClearText {
 		m.ClearText()

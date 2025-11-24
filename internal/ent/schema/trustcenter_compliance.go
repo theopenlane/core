@@ -100,6 +100,9 @@ func (TrustCenterCompliance) Hooks() []ent.Hook {
 func (TrustCenterCompliance) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				TrustCenter{}.Name(),
+			}),
 			entfga.CheckEditAccess[*generated.TrustCenterComplianceMutation](),
 		),
 	)

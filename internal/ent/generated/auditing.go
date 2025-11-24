@@ -4797,6 +4797,9 @@ func (_m *TrustCenterWatermarkConfigHistory) changes(new *TrustCenterWatermarkCo
 	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
 		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
 	}
+	if !reflect.DeepEqual(_m.IsEnabled, new.IsEnabled) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldIsEnabled, _m.IsEnabled, new.IsEnabled))
+	}
 	if !reflect.DeepEqual(_m.LogoID, new.LogoID) {
 		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldLogoID, _m.LogoID, new.LogoID))
 	}

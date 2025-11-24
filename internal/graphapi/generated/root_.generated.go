@@ -6752,6 +6752,7 @@ type ComplexityRoot struct {
 		Font          func(childComplexity int) int
 		FontSize      func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsEnabled     func(childComplexity int) int
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
 		Owner         func(childComplexity int) int
@@ -6795,6 +6796,7 @@ type ComplexityRoot struct {
 		FontSize      func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsEnabled     func(childComplexity int) int
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
 		Operation     func(childComplexity int) int
@@ -45530,6 +45532,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterWatermarkConfig.ID(childComplexity), true
 
+	case "TrustCenterWatermarkConfig.isEnabled":
+		if e.complexity.TrustCenterWatermarkConfig.IsEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.IsEnabled(childComplexity), true
+
 	case "TrustCenterWatermarkConfig.logoID":
 		if e.complexity.TrustCenterWatermarkConfig.LogoID == nil {
 			break
@@ -45704,6 +45713,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterWatermarkConfigHistory.ID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.isEnabled":
+		if e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.logoID":
 		if e.complexity.TrustCenterWatermarkConfigHistory.LogoID == nil {
@@ -66145,6 +66161,10 @@ input CreateTrustCenterWatermarkConfigInput {
   ID of the trust center
   """
   trustCenterID: String
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
   """
   text to watermark the document with
   """
@@ -124157,6 +124177,10 @@ type TrustCenterWatermarkConfig implements Node {
   """
   trustCenterID: String
   """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  """
   ID of the file containing the document
   """
   logoID: ID
@@ -124256,6 +124280,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   ID of the trust center
   """
   trustCenterID: String
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
   """
   ID of the file containing the document
   """
@@ -124518,6 +124546,13 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
   """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
+  """
   logo_id field predicates
   """
   logoID: String
@@ -124759,6 +124794,13 @@ input TrustCenterWatermarkConfigWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
   """
   logo_id field predicates
   """
@@ -129869,6 +129911,11 @@ input UpdateTrustCenterWatermarkConfigInput {
   """
   trustCenterID: String
   clearTrustCenterID: Boolean
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  clearIsEnabled: Boolean
   """
   text to watermark the document with
   """

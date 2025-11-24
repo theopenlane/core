@@ -63292,6 +63292,11 @@ func (_q *TrustCenterWatermarkConfigQuery) collectField(ctx context.Context, one
 				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldTrustCenterID)
 				fieldSeen[trustcenterwatermarkconfig.FieldTrustCenterID] = struct{}{}
 			}
+		case "isEnabled":
+			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldIsEnabled]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldIsEnabled)
+				fieldSeen[trustcenterwatermarkconfig.FieldIsEnabled] = struct{}{}
+			}
 		case "logoID":
 			if _, ok := fieldSeen[trustcenterwatermarkconfig.FieldLogoID]; !ok {
 				selectedFields = append(selectedFields, trustcenterwatermarkconfig.FieldLogoID)
@@ -63461,6 +63466,11 @@ func (_q *TrustCenterWatermarkConfigHistoryQuery) collectField(ctx context.Conte
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldTrustCenterID]; !ok {
 				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldTrustCenterID)
 				fieldSeen[trustcenterwatermarkconfighistory.FieldTrustCenterID] = struct{}{}
+			}
+		case "isEnabled":
+			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldIsEnabled]; !ok {
+				selectedFields = append(selectedFields, trustcenterwatermarkconfighistory.FieldIsEnabled)
+				fieldSeen[trustcenterwatermarkconfighistory.FieldIsEnabled] = struct{}{}
 			}
 		case "logoID":
 			if _, ok := fieldSeen[trustcenterwatermarkconfighistory.FieldLogoID]; !ok {

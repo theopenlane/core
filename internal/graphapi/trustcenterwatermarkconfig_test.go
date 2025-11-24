@@ -7,6 +7,8 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
@@ -16,6 +18,17 @@ import (
 
 func TestMutationCreateTrustCenterWatermarkConfig(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	// delete the auto created watermark config for the trust center
+	// so we can test creating a new one
+	allowCtx := privacy.DecisionContext(testUser1.UserCtx, privacy.Allow)
+	trustCenterWatermarkConfig, err := suite.client.db.TrustCenterWatermarkConfig.Query().
+		Where(trustcenterwatermarkconfig.TrustCenterID(trustCenter.ID)).
+		Only(allowCtx)
+
+	assert.NilError(t, err)
+	(&Cleanup[*generated.TrustCenterWatermarkConfigDeleteOne]{client: suite.client.db.TrustCenterWatermarkConfig, ID: trustCenterWatermarkConfig.ID}).MustDelete(testUser1.UserCtx, t)
+
 	createPNGUpload := func() *graphql.Upload {
 		pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
 		assert.NilError(t, err)

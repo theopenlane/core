@@ -13119,6 +13119,10 @@ input CreateTrustCenterWatermarkConfigInput {
   """
   trustCenterID: String
   """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  """
   text to watermark the document with
   """
   text: String
@@ -71130,6 +71134,10 @@ type TrustCenterWatermarkConfig implements Node {
   """
   trustCenterID: String
   """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  """
   ID of the file containing the document
   """
   logoID: ID
@@ -71229,6 +71237,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   ID of the trust center
   """
   trustCenterID: String
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
   """
   ID of the file containing the document
   """
@@ -71491,6 +71503,13 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
   """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
+  """
   logo_id field predicates
   """
   logoID: String
@@ -71732,6 +71751,13 @@ input TrustCenterWatermarkConfigWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
   """
   logo_id field predicates
   """
@@ -76842,6 +76868,11 @@ input UpdateTrustCenterWatermarkConfigInput {
   """
   trustCenterID: String
   clearTrustCenterID: Boolean
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  clearIsEnabled: Boolean
   """
   text to watermark the document with
   """
