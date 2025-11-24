@@ -120,6 +120,7 @@ type SystemOwnedMutation interface {
 	SetOwnerID(string)
 }
 
+// OrgOwnedMutation is an interface for interacting with the owner_id field in mutations
 type OrgOwnedMutation interface {
 	utils.GenericMutation
 
