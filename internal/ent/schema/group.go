@@ -1,8 +1,6 @@
 package schema
 
 import (
-	"context"
-
 	"entgo.io/contrib/entgql"
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -15,16 +13,12 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
-	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/entfga"
-	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/entx/accessmap"
 )
@@ -225,22 +219,8 @@ func (Group) Hooks() []ent.Hook {
 // Policy of the Group
 func (g Group) Policy() ent.Policy {
 	return policy.NewPolicy(
-		policy.WithQueryRules(
-			privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-				if auth.IsAPITokenAuthentication(ctx) {
-					return rule.CheckAPITokenScope(ctx, generated.TypeGroup, fgax.CanView, ent.Op(0))
-				}
-				return privacy.Skip
-			}),
-		),
 		policy.WithMutationRules(
 			policy.CheckCreateAccess(),
-			privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
-				if auth.IsAPITokenAuthentication(ctx) {
-					return rule.CheckAPITokenScope(ctx, m.Type(), fgax.CanEdit, m.Op())
-				}
-				return privacy.Skip
-			}),
 			entfga.CheckEditAccess[*generated.GroupMutation](),
 		),
 	)

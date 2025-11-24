@@ -242,7 +242,7 @@ func TestQueryFiles(t *testing.T) {
 			name:            "happy path, using api token",
 			client:          tokenClient,
 			ctx:             context.Background(),
-			expectedResults: 1, // 1 for evidence file, service not able to access another user's avatar file
+			expectedResults: 2, // access to files the organization has access to via can_view_file scope
 		},
 		{
 			name:            "happy path, using pat",

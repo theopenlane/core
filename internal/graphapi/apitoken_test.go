@@ -376,7 +376,7 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	orgCtx := auth.NewTestContextWithOrgID(orgUser.ID, orgUser.OrganizationID)
 
 	// create scoped tokens (read-only vs write)
-	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:organization"}}).MustNew(orgCtx, t)
+	readToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"read:organization", "read:group"}}).MustNew(orgCtx, t)
 	writeToken := (&APITokenBuilder{client: suite.client, Scopes: []string{"write:group"}}).MustNew(orgCtx, t)
 
 	makeClient := func(token string) *testclient.TestClient {
@@ -397,7 +397,7 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	readClient := makeClient(readToken.Token)
 	writeClient := makeClient(writeToken.Token)
 
-	// read-only scope can fetch org details
+	// read-only scope can fetch org details, this query includes groups so the token must have read:group scope as well
 	_, err := readClient.GetOrganizationByID(context.Background(), orgUser.OrganizationID)
 	assert.NilError(t, err)
 
@@ -405,7 +405,7 @@ func TestAPITokenScopeEnforcement(t *testing.T) {
 	_, err = readClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
 		Name: gofakeit.AppName(),
 	})
-	assert.ErrorContains(t, err, "permission denied")
+	assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 
 	// write scope can create a group
 	groupResp, err := writeClient.CreateGroup(context.Background(), testclient.CreateGroupInput{
@@ -488,7 +488,7 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 	editRelation := fgamodel.NormalizeScope("write:evidence")
 
 	t.Run("read-only evidence scope", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"read:evidence"})
+		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control", "read:task", "read:subcontrol"})
 
 		ids := listScopedOrgIDs(token.ID, viewRelation)
 		assert.Check(t, lo.Contains(ids, orgUser.OrganizationID))
@@ -502,11 +502,11 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
 			Name: lo.ToPtr(gofakeit.Word()),
 		}, nil)
-		assert.ErrorContains(t, err, "permission denied")
+		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 	})
 
 	t.Run("scope addition and removal update tuples", func(t *testing.T) {
-		token, client := makeTokenClient([]string{"read:evidence"})
+		token, client := makeTokenClient([]string{"read:evidence", "read:file", "read:control"})
 
 		assert.Check(t, lo.Contains(listScopedOrgIDs(token.ID, viewRelation), orgUser.OrganizationID))
 		assert.Check(t, !lo.Contains(listScopedOrgIDs(token.ID, editRelation), orgUser.OrganizationID))
@@ -534,6 +534,6 @@ func TestAPITokenObjectScopeTuples(t *testing.T) {
 		_, err = client.UpdateEvidence(context.Background(), evidence.ID, testclient.UpdateEvidenceInput{
 			Name: lo.ToPtr(gofakeit.Word()),
 		}, nil)
-		assert.ErrorContains(t, err, "permission denied")
+		assert.ErrorContains(t, err, notAuthorizedErrorMsg)
 	})
 }

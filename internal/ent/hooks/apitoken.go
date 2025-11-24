@@ -79,7 +79,7 @@ func HookCreateAPIToken() ent.Hook {
 
 			// create the relationship tuples if we have any
 			if len(tuples) > 0 {
-				if err := batchWriteTuples(ctx, m.Authz, tuples, nil); err != nil {
+				if _, err := m.Authz.WriteTupleKeys(ctx, tuples, nil); err != nil {
 					logx.FromContext(ctx).Error().Err(err).Msg("failed to create relationship tuple")
 
 					return nil, err
@@ -99,7 +99,13 @@ func HookUpdateAPIToken() ent.Hook {
 			var scopesModified bool
 
 			// Only query old scopes if scopes are being modified and this is an UpdateOne operation
-			if _, scopesModified = m.Scopes(); scopesModified && m.Op().Is(ent.OpUpdateOne) {
+			_, scopesModified = m.Scopes()
+			if !scopesModified {
+				// check appended
+				_, scopesModified = m.AppendedScopes()
+			}
+
+			if scopesModified && m.Op().Is(ent.OpUpdateOne) {
 				var err error
 				oldScopes, err = m.OldScopes(ctx)
 				if err != nil {
@@ -140,7 +146,7 @@ func HookUpdateAPIToken() ent.Hook {
 				}
 
 				if len(addTuples) > 0 || len(removeTuples) > 0 {
-					if err := batchWriteTuples(ctx, m.Authz, addTuples, removeTuples); err != nil {
+					if _, err := m.Authz.WriteTupleKeys(ctx, addTuples, removeTuples); err != nil {
 						logx.FromContext(ctx).Error().Err(err).Msg("failed to update api token scope tuples")
 
 						return nil, err
@@ -201,42 +207,4 @@ func diffScopes(oldScopes, newScopes []string) (added []string, removed []string
 	removed, _ = lo.Difference(oldScopes, newScopes)
 
 	return
-}
-
-const (
-	// maxFGATuplesPerBatch is the maximum number of tuples that can be written to FGA in a single batch
-	maxFGATuplesPerBatch = 100
-)
-
-// batchWriteTuples writes tuples to FGA in batches of maxFGATuplesPerBatch to avoid exceeding OpenFGA's limit
-func batchWriteTuples(ctx context.Context, authz fgax.Client, addTuples, removeTuples []fgax.TupleKey) error {
-	// Process additions in batches
-	for i := 0; i < len(addTuples); i += maxFGATuplesPerBatch {
-		end := i + maxFGATuplesPerBatch
-		if end > len(addTuples) {
-			end = len(addTuples)
-		}
-
-		batch := addTuples[i:end]
-
-		if _, err := authz.WriteTupleKeys(ctx, batch, nil); err != nil {
-			return err
-		}
-	}
-
-	// Process removals in batches
-	for i := 0; i < len(removeTuples); i += maxFGATuplesPerBatch {
-		end := i + maxFGATuplesPerBatch
-		if end > len(removeTuples) {
-			end = len(removeTuples)
-		}
-
-		batch := removeTuples[i:end]
-
-		if _, err := authz.WriteTupleKeys(ctx, nil, batch); err != nil {
-			return err
-		}
-	}
-
-	return nil
 }

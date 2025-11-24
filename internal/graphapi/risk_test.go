@@ -140,10 +140,10 @@ func TestQueryRisks(t *testing.T) {
 			expectedResults: 0,
 		},
 		{
-			name:            "happy path, no access to the program or group",
+			name:            "happy path, has scope using api token",
 			client:          suite.client.apiWithToken,
 			ctx:             context.Background(),
-			expectedResults: 0,
+			expectedResults: 2,
 		},
 		{
 			name:            "happy path, using pat",

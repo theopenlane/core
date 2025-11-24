@@ -77,17 +77,6 @@ func CanCreateObjectsUnderParents(edges []string) privacy.MutationRuleFunc {
 	})
 }
 
-// CheckAPITokenQueryAccess checks if the requestor has access to read api tokens
-func CheckAPITokenQueryAccess() privacy.QueryRule {
-	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		if auth.IsAPITokenAuthentication(ctx) {
-			return rule.CheckAPITokenScope(ctx, generated.TypeAPIToken, fgax.CanView, ent.Op(0))
-		}
-
-		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanView)
-	})
-}
-
 // CheckOrgReadAccess checks if the requestor has access to read the organization
 func CheckOrgReadAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, q ent.Query) error {
@@ -95,9 +84,12 @@ func CheckOrgReadAccess() privacy.QueryRule {
 			return privacy.Deny
 		}
 
-		if err := rule.CheckAPITokenScope(ctx, generated.TypeOrganization, fgax.CanView, ent.Op(0)); err != nil {
-			return err
+		if err := rule.CheckAPITokenScope(ctx, generated.TypeOrganization, fgax.CanView, nil); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
 		}
+
 		// check if the user has access to view the organization
 		// check the query first for the IDS
 		query, ok := q.(*generated.OrganizationQuery)
@@ -119,9 +111,12 @@ func CheckOrgReadAccess() privacy.QueryRule {
 // some query operations
 func CheckOrgEditAccess() privacy.QueryRule {
 	return privacy.QueryRuleFunc(func(ctx context.Context, _ ent.Query) error {
-		if err := rule.CheckAPITokenScope(ctx, generated.TypeOrganization, fgax.CanEdit, ent.Op(0)); err != nil {
-			return err
+		if err := rule.CheckAPITokenScope(ctx, generated.TypeOrganization, fgax.CanEdit, nil); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
 		}
+
 		// otherwise check against the current context
 		return rule.CheckCurrentOrgAccess(ctx, nil, fgax.CanEdit)
 	})
@@ -141,8 +136,10 @@ func CheckOrgAccess() privacy.MutationRule {
 	return privacy.MutationRuleFunc(func(ctx context.Context, m ent.Mutation) error {
 		logx.FromContext(ctx).Debug().Msg("checking org read access")
 
-		if err := rule.CheckAPITokenScope(ctx, m.Type(), fgax.CanView, m.Op()); err != nil {
-			return err
+		if err := rule.CheckAPITokenScope(ctx, m.Type(), fgax.CanView, nil); err != nil {
+			if !errors.Is(err, privacy.Skip) {
+				return err
+			}
 		}
 
 		return rule.CheckCurrentOrgAccess(ctx, m, fgax.CanView)
@@ -257,6 +254,13 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 				}
 
 				idStr = orgID
+			}
+
+			// check api token scope first, as api tokens will have full access to object types they have scope for
+			if err := rule.CheckAPITokenScope(ctx, edgeMap.ObjectType, relationCheck, nil); err != nil {
+				if errors.Is(err, privacy.Allow) {
+					return nil
+				}
 			}
 
 			ac := fgax.AccessCheck{

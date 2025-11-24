@@ -2,7 +2,6 @@ package schema
 
 import (
 	"fmt"
-	"sort"
 	"strings"
 
 	"entgo.io/contrib/entgql"
@@ -19,20 +18,12 @@ import (
 
 // createObjectTypes is derived from the model scopes for service subjects.
 var createObjectTypes = func() []string {
-	opts, err := fgamodel.ScopeOptions()
+	opts, err := fgamodel.CreateOptions()
 	if err != nil {
 		return nil
 	}
 
-	objects := make([]string, 0, len(opts))
-	for obj := range opts {
-		objects = append(objects, obj)
-	}
-
-	// the model uses snake_case already; ensure deterministic ordering
-	sort.Strings(objects)
-
-	return objects
+	return opts
 }()
 
 // GroupBasedCreateAccessMixin is a mixin for group permissions for creation of an entity

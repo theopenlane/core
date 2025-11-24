@@ -97,6 +97,33 @@ func RelationsForService() ([]string, error) {
 	return relations, nil
 }
 
+// CreateRelations returns relations shaped like can_create_<object> that are used for group-based creation access
+func CreateRelations() ([]string, error) {
+	model, err := GetAuthorizationModel()
+	if err != nil {
+		return nil, err
+	}
+
+	var relations []string
+
+	for _, td := range model.GetTypeDefinitions() {
+		if td.Metadata == nil || td.Metadata.Relations == nil {
+			continue
+		}
+
+		for rel, _ := range *td.Metadata.Relations {
+			parts := strings.SplitN(rel, "_", relationPartsCount)
+			if len(parts) == relationPartsCount && parts[0] == "can" && parts[1] == "create" {
+				relations = append(relations, rel)
+			}
+		}
+	}
+
+	sort.Strings(relations)
+
+	return relations, nil
+}
+
 // DefaultServiceScopeSet returns the default service scopes as a set
 func DefaultServiceScopeSet() (map[string]struct{}, error) {
 	scopes, err := RelationsForService()
@@ -187,4 +214,28 @@ func ScopeOptions() (map[string][]string, error) {
 	}
 
 	return opts, nil
+}
+
+// CreateOptions returns objects with verbs that support creation
+func CreateOptions() ([]string, error) {
+	rels, err := CreateRelations()
+	if err != nil {
+		return nil, err
+	}
+
+	objs := make([]string, 0, len(rels))
+	for _, rel := range rels {
+		parts := strings.SplitN(rel, "_", relationPartsCount)
+
+		obj := parts[2]
+		if obj == "" {
+			continue
+		}
+
+		objs = append(objs, obj)
+	}
+
+	sort.Strings(objs)
+
+	return objs, nil
 }

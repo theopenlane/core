@@ -2,6 +2,7 @@ package rule
 
 import (
 	"context"
+	"errors"
 	"fmt"
 
 	"github.com/stoewer/go-strcase"
@@ -23,15 +24,11 @@ func CheckGroupBasedObjectCreationAccess() privacy.MutationRuleFunc {
 		}
 
 		// Check API token scope first if applicable
-		if err := CheckAPITokenScope(ctx, m.Type(), "", m.Op()); err != nil {
-			if err == privacy.Allow {
-				return privacy.Allow
-			}
-			// If it returns permission denied for API token, return that error
-			if err == generated.ErrPermissionDenied {
+		op := m.Op()
+		if err := CheckAPITokenScope(ctx, m.Type(), "", &op); err != nil {
+			if !errors.Is(err, privacy.Skip) {
 				return err
 			}
-			// If it returns nil, continue to regular check
 		}
 
 		au, err := auth.GetAuthenticatedUserFromContext(ctx)

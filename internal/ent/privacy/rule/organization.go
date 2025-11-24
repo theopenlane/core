@@ -42,15 +42,11 @@ func CheckCurrentOrgAccess(ctx context.Context, m ent.Mutation, relation string)
 	mut, ok := m.(genericMutation)
 	if ok {
 		objectType := mut.Type()
-		if err := CheckAPITokenScope(ctx, objectType, relation, mut.Op()); err != nil {
-			if err == privacy.Allow {
-				return privacy.Allow
-			}
-			// If it returns permission denied for API token, return that error
-			if errors.Is(err, generated.ErrPermissionDenied) {
+		op := mut.Op()
+		if err := CheckAPITokenScope(ctx, objectType, relation, &op); err != nil {
+			if !errors.Is(err, privacy.Skip) {
 				return err
 			}
-			// If it returns nil or skip, continue to org check
 		}
 	}
 

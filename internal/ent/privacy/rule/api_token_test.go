@@ -25,7 +25,7 @@ func TestScopedRelationForAPIToken(t *testing.T) {
 	for _, tt := range tests {
 		tt := tt
 		t.Run(tt.name, func(t *testing.T) {
-			actual := scopedRelationForAPIToken(tt.objectType, tt.relation, tt.op)
+			actual := scopedRelationForAPIToken(tt.objectType, tt.relation, &tt.op)
 			assert.Equal(t, tt.expected, actual)
 		})
 	}

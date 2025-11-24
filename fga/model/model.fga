@@ -135,172 +135,204 @@ type organization
 
     # Search
     define can_view_search: [service]
-    define can_edit_search: [service]
-    define can_delete_search: [service]
     # API Token
-    define can_view_api_token: [service]
-    define can_edit_api_token: [service]
+    define can_view_api_token: [service] or can_edit_api_token
+    define can_edit_api_token: [service] or can_delete_api_token
     define can_delete_api_token: [service]
-    # Organization
-    define can_view_organization: [service]
+    # Organization, do not allow api tokens to delete organizations
+    define can_view_organization: [service] or can_edit_organization
     define can_edit_organization: [service]
-    define can_delete_organization: [service]
+    # Organization settings, also allow inheritance from organization view/edit permissions
+    define can_view_organization_setting: [service] or can_edit_organization_setting or can_view_organization
+    define can_edit_organization_setting: [service] or can_edit_organization
     # Group
-    define can_view_group: [service]
-    define can_edit_group: [service]
+    define can_view_group: [service] or can_edit_group
+    # this is a special case where edges are named differently and are permissions
+    define can_view_permission: [service] or can_view_group
+    define can_edit_group: [service] or can_delete_group
     define can_delete_group: [service]
+    # Group Setting, also allow inheritance from group view/edit permissions
+    define can_view_group_setting: [service] or can_edit_group_setting or can_view_group
+    define can_edit_group_setting: [service] or can_delete_group_setting or can_edit_group
+    define can_delete_group_setting: [service] or can_delete_group
+    # Group Membership
+    define can_view_group_membership: [service] or can_edit_group_membership or can_view_group
+    define can_edit_group_membership: [service] or can_delete_group_membership or can_edit_group
+    define can_delete_group_membership: [service] or can_edit_group
     # File
-    define can_view_file: [service]
-    define can_edit_file: [service]
+    define can_view_file: [service] or can_edit_file
+    define can_edit_file: [service] or can_delete_file
     define can_delete_file: [service]
     # Program
-    define can_view_program: [service]
-    define can_edit_program: [service]
+    define can_view_program: [service] or can_edit_program
+    define can_edit_program: [service] or can_delete_program
     define can_delete_program: [service]
+    # Program Membership
+    define can_view_program_membership: [service] or can_edit_program_membership or can_view_program
+    define can_edit_program_membership: [service] or can_delete_program_membership or can_edit_program
+    define can_delete_program_membership: [service]
+    # Program Settings
+    define can_view_program_setting: [service] or can_edit_program_setting or can_view_program
+    define can_edit_program_setting: [service] or can_delete_program_setting or can_edit_program
+    define can_delete_program_setting: [service] or can_delete_program
     # Control
-    define can_view_control: [service]
-    define can_edit_control: [service]
+    define can_view_control: [service] or can_edit_control
+    define can_edit_control: [service] or can_delete_control
     define can_delete_control: [service]
     # Subcontrol
-    define can_view_subcontrol: [service]
-    define can_edit_subcontrol: [service]
+    define can_view_subcontrol: [service] or can_edit_subcontrol
+    define can_edit_subcontrol: [service] or can_delete_subcontrol
     define can_delete_subcontrol: [service]
     # Control Objective
-    define can_view_control_objective: [service]
-    define can_edit_control_objective: [service]
+    define can_view_control_objective: [service] or can_edit_control_objective
+    define can_edit_control_objective: [service] or can_delete_control_objective
     define can_delete_control_objective: [service]
     # Control Implementation
-    define can_view_control_implementation: [service]
-    define can_edit_control_implementation: [service]
+    define can_view_control_implementation: [service] or can_edit_control_implementation
+    define can_edit_control_implementation: [service] or can_delete_control_implementation
     define can_delete_control_implementation: [service]
     # Mapped Control
-    define can_view_mapped_control: [service]
-    define can_edit_mapped_control: [service]
+    define can_view_mapped_control: [service] or can_edit_mapped_control
+    define can_edit_mapped_control: [service] or can_delete_mapped_control
     define can_delete_mapped_control: [service]
     # Risk
-    define can_view_risk: [service]
-    define can_edit_risk: [service]
+    define can_view_risk: [service] or can_edit_risk
+    define can_edit_risk: [service] or can_delete_risk
     define can_delete_risk: [service]
     # Narrative
-    define can_view_narrative: [service]
-    define can_edit_narrative: [service]
+    define can_view_narrative: [service] or can_edit_narrative
+    define can_edit_narrative: [service] or can_delete_narrative
     define can_delete_narrative: [service]
     # Action Plan
-    define can_view_action_plan: [service]
-    define can_edit_action_plan: [service]
+    define can_view_action_plan: [service] or can_edit_action_plan
+    define can_edit_action_plan: [service] or can_delete_action_plan
     define can_delete_action_plan: [service]
     # Internal Policy
-    define can_view_internal_policy: [service]
-    define can_edit_internal_policy: [service]
+    define can_view_internal_policy: [service] or can_edit_internal_policy
+    define can_edit_internal_policy: [service] or can_delete_internal_policy
     define can_delete_internal_policy: [service]
     # Procedure
-    define can_view_procedure: [service]
-    define can_edit_procedure: [service]
+    define can_view_procedure: [service] or can_edit_procedure
+    define can_edit_procedure: [service] or can_delete_procedure
     define can_delete_procedure: [service]
     # Template
-    define can_view_template: [service]
-    define can_edit_template: [service]
+    define can_view_template: [service] or can_edit_template
+    define can_edit_template: [service] or can_delete_template
     define can_delete_template: [service]
     # Document Data
-    define can_view_document_data: [service]
-    define can_edit_document_data: [service]
+    define can_view_document_data: [service] or can_edit_document_data
+    define can_edit_document_data: [service] or can_delete_document_data
     define can_delete_document_data: [service]
     # Contact
-    define can_view_contact: [service]
-    define can_edit_contact: [service]
+    define can_view_contact: [service] or can_edit_contact
+    define can_edit_contact: [service] or can_delete_contact
     define can_delete_contact: [service]
-    # Controlobjective (custom object)
-    define can_view_controlobjective: [service]
-    define can_edit_controlobjective: [service]
-    define can_delete_controlobjective: [service]
     # Entity (custom object)
-    define can_view_entity: [service]
-    define can_edit_entity: [service]
+    define can_view_entity: [service] or can_edit_entity
+    define can_edit_entity: [service] or can_delete_entity
     define can_delete_entity: [service]
     # Task
-    define can_view_task: [service]
-    define can_edit_task: [service]
+    define can_view_task: [service] or can_edit_task
+    define can_edit_task: [service] or can_delete_task
     define can_delete_task: [service]
     # Note
-    define can_view_note: [service]
-    define can_edit_note: [service]
+    define can_view_note: [service] or can_edit_note
+    define can_edit_note: [service] or can_delete_note
     define can_delete_note: [service]
     # Evidence
-    define can_view_evidence: [service]
-    define can_edit_evidence: [service]
+    define can_view_evidence: [service] or can_edit_evidence
+    define can_edit_evidence: [service] or can_delete_evidence
     define can_delete_evidence: [service]
     # Standard
-    define can_view_standard: [service]
-    define can_edit_standard: [service]
+    define can_view_standard: [service] or can_edit_standard
+    define can_edit_standard: [service] or can_delete_standard
     define can_delete_standard: [service]
     # Job Runner
-    define can_view_job_runner: [service]
-    define can_edit_job_runner: [service]
+    define can_view_job_runner: [service] or can_edit_job_runner
+    define can_edit_job_runner: [service] or can_delete_job_runner
     define can_delete_job_runner: [service]
     # Job Template
-    define can_view_job_template: [service]
-    define can_edit_job_template: [service]
+    define can_view_job_template: [service] or can_edit_job_template
+    define can_edit_job_template: [service] or can_delete_job_template
     define can_delete_job_template: [service]
     # Scheduled Job
-    define can_view_scheduled_job: [service]
-    define can_edit_scheduled_job: [service]
+    define can_view_scheduled_job: [service] or can_edit_scheduled_job
+    define can_edit_scheduled_job: [service] or can_delete_scheduled_job
     define can_delete_scheduled_job: [service]
     # Trust Center
-    define can_view_trust_center: [service]
-    define can_edit_trust_center: [service]
+    define can_view_trust_center: [service] or can_edit_trust_center
+    define can_edit_trust_center: [service] or can_delete_trust_center
     define can_delete_trust_center: [service]
     # Trust Center Setting
-    define can_view_trust_center_setting: [service]
-    define can_edit_trust_center_setting: [service]
+    define can_view_trust_center_setting: [service] or can_edit_trust_center_setting
+    define can_edit_trust_center_setting: [service] or can_delete_trust_center_setting
     define can_delete_trust_center_setting: [service]
     # Trust Center Compliance
-    define can_view_trust_center_compliance: [service]
-    define can_edit_trust_center_compliance: [service]
+    define can_view_trust_center_compliance: [service] or can_edit_trust_center_compliance
+    define can_edit_trust_center_compliance: [service] or can_delete_trust_center_compliance
     define can_delete_trust_center_compliance: [service]
     # Trust Center Subprocessor
-    define can_view_trust_center_subprocessor: [service]
-    define can_edit_trust_center_subprocessor: [service]
+    define can_view_trust_center_subprocessor: [service] or can_edit_trust_center_subprocessor
+    define can_edit_trust_center_subprocessor: [service] or can_delete_trust_center_subprocessor
     define can_delete_trust_center_subprocessor: [service]
     # Trust Center Doc
-    define can_view_trust_center_doc: [service]
-    define can_edit_trust_center_doc: [service]
+    define can_view_trust_center_doc: [service] or can_edit_trust_center_doc
+    define can_edit_trust_center_doc: [service] or can_delete_trust_center_doc
     define can_delete_trust_center_doc: [service]
     # Trust Center Watermark Config
-    define can_view_trust_center_watermark_config: [service]
-    define can_edit_trust_center_watermark_config: [service]
+    define can_view_trust_center_watermark_config: [service] or can_edit_trust_center_watermark_config
+    define can_edit_trust_center_watermark_config: [service] or can_delete_trust_center_watermark_config
     define can_delete_trust_center_watermark_config: [service]
     # Export
-    define can_view_export: [service]
-    define can_edit_export: [service]
+    define can_view_export: [service] or can_edit_export
+    define can_edit_export: [service] or can_delete_export
     define can_delete_export: [service]
     # Custom Domain
-    define can_view_custom_domain: [service]
-    define can_edit_custom_domain: [service]
+    define can_view_custom_domain: [service] or can_edit_custom_domain
+    define can_edit_custom_domain: [service] or can_delete_custom_domain
     define can_delete_custom_domain: [service]
     # Subprocessor
-    define can_view_subprocessor: [service]
-    define can_edit_subprocessor: [service]
+    define can_view_subprocessor: [service] or can_edit_subprocessor
+    define can_edit_subprocessor: [service] or can_delete_subprocessor
     define can_delete_subprocessor: [service]
     # Assessment
-    define can_view_assessment: [service]
-    define can_edit_assessment: [service]
+    define can_view_assessment: [service] or can_edit_assessment
+    define can_edit_assessment: [service] or can_delete_assessment
     define can_delete_assessment: [service]
     # Assessment Response
-    define can_view_assessment_response: [service]
-    define can_edit_assessment_response: [service]
-    define can_delete_assessment_response: [service]
+    # these shouldn't be here because assessment responses are tied to users filling out questionnaires
+    # define can_view_assessment_response: [service]
+    # define can_edit_assessment_response: [service]
+    # define can_delete_assessment_response: [service]
     # Custom Type Enum
-    define can_view_custom_type_enum: [service]
-    define can_edit_custom_type_enum: [service]
+    define can_view_custom_type_enum: [service] or can_edit_custom_type_enum
+    define can_edit_custom_type_enum: [service] or can_delete_custom_type_enum
     define can_delete_custom_type_enum: [service]
     # Entity Type
-    define can_view_entity_type: [service]
-    define can_edit_entity_type: [service]
+    define can_view_entity_type: [service] or can_edit_entity_type
+    define can_edit_entity_type: [service] or can_delete_entity_type
     define can_delete_entity_type: [service]
-    # Group Membership
-    define can_view_group_membership: [service]
-    define can_edit_group_membership: [service]
-    define can_delete_group_membership: [service]
+    # # Integrations
+    define can_view_integration: [service] or can_edit_integration
+    define can_edit_integration: [service] or can_delete_integration
+    define can_delete_integration: [service]
+    # Invite
+    define can_view_invite: [service] or can_edit_invite
+    define can_edit_invite: [service] or can_delete_invite
+    define can_delete_invite: [service]
+    # Subscriber
+    define can_view_subscriber: [service] or can_edit_subscriber
+    define can_edit_subscriber: [service] or can_delete_subscriber
+    define can_delete_subscriber: [service]
+    # Tag Definition, also allow inheritance from organization view/edit permissions
+    define can_view_tag_definition: [service] or can_edit_tag_definition or can_view_organization
+    define can_edit_tag_definition: [service] or can_delete_tag_definition or can_edit_organization
+    define can_delete_tag_definition: [service] or can_edit_organization
+    # Custom Enums, also allow inheritance from organization view/edit permissions
+    define can_view_custom_enum: [service] or can_edit_custom_enum or can_view_organization
+    define can_edit_custom_enum: [service] or can_delete_custom_enum or can_edit_organization
+    define can_delete_custom_enum: [service] or can_edit_organization
+
 # groups are commonly used to assigned view/edit permissions to other objects within the organization for group members
 type group
   relations
