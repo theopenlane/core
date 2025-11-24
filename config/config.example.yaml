@@ -71,6 +71,7 @@ authz:
         scopes: ""
     enabled: true
     hosturl: https://authz.theopenlane.io
+    maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
     storeid: ""
@@ -157,11 +158,11 @@ entconfig:
         timezone: UTC
         token: ""
         workspace: ""
-integrationOauthProvider:
+integrationoauthprovider:
     providerSpecPath: internal/integrations/config/providers
     successRedirectUrl: ""
-jobQueue:
-    connectionURI: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
+jobqueue:
+    connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:
         enablemetrics: false
         enablesemanticmetrics: true

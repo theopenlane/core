@@ -697,6 +697,10 @@
         "credentials": {
           "$ref": "#/$defs/fgax.Credentials",
           "description": "credentials for the openFGA client"
+        },
+        "maxbatchwritesize": {
+          "type": "integer",
+          "description": "maximum number of writes per batch in a transaction"
         }
       },
       "additionalProperties": false,

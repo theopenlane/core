@@ -610,6 +610,9 @@ data:
         scopes: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
+      maxbatchwritesize: {{ .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.db }}
     db:
@@ -1138,17 +1141,17 @@ data:
       newusermessagefile: {{ .Values.openlane.coreConfiguration.slack.newusermessagefile | quote }}
       {{- end }}
     {{- end }}
-    {{- if .Values.openlane.coreConfiguration.integrationOauthProvider }}
-    integrationOauthProvider:
-      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl }}
-      successRedirectUrl: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.successRedirectUrl | quote }}
+    {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
+    integrationoauthprovider:
+      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.successRedirectUrl }}
+      successRedirectUrl: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.successRedirectUrl | quote }}
       {{- else if .Values.domain }}
-      successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
+      successRedirectUrl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
       {{- else }}
-      successredirecturl: ""
+      successRedirectUrl: ""
       {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath }}
-      providerSpecPath: {{ .Values.openlane.coreConfiguration.integrationOauthProvider.providerSpecPath | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.providerSpecPath }}
+      providerSpecPath: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.providerSpecPath | quote }}
       {{- end }}
     {{- end }}
 {{- end }}
