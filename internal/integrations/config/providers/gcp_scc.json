@@ -6,7 +6,7 @@
   "active": true,
   "logoUrl": "",
   "docsUrl": "https://cloud.google.com/security-command-center/docs",
-  "workloadIdentity": {
+  "googleWorkloadIdentity": {
     "scopes": [
       "https://www.googleapis.com/auth/cloud-platform"
     ],

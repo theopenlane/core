@@ -187,17 +187,6 @@ func (p *Provider) Mint(ctx context.Context, subject types.CredentialSubject) (t
 // WithOperations configures provider-managed operations.
 func WithOperations(descriptors []types.OperationDescriptor) ProviderOption {
 	return func(p *Provider) {
-		sanitized := helpers.SanitizeOperationDescriptors(p.providerType, descriptors)
-
-		ops := make([]types.OperationDescriptor, len(sanitized))
-		for i, descriptor := range sanitized {
-			if descriptor.Provider == types.ProviderUnknown {
-				descriptor.Provider = p.providerType
-			}
-
-			ops[i] = descriptor
-		}
-
-		p.operations = ops
+		p.operations = helpers.SanitizeOperationDescriptors(p.providerType, descriptors)
 	}
 }

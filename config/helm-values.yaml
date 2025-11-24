@@ -581,10 +581,10 @@ coreConfiguration:
     newusermessagefile: ""  # @schema type:string
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
   integrationoauthprovider:
+    # -- Enabled toggles initialization of the integration provider registry.
+    enabled: false  # @schema type:boolean; default:false
     # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
     successredirecturl: ""  # @schema type:string
-    # -- ProviderSpecPath is the path to the declarative provider spec configuration file.
-    providerspecpath: "internal/integrations/config/providers"  # @schema type:string; default:internal/integrations/config/providers
 
 # -- External Secrets configuration
 externalSecrets:

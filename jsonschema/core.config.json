@@ -795,13 +795,13 @@
     },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
+        "enabled": {
+          "type": "boolean",
+          "description": "Enabled toggles initialization of the integration provider registry."
+        },
         "successredirecturl": {
           "type": "string",
           "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration."
-        },
-        "providerspecpath": {
-          "type": "string",
-          "description": "ProviderSpecPath is the path to the declarative provider spec configuration file."
         }
       },
       "additionalProperties": false,

@@ -10,6 +10,7 @@ import (
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/providers/catalog"
+	"github.com/theopenlane/core/internal/integrations/providers/helpers"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
 
@@ -21,11 +22,15 @@ type Registry struct {
 	operations map[types.ProviderType][]types.OperationDescriptor
 }
 
-// NewRegistry builds a registry from the supplied specs and factories
-func NewRegistry(ctx context.Context, specs map[types.ProviderType]config.ProviderSpec, builders []providers.Builder) (*Registry, error) {
-	if len(specs) == 0 {
-		return nil, ErrNoProviderSpecs
+// NewRegistry loads embedded provider specs and builds the registry using the catalog builders.
+func NewRegistry(ctx context.Context) (*Registry, error) {
+	loader := config.NewFSLoader(config.ProvidersFS, "providers")
+	specs, err := loader.Load()
+	if err != nil {
+		return nil, err
 	}
+
+	builders := catalog.Builders()
 
 	instance := &Registry{
 		configs:    specs,
@@ -52,13 +57,13 @@ func NewRegistry(ctx context.Context, specs map[types.ProviderType]config.Provid
 		instance.providers[providerType] = provider
 
 		if clientProvider, ok := provider.(types.ClientProvider); ok {
-			if descriptors := sanitizeDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+			if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
 				instance.clients[providerType] = descriptors
 			}
 		}
 
 		if operationProvider, ok := provider.(types.OperationProvider); ok {
-			if ops := sanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+			if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
 				instance.operations[providerType] = ops
 			}
 		}
@@ -163,68 +168,47 @@ func (r *Registry) OperationDescriptorCatalog() map[types.ProviderType][]types.O
 	return out
 }
 
-// LoadRegistry loads provider specs using the supplied loader and builder catalog.
-func LoadRegistry(ctx context.Context, loader *config.FSLoader) (*Registry, error) {
-	specs, err := loader.Load()
+// UpsertProvider adds or replaces a provider/spec after initialization (primarily for tests).
+func (r *Registry) UpsertProvider(ctx context.Context, spec config.ProviderSpec, builder providers.Builder) error {
+	if r == nil {
+		return fmt.Errorf("integrations/registry: registry is nil")
+	}
+
+	providerType := spec.ProviderType()
+	if providerType == types.ProviderUnknown {
+		return fmt.Errorf("integrations/registry: provider type required")
+	}
+	if builder == nil || builder.Type() != providerType {
+		return fmt.Errorf("integrations/registry: builder missing or type mismatch for %s", providerType)
+	}
+
+	provider, err := builder.Build(ctx, spec)
 	if err != nil {
-		return nil, err
+		return fmt.Errorf("integrations/registry: build provider %s: %w", providerType, err)
 	}
 
-	builders := catalog.Builders()
+	r.configs[providerType] = spec
+	r.providers[providerType] = provider
 
-	return NewRegistry(ctx, specs, builders)
-}
-
-// LoadDefaultRegistry loads provider specs from the embedded filesystem.
-func LoadDefaultRegistry(ctx context.Context) (*Registry, error) {
-	loader := config.NewFSLoader(config.ProvidersFS, "providers")
-
-	return LoadRegistry(ctx, loader)
-}
-
-// sanitizeDescriptors filters out invalid client descriptors and assigns provider type
-func sanitizeDescriptors(provider types.ProviderType, descriptors []types.ClientDescriptor) []types.ClientDescriptor {
-	if len(descriptors) == 0 {
-		return nil
+	if clientProvider, ok := provider.(types.ClientProvider); ok {
+		if descriptors := helpers.SanitizeClientDescriptors(providerType, clientProvider.ClientDescriptors()); len(descriptors) > 0 {
+			r.clients[providerType] = descriptors
+		} else {
+			delete(r.clients, providerType)
+		}
+	} else {
+		delete(r.clients, providerType)
 	}
 
-	out := make([]types.ClientDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
-		if descriptor.Build == nil {
-			continue
+	if operationProvider, ok := provider.(types.OperationProvider); ok {
+		if ops := helpers.SanitizeOperationDescriptors(providerType, operationProvider.Operations()); len(ops) > 0 {
+			r.operations[providerType] = ops
+		} else {
+			delete(r.operations, providerType)
 		}
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
-		}
-		out = append(out, descriptor)
+	} else {
+		delete(r.operations, providerType)
 	}
 
-	return out
-}
-
-// sanitizeOperationDescriptors filters out invalid operation descriptors and assigns provider type
-func sanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, 0, len(descriptors))
-
-	for _, descriptor := range descriptors {
-		if descriptor.Run == nil {
-			continue
-		}
-
-		if descriptor.Name == "" {
-			continue
-		}
-
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
-		}
-
-		out = append(out, descriptor)
-	}
-
-	return out
+	return nil
 }
