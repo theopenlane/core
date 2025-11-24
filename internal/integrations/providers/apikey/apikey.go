@@ -142,28 +142,3 @@ func (p *Provider) Mint(_ context.Context, subject types.CredentialSubject) (typ
 
 	return builder.Build()
 }
-
-func sanitizeOperationDescriptors(provider types.ProviderType, descriptors []types.OperationDescriptor) []types.OperationDescriptor {
-	if len(descriptors) == 0 {
-		return nil
-	}
-
-	out := make([]types.OperationDescriptor, 0, len(descriptors))
-	for _, descriptor := range descriptors {
-		if descriptor.Run == nil {
-			continue
-		}
-
-		if descriptor.Name == "" {
-			continue
-		}
-
-		if descriptor.Provider == types.ProviderUnknown {
-			descriptor.Provider = provider
-		}
-
-		out = append(out, descriptor)
-	}
-
-	return out
-}

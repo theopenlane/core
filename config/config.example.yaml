@@ -159,8 +159,8 @@ entconfig:
         token: ""
         workspace: ""
 integrationoauthprovider:
-    providerSpecPath: internal/integrations/config/providers
-    successRedirectUrl: ""
+    providerspecpath: internal/integrations/config/providers
+    successredirecturl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
     metrics:

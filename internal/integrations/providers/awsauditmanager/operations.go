@@ -23,7 +23,8 @@ func awsAuditOperations() []types.OperationDescriptor {
 	}
 }
 
-func runAWSAuditHealth(ctx context.Context, input types.OperationInput) (types.OperationResult, error) {
+// runAWSAuditHealth validates that the AWS Audit Manager credentials are present
+func runAWSAuditHealth(_ context.Context, input types.OperationInput) (types.OperationResult, error) {
 	meta := input.Credential.Data.ProviderData
 	if len(meta) == 0 {
 		return types.OperationResult{}, ErrMetadataMissing

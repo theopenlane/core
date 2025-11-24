@@ -795,11 +795,11 @@
     },
     "handlers.IntegrationOauthProviderConfig": {
       "properties": {
-        "successRedirectUrl": {
+        "successredirecturl": {
           "type": "string",
           "description": "SuccessRedirectURL is the URL to redirect to after successful OAuth integration."
         },
-        "providerSpecPath": {
+        "providerspecpath": {
           "type": "string",
           "description": "ProviderSpecPath is the path to the declarative provider spec configuration file."
         }
