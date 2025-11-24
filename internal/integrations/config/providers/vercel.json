@@ -1,0 +1,71 @@
+{
+  "name": "vercel",
+  "displayName": "Vercel",
+  "category": "devops",
+  "authType": "apikey",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://vercel.com/docs/rest-api",
+  "apiKey": {
+    "keyLabel": "API Token",
+    "headerName": "Authorization"
+  },
+  "labels": {
+    "vendor": "vercel",
+    "product": "deployment"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "apiToken"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly name shown inside Openlane for this token."
+      },
+      "apiToken": {
+        "type": "string",
+        "title": "API Token",
+        "description": "Vercel personal or team API token with read access to projects and settings."
+      },
+      "teamId": {
+        "type": "string",
+        "title": "Team ID",
+        "description": "Optional team identifier used if the token is scoped to a team."
+      },
+      "projectId": {
+        "type": "string",
+        "title": "Project ID",
+        "description": "Optional project identifier to scope compliance checks."
+      },
+      "environment": {
+        "type": "string",
+        "title": "Default Environment",
+        "description": "Indicates which deployment environment should be queried first.",
+        "enum": [
+          "production",
+          "preview",
+          "development"
+        ],
+        "default": "production"
+      },
+      "captureDeployHooks": {
+        "type": "boolean",
+        "title": "Capture Deploy Hooks",
+        "description": "When enabled, deploy hook metadata is persisted alongside the integration.",
+        "default": false
+      },
+      "metadataTags": {
+        "type": "array",
+        "title": "Metadata Tags",
+        "description": "Optional list of tags that categorize the projects pulled from Vercel.",
+        "items": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

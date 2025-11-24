@@ -1,0 +1,31 @@
+{
+  "name": "slack",
+  "displayName": "Slack",
+  "category": "collab",
+  "authType": "oauth2",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://api.slack.com/authentication/oauth-v2",
+  "oauth": {
+    "clientId": "${SLACK_CLIENT_ID}",
+    "clientSecret": "${SLACK_CLIENT_SECRET}",
+    "authUrl": "https://slack.com/oauth/v2/authorize",
+    "tokenUrl": "https://slack.com/api/oauth.v2.access",
+    "scopes": [
+      "identity.basic",
+      "identity.email"
+    ],
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+  },
+  "userInfo": {
+    "url": "https://slack.com/api/users.identity",
+    "method": "GET",
+    "authStyle": "Bearer",
+    "idPath": "user.id",
+    "emailPath": "user.email",
+    "loginPath": "user.name"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  }
+}

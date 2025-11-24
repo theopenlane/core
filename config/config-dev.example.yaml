@@ -192,7 +192,8 @@ subscription:
   stripewebhooksecret: ""
 
 integrationoauthprovider:
-  successredirecturl: "http://localhost:3001/organization-settings/integrations"
+  successredirecturl: "http://localhost:3004/"
+  providerspecpath: internal/integrations/config/providers
   github:
     clientendpoint: http://localhost:17608
     clientid: ""

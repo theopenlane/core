@@ -3,6 +3,9 @@ package handlers_test
 import (
 	"context"
 	"encoding/json"
+	"fmt"
+	"net/url"
+	"strings"
 	"testing"
 	"time"
 
@@ -12,6 +15,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
 	"github.com/stripe/stripe-go/v83"
+	"golang.org/x/oauth2"
 
 	"github.com/redis/go-redis/v9"
 	echo "github.com/theopenlane/echox"
@@ -33,6 +37,12 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providers"
+	"github.com/theopenlane/core/internal/integrations/registry"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
@@ -101,6 +111,7 @@ type HandlerTestSuite struct {
 	sharedFGAClient      *fgax.Client
 	sharedOTPManager     *totp.Client
 	sharedPondPool       *soiree.PondPool
+	registeredRoutes     map[string]struct{}
 	sharedAuthMiddleware echo.MiddlewareFunc
 
 	// OpenAPI operations for reuse in tests
@@ -172,6 +183,8 @@ func (suite *HandlerTestSuite) SetupSuite() {
 func (suite *HandlerTestSuite) SetupTest() {
 	t := suite.T()
 
+	suite.registeredRoutes = make(map[string]struct{})
+
 	ctx := context.Background()
 
 	// use all shared instances to avoid expensive recreation
@@ -230,6 +243,7 @@ func (suite *HandlerTestSuite) SetupTest() {
 
 	// setup handler
 	suite.h = handlerSetup(suite.db)
+	suite.configureIntegrationRuntime(ctx)
 	if suite.h.Entitlements.Config.StripeWebhookSecrets == nil {
 		suite.h.Entitlements.Config.StripeWebhookSecrets = map[string]string{}
 	}
@@ -268,16 +282,6 @@ func (suite *HandlerTestSuite) createImpersonationOperation(operationID, descrip
 	return operation
 }
 
-// registerTestHandler is a helper to register test handlers with OpenAPI context
-func (suite *HandlerTestSuite) registerTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
-	suite.e.Add(method, path, func(c echo.Context) error {
-		return handlerFunc(c, &handlers.OpenAPIContext{
-			Operation: operation,
-			Registry:  suite.router.SchemaRegistry,
-		})
-	})
-}
-
 // registerAuthenticatedTestHandler registers a handler with authentication middleware for testing authenticated endpoints
 func (suite *HandlerTestSuite) registerAuthenticatedTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
 	suite.e.Add(method, path, func(c echo.Context) error {
@@ -306,6 +310,25 @@ func (suite *HandlerTestSuite) createAuthMiddleware() echo.MiddlewareFunc {
 	conf := authmiddleware.NewAuthOptions(opts...)
 
 	return authmiddleware.Authenticate(&conf)
+}
+
+// registerTestHandler is a helper to register test handlers with OpenAPI context
+func (suite *HandlerTestSuite) registerTestHandler(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	suite.e.Add(method, path, func(c echo.Context) error {
+		return handlerFunc(c, &handlers.OpenAPIContext{
+			Operation: operation,
+			Registry:  suite.router.SchemaRegistry,
+		})
+	})
+}
+
+func (suite *HandlerTestSuite) registerRouteOnce(method, path string, operation *openapi3.Operation, handlerFunc func(echo.Context, *handlers.OpenAPIContext) error) {
+	key := method + " " + path
+	if _, exists := suite.registeredRoutes[key]; exists {
+		return
+	}
+	suite.registeredRoutes[key] = struct{}{}
+	suite.registerTestHandler(method, path, operation, handlerFunc)
 }
 
 func (suite *HandlerTestSuite) TearDownTest() {
@@ -355,6 +378,124 @@ func handlerSetup(db *ent.Client) *handlers.Handler {
 	}
 
 	return h
+}
+
+func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) {
+	store := keystore.NewStore(suite.db)
+	suite.h.IntegrationStore = store
+
+	providerType := types.ProviderType("github")
+	spec := config.ProviderSpec{
+		Name:        "github",
+		DisplayName: "GitHub",
+		Category:    "code",
+		AuthType:    types.AuthKindOAuth2,
+		Active:      true,
+		OAuth: &config.OAuthSpec{
+			ClientID:     "test-client",
+			ClientSecret: "test-secret",
+			AuthURL:      "https://example.com/oauth/authorize",
+			TokenURL:     "https://example.com/oauth/token",
+			Scopes:       []string{"repo"},
+			RedirectURI:  "https://example.com/oauth/callback",
+		},
+	}
+
+	builder := providers.BuilderFunc{
+		ProviderType: providerType,
+		BuildFunc: func(context.Context, config.ProviderSpec) (providers.Provider, error) {
+			return &testOAuthProvider{provider: providerType}, nil
+		},
+	}
+
+	reg, err := registry.NewRegistry(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
+	require.NoError(suite.T(), err)
+
+	sessions := keymaker.NewMemorySessionStore()
+	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
+	require.NoError(suite.T(), err)
+
+	suite.h.IntegrationRegistry = reg
+	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
+	suite.h.KeymakerService = svc
+
+	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
+	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
+	require.NoError(suite.T(), err)
+	suite.h.IntegrationOperations = manager
+}
+
+type testOAuthProvider struct {
+	provider types.ProviderType
+}
+
+func (p *testOAuthProvider) Type() types.ProviderType {
+	return p.provider
+}
+
+func (p *testOAuthProvider) Capabilities() types.ProviderCapabilities {
+	return types.ProviderCapabilities{
+		SupportsRefreshTokens: true,
+	}
+}
+
+func (p *testOAuthProvider) BeginAuth(_ context.Context, input types.AuthContext) (types.AuthSession, error) {
+	state := strings.TrimSpace(input.State)
+	if state == "" {
+		state = "state"
+	}
+	values := url.Values{}
+	values.Set("state", state)
+	if len(input.Scopes) > 0 {
+		values.Set("scope", strings.Join(input.Scopes, " "))
+	}
+
+	authURL := fmt.Sprintf("https://example.com/oauth/authorize?%s", values.Encode())
+	return &testAuthSession{
+		provider: p.provider,
+		state:    state,
+		authURL:  authURL,
+	}, nil
+}
+
+func (p *testOAuthProvider) Mint(_ context.Context, subject types.CredentialSubject) (types.CredentialPayload, error) {
+	token := &oauth2.Token{
+		AccessToken:  "minted-access-token",
+		RefreshToken: "minted-refresh-token",
+		Expiry:       time.Now().Add(time.Hour),
+	}
+	return types.NewCredentialBuilder(subject.Provider).
+		With(types.WithOAuthToken(token)).
+		Build()
+}
+
+type testAuthSession struct {
+	provider types.ProviderType
+	state    string
+	authURL  string
+}
+
+func (s *testAuthSession) ProviderType() types.ProviderType {
+	return s.provider
+}
+
+func (s *testAuthSession) State() string {
+	return s.state
+}
+
+func (s *testAuthSession) AuthURL() string {
+	return s.authURL
+}
+
+func (s *testAuthSession) Finish(context.Context, string) (types.CredentialPayload, error) {
+	token := &oauth2.Token{
+		AccessToken:  "test-access-token",
+		RefreshToken: "test-refresh-token",
+		Expiry:       time.Now().Add(time.Hour),
+	}
+	return types.NewCredentialBuilder(s.provider).
+		With(types.WithOAuthToken(token)).
+		Build()
 }
 
 // mockStripeClient creates a new stripe client with mock backend
