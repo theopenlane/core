@@ -695,6 +695,9 @@ func TestMutationCreateTask(t *testing.T) {
 	control := (&ControlBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 	internalPolicy := (&InternalPolicyBuilder{client: suite.client}).MustNew(testUser.UserCtx, t)
 
+	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client, ControlID: systemOwnedControl.ID}).MustNew(systemAdminUser.UserCtx, t)
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateTaskInput
@@ -773,6 +776,26 @@ func TestMutationCreateTask(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
 			expectedErr: "value is less than the required length",
+		},
+		{
+			name: "not allowed to associated system owned control",
+			request: testclient.CreateTaskInput{
+				Title:      "test-task",
+				ControlIDs: []string{systemOwnedControl.ID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "not allowed to associated system owned subcontrol",
+			request: testclient.CreateTaskInput{
+				Title:      "test-task",
+				ControlIDs: []string{systemOwnedSubcontrol.ID},
+			},
+			client:      suite.client.api,
+			ctx:         testUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 	}
 
@@ -865,6 +888,13 @@ func TestMutationCreateTask(t *testing.T) {
 
 	// cleanup
 	(&Cleanup[*generated.OrgMembershipDeleteOne]{client: suite.client.db.OrgMembership, ID: om.ID}).MustDelete(testUser.UserCtx, t)
+	// cleanup controls and policies
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: control.ID}).MustDelete(testUser.UserCtx, t)
+	(&Cleanup[*generated.InternalPolicyDeleteOne]{client: suite.client.db.InternalPolicy, ID: internalPolicy.ID}).MustDelete(testUser.UserCtx, t)
+	// cleanup system owned controls
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: systemOwnedControl.ID}).MustDelete(systemAdminUser.UserCtx, t)
+
 }
 
 func TestMutationUpdateTask(t *testing.T) {

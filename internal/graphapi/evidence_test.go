@@ -564,6 +564,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete system owned controls and subcontrols
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: systemOwnedControl.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateEvidence(t *testing.T) {
