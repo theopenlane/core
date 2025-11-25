@@ -261,6 +261,7 @@ func (Task) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTaskCreate(),
 		hooks.HookTaskPermissions(),
+		hooks.HookSystemOwnedControls(),
 	}
 }
 
