@@ -117,6 +117,60 @@ func (_u *NoteHistoryUpdate) SetNillableText(v *string) *NoteHistoryUpdate {
 	return _u
 }
 
+// SetNoteRef sets the "note_ref" field.
+func (_u *NoteHistoryUpdate) SetNoteRef(v string) *NoteHistoryUpdate {
+	_u.mutation.SetNoteRef(v)
+	return _u
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableNoteRef(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetNoteRef(*v)
+	}
+	return _u
+}
+
+// ClearNoteRef clears the value of the "note_ref" field.
+func (_u *NoteHistoryUpdate) ClearNoteRef() *NoteHistoryUpdate {
+	_u.mutation.ClearNoteRef()
+	return _u
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_u *NoteHistoryUpdate) SetDiscussionID(v string) *NoteHistoryUpdate {
+	_u.mutation.SetDiscussionID(v)
+	return _u
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableDiscussionID(v *string) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetDiscussionID(*v)
+	}
+	return _u
+}
+
+// ClearDiscussionID clears the value of the "discussion_id" field.
+func (_u *NoteHistoryUpdate) ClearDiscussionID() *NoteHistoryUpdate {
+	_u.mutation.ClearDiscussionID()
+	return _u
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_u *NoteHistoryUpdate) SetIsEdited(v bool) *NoteHistoryUpdate {
+	_u.mutation.SetIsEdited(v)
+	return _u
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_u *NoteHistoryUpdate) SetNillableIsEdited(v *bool) *NoteHistoryUpdate {
+	if v != nil {
+		_u.SetIsEdited(*v)
+	}
+	return _u
+}
+
 // Mutation returns the NoteHistoryMutation object of the builder.
 func (_u *NoteHistoryUpdate) Mutation() *NoteHistoryMutation {
 	return _u.mutation
@@ -217,6 +271,21 @@ func (_u *NoteHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.NoteRef(); ok {
+		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)
+	}
+	if _u.mutation.NoteRefCleared() {
+		_spec.ClearField(notehistory.FieldNoteRef, field.TypeString)
+	}
+	if value, ok := _u.mutation.DiscussionID(); ok {
+		_spec.SetField(notehistory.FieldDiscussionID, field.TypeString, value)
+	}
+	if _u.mutation.DiscussionIDCleared() {
+		_spec.ClearField(notehistory.FieldDiscussionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsEdited(); ok {
+		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -324,6 +393,60 @@ func (_u *NoteHistoryUpdateOne) SetText(v string) *NoteHistoryUpdateOne {
 func (_u *NoteHistoryUpdateOne) SetNillableText(v *string) *NoteHistoryUpdateOne {
 	if v != nil {
 		_u.SetText(*v)
+	}
+	return _u
+}
+
+// SetNoteRef sets the "note_ref" field.
+func (_u *NoteHistoryUpdateOne) SetNoteRef(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetNoteRef(v)
+	return _u
+}
+
+// SetNillableNoteRef sets the "note_ref" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableNoteRef(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetNoteRef(*v)
+	}
+	return _u
+}
+
+// ClearNoteRef clears the value of the "note_ref" field.
+func (_u *NoteHistoryUpdateOne) ClearNoteRef() *NoteHistoryUpdateOne {
+	_u.mutation.ClearNoteRef()
+	return _u
+}
+
+// SetDiscussionID sets the "discussion_id" field.
+func (_u *NoteHistoryUpdateOne) SetDiscussionID(v string) *NoteHistoryUpdateOne {
+	_u.mutation.SetDiscussionID(v)
+	return _u
+}
+
+// SetNillableDiscussionID sets the "discussion_id" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableDiscussionID(v *string) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetDiscussionID(*v)
+	}
+	return _u
+}
+
+// ClearDiscussionID clears the value of the "discussion_id" field.
+func (_u *NoteHistoryUpdateOne) ClearDiscussionID() *NoteHistoryUpdateOne {
+	_u.mutation.ClearDiscussionID()
+	return _u
+}
+
+// SetIsEdited sets the "is_edited" field.
+func (_u *NoteHistoryUpdateOne) SetIsEdited(v bool) *NoteHistoryUpdateOne {
+	_u.mutation.SetIsEdited(v)
+	return _u
+}
+
+// SetNillableIsEdited sets the "is_edited" field if the given value is not nil.
+func (_u *NoteHistoryUpdateOne) SetNillableIsEdited(v *bool) *NoteHistoryUpdateOne {
+	if v != nil {
+		_u.SetIsEdited(*v)
 	}
 	return _u
 }
@@ -458,6 +581,21 @@ func (_u *NoteHistoryUpdateOne) sqlSave(ctx context.Context) (_node *NoteHistory
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(notehistory.FieldText, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.NoteRef(); ok {
+		_spec.SetField(notehistory.FieldNoteRef, field.TypeString, value)
+	}
+	if _u.mutation.NoteRefCleared() {
+		_spec.ClearField(notehistory.FieldNoteRef, field.TypeString)
+	}
+	if value, ok := _u.mutation.DiscussionID(); ok {
+		_spec.SetField(notehistory.FieldDiscussionID, field.TypeString, value)
+	}
+	if _u.mutation.DiscussionIDCleared() {
+		_spec.ClearField(notehistory.FieldDiscussionID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsEdited(); ok {
+		_spec.SetField(notehistory.FieldIsEdited, field.TypeBool, value)
 	}
 	_spec.Node.Schema = _u.schemaConfig.NoteHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

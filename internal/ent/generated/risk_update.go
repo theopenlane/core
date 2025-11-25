@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/asset"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/entity"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -687,6 +688,21 @@ func (_u *RiskUpdate) AddComments(v ...*Note) *RiskUpdate {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *RiskUpdate) AddDiscussionIDs(ids ...string) *RiskUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *RiskUpdate) AddDiscussions(v ...*Discussion) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_u *RiskUpdate) Mutation() *RiskMutation {
 	return _u.mutation
@@ -1008,6 +1024,27 @@ func (_u *RiskUpdate) RemoveComments(v ...*Note) *RiskUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *RiskUpdate) ClearDiscussions() *RiskUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *RiskUpdate) RemoveDiscussionIDs(ids ...string) *RiskUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *RiskUpdate) RemoveDiscussions(v ...*Discussion) *RiskUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -2004,6 +2041,54 @@ func (_u *RiskUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	_spec.Node.Schema = _u.schemaConfig.Risk
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
 	_spec.AddModifiers(_u.modifiers...)
@@ -2669,6 +2754,21 @@ func (_u *RiskUpdateOne) AddComments(v ...*Note) *RiskUpdateOne {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *RiskUpdateOne) AddDiscussionIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *RiskUpdateOne) AddDiscussions(v ...*Discussion) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // Mutation returns the RiskMutation object of the builder.
 func (_u *RiskUpdateOne) Mutation() *RiskMutation {
 	return _u.mutation
@@ -2990,6 +3090,27 @@ func (_u *RiskUpdateOne) RemoveComments(v ...*Note) *RiskUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *RiskUpdateOne) ClearDiscussions() *RiskUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *RiskUpdateOne) RemoveDiscussionIDs(ids ...string) *RiskUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *RiskUpdateOne) RemoveDiscussions(v ...*Discussion) *RiskUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // Where appends a list predicates to the RiskUpdate builder.
@@ -4011,6 +4132,54 @@ func (_u *RiskUpdateOne) sqlSave(ctx context.Context) (_node *Risk, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   risk.DiscussionsTable,
+			Columns: []string{risk.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

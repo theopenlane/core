@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -767,6 +768,21 @@ func (_u *ProcedureUpdate) AddComments(v ...*Note) *ProcedureUpdate {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *ProcedureUpdate) AddDiscussionIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *ProcedureUpdate) AddDiscussions(v ...*Discussion) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdate) SetFile(v *File) *ProcedureUpdate {
 	return _u.SetFileID(v.ID)
@@ -1009,6 +1025,27 @@ func (_u *ProcedureUpdate) RemoveComments(v ...*Note) *ProcedureUpdate {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *ProcedureUpdate) ClearDiscussions() *ProcedureUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *ProcedureUpdate) RemoveDiscussionIDs(ids ...string) *ProcedureUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *ProcedureUpdate) RemoveDiscussions(v ...*Discussion) *ProcedureUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -1891,6 +1928,54 @@ func (_u *ProcedureUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.FileCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -2668,6 +2753,21 @@ func (_u *ProcedureUpdateOne) AddComments(v ...*Note) *ProcedureUpdateOne {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *ProcedureUpdateOne) AddDiscussionIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *ProcedureUpdateOne) AddDiscussions(v ...*Discussion) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // SetFile sets the "file" edge to the File entity.
 func (_u *ProcedureUpdateOne) SetFile(v *File) *ProcedureUpdateOne {
 	return _u.SetFileID(v.ID)
@@ -2910,6 +3010,27 @@ func (_u *ProcedureUpdateOne) RemoveComments(v ...*Note) *ProcedureUpdateOne {
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *ProcedureUpdateOne) ClearDiscussions() *ProcedureUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *ProcedureUpdateOne) RemoveDiscussionIDs(ids ...string) *ProcedureUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *ProcedureUpdateOne) RemoveDiscussions(v ...*Discussion) *ProcedureUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearFile clears the "file" edge to the File entity.
@@ -3817,6 +3938,54 @@ func (_u *ProcedureUpdateOne) sqlSave(ctx context.Context) (_node *Procedure, er
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   procedure.DiscussionsTable,
+			Columns: []string{procedure.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

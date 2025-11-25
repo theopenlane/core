@@ -41,6 +41,12 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldText holds the string denoting the text field in the database.
 	FieldText = "text"
+	// FieldNoteRef holds the string denoting the note_ref field in the database.
+	FieldNoteRef = "note_ref"
+	// FieldDiscussionID holds the string denoting the discussion_id field in the database.
+	FieldDiscussionID = "discussion_id"
+	// FieldIsEdited holds the string denoting the is_edited field in the database.
+	FieldIsEdited = "is_edited"
 	// Table holds the table name of the notehistory in the database.
 	Table = "note_history"
 )
@@ -60,6 +66,9 @@ var Columns = []string{
 	FieldDisplayID,
 	FieldOwnerID,
 	FieldText,
+	FieldNoteRef,
+	FieldDiscussionID,
+	FieldIsEdited,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -89,6 +98,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultIsEdited holds the default value on creation for the "is_edited" field.
+	DefaultIsEdited bool
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -169,6 +180,21 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByText orders the results by the text field.
 func ByText(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldText, opts...).ToFunc()
+}
+
+// ByNoteRef orders the results by the note_ref field.
+func ByNoteRef(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldNoteRef, opts...).ToFunc()
+}
+
+// ByDiscussionID orders the results by the discussion_id field.
+func ByDiscussionID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldDiscussionID, opts...).ToFunc()
+}
+
+// ByIsEdited orders the results by the is_edited field.
+func ByIsEdited(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsEdited, opts...).ToFunc()
 }
 
 var (

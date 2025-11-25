@@ -526,6 +526,86 @@ components:
                 - schemas
                 - displayName
             type: object
+        IntegrationConfigPayload:
+            properties:
+                Provider:
+                    description: Integration provider identifier
+                    example: gcp_scc
+                    type: string
+                payload:
+                    properties:
+                        audience:
+                            type: string
+                        findingFilter:
+                            type: string
+                        organizationId:
+                            type: string
+                        projectId:
+                            type: string
+                        serviceAccountEmail:
+                            type: string
+                        workloadIdentityProvider:
+                            type: string
+                    type: object
+            type: object
+        IntegrationConfigResponse:
+            properties:
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                provider:
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                unverified:
+                    type: boolean
+            type: object
+        IntegrationOperationPayload:
+            properties:
+                Provider:
+                    description: Integration provider identifier
+                    example: gcp_scc
+                    type: string
+                payload:
+                    properties:
+                        config:
+                            additionalProperties: {}
+                            type: object
+                        force:
+                            type: boolean
+                        operation:
+                            type: string
+                    type: object
+            type: object
+        IntegrationOperationResponse:
+            properties:
+                details:
+                    additionalProperties: {}
+                    type: object
+                error:
+                    description: The error message if the request was unsuccessful
+                    type: string
+                error_code:
+                    description: The error code if the request was unsuccessful
+                    type: string
+                operation:
+                    type: string
+                provider:
+                    type: string
+                status:
+                    type: string
+                success:
+                    description: Whether or not the request was successful or not
+                    type: boolean
+                summary:
+                    type: string
+                unverified:
+                    type: boolean
+            type: object
         IntegrationTokenResponse:
             properties:
                 error:
@@ -3744,6 +3824,121 @@ paths:
             summary: Start an impersonation session to act as another user for support, administrative, or testing purposes. Requires appropriate permissions and logs all impersonation activity for audit purposes.
             tags:
                 - impersonation
+    /v1/integrations/{provider}/config:
+        post:
+            description: Persist integration credentials or configuration
+            operationId: ConfigureIntegrationProvider
+            parameters:
+                - description: 'Path parameter: provider'
+                  in: path
+                  name: provider
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    Provider: gcp_scc
+                                    payload:
+                                        audience: //iam.googleapis.com/projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider
+                                        organizationId: "1234567890"
+                                        projectId: sample-project
+                                        serviceAccountEmail: scc-runner@example.iam.gserviceaccount.com
+                                        workloadIdentityProvider: projects/123456789/locations/global/workloadIdentityPools/pool/providers/provider
+                        schema:
+                            $ref: '#/components/schemas/IntegrationConfigPayload'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        provider: gcp_scc
+                                        success: true
+                            schema:
+                                $ref: '#/components/schemas/IntegrationConfigResponse'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Persist integration credentials or configuration
+            tags:
+                - integrations
+    /v1/integrations/{provider}/operations/run:
+        post:
+            description: Execute a provider operation using stored credentials
+            operationId: RunIntegrationOperation
+            parameters:
+                - description: 'Path parameter: provider'
+                  in: path
+                  name: provider
+                  required: true
+                  schema:
+                    type: string
+            requestBody:
+                content:
+                    application/json:
+                        examples:
+                            success:
+                                value:
+                                    Provider: gcp_scc
+                                    payload:
+                                        config:
+                                            filter: severity="HIGH"
+                                            sourceId: organizations/123/sources/456
+                                        force: true
+                                        operation: findings.collect
+                        schema:
+                            $ref: '#/components/schemas/IntegrationOperationPayload'
+                description: Request body
+            responses:
+                "200":
+                    content:
+                        application/json:
+                            examples:
+                                success:
+                                    value:
+                                        details:
+                                            totalFindings: 5
+                                        operation: findings.collect
+                                        provider: gcp_scc
+                                        status: ok
+                                        success: true
+                                        summary: Collected 5 findings from organizations/123/sources/456
+                            schema:
+                                $ref: '#/components/schemas/IntegrationOperationResponse'
+                    description: Success
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: Execute a provider operation using stored credentials
+            tags:
+                - integrations
     /v1/integrations/{provider}/refresh:
         post:
             description: Refresh integration token
@@ -3876,6 +4071,27 @@ paths:
                 - basic: []
                 - apiKey: []
             summary: Start OAuth flow for integration
+            tags:
+                - integrations
+    /v1/integrations/providers:
+        get:
+            description: List available integration providers and their metadata
+            operationId: ListIntegrationProviders
+            responses:
+                "400":
+                    description: Bad Request
+                "401":
+                    description: Unauthorized
+                "500":
+                    description: Internal Server Error
+                default:
+                    description: ""
+            security:
+                - bearer: []
+                - oauth2: []
+                - basic: []
+                - apiKey: []
+            summary: List available integration providers and their metadata
             tags:
                 - integrations
     /v1/invite:
@@ -4731,7 +4947,7 @@ tags:
       name: health
     - description: End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.
       name: impersonation
-    - description: Handle OAuth callback for integration
+    - description: Execute a provider operation using stored credentials
       name: integrations
     - description: Get user information for OAuth authenticated user
       name: oauth

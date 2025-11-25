@@ -15,6 +15,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -52,6 +53,7 @@ type ProcedureQuery struct {
 	withRisks                 *RiskQuery
 	withTasks                 *TaskQuery
 	withComments              *NoteQuery
+	withDiscussions           *DiscussionQuery
 	withFile                  *FileQuery
 	withFKs                   bool
 	loadTotal                 []func(context.Context, []*Procedure) error
@@ -66,6 +68,7 @@ type ProcedureQuery struct {
 	withNamedRisks            map[string]*RiskQuery
 	withNamedTasks            map[string]*TaskQuery
 	withNamedComments         map[string]*NoteQuery
+	withNamedDiscussions      map[string]*DiscussionQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -452,6 +455,31 @@ func (_q *ProcedureQuery) QueryComments() *NoteQuery {
 	return query
 }
 
+// QueryDiscussions chains the current query on the "discussions" edge.
+func (_q *ProcedureQuery) QueryDiscussions() *DiscussionQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(procedure.Table, procedure.FieldID, selector),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, procedure.DiscussionsTable, procedure.DiscussionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryFile chains the current query on the "file" edge.
 func (_q *ProcedureQuery) QueryFile() *FileQuery {
 	query := (&FileClient{config: _q.config}).Query()
@@ -683,6 +711,7 @@ func (_q *ProcedureQuery) Clone() *ProcedureQuery {
 		withRisks:            _q.withRisks.Clone(),
 		withTasks:            _q.withTasks.Clone(),
 		withComments:         _q.withComments.Clone(),
+		withDiscussions:      _q.withDiscussions.Clone(),
 		withFile:             _q.withFile.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -845,6 +874,17 @@ func (_q *ProcedureQuery) WithComments(opts ...func(*NoteQuery)) *ProcedureQuery
 	return _q
 }
 
+// WithDiscussions tells the query-builder to eager-load the nodes that are connected to
+// the "discussions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *ProcedureQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDiscussions = query
+	return _q
+}
+
 // WithFile tells the query-builder to eager-load the nodes that are connected to
 // the "file" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *ProcedureQuery) WithFile(opts ...func(*FileQuery)) *ProcedureQuery {
@@ -941,7 +981,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		nodes       = []*Procedure{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [15]bool{
+		loadedTypes = [16]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -956,6 +996,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			_q.withRisks != nil,
 			_q.withTasks != nil,
 			_q.withComments != nil,
+			_q.withDiscussions != nil,
 			_q.withFile != nil,
 		}
 	)
@@ -1079,6 +1120,13 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 			return nil, err
 		}
 	}
+	if query := _q.withDiscussions; query != nil {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Procedure) { n.Edges.Discussions = []*Discussion{} },
+			func(n *Procedure, e *Discussion) { n.Edges.Discussions = append(n.Edges.Discussions, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withFile; query != nil {
 		if err := _q.loadFile(ctx, query, nodes, nil,
 			func(n *Procedure, e *File) { n.Edges.File = e }); err != nil {
@@ -1152,6 +1200,13 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedComments(name) },
 			func(n *Procedure, e *Note) { n.appendNamedComments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDiscussions {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *Procedure) { n.appendNamedDiscussions(name) },
+			func(n *Procedure, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1868,6 +1923,37 @@ func (_q *ProcedureQuery) loadComments(ctx context.Context, query *NoteQuery, no
 	}
 	return nil
 }
+func (_q *ProcedureQuery) loadDiscussions(ctx context.Context, query *DiscussionQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *Discussion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Procedure)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Discussion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(procedure.DiscussionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.procedure_discussions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "procedure_discussions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "procedure_discussions" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *ProcedureQuery) loadFile(ctx context.Context, query *FileQuery, nodes []*Procedure, init func(*Procedure), assign func(*Procedure, *File)) error {
 	ids := make([]string, 0, len(nodes))
 	nodeids := make(map[string][]*Procedure)
@@ -2151,6 +2237,20 @@ func (_q *ProcedureQuery) WithNamedComments(name string, opts ...func(*NoteQuery
 		_q.withNamedComments = make(map[string]*NoteQuery)
 	}
 	_q.withNamedComments[name] = query
+	return _q
+}
+
+// WithNamedDiscussions tells the query-builder to eager-load the nodes that are connected to the "discussions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *ProcedureQuery) WithNamedDiscussions(name string, opts ...func(*DiscussionQuery)) *ProcedureQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDiscussions == nil {
+		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
+	}
+	_q.withNamedDiscussions[name] = query
 	return _q
 }
 
