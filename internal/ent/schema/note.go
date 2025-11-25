@@ -44,8 +44,26 @@ func (Note) Fields() []ent.Field {
 		field.Text("text").
 			Comment("the text of the note").
 			NotEmpty(),
+		field.String("note_ref").
+			Comment("ref location of the note").
+			Optional(),
+		field.String("discussion_id").
+			Comment("the external discussion id this note is associated with").
+			Optional(),
+		field.Bool("is_edited").
+			Comment("whether the note has been edited").
+			Default(false),
 	}
 }
+
+// id
+// comment_ref (string)
+// discussion_id (number)
+// user_id (string)
+// content (json)
+// is_edited (boolean) default false
+// created_at (DateTime)
+// updated_at (DateTime)
 
 // Mixin of the Note
 func (n Note) Mixin() []ent.Mixin {
