@@ -978,6 +978,72 @@ func (r *queryResolver) DirectorySyncRuns(ctx context.Context, after *entgql.Cur
 	return res, err
 }
 
+// Discussions is the resolver for the discussions field.
+func (r *queryResolver) Discussions(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DiscussionOrder, where *generated.DiscussionWhereInput) (*generated.DiscussionConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.DiscussionOrder{
+			{
+				Field:     generated.DiscussionOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).Discussion.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDiscussionOrder(orderBy),
+		generated.WithDiscussionFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussion"})
+	}
+
+	return res, err
+}
+
+// DiscussionHistories is the resolver for the discussionHistories field.
+func (r *queryResolver) DiscussionHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.DiscussionHistoryOrder, where *generated.DiscussionHistoryWhereInput) (*generated.DiscussionHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.DiscussionHistoryOrder{
+			Field:     generated.DiscussionHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).DiscussionHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussionhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithDiscussionHistoryOrder(orderBy),
+		generated.WithDiscussionHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "discussionhistory"})
+	}
+
+	return res, err
+}
+
 // DocumentDataSlice is the resolver for the documentDataSlice field.
 func (r *queryResolver) DocumentDataSlice(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) (*generated.DocumentDataConnection, error) {
 	// set page limit if nothing was set

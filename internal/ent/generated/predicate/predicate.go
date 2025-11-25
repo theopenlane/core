@@ -93,6 +93,12 @@ type DirectoryMembershipHistory func(*sql.Selector)
 // DirectorySyncRun is the predicate function for directorysyncrun builders.
 type DirectorySyncRun func(*sql.Selector)
 
+// Discussion is the predicate function for discussion builders.
+type Discussion func(*sql.Selector)
+
+// DiscussionHistory is the predicate function for discussionhistory builders.
+type DiscussionHistory func(*sql.Selector)
+
 // DocumentData is the predicate function for documentdata builders.
 type DocumentData func(*sql.Selector)
 

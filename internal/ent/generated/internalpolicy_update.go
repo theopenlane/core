@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -805,6 +806,21 @@ func (_u *InternalPolicyUpdate) AddComments(v ...*Note) *InternalPolicyUpdate {
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *InternalPolicyUpdate) AddDiscussionIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdate) AddDiscussions(v ...*Discussion) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *InternalPolicyUpdate) AddWorkflowObjectRefIDs(ids ...string) *InternalPolicyUpdate {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -1105,6 +1121,27 @@ func (_u *InternalPolicyUpdate) RemoveComments(v ...*Note) *InternalPolicyUpdate
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdate) ClearDiscussions() *InternalPolicyUpdate {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *InternalPolicyUpdate) RemoveDiscussionIDs(ids ...string) *InternalPolicyUpdate {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *InternalPolicyUpdate) RemoveDiscussions(v ...*Discussion) *InternalPolicyUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -2129,6 +2166,54 @@ func (_u *InternalPolicyUpdate) sqlSave(ctx context.Context) (_node int, err err
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.WorkflowObjectRefsCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
@@ -2958,6 +3043,21 @@ func (_u *InternalPolicyUpdateOne) AddComments(v ...*Note) *InternalPolicyUpdate
 	return _u.AddCommentIDs(ids...)
 }
 
+// AddDiscussionIDs adds the "discussions" edge to the Discussion entity by IDs.
+func (_u *InternalPolicyUpdateOne) AddDiscussionIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.AddDiscussionIDs(ids...)
+	return _u
+}
+
+// AddDiscussions adds the "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdateOne) AddDiscussions(v ...*Discussion) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddDiscussionIDs(ids...)
+}
+
 // AddWorkflowObjectRefIDs adds the "workflow_object_refs" edge to the WorkflowObjectRef entity by IDs.
 func (_u *InternalPolicyUpdateOne) AddWorkflowObjectRefIDs(ids ...string) *InternalPolicyUpdateOne {
 	_u.mutation.AddWorkflowObjectRefIDs(ids...)
@@ -3258,6 +3358,27 @@ func (_u *InternalPolicyUpdateOne) RemoveComments(v ...*Note) *InternalPolicyUpd
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveCommentIDs(ids...)
+}
+
+// ClearDiscussions clears all "discussions" edges to the Discussion entity.
+func (_u *InternalPolicyUpdateOne) ClearDiscussions() *InternalPolicyUpdateOne {
+	_u.mutation.ClearDiscussions()
+	return _u
+}
+
+// RemoveDiscussionIDs removes the "discussions" edge to Discussion entities by IDs.
+func (_u *InternalPolicyUpdateOne) RemoveDiscussionIDs(ids ...string) *InternalPolicyUpdateOne {
+	_u.mutation.RemoveDiscussionIDs(ids...)
+	return _u
+}
+
+// RemoveDiscussions removes "discussions" edges to Discussion entities.
+func (_u *InternalPolicyUpdateOne) RemoveDiscussions(v ...*Discussion) *InternalPolicyUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveDiscussionIDs(ids...)
 }
 
 // ClearWorkflowObjectRefs clears all "workflow_object_refs" edges to the WorkflowObjectRef entity.
@@ -4307,6 +4428,54 @@ func (_u *InternalPolicyUpdateOne) sqlSave(ctx context.Context) (_node *Internal
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedDiscussionsIDs(); len(nodes) > 0 && !_u.mutation.DiscussionsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.DiscussionsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   internalpolicy.DiscussionsTable,
+			Columns: []string{internalpolicy.DiscussionsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(discussion.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Discussion
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

@@ -36,6 +36,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/directorymembership"
 	"github.com/theopenlane/core/internal/ent/generated/directorymembershiphistory"
 	"github.com/theopenlane/core/internal/ent/generated/directorysyncrun"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
+	"github.com/theopenlane/core/internal/ent/generated/discussionhistory"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/dnsverificationhistory"
 	"github.com/theopenlane/core/internal/ent/generated/documentdata"
@@ -303,6 +305,16 @@ var directorysyncrunImplementors = []string{"DirectorySyncRun", "Node"}
 
 // IsNode implements the Node interface check for GQLGen.
 func (*DirectorySyncRun) IsNode() {}
+
+var discussionImplementors = []string{"Discussion", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*Discussion) IsNode() {}
+
+var discussionhistoryImplementors = []string{"DiscussionHistory", "Node"}
+
+// IsNode implements the Node interface check for GQLGen.
+func (*DiscussionHistory) IsNode() {}
 
 var documentdataImplementors = []string{"DocumentData", "Node"}
 
@@ -1189,6 +1201,24 @@ func (c *Client) noder(ctx context.Context, table string, id string) (Noder, err
 			Where(directorysyncrun.ID(id))
 		if fc := graphql.GetFieldContext(ctx); fc != nil {
 			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, directorysyncrunImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case discussion.Table:
+		query := c.Discussion.Query().
+			Where(discussion.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, discussionImplementors...); err != nil {
+				return nil, err
+			}
+		}
+		return query.Only(ctx)
+	case discussionhistory.Table:
+		query := c.DiscussionHistory.Query().
+			Where(discussionhistory.ID(id))
+		if fc := graphql.GetFieldContext(ctx); fc != nil {
+			if err := query.collectField(ctx, true, graphql.GetOperationContext(ctx), fc.Field, nil, discussionhistoryImplementors...); err != nil {
 				return nil, err
 			}
 		}
@@ -2744,6 +2774,38 @@ func (c *Client) noders(ctx context.Context, table string, ids []string) ([]Node
 		query := c.DirectorySyncRun.Query().
 			Where(directorysyncrun.IDIn(ids...))
 		query, err := query.CollectFields(ctx, directorysyncrunImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case discussion.Table:
+		query := c.Discussion.Query().
+			Where(discussion.IDIn(ids...))
+		query, err := query.CollectFields(ctx, discussionImplementors...)
+		if err != nil {
+			return nil, err
+		}
+		nodes, err := query.All(ctx)
+		if err != nil {
+			return nil, err
+		}
+		for _, node := range nodes {
+			for _, noder := range idmap[node.ID] {
+				*noder = node
+			}
+		}
+	case discussionhistory.Table:
+		query := c.DiscussionHistory.Query().
+			Where(discussionhistory.IDIn(ids...))
+		query, err := query.CollectFields(ctx, discussionhistoryImplementors...)
 		if err != nil {
 			return nil, err
 		}

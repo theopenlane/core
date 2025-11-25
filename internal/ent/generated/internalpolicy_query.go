@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlimplementation"
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
+	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/group"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
@@ -58,6 +59,7 @@ type InternalPolicyQuery struct {
 	withPrograms                    *ProgramQuery
 	withFile                        *FileQuery
 	withComments                    *NoteQuery
+	withDiscussions                 *DiscussionQuery
 	withWorkflowObjectRefs          *WorkflowObjectRefQuery
 	withFKs                         bool
 	loadTotal                       []func(context.Context, []*InternalPolicy) error
@@ -74,6 +76,7 @@ type InternalPolicyQuery struct {
 	withNamedRisks                  map[string]*RiskQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedComments               map[string]*NoteQuery
+	withNamedDiscussions            map[string]*DiscussionQuery
 	withNamedWorkflowObjectRefs     map[string]*WorkflowObjectRefQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -536,6 +539,31 @@ func (_q *InternalPolicyQuery) QueryComments() *NoteQuery {
 	return query
 }
 
+// QueryDiscussions chains the current query on the "discussions" edge.
+func (_q *InternalPolicyQuery) QueryDiscussions() *DiscussionQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(internalpolicy.Table, internalpolicy.FieldID, selector),
+			sqlgraph.To(discussion.Table, discussion.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, internalpolicy.DiscussionsTable, internalpolicy.DiscussionsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Discussion
+		step.Edge.Schema = schemaConfig.Discussion
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // QueryWorkflowObjectRefs chains the current query on the "workflow_object_refs" edge.
 func (_q *InternalPolicyQuery) QueryWorkflowObjectRefs() *WorkflowObjectRefQuery {
 	query := (&WorkflowObjectRefClient{config: _q.config}).Query()
@@ -770,6 +798,7 @@ func (_q *InternalPolicyQuery) Clone() *InternalPolicyQuery {
 		withPrograms:               _q.withPrograms.Clone(),
 		withFile:                   _q.withFile.Clone(),
 		withComments:               _q.withComments.Clone(),
+		withDiscussions:            _q.withDiscussions.Clone(),
 		withWorkflowObjectRefs:     _q.withWorkflowObjectRefs.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
@@ -965,6 +994,17 @@ func (_q *InternalPolicyQuery) WithComments(opts ...func(*NoteQuery)) *InternalP
 	return _q
 }
 
+// WithDiscussions tells the query-builder to eager-load the nodes that are connected to
+// the "discussions" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithDiscussions(opts ...func(*DiscussionQuery)) *InternalPolicyQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withDiscussions = query
+	return _q
+}
+
 // WithWorkflowObjectRefs tells the query-builder to eager-load the nodes that are connected to
 // the "workflow_object_refs" edge. The optional arguments are used to configure the query builder of the edge.
 func (_q *InternalPolicyQuery) WithWorkflowObjectRefs(opts ...func(*WorkflowObjectRefQuery)) *InternalPolicyQuery {
@@ -1061,7 +1101,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		nodes       = []*InternalPolicy{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [18]bool{
+		loadedTypes = [19]bool{
 			_q.withOwner != nil,
 			_q.withBlockedGroups != nil,
 			_q.withEditors != nil,
@@ -1079,6 +1119,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			_q.withPrograms != nil,
 			_q.withFile != nil,
 			_q.withComments != nil,
+			_q.withDiscussions != nil,
 			_q.withWorkflowObjectRefs != nil,
 		}
 	)
@@ -1226,6 +1267,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			return nil, err
 		}
 	}
+	if query := _q.withDiscussions; query != nil {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *InternalPolicy) { n.Edges.Discussions = []*Discussion{} },
+			func(n *InternalPolicy, e *Discussion) { n.Edges.Discussions = append(n.Edges.Discussions, e) }); err != nil {
+			return nil, err
+		}
+	}
 	if query := _q.withWorkflowObjectRefs; query != nil {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
@@ -1316,6 +1364,13 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedComments(name) },
 			func(n *InternalPolicy, e *Note) { n.appendNamedComments(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedDiscussions {
+		if err := _q.loadDiscussions(ctx, query, nodes,
+			func(n *InternalPolicy) { n.appendNamedDiscussions(name) },
+			func(n *InternalPolicy, e *Discussion) { n.appendNamedDiscussions(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2164,6 +2219,37 @@ func (_q *InternalPolicyQuery) loadComments(ctx context.Context, query *NoteQuer
 	}
 	return nil
 }
+func (_q *InternalPolicyQuery) loadDiscussions(ctx context.Context, query *DiscussionQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *Discussion)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*InternalPolicy)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Discussion(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(internalpolicy.DiscussionsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.internal_policy_discussions
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "internal_policy_discussions" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "internal_policy_discussions" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 func (_q *InternalPolicyQuery) loadWorkflowObjectRefs(ctx context.Context, query *WorkflowObjectRefQuery, nodes []*InternalPolicy, init func(*InternalPolicy), assign func(*InternalPolicy, *WorkflowObjectRef)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[string]*InternalPolicy)
@@ -2474,6 +2560,20 @@ func (_q *InternalPolicyQuery) WithNamedComments(name string, opts ...func(*Note
 		_q.withNamedComments = make(map[string]*NoteQuery)
 	}
 	_q.withNamedComments[name] = query
+	return _q
+}
+
+// WithNamedDiscussions tells the query-builder to eager-load the nodes that are connected to the "discussions"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *InternalPolicyQuery) WithNamedDiscussions(name string, opts ...func(*DiscussionQuery)) *InternalPolicyQuery {
+	query := (&DiscussionClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedDiscussions == nil {
+		_q.withNamedDiscussions = make(map[string]*DiscussionQuery)
+	}
+	_q.withNamedDiscussions[name] = query
 	return _q
 }
 

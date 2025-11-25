@@ -127,13 +127,15 @@ type ProcedureEdges struct {
 	Tasks []*Task `json:"tasks,omitempty"`
 	// conversations related to the procedure
 	Comments []*Note `json:"comments,omitempty"`
+	// discussions related to the procedure
+	Discussions []*Discussion `json:"discussions,omitempty"`
 	// File holds the value of the file edge.
 	File *File `json:"file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [15]bool
+	loadedTypes [16]bool
 	// totalCount holds the count of the edges above.
-	totalCount [15]map[string]int
+	totalCount [16]map[string]int
 
 	namedBlockedGroups    map[string][]*Group
 	namedEditors          map[string][]*Group
@@ -145,6 +147,7 @@ type ProcedureEdges struct {
 	namedRisks            map[string][]*Risk
 	namedTasks            map[string][]*Task
 	namedComments         map[string][]*Note
+	namedDiscussions      map[string][]*Discussion
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -281,12 +284,21 @@ func (e ProcedureEdges) CommentsOrErr() ([]*Note, error) {
 	return nil, &NotLoadedError{edge: "comments"}
 }
 
+// DiscussionsOrErr returns the Discussions value or an error if the edge
+// was not loaded in eager-loading.
+func (e ProcedureEdges) DiscussionsOrErr() ([]*Discussion, error) {
+	if e.loadedTypes[14] {
+		return e.Discussions, nil
+	}
+	return nil, &NotLoadedError{edge: "discussions"}
+}
+
 // FileOrErr returns the File value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e ProcedureEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[14] {
+	} else if e.loadedTypes[15] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -641,6 +653,11 @@ func (_m *Procedure) QueryTasks() *TaskQuery {
 // QueryComments queries the "comments" edge of the Procedure entity.
 func (_m *Procedure) QueryComments() *NoteQuery {
 	return NewProcedureClient(_m.config).QueryComments(_m)
+}
+
+// QueryDiscussions queries the "discussions" edge of the Procedure entity.
+func (_m *Procedure) QueryDiscussions() *DiscussionQuery {
+	return NewProcedureClient(_m.config).QueryDiscussions(_m)
 }
 
 // QueryFile queries the "file" edge of the Procedure entity.
@@ -1018,6 +1035,30 @@ func (_m *Procedure) appendNamedComments(name string, edges ...*Note) {
 		_m.Edges.namedComments[name] = []*Note{}
 	} else {
 		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
+	}
+}
+
+// NamedDiscussions returns the Discussions named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Procedure) NamedDiscussions(name string) ([]*Discussion, error) {
+	if _m.Edges.namedDiscussions == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedDiscussions[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Procedure) appendNamedDiscussions(name string, edges ...*Discussion) {
+	if _m.Edges.namedDiscussions == nil {
+		_m.Edges.namedDiscussions = make(map[string][]*Discussion)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedDiscussions[name] = []*Discussion{}
+	} else {
+		_m.Edges.namedDiscussions[name] = append(_m.Edges.namedDiscussions[name], edges...)
 	}
 }
 
