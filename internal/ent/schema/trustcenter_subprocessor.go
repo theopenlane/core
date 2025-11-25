@@ -84,9 +84,6 @@ func (t TrustCenterSubprocessor) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
-			annotations: []schema.Annotation{
-				accessmap.EdgeViewCheck(Organization{}.Name()),
-			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: t,
@@ -109,6 +106,9 @@ func (TrustCenterSubprocessor) Hooks() []ent.Hook {
 func (t TrustCenterSubprocessor) Policy() ent.Policy {
 	return policy.NewPolicy(
 		policy.WithMutationRules(
+			policy.CanCreateObjectsUnderParents([]string{
+				TrustCenter{}.Name(),
+			}),
 			entfga.CheckEditAccess[*generated.TrustCenterSubprocessorMutation](),
 		),
 	)

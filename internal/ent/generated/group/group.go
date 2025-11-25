@@ -382,6 +382,8 @@ var ForeignKeys = []string{
 	"organization_standard_creators",
 	"organization_template_creators",
 	"organization_subprocessor_creators",
+	"organization_trust_center_doc_creators",
+	"organization_trust_center_subprocessor_creators",
 	"remediation_blocked_groups",
 	"remediation_editors",
 	"remediation_viewers",

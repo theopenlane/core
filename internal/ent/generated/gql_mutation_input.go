@@ -9731,95 +9731,97 @@ func (c *OrgMembershipUpdateOne) SetInput(i UpdateOrgMembershipInput) *OrgMember
 
 // CreateOrganizationInput represents a mutation input for creating organizations.
 type CreateOrganizationInput struct {
-	Tags                            []string
-	Name                            string
-	DisplayName                     *string
-	Description                     *string
-	PersonalOrg                     *bool
-	AvatarRemoteURL                 *string
-	AvatarUpdatedAt                 *time.Time
-	DedicatedDb                     *bool
-	ControlCreatorIDs               []string
-	ControlImplementationCreatorIDs []string
-	ControlObjectiveCreatorIDs      []string
-	EvidenceCreatorIDs              []string
-	GroupCreatorIDs                 []string
-	InternalPolicyCreatorIDs        []string
-	MappedControlCreatorIDs         []string
-	NarrativeCreatorIDs             []string
-	ProcedureCreatorIDs             []string
-	ProgramCreatorIDs               []string
-	RiskCreatorIDs                  []string
-	ScheduledJobCreatorIDs          []string
-	StandardCreatorIDs              []string
-	TemplateCreatorIDs              []string
-	SubprocessorCreatorIDs          []string
-	ParentID                        *string
-	SettingID                       *string
-	PersonalAccessTokenIDs          []string
-	APITokenIDs                     []string
-	FileIDs                         []string
-	EventIDs                        []string
-	SecretIDs                       []string
-	AvatarFileID                    *string
-	GroupIDs                        []string
-	TemplateIDs                     []string
-	IntegrationIDs                  []string
-	DocumentIDs                     []string
-	OrgSubscriptionIDs              []string
-	InviteIDs                       []string
-	SubscriberIDs                   []string
-	EntityIDs                       []string
-	EntityTypeIDs                   []string
-	ContactIDs                      []string
-	NoteIDs                         []string
-	TaskIDs                         []string
-	ProgramIDs                      []string
-	ProcedureIDs                    []string
-	InternalPolicyIDs               []string
-	RiskIDs                         []string
-	ControlObjectiveIDs             []string
-	NarrativeIDs                    []string
-	ControlIDs                      []string
-	SubcontrolIDs                   []string
-	ControlImplementationIDs        []string
-	MappedControlIDs                []string
-	EvidenceIDs                     []string
-	StandardIDs                     []string
-	ActionPlanIDs                   []string
-	CustomDomainIDs                 []string
-	JobRunnerIDs                    []string
-	JobRunnerTokenIDs               []string
-	JobRunnerRegistrationTokenIDs   []string
-	DNSVerificationIDs              []string
-	JobTemplateIDs                  []string
-	ScheduledJobIDs                 []string
-	JobResultIDs                    []string
-	ScheduledJobRunIDs              []string
-	TrustCenterIDs                  []string
-	AssetIDs                        []string
-	ScanIDs                         []string
-	SubprocessorIDs                 []string
-	ExportIDs                       []string
-	TrustCenterWatermarkConfigIDs   []string
-	ImpersonationEventIDs           []string
-	AssessmentIDs                   []string
-	AssessmentResponseIDs           []string
-	CustomTypeEnumIDs               []string
-	TagDefinitionIDs                []string
-	RemediationIDs                  []string
-	FindingIDs                      []string
-	ReviewIDs                       []string
-	VulnerabilityIDs                []string
-	WorkflowDefinitionIDs           []string
-	WorkflowInstanceIDs             []string
-	WorkflowEventIDs                []string
-	WorkflowAssignmentIDs           []string
-	WorkflowAssignmentTargetIDs     []string
-	WorkflowObjectRefIDs            []string
-	DirectoryAccountIDs             []string
-	DirectoryGroupIDs               []string
-	DirectorySyncRunIDs             []string
+	Tags                              []string
+	Name                              string
+	DisplayName                       *string
+	Description                       *string
+	PersonalOrg                       *bool
+	AvatarRemoteURL                   *string
+	AvatarUpdatedAt                   *time.Time
+	DedicatedDb                       *bool
+	ControlCreatorIDs                 []string
+	ControlImplementationCreatorIDs   []string
+	ControlObjectiveCreatorIDs        []string
+	EvidenceCreatorIDs                []string
+	GroupCreatorIDs                   []string
+	InternalPolicyCreatorIDs          []string
+	MappedControlCreatorIDs           []string
+	NarrativeCreatorIDs               []string
+	ProcedureCreatorIDs               []string
+	ProgramCreatorIDs                 []string
+	RiskCreatorIDs                    []string
+	ScheduledJobCreatorIDs            []string
+	StandardCreatorIDs                []string
+	TemplateCreatorIDs                []string
+	SubprocessorCreatorIDs            []string
+	TrustCenterDocCreatorIDs          []string
+	TrustCenterSubprocessorCreatorIDs []string
+	ParentID                          *string
+	SettingID                         *string
+	PersonalAccessTokenIDs            []string
+	APITokenIDs                       []string
+	FileIDs                           []string
+	EventIDs                          []string
+	SecretIDs                         []string
+	AvatarFileID                      *string
+	GroupIDs                          []string
+	TemplateIDs                       []string
+	IntegrationIDs                    []string
+	DocumentIDs                       []string
+	OrgSubscriptionIDs                []string
+	InviteIDs                         []string
+	SubscriberIDs                     []string
+	EntityIDs                         []string
+	EntityTypeIDs                     []string
+	ContactIDs                        []string
+	NoteIDs                           []string
+	TaskIDs                           []string
+	ProgramIDs                        []string
+	ProcedureIDs                      []string
+	InternalPolicyIDs                 []string
+	RiskIDs                           []string
+	ControlObjectiveIDs               []string
+	NarrativeIDs                      []string
+	ControlIDs                        []string
+	SubcontrolIDs                     []string
+	ControlImplementationIDs          []string
+	MappedControlIDs                  []string
+	EvidenceIDs                       []string
+	StandardIDs                       []string
+	ActionPlanIDs                     []string
+	CustomDomainIDs                   []string
+	JobRunnerIDs                      []string
+	JobRunnerTokenIDs                 []string
+	JobRunnerRegistrationTokenIDs     []string
+	DNSVerificationIDs                []string
+	JobTemplateIDs                    []string
+	ScheduledJobIDs                   []string
+	JobResultIDs                      []string
+	ScheduledJobRunIDs                []string
+	TrustCenterIDs                    []string
+	AssetIDs                          []string
+	ScanIDs                           []string
+	SubprocessorIDs                   []string
+	ExportIDs                         []string
+	TrustCenterWatermarkConfigIDs     []string
+	ImpersonationEventIDs             []string
+	AssessmentIDs                     []string
+	AssessmentResponseIDs             []string
+	CustomTypeEnumIDs                 []string
+	TagDefinitionIDs                  []string
+	RemediationIDs                    []string
+	FindingIDs                        []string
+	ReviewIDs                         []string
+	VulnerabilityIDs                  []string
+	WorkflowDefinitionIDs             []string
+	WorkflowInstanceIDs               []string
+	WorkflowEventIDs                  []string
+	WorkflowAssignmentIDs             []string
+	WorkflowAssignmentTargetIDs       []string
+	WorkflowObjectRefIDs              []string
+	DirectoryAccountIDs               []string
+	DirectoryGroupIDs                 []string
+	DirectorySyncRunIDs               []string
 }
 
 // Mutate applies the CreateOrganizationInput on the OrganizationMutation builder.
@@ -9890,6 +9892,12 @@ func (i *CreateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.SubprocessorCreatorIDs; len(v) > 0 {
 		m.AddSubprocessorCreatorIDs(v...)
+	}
+	if v := i.TrustCenterDocCreatorIDs; len(v) > 0 {
+		m.AddTrustCenterDocCreatorIDs(v...)
+	}
+	if v := i.TrustCenterSubprocessorCreatorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorCreatorIDs(v...)
 	}
 	if v := i.ParentID; v != nil {
 		m.SetParentID(*v)
@@ -10099,255 +10107,261 @@ func (c *OrganizationCreate) SetInput(i CreateOrganizationInput) *OrganizationCr
 
 // UpdateOrganizationInput represents a mutation input for updating organizations.
 type UpdateOrganizationInput struct {
-	ClearTags                             bool
-	Tags                                  []string
-	AppendTags                            []string
-	Name                                  *string
-	DisplayName                           *string
-	ClearDescription                      bool
-	Description                           *string
-	ClearAvatarRemoteURL                  bool
-	AvatarRemoteURL                       *string
-	ClearAvatarUpdatedAt                  bool
-	AvatarUpdatedAt                       *time.Time
-	ClearControlCreators                  bool
-	AddControlCreatorIDs                  []string
-	RemoveControlCreatorIDs               []string
-	ClearControlImplementationCreators    bool
-	AddControlImplementationCreatorIDs    []string
-	RemoveControlImplementationCreatorIDs []string
-	ClearControlObjectiveCreators         bool
-	AddControlObjectiveCreatorIDs         []string
-	RemoveControlObjectiveCreatorIDs      []string
-	ClearEvidenceCreators                 bool
-	AddEvidenceCreatorIDs                 []string
-	RemoveEvidenceCreatorIDs              []string
-	ClearGroupCreators                    bool
-	AddGroupCreatorIDs                    []string
-	RemoveGroupCreatorIDs                 []string
-	ClearInternalPolicyCreators           bool
-	AddInternalPolicyCreatorIDs           []string
-	RemoveInternalPolicyCreatorIDs        []string
-	ClearMappedControlCreators            bool
-	AddMappedControlCreatorIDs            []string
-	RemoveMappedControlCreatorIDs         []string
-	ClearNarrativeCreators                bool
-	AddNarrativeCreatorIDs                []string
-	RemoveNarrativeCreatorIDs             []string
-	ClearProcedureCreators                bool
-	AddProcedureCreatorIDs                []string
-	RemoveProcedureCreatorIDs             []string
-	ClearProgramCreators                  bool
-	AddProgramCreatorIDs                  []string
-	RemoveProgramCreatorIDs               []string
-	ClearRiskCreators                     bool
-	AddRiskCreatorIDs                     []string
-	RemoveRiskCreatorIDs                  []string
-	ClearScheduledJobCreators             bool
-	AddScheduledJobCreatorIDs             []string
-	RemoveScheduledJobCreatorIDs          []string
-	ClearStandardCreators                 bool
-	AddStandardCreatorIDs                 []string
-	RemoveStandardCreatorIDs              []string
-	ClearTemplateCreators                 bool
-	AddTemplateCreatorIDs                 []string
-	RemoveTemplateCreatorIDs              []string
-	ClearSubprocessorCreators             bool
-	AddSubprocessorCreatorIDs             []string
-	RemoveSubprocessorCreatorIDs          []string
-	ClearSetting                          bool
-	SettingID                             *string
-	ClearPersonalAccessTokens             bool
-	AddPersonalAccessTokenIDs             []string
-	RemovePersonalAccessTokenIDs          []string
-	ClearAPITokens                        bool
-	AddAPITokenIDs                        []string
-	RemoveAPITokenIDs                     []string
-	ClearFiles                            bool
-	AddFileIDs                            []string
-	RemoveFileIDs                         []string
-	ClearEvents                           bool
-	AddEventIDs                           []string
-	RemoveEventIDs                        []string
-	ClearSecrets                          bool
-	AddSecretIDs                          []string
-	RemoveSecretIDs                       []string
-	ClearAvatarFile                       bool
-	AvatarFileID                          *string
-	ClearGroups                           bool
-	AddGroupIDs                           []string
-	RemoveGroupIDs                        []string
-	ClearTemplates                        bool
-	AddTemplateIDs                        []string
-	RemoveTemplateIDs                     []string
-	ClearIntegrations                     bool
-	AddIntegrationIDs                     []string
-	RemoveIntegrationIDs                  []string
-	ClearDocuments                        bool
-	AddDocumentIDs                        []string
-	RemoveDocumentIDs                     []string
-	ClearOrgSubscriptions                 bool
-	AddOrgSubscriptionIDs                 []string
-	RemoveOrgSubscriptionIDs              []string
-	ClearInvites                          bool
-	AddInviteIDs                          []string
-	RemoveInviteIDs                       []string
-	ClearSubscribers                      bool
-	AddSubscriberIDs                      []string
-	RemoveSubscriberIDs                   []string
-	ClearEntities                         bool
-	AddEntityIDs                          []string
-	RemoveEntityIDs                       []string
-	ClearEntityTypes                      bool
-	AddEntityTypeIDs                      []string
-	RemoveEntityTypeIDs                   []string
-	ClearContacts                         bool
-	AddContactIDs                         []string
-	RemoveContactIDs                      []string
-	ClearNotes                            bool
-	AddNoteIDs                            []string
-	RemoveNoteIDs                         []string
-	ClearTasks                            bool
-	AddTaskIDs                            []string
-	RemoveTaskIDs                         []string
-	ClearPrograms                         bool
-	AddProgramIDs                         []string
-	RemoveProgramIDs                      []string
-	ClearProcedures                       bool
-	AddProcedureIDs                       []string
-	RemoveProcedureIDs                    []string
-	ClearInternalPolicies                 bool
-	AddInternalPolicyIDs                  []string
-	RemoveInternalPolicyIDs               []string
-	ClearRisks                            bool
-	AddRiskIDs                            []string
-	RemoveRiskIDs                         []string
-	ClearControlObjectives                bool
-	AddControlObjectiveIDs                []string
-	RemoveControlObjectiveIDs             []string
-	ClearNarratives                       bool
-	AddNarrativeIDs                       []string
-	RemoveNarrativeIDs                    []string
-	ClearControls                         bool
-	AddControlIDs                         []string
-	RemoveControlIDs                      []string
-	ClearSubcontrols                      bool
-	AddSubcontrolIDs                      []string
-	RemoveSubcontrolIDs                   []string
-	ClearControlImplementations           bool
-	AddControlImplementationIDs           []string
-	RemoveControlImplementationIDs        []string
-	ClearMappedControls                   bool
-	AddMappedControlIDs                   []string
-	RemoveMappedControlIDs                []string
-	ClearEvidence                         bool
-	AddEvidenceIDs                        []string
-	RemoveEvidenceIDs                     []string
-	ClearStandards                        bool
-	AddStandardIDs                        []string
-	RemoveStandardIDs                     []string
-	ClearActionPlans                      bool
-	AddActionPlanIDs                      []string
-	RemoveActionPlanIDs                   []string
-	ClearCustomDomains                    bool
-	AddCustomDomainIDs                    []string
-	RemoveCustomDomainIDs                 []string
-	ClearJobRunners                       bool
-	AddJobRunnerIDs                       []string
-	RemoveJobRunnerIDs                    []string
-	ClearJobRunnerTokens                  bool
-	AddJobRunnerTokenIDs                  []string
-	RemoveJobRunnerTokenIDs               []string
-	ClearJobRunnerRegistrationTokens      bool
-	AddJobRunnerRegistrationTokenIDs      []string
-	RemoveJobRunnerRegistrationTokenIDs   []string
-	ClearDNSVerifications                 bool
-	AddDNSVerificationIDs                 []string
-	RemoveDNSVerificationIDs              []string
-	ClearJobTemplates                     bool
-	AddJobTemplateIDs                     []string
-	RemoveJobTemplateIDs                  []string
-	ClearScheduledJobs                    bool
-	AddScheduledJobIDs                    []string
-	RemoveScheduledJobIDs                 []string
-	ClearJobResults                       bool
-	AddJobResultIDs                       []string
-	RemoveJobResultIDs                    []string
-	ClearScheduledJobRuns                 bool
-	AddScheduledJobRunIDs                 []string
-	RemoveScheduledJobRunIDs              []string
-	ClearTrustCenters                     bool
-	AddTrustCenterIDs                     []string
-	RemoveTrustCenterIDs                  []string
-	ClearAssets                           bool
-	AddAssetIDs                           []string
-	RemoveAssetIDs                        []string
-	ClearScans                            bool
-	AddScanIDs                            []string
-	RemoveScanIDs                         []string
-	ClearSubprocessors                    bool
-	AddSubprocessorIDs                    []string
-	RemoveSubprocessorIDs                 []string
-	ClearExports                          bool
-	AddExportIDs                          []string
-	RemoveExportIDs                       []string
-	ClearTrustCenterWatermarkConfigs      bool
-	AddTrustCenterWatermarkConfigIDs      []string
-	RemoveTrustCenterWatermarkConfigIDs   []string
-	ClearImpersonationEvents              bool
-	AddImpersonationEventIDs              []string
-	RemoveImpersonationEventIDs           []string
-	ClearAssessments                      bool
-	AddAssessmentIDs                      []string
-	RemoveAssessmentIDs                   []string
-	ClearAssessmentResponses              bool
-	AddAssessmentResponseIDs              []string
-	RemoveAssessmentResponseIDs           []string
-	ClearCustomTypeEnums                  bool
-	AddCustomTypeEnumIDs                  []string
-	RemoveCustomTypeEnumIDs               []string
-	ClearTagDefinitions                   bool
-	AddTagDefinitionIDs                   []string
-	RemoveTagDefinitionIDs                []string
-	ClearRemediations                     bool
-	AddRemediationIDs                     []string
-	RemoveRemediationIDs                  []string
-	ClearFindings                         bool
-	AddFindingIDs                         []string
-	RemoveFindingIDs                      []string
-	ClearReviews                          bool
-	AddReviewIDs                          []string
-	RemoveReviewIDs                       []string
-	ClearVulnerabilities                  bool
-	AddVulnerabilityIDs                   []string
-	RemoveVulnerabilityIDs                []string
-	ClearWorkflowDefinitions              bool
-	AddWorkflowDefinitionIDs              []string
-	RemoveWorkflowDefinitionIDs           []string
-	ClearWorkflowInstances                bool
-	AddWorkflowInstanceIDs                []string
-	RemoveWorkflowInstanceIDs             []string
-	ClearWorkflowEvents                   bool
-	AddWorkflowEventIDs                   []string
-	RemoveWorkflowEventIDs                []string
-	ClearWorkflowAssignments              bool
-	AddWorkflowAssignmentIDs              []string
-	RemoveWorkflowAssignmentIDs           []string
-	ClearWorkflowAssignmentTargets        bool
-	AddWorkflowAssignmentTargetIDs        []string
-	RemoveWorkflowAssignmentTargetIDs     []string
-	ClearWorkflowObjectRefs               bool
-	AddWorkflowObjectRefIDs               []string
-	RemoveWorkflowObjectRefIDs            []string
-	ClearDirectoryAccounts                bool
-	AddDirectoryAccountIDs                []string
-	RemoveDirectoryAccountIDs             []string
-	ClearDirectoryGroups                  bool
-	AddDirectoryGroupIDs                  []string
-	RemoveDirectoryGroupIDs               []string
-	ClearDirectorySyncRuns                bool
-	AddDirectorySyncRunIDs                []string
-	RemoveDirectorySyncRunIDs             []string
+	ClearTags                               bool
+	Tags                                    []string
+	AppendTags                              []string
+	Name                                    *string
+	DisplayName                             *string
+	ClearDescription                        bool
+	Description                             *string
+	ClearAvatarRemoteURL                    bool
+	AvatarRemoteURL                         *string
+	ClearAvatarUpdatedAt                    bool
+	AvatarUpdatedAt                         *time.Time
+	ClearControlCreators                    bool
+	AddControlCreatorIDs                    []string
+	RemoveControlCreatorIDs                 []string
+	ClearControlImplementationCreators      bool
+	AddControlImplementationCreatorIDs      []string
+	RemoveControlImplementationCreatorIDs   []string
+	ClearControlObjectiveCreators           bool
+	AddControlObjectiveCreatorIDs           []string
+	RemoveControlObjectiveCreatorIDs        []string
+	ClearEvidenceCreators                   bool
+	AddEvidenceCreatorIDs                   []string
+	RemoveEvidenceCreatorIDs                []string
+	ClearGroupCreators                      bool
+	AddGroupCreatorIDs                      []string
+	RemoveGroupCreatorIDs                   []string
+	ClearInternalPolicyCreators             bool
+	AddInternalPolicyCreatorIDs             []string
+	RemoveInternalPolicyCreatorIDs          []string
+	ClearMappedControlCreators              bool
+	AddMappedControlCreatorIDs              []string
+	RemoveMappedControlCreatorIDs           []string
+	ClearNarrativeCreators                  bool
+	AddNarrativeCreatorIDs                  []string
+	RemoveNarrativeCreatorIDs               []string
+	ClearProcedureCreators                  bool
+	AddProcedureCreatorIDs                  []string
+	RemoveProcedureCreatorIDs               []string
+	ClearProgramCreators                    bool
+	AddProgramCreatorIDs                    []string
+	RemoveProgramCreatorIDs                 []string
+	ClearRiskCreators                       bool
+	AddRiskCreatorIDs                       []string
+	RemoveRiskCreatorIDs                    []string
+	ClearScheduledJobCreators               bool
+	AddScheduledJobCreatorIDs               []string
+	RemoveScheduledJobCreatorIDs            []string
+	ClearStandardCreators                   bool
+	AddStandardCreatorIDs                   []string
+	RemoveStandardCreatorIDs                []string
+	ClearTemplateCreators                   bool
+	AddTemplateCreatorIDs                   []string
+	RemoveTemplateCreatorIDs                []string
+	ClearSubprocessorCreators               bool
+	AddSubprocessorCreatorIDs               []string
+	RemoveSubprocessorCreatorIDs            []string
+	ClearTrustCenterDocCreators             bool
+	AddTrustCenterDocCreatorIDs             []string
+	RemoveTrustCenterDocCreatorIDs          []string
+	ClearTrustCenterSubprocessorCreators    bool
+	AddTrustCenterSubprocessorCreatorIDs    []string
+	RemoveTrustCenterSubprocessorCreatorIDs []string
+	ClearSetting                            bool
+	SettingID                               *string
+	ClearPersonalAccessTokens               bool
+	AddPersonalAccessTokenIDs               []string
+	RemovePersonalAccessTokenIDs            []string
+	ClearAPITokens                          bool
+	AddAPITokenIDs                          []string
+	RemoveAPITokenIDs                       []string
+	ClearFiles                              bool
+	AddFileIDs                              []string
+	RemoveFileIDs                           []string
+	ClearEvents                             bool
+	AddEventIDs                             []string
+	RemoveEventIDs                          []string
+	ClearSecrets                            bool
+	AddSecretIDs                            []string
+	RemoveSecretIDs                         []string
+	ClearAvatarFile                         bool
+	AvatarFileID                            *string
+	ClearGroups                             bool
+	AddGroupIDs                             []string
+	RemoveGroupIDs                          []string
+	ClearTemplates                          bool
+	AddTemplateIDs                          []string
+	RemoveTemplateIDs                       []string
+	ClearIntegrations                       bool
+	AddIntegrationIDs                       []string
+	RemoveIntegrationIDs                    []string
+	ClearDocuments                          bool
+	AddDocumentIDs                          []string
+	RemoveDocumentIDs                       []string
+	ClearOrgSubscriptions                   bool
+	AddOrgSubscriptionIDs                   []string
+	RemoveOrgSubscriptionIDs                []string
+	ClearInvites                            bool
+	AddInviteIDs                            []string
+	RemoveInviteIDs                         []string
+	ClearSubscribers                        bool
+	AddSubscriberIDs                        []string
+	RemoveSubscriberIDs                     []string
+	ClearEntities                           bool
+	AddEntityIDs                            []string
+	RemoveEntityIDs                         []string
+	ClearEntityTypes                        bool
+	AddEntityTypeIDs                        []string
+	RemoveEntityTypeIDs                     []string
+	ClearContacts                           bool
+	AddContactIDs                           []string
+	RemoveContactIDs                        []string
+	ClearNotes                              bool
+	AddNoteIDs                              []string
+	RemoveNoteIDs                           []string
+	ClearTasks                              bool
+	AddTaskIDs                              []string
+	RemoveTaskIDs                           []string
+	ClearPrograms                           bool
+	AddProgramIDs                           []string
+	RemoveProgramIDs                        []string
+	ClearProcedures                         bool
+	AddProcedureIDs                         []string
+	RemoveProcedureIDs                      []string
+	ClearInternalPolicies                   bool
+	AddInternalPolicyIDs                    []string
+	RemoveInternalPolicyIDs                 []string
+	ClearRisks                              bool
+	AddRiskIDs                              []string
+	RemoveRiskIDs                           []string
+	ClearControlObjectives                  bool
+	AddControlObjectiveIDs                  []string
+	RemoveControlObjectiveIDs               []string
+	ClearNarratives                         bool
+	AddNarrativeIDs                         []string
+	RemoveNarrativeIDs                      []string
+	ClearControls                           bool
+	AddControlIDs                           []string
+	RemoveControlIDs                        []string
+	ClearSubcontrols                        bool
+	AddSubcontrolIDs                        []string
+	RemoveSubcontrolIDs                     []string
+	ClearControlImplementations             bool
+	AddControlImplementationIDs             []string
+	RemoveControlImplementationIDs          []string
+	ClearMappedControls                     bool
+	AddMappedControlIDs                     []string
+	RemoveMappedControlIDs                  []string
+	ClearEvidence                           bool
+	AddEvidenceIDs                          []string
+	RemoveEvidenceIDs                       []string
+	ClearStandards                          bool
+	AddStandardIDs                          []string
+	RemoveStandardIDs                       []string
+	ClearActionPlans                        bool
+	AddActionPlanIDs                        []string
+	RemoveActionPlanIDs                     []string
+	ClearCustomDomains                      bool
+	AddCustomDomainIDs                      []string
+	RemoveCustomDomainIDs                   []string
+	ClearJobRunners                         bool
+	AddJobRunnerIDs                         []string
+	RemoveJobRunnerIDs                      []string
+	ClearJobRunnerTokens                    bool
+	AddJobRunnerTokenIDs                    []string
+	RemoveJobRunnerTokenIDs                 []string
+	ClearJobRunnerRegistrationTokens        bool
+	AddJobRunnerRegistrationTokenIDs        []string
+	RemoveJobRunnerRegistrationTokenIDs     []string
+	ClearDNSVerifications                   bool
+	AddDNSVerificationIDs                   []string
+	RemoveDNSVerificationIDs                []string
+	ClearJobTemplates                       bool
+	AddJobTemplateIDs                       []string
+	RemoveJobTemplateIDs                    []string
+	ClearScheduledJobs                      bool
+	AddScheduledJobIDs                      []string
+	RemoveScheduledJobIDs                   []string
+	ClearJobResults                         bool
+	AddJobResultIDs                         []string
+	RemoveJobResultIDs                      []string
+	ClearScheduledJobRuns                   bool
+	AddScheduledJobRunIDs                   []string
+	RemoveScheduledJobRunIDs                []string
+	ClearTrustCenters                       bool
+	AddTrustCenterIDs                       []string
+	RemoveTrustCenterIDs                    []string
+	ClearAssets                             bool
+	AddAssetIDs                             []string
+	RemoveAssetIDs                          []string
+	ClearScans                              bool
+	AddScanIDs                              []string
+	RemoveScanIDs                           []string
+	ClearSubprocessors                      bool
+	AddSubprocessorIDs                      []string
+	RemoveSubprocessorIDs                   []string
+	ClearExports                            bool
+	AddExportIDs                            []string
+	RemoveExportIDs                         []string
+	ClearTrustCenterWatermarkConfigs        bool
+	AddTrustCenterWatermarkConfigIDs        []string
+	RemoveTrustCenterWatermarkConfigIDs     []string
+	ClearImpersonationEvents                bool
+	AddImpersonationEventIDs                []string
+	RemoveImpersonationEventIDs             []string
+	ClearAssessments                        bool
+	AddAssessmentIDs                        []string
+	RemoveAssessmentIDs                     []string
+	ClearAssessmentResponses                bool
+	AddAssessmentResponseIDs                []string
+	RemoveAssessmentResponseIDs             []string
+	ClearCustomTypeEnums                    bool
+	AddCustomTypeEnumIDs                    []string
+	RemoveCustomTypeEnumIDs                 []string
+	ClearTagDefinitions                     bool
+	AddTagDefinitionIDs                     []string
+	RemoveTagDefinitionIDs                  []string
+	ClearRemediations                       bool
+	AddRemediationIDs                       []string
+	RemoveRemediationIDs                    []string
+	ClearFindings                           bool
+	AddFindingIDs                           []string
+	RemoveFindingIDs                        []string
+	ClearReviews                            bool
+	AddReviewIDs                            []string
+	RemoveReviewIDs                         []string
+	ClearVulnerabilities                    bool
+	AddVulnerabilityIDs                     []string
+	RemoveVulnerabilityIDs                  []string
+	ClearWorkflowDefinitions                bool
+	AddWorkflowDefinitionIDs                []string
+	RemoveWorkflowDefinitionIDs             []string
+	ClearWorkflowInstances                  bool
+	AddWorkflowInstanceIDs                  []string
+	RemoveWorkflowInstanceIDs               []string
+	ClearWorkflowEvents                     bool
+	AddWorkflowEventIDs                     []string
+	RemoveWorkflowEventIDs                  []string
+	ClearWorkflowAssignments                bool
+	AddWorkflowAssignmentIDs                []string
+	RemoveWorkflowAssignmentIDs             []string
+	ClearWorkflowAssignmentTargets          bool
+	AddWorkflowAssignmentTargetIDs          []string
+	RemoveWorkflowAssignmentTargetIDs       []string
+	ClearWorkflowObjectRefs                 bool
+	AddWorkflowObjectRefIDs                 []string
+	RemoveWorkflowObjectRefIDs              []string
+	ClearDirectoryAccounts                  bool
+	AddDirectoryAccountIDs                  []string
+	RemoveDirectoryAccountIDs               []string
+	ClearDirectoryGroups                    bool
+	AddDirectoryGroupIDs                    []string
+	RemoveDirectoryGroupIDs                 []string
+	ClearDirectorySyncRuns                  bool
+	AddDirectorySyncRunIDs                  []string
+	RemoveDirectorySyncRunIDs               []string
 }
 
 // Mutate applies the UpdateOrganizationInput on the OrganizationMutation builder.
@@ -10519,6 +10533,24 @@ func (i *UpdateOrganizationInput) Mutate(m *OrganizationMutation) {
 	}
 	if v := i.RemoveSubprocessorCreatorIDs; len(v) > 0 {
 		m.RemoveSubprocessorCreatorIDs(v...)
+	}
+	if i.ClearTrustCenterDocCreators {
+		m.ClearTrustCenterDocCreators()
+	}
+	if v := i.AddTrustCenterDocCreatorIDs; len(v) > 0 {
+		m.AddTrustCenterDocCreatorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocCreatorIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocCreatorIDs(v...)
+	}
+	if i.ClearTrustCenterSubprocessorCreators {
+		m.ClearTrustCenterSubprocessorCreators()
+	}
+	if v := i.AddTrustCenterSubprocessorCreatorIDs; len(v) > 0 {
+		m.AddTrustCenterSubprocessorCreatorIDs(v...)
+	}
+	if v := i.RemoveTrustCenterSubprocessorCreatorIDs; len(v) > 0 {
+		m.RemoveTrustCenterSubprocessorCreatorIDs(v...)
 	}
 	if i.ClearSetting {
 		m.ClearSetting()
@@ -17220,6 +17252,7 @@ func (c *TrustCenterSubprocessorUpdateOne) SetInput(i UpdateTrustCenterSubproces
 // CreateTrustCenterWatermarkConfigInput represents a mutation input for creating trustcenterwatermarkconfigs.
 type CreateTrustCenterWatermarkConfigInput struct {
 	TrustCenterID  *string
+	IsEnabled      *bool
 	Text           *string
 	FontSize       *float64
 	Opacity        *float64
@@ -17235,6 +17268,9 @@ type CreateTrustCenterWatermarkConfigInput struct {
 func (i *CreateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkConfigMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.IsEnabled; v != nil {
+		m.SetIsEnabled(*v)
 	}
 	if v := i.Text; v != nil {
 		m.SetText(*v)
@@ -17275,6 +17311,8 @@ func (c *TrustCenterWatermarkConfigCreate) SetInput(i CreateTrustCenterWatermark
 type UpdateTrustCenterWatermarkConfigInput struct {
 	ClearTrustCenterID   bool
 	TrustCenterID        *string
+	ClearIsEnabled       bool
+	IsEnabled            *bool
 	ClearText            bool
 	Text                 *string
 	ClearFontSize        bool
@@ -17301,6 +17339,12 @@ func (i *UpdateTrustCenterWatermarkConfigInput) Mutate(m *TrustCenterWatermarkCo
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearIsEnabled {
+		m.ClearIsEnabled()
+	}
+	if v := i.IsEnabled; v != nil {
+		m.SetIsEnabled(*v)
 	}
 	if i.ClearText {
 		m.ClearText()

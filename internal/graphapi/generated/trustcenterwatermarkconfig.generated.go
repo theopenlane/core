@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":
@@ -131,6 +133,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":
@@ -225,6 +229,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":

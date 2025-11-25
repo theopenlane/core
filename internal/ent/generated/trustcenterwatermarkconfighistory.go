@@ -41,6 +41,8 @@ type TrustCenterWatermarkConfigHistory struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled bool `json:"is_enabled,omitempty"`
 	// ID of the file containing the document
 	LogoID *string `json:"logo_id,omitempty"`
 	// text to watermark the document with
@@ -65,6 +67,8 @@ func (*TrustCenterWatermarkConfigHistory) scanValues(columns []string) ([]any, e
 		switch columns[i] {
 		case trustcenterwatermarkconfighistory.FieldOperation:
 			values[i] = new(history.OpType)
+		case trustcenterwatermarkconfighistory.FieldIsEnabled:
+			values[i] = new(sql.NullBool)
 		case trustcenterwatermarkconfighistory.FieldFontSize, trustcenterwatermarkconfighistory.FieldOpacity, trustcenterwatermarkconfighistory.FieldRotation:
 			values[i] = new(sql.NullFloat64)
 		case trustcenterwatermarkconfighistory.FieldID, trustcenterwatermarkconfighistory.FieldRef, trustcenterwatermarkconfighistory.FieldCreatedBy, trustcenterwatermarkconfighistory.FieldUpdatedBy, trustcenterwatermarkconfighistory.FieldDeletedBy, trustcenterwatermarkconfighistory.FieldOwnerID, trustcenterwatermarkconfighistory.FieldTrustCenterID, trustcenterwatermarkconfighistory.FieldLogoID, trustcenterwatermarkconfighistory.FieldText, trustcenterwatermarkconfighistory.FieldColor, trustcenterwatermarkconfighistory.FieldFont:
@@ -157,6 +161,12 @@ func (_m *TrustCenterWatermarkConfigHistory) assignValues(columns []string, valu
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
+			}
+		case trustcenterwatermarkconfighistory.FieldIsEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_enabled", values[i])
+			} else if value.Valid {
+				_m.IsEnabled = value.Bool
 			}
 		case trustcenterwatermarkconfighistory.FieldLogoID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -269,6 +279,9 @@ func (_m *TrustCenterWatermarkConfigHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("is_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsEnabled))
 	builder.WriteString(", ")
 	if v := _m.LogoID; v != nil {
 		builder.WriteString("logo_id=")
