@@ -45,10 +45,6 @@ func HookEvidenceFiles() ent.Hook {
 				m.AddFileIDs(fileIDs...)
 			}
 
-			if err := checkControlEdges(ctx, m); err != nil {
-				return nil, err
-			}
-
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
