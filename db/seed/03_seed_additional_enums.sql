@@ -235,7 +235,7 @@ VALUES
         NOW(),
         'system',
         'system'
-    );
+    ) ON CONFLICT DO NOTHING;
 
 
 -- +goose Down
