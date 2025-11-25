@@ -1743,8 +1743,8 @@ IntegrationOauthProviderConfig represents the configuration for OAuth providers 
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
+|**enabled**|`boolean`|Enabled toggles initialization of the integration provider registry.<br/>||
 |**successredirecturl**|`string`|SuccessRedirectURL is the URL to redirect to after successful OAuth integration.<br/>||
-|**providerspecpath**|`string`|ProviderSpecPath is the path to the declarative provider spec configuration file.<br/>||
 
 **Additional Properties:** not allowed  
 

@@ -7,6 +7,7 @@ import (
 	"github.com/stretchr/testify/require"
 
 	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/providers"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/integrations/types"
 )
@@ -15,14 +16,41 @@ func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[t
 	t.Helper()
 
 	original := suite.h.IntegrationRegistry
-	reg, err := registry.NewRegistry(context.Background(), specs, nil)
+
+	reg, err := registry.NewRegistry(context.Background())
 	require.NoError(t, err)
+	for provider, spec := range specs {
+		pt := provider
+		builder := providers.BuilderFunc{
+			ProviderType: pt,
+			BuildFunc: func(context.Context, config.ProviderSpec) (providers.Provider, error) {
+				return &testProvider{providerType: pt}, nil
+			},
+		}
+		require.NoError(t, reg.UpsertProvider(context.Background(), spec, builder))
+	}
 
 	suite.h.IntegrationRegistry = reg
 
 	return func() {
 		suite.h.IntegrationRegistry = original
 	}
+}
+
+type testProvider struct {
+	providerType types.ProviderType
+}
+
+func (p *testProvider) Type() types.ProviderType { return p.providerType }
+
+func (p *testProvider) Capabilities() types.ProviderCapabilities { return types.ProviderCapabilities{} }
+
+func (p *testProvider) BeginAuth(context.Context, types.AuthContext) (types.AuthSession, error) {
+	return nil, nil
+}
+
+func (p *testProvider) Mint(context.Context, types.CredentialSubject) (types.CredentialPayload, error) {
+	return types.CredentialPayload{}, nil
 }
 
 func gcpSCCSpec() config.ProviderSpec {

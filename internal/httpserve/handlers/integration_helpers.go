@@ -16,10 +16,10 @@ var (
 
 // IntegrationOauthProviderConfig represents the configuration for OAuth providers used for integrations.
 type IntegrationOauthProviderConfig struct {
+	// Enabled toggles initialization of the integration provider registry.
+	Enabled bool `json:"enabled" koanf:"enabled" default:"false"`
 	// SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
 	SuccessRedirectURL string `json:"successredirecturl" koanf:"successredirecturl" domain:"inherit" domainPrefix:"https://console" domainSuffix:"/organization-settings/integrations"`
-	// ProviderSpecPath is the path to the declarative provider spec configuration file.
-	ProviderSpecPath string `json:"providerspecpath" koanf:"providerspecpath" default:"internal/integrations/config/providers"`
 }
 
 var (

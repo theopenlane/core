@@ -11,6 +11,7 @@ import (
 
 	"github.com/getkin/kin-openapi/openapi3"
 	"github.com/rs/zerolog"
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
@@ -408,12 +409,13 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 		},
 	}
 
-	reg, err := registry.NewRegistry(ctx, map[types.ProviderType]config.ProviderSpec{providerType: spec}, []providers.Builder{builder})
+	reg, err := registry.NewRegistry(ctx)
 	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), reg.UpsertProvider(ctx, spec, builder))
 
 	sessions := keymaker.NewMemorySessionStore()
 	svc, err := keymaker.NewService(reg, store, sessions, keymaker.ServiceOptions{})
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 
 	suite.h.IntegrationRegistry = reg
 	suite.h.IntegrationBroker = keystore.NewBroker(store, reg)
@@ -421,7 +423,7 @@ func (suite *HandlerTestSuite) configureIntegrationRuntime(ctx context.Context) 
 
 	opDescriptors := keystore.FlattenOperationDescriptors(reg.OperationDescriptorCatalog())
 	manager, err := keystore.NewOperationManager(suite.h.IntegrationBroker, opDescriptors)
-	require.NoError(suite.T(), err)
+	assert.NoError(suite.T(), err)
 	suite.h.IntegrationOperations = manager
 }
 
