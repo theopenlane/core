@@ -7,20 +7,17 @@ import (
 	"strings"
 	"sync"
 
+	"entgo.io/ent/dialect/sql"
+
 	"entgo.io/ent"
 	"github.com/gertd/go-pluralize"
+	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/actionplan"
-	"github.com/theopenlane/core/internal/ent/generated/control"
 	"github.com/theopenlane/core/internal/ent/generated/customtypeenum"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
-	"github.com/theopenlane/core/internal/ent/generated/procedure"
-	"github.com/theopenlane/core/internal/ent/generated/program"
-	"github.com/theopenlane/core/internal/ent/generated/risk"
-	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
-	"github.com/theopenlane/core/internal/ent/generated/task"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
 )
@@ -126,7 +123,7 @@ func HookCustomTypeEnumDelete() ent.Hook {
 
 			funcs := make([]func(), 0)
 			for _, enum := range enums {
-				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, strings.ToLower(enum.ObjectType), enum.ObjectType, enum.Name, &errs, &mu)...)
+				funcs = append(funcs, isEnumInUse(ctx, client, enum.ID, strings.ToLower(enum.ObjectType), enum.ObjectType, enum.Name, &errs, &mu))
 			}
 
 			if len(funcs) == 0 {
@@ -148,104 +145,72 @@ func HookCustomTypeEnumDelete() ent.Hook {
 	}, ent.OpDeleteOne|ent.OpDelete|ent.OpUpdateOne|ent.OpUpdate)
 }
 
-func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName, objectType, name string, allErrors *[]string, mu *sync.Mutex) []func() {
-	type countTask struct {
-		queryFunc func(context.Context) (int, error)
-		label     string
+func isEnumInUse(ctx context.Context, client *generated.Client, enumID, edgeName, objectType, name string, allErrors *[]string, mu *sync.Mutex) func() {
+
+	ctrlCtx := privacy.DecisionContext(ctx, privacy.Allow)
+
+	type tableConfig struct {
+		table string
+		field string
+		label string
 	}
 
-	var operations []countTask
+	table := pluralize.NewClient().Plural(edgeName)
 
-	switch edgeName {
-	case "task":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Task.Query().Where(task.TaskKindID(enumID)).Count(ctx)
-			},
-			label: "task",
-		})
-	case "control":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Control.Query().Where(control.ControlKindID(enumID)).Count(ctx)
-			},
-			label: "control",
-		})
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Subcontrol.Query().Where(subcontrol.SubcontrolKindID(enumID)).Count(ctx)
-			},
-			label: "subcontrol",
-		})
-	case "subcontrol":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Subcontrol.Query().Where(subcontrol.SubcontrolKindID(enumID)).Count(ctx)
-			},
-			label: "subcontrol",
-		})
-	case "risk":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Risk.Query().Where(risk.RiskKindID(enumID)).Count(ctx)
-			},
-			label: "risk",
-		})
-	case "risk_category":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Risk.Query().Where(risk.RiskCategoryID(enumID)).Count(ctx)
-			},
-			label: "risk",
-		})
-	case "internal_policy":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.InternalPolicy.Query().Where(internalpolicy.InternalPolicyKindID(enumID)).Count(ctx)
-			},
-			label: "internal policy",
-		})
-	case "procedure":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Procedure.Query().Where(procedure.ProcedureKindID(enumID)).Count(ctx)
-			},
-			label: "procedure",
-		})
-	case "action_plan":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.ActionPlan.Query().Where(actionplan.ActionPlanKindID(enumID)).Count(ctx)
-			},
-			label: "action plan",
-		})
-	case "program":
-		operations = append(operations, countTask{
-			queryFunc: func(ctx context.Context) (int, error) {
-				return client.Program.Query().Where(program.ProgramKindID(enumID)).Count(ctx)
-			},
-			label: "program",
-		})
+	field := fmt.Sprintf("%s_kind_id", strcase.SnakeCase(edgeName))
+
+	config := tableConfig{
+		table: table,
+		field: field,
+		label: strings.ReplaceAll(edgeName, "_", " "),
 	}
 
-	funcs := make([]func(), 0, len(operations))
+	return func() {
+		query := fmt.Sprintf("SELECT count(id) FROM %s WHERE %s = $1 AND deleted_at IS NULL", config.table, config.field)
 
-	for _, op := range operations {
-		funcs = append(funcs, func() {
-			if count, err := op.queryFunc(ctx); err == nil && count > 0 {
+		var rows sql.Rows
+		err := client.Driver().
+			Query(ctrlCtx,
+				query, lo.ToAnySlice([]string{enumID}), &rows)
+		if err != nil {
+			mu.Lock()
+			logx.FromContext(ctx).Error().Err(err).
+				Str("table", config.table).
+				Str("field", config.field).
+				Str("enum_id", enumID).
+				Msg("failed to query enum edges")
+			*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
+			mu.Unlock()
+			return
+		}
+		defer rows.Close()
+
+		var count int
+		if rows.Next() {
+			if err := rows.Scan(&count); err != nil {
 				mu.Lock()
-
-				label := op.label
-				if count != 1 {
-					label = pluralize.NewClient().Plural(op.label)
-				}
-
-				*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated",
-					objectType, name, count, label))
+				logx.FromContext(ctx).Error().Err(err).
+					Str("table", config.table).
+					Str("field", config.field).
+					Str("enum_id", enumID).
+					Msg("failed to scan enum edge count")
+				*allErrors = append(*allErrors, fmt.Sprintf("failed to check if %s enum %s is in use: %v", objectType, name, err))
 				mu.Unlock()
+				return
 			}
-		})
-	}
+		}
 
-	return funcs
+		if count > 0 {
+			mu.Lock()
+
+			label := config.label
+			if count != 1 {
+				label = pluralize.NewClient().Plural(config.label)
+			}
+
+			*allErrors = append(*allErrors, fmt.Sprintf("the %s value of %s is in use by %d %s and cannot be deleted until those are updated",
+				objectType, name, count, label))
+			mu.Unlock()
+		}
+	}
 }

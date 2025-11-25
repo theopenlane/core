@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
@@ -44,7 +45,7 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			m.SetSlug(sluggify(org.Name))
+			m.SetSlug(strcase.KebabCase(org.Name))
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {

@@ -3,7 +3,6 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
-	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -304,10 +303,7 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strings.ReplaceAll(
-				strcase.SnakeCase(
-					strings.ToLower(org.Name)),
-				"_", "-")
+			expectedSlug := strcase.KebabCase(org.Name)
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
 
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
