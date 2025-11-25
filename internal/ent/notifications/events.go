@@ -2,6 +2,7 @@ package notifications
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
@@ -12,6 +13,13 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/logx"
+)
+
+var (
+	// ErrFailedToGetClient is returned when the client cannot be retrieved from context
+	ErrFailedToGetClient = errors.New("failed to get client from context")
+	// ErrEntityIDNotFound is returned when entity ID is not found in props
+	ErrEntityIDNotFound = errors.New("entity ID not found in props")
 )
 
 type notificationData struct {
@@ -38,22 +46,80 @@ func handleTaskMutation(ctx *soiree.EventContext) error {
 		return nil
 	}
 
-	// Get assignee_id from properties
-	assigneeID := props.GetKey(task.FieldAssigneeID)
-	if assigneeID == nil {
+	// Check if assignee_id field changed - only trigger notification if this field was updated
+	assigneeIDVal := props.GetKey(task.FieldAssigneeID)
+	if assigneeIDVal == nil {
 		return nil
 	}
 
-	title := props.GetKey(task.FieldTitle)
-	entityID := props.GetKey(task.FieldID)
-	ownerID := props.GetKey(task.FieldOwnerID)
+	assigneeID, ok := assigneeIDVal.(string)
+	if !ok || assigneeID == "" {
+		return nil
+	}
 
-	if err := addTaskAssigneeNotification(ctx, assigneeID.(string), title.(string), entityID.(string), ownerID.(string)); err != nil {
+	// Get other fields from props, fallback to database query if missing
+	title, entityID, ownerID, err := getTaskFields(ctx, props)
+	if err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get task fields")
+		return err
+	}
+
+	if err := addTaskAssigneeNotification(ctx, assigneeID, title, entityID, ownerID); err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add task assignee notification")
 		return err
 	}
 
 	return nil
+}
+
+// getTaskFields retrieves task fields from props or queries database if missing
+func getTaskFields(ctx *soiree.EventContext, props soiree.Properties) (title, entityID, ownerID string, err error) {
+	// Try to get fields from props first
+	if titleVal := props.GetKey(task.FieldTitle); titleVal != nil {
+		if t, ok := titleVal.(string); ok {
+			title = t
+		}
+	}
+
+	if idVal := props.GetKey(task.FieldID); idVal != nil {
+		if id, ok := idVal.(string); ok {
+			entityID = id
+		}
+	}
+
+	if ownerVal := props.GetKey(task.FieldOwnerID); ownerVal != nil {
+		if o, ok := ownerVal.(string); ok {
+			ownerID = o
+		}
+	}
+
+	// If any field is missing, query the database
+	if title == "" || entityID == "" || ownerID == "" {
+		client, ok := soiree.ClientAs[*generated.Client](ctx)
+		if !ok {
+			return "", "", "", ErrFailedToGetClient
+		}
+
+		// Use the entity ID from props to query
+		if entityID == "" {
+			return "", "", "", ErrEntityIDNotFound
+		}
+
+		allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+		taskEntity, err := client.Task.Get(allowCtx, entityID)
+		if err != nil {
+			return "", "", "", fmt.Errorf("failed to query task: %w", err)
+		}
+
+		if title == "" {
+			title = taskEntity.Title
+		}
+		if ownerID == "" {
+			ownerID = taskEntity.OwnerID
+		}
+	}
+
+	return title, entityID, ownerID, nil
 }
 
 // handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL
@@ -68,36 +134,101 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext) error {
 		return nil
 	}
 
-	// Get status from properties
-	status := props.GetKey(internalpolicy.FieldStatus)
-	if status == nil {
+	// Check if status field changed - only trigger notification if this field was updated
+	statusVal := props.GetKey(internalpolicy.FieldStatus)
+	if statusVal == nil {
 		return nil
 	}
 
-	statusEnum := enums.ToDocumentStatus(status.(string))
+	status, ok := statusVal.(string)
+	if !ok {
+		return nil
+	}
+
+	statusEnum := enums.ToDocumentStatus(status)
 
 	// Check if status is NEEDS_APPROVAL
 	if statusEnum != &enums.DocumentNeedsApproval {
 		return nil
 	}
 
-	// Get approver_id from properties
-	approverID := props.GetKey(internalpolicy.FieldApproverID)
-	if approverID == nil {
+	// Get approver_id from props, fallback to database query if missing
+	approverID, name, entityID, ownerID, err := getInternalPolicyFields(ctx, props)
+	if err != nil {
+		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get internal policy fields")
+		return err
+	}
+
+	if approverID == "" {
 		logx.FromContext(ctx.Context()).Warn().Msg("approver_id not set for internal policy with NEEDS_APPROVAL status")
 		return nil
 	}
 
-	name := props.GetKey(internalpolicy.FieldName).(string)
-	entityID := props.GetKey(internalpolicy.FieldID).(string)
-	ownerID := props.GetKey(internalpolicy.FieldOwnerID).(string)
-
-	if err := addInternalPolicyNotification(ctx, approverID.(string), name, entityID, ownerID); err != nil {
+	if err := addInternalPolicyNotification(ctx, approverID, name, entityID, ownerID); err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to add internal policy notification")
 		return err
 	}
 
 	return nil
+}
+
+// getInternalPolicyFields retrieves internal policy fields from props or queries database if missing
+func getInternalPolicyFields(ctx *soiree.EventContext, props soiree.Properties) (approverID, name, entityID, ownerID string, err error) {
+	// Try to get fields from props first
+	if approverVal := props.GetKey(internalpolicy.FieldApproverID); approverVal != nil {
+		if a, ok := approverVal.(string); ok {
+			approverID = a
+		}
+	}
+
+	if nameVal := props.GetKey(internalpolicy.FieldName); nameVal != nil {
+		if n, ok := nameVal.(string); ok {
+			name = n
+		}
+	}
+
+	if idVal := props.GetKey(internalpolicy.FieldID); idVal != nil {
+		if id, ok := idVal.(string); ok {
+			entityID = id
+		}
+	}
+
+	if ownerVal := props.GetKey(internalpolicy.FieldOwnerID); ownerVal != nil {
+		if o, ok := ownerVal.(string); ok {
+			ownerID = o
+		}
+	}
+
+	// If any field is missing, query the database
+	if name == "" || entityID == "" || ownerID == "" || approverID == "" {
+		client, ok := soiree.ClientAs[*generated.Client](ctx)
+		if !ok {
+			return "", "", "", "", ErrFailedToGetClient
+		}
+
+		// Use the entity ID from props to query
+		if entityID == "" {
+			return "", "", "", "", ErrEntityIDNotFound
+		}
+
+		allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+		policy, err := client.InternalPolicy.Get(allowCtx, entityID)
+		if err != nil {
+			return "", "", "", "", fmt.Errorf("failed to query internal policy: %w", err)
+		}
+
+		if name == "" {
+			name = policy.Name
+		}
+		if ownerID == "" {
+			ownerID = policy.OwnerID
+		}
+		if approverID == "" && policy.ApproverID != "" {
+			approverID = policy.ApproverID
+		}
+	}
+
+	return approverID, name, entityID, ownerID, nil
 }
 
 func addTaskAssigneeNotification(ctx *soiree.EventContext, assigneeID, taskTitle, taskID, ownerID string) error {

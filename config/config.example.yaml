@@ -127,6 +127,8 @@ entconfig:
     modules:
         enabled: true
         usesandbox: false
+    notifications:
+        consoleurl: http://localhost:3001
     summarizer:
         llm:
             anthropic:

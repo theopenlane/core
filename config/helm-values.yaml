@@ -220,6 +220,10 @@ coreConfiguration:
       # -- BypassEmailDomains is a list of domains that should be allowed to bypass
       # the checks if RequirePaymentMethod above is enabled
       bypassemaildomains: []
+    # -- Notifications contains configuration for notifications sent to users based on events
+    notifications:
+      # -- ConsoleURL for ui links used in notifications
+      consoleurl: "http://localhost:3001"  # @schema type:string; default:http://localhost:3001
   # -- Auth contains the authentication token settings and provider(s)
   auth:
     # -- Enabled authentication on the server, not recommended to disable

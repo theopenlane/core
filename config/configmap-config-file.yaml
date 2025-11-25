@@ -343,6 +343,16 @@ data:
         {{- toYaml $sliceValue | nindent 10 }}
         {{- end }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.entconfig.notifications }}
+      notifications:
+        {{- if .Values.openlane.coreConfiguration.entconfig.notifications.consoleurl }}
+        consoleurl: {{ .Values.openlane.coreConfiguration.entconfig.notifications.consoleurl | quote }}
+        {{- else if .Values.domain }}
+        consoleurl: "https://console.{{ .Values.domain }}"
+        {{- else }}
+        consoleurl: "http://localhost:3001"
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.auth }}
     auth:

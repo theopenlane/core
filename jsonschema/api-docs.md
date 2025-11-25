@@ -62,7 +62,8 @@ Config contains the configuration for the core server
         "emailvalidation": {
             "allowedemailtypes": {}
         },
-        "billing": {}
+        "billing": {},
+        "notifications": {}
     },
     "auth": {
         "token": {
@@ -429,6 +430,7 @@ Config holds the configuration for the ent server
 |**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
 |[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
 |[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
+|[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -447,7 +449,8 @@ Config holds the configuration for the ent server
     "emailvalidation": {
         "allowedemailtypes": {}
     },
-    "billing": {}
+    "billing": {},
+    "notifications": {}
 }
 ```
 
@@ -653,6 +656,19 @@ Billing settings for feature access
 **Items**
 
 **Item Type:** `string`  
+<a name="entconfignotifications"></a>
+### entconfig\.notifications: object
+
+Notifications settings for notifications sent to users based on events
+
+
+**Properties**
+
+|Name|Type|Description|Required|
+|----|----|-----------|--------|
+|**consoleurl**|`string`|ConsoleURL for ui links used in notifications<br/>||
+
+**Additional Properties:** not allowed  
 <a name="auth"></a>
 ## auth: object
 
