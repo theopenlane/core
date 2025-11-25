@@ -170,6 +170,14 @@ func (r Risk) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: r,
+			edgeSchema: Discussion{},
+			comment:    "discussions related to the risk",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 	}
 }
 

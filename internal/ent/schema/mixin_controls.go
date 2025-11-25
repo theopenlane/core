@@ -61,6 +61,14 @@ func (m ControlMixin) Edges() []ent.Edge {
 				accessmap.EdgeAuthCheck(Note{}.Name()),
 			},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: c,
+			edgeSchema: Discussion{},
+			comment:    "discussions related to the control",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 		// owner is the user who is responsible for the control
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: c,
