@@ -1633,33 +1633,44 @@ func SecondaryForegroundColorContainsFold(v string) predicate.TrustCenterSetting
 	return predicate.TrustCenterSetting(sql.FieldContainsFold(FieldSecondaryForegroundColor, v))
 }
 
-// HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
-func HasTrustCenter() predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(func(s *sql.Selector) {
-		step := sqlgraph.NewStep(
-			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2O, true, TrustCenterTable, TrustCenterColumn),
-		)
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
-		sqlgraph.HasNeighbors(s, step)
-	})
+// EnvironmentEQ applies the EQ predicate on the "environment" field.
+func EnvironmentEQ(v enums.TrustCenterEnvironment) predicate.TrustCenterSetting {
+	vc := v
+	return predicate.TrustCenterSetting(sql.FieldEQ(FieldEnvironment, vc))
 }
 
-// HasTrustCenterWith applies the HasEdge predicate on the "trust_center" edge with a given conditions (other predicates).
-func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterSetting {
-	return predicate.TrustCenterSetting(func(s *sql.Selector) {
-		step := newTrustCenterStep()
-		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.TrustCenter
-		step.Edge.Schema = schemaConfig.TrustCenterSetting
-		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
-			for _, p := range preds {
-				p(s)
-			}
-		})
-	})
+// EnvironmentNEQ applies the NEQ predicate on the "environment" field.
+func EnvironmentNEQ(v enums.TrustCenterEnvironment) predicate.TrustCenterSetting {
+	vc := v
+	return predicate.TrustCenterSetting(sql.FieldNEQ(FieldEnvironment, vc))
+}
+
+// EnvironmentIn applies the In predicate on the "environment" field.
+func EnvironmentIn(vs ...enums.TrustCenterEnvironment) predicate.TrustCenterSetting {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSetting(sql.FieldIn(FieldEnvironment, v...))
+}
+
+// EnvironmentNotIn applies the NotIn predicate on the "environment" field.
+func EnvironmentNotIn(vs ...enums.TrustCenterEnvironment) predicate.TrustCenterSetting {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSetting(sql.FieldNotIn(FieldEnvironment, v...))
+}
+
+// EnvironmentIsNil applies the IsNil predicate on the "environment" field.
+func EnvironmentIsNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldIsNull(FieldEnvironment))
+}
+
+// EnvironmentNotNil applies the NotNil predicate on the "environment" field.
+func EnvironmentNotNil() predicate.TrustCenterSetting {
+	return predicate.TrustCenterSetting(sql.FieldNotNull(FieldEnvironment))
 }
 
 // HasFiles applies the HasEdge predicate on the "files" edge.

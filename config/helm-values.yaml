@@ -134,6 +134,8 @@ coreConfiguration:
     # -- TrustCenterCnameTarget is the cname target for the trust center
     # Used for mapping the vanity domains to the trust centers
     trustcentercnametarget: ""  # @schema type:string
+    # -- TrustCenterPreviewZoneID is the cloudflare zone id for the trust center preview domain
+    trustcenterpreviewzoneid: ""  # @schema type:string
   # -- EntConfig contains the ent configuration used by the ent middleware
   entconfig:
     # -- EntityTypes is the list of entity types to create by default for the organization
@@ -319,6 +321,8 @@ coreConfiguration:
       issuer: ""  # @schema type:string
       # -- scopes for the openFGA client
       scopes: ""  # @schema type:string
+    # -- maximum number of writes per batch in a transaction
+    maxbatchwritesize: 100  # @schema type:integer; default:100
   # -- DB contains the database configuration for the ent client
   db:
     # -- debug enables printing the debug database logs
@@ -581,26 +585,10 @@ coreConfiguration:
     newusermessagefile: ""  # @schema type:string
   # -- IntegrationOauthProvider contains the OAuth provider configuration for integrations (separate from auth.providers)
   integrationoauthprovider:
-    # -- RedirectURL is the base URL for integration OAuth callbacks
-    redirecturl: ""  # @schema type:string
-    # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration
+    # -- Enabled toggles initialization of the integration provider registry.
+    enabled: false  # @schema type:boolean; default:false
+    # -- SuccessRedirectURL is the URL to redirect to after successful OAuth integration.
     successredirecturl: ""  # @schema type:string
-    # -- Github contains the configuration settings for GitHub integrations
-    github:
-      # -- ClientID is the OAuth2 client ID
-      clientid: ""  # @schema type:string
-      # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientendpoint: ""  # @schema type:string
-      # -- Scopes are the OAuth2 scopes to request
-      scopes: []
-    # -- Slack contains the configuration settings for Slack integrations
-    slack:
-      # -- ClientID is the OAuth2 client ID
-      clientid: ""  # @schema type:string
-      # -- ClientEndpoint is the base URL for the OAuth endpoints
-      clientendpoint: ""  # @schema type:string
-      # -- Scopes are the OAuth2 scopes to request
-      scopes: []
 
 # -- External Secrets configuration
 externalSecrets:
@@ -952,19 +940,3 @@ externalSecrets:
       secretKey: "CORE_SLACK_WEBHOOKURL"  # @schema type:string
       # -- Remote key in GCP Secret Manager
       remoteKey: "core-slack-webhookurl"  # @schema type:string
-    # -- core-integrationoauthprovider-github-clientsecret secret configuration
-    core-integrationoauthprovider-github-clientsecret:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationoauthprovider.github.clientsecret
-      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_GITHUB_CLIENTSECRET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrationoauthprovider-github-clientsecret"  # @schema type:string
-    # -- core-integrationoauthprovider-slack-clientsecret secret configuration
-    core-integrationoauthprovider-slack-clientsecret:
-      # -- Enable this external secret
-      enabled: true  # @schema type:boolean; default:true
-      # -- Environment variable key for integrationoauthprovider.slack.clientsecret
-      secretKey: "CORE_INTEGRATIONOAUTHPROVIDER_SLACK_CLIENTSECRET"  # @schema type:string
-      # -- Remote key in GCP Secret Manager
-      remoteKey: "core-integrationoauthprovider-slack-clientsecret"  # @schema type:string

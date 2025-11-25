@@ -14,7 +14,32 @@ mutation CreateTrustCenter($input: CreateTrustCenterInput!) {
         cnameRecord
         dnsVerificationID
       }
+      previewDomain {
+        cnameRecord
+        dnsVerificationID
+      }
       setting {
+        id
+        overview
+        title
+        primaryColor
+        logoRemoteURL
+        logoLocalFileID
+        logoFile {
+          presignedURL
+        }
+        faviconRemoteURL
+        faviconLocalFileID
+        faviconFile {
+          presignedURL
+        }
+        themeMode
+        font
+        foregroundColor
+        backgroundColor
+        accentColor
+      }
+      previewSetting {
         id
         overview
         title
@@ -63,6 +88,10 @@ query GetAllTrustCenters {
           dnsVerificationID
         }
         customDomainID
+        previewDomain {
+          cnameRecord
+          dnsVerificationID
+        }
         id
         ownerID
         slug
@@ -100,6 +129,7 @@ query GetTrustCenterByID($trustCenterId: ID!) {
     createdAt
     createdBy
     customDomainID
+    previewDomainID
     id
     ownerID
     pirschDomainID
@@ -150,6 +180,7 @@ query GetTrustCenters($first: Int, $last: Int, $where: TrustCenterWhereInput) {
         createdAt
         createdBy
         customDomainID
+        previewDomainID
         id
         ownerID
         slug

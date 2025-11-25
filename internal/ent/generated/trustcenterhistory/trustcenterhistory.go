@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -43,10 +44,14 @@ const (
 	FieldSlug = "slug"
 	// FieldCustomDomainID holds the string denoting the custom_domain_id field in the database.
 	FieldCustomDomainID = "custom_domain_id"
+	// FieldPreviewDomainID holds the string denoting the preview_domain_id field in the database.
+	FieldPreviewDomainID = "preview_domain_id"
 	// FieldPirschDomainID holds the string denoting the pirsch_domain_id field in the database.
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
 	FieldPirschIdentificationCode = "pirsch_identification_code"
+	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
+	FieldPreviewStatus = "preview_status"
 	// Table holds the table name of the trustcenterhistory in the database.
 	Table = "trust_center_history"
 )
@@ -67,8 +72,10 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldSlug,
 	FieldCustomDomainID,
+	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
+	FieldPreviewStatus,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -111,6 +118,18 @@ func OperationValidator(o history.OpType) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcenterhistory: invalid enum value for operation field: %q", o)
+	}
+}
+
+const DefaultPreviewStatus enums.TrustCenterPreviewStatus = "NONE"
+
+// PreviewStatusValidator is a validator for the "preview_status" field enum values. It is called by the builders before save.
+func PreviewStatusValidator(ps enums.TrustCenterPreviewStatus) error {
+	switch ps.String() {
+	case "PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("trustcenterhistory: invalid enum value for preview_status field: %q", ps)
 	}
 }
 
@@ -182,6 +201,11 @@ func ByCustomDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCustomDomainID, opts...).ToFunc()
 }
 
+// ByPreviewDomainID orders the results by the preview_domain_id field.
+func ByPreviewDomainID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewDomainID, opts...).ToFunc()
+}
+
 // ByPirschDomainID orders the results by the pirsch_domain_id field.
 func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschDomainID, opts...).ToFunc()
@@ -192,9 +216,21 @@ func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
 }
 
+// ByPreviewStatus orders the results by the preview_status field.
+func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewStatus, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
 	// history.OpType must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*history.OpType)(nil)
+)
+
+var (
+	// enums.TrustCenterPreviewStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterPreviewStatus)(nil)
+	// enums.TrustCenterPreviewStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterPreviewStatus)(nil)
 )

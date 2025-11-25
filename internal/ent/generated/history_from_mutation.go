@@ -15034,12 +15034,20 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 		create = create.SetCustomDomainID(customDomainID)
 	}
 
+	if previewDomainID, exists := m.PreviewDomainID(); exists {
+		create = create.SetPreviewDomainID(previewDomainID)
+	}
+
 	if pirschDomainID, exists := m.PirschDomainID(); exists {
 		create = create.SetPirschDomainID(pirschDomainID)
 	}
 
 	if pirschIdentificationCode, exists := m.PirschIdentificationCode(); exists {
 		create = create.SetPirschIdentificationCode(pirschIdentificationCode)
+	}
+
+	if previewStatus, exists := m.PreviewStatus(); exists {
+		create = create.SetPreviewStatus(previewStatus)
 	}
 
 	_, err := create.Save(ctx)
@@ -15133,6 +15141,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetCustomDomainID(trustcenter.CustomDomainID)
 		}
 
+		if previewDomainID, exists := m.PreviewDomainID(); exists {
+			create = create.SetPreviewDomainID(previewDomainID)
+		} else {
+			create = create.SetPreviewDomainID(trustcenter.PreviewDomainID)
+		}
+
 		if pirschDomainID, exists := m.PirschDomainID(); exists {
 			create = create.SetPirschDomainID(pirschDomainID)
 		} else {
@@ -15143,6 +15157,12 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 			create = create.SetPirschIdentificationCode(pirschIdentificationCode)
 		} else {
 			create = create.SetPirschIdentificationCode(trustcenter.PirschIdentificationCode)
+		}
+
+		if previewStatus, exists := m.PreviewStatus(); exists {
+			create = create.SetPreviewStatus(previewStatus)
+		} else {
+			create = create.SetPreviewStatus(trustcenter.PreviewStatus)
 		}
 
 		if _, err := create.Save(ctx); err != nil {
@@ -15190,8 +15210,10 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetOwnerID(trustcenter.OwnerID).
 			SetSlug(trustcenter.Slug).
 			SetCustomDomainID(trustcenter.CustomDomainID).
+			SetPreviewDomainID(trustcenter.PreviewDomainID).
 			SetPirschDomainID(trustcenter.PirschDomainID).
 			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).
+			SetPreviewStatus(trustcenter.PreviewStatus).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -15747,6 +15769,10 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 		create = create.SetSecondaryForegroundColor(secondaryForegroundColor)
 	}
 
+	if environment, exists := m.Environment(); exists {
+		create = create.SetEnvironment(environment)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15904,6 +15930,12 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context
 			create = create.SetSecondaryForegroundColor(trustcentersetting.SecondaryForegroundColor)
 		}
 
+		if environment, exists := m.Environment(); exists {
+			create = create.SetEnvironment(environment)
+		} else {
+			create = create.SetEnvironment(trustcentersetting.Environment)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15960,6 +15992,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 			SetAccentColor(trustcentersetting.AccentColor).
 			SetSecondaryBackgroundColor(trustcentersetting.SecondaryBackgroundColor).
 			SetSecondaryForegroundColor(trustcentersetting.SecondaryForegroundColor).
+			SetEnvironment(trustcentersetting.Environment).
 			Save(ctx)
 		if err != nil {
 			return err

@@ -22,6 +22,10 @@ import (
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
+	"github.com/theopenlane/core/internal/integrations/config"
+	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
@@ -32,6 +36,14 @@ import (
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
+
+// ProviderRegistry exposes provider runtimes and metadata to handlers.
+type ProviderRegistry interface {
+	Provider(provider types.ProviderType) (types.Provider, bool)
+	Config(provider types.ProviderType) (config.ProviderSpec, bool)
+	ProviderMetadataCatalog() map[types.ProviderType]types.ProviderConfig
+	OperationDescriptors(provider types.ProviderType) []types.OperationDescriptor
+}
 
 // SchemaRegistry interface for dynamic schema registration
 type SchemaRegistry interface {
@@ -110,6 +122,18 @@ type Handler struct {
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations
 	ObjectStore *objects.Service
+	// IntegrationRegistry contains the declarative provider runtimes for third-party integrations
+	IntegrationRegistry ProviderRegistry
+	// IntegrationStore handles persistence for integration metadata and secrets
+	IntegrationStore *keystore.Store
+	// IntegrationBroker exchanges credentials for provider access tokens
+	IntegrationBroker *keystore.Broker
+	// IntegrationClients reuses provider SDK clients via pooled builders
+	IntegrationClients *keystore.ClientPoolManager
+	// IntegrationOperations standardizes executing provider operations
+	IntegrationOperations *keystore.OperationManager
+	// KeymakerService orchestrates integration activation flows
+	KeymakerService *keymaker.Service
 }
 
 // setAuthenticatedContext is a wrapper that will set the minimal context for an authenticated user

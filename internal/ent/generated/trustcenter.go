@@ -15,6 +15,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenter is the model entity for the TrustCenter schema.
@@ -42,13 +43,19 @@ type TrustCenter struct {
 	Slug string `json:"slug,omitempty"`
 	// custom domain id for the trust center
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
+	// preview domain id for the trust center
+	PreviewDomainID string `json:"preview_domain_id,omitempty"`
 	// Pirsch domain ID
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
+	// preview status of the trust center
+	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterQuery when eager-loading is set.
 	Edges                         TrustCenterEdges `json:"edges"`
+	trust_center_setting          *string
+	trust_center_preview_setting  *string
 	trust_center_watermark_config *string
 	selectValues                  sql.SelectValues
 }
@@ -59,8 +66,12 @@ type TrustCenterEdges struct {
 	Owner *Organization `json:"owner,omitempty"`
 	// CustomDomain holds the value of the custom_domain edge.
 	CustomDomain *CustomDomain `json:"custom_domain,omitempty"`
+	// PreviewDomain holds the value of the preview_domain edge.
+	PreviewDomain *CustomDomain `json:"preview_domain,omitempty"`
 	// Setting holds the value of the setting edge.
 	Setting *TrustCenterSetting `json:"setting,omitempty"`
+	// PreviewSetting holds the value of the preview_setting edge.
+	PreviewSetting *TrustCenterSetting `json:"preview_setting,omitempty"`
 	// WatermarkConfig holds the value of the watermark_config edge.
 	WatermarkConfig *TrustCenterWatermarkConfig `json:"watermark_config,omitempty"`
 	// TrustCenterSubprocessors holds the value of the trust_center_subprocessors edge.
@@ -75,9 +86,9 @@ type TrustCenterEdges struct {
 	Posts []*Note `json:"posts,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [11]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [11]map[string]int
 
 	namedTrustCenterSubprocessors map[string][]*TrustCenterSubprocessor
 	namedTrustCenterDocs          map[string][]*TrustCenterDoc
@@ -108,15 +119,37 @@ func (e TrustCenterEdges) CustomDomainOrErr() (*CustomDomain, error) {
 	return nil, &NotLoadedError{edge: "custom_domain"}
 }
 
+// PreviewDomainOrErr returns the PreviewDomain value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterEdges) PreviewDomainOrErr() (*CustomDomain, error) {
+	if e.PreviewDomain != nil {
+		return e.PreviewDomain, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: customdomain.Label}
+	}
+	return nil, &NotLoadedError{edge: "preview_domain"}
+}
+
 // SettingOrErr returns the Setting value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 	if e.Setting != nil {
 		return e.Setting, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: trustcentersetting.Label}
 	}
 	return nil, &NotLoadedError{edge: "setting"}
+}
+
+// PreviewSettingOrErr returns the PreviewSetting value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterEdges) PreviewSettingOrErr() (*TrustCenterSetting, error) {
+	if e.PreviewSetting != nil {
+		return e.PreviewSetting, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: trustcentersetting.Label}
+	}
+	return nil, &NotLoadedError{edge: "preview_setting"}
 }
 
 // WatermarkConfigOrErr returns the WatermarkConfig value or an error if the edge
@@ -124,7 +157,7 @@ func (e TrustCenterEdges) SettingOrErr() (*TrustCenterSetting, error) {
 func (e TrustCenterEdges) WatermarkConfigOrErr() (*TrustCenterWatermarkConfig, error) {
 	if e.WatermarkConfig != nil {
 		return e.WatermarkConfig, nil
-	} else if e.loadedTypes[3] {
+	} else if e.loadedTypes[5] {
 		return nil, &NotFoundError{label: trustcenterwatermarkconfig.Label}
 	}
 	return nil, &NotLoadedError{edge: "watermark_config"}
@@ -133,7 +166,7 @@ func (e TrustCenterEdges) WatermarkConfigOrErr() (*TrustCenterWatermarkConfig, e
 // TrustCenterSubprocessorsOrErr returns the TrustCenterSubprocessors value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubprocessor, error) {
-	if e.loadedTypes[4] {
+	if e.loadedTypes[6] {
 		return e.TrustCenterSubprocessors, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_subprocessors"}
@@ -142,7 +175,7 @@ func (e TrustCenterEdges) TrustCenterSubprocessorsOrErr() ([]*TrustCenterSubproc
 // TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
-	if e.loadedTypes[5] {
+	if e.loadedTypes[7] {
 		return e.TrustCenterDocs, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
@@ -151,7 +184,7 @@ func (e TrustCenterEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
 // TrustCenterCompliancesOrErr returns the TrustCenterCompliances value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, error) {
-	if e.loadedTypes[6] {
+	if e.loadedTypes[8] {
 		return e.TrustCenterCompliances, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_compliances"}
@@ -160,7 +193,7 @@ func (e TrustCenterEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterComplianc
 // TemplatesOrErr returns the Templates value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
-	if e.loadedTypes[7] {
+	if e.loadedTypes[9] {
 		return e.Templates, nil
 	}
 	return nil, &NotLoadedError{edge: "templates"}
@@ -169,7 +202,7 @@ func (e TrustCenterEdges) TemplatesOrErr() ([]*Template, error) {
 // PostsOrErr returns the Posts value or an error if the edge
 // was not loaded in eager-loading.
 func (e TrustCenterEdges) PostsOrErr() ([]*Note, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[10] {
 		return e.Posts, nil
 	}
 	return nil, &NotLoadedError{edge: "posts"}
@@ -182,11 +215,15 @@ func (*TrustCenter) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenter.FieldTags:
 			values[i] = new([]byte)
-		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode:
+		case trustcenter.FieldID, trustcenter.FieldCreatedBy, trustcenter.FieldUpdatedBy, trustcenter.FieldDeletedBy, trustcenter.FieldOwnerID, trustcenter.FieldSlug, trustcenter.FieldCustomDomainID, trustcenter.FieldPreviewDomainID, trustcenter.FieldPirschDomainID, trustcenter.FieldPirschIdentificationCode, trustcenter.FieldPreviewStatus:
 			values[i] = new(sql.NullString)
 		case trustcenter.FieldCreatedAt, trustcenter.FieldUpdatedAt, trustcenter.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case trustcenter.ForeignKeys[0]: // trust_center_watermark_config
+		case trustcenter.ForeignKeys[0]: // trust_center_setting
+			values[i] = new(sql.NullString)
+		case trustcenter.ForeignKeys[1]: // trust_center_preview_setting
+			values[i] = new(sql.NullString)
+		case trustcenter.ForeignKeys[2]: // trust_center_watermark_config
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -271,6 +308,12 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
 			}
+		case trustcenter.FieldPreviewDomainID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_domain_id", values[i])
+			} else if value.Valid {
+				_m.PreviewDomainID = value.String
+			}
 		case trustcenter.FieldPirschDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pirsch_domain_id", values[i])
@@ -283,7 +326,27 @@ func (_m *TrustCenter) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.PirschIdentificationCode = value.String
 			}
+		case trustcenter.FieldPreviewStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_status", values[i])
+			} else if value.Valid {
+				_m.PreviewStatus = enums.TrustCenterPreviewStatus(value.String)
+			}
 		case trustcenter.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_setting", values[i])
+			} else if value.Valid {
+				_m.trust_center_setting = new(string)
+				*_m.trust_center_setting = value.String
+			}
+		case trustcenter.ForeignKeys[1]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field trust_center_preview_setting", values[i])
+			} else if value.Valid {
+				_m.trust_center_preview_setting = new(string)
+				*_m.trust_center_preview_setting = value.String
+			}
+		case trustcenter.ForeignKeys[2]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_watermark_config", values[i])
 			} else if value.Valid {
@@ -313,9 +376,19 @@ func (_m *TrustCenter) QueryCustomDomain() *CustomDomainQuery {
 	return NewTrustCenterClient(_m.config).QueryCustomDomain(_m)
 }
 
+// QueryPreviewDomain queries the "preview_domain" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryPreviewDomain() *CustomDomainQuery {
+	return NewTrustCenterClient(_m.config).QueryPreviewDomain(_m)
+}
+
 // QuerySetting queries the "setting" edge of the TrustCenter entity.
 func (_m *TrustCenter) QuerySetting() *TrustCenterSettingQuery {
 	return NewTrustCenterClient(_m.config).QuerySetting(_m)
+}
+
+// QueryPreviewSetting queries the "preview_setting" edge of the TrustCenter entity.
+func (_m *TrustCenter) QueryPreviewSetting() *TrustCenterSettingQuery {
+	return NewTrustCenterClient(_m.config).QueryPreviewSetting(_m)
 }
 
 // QueryWatermarkConfig queries the "watermark_config" edge of the TrustCenter entity.
@@ -401,11 +474,17 @@ func (_m *TrustCenter) String() string {
 	builder.WriteString("custom_domain_id=")
 	builder.WriteString(_m.CustomDomainID)
 	builder.WriteString(", ")
+	builder.WriteString("preview_domain_id=")
+	builder.WriteString(_m.PreviewDomainID)
+	builder.WriteString(", ")
 	builder.WriteString("pirsch_domain_id=")
 	builder.WriteString(_m.PirschDomainID)
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_identification_code=")
 	builder.WriteString(_m.PirschIdentificationCode)
+	builder.WriteString(", ")
+	builder.WriteString("preview_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))
 	builder.WriteByte(')')
 	return builder.String()
 }

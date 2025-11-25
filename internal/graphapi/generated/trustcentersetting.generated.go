@@ -92,8 +92,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingBulkCreatePayload_tru
 				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
 			case "secondaryForegroundColor":
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "environment":
+				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
 			case "files":
 				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
@@ -171,8 +171,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
 			case "secondaryForegroundColor":
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "environment":
+				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
 			case "files":
 				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":
@@ -279,8 +279,8 @@ func (ec *executionContext) fieldContext_TrustCenterSettingUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterSetting_secondaryBackgroundColor(ctx, field)
 			case "secondaryForegroundColor":
 				return ec.fieldContext_TrustCenterSetting_secondaryForegroundColor(ctx, field)
-			case "trustCenter":
-				return ec.fieldContext_TrustCenterSetting_trustCenter(ctx, field)
+			case "environment":
+				return ec.fieldContext_TrustCenterSetting_environment(ctx, field)
 			case "files":
 				return ec.fieldContext_TrustCenterSetting_files(ctx, field)
 			case "logoFile":

@@ -133,6 +133,12 @@ func serve(ctx context.Context) error {
 	// add email verifier
 	verifier := so.Config.Settings.EntConfig.EmailValidation.NewVerifier()
 
+	// Set trust center config for hooks
+	hooks.SetTrustCenterConfig(hooks.TrustCenterConfig{
+		PreviewZoneID: so.Config.Settings.Server.TrustCenterPreviewZoneID,
+		CnameTarget:   so.Config.Settings.Server.TrustCenterCnameTarget,
+	})
+
 	// add additional ent dependencies
 	entOpts = append(
 		entOpts,
@@ -207,9 +213,12 @@ func serve(ctx context.Context) error {
 	)
 
 	// add auth options
-	so.AddServerOptions(
-		serveropts.WithAuth(),
-	)
+	so.AddServerOptions(serveropts.WithAuth())
+	so.AddServerOptions(serveropts.WithIntegrationStore(dbClient))
+	so.AddServerOptions(serveropts.WithIntegrationBroker())
+	so.AddServerOptions(serveropts.WithIntegrationClients())
+	so.AddServerOptions(serveropts.WithIntegrationOperations())
+	so.AddServerOptions(serveropts.WithKeymaker())
 
 	// add session manager
 	so.AddServerOptions(

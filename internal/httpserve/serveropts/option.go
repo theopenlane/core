@@ -35,6 +35,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
+	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/objects/resolver"
 	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
@@ -190,6 +191,14 @@ func WithAuth() ServerOption {
 
 		// add oauth providers for integrations (separate config)
 		s.Config.Handler.IntegrationOauthProvider = s.Config.Settings.IntegrationOauthProvider
+		if s.Config.Settings.IntegrationOauthProvider.Enabled && s.Config.Handler.IntegrationRegistry == nil {
+			registry, err := registry.NewRegistry(context.Background())
+			if err != nil {
+				log.Panic().Err(err).Msg("failed to build integration provider registry")
+			}
+
+			s.Config.Handler.IntegrationRegistry = registry
+		}
 
 		// add auth middleware
 		opts := []authmw.Option{

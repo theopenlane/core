@@ -11,6 +11,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
+	"github.com/theopenlane/core/pkg/corejobs"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
@@ -47,6 +49,7 @@ func HookTrustCenter() ent.Hook {
 			if err != nil {
 				return nil, err
 			}
+
 			// Remove all spaces and non-alphanumeric characters from org.Name, then lowercase
 			cleanedName := reg.ReplaceAllString(org.Name, "")
 			slug := strings.ToLower(cleanedName)
@@ -58,9 +61,27 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			settingID, _ := m.SettingID()
-			if settingID != "" {
-				logx.FromContext(ctx).Debug().Msg("trust center setting ID provided, skipping default setting creation")
+			settingIDs := m.SettingIDs()
+
+			createLive, createPreview := false, false
+			switch len(settingIDs) {
+			case 0:
+				createLive, createPreview = true, true
+			case 1:
+				setting, err := m.Client().TrustCenterSetting.Get(ctx, settingIDs[0])
+				if err != nil {
+					return nil, err
+				}
+
+				switch setting.Environment {
+				case enums.TrustCenterEnvironmentLive:
+					createPreview = true
+				case enums.TrustCenterEnvironmentPreview:
+					createLive = true
+				}
+
+			default:
+				logx.FromContext(ctx).Debug().Msg("trust center setting IDs provided, skipping default setting creation")
 
 				return retVal, nil
 			}
@@ -73,16 +94,50 @@ func HookTrustCenter() ent.Hook {
 				return retVal, err
 			}
 
-			setting, err := m.Client().TrustCenterSetting.Create().
-				SetTrustCenterID(id).
-				SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
-				SetOverview(defaultOverview).
-				Save(ctx)
-			if err != nil {
-				return nil, err
+			if createLive {
+				setting, err := m.Client().TrustCenterSetting.Create().
+					SetTrustCenterID(id).
+					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+					SetOverview(defaultOverview).
+					SetEnvironment(enums.TrustCenterEnvironmentLive).
+					Save(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create live trust center setting")
+
+					return nil, err
+				}
+
+				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetSettingID(setting.ID).Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to set live setting ID on trust center")
+
+					return nil, err
+				}
+
+				trustCenter.Edges.Setting = setting
 			}
 
-			trustCenter.Edges.Setting = setting
+			if createPreview {
+				// create preview settings with same values but environment set to "preview"
+				previewSetting, err := m.Client().TrustCenterSetting.Create().
+					SetTrustCenterID(id).
+					SetTitle(fmt.Sprintf("%s Trust Center", org.Name)).
+					SetOverview(defaultOverview).
+					SetEnvironment(enums.TrustCenterEnvironmentPreview).
+					Save(ctx)
+				if err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to create preview trust center setting")
+
+					return nil, err
+				}
+
+				if err := m.Client().TrustCenter.UpdateOne(trustCenter).SetPreviewSettingID(previewSetting.ID).Exec(ctx); err != nil {
+					logx.FromContext(ctx).Error().Err(err).Msg("failed to set preview setting ID on trust center")
+
+					return nil, err
+				}
+
+				trustCenter.Edges.PreviewSetting = previewSetting
+			}
 
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 
@@ -99,6 +154,14 @@ func HookTrustCenter() ent.Hook {
 				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
+			if trustCenter.CustomDomainID != "" {
+				if _, err = m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
+					TrustCenterID: trustCenter.ID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
 			return trustCenter, nil
 		})
 	}, ent.OpCreate)
@@ -109,3 +172,82 @@ const defaultOverview = `
 
 This is the default overview for your trust center. You can customize this by editing the trust center settings.
 `
+
+// HookTrustCenterDelete runs on trust center delete mutations
+func HookTrustCenterDelete() ent.Hook {
+	return func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
+			// Only run on delete operations (including soft delete)
+			if !isDeleteOp(ctx, m) {
+				return next.Mutate(ctx, m)
+			}
+
+			// Get the trust center ID from the mutation
+			id, ok := m.ID()
+			if !ok {
+				// If we can't get the ID, just proceed with the deletion
+				return next.Mutate(ctx, m)
+			}
+
+			// Query the trust center to get the pirsch_domain_id before deletion
+			tc, err := m.Client().TrustCenter.Get(ctx, id)
+			if err != nil {
+				// If we can't find the trust center, just proceed
+				return next.Mutate(ctx, m)
+			}
+
+			// If the trust center has a Pirsch domain ID, kick off the DeletePirschDomain job
+			if tc.PirschDomainID != "" {
+				_, err := m.Job.Insert(ctx, corejobs.DeletePirschDomainArgs{
+					PirschDomainID: tc.PirschDomainID,
+				}, nil)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}
+}
+
+func HookTrustCenterUpdate() ent.Hook {
+	return hook.On(func(next ent.Mutator) ent.Mutator {
+		return hook.TrustCenterFunc(func(ctx context.Context, m *generated.TrustCenterMutation) (generated.Value, error) {
+			// Get the previous custom domain ID
+			// If the custom domain ID has been updated from nothing/nil, then kick off the CreatePirschDomain job
+			previousCustomDomainID, err := m.OldCustomDomainID(ctx)
+			if err != nil {
+				return nil, err
+			}
+
+			mutationCustomDomainID, mutationCustomDomainIDExists := m.CustomDomainID()
+
+			v, err := next.Mutate(ctx, m)
+			if err != nil {
+				return v, err
+			}
+
+			tcID, err := GetObjectIDFromEntValue(v)
+			if err != nil {
+				return v, err
+			}
+
+			if mutationCustomDomainIDExists && previousCustomDomainID == "" && mutationCustomDomainID != "" {
+				if _, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
+					TrustCenterID: tcID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			} else if mutationCustomDomainIDExists && mutationCustomDomainID != previousCustomDomainID {
+				if _, err := m.Job.Insert(ctx, corejobs.UpdatePirschDomainArgs{
+					TrustCenterID: tcID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	}, ent.OpUpdateOne)
+}

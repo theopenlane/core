@@ -159,7 +159,7 @@ func (w *ExportContentWorker) Work(ctx context.Context, job *river.Job[ExportCon
 
 	hasWhere := len(where) > 0
 
-	exportType := strings.ToLower(export.Export.ExportType.String())
+	exportType := strcase.LowerCamelCase(export.Export.ExportType.String())
 	rootQuery := pluralize.NewClient().Plural(exportType)
 
 	fields := export.Export.Fields

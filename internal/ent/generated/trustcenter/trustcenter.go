@@ -3,11 +3,14 @@
 package trustcenter
 
 import (
+	"fmt"
 	"time"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 const (
@@ -35,16 +38,24 @@ const (
 	FieldSlug = "slug"
 	// FieldCustomDomainID holds the string denoting the custom_domain_id field in the database.
 	FieldCustomDomainID = "custom_domain_id"
+	// FieldPreviewDomainID holds the string denoting the preview_domain_id field in the database.
+	FieldPreviewDomainID = "preview_domain_id"
 	// FieldPirschDomainID holds the string denoting the pirsch_domain_id field in the database.
 	FieldPirschDomainID = "pirsch_domain_id"
 	// FieldPirschIdentificationCode holds the string denoting the pirsch_identification_code field in the database.
 	FieldPirschIdentificationCode = "pirsch_identification_code"
+	// FieldPreviewStatus holds the string denoting the preview_status field in the database.
+	FieldPreviewStatus = "preview_status"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeCustomDomain holds the string denoting the custom_domain edge name in mutations.
 	EdgeCustomDomain = "custom_domain"
+	// EdgePreviewDomain holds the string denoting the preview_domain edge name in mutations.
+	EdgePreviewDomain = "preview_domain"
 	// EdgeSetting holds the string denoting the setting edge name in mutations.
 	EdgeSetting = "setting"
+	// EdgePreviewSetting holds the string denoting the preview_setting edge name in mutations.
+	EdgePreviewSetting = "preview_setting"
 	// EdgeWatermarkConfig holds the string denoting the watermark_config edge name in mutations.
 	EdgeWatermarkConfig = "watermark_config"
 	// EdgeTrustCenterSubprocessors holds the string denoting the trust_center_subprocessors edge name in mutations.
@@ -73,13 +84,27 @@ const (
 	CustomDomainInverseTable = "custom_domains"
 	// CustomDomainColumn is the table column denoting the custom_domain relation/edge.
 	CustomDomainColumn = "custom_domain_id"
+	// PreviewDomainTable is the table that holds the preview_domain relation/edge.
+	PreviewDomainTable = "trust_centers"
+	// PreviewDomainInverseTable is the table name for the CustomDomain entity.
+	// It exists in this package in order to avoid circular dependency with the "customdomain" package.
+	PreviewDomainInverseTable = "custom_domains"
+	// PreviewDomainColumn is the table column denoting the preview_domain relation/edge.
+	PreviewDomainColumn = "preview_domain_id"
 	// SettingTable is the table that holds the setting relation/edge.
-	SettingTable = "trust_center_settings"
+	SettingTable = "trust_centers"
 	// SettingInverseTable is the table name for the TrustCenterSetting entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
 	SettingInverseTable = "trust_center_settings"
 	// SettingColumn is the table column denoting the setting relation/edge.
-	SettingColumn = "trust_center_id"
+	SettingColumn = "trust_center_setting"
+	// PreviewSettingTable is the table that holds the preview_setting relation/edge.
+	PreviewSettingTable = "trust_centers"
+	// PreviewSettingInverseTable is the table name for the TrustCenterSetting entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcentersetting" package.
+	PreviewSettingInverseTable = "trust_center_settings"
+	// PreviewSettingColumn is the table column denoting the preview_setting relation/edge.
+	PreviewSettingColumn = "trust_center_preview_setting"
 	// WatermarkConfigTable is the table that holds the watermark_config relation/edge.
 	WatermarkConfigTable = "trust_centers"
 	// WatermarkConfigInverseTable is the table name for the TrustCenterWatermarkConfig entity.
@@ -137,13 +162,17 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldSlug,
 	FieldCustomDomainID,
+	FieldPreviewDomainID,
 	FieldPirschDomainID,
 	FieldPirschIdentificationCode,
+	FieldPreviewStatus,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "trust_centers"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"trust_center_setting",
+	"trust_center_preview_setting",
 	"trust_center_watermark_config",
 }
 
@@ -168,7 +197,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [8]ent.Hook
+	Hooks        [10]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -184,6 +213,18 @@ var (
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
+
+const DefaultPreviewStatus enums.TrustCenterPreviewStatus = "NONE"
+
+// PreviewStatusValidator is a validator for the "preview_status" field enum values. It is called by the builders before save.
+func PreviewStatusValidator(ps enums.TrustCenterPreviewStatus) error {
+	switch ps.String() {
+	case "PROVISIONING", "READY", "FAILED", "DEPROVISIONING", "NONE":
+		return nil
+	default:
+		return fmt.Errorf("trustcenter: invalid enum value for preview_status field: %q", ps)
+	}
+}
 
 // OrderOption defines the ordering options for the TrustCenter queries.
 type OrderOption func(*sql.Selector)
@@ -238,6 +279,11 @@ func ByCustomDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldCustomDomainID, opts...).ToFunc()
 }
 
+// ByPreviewDomainID orders the results by the preview_domain_id field.
+func ByPreviewDomainID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewDomainID, opts...).ToFunc()
+}
+
 // ByPirschDomainID orders the results by the pirsch_domain_id field.
 func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschDomainID, opts...).ToFunc()
@@ -246,6 +292,11 @@ func ByPirschDomainID(opts ...sql.OrderTermOption) OrderOption {
 // ByPirschIdentificationCode orders the results by the pirsch_identification_code field.
 func ByPirschIdentificationCode(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPirschIdentificationCode, opts...).ToFunc()
+}
+
+// ByPreviewStatus orders the results by the preview_status field.
+func ByPreviewStatus(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPreviewStatus, opts...).ToFunc()
 }
 
 // ByOwnerField orders the results by owner field.
@@ -262,10 +313,24 @@ func ByCustomDomainField(field string, opts ...sql.OrderTermOption) OrderOption 
 	}
 }
 
+// ByPreviewDomainField orders the results by preview_domain field.
+func ByPreviewDomainField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPreviewDomainStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // BySettingField orders the results by setting field.
 func BySettingField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSettingStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByPreviewSettingField orders the results by preview_setting field.
+func ByPreviewSettingField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPreviewSettingStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -359,11 +424,25 @@ func newCustomDomainStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, CustomDomainTable, CustomDomainColumn),
 	)
 }
+func newPreviewDomainStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PreviewDomainInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PreviewDomainTable, PreviewDomainColumn),
+	)
+}
 func newSettingStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SettingInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2O, false, SettingTable, SettingColumn),
+		sqlgraph.Edge(sqlgraph.M2O, false, SettingTable, SettingColumn),
+	)
+}
+func newPreviewSettingStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PreviewSettingInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, PreviewSettingTable, PreviewSettingColumn),
 	)
 }
 func newWatermarkConfigStep() *sqlgraph.Step {
@@ -408,3 +487,10 @@ func newPostsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
 	)
 }
+
+var (
+	// enums.TrustCenterPreviewStatus must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterPreviewStatus)(nil)
+	// enums.TrustCenterPreviewStatus must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterPreviewStatus)(nil)
+)

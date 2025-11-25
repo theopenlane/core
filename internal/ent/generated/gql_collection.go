@@ -60948,6 +60948,21 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				fieldSeen[trustcenter.FieldCustomDomainID] = struct{}{}
 			}
 
+		case "previewDomain":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&CustomDomainClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, customdomainImplementors)...); err != nil {
+				return err
+			}
+			_q.withPreviewDomain = query
+			if _, ok := fieldSeen[trustcenter.FieldPreviewDomainID]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPreviewDomainID)
+				fieldSeen[trustcenter.FieldPreviewDomainID] = struct{}{}
+			}
+
 		case "setting":
 			var (
 				alias = field.Alias
@@ -60958,6 +60973,17 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				return err
 			}
 			_q.withSetting = query
+
+		case "previewSetting":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&TrustCenterSettingClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcentersettingImplementors)...); err != nil {
+				return err
+			}
+			_q.withPreviewSetting = query
 
 		case "watermarkConfig":
 			var (
@@ -61013,10 +61039,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[6][alias] = n
 						}
 						return nil
 					})
@@ -61024,10 +61050,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterSubprocessors)
-							if nodes[i].Edges.totalCount[4] == nil {
-								nodes[i].Edges.totalCount[4] = make(map[string]int)
+							if nodes[i].Edges.totalCount[6] == nil {
+								nodes[i].Edges.totalCount[6] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[4][alias] = n
+							nodes[i].Edges.totalCount[6][alias] = n
 						}
 						return nil
 					})
@@ -61102,10 +61128,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[5] == nil {
-								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[5][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -61113,10 +61139,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterDocs)
-							if nodes[i].Edges.totalCount[5] == nil {
-								nodes[i].Edges.totalCount[5] = make(map[string]int)
+							if nodes[i].Edges.totalCount[7] == nil {
+								nodes[i].Edges.totalCount[7] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[5][alias] = n
+							nodes[i].Edges.totalCount[7][alias] = n
 						}
 						return nil
 					})
@@ -61191,10 +61217,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -61202,10 +61228,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.TrustCenterCompliances)
-							if nodes[i].Edges.totalCount[6] == nil {
-								nodes[i].Edges.totalCount[6] = make(map[string]int)
+							if nodes[i].Edges.totalCount[8] == nil {
+								nodes[i].Edges.totalCount[8] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[6][alias] = n
+							nodes[i].Edges.totalCount[8][alias] = n
 						}
 						return nil
 					})
@@ -61280,10 +61306,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -61291,10 +61317,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Templates)
-							if nodes[i].Edges.totalCount[7] == nil {
-								nodes[i].Edges.totalCount[7] = make(map[string]int)
+							if nodes[i].Edges.totalCount[9] == nil {
+								nodes[i].Edges.totalCount[9] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[7][alias] = n
+							nodes[i].Edges.totalCount[9][alias] = n
 						}
 						return nil
 					})
@@ -61369,10 +61395,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[8] == nil {
-								nodes[i].Edges.totalCount[8] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[8][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -61380,10 +61406,10 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenter) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Posts)
-							if nodes[i].Edges.totalCount[8] == nil {
-								nodes[i].Edges.totalCount[8] = make(map[string]int)
+							if nodes[i].Edges.totalCount[10] == nil {
+								nodes[i].Edges.totalCount[10] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[8][alias] = n
+							nodes[i].Edges.totalCount[10][alias] = n
 						}
 						return nil
 					})
@@ -61454,6 +61480,11 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 				selectedFields = append(selectedFields, trustcenter.FieldCustomDomainID)
 				fieldSeen[trustcenter.FieldCustomDomainID] = struct{}{}
 			}
+		case "previewDomainID":
+			if _, ok := fieldSeen[trustcenter.FieldPreviewDomainID]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPreviewDomainID)
+				fieldSeen[trustcenter.FieldPreviewDomainID] = struct{}{}
+			}
 		case "pirschDomainID":
 			if _, ok := fieldSeen[trustcenter.FieldPirschDomainID]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldPirschDomainID)
@@ -61463,6 +61494,11 @@ func (_q *TrustCenterQuery) collectField(ctx context.Context, oneNode bool, opCt
 			if _, ok := fieldSeen[trustcenter.FieldPirschIdentificationCode]; !ok {
 				selectedFields = append(selectedFields, trustcenter.FieldPirschIdentificationCode)
 				fieldSeen[trustcenter.FieldPirschIdentificationCode] = struct{}{}
+			}
+		case "previewStatus":
+			if _, ok := fieldSeen[trustcenter.FieldPreviewStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenter.FieldPreviewStatus)
+				fieldSeen[trustcenter.FieldPreviewStatus] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -62262,6 +62298,11 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 				selectedFields = append(selectedFields, trustcenterhistory.FieldCustomDomainID)
 				fieldSeen[trustcenterhistory.FieldCustomDomainID] = struct{}{}
 			}
+		case "previewDomainID":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPreviewDomainID]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPreviewDomainID)
+				fieldSeen[trustcenterhistory.FieldPreviewDomainID] = struct{}{}
+			}
 		case "pirschDomainID":
 			if _, ok := fieldSeen[trustcenterhistory.FieldPirschDomainID]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschDomainID)
@@ -62271,6 +62312,11 @@ func (_q *TrustCenterHistoryQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcenterhistory.FieldPirschIdentificationCode]; !ok {
 				selectedFields = append(selectedFields, trustcenterhistory.FieldPirschIdentificationCode)
 				fieldSeen[trustcenterhistory.FieldPirschIdentificationCode] = struct{}{}
+			}
+		case "previewStatus":
+			if _, ok := fieldSeen[trustcenterhistory.FieldPreviewStatus]; !ok {
+				selectedFields = append(selectedFields, trustcenterhistory.FieldPreviewStatus)
+				fieldSeen[trustcenterhistory.FieldPreviewStatus] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -62357,21 +62403,6 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
 		switch field.Name {
 
-		case "trustCenter":
-			var (
-				alias = field.Alias
-				path  = append(path, alias)
-				query = (&TrustCenterClient{config: _q.config}).Query()
-			)
-			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, trustcenterImplementors)...); err != nil {
-				return err
-			}
-			_q.withTrustCenter = query
-			if _, ok := fieldSeen[trustcentersetting.FieldTrustCenterID]; !ok {
-				selectedFields = append(selectedFields, trustcentersetting.FieldTrustCenterID)
-				fieldSeen[trustcentersetting.FieldTrustCenterID] = struct{}{}
-			}
-
 		case "files":
 			var (
 				alias = field.Alias
@@ -62419,10 +62450,10 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 						}
 						for i := range nodes {
 							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[0][alias] = n
 						}
 						return nil
 					})
@@ -62430,10 +62461,10 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustCenterSetting) error {
 						for i := range nodes {
 							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[1] == nil {
-								nodes[i].Edges.totalCount[1] = make(map[string]int)
+							if nodes[i].Edges.totalCount[0] == nil {
+								nodes[i].Edges.totalCount[0] = make(map[string]int)
 							}
-							nodes[i].Edges.totalCount[1][alias] = n
+							nodes[i].Edges.totalCount[0][alias] = n
 						}
 						return nil
 					})
@@ -62588,6 +62619,11 @@ func (_q *TrustCenterSettingQuery) collectField(ctx context.Context, oneNode boo
 			if _, ok := fieldSeen[trustcentersetting.FieldSecondaryForegroundColor]; !ok {
 				selectedFields = append(selectedFields, trustcentersetting.FieldSecondaryForegroundColor)
 				fieldSeen[trustcentersetting.FieldSecondaryForegroundColor] = struct{}{}
+			}
+		case "environment":
+			if _, ok := fieldSeen[trustcentersetting.FieldEnvironment]; !ok {
+				selectedFields = append(selectedFields, trustcentersetting.FieldEnvironment)
+				fieldSeen[trustcentersetting.FieldEnvironment] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -62788,6 +62824,11 @@ func (_q *TrustCenterSettingHistoryQuery) collectField(ctx context.Context, oneN
 			if _, ok := fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor]; !ok {
 				selectedFields = append(selectedFields, trustcentersettinghistory.FieldSecondaryForegroundColor)
 				fieldSeen[trustcentersettinghistory.FieldSecondaryForegroundColor] = struct{}{}
+			}
+		case "environment":
+			if _, ok := fieldSeen[trustcentersettinghistory.FieldEnvironment]; !ok {
+				selectedFields = append(selectedFields, trustcentersettinghistory.FieldEnvironment)
+				fieldSeen[trustcentersettinghistory.FieldEnvironment] = struct{}{}
 			}
 		case "id":
 		case "__typename":

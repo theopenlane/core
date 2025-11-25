@@ -213,6 +213,9 @@ data:
       {{- if .Values.openlane.coreConfiguration.server.trustcentercnametarget }}
       trustcentercnametarget: {{ .Values.openlane.coreConfiguration.server.trustcentercnametarget | quote }}
       {{- end }}
+      {{- if .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid }}
+      trustcenterpreviewzoneid: {{ .Values.openlane.coreConfiguration.server.trustcenterpreviewzoneid | quote }}
+      {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.entconfig }}
     entconfig:
@@ -616,6 +619,9 @@ data:
         {{- if .Values.openlane.coreConfiguration.authz.credentials.scopes }}
         scopes: {{ .Values.openlane.coreConfiguration.authz.credentials.scopes | quote }}
         {{- end }}
+      {{- end }}
+      {{- if .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
+      maxbatchwritesize: {{ .Values.openlane.coreConfiguration.authz.maxbatchwritesize }}
       {{- end }}
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.db }}
@@ -1147,8 +1153,8 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
     integrationoauthprovider:
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.redirecturl }}
-      redirecturl: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.redirecturl | quote }}
+      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
       {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl }}
       successredirecturl: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl | quote }}
@@ -1156,42 +1162,6 @@ data:
       successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
       {{- else }}
       successredirecturl: ""
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.github }}
-      github:
-        {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.github.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.github.clientid | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.github.clientendpoint }}
-        clientendpoint: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.github.clientendpoint | quote }}
-        {{- else if .Values.domain }}
-        clientendpoint: "https://api.{{ .Values.domain }}"
-        {{- else }}
-        clientendpoint: ""
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationoauthprovider.github.scopes | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        scopes:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.slack }}
-      slack:
-        {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.slack.clientid }}
-        clientid: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.slack.clientid | quote }}
-        {{- end }}
-        {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.slack.clientendpoint }}
-        clientendpoint: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.slack.clientendpoint | quote }}
-        {{- else if .Values.domain }}
-        clientendpoint: "https://api.{{ .Values.domain }}"
-        {{- else }}
-        clientendpoint: ""
-        {{- end }}
-        {{- $sliceValue := (.Values.openlane.coreConfiguration.integrationoauthprovider.slack.scopes | default (list)) }}
-        {{- if gt (len $sliceValue) 0 }}
-        scopes:
-        {{- toYaml $sliceValue | nindent 10 }}
-        {{- end }}
       {{- end }}
     {{- end }}
 {{- end }}

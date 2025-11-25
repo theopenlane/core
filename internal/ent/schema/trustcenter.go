@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
@@ -63,12 +64,20 @@ func (TrustCenter) Fields() []ent.Field {
 		field.String("custom_domain_id").
 			Comment("custom domain id for the trust center").
 			Optional(),
+		field.String("preview_domain_id").
+			Comment("preview domain id for the trust center").
+			Optional(),
 		field.String("pirsch_domain_id").
 			Comment("Pirsch domain ID").
 			Optional(),
 		field.String("pirsch_identification_code").
 			Comment("Pirsch ID code").
 			Optional(),
+		field.Enum("preview_status").
+			GoType(enums.TrustCenterPreviewStatus("")).
+			Default(enums.TrustCenterPreviewStatusNone.String()).
+			Optional().
+			Comment("preview status of the trust center"),
 	}
 }
 
@@ -84,8 +93,6 @@ func (t TrustCenter) Mixin() []ent.Mixin {
 // Edges of the TrustCenter
 func (t TrustCenter) Edges() []ent.Edge {
 	return []ent.Edge{
-		// Add relationships to other entities as needed
-		// Example: defaultEdgeToWithPagination(t, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
 			edgeSchema: CustomDomain{},
@@ -98,10 +105,26 @@ func (t TrustCenter) Edges() []ent.Edge {
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
+			t:          CustomDomain.Type,
+			name:       "preview_domain",
+			field:      "preview_domain_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Organization{}.Name()),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
 			name:       "setting",
 			t:          TrustCenterSetting.Type,
 			annotations: []schema.Annotation{
-				entx.CascadeAnnotationField("TrustCenter"),
+				accessmap.EdgeNoAuthCheck(),
+			},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			name:       "preview_setting",
+			t:          TrustCenterSetting.Type,
+			annotations: []schema.Annotation{
 				accessmap.EdgeNoAuthCheck(),
 			},
 		}),
@@ -160,6 +183,8 @@ func (TrustCenter) Hooks() []ent.Hook {
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
+		hooks.HookTrustCenterUpdate(),
+		hooks.HookTrustCenterDelete(),
 	}
 }
 

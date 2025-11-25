@@ -1,0 +1,56 @@
+{
+  "name": "microsoft_teams",
+  "displayName": "Microsoft Teams",
+  "category": "collab",
+  "authType": "oauth2",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://learn.microsoft.com/en-us/microsoftteams/platform/concepts/authentication/authentication",
+  "oauth": {
+    "clientId": "${MICROSOFT_TEAMS_CLIENT_ID}",
+    "clientSecret": "${MICROSOFT_TEAMS_CLIENT_SECRET}",
+    "authUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/authorize",
+    "tokenUrl": "https://login.microsoftonline.com/common/oauth2/v2.0/token",
+    "scopes": [
+      "https://graph.microsoft.com/User.Read",
+      "https://graph.microsoft.com/Team.ReadBasic.All",
+      "https://graph.microsoft.com/Channel.ReadBasic.All",
+      "offline_access"
+    ],
+    "redirectUri": "https://api.theopenlane.io/v1/integrations/callback"
+  },
+  "userInfo": {
+    "url": "https://graph.microsoft.com/v1.0/me",
+    "method": "GET",
+    "authStyle": "Bearer",
+    "idPath": "id",
+    "emailPath": "mail",
+    "loginPath": "displayName"
+  },
+  "persistence": {
+    "storeRefreshToken": true
+  },
+  "labels": {
+    "vendor": "microsoft",
+    "product": "teams"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "tenantId"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly name for this Microsoft 365 tenant."
+      },
+      "tenantId": {
+        "type": "string",
+        "title": "Tenant ID",
+        "description": "Azure AD tenant hosting the Teams instance."
+      }
+    }
+  }
+}

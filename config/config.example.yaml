@@ -71,6 +71,7 @@ authz:
         scopes: ""
     enabled: true
     hosturl: https://authz.theopenlane.io
+    maxbatchwritesize: 100
     modelfile: fga/model/model.fga
     modelid: ""
     storeid: ""
@@ -160,17 +161,7 @@ entconfig:
         token: ""
         workspace: ""
 integrationoauthprovider:
-    github:
-        clientendpoint: ""
-        clientid: ""
-        clientsecret: ""
-        scopes: null
-    redirecturl: ""
-    slack:
-        clientendpoint: ""
-        clientid: ""
-        clientsecret: ""
-        scopes: null
+    enabled: false
     successredirecturl: ""
 jobqueue:
     connectionuri: postgres://postgres:password@0.0.0.0:5432/jobs?sslmode=disable
@@ -387,6 +378,7 @@ server:
         certkey: server.key
         enabled: false
     trustcentercnametarget: ""
+    trustcenterpreviewzoneid: ""
     writetimeout: 15000000000
 sessions:
     domain: ""

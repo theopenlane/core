@@ -116,6 +116,12 @@ func (TrustCenterSetting) Fields() []ent.Field {
 			Comment("secondary foreground color for the trust center").
 			Validate(validator.HexColorValidator).
 			Optional(),
+		field.Enum("environment").
+			GoType(enums.TrustCenterEnvironment("")).
+			Default(enums.TrustCenterEnvironmentLive.String()).
+			Immutable().
+			Optional().
+			Comment("environment of the trust center"),
 	}
 }
 
@@ -134,12 +140,6 @@ func (t TrustCenterSetting) Mixin() []ent.Mixin {
 // Edges of the TrustCenterSetting
 func (t TrustCenterSetting) Edges() []ent.Edge {
 	return []ent.Edge{
-		uniqueEdgeFrom(&edgeDefinition{
-			fromSchema: t,
-			edgeSchema: TrustCenter{},
-			field:      "trust_center_id",
-			ref:        "setting",
-		}),
 		defaultEdgeToWithPagination(t, File{}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,
@@ -167,6 +167,7 @@ func (t TrustCenterSetting) Interceptors() []ent.Interceptor {
 func (TrustCenterSetting) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookTrustCenterSetting(),
+		hooks.HookTrustCenterSettingCreatePreview(),
 	}
 }
 
@@ -181,7 +182,7 @@ func (t TrustCenterSetting) Policy() ent.Policy {
 
 func (TrustCenterSetting) Indexes() []ent.Index {
 	return []ent.Index{
-		index.Fields("trust_center_id").
+		index.Fields("trust_center_id", "environment").
 			Unique().Annotations(entsql.IndexWhere("deleted_at is NULL")),
 	}
 }

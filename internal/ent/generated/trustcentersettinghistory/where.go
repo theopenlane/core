@@ -1776,6 +1776,46 @@ func SecondaryForegroundColorContainsFold(v string) predicate.TrustCenterSetting
 	return predicate.TrustCenterSettingHistory(sql.FieldContainsFold(FieldSecondaryForegroundColor, v))
 }
 
+// EnvironmentEQ applies the EQ predicate on the "environment" field.
+func EnvironmentEQ(v enums.TrustCenterEnvironment) predicate.TrustCenterSettingHistory {
+	vc := v
+	return predicate.TrustCenterSettingHistory(sql.FieldEQ(FieldEnvironment, vc))
+}
+
+// EnvironmentNEQ applies the NEQ predicate on the "environment" field.
+func EnvironmentNEQ(v enums.TrustCenterEnvironment) predicate.TrustCenterSettingHistory {
+	vc := v
+	return predicate.TrustCenterSettingHistory(sql.FieldNEQ(FieldEnvironment, vc))
+}
+
+// EnvironmentIn applies the In predicate on the "environment" field.
+func EnvironmentIn(vs ...enums.TrustCenterEnvironment) predicate.TrustCenterSettingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSettingHistory(sql.FieldIn(FieldEnvironment, v...))
+}
+
+// EnvironmentNotIn applies the NotIn predicate on the "environment" field.
+func EnvironmentNotIn(vs ...enums.TrustCenterEnvironment) predicate.TrustCenterSettingHistory {
+	v := make([]any, len(vs))
+	for i := range v {
+		v[i] = vs[i]
+	}
+	return predicate.TrustCenterSettingHistory(sql.FieldNotIn(FieldEnvironment, v...))
+}
+
+// EnvironmentIsNil applies the IsNil predicate on the "environment" field.
+func EnvironmentIsNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldIsNull(FieldEnvironment))
+}
+
+// EnvironmentNotNil applies the NotNil predicate on the "environment" field.
+func EnvironmentNotNil() predicate.TrustCenterSettingHistory {
+	return predicate.TrustCenterSettingHistory(sql.FieldNotNull(FieldEnvironment))
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.TrustCenterSettingHistory) predicate.TrustCenterSettingHistory {
 	return predicate.TrustCenterSettingHistory(sql.AndPredicates(predicates...))

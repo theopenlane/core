@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -191,6 +192,26 @@ func (_u *TrustCenterUpdate) ClearCustomDomainID() *TrustCenterUpdate {
 	return _u
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterUpdate) SetPreviewDomainID(v string) *TrustCenterUpdate {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePreviewDomainID(v *string) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterUpdate) ClearPreviewDomainID() *TrustCenterUpdate {
+	_u.mutation.ClearPreviewDomainID()
+	return _u
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_u *TrustCenterUpdate) SetPirschDomainID(v string) *TrustCenterUpdate {
 	_u.mutation.SetPirschDomainID(v)
@@ -231,6 +252,26 @@ func (_u *TrustCenterUpdate) ClearPirschIdentificationCode() *TrustCenterUpdate 
 	return _u
 }
 
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterUpdate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdate {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterUpdate {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterUpdate) ClearPreviewStatus() *TrustCenterUpdate {
+	_u.mutation.ClearPreviewStatus()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -239,6 +280,11 @@ func (_u *TrustCenterUpdate) SetOwner(v *Organization) *TrustCenterUpdate {
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
 func (_u *TrustCenterUpdate) SetCustomDomain(v *CustomDomain) *TrustCenterUpdate {
 	return _u.SetCustomDomainID(v.ID)
+}
+
+// SetPreviewDomain sets the "preview_domain" edge to the CustomDomain entity.
+func (_u *TrustCenterUpdate) SetPreviewDomain(v *CustomDomain) *TrustCenterUpdate {
+	return _u.SetPreviewDomainID(v.ID)
 }
 
 // SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
@@ -258,6 +304,25 @@ func (_u *TrustCenterUpdate) SetNillableSettingID(id *string) *TrustCenterUpdate
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
 func (_u *TrustCenterUpdate) SetSetting(v *TrustCenterSetting) *TrustCenterUpdate {
 	return _u.SetSettingID(v.ID)
+}
+
+// SetPreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID.
+func (_u *TrustCenterUpdate) SetPreviewSettingID(id string) *TrustCenterUpdate {
+	_u.mutation.SetPreviewSettingID(id)
+	return _u
+}
+
+// SetNillablePreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (_u *TrustCenterUpdate) SetNillablePreviewSettingID(id *string) *TrustCenterUpdate {
+	if id != nil {
+		_u = _u.SetPreviewSettingID(*id)
+	}
+	return _u
+}
+
+// SetPreviewSetting sets the "preview_setting" edge to the TrustCenterSetting entity.
+func (_u *TrustCenterUpdate) SetPreviewSetting(v *TrustCenterSetting) *TrustCenterUpdate {
+	return _u.SetPreviewSettingID(v.ID)
 }
 
 // SetWatermarkConfigID sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity by ID.
@@ -371,9 +436,21 @@ func (_u *TrustCenterUpdate) ClearCustomDomain() *TrustCenterUpdate {
 	return _u
 }
 
+// ClearPreviewDomain clears the "preview_domain" edge to the CustomDomain entity.
+func (_u *TrustCenterUpdate) ClearPreviewDomain() *TrustCenterUpdate {
+	_u.mutation.ClearPreviewDomain()
+	return _u
+}
+
 // ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
 func (_u *TrustCenterUpdate) ClearSetting() *TrustCenterUpdate {
 	_u.mutation.ClearSetting()
+	return _u
+}
+
+// ClearPreviewSetting clears the "preview_setting" edge to the TrustCenterSetting entity.
+func (_u *TrustCenterUpdate) ClearPreviewSetting() *TrustCenterUpdate {
+	_u.mutation.ClearPreviewSetting()
 	return _u
 }
 
@@ -537,6 +614,11 @@ func (_u *TrustCenterUpdate) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -617,6 +699,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
 	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -679,9 +767,40 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PreviewDomainCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PreviewDomainIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
@@ -690,12 +809,12 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
@@ -704,7 +823,38 @@ func (_u *TrustCenterUpdate) sqlSave(ctx context.Context) (_node int, err error)
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PreviewSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PreviewSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1155,6 +1305,26 @@ func (_u *TrustCenterUpdateOne) ClearCustomDomainID() *TrustCenterUpdateOne {
 	return _u
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterUpdateOne) SetPreviewDomainID(v string) *TrustCenterUpdateOne {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePreviewDomainID(v *string) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterUpdateOne) ClearPreviewDomainID() *TrustCenterUpdateOne {
+	_u.mutation.ClearPreviewDomainID()
+	return _u
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_u *TrustCenterUpdateOne) SetPirschDomainID(v string) *TrustCenterUpdateOne {
 	_u.mutation.SetPirschDomainID(v)
@@ -1195,6 +1365,26 @@ func (_u *TrustCenterUpdateOne) ClearPirschIdentificationCode() *TrustCenterUpda
 	return _u
 }
 
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterUpdateOne) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterUpdateOne {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterUpdateOne {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterUpdateOne) ClearPreviewStatus() *TrustCenterUpdateOne {
+	_u.mutation.ClearPreviewStatus()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1203,6 +1393,11 @@ func (_u *TrustCenterUpdateOne) SetOwner(v *Organization) *TrustCenterUpdateOne 
 // SetCustomDomain sets the "custom_domain" edge to the CustomDomain entity.
 func (_u *TrustCenterUpdateOne) SetCustomDomain(v *CustomDomain) *TrustCenterUpdateOne {
 	return _u.SetCustomDomainID(v.ID)
+}
+
+// SetPreviewDomain sets the "preview_domain" edge to the CustomDomain entity.
+func (_u *TrustCenterUpdateOne) SetPreviewDomain(v *CustomDomain) *TrustCenterUpdateOne {
+	return _u.SetPreviewDomainID(v.ID)
 }
 
 // SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
@@ -1222,6 +1417,25 @@ func (_u *TrustCenterUpdateOne) SetNillableSettingID(id *string) *TrustCenterUpd
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
 func (_u *TrustCenterUpdateOne) SetSetting(v *TrustCenterSetting) *TrustCenterUpdateOne {
 	return _u.SetSettingID(v.ID)
+}
+
+// SetPreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID.
+func (_u *TrustCenterUpdateOne) SetPreviewSettingID(id string) *TrustCenterUpdateOne {
+	_u.mutation.SetPreviewSettingID(id)
+	return _u
+}
+
+// SetNillablePreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (_u *TrustCenterUpdateOne) SetNillablePreviewSettingID(id *string) *TrustCenterUpdateOne {
+	if id != nil {
+		_u = _u.SetPreviewSettingID(*id)
+	}
+	return _u
+}
+
+// SetPreviewSetting sets the "preview_setting" edge to the TrustCenterSetting entity.
+func (_u *TrustCenterUpdateOne) SetPreviewSetting(v *TrustCenterSetting) *TrustCenterUpdateOne {
+	return _u.SetPreviewSettingID(v.ID)
 }
 
 // SetWatermarkConfigID sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity by ID.
@@ -1335,9 +1549,21 @@ func (_u *TrustCenterUpdateOne) ClearCustomDomain() *TrustCenterUpdateOne {
 	return _u
 }
 
+// ClearPreviewDomain clears the "preview_domain" edge to the CustomDomain entity.
+func (_u *TrustCenterUpdateOne) ClearPreviewDomain() *TrustCenterUpdateOne {
+	_u.mutation.ClearPreviewDomain()
+	return _u
+}
+
 // ClearSetting clears the "setting" edge to the TrustCenterSetting entity.
 func (_u *TrustCenterUpdateOne) ClearSetting() *TrustCenterUpdateOne {
 	_u.mutation.ClearSetting()
+	return _u
+}
+
+// ClearPreviewSetting clears the "preview_setting" edge to the TrustCenterSetting entity.
+func (_u *TrustCenterUpdateOne) ClearPreviewSetting() *TrustCenterUpdateOne {
+	_u.mutation.ClearPreviewSetting()
 	return _u
 }
 
@@ -1514,6 +1740,11 @@ func (_u *TrustCenterUpdateOne) check() error {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1611,6 +1842,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenter.FieldPirschIdentificationCode, field.TypeString)
 	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenter.FieldPreviewStatus, field.TypeEnum)
+	}
 	if _u.mutation.OwnerCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -1673,9 +1910,40 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.PreviewDomainCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PreviewDomainIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.SettingCleared() {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
@@ -1684,12 +1952,12 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenter
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
 	if nodes := _u.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
@@ -1698,7 +1966,38 @@ func (_u *TrustCenterUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenter
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _u.schemaConfig.TrustCenterSetting
+		edge.Schema = _u.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.PreviewSettingCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.PreviewSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

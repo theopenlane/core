@@ -1,0 +1,38 @@
+{
+  "name": "okta",
+  "displayName": "Okta",
+  "category": "sso",
+  "authType": "apikey",
+  "active": true,
+  "logoUrl": "",
+  "docsUrl": "https://developer.okta.com/docs/reference/api/overview/",
+  "labels": {
+    "vendor": "okta",
+    "product": "identity"
+  },
+  "credentialsSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "orgUrl",
+      "apiToken"
+    ],
+    "properties": {
+      "alias": {
+        "type": "string",
+        "title": "Credential Alias",
+        "description": "Friendly identifier for this Okta tenant."
+      },
+      "orgUrl": {
+        "type": "string",
+        "title": "Org URL",
+        "description": "Base URL of the Okta organization (e.g. https://acme.okta.com)."
+      },
+      "apiToken": {
+        "type": "string",
+        "title": "API Token",
+        "description": "Okta API token with permission to query users, groups, and system settings."
+      }
+    }
+  }
+}

@@ -19,6 +19,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // TrustCenterCreate is the builder for creating a TrustCenter entity.
@@ -160,6 +161,20 @@ func (_c *TrustCenterCreate) SetNillableCustomDomainID(v *string) *TrustCenterCr
 	return _c
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_c *TrustCenterCreate) SetPreviewDomainID(v string) *TrustCenterCreate {
+	_c.mutation.SetPreviewDomainID(v)
+	return _c
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePreviewDomainID(v *string) *TrustCenterCreate {
+	if v != nil {
+		_c.SetPreviewDomainID(*v)
+	}
+	return _c
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_c *TrustCenterCreate) SetPirschDomainID(v string) *TrustCenterCreate {
 	_c.mutation.SetPirschDomainID(v)
@@ -188,6 +203,20 @@ func (_c *TrustCenterCreate) SetNillablePirschIdentificationCode(v *string) *Tru
 	return _c
 }
 
+// SetPreviewStatus sets the "preview_status" field.
+func (_c *TrustCenterCreate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterCreate {
+	_c.mutation.SetPreviewStatus(v)
+	return _c
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterCreate {
+	if v != nil {
+		_c.SetPreviewStatus(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterCreate) SetID(v string) *TrustCenterCreate {
 	_c.mutation.SetID(v)
@@ -212,6 +241,11 @@ func (_c *TrustCenterCreate) SetCustomDomain(v *CustomDomain) *TrustCenterCreate
 	return _c.SetCustomDomainID(v.ID)
 }
 
+// SetPreviewDomain sets the "preview_domain" edge to the CustomDomain entity.
+func (_c *TrustCenterCreate) SetPreviewDomain(v *CustomDomain) *TrustCenterCreate {
+	return _c.SetPreviewDomainID(v.ID)
+}
+
 // SetSettingID sets the "setting" edge to the TrustCenterSetting entity by ID.
 func (_c *TrustCenterCreate) SetSettingID(id string) *TrustCenterCreate {
 	_c.mutation.SetSettingID(id)
@@ -229,6 +263,25 @@ func (_c *TrustCenterCreate) SetNillableSettingID(id *string) *TrustCenterCreate
 // SetSetting sets the "setting" edge to the TrustCenterSetting entity.
 func (_c *TrustCenterCreate) SetSetting(v *TrustCenterSetting) *TrustCenterCreate {
 	return _c.SetSettingID(v.ID)
+}
+
+// SetPreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID.
+func (_c *TrustCenterCreate) SetPreviewSettingID(id string) *TrustCenterCreate {
+	_c.mutation.SetPreviewSettingID(id)
+	return _c
+}
+
+// SetNillablePreviewSettingID sets the "preview_setting" edge to the TrustCenterSetting entity by ID if the given value is not nil.
+func (_c *TrustCenterCreate) SetNillablePreviewSettingID(id *string) *TrustCenterCreate {
+	if id != nil {
+		_c = _c.SetPreviewSettingID(*id)
+	}
+	return _c
+}
+
+// SetPreviewSetting sets the "preview_setting" edge to the TrustCenterSetting entity.
+func (_c *TrustCenterCreate) SetPreviewSetting(v *TrustCenterSetting) *TrustCenterCreate {
+	return _c.SetPreviewSettingID(v.ID)
 }
 
 // SetWatermarkConfigID sets the "watermark_config" edge to the TrustCenterWatermarkConfig entity by ID.
@@ -380,6 +433,10 @@ func (_c *TrustCenterCreate) defaults() error {
 		v := trustcenter.DefaultTags
 		_c.mutation.SetTags(v)
 	}
+	if _, ok := _c.mutation.PreviewStatus(); !ok {
+		v := trustcenter.DefaultPreviewStatus
+		_c.mutation.SetPreviewStatus(v)
+	}
 	if _, ok := _c.mutation.ID(); !ok {
 		if trustcenter.DefaultID == nil {
 			return fmt.Errorf("generated: uninitialized trustcenter.DefaultID (forgotten import generated/runtime?)")
@@ -395,6 +452,11 @@ func (_c *TrustCenterCreate) check() error {
 	if v, ok := _c.mutation.Slug(); ok {
 		if err := trustcenter.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.slug": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.PreviewStatus(); ok {
+		if err := trustcenter.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenter.preview_status": %w`, err)}
 		}
 	}
 	return nil
@@ -473,6 +535,10 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 		_spec.SetField(trustcenter.FieldPirschIdentificationCode, field.TypeString, value)
 		_node.PirschIdentificationCode = value
 	}
+	if value, ok := _c.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenter.FieldPreviewStatus, field.TypeEnum, value)
+		_node.PreviewStatus = value
+	}
 	if nodes := _c.mutation.OwnerIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -509,9 +575,27 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 		_node.CustomDomainID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
+	if nodes := _c.mutation.PreviewDomainIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(customdomain.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.PreviewDomainID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
 	if nodes := _c.mutation.SettingIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
@@ -520,10 +604,29 @@ func (_c *TrustCenterCreate) createSpec() (*TrustCenter, *sqlgraph.CreateSpec) {
 				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustCenterSetting
+		edge.Schema = _c.schemaConfig.TrustCenter
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.trust_center_setting = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.PreviewSettingIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcentersetting.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenter
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.trust_center_preview_setting = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.WatermarkConfigIDs(); len(nodes) > 0 {

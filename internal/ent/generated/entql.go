@@ -4158,8 +4158,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenter.FieldOwnerID:                  {Type: field.TypeString, Column: trustcenter.FieldOwnerID},
 			trustcenter.FieldSlug:                     {Type: field.TypeString, Column: trustcenter.FieldSlug},
 			trustcenter.FieldCustomDomainID:           {Type: field.TypeString, Column: trustcenter.FieldCustomDomainID},
+			trustcenter.FieldPreviewDomainID:          {Type: field.TypeString, Column: trustcenter.FieldPreviewDomainID},
 			trustcenter.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenter.FieldPirschDomainID},
 			trustcenter.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenter.FieldPirschIdentificationCode},
+			trustcenter.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenter.FieldPreviewStatus},
 		},
 	}
 	graph.Nodes[121] = &sqlgraph.Node{
@@ -4292,8 +4294,10 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterhistory.FieldOwnerID:                  {Type: field.TypeString, Column: trustcenterhistory.FieldOwnerID},
 			trustcenterhistory.FieldSlug:                     {Type: field.TypeString, Column: trustcenterhistory.FieldSlug},
 			trustcenterhistory.FieldCustomDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldCustomDomainID},
+			trustcenterhistory.FieldPreviewDomainID:          {Type: field.TypeString, Column: trustcenterhistory.FieldPreviewDomainID},
 			trustcenterhistory.FieldPirschDomainID:           {Type: field.TypeString, Column: trustcenterhistory.FieldPirschDomainID},
 			trustcenterhistory.FieldPirschIdentificationCode: {Type: field.TypeString, Column: trustcenterhistory.FieldPirschIdentificationCode},
+			trustcenterhistory.FieldPreviewStatus:            {Type: field.TypeEnum, Column: trustcenterhistory.FieldPreviewStatus},
 		},
 	}
 	graph.Nodes[126] = &sqlgraph.Node{
@@ -4328,6 +4332,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersetting.FieldAccentColor:              {Type: field.TypeString, Column: trustcentersetting.FieldAccentColor},
 			trustcentersetting.FieldSecondaryBackgroundColor: {Type: field.TypeString, Column: trustcentersetting.FieldSecondaryBackgroundColor},
 			trustcentersetting.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersetting.FieldSecondaryForegroundColor},
+			trustcentersetting.FieldEnvironment:              {Type: field.TypeEnum, Column: trustcentersetting.FieldEnvironment},
 		},
 	}
 	graph.Nodes[127] = &sqlgraph.Node{
@@ -4365,6 +4370,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcentersettinghistory.FieldAccentColor:              {Type: field.TypeString, Column: trustcentersettinghistory.FieldAccentColor},
 			trustcentersettinghistory.FieldSecondaryBackgroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryBackgroundColor},
 			trustcentersettinghistory.FieldSecondaryForegroundColor: {Type: field.TypeString, Column: trustcentersettinghistory.FieldSecondaryForegroundColor},
+			trustcentersettinghistory.FieldEnvironment:              {Type: field.TypeEnum, Column: trustcentersettinghistory.FieldEnvironment},
 		},
 	}
 	graph.Nodes[128] = &sqlgraph.Node{
@@ -12332,12 +12338,36 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"CustomDomain",
 	)
 	graph.MustAddE(
+		"preview_domain",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewDomainTable,
+			Columns: []string{trustcenter.PreviewDomainColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"CustomDomain",
+	)
+	graph.MustAddE(
 		"setting",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
 			Table:   trustcenter.SettingTable,
 			Columns: []string{trustcenter.SettingColumn},
+			Bidi:    false,
+		},
+		"TrustCenter",
+		"TrustCenterSetting",
+	)
+	graph.MustAddE(
+		"preview_setting",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   trustcenter.PreviewSettingTable,
+			Columns: []string{trustcenter.PreviewSettingColumn},
 			Bidi:    false,
 		},
 		"TrustCenter",
@@ -12474,18 +12504,6 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterDoc",
 		"File",
-	)
-	graph.MustAddE(
-		"trust_center",
-		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.O2O,
-			Inverse: true,
-			Table:   trustcentersetting.TrustCenterTable,
-			Columns: []string{trustcentersetting.TrustCenterColumn},
-			Bidi:    false,
-		},
-		"TrustCenterSetting",
-		"TrustCenter",
 	)
 	graph.MustAddE(
 		"files",
@@ -38790,6 +38808,11 @@ func (f *TrustCenterFilter) WhereCustomDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldCustomDomainID))
 }
 
+// WherePreviewDomainID applies the entql string predicate on the preview_domain_id field.
+func (f *TrustCenterFilter) WherePreviewDomainID(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPreviewDomainID))
+}
+
 // WherePirschDomainID applies the entql string predicate on the pirsch_domain_id field.
 func (f *TrustCenterFilter) WherePirschDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldPirschDomainID))
@@ -38798,6 +38821,11 @@ func (f *TrustCenterFilter) WherePirschDomainID(p entql.StringP) {
 // WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
 func (f *TrustCenterFilter) WherePirschIdentificationCode(p entql.StringP) {
 	f.Where(p.Field(trustcenter.FieldPirschIdentificationCode))
+}
+
+// WherePreviewStatus applies the entql string predicate on the preview_status field.
+func (f *TrustCenterFilter) WherePreviewStatus(p entql.StringP) {
+	f.Where(p.Field(trustcenter.FieldPreviewStatus))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -38828,6 +38856,20 @@ func (f *TrustCenterFilter) WhereHasCustomDomainWith(preds ...predicate.CustomDo
 	})))
 }
 
+// WhereHasPreviewDomain applies a predicate to check if query has an edge preview_domain.
+func (f *TrustCenterFilter) WhereHasPreviewDomain() {
+	f.Where(entql.HasEdge("preview_domain"))
+}
+
+// WhereHasPreviewDomainWith applies a predicate to check if query has an edge preview_domain with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasPreviewDomainWith(preds ...predicate.CustomDomain) {
+	f.Where(entql.HasEdgeWith("preview_domain", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasSetting applies a predicate to check if query has an edge setting.
 func (f *TrustCenterFilter) WhereHasSetting() {
 	f.Where(entql.HasEdge("setting"))
@@ -38836,6 +38878,20 @@ func (f *TrustCenterFilter) WhereHasSetting() {
 // WhereHasSettingWith applies a predicate to check if query has an edge setting with a given conditions (other predicates).
 func (f *TrustCenterFilter) WhereHasSettingWith(preds ...predicate.TrustCenterSetting) {
 	f.Where(entql.HasEdgeWith("setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasPreviewSetting applies a predicate to check if query has an edge preview_setting.
+func (f *TrustCenterFilter) WhereHasPreviewSetting() {
+	f.Where(entql.HasEdge("preview_setting"))
+}
+
+// WhereHasPreviewSettingWith applies a predicate to check if query has an edge preview_setting with a given conditions (other predicates).
+func (f *TrustCenterFilter) WhereHasPreviewSettingWith(preds ...predicate.TrustCenterSetting) {
+	f.Where(entql.HasEdgeWith("preview_setting", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -39531,6 +39587,11 @@ func (f *TrustCenterHistoryFilter) WhereCustomDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldCustomDomainID))
 }
 
+// WherePreviewDomainID applies the entql string predicate on the preview_domain_id field.
+func (f *TrustCenterHistoryFilter) WherePreviewDomainID(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldPreviewDomainID))
+}
+
 // WherePirschDomainID applies the entql string predicate on the pirsch_domain_id field.
 func (f *TrustCenterHistoryFilter) WherePirschDomainID(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldPirschDomainID))
@@ -39539,6 +39600,11 @@ func (f *TrustCenterHistoryFilter) WherePirschDomainID(p entql.StringP) {
 // WherePirschIdentificationCode applies the entql string predicate on the pirsch_identification_code field.
 func (f *TrustCenterHistoryFilter) WherePirschIdentificationCode(p entql.StringP) {
 	f.Where(p.Field(trustcenterhistory.FieldPirschIdentificationCode))
+}
+
+// WherePreviewStatus applies the entql string predicate on the preview_status field.
+func (f *TrustCenterHistoryFilter) WherePreviewStatus(p entql.StringP) {
+	f.Where(p.Field(trustcenterhistory.FieldPreviewStatus))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -39686,18 +39752,9 @@ func (f *TrustCenterSettingFilter) WhereSecondaryForegroundColor(p entql.StringP
 	f.Where(p.Field(trustcentersetting.FieldSecondaryForegroundColor))
 }
 
-// WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
-func (f *TrustCenterSettingFilter) WhereHasTrustCenter() {
-	f.Where(entql.HasEdge("trust_center"))
-}
-
-// WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
-func (f *TrustCenterSettingFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
-	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
-		for _, p := range preds {
-			p(s)
-		}
-	})))
+// WhereEnvironment applies the entql string predicate on the environment field.
+func (f *TrustCenterSettingFilter) WhereEnvironment(p entql.StringP) {
+	f.Where(p.Field(trustcentersetting.FieldEnvironment))
 }
 
 // WhereHasFiles applies a predicate to check if query has an edge files.
@@ -39900,6 +39957,11 @@ func (f *TrustCenterSettingHistoryFilter) WhereSecondaryBackgroundColor(p entql.
 // WhereSecondaryForegroundColor applies the entql string predicate on the secondary_foreground_color field.
 func (f *TrustCenterSettingHistoryFilter) WhereSecondaryForegroundColor(p entql.StringP) {
 	f.Where(p.Field(trustcentersettinghistory.FieldSecondaryForegroundColor))
+}
+
+// WhereEnvironment applies the entql string predicate on the environment field.
+func (f *TrustCenterSettingHistoryFilter) WhereEnvironment(p entql.StringP) {
+	f.Where(p.Field(trustcentersettinghistory.FieldEnvironment))
 }
 
 // addPredicate implements the predicateAdder interface.

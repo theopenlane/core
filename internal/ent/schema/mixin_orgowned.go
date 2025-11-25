@@ -304,6 +304,10 @@ func (o ObjectOwnedMixin) orgInterceptorSkipper(ctx context.Context, q intercept
 		return true
 	}
 
+	if _, keystore := contextx.From[auth.KeyStoreContextKey](ctx); keystore {
+		return true
+	}
+
 	return false
 }
 

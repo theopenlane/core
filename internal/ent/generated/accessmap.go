@@ -2483,8 +2483,16 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "organization",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "preview_domain": {
+	ObjectType:      "organization",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 }, "setting": {
 	ObjectType:      "setting",
+	SkipEditCheck:   true,
+	CheckViewAccess: false,
+}, "preview_setting": {
+	ObjectType:      "preview_setting",
 	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "watermark_config": {
@@ -2534,11 +2542,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
-}, "trust_center_setting": {"trust_center": {
-	ObjectType:      "trust_center",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
-}, "files": {
+}, "trust_center_setting": {"files": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,

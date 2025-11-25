@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
 )
@@ -182,6 +183,26 @@ func (_u *TrustCenterHistoryUpdate) ClearCustomDomainID() *TrustCenterHistoryUpd
 	return _u
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) SetPreviewDomainID(v string) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePreviewDomainID(v *string) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdate) ClearPreviewDomainID() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPreviewDomainID()
+	return _u
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_u *TrustCenterHistoryUpdate) SetPirschDomainID(v string) *TrustCenterHistoryUpdate {
 	_u.mutation.SetPirschDomainID(v)
@@ -219,6 +240,26 @@ func (_u *TrustCenterHistoryUpdate) SetNillablePirschIdentificationCode(v *strin
 // ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
 func (_u *TrustCenterHistoryUpdate) ClearPirschIdentificationCode() *TrustCenterHistoryUpdate {
 	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterHistoryUpdate) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdate {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdate) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdate {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterHistoryUpdate) ClearPreviewStatus() *TrustCenterHistoryUpdate {
+	_u.mutation.ClearPreviewStatus()
 	return _u
 }
 
@@ -269,6 +310,16 @@ func (_u *TrustCenterHistoryUpdate) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterHistoryUpdate) check() error {
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenterhistory.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.preview_status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdate {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -276,6 +327,9 @@ func (_u *TrustCenterHistoryUpdate) Modify(modifiers ...func(u *sql.UpdateBuilde
 }
 
 func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterhistory.Table, trustcenterhistory.Columns, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
 	if ps := _u.mutation.predicates; len(ps) > 0 {
 		_spec.Predicate = func(selector *sql.Selector) {
@@ -346,6 +400,12 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
 	}
+	if value, ok := _u.mutation.PreviewDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PreviewDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewDomainID, field.TypeString)
+	}
 	if value, ok := _u.mutation.PirschDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
 	}
@@ -357,6 +417,12 @@ func (_u *TrustCenterHistoryUpdate) sqlSave(ctx context.Context) (_node int, err
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -532,6 +598,26 @@ func (_u *TrustCenterHistoryUpdateOne) ClearCustomDomainID() *TrustCenterHistory
 	return _u
 }
 
+// SetPreviewDomainID sets the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPreviewDomainID(v string) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPreviewDomainID(v)
+	return _u
+}
+
+// SetNillablePreviewDomainID sets the "preview_domain_id" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePreviewDomainID(v *string) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPreviewDomainID(*v)
+	}
+	return _u
+}
+
+// ClearPreviewDomainID clears the value of the "preview_domain_id" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPreviewDomainID() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPreviewDomainID()
+	return _u
+}
+
 // SetPirschDomainID sets the "pirsch_domain_id" field.
 func (_u *TrustCenterHistoryUpdateOne) SetPirschDomainID(v string) *TrustCenterHistoryUpdateOne {
 	_u.mutation.SetPirschDomainID(v)
@@ -569,6 +655,26 @@ func (_u *TrustCenterHistoryUpdateOne) SetNillablePirschIdentificationCode(v *st
 // ClearPirschIdentificationCode clears the value of the "pirsch_identification_code" field.
 func (_u *TrustCenterHistoryUpdateOne) ClearPirschIdentificationCode() *TrustCenterHistoryUpdateOne {
 	_u.mutation.ClearPirschIdentificationCode()
+	return _u
+}
+
+// SetPreviewStatus sets the "preview_status" field.
+func (_u *TrustCenterHistoryUpdateOne) SetPreviewStatus(v enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdateOne {
+	_u.mutation.SetPreviewStatus(v)
+	return _u
+}
+
+// SetNillablePreviewStatus sets the "preview_status" field if the given value is not nil.
+func (_u *TrustCenterHistoryUpdateOne) SetNillablePreviewStatus(v *enums.TrustCenterPreviewStatus) *TrustCenterHistoryUpdateOne {
+	if v != nil {
+		_u.SetPreviewStatus(*v)
+	}
+	return _u
+}
+
+// ClearPreviewStatus clears the value of the "preview_status" field.
+func (_u *TrustCenterHistoryUpdateOne) ClearPreviewStatus() *TrustCenterHistoryUpdateOne {
+	_u.mutation.ClearPreviewStatus()
 	return _u
 }
 
@@ -632,6 +738,16 @@ func (_u *TrustCenterHistoryUpdateOne) defaults() error {
 	return nil
 }
 
+// check runs all checks and user-defined validators on the builder.
+func (_u *TrustCenterHistoryUpdateOne) check() error {
+	if v, ok := _u.mutation.PreviewStatus(); ok {
+		if err := trustcenterhistory.PreviewStatusValidator(v); err != nil {
+			return &ValidationError{Name: "preview_status", err: fmt.Errorf(`generated: validator failed for field "TrustCenterHistory.preview_status": %w`, err)}
+		}
+	}
+	return nil
+}
+
 // Modify adds a statement modifier for attaching custom logic to the UPDATE statement.
 func (_u *TrustCenterHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBuilder)) *TrustCenterHistoryUpdateOne {
 	_u.modifiers = append(_u.modifiers, modifiers...)
@@ -639,6 +755,9 @@ func (_u *TrustCenterHistoryUpdateOne) Modify(modifiers ...func(u *sql.UpdateBui
 }
 
 func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *TrustCenterHistory, err error) {
+	if err := _u.check(); err != nil {
+		return _node, err
+	}
 	_spec := sqlgraph.NewUpdateSpec(trustcenterhistory.Table, trustcenterhistory.Columns, sqlgraph.NewFieldSpec(trustcenterhistory.FieldID, field.TypeString))
 	id, ok := _u.mutation.ID()
 	if !ok {
@@ -726,6 +845,12 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	if _u.mutation.CustomDomainIDCleared() {
 		_spec.ClearField(trustcenterhistory.FieldCustomDomainID, field.TypeString)
 	}
+	if value, ok := _u.mutation.PreviewDomainID(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)
+	}
+	if _u.mutation.PreviewDomainIDCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewDomainID, field.TypeString)
+	}
 	if value, ok := _u.mutation.PirschDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPirschDomainID, field.TypeString, value)
 	}
@@ -737,6 +862,12 @@ func (_u *TrustCenterHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Trus
 	}
 	if _u.mutation.PirschIdentificationCodeCleared() {
 		_spec.ClearField(trustcenterhistory.FieldPirschIdentificationCode, field.TypeString)
+	}
+	if value, ok := _u.mutation.PreviewStatus(); ok {
+		_spec.SetField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum, value)
+	}
+	if _u.mutation.PreviewStatusCleared() {
+		_spec.ClearField(trustcenterhistory.FieldPreviewStatus, field.TypeEnum)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

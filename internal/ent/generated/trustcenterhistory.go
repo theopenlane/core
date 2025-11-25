@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/entx/history"
 )
 
@@ -45,11 +46,15 @@ type TrustCenterHistory struct {
 	Slug string `json:"slug,omitempty"`
 	// custom domain id for the trust center
 	CustomDomainID string `json:"custom_domain_id,omitempty"`
+	// preview domain id for the trust center
+	PreviewDomainID string `json:"preview_domain_id,omitempty"`
 	// Pirsch domain ID
 	PirschDomainID string `json:"pirsch_domain_id,omitempty"`
 	// Pirsch ID code
 	PirschIdentificationCode string `json:"pirsch_identification_code,omitempty"`
-	selectValues             sql.SelectValues
+	// preview status of the trust center
+	PreviewStatus enums.TrustCenterPreviewStatus `json:"preview_status,omitempty"`
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -61,7 +66,7 @@ func (*TrustCenterHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode:
+		case trustcenterhistory.FieldID, trustcenterhistory.FieldRef, trustcenterhistory.FieldCreatedBy, trustcenterhistory.FieldUpdatedBy, trustcenterhistory.FieldDeletedBy, trustcenterhistory.FieldOwnerID, trustcenterhistory.FieldSlug, trustcenterhistory.FieldCustomDomainID, trustcenterhistory.FieldPreviewDomainID, trustcenterhistory.FieldPirschDomainID, trustcenterhistory.FieldPirschIdentificationCode, trustcenterhistory.FieldPreviewStatus:
 			values[i] = new(sql.NullString)
 		case trustcenterhistory.FieldHistoryTime, trustcenterhistory.FieldCreatedAt, trustcenterhistory.FieldUpdatedAt, trustcenterhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -166,6 +171,12 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 			} else if value.Valid {
 				_m.CustomDomainID = value.String
 			}
+		case trustcenterhistory.FieldPreviewDomainID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_domain_id", values[i])
+			} else if value.Valid {
+				_m.PreviewDomainID = value.String
+			}
 		case trustcenterhistory.FieldPirschDomainID:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field pirsch_domain_id", values[i])
@@ -177,6 +188,12 @@ func (_m *TrustCenterHistory) assignValues(columns []string, values []any) error
 				return fmt.Errorf("unexpected type %T for field pirsch_identification_code", values[i])
 			} else if value.Valid {
 				_m.PirschIdentificationCode = value.String
+			}
+		case trustcenterhistory.FieldPreviewStatus:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field preview_status", values[i])
+			} else if value.Valid {
+				_m.PreviewStatus = enums.TrustCenterPreviewStatus(value.String)
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -253,11 +270,17 @@ func (_m *TrustCenterHistory) String() string {
 	builder.WriteString("custom_domain_id=")
 	builder.WriteString(_m.CustomDomainID)
 	builder.WriteString(", ")
+	builder.WriteString("preview_domain_id=")
+	builder.WriteString(_m.PreviewDomainID)
+	builder.WriteString(", ")
 	builder.WriteString("pirsch_domain_id=")
 	builder.WriteString(_m.PirschDomainID)
 	builder.WriteString(", ")
 	builder.WriteString("pirsch_identification_code=")
 	builder.WriteString(_m.PirschIdentificationCode)
+	builder.WriteString(", ")
+	builder.WriteString("preview_status=")
+	builder.WriteString(fmt.Sprintf("%v", _m.PreviewStatus))
 	builder.WriteByte(')')
 	return builder.String()
 }

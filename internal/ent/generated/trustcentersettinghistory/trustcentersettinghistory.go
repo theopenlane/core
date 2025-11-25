@@ -66,6 +66,8 @@ const (
 	FieldSecondaryBackgroundColor = "secondary_background_color"
 	// FieldSecondaryForegroundColor holds the string denoting the secondary_foreground_color field in the database.
 	FieldSecondaryForegroundColor = "secondary_foreground_color"
+	// FieldEnvironment holds the string denoting the environment field in the database.
+	FieldEnvironment = "environment"
 	// Table holds the table name of the trustcentersettinghistory in the database.
 	Table = "trust_center_setting_history"
 )
@@ -97,6 +99,7 @@ var Columns = []string{
 	FieldAccentColor,
 	FieldSecondaryBackgroundColor,
 	FieldSecondaryForegroundColor,
+	FieldEnvironment,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -149,6 +152,18 @@ func ThemeModeValidator(tm enums.TrustCenterThemeMode) error {
 		return nil
 	default:
 		return fmt.Errorf("trustcentersettinghistory: invalid enum value for theme_mode field: %q", tm)
+	}
+}
+
+const DefaultEnvironment enums.TrustCenterEnvironment = "LIVE"
+
+// EnvironmentValidator is a validator for the "environment" field enum values. It is called by the builders before save.
+func EnvironmentValidator(e enums.TrustCenterEnvironment) error {
+	switch e.String() {
+	case "LIVE", "PREVIEW":
+		return nil
+	default:
+		return fmt.Errorf("trustcentersettinghistory: invalid enum value for environment field: %q", e)
 	}
 }
 
@@ -280,6 +295,11 @@ func BySecondaryForegroundColor(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldSecondaryForegroundColor, opts...).ToFunc()
 }
 
+// ByEnvironment orders the results by the environment field.
+func ByEnvironment(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEnvironment, opts...).ToFunc()
+}
+
 var (
 	// history.OpType must implement graphql.Marshaler.
 	_ graphql.Marshaler = (*history.OpType)(nil)
@@ -292,4 +312,11 @@ var (
 	_ graphql.Marshaler = (*enums.TrustCenterThemeMode)(nil)
 	// enums.TrustCenterThemeMode must implement graphql.Unmarshaler.
 	_ graphql.Unmarshaler = (*enums.TrustCenterThemeMode)(nil)
+)
+
+var (
+	// enums.TrustCenterEnvironment must implement graphql.Marshaler.
+	_ graphql.Marshaler = (*enums.TrustCenterEnvironment)(nil)
+	// enums.TrustCenterEnvironment must implement graphql.Unmarshaler.
+	_ graphql.Unmarshaler = (*enums.TrustCenterEnvironment)(nil)
 )

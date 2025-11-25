@@ -20,6 +20,7 @@ mutation CreateTrustCenterSetting($input: CreateTrustCenterSettingInput!) {
       foregroundColor
       backgroundColor
       accentColor
+      environment
     }
   }
 }
@@ -65,6 +66,7 @@ query GetAllTrustCenterSettings {
         foregroundColor
         backgroundColor
         accentColor
+        environment
       }
     }
   }
@@ -96,6 +98,7 @@ query GetTrustCenterSettingByID($trustCenterSettingId: ID!) {
     foregroundColor
     backgroundColor
     accentColor
+    environment
   }
 }
 
@@ -134,6 +137,7 @@ query GetTrustCenterSettings($first: Int, $last: Int, $where: TrustCenterSetting
         foregroundColor
         backgroundColor
         accentColor
+        environment
       }
     }
   }
@@ -171,6 +175,7 @@ mutation UpdateTrustCenterSetting($updateTrustCenterSettingId: ID!, $input: Upda
       foregroundColor
       backgroundColor
       accentColor
+      environment
     }
   }
 }
