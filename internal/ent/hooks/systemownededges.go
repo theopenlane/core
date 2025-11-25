@@ -16,6 +16,11 @@ type controlEdgeMutation interface {
 	utils.GenericMutation
 
 	ControlsIDs() []string
+}
+
+type subcontrolEdgeMutation interface {
+	utils.GenericMutation
+
 	SubcontrolsIDs() []string
 }
 
@@ -30,13 +35,17 @@ func HookSystemOwnedControls() ent.Hook {
 			}
 
 			mut, ok := m.(controlEdgeMutation)
-			if !ok {
-				// nothing to do if its not the right mutation type
-				return next.Mutate(ctx, m)
+			if ok {
+				if err := checkControlEdges(ctx, mut); err != nil {
+					return nil, err
+				}
 			}
 
-			if err := checkControlEdges(ctx, mut); err != nil {
-				return nil, err
+			subMut, ok := m.(subcontrolEdgeMutation)
+			if ok {
+				if err := checkSubcontrolEdges(ctx, subMut); err != nil {
+					return nil, err
+				}
 			}
 
 			return next.Mutate(ctx, m)
@@ -67,6 +76,10 @@ func checkControlEdges(ctx context.Context, m controlEdgeMutation) error {
 		}
 	}
 
+	return nil
+}
+
+func checkSubcontrolEdges(ctx context.Context, m subcontrolEdgeMutation) error {
 	// ensure system owned controls are not being linked
 	subcontrolIDs := m.SubcontrolsIDs()
 

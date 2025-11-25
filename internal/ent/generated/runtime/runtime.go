@@ -991,21 +991,19 @@ func init() {
 
 	control.Hooks[7] = controlMixinHooks6[1]
 
-	control.Hooks[8] = controlMixinHooks6[2]
+	control.Hooks[8] = controlMixinHooks7[0]
 
-	control.Hooks[9] = controlMixinHooks7[0]
+	control.Hooks[9] = controlMixinHooks7[1]
 
-	control.Hooks[10] = controlMixinHooks7[1]
+	control.Hooks[10] = controlMixinHooks8[0]
 
-	control.Hooks[11] = controlMixinHooks8[0]
+	control.Hooks[11] = controlMixinHooks9[0]
 
-	control.Hooks[12] = controlMixinHooks9[0]
+	control.Hooks[12] = controlMixinHooks9[1]
 
-	control.Hooks[13] = controlMixinHooks9[1]
+	control.Hooks[13] = controlMixinHooks10[0]
 
-	control.Hooks[14] = controlMixinHooks10[0]
-
-	control.Hooks[15] = controlHooks[0]
+	control.Hooks[14] = controlHooks[0]
 	controlMixinInters1 := controlMixin[1].Interceptors()
 	controlMixinInters2 := controlMixin[2].Interceptors()
 	controlMixinInters6 := controlMixin[6].Interceptors()
@@ -2740,6 +2738,8 @@ func init() {
 	evidence.Hooks[7] = evidenceMixinHooks6[1]
 
 	evidence.Hooks[8] = evidenceHooks[0]
+
+	evidence.Hooks[9] = evidenceHooks[1]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters2 := evidenceMixin[2].Interceptors()
 	evidenceMixinInters6 := evidenceMixin[6].Interceptors()
@@ -7405,19 +7405,17 @@ func init() {
 
 	subcontrol.Hooks[7] = subcontrolMixinHooks6[1]
 
-	subcontrol.Hooks[8] = subcontrolMixinHooks6[2]
+	subcontrol.Hooks[8] = subcontrolMixinHooks7[0]
 
-	subcontrol.Hooks[9] = subcontrolMixinHooks7[0]
+	subcontrol.Hooks[9] = subcontrolMixinHooks7[1]
 
-	subcontrol.Hooks[10] = subcontrolMixinHooks7[1]
+	subcontrol.Hooks[10] = subcontrolMixinHooks8[0]
 
-	subcontrol.Hooks[11] = subcontrolMixinHooks8[0]
+	subcontrol.Hooks[11] = subcontrolMixinHooks9[0]
 
-	subcontrol.Hooks[12] = subcontrolMixinHooks9[0]
+	subcontrol.Hooks[12] = subcontrolHooks[0]
 
-	subcontrol.Hooks[13] = subcontrolHooks[0]
-
-	subcontrol.Hooks[14] = subcontrolHooks[1]
+	subcontrol.Hooks[13] = subcontrolHooks[1]
 	subcontrolMixinInters1 := subcontrolMixin[1].Interceptors()
 	subcontrolMixinInters2 := subcontrolMixin[2].Interceptors()
 	subcontrolMixinInters6 := subcontrolMixin[6].Interceptors()
