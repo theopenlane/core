@@ -136,6 +136,11 @@ func WatermarkingEnabled(v bool) predicate.TrustCenterDocHistory {
 	return predicate.TrustCenterDocHistory(sql.FieldEQ(FieldWatermarkingEnabled, v))
 }
 
+// StandardID applies equality check predicate on the "standard_id" field. It's identical to StandardIDEQ.
+func StandardID(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldEQ(FieldStandardID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustCenterDocHistory {
 	return predicate.TrustCenterDocHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -1099,6 +1104,81 @@ func VisibilityIsNil() predicate.TrustCenterDocHistory {
 // VisibilityNotNil applies the NotNil predicate on the "visibility" field.
 func VisibilityNotNil() predicate.TrustCenterDocHistory {
 	return predicate.TrustCenterDocHistory(sql.FieldNotNull(FieldVisibility))
+}
+
+// StandardIDEQ applies the EQ predicate on the "standard_id" field.
+func StandardIDEQ(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldEQ(FieldStandardID, v))
+}
+
+// StandardIDNEQ applies the NEQ predicate on the "standard_id" field.
+func StandardIDNEQ(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldNEQ(FieldStandardID, v))
+}
+
+// StandardIDIn applies the In predicate on the "standard_id" field.
+func StandardIDIn(vs ...string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldIn(FieldStandardID, vs...))
+}
+
+// StandardIDNotIn applies the NotIn predicate on the "standard_id" field.
+func StandardIDNotIn(vs ...string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldNotIn(FieldStandardID, vs...))
+}
+
+// StandardIDGT applies the GT predicate on the "standard_id" field.
+func StandardIDGT(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldGT(FieldStandardID, v))
+}
+
+// StandardIDGTE applies the GTE predicate on the "standard_id" field.
+func StandardIDGTE(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldGTE(FieldStandardID, v))
+}
+
+// StandardIDLT applies the LT predicate on the "standard_id" field.
+func StandardIDLT(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldLT(FieldStandardID, v))
+}
+
+// StandardIDLTE applies the LTE predicate on the "standard_id" field.
+func StandardIDLTE(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldLTE(FieldStandardID, v))
+}
+
+// StandardIDContains applies the Contains predicate on the "standard_id" field.
+func StandardIDContains(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldContains(FieldStandardID, v))
+}
+
+// StandardIDHasPrefix applies the HasPrefix predicate on the "standard_id" field.
+func StandardIDHasPrefix(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldHasPrefix(FieldStandardID, v))
+}
+
+// StandardIDHasSuffix applies the HasSuffix predicate on the "standard_id" field.
+func StandardIDHasSuffix(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldHasSuffix(FieldStandardID, v))
+}
+
+// StandardIDIsNil applies the IsNil predicate on the "standard_id" field.
+func StandardIDIsNil() predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldIsNull(FieldStandardID))
+}
+
+// StandardIDNotNil applies the NotNil predicate on the "standard_id" field.
+func StandardIDNotNil() predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldNotNull(FieldStandardID))
+}
+
+// StandardIDEqualFold applies the EqualFold predicate on the "standard_id" field.
+func StandardIDEqualFold(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldEqualFold(FieldStandardID, v))
+}
+
+// StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
+func StandardIDContainsFold(v string) predicate.TrustCenterDocHistory {
+	return predicate.TrustCenterDocHistory(sql.FieldContainsFold(FieldStandardID, v))
 }
 
 // And groups predicates with the AND operator between them.

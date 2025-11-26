@@ -14659,6 +14659,7 @@ type CreateStandardInput struct {
 	OwnerID                  *string
 	ControlIDs               []string
 	TrustCenterComplianceIDs []string
+	TrustCenterDocIDs        []string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -14721,6 +14722,9 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
 	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
@@ -14774,6 +14778,9 @@ type UpdateStandardInput struct {
 	ClearTrustCenterCompliances    bool
 	AddTrustCenterComplianceIDs    []string
 	RemoveTrustCenterComplianceIDs []string
+	ClearTrustCenterDocs           bool
+	AddTrustCenterDocIDs           []string
+	RemoveTrustCenterDocIDs        []string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -14906,6 +14913,15 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
 		m.RemoveTrustCenterComplianceIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
 	}
 }
 
@@ -16824,6 +16840,7 @@ type CreateTrustCenterDocInput struct {
 	WatermarkStatus     *enums.WatermarkStatus
 	Visibility          *enums.TrustCenterDocumentVisibility
 	TrustCenterID       *string
+	StandardID          *string
 	FileID              *string
 	OriginalFileID      *string
 }
@@ -16846,6 +16863,9 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
@@ -16875,6 +16895,8 @@ type UpdateTrustCenterDocInput struct {
 	Visibility           *enums.TrustCenterDocumentVisibility
 	ClearTrustCenter     bool
 	TrustCenterID        *string
+	ClearStandard        bool
+	StandardID           *string
 	ClearFile            bool
 	FileID               *string
 	ClearOriginalFile    bool
@@ -16918,6 +16940,12 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearStandard {
+		m.ClearStandard()
+	}
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
 	if i.ClearFile {
 		m.ClearFile()

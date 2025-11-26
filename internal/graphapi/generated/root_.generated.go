@@ -5696,6 +5696,7 @@ type ComplexityRoot struct {
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDocs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		Version                func(childComplexity int) int
@@ -6453,6 +6454,8 @@ type ComplexityRoot struct {
 		ID                  func(childComplexity int) int
 		OriginalFile        func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
+		Standard            func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenter         func(childComplexity int) int
@@ -6506,6 +6509,7 @@ type ComplexityRoot struct {
 		Operation           func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
 		Ref                 func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenterID       func(childComplexity int) int
@@ -40738,6 +40742,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
 
+	case "Standard.trustCenterDocs":
+		if e.complexity.Standard.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Standard_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
+
 	case "Standard.updatedAt":
 		if e.complexity.Standard.UpdatedAt == nil {
 			break
@@ -44296,6 +44312,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.OriginalFileID(childComplexity), true
 
+	case "TrustCenterDoc.standard":
+		if e.complexity.TrustCenterDoc.Standard == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Standard(childComplexity), true
+
+	case "TrustCenterDoc.standardID":
+		if e.complexity.TrustCenterDoc.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.StandardID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -44498,6 +44528,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Ref(childComplexity), true
+
+	case "TrustCenterDocHistory.standardID":
+		if e.complexity.TrustCenterDocHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.StandardID(childComplexity), true
 
 	case "TrustCenterDocHistory.tags":
 		if e.complexity.TrustCenterDocHistory.Tags == nil {
@@ -65677,6 +65714,7 @@ input CreateStandardInput {
   ownerID: ID
   controlIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  trustCenterDocIDs: [ID!]
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -66047,6 +66085,7 @@ input CreateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   trustCenterID: ID
+  standardID: ID
   fileID: ID
   originalFileID: ID
 }
@@ -114316,6 +114355,37 @@ type Standard implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
 }
 """
 A connection to a list of items.
@@ -115284,6 +115354,11 @@ input StandardWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -121619,7 +121694,12 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: ID
   trustCenter: TrustCenter
+  standard: Standard
   """
   the file containing the document content
   """
@@ -121704,6 +121784,10 @@ type TrustCenterDocHistory implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: String
 }
 """
 A connection to a list of items.
@@ -122010,6 +122094,24 @@ input TrustCenterDocHistoryWhereInput {
   visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: String
+  standardIDContainsFold: String
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -122242,10 +122344,33 @@ input TrustCenterDocWhereInput {
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
   """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
   """
   file edge predicates
   """
@@ -129267,6 +129392,9 @@ input UpdateStandardInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -129776,6 +129904,8 @@ input UpdateTrustCenterDocInput {
   clearVisibility: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  standardID: ID
+  clearStandard: Boolean
   fileID: ID
   clearFile: Boolean
   originalFileID: ID

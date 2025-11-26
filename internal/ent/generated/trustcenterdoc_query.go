@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 
@@ -28,6 +29,7 @@ type TrustCenterDocQuery struct {
 	inters           []Interceptor
 	predicates       []predicate.TrustCenterDoc
 	withTrustCenter  *TrustCenterQuery
+	withStandard     *StandardQuery
 	withFile         *FileQuery
 	withOriginalFile *FileQuery
 	loadTotal        []func(context.Context, []*TrustCenterDoc) error
@@ -86,6 +88,31 @@ func (_q *TrustCenterDocQuery) QueryTrustCenter() *TrustCenterQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryStandard chains the current query on the "standard" edge.
+func (_q *TrustCenterDocQuery) QueryStandard() *StandardQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, selector),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.StandardTable, trustcenterdoc.StandardColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Standard
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -336,6 +363,7 @@ func (_q *TrustCenterDocQuery) Clone() *TrustCenterDocQuery {
 		inters:           append([]Interceptor{}, _q.inters...),
 		predicates:       append([]predicate.TrustCenterDoc{}, _q.predicates...),
 		withTrustCenter:  _q.withTrustCenter.Clone(),
+		withStandard:     _q.withStandard.Clone(),
 		withFile:         _q.withFile.Clone(),
 		withOriginalFile: _q.withOriginalFile.Clone(),
 		// clone intermediate query.
@@ -353,6 +381,17 @@ func (_q *TrustCenterDocQuery) WithTrustCenter(opts ...func(*TrustCenterQuery)) 
 		opt(query)
 	}
 	_q.withTrustCenter = query
+	return _q
+}
+
+// WithStandard tells the query-builder to eager-load the nodes that are connected to
+// the "standard" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *TrustCenterDocQuery) WithStandard(opts ...func(*StandardQuery)) *TrustCenterDocQuery {
+	query := (&StandardClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withStandard = query
 	return _q
 }
 
@@ -462,8 +501,9 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	var (
 		nodes       = []*TrustCenterDoc{}
 		_spec       = _q.querySpec()
-		loadedTypes = [3]bool{
+		loadedTypes = [4]bool{
 			_q.withTrustCenter != nil,
+			_q.withStandard != nil,
 			_q.withFile != nil,
 			_q.withOriginalFile != nil,
 		}
@@ -494,6 +534,12 @@ func (_q *TrustCenterDocQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withTrustCenter; query != nil {
 		if err := _q.loadTrustCenter(ctx, query, nodes, nil,
 			func(n *TrustCenterDoc, e *TrustCenter) { n.Edges.TrustCenter = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withStandard; query != nil {
+		if err := _q.loadStandard(ctx, query, nodes, nil,
+			func(n *TrustCenterDoc, e *Standard) { n.Edges.Standard = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -539,6 +585,35 @@ func (_q *TrustCenterDocQuery) loadTrustCenter(ctx context.Context, query *Trust
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "trust_center_id" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *TrustCenterDocQuery) loadStandard(ctx context.Context, query *StandardQuery, nodes []*TrustCenterDoc, init func(*TrustCenterDoc), assign func(*TrustCenterDoc, *Standard)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*TrustCenterDoc)
+	for i := range nodes {
+		fk := nodes[i].StandardID
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(standard.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "standard_id" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)
@@ -643,6 +718,9 @@ func (_q *TrustCenterDocQuery) querySpec() *sqlgraph.QuerySpec {
 		}
 		if _q.withTrustCenter != nil {
 			_spec.Node.AddColumnOnce(trustcenterdoc.FieldTrustCenterID)
+		}
+		if _q.withStandard != nil {
+			_spec.Node.AddColumnOnce(trustcenterdoc.FieldStandardID)
 		}
 		if _q.withFile != nil {
 			_spec.Node.AddColumnOnce(trustcenterdoc.FieldFileID)

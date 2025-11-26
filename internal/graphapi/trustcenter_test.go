@@ -1343,3 +1343,129 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
 }
+
+func TestTrustCenterDocStandards(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	t.Run("create trust center doc with standard and retrieve it", func(t *testing.T) {
+		fileUpload := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+
+		input := testclient.CreateTrustCenterDocInput{
+			Title:         "Test Document with Standard",
+			Category:      "Policy",
+			TrustCenterID: &trustCenter.ID,
+			StandardID:    &standard1.ID,
+			Tags:          []string{"test", "standard"},
+		}
+
+		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *fileUpload)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
+
+		doc := createResp.CreateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, doc.ID != "")
+		assert.Check(t, doc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *doc.StandardID))
+		assert.Check(t, doc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, doc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, doc.Standard.Name))
+
+		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, doc.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp != nil)
+		assert.Check(t, getResp.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *getResp.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, getResp.TrustCenterDoc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, getResp.TrustCenterDoc.Standard.Name))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	t.Run("update trust center doc to set standard and retrieve it", func(t *testing.T) {
+		fileUpload := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+
+		createInput := testclient.CreateTrustCenterDocInput{
+			Title:         "Test Document without Standard",
+			Category:      "Policy",
+			TrustCenterID: &trustCenter.ID,
+			Tags:          []string{"test"},
+		}
+
+		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *fileUpload)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
+
+		docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
+
+		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp != nil)
+		assert.Check(t, getResp.TrustCenterDoc.StandardID == nil || *getResp.TrustCenterDoc.StandardID == "")
+
+		updateInput := testclient.UpdateTrustCenterDocInput{
+			StandardID: &standard1.ID,
+		}
+
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp != nil)
+
+		updatedDoc := updateResp.UpdateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, updatedDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *updatedDoc.StandardID))
+		assert.Check(t, updatedDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, updatedDoc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, updatedDoc.Standard.Name))
+
+		getResp2, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp2 != nil)
+		assert.Check(t, getResp2.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *getResp2.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp2.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, getResp2.TrustCenterDoc.Standard.ID))
+
+		updateInput2 := testclient.UpdateTrustCenterDocInput{
+			StandardID: &standard2.ID,
+		}
+
+		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput2, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp2 != nil)
+
+		updatedDoc2 := updateResp2.UpdateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, updatedDoc2.StandardID != nil)
+		assert.Check(t, is.Equal(standard2.ID, *updatedDoc2.StandardID))
+		assert.Check(t, updatedDoc2.Standard != nil)
+		assert.Check(t, is.Equal(standard2.ID, updatedDoc2.Standard.ID))
+		assert.Check(t, is.Equal(standard2.Name, updatedDoc2.Standard.Name))
+
+		getResp3, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp3 != nil)
+		assert.Check(t, getResp3.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard2.ID, *getResp3.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp3.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard2.ID, getResp3.TrustCenterDoc.Standard.ID))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}

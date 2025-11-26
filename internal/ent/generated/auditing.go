@@ -4596,6 +4596,9 @@ func (_m *TrustCenterDocHistory) changes(new *TrustCenterDocHistory) []Change {
 	if !reflect.DeepEqual(_m.Visibility, new.Visibility) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldVisibility, _m.Visibility, new.Visibility))
 	}
+	if !reflect.DeepEqual(_m.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldStandardID, _m.StandardID, new.StandardID))
+	}
 	return changes
 }
 
