@@ -4,6 +4,7 @@ import (
 	"context"
 	"testing"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
@@ -13,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/utils/ulids"
 )
@@ -288,9 +290,21 @@ func TestMutationCreateStandard(t *testing.T) {
 		adminControlIDs = append(adminControlIDs, control.ID)
 	}
 
+	createImageUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
 	testCases := []struct {
 		name        string
 		request     testclient.CreateStandardInput
+		upload      *graphql.Upload
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
@@ -300,6 +314,15 @@ func TestMutationCreateStandard(t *testing.T) {
 			request: testclient.CreateStandardInput{
 				Name: "Super Awesome Standard",
 			},
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name: "happy path, minimal input with logo upload",
+			request: testclient.CreateStandardInput{
+				Name: "Super Awesome Standard",
+			},
+			upload: createImageUpload(),
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
 		},
@@ -421,7 +444,11 @@ func TestMutationCreateStandard(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Create "+tc.name, func(t *testing.T) {
-			resp, err := tc.client.CreateStandard(tc.ctx, tc.request)
+			if tc.upload != nil {
+				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+			}
+
+			resp, err := tc.client.CreateStandard(tc.ctx, tc.request, tc.upload)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -526,6 +553,11 @@ func TestMutationCreateStandard(t *testing.T) {
 			}
 			assert.Check(t, is.Equal(expectedVersion, *resp.CreateStandard.Standard.Version))
 
+			if tc.upload != nil {
+				assert.Assert(t, resp.CreateStandard.Standard.LogoFile != nil)
+				assert.Check(t, resp.CreateStandard.Standard.LogoFile.ID != "")
+			}
+
 			// cleanup the created standard
 			ctx := tc.ctx
 			if tc.ctx != systemAdminUser.UserCtx && tc.client != suite.client.api {
@@ -549,10 +581,22 @@ func TestMutationUpdateStandard(t *testing.T) {
 	_, err := suite.client.api.GetStandardByID(testUser1.UserCtx, standardSystemOwned.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
+	createImageUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
 	testCases := []struct {
 		name        string
 		id          string
 		request     testclient.UpdateStandardInput
+		upload      *graphql.Upload
 		client      *testclient.TestClient
 		ctx         context.Context
 		expectedErr string
@@ -563,6 +607,16 @@ func TestMutationUpdateStandard(t *testing.T) {
 			request: testclient.UpdateStandardInput{
 				Tags: []string{"new-tag-1", "new-tag-2"},
 			},
+			client: suite.client.apiWithPAT,
+			ctx:    context.Background(),
+		},
+		{
+			name: "happy path, update field, org owned standard with upload",
+			id:   standardOrgOwned.ID,
+			request: testclient.UpdateStandardInput{
+				Tags: []string{"new-tag-1", "new-tag-2"},
+			},
+			upload: createImageUpload(),
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
 		},
@@ -681,7 +735,12 @@ func TestMutationUpdateStandard(t *testing.T) {
 	for _, tc := range testCases {
 		t.Run("Update "+tc.name, func(t *testing.T) {
 			tc.ctx = resetContext(tc.ctx, t)
-			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request)
+
+			if tc.upload != nil {
+				expectUpload(t, suite.client.mockProvider, []graphql.Upload{*tc.upload})
+			}
+
+			resp, err := tc.client.UpdateStandard(tc.ctx, tc.id, tc.request, tc.upload)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
 
@@ -748,6 +807,11 @@ func TestMutationUpdateStandard(t *testing.T) {
 				assert.NilError(t, err)
 				assert.Assert(t, std != nil)
 				assert.Equal(t, standardSystemOwned.ID, std.Standard.ID)
+			}
+
+			if tc.upload != nil {
+				assert.Assert(t, resp.UpdateStandard.Standard.LogoFile != nil)
+				assert.Check(t, resp.UpdateStandard.Standard.LogoFile.ID != "")
 			}
 
 			if tc.request.Tags != nil {
