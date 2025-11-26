@@ -1,2 +1,2 @@
-Url,Name,LogoFileId,TrustCenterId,EntityTypeId,EntityId
-example_url,example_name,example_logofileid,example_trustcenterid,example_entitytypeid,example_entityid
+Url,Name,LogoFileId,TrustCenterId,EntityTypeId
+example_url,example_name,example_logofileid,example_trustcenterid,example_entitytypeid

@@ -1675,7 +1675,6 @@ func adminSearchTrustcenterEntities(ctx context.Context, query string, after *en
 				trustcenterentity.URLContainsFold(query),           // search by URL
 				trustcenterentity.TrustCenterIDContainsFold(query), // search by TrustCenterID
 				trustcenterentity.NameContainsFold(query),          // search by Name
-				trustcenterentity.EntityIDContainsFold(query),      // search by EntityID
 			),
 		)
 
