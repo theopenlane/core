@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
@@ -459,6 +460,26 @@ func (_u *StandardUpdate) ClearVersion() *StandardUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardUpdate) SetLogoFileID(v string) *StandardUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardUpdate) SetNillableLogoFileID(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardUpdate) ClearLogoFileID() *StandardUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *StandardUpdate) SetOwner(v *Organization) *StandardUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -507,6 +528,11 @@ func (_u *StandardUpdate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpda
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *StandardUpdate) SetLogoFile(v *File) *StandardUpdate {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -581,6 +607,12 @@ func (_u *StandardUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardU
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *StandardUpdate) ClearLogoFile() *StandardUpdate {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -985,6 +1017,37 @@ func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1436,6 +1499,26 @@ func (_u *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardUpdateOne) SetLogoFileID(v string) *StandardUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardUpdateOne) SetNillableLogoFileID(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardUpdateOne) ClearLogoFileID() *StandardUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *StandardUpdateOne) SetOwner(v *Organization) *StandardUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1484,6 +1567,11 @@ func (_u *StandardUpdateOne) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardU
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *StandardUpdateOne) SetLogoFile(v *File) *StandardUpdateOne {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -1558,6 +1646,12 @@ func (_u *StandardUpdateOne) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *Standa
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *StandardUpdateOne) ClearLogoFile() *StandardUpdateOne {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1992,6 +2086,37 @@ func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

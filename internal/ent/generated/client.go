@@ -26756,6 +26756,25 @@ func (c *StandardClient) QueryTrustCenterDocs(_m *Standard) *TrustCenterDocQuery
 	return query
 }
 
+// QueryLogoFile queries the logo_file edge of a Standard.
+func (c *StandardClient) QueryLogoFile(_m *Standard) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.LogoFileTable, standard.LogoFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Standard
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StandardClient) Hooks() []Hook {
 	hooks := c.hooks.Standard

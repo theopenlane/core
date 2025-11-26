@@ -13377,6 +13377,7 @@ input CreateStandardInput {
 	controlIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
 	trustCenterDocIDs: [ID!]
+	logoFileID: ID
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -43435,6 +43436,11 @@ type Mutation {
 		values of the standard
 		"""
 		input: CreateStandardInput!
+
+		"""
+		file to upload as the logo to represent the standard
+		"""
+		logoFile: Upload
 	): StandardCreatePayload!
 	"""
 	Update an existing standard
@@ -43449,6 +43455,11 @@ type Mutation {
 		New values for the standard
 		"""
 		input: UpdateStandardInput!
+
+		"""
+		file to upload as the logo to represent the standard
+		"""
+		logoFile: Upload
 	): StandardUpdatePayload!
 	"""
 	Delete an existing standard
@@ -43526,7 +43537,12 @@ type Mutation {
 		values of the subprocessor
 		"""
 		input: CreateSubprocessorInput!
-	logoFile: Upload): SubprocessorCreatePayload!
+
+		"""
+		file to upload as the logo of the subprocessor
+		"""
+		logoFile: Upload
+	): SubprocessorCreatePayload!
 	"""
 	Create multiple new subprocessors
 	"""
@@ -43558,7 +43574,12 @@ type Mutation {
 		New values for the subprocessor
 		"""
 		input: UpdateSubprocessorInput!
-	logoFile: Upload): SubprocessorUpdatePayload!
+
+		"""
+		file to upload as the logo of the subprocessor
+		"""
+		logoFile: Upload
+	): SubprocessorUpdatePayload!
 	"""
 	Delete an existing subprocessor
 	"""
@@ -70109,6 +70130,10 @@ type Standard implements Node {
 	version of the standard
 	"""
 	version: String
+	"""
+	URL of the logo
+	"""
+	logoFileID: ID
 	owner: Organization
 	controls(
 		"""
@@ -70203,6 +70228,7 @@ type Standard implements Node {
 		"""
 		where: TrustCenterDocWhereInput
 	): TrustCenterDocConnection!
+	logoFile: File
 }
 """
 Return response for createBulkStandard mutation
@@ -70346,6 +70372,10 @@ type StandardHistory implements Node {
 	version of the standard
 	"""
 	version: String
+	"""
+	URL of the logo
+	"""
+	logoFileID: String
 }
 """
 A connection to a list of items.
@@ -70802,6 +70832,24 @@ input StandardHistoryWhereInput {
 	versionNotNil: Boolean
 	versionEqualFold: String
 	versionContainsFold: String
+	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: String
+	logoFileIDNEQ: String
+	logoFileIDIn: [String!]
+	logoFileIDNotIn: [String!]
+	logoFileIDGT: String
+	logoFileIDGTE: String
+	logoFileIDLT: String
+	logoFileIDLTE: String
+	logoFileIDContains: String
+	logoFileIDHasPrefix: String
+	logoFileIDHasSuffix: String
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: String
+	logoFileIDContainsFold: String
 }
 """
 Ordering options for Standard connections
@@ -71193,6 +71241,24 @@ input StandardWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: ID
+	logoFileIDNEQ: ID
+	logoFileIDIn: [ID!]
+	logoFileIDNotIn: [ID!]
+	logoFileIDGT: ID
+	logoFileIDGTE: ID
+	logoFileIDLT: ID
+	logoFileIDLTE: ID
+	logoFileIDContains: ID
+	logoFileIDHasPrefix: ID
+	logoFileIDHasSuffix: ID
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: ID
+	logoFileIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -71212,6 +71278,11 @@ input StandardWhereInput {
 	"""
 	hasTrustCenterDocs: Boolean
 	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+	"""
+	logo_file edge predicates
+	"""
+	hasLogoFile: Boolean
+	hasLogoFileWith: [FileWhereInput!]
 }
 type Subcontrol implements Node {
 	id: ID!
@@ -85840,6 +85911,8 @@ input UpdateStandardInput {
 	addTrustCenterDocIDs: [ID!]
 	removeTrustCenterDocIDs: [ID!]
 	clearTrustCenterDocs: Boolean
+	logoFileID: ID
+	clearLogoFile: Boolean
 	RevisionBump: VersionBump
 }
 """

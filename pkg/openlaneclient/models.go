@@ -8094,6 +8094,7 @@ type CreateStandardInput struct {
 	ControlIDs               []string `json:"controlIDs,omitempty"`
 	TrustCenterComplianceIDs []string `json:"trustCenterComplianceIDs,omitempty"`
 	TrustCenterDocIDs        []string `json:"trustCenterDocIDs,omitempty"`
+	LogoFileID               *string  `json:"logoFileID,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -34743,11 +34744,14 @@ type Standard struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
-	Version                *string                          `json:"version,omitempty"`
+	Version *string `json:"version,omitempty"`
+	// URL of the logo
+	LogoFileID             *string                          `json:"logoFileID,omitempty"`
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Controls               *ControlConnection               `json:"controls"`
 	TrustCenterCompliances *TrustCenterComplianceConnection `json:"trustCenterCompliances"`
 	TrustCenterDocs        *TrustCenterDocConnection        `json:"trustCenterDocs"`
+	LogoFile               *File                            `json:"logoFile,omitempty"`
 }
 
 func (Standard) IsNode() {}
@@ -34835,6 +34839,8 @@ type StandardHistory struct {
 	StandardType *string `json:"standardType,omitempty"`
 	// version of the standard
 	Version *string `json:"version,omitempty"`
+	// URL of the logo
+	LogoFileID *string `json:"logoFileID,omitempty"`
 }
 
 func (StandardHistory) IsNode() {}
@@ -35194,6 +35200,22 @@ type StandardHistoryWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 }
 
 // Ordering options for Standard connections
@@ -35509,6 +35531,22 @@ type StandardWhereInput struct {
 	VersionNotNil       *bool    `json:"versionNotNil,omitempty"`
 	VersionEqualFold    *string  `json:"versionEqualFold,omitempty"`
 	VersionContainsFold *string  `json:"versionContainsFold,omitempty"`
+	// logo_file_id field predicates
+	LogoFileID             *string  `json:"logoFileID,omitempty"`
+	LogoFileIdneq          *string  `json:"logoFileIDNEQ,omitempty"`
+	LogoFileIDIn           []string `json:"logoFileIDIn,omitempty"`
+	LogoFileIDNotIn        []string `json:"logoFileIDNotIn,omitempty"`
+	LogoFileIdgt           *string  `json:"logoFileIDGT,omitempty"`
+	LogoFileIdgte          *string  `json:"logoFileIDGTE,omitempty"`
+	LogoFileIdlt           *string  `json:"logoFileIDLT,omitempty"`
+	LogoFileIdlte          *string  `json:"logoFileIDLTE,omitempty"`
+	LogoFileIDContains     *string  `json:"logoFileIDContains,omitempty"`
+	LogoFileIDHasPrefix    *string  `json:"logoFileIDHasPrefix,omitempty"`
+	LogoFileIDHasSuffix    *string  `json:"logoFileIDHasSuffix,omitempty"`
+	LogoFileIDIsNil        *bool    `json:"logoFileIDIsNil,omitempty"`
+	LogoFileIDNotNil       *bool    `json:"logoFileIDNotNil,omitempty"`
+	LogoFileIDEqualFold    *string  `json:"logoFileIDEqualFold,omitempty"`
+	LogoFileIDContainsFold *string  `json:"logoFileIDContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -35521,6 +35559,9 @@ type StandardWhereInput struct {
 	// trust_center_docs edge predicates
 	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
 	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
+	// logo_file edge predicates
+	HasLogoFile     *bool             `json:"hasLogoFile,omitempty"`
+	HasLogoFileWith []*FileWhereInput `json:"hasLogoFileWith,omitempty"`
 }
 
 type Subcontrol struct {
@@ -45609,6 +45650,8 @@ type UpdateStandardInput struct {
 	AddTrustCenterDocIDs           []string            `json:"addTrustCenterDocIDs,omitempty"`
 	RemoveTrustCenterDocIDs        []string            `json:"removeTrustCenterDocIDs,omitempty"`
 	ClearTrustCenterDocs           *bool               `json:"clearTrustCenterDocs,omitempty"`
+	LogoFileID                     *string             `json:"logoFileID,omitempty"`
+	ClearLogoFile                  *bool               `json:"clearLogoFile,omitempty"`
 	RevisionBump                   *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 

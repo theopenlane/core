@@ -68,6 +68,8 @@ const (
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// EdgeOwner holds the string denoting the owner edge name in mutations.
 	EdgeOwner = "owner"
 	// EdgeControls holds the string denoting the controls edge name in mutations.
@@ -76,6 +78,8 @@ const (
 	EdgeTrustCenterCompliances = "trust_center_compliances"
 	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
 	EdgeTrustCenterDocs = "trust_center_docs"
+	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
+	EdgeLogoFile = "logo_file"
 	// Table holds the table name of the standard in the database.
 	Table = "standards"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -106,6 +110,13 @@ const (
 	TrustCenterDocsInverseTable = "trust_center_docs"
 	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
 	TrustCenterDocsColumn = "standard_id"
+	// LogoFileTable is the table that holds the logo_file relation/edge.
+	LogoFileTable = "standards"
+	// LogoFileInverseTable is the table name for the File entity.
+	// It exists in this package in order to avoid circular dependency with the "file" package.
+	LogoFileInverseTable = "files"
+	// LogoFileColumn is the table column denoting the logo_file relation/edge.
+	LogoFileColumn = "logo_file_id"
 )
 
 // Columns holds all SQL columns for standard fields.
@@ -136,6 +147,7 @@ var Columns = []string{
 	FieldFreeToUse,
 	FieldStandardType,
 	FieldVersion,
+	FieldLogoFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -154,7 +166,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [12]ent.Hook
+	Hooks        [13]ent.Hook
 	Interceptors [4]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -320,6 +332,11 @@ func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
 }
 
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
+}
+
 // ByOwnerField orders the results by owner field.
 func ByOwnerField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -368,6 +385,13 @@ func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByLogoFileField orders the results by logo_file field.
+func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newLogoFileStep(), sql.OrderByField(field, opts...))
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -394,6 +418,13 @@ func newTrustCenterDocsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+	)
+}
+func newLogoFileStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(LogoFileInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
 	)
 }
 

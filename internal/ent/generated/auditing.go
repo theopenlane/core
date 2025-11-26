@@ -4011,6 +4011,9 @@ func (_m *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(_m.Version, new.Version) {
 		changes = append(changes, NewChange(standardhistory.FieldVersion, _m.Version, new.Version))
 	}
+	if !reflect.DeepEqual(_m.LogoFileID, new.LogoFileID) {
+		changes = append(changes, NewChange(standardhistory.FieldLogoFileID, _m.LogoFileID, new.LogoFileID))
+	}
 	return changes
 }
 

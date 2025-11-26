@@ -3706,6 +3706,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldFreeToUse:            {Type: field.TypeBool, Column: standard.FieldFreeToUse},
 			standard.FieldStandardType:         {Type: field.TypeString, Column: standard.FieldStandardType},
 			standard.FieldVersion:              {Type: field.TypeString, Column: standard.FieldVersion},
+			standard.FieldLogoFileID:           {Type: field.TypeString, Column: standard.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[108] = &sqlgraph.Node{
@@ -3747,6 +3748,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldFreeToUse:            {Type: field.TypeBool, Column: standardhistory.FieldFreeToUse},
 			standardhistory.FieldStandardType:         {Type: field.TypeString, Column: standardhistory.FieldStandardType},
 			standardhistory.FieldVersion:              {Type: field.TypeString, Column: standardhistory.FieldVersion},
+			standardhistory.FieldLogoFileID:           {Type: field.TypeString, Column: standardhistory.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[109] = &sqlgraph.Node{
@@ -11777,6 +11779,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"Standard",
 		"TrustCenterDoc",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"File",
 	)
 	graph.MustAddE(
 		"evidence",
@@ -36240,6 +36254,11 @@ func (f *StandardFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standard.FieldVersion))
 }
 
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *StandardFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(standard.FieldLogoFileID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *StandardFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -36290,6 +36309,20 @@ func (f *StandardFilter) WhereHasTrustCenterDocs() {
 // WhereHasTrustCenterDocsWith applies a predicate to check if query has an edge trust_center_docs with a given conditions (other predicates).
 func (f *StandardFilter) WhereHasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) {
 	f.Where(entql.HasEdgeWith("trust_center_docs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *StandardFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -36474,6 +36507,11 @@ func (f *StandardHistoryFilter) WhereStandardType(p entql.StringP) {
 // WhereVersion applies the entql string predicate on the version field.
 func (f *StandardHistoryFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldVersion))
+}
+
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *StandardHistoryFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldLogoFileID))
 }
 
 // addPredicate implements the predicateAdder interface.

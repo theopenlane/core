@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/pkg/enums"
@@ -70,6 +71,8 @@ type Standard struct {
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
 	Version string `json:"version,omitempty"`
+	// URL of the logo
+	LogoFileID *string `json:"logo_file_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the StandardQuery when eager-loading is set.
 	Edges        StandardEdges `json:"edges"`
@@ -86,11 +89,13 @@ type StandardEdges struct {
 	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
 	// TrustCenterDocs holds the value of the trust_center_docs edge.
 	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
+	// LogoFile holds the value of the logo_file edge.
+	LogoFile *File `json:"logo_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [4]bool
+	loadedTypes [5]bool
 	// totalCount holds the count of the edges above.
-	totalCount [4]map[string]int
+	totalCount [5]map[string]int
 
 	namedControls               map[string][]*Control
 	namedTrustCenterCompliances map[string][]*TrustCenterCompliance
@@ -135,6 +140,17 @@ func (e StandardEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
 	return nil, &NotLoadedError{edge: "trust_center_docs"}
 }
 
+// LogoFileOrErr returns the LogoFile value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e StandardEdges) LogoFileOrErr() (*File, error) {
+	if e.LogoFile != nil {
+		return e.LogoFile, nil
+	} else if e.loadedTypes[4] {
+		return nil, &NotFoundError{label: file.Label}
+	}
+	return nil, &NotLoadedError{edge: "logo_file"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Standard) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
@@ -144,7 +160,7 @@ func (*Standard) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case standard.FieldSystemOwned, standard.FieldIsPublic, standard.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
-		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldRevision, standard.FieldOwnerID, standard.FieldInternalNotes, standard.FieldSystemInternalID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBodyLogoURL, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion:
+		case standard.FieldID, standard.FieldCreatedBy, standard.FieldUpdatedBy, standard.FieldDeletedBy, standard.FieldRevision, standard.FieldOwnerID, standard.FieldInternalNotes, standard.FieldSystemInternalID, standard.FieldName, standard.FieldShortName, standard.FieldFramework, standard.FieldDescription, standard.FieldGoverningBodyLogoURL, standard.FieldGoverningBody, standard.FieldLink, standard.FieldStatus, standard.FieldStandardType, standard.FieldVersion, standard.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case standard.FieldCreatedAt, standard.FieldUpdatedAt, standard.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -325,6 +341,13 @@ func (_m *Standard) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Version = value.String
 			}
+		case standard.FieldLogoFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+			} else if value.Valid {
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -356,6 +379,11 @@ func (_m *Standard) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
 // QueryTrustCenterDocs queries the "trust_center_docs" edge of the Standard entity.
 func (_m *Standard) QueryTrustCenterDocs() *TrustCenterDocQuery {
 	return NewStandardClient(_m.config).QueryTrustCenterDocs(_m)
+}
+
+// QueryLogoFile queries the "logo_file" edge of the Standard entity.
+func (_m *Standard) QueryLogoFile() *FileQuery {
+	return NewStandardClient(_m.config).QueryLogoFile(_m)
 }
 
 // Update returns a builder for updating this Standard.
@@ -459,6 +487,11 @@ func (_m *Standard) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(_m.Version)
+	builder.WriteString(", ")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }
