@@ -7,12 +7,14 @@ import (
 	"entgo.io/ent"
 
 	"github.com/samber/lo"
+
+	"github.com/theopenlane/iam/auth"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
 // tagMutation is an interface for mutations that have tags
@@ -60,6 +62,7 @@ func HookTags() ent.Hook {
 					Where(tagdefinition.NameEqualFold(tag)).
 					Exist(ctx)
 				if !exists {
+
 					input := generated.CreateTagDefinitionInput{
 						Name:    tag,
 						OwnerID: &orgID,

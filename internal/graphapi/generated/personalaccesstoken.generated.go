@@ -446,7 +446,7 @@ func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2githubᚗco
 func (ec *executionContext) marshalNPersonalAccessTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -460,7 +460,7 @@ func (ec *executionContext) marshalNPersonalAccessTokenDeletePayload2githubᚗco
 func (ec *executionContext) marshalNPersonalAccessTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -474,7 +474,7 @@ func (ec *executionContext) marshalNPersonalAccessTokenUpdatePayload2githubᚗco
 func (ec *executionContext) marshalNPersonalAccessTokenUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐPersonalAccessTokenUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.PersonalAccessTokenUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
