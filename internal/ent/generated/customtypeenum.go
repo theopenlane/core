@@ -48,6 +48,8 @@ type CustomTypeEnum struct {
 	Description string `json:"description,omitempty"`
 	// The color of the tag definition in hex format
 	Color string `json:"color,omitempty"`
+	// The icon of the custom type enum in SVG format
+	Icon string `json:"icon,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the CustomTypeEnumQuery when eager-loading is set.
 	Edges        CustomTypeEnumEdges `json:"edges"`
@@ -192,7 +194,7 @@ func (*CustomTypeEnum) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case customtypeenum.FieldSystemOwned:
 			values[i] = new(sql.NullBool)
-		case customtypeenum.FieldID, customtypeenum.FieldCreatedBy, customtypeenum.FieldUpdatedBy, customtypeenum.FieldDeletedBy, customtypeenum.FieldOwnerID, customtypeenum.FieldInternalNotes, customtypeenum.FieldSystemInternalID, customtypeenum.FieldObjectType, customtypeenum.FieldField, customtypeenum.FieldName, customtypeenum.FieldDescription, customtypeenum.FieldColor:
+		case customtypeenum.FieldID, customtypeenum.FieldCreatedBy, customtypeenum.FieldUpdatedBy, customtypeenum.FieldDeletedBy, customtypeenum.FieldOwnerID, customtypeenum.FieldInternalNotes, customtypeenum.FieldSystemInternalID, customtypeenum.FieldObjectType, customtypeenum.FieldField, customtypeenum.FieldName, customtypeenum.FieldDescription, customtypeenum.FieldColor, customtypeenum.FieldIcon:
 			values[i] = new(sql.NullString)
 		case customtypeenum.FieldCreatedAt, customtypeenum.FieldUpdatedAt, customtypeenum.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -308,6 +310,12 @@ func (_m *CustomTypeEnum) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field color", values[i])
 			} else if value.Valid {
 				_m.Color = value.String
+			}
+		case customtypeenum.FieldIcon:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field icon", values[i])
+			} else if value.Valid {
+				_m.Icon = value.String
 			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
@@ -443,6 +451,9 @@ func (_m *CustomTypeEnum) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("color=")
 	builder.WriteString(_m.Color)
+	builder.WriteString(", ")
+	builder.WriteString("icon=")
+	builder.WriteString(_m.Icon)
 	builder.WriteByte(')')
 	return builder.String()
 }

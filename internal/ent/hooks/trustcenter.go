@@ -3,10 +3,12 @@ package hooks
 import (
 	"context"
 	"fmt"
-	"regexp"
-	"strings"
 
 	"entgo.io/ent"
+
+	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -14,13 +16,6 @@ import (
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-)
-
-var (
-	// compile this only once
-	reg = regexp.MustCompile(`[^a-zA-Z0-9]`)
 )
 
 // HookTrustCenter runs on trust center create mutations
@@ -50,11 +45,7 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			// Remove all spaces and non-alphanumeric characters from org.Name, then lowercase
-			cleanedName := reg.ReplaceAllString(org.Name, "")
-			slug := strings.ToLower(cleanedName)
-
-			m.SetSlug(slug)
+			m.SetSlug(strcase.KebabCase(org.Name))
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {

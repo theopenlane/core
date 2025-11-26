@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
@@ -61,6 +62,7 @@ func (CustomTypeEnum) Fields() []ent.Field {
 			Comment("The name of the enum value, for example evidence request").
 			Annotations(entx.FieldSearchable()).
 			NotEmpty().
+			Immutable().
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
 			}),
@@ -71,6 +73,9 @@ func (CustomTypeEnum) Fields() []ent.Field {
 			Comment("The color of the tag definition in hex format").
 			Validate(validator.HexColorValidator).
 			DefaultFunc(defaultRandomColor).
+			Optional(),
+		field.String("icon").
+			Comment("The icon of the custom type enum in SVG format").
 			Optional(),
 	}
 }
@@ -158,7 +163,9 @@ func (CustomTypeEnum) Annotations() []schema.Annotation {
 
 // Hooks of the CustomTypeEnum
 func (CustomTypeEnum) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookCustomTypeEnumDelete(),
+	}
 }
 
 // Interceptors of the CustomTypeEnum

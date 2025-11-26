@@ -8,9 +8,11 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/utils/ulids"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 func TestQueryTagDefinition(t *testing.T) {
@@ -142,12 +144,13 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "view only user allowed",
+			name: "view only user not allowed",
 			request: testclient.CreateTagDefinitionInput{
 				Name: "sames",
 			},
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 
 		{
@@ -206,6 +209,147 @@ func TestMutationCreateTagDefinition(t *testing.T) {
 	}
 }
 
+func TestMutationCreateTagDefinitionWithAliasLookup(t *testing.T) {
+	baseTagResp, err := suite.client.api.CreateTagDefinition(testUser1.UserCtx, testclient.CreateTagDefinitionInput{
+		Name:        "red",
+		Aliases:     []string{"maroon", "brick", "crimson"},
+		Description: lo.ToPtr("Red color tag with aliases"),
+		Color:       lo.ToPtr("#ff0000"),
+	})
+	assert.NilError(t, err)
+	assert.Assert(t, baseTagResp != nil)
+	baseTagID := baseTagResp.CreateTagDefinition.TagDefinition.ID
+
+	testCases := []struct {
+		name                 string
+		request              testclient.CreateTagDefinitionInput
+		client               *testclient.TestClient
+		ctx                  context.Context
+		expectedErr          string
+		expectedName         string
+		expectedID           string
+		shouldReturnOriginal bool
+	}{
+		{
+			name: "create with alias name returns existing tag - maroon",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "maroon",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with alias name returns existing tag - brick",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "brick",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with alias name returns existing tag - crimson",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "crimson",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with alias name case insensitive - MAROON",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "MAROON",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with alias name case insensitive - BrIcK",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "BrIcK",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with actual name returns existing tag",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "red",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+		{
+			name: "create with non-alias name creates new tag",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "blue",
+			},
+			client:               suite.client.api,
+			ctx:                  testUser1.UserCtx,
+			expectedName:         "blue",
+			shouldReturnOriginal: false,
+		},
+		{
+			name: "create with alias using PAT returns existing tag",
+			request: testclient.CreateTagDefinitionInput{
+				Name: "brick",
+			},
+			client:               suite.client.apiWithPAT,
+			ctx:                  context.Background(),
+			expectedName:         "red",
+			expectedID:           baseTagID,
+			shouldReturnOriginal: true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Create "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.CreateTagDefinition(tc.ctx, tc.request)
+			if tc.expectedErr != "" {
+				assert.ErrorContains(t, err, tc.expectedErr)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			// verify that the stored tag has the expected name
+			assert.Check(t, is.Equal(tc.expectedName, resp.CreateTagDefinition.TagDefinition.Name))
+
+			if tc.shouldReturnOriginal {
+				assert.Check(t, is.Equal(tc.expectedID, resp.CreateTagDefinition.TagDefinition.ID))
+				assert.Check(t, is.Equal("red", resp.CreateTagDefinition.TagDefinition.Name))
+				assert.Check(t, is.DeepEqual([]string{"maroon", "brick", "crimson"}, resp.CreateTagDefinition.TagDefinition.Aliases))
+				assert.Check(t, is.Equal("#ff0000", *resp.CreateTagDefinition.TagDefinition.Color))
+			} else {
+				// new tag ( new id )
+				assert.Check(t, resp.CreateTagDefinition.TagDefinition.ID != baseTagID)
+
+				(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: resp.CreateTagDefinition.TagDefinition.ID}).MustDelete(testUser1.UserCtx, t)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.TagDefinitionDeleteOne]{client: suite.client.db.TagDefinition, ID: baseTagID}).MustDelete(testUser1.UserCtx, t)
+}
+
 func TestMutationUpdateTagDefinition(t *testing.T) {
 	tagDefinition := (&TagDefinitionBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	systemTagDefinition := (&TagDefinitionBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
@@ -249,14 +393,15 @@ func TestMutationUpdateTagDefinition(t *testing.T) {
 			ctx:    context.Background(),
 		},
 		{
-			name: "update allowed by view only user",
+			name: "update not allowed by view only user",
 			request: testclient.UpdateTagDefinitionInput{
 				Color:         lo.ToPtr("#accef0"),
 				AppendAliases: []string{"new-alias"},
 			},
-			reqID:  tagDefinition.ID,
-			client: suite.client.api,
-			ctx:    viewOnlyUser.UserCtx,
+			reqID:       tagDefinition.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, clear aliases",
@@ -341,14 +486,15 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			expectedErr: notFoundErrorMsg,
 		},
 		{
-			name:       "view only user can delete, authorized",
-			idToDelete: tagDefinition1.ID,
-			client:     suite.client.api,
-			ctx:        viewOnlyUser.UserCtx,
+			name:        "view only user cannot delete, not authorized",
+			idToDelete:  tagDefinition1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
-			name:       "happy path, delete",
-			idToDelete: tagDefinition2.ID,
+			name:       "happy path, delete tagDefinition1",
+			idToDelete: tagDefinition1.ID,
 			client:     suite.client.api,
 			ctx:        testUser1.UserCtx,
 		},
@@ -358,6 +504,12 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
 			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete tagDefinition2",
+			idToDelete: tagDefinition2.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
 		},
 		{
 			name:       "happy path, delete using personal access token",
@@ -394,4 +546,39 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteTagDefinition.DeletedID))
 		})
 	}
+}
+
+func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
+	// create a tag definition
+	tagDef := (&TagDefinitionBuilder{
+		client: suite.client,
+		Name:   "test-tag",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a workflow definition that uses the tag definition
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	workflowResp, err := suite.client.db.WorkflowDefinition.Create().
+		SetName("Test Workflow").
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("control").
+		AddTagDefinitionIDs(tagDef.ID).
+		Save(ctx)
+	assert.NilError(t, err)
+
+	workflowID := workflowResp.ID
+
+	t.Run("delete tag definition in use by workflow definition", func(t *testing.T) {
+		_, err := suite.client.api.DeleteTagDefinition(testUser1.UserCtx, tagDef.ID)
+		assert.ErrorContains(t, err, "tag definition is in use")
+	})
+
+	// clean up the workflow definition using the tag
+	(&Cleanup[*generated.WorkflowDefinitionDeleteOne]{client: suite.client.db.WorkflowDefinition, ID: workflowID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("tag definition deletion works if no workflow definition using it", func(t *testing.T) {
+		resp, err := suite.client.api.DeleteTagDefinition(testUser1.UserCtx, tagDef.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(tagDef.ID, resp.DeleteTagDefinition.DeletedID))
+	})
 }

@@ -10,12 +10,14 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
+	"github.com/theopenlane/entx"
+	"github.com/theopenlane/entx/history"
+
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/mixin"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/entx"
-	"github.com/theopenlane/entx/history"
 )
 
 // TagDefinition holds the schema definition for the TagDefinition entity
@@ -48,6 +50,7 @@ func (TagDefinition) Fields() []ent.Field {
 	return []ent.Field{
 		field.String("name").
 			Comment("The name of the tag definition").
+			Immutable().
 			Annotations(entx.FieldSearchable()).
 			SchemaType(map[string]string{
 				dialect.Postgres: "citext",
@@ -115,7 +118,10 @@ func (TagDefinition) Annotations() []schema.Annotation {
 
 // Hooks of the TagDefinition
 func (TagDefinition) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTagDefintion(),
+		hooks.HookTagDefinitionDelete(),
+	}
 }
 
 // Interceptors of the TagDefinition
@@ -136,7 +142,7 @@ func (TagDefinition) Policy() ent.Policy {
 	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			policy.CheckOrgAccess(),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

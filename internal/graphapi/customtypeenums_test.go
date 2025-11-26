@@ -8,9 +8,10 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryCustomTypeEnum(t *testing.T) {
@@ -237,7 +238,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "happy path, update field",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Name: lo.ToPtr("Meow"),
+				Description: lo.ToPtr("Updated description"),
 			},
 			requestID: customTypeEnum.ID,
 			client:    suite.client.api,
@@ -246,7 +247,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "not authorized, update system owned enum",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Name: lo.ToPtr("Meow"),
+				Description: lo.ToPtr("Updated description"),
 			},
 			requestID:   systemTypeEnum.ID,
 			client:      suite.client.api,
@@ -266,7 +267,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "update not allowed, not enough permissions",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Name: lo.ToPtr("Woof"),
+				Description: lo.ToPtr("Updated description"),
 			},
 			requestID:   customTypeEnum.ID,
 			client:      suite.client.api,
@@ -276,7 +277,7 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 		{
 			name: "update not allowed, no permissions",
 			request: testclient.UpdateCustomTypeEnumInput{
-				Name: lo.ToPtr("Bark"),
+				Description: lo.ToPtr("Updated description"),
 			},
 			requestID:   customTypeEnum.ID,
 			client:      suite.client.api,
@@ -296,11 +297,6 @@ func TestMutationUpdateCustomTypeEnum(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-
-			// add checks for the updated fields if they were set in the request
-			if tc.request.Name != nil {
-				assert.Check(t, resp.UpdateCustomTypeEnum.CustomTypeEnum.Name == *tc.request.Name)
-			}
 
 			if tc.request.Description != nil {
 				assert.Check(t, resp.UpdateCustomTypeEnum.CustomTypeEnum.Description != nil)
@@ -392,4 +388,71 @@ func TestMutationDeleteCustomTypeEnum(t *testing.T) {
 			assert.Check(t, is.Equal(tc.idToDelete, resp.DeleteCustomTypeEnum.DeletedID))
 		})
 	}
+}
+
+func TestMutationDeleteCustomTypeEnumInUse(t *testing.T) {
+	// create a control enum
+	controlEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "Preventative",
+		ObjectType: "control",
+	}).MustNew(testUser1.UserCtx, t)
+
+	// create a task enum
+	taskEnum := (&CustomTypeEnumBuilder{
+		client:     suite.client,
+		Name:       "Evidence",
+		ObjectType: "task",
+	}).MustNew(testUser1.UserCtx, t)
+
+	controlResp, err := suite.client.api.CreateControl(testUser1.UserCtx, testclient.CreateControlInput{
+		RefCode:         "TEST-1",
+		ControlKindName: lo.ToPtr(controlEnum.Name),
+	})
+	assert.NilError(t, err)
+	controlID := controlResp.CreateControl.Control.ID
+
+	taskResp, err := suite.client.api.CreateTask(testUser1.UserCtx, testclient.CreateTaskInput{
+		Title:        "Test Task",
+		TaskKindName: lo.ToPtr(taskEnum.Name),
+	})
+	assert.NilError(t, err)
+	taskID := taskResp.CreateTask.Task.ID
+
+	subcontrolResp, err := suite.client.api.CreateSubcontrol(testUser1.UserCtx, testclient.CreateSubcontrolInput{
+		RefCode:            "SUB-1",
+		ControlID:          controlID,
+		SubcontrolKindName: lo.ToPtr(controlEnum.Name),
+	})
+	assert.NilError(t, err)
+	subcontrolID := subcontrolResp.CreateSubcontrol.Subcontrol.ID
+
+	t.Run("delete enum in use by control", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, controlEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	t.Run("delete enum in use by task", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, taskEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	t.Run("delete enum in use by control and subcontrol", func(t *testing.T) {
+		_, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, controlEnum.ID)
+		assert.ErrorContains(t, err, "enum is in use")
+	})
+
+	// clean up the objects using the enums
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, ID: controlID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, ID: taskID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: subcontrolID}).MustDelete(testUser1.UserCtx, t)
+
+	t.Run("enum deletion works if no object using it", func(t *testing.T) {
+		resp, err := suite.client.api.DeleteCustomTypeEnum(testUser1.UserCtx, controlEnum.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
+		assert.Check(t, is.Equal(controlEnum.ID, resp.DeleteCustomTypeEnum.DeletedID))
+	})
+
+	(&Cleanup[*generated.CustomTypeEnumDeleteOne]{client: suite.client.db.CustomTypeEnum, ID: taskEnum.ID}).MustDelete(testUser1.UserCtx, t)
 }

@@ -6604,7 +6604,9 @@ type CreateCustomTypeEnumInput struct {
 	// The description of the custom type
 	Description *string `json:"description,omitempty"`
 	// The color of the tag definition in hex format
-	Color             *string  `json:"color,omitempty"`
+	Color *string `json:"color,omitempty"`
+	// The icon of the custom type enum in SVG format
+	Icon              *string  `json:"icon,omitempty"`
 	OwnerID           *string  `json:"ownerID,omitempty"`
 	TaskIDs           []string `json:"taskIDs,omitempty"`
 	ControlIDs        []string `json:"controlIDs,omitempty"`
@@ -9281,7 +9283,9 @@ type CustomTypeEnum struct {
 	// The description of the custom type
 	Description *string `json:"description,omitempty"`
 	// The color of the tag definition in hex format
-	Color            *string                   `json:"color,omitempty"`
+	Color *string `json:"color,omitempty"`
+	// The icon of the custom type enum in SVG format
+	Icon             *string                   `json:"icon,omitempty"`
 	Owner            *Organization             `json:"owner,omitempty"`
 	Tasks            *TaskConnection           `json:"tasks"`
 	Controls         *ControlConnection        `json:"controls"`
@@ -9544,6 +9548,22 @@ type CustomTypeEnumWhereInput struct {
 	ColorNotNil       *bool    `json:"colorNotNil,omitempty"`
 	ColorEqualFold    *string  `json:"colorEqualFold,omitempty"`
 	ColorContainsFold *string  `json:"colorContainsFold,omitempty"`
+	// icon field predicates
+	Icon             *string  `json:"icon,omitempty"`
+	IconNeq          *string  `json:"iconNEQ,omitempty"`
+	IconIn           []string `json:"iconIn,omitempty"`
+	IconNotIn        []string `json:"iconNotIn,omitempty"`
+	IconGt           *string  `json:"iconGT,omitempty"`
+	IconGte          *string  `json:"iconGTE,omitempty"`
+	IconLt           *string  `json:"iconLT,omitempty"`
+	IconLte          *string  `json:"iconLTE,omitempty"`
+	IconContains     *string  `json:"iconContains,omitempty"`
+	IconHasPrefix    *string  `json:"iconHasPrefix,omitempty"`
+	IconHasSuffix    *string  `json:"iconHasSuffix,omitempty"`
+	IconIsNil        *bool    `json:"iconIsNil,omitempty"`
+	IconNotNil       *bool    `json:"iconNotNil,omitempty"`
+	IconEqualFold    *string  `json:"iconEqualFold,omitempty"`
+	IconContainsFold *string  `json:"iconContainsFold,omitempty"`
 	// owner edge predicates
 	HasOwner     *bool                     `json:"hasOwner,omitempty"`
 	HasOwnerWith []*OrganizationWhereInput `json:"hasOwnerWith,omitempty"`
@@ -43537,14 +43557,15 @@ type UpdateCustomTypeEnumInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	// The name of the enum value, for example evidence request
-	Name *string `json:"name,omitempty"`
 	// The description of the custom type
 	Description      *string `json:"description,omitempty"`
 	ClearDescription *bool   `json:"clearDescription,omitempty"`
 	// The color of the tag definition in hex format
-	Color                   *string  `json:"color,omitempty"`
-	ClearColor              *bool    `json:"clearColor,omitempty"`
+	Color      *string `json:"color,omitempty"`
+	ClearColor *bool   `json:"clearColor,omitempty"`
+	// The icon of the custom type enum in SVG format
+	Icon                    *string  `json:"icon,omitempty"`
+	ClearIcon               *bool    `json:"clearIcon,omitempty"`
 	OwnerID                 *string  `json:"ownerID,omitempty"`
 	ClearOwner              *bool    `json:"clearOwner,omitempty"`
 	AddTaskIDs              []string `json:"addTaskIDs,omitempty"`
@@ -46196,8 +46217,6 @@ type UpdateTagDefinitionInput struct {
 	// an internal identifier for the mapping, this field is only available to system admins
 	SystemInternalID      *string `json:"systemInternalID,omitempty"`
 	ClearSystemInternalID *bool   `json:"clearSystemInternalID,omitempty"`
-	// The name of the tag definition
-	Name *string `json:"name,omitempty"`
 	// common aliases or misspellings for the tag definition
 	Aliases       []string `json:"aliases,omitempty"`
 	AppendAliases []string `json:"appendAliases,omitempty"`

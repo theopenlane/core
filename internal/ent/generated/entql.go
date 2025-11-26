@@ -876,6 +876,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customtypeenum.FieldName:             {Type: field.TypeString, Column: customtypeenum.FieldName},
 			customtypeenum.FieldDescription:      {Type: field.TypeString, Column: customtypeenum.FieldDescription},
 			customtypeenum.FieldColor:            {Type: field.TypeString, Column: customtypeenum.FieldColor},
+			customtypeenum.FieldIcon:             {Type: field.TypeString, Column: customtypeenum.FieldIcon},
 		},
 	}
 	graph.Nodes[20] = &sqlgraph.Node{
@@ -17866,6 +17867,11 @@ func (f *CustomTypeEnumFilter) WhereDescription(p entql.StringP) {
 // WhereColor applies the entql string predicate on the color field.
 func (f *CustomTypeEnumFilter) WhereColor(p entql.StringP) {
 	f.Where(p.Field(customtypeenum.FieldColor))
+}
+
+// WhereIcon applies the entql string predicate on the icon field.
+func (f *CustomTypeEnumFilter) WhereIcon(p entql.StringP) {
+	f.Where(p.Field(customtypeenum.FieldIcon))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
