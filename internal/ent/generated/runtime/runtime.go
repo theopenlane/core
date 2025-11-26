@@ -8398,6 +8398,10 @@ func init() {
 	trustcenterdocDescWatermarkingEnabled := trustcenterdocFields[5].Descriptor()
 	// trustcenterdoc.DefaultWatermarkingEnabled holds the default value on creation for the watermarking_enabled field.
 	trustcenterdoc.DefaultWatermarkingEnabled = trustcenterdocDescWatermarkingEnabled.Default.(bool)
+	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
+	trustcenterdocDescStandardID := trustcenterdocFields[8].Descriptor()
+	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
+	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields3[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.

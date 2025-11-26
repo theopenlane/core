@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
@@ -51,6 +52,8 @@ type TrustCenterDoc struct {
 	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	// visibility of the document
 	Visibility enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	// ID of the standard
+	StandardID string `json:"standard_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustCenterDocQuery when eager-loading is set.
 	Edges        TrustCenterDocEdges `json:"edges"`
@@ -61,15 +64,17 @@ type TrustCenterDoc struct {
 type TrustCenterDocEdges struct {
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
+	// Standard holds the value of the standard edge.
+	Standard *Standard `json:"standard,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
 	// the file containing the document content, pre watermarking
 	OriginalFile *File `json:"original_file,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 }
 
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
@@ -83,12 +88,23 @@ func (e TrustCenterDocEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	return nil, &NotLoadedError{edge: "trust_center"}
 }
 
+// StandardOrErr returns the Standard value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustCenterDocEdges) StandardOrErr() (*Standard, error) {
+	if e.Standard != nil {
+		return e.Standard, nil
+	} else if e.loadedTypes[1] {
+		return nil, &NotFoundError{label: standard.Label}
+	}
+	return nil, &NotLoadedError{edge: "standard"}
+}
+
 // FileOrErr returns the File value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 	if e.File != nil {
 		return e.File, nil
-	} else if e.loadedTypes[1] {
+	} else if e.loadedTypes[2] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "file"}
@@ -99,7 +115,7 @@ func (e TrustCenterDocEdges) FileOrErr() (*File, error) {
 func (e TrustCenterDocEdges) OriginalFileOrErr() (*File, error) {
 	if e.OriginalFile != nil {
 		return e.OriginalFile, nil
-	} else if e.loadedTypes[2] {
+	} else if e.loadedTypes[3] {
 		return nil, &NotFoundError{label: file.Label}
 	}
 	return nil, &NotLoadedError{edge: "original_file"}
@@ -114,7 +130,7 @@ func (*TrustCenterDoc) scanValues(columns []string) ([]any, error) {
 			values[i] = new([]byte)
 		case trustcenterdoc.FieldWatermarkingEnabled:
 			values[i] = new(sql.NullBool)
-		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldOriginalFileID, trustcenterdoc.FieldWatermarkStatus, trustcenterdoc.FieldVisibility:
+		case trustcenterdoc.FieldID, trustcenterdoc.FieldCreatedBy, trustcenterdoc.FieldUpdatedBy, trustcenterdoc.FieldDeletedBy, trustcenterdoc.FieldTrustCenterID, trustcenterdoc.FieldTitle, trustcenterdoc.FieldCategory, trustcenterdoc.FieldFileID, trustcenterdoc.FieldOriginalFileID, trustcenterdoc.FieldWatermarkStatus, trustcenterdoc.FieldVisibility, trustcenterdoc.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case trustcenterdoc.FieldCreatedAt, trustcenterdoc.FieldUpdatedAt, trustcenterdoc.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -233,6 +249,12 @@ func (_m *TrustCenterDoc) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Visibility = enums.TrustCenterDocumentVisibility(value.String)
 			}
+		case trustcenterdoc.FieldStandardID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
+			} else if value.Valid {
+				_m.StandardID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -249,6 +271,11 @@ func (_m *TrustCenterDoc) Value(name string) (ent.Value, error) {
 // QueryTrustCenter queries the "trust_center" edge of the TrustCenterDoc entity.
 func (_m *TrustCenterDoc) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustCenterDocClient(_m.config).QueryTrustCenter(_m)
+}
+
+// QueryStandard queries the "standard" edge of the TrustCenterDoc entity.
+func (_m *TrustCenterDoc) QueryStandard() *StandardQuery {
+	return NewTrustCenterDocClient(_m.config).QueryStandard(_m)
 }
 
 // QueryFile queries the "file" edge of the TrustCenterDoc entity.
@@ -332,6 +359,9 @@ func (_m *TrustCenterDoc) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))
+	builder.WriteString(", ")
+	builder.WriteString("standard_id=")
+	builder.WriteString(_m.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
 }

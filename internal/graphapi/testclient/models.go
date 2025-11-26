@@ -8091,6 +8091,7 @@ type CreateStandardInput struct {
 	OwnerID                  *string  `json:"ownerID,omitempty"`
 	ControlIDs               []string `json:"controlIDs,omitempty"`
 	TrustCenterComplianceIDs []string `json:"trustCenterComplianceIDs,omitempty"`
+	TrustCenterDocIDs        []string `json:"trustCenterDocIDs,omitempty"`
 }
 
 // CreateSubcontrolInput is used for create Subcontrol object.
@@ -8318,6 +8319,7 @@ type CreateTrustCenterDocInput struct {
 	// visibility of the document
 	Visibility     *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
 	TrustCenterID  *string                              `json:"trustCenterID,omitempty"`
+	StandardID     *string                              `json:"standardID,omitempty"`
 	FileID         *string                              `json:"fileID,omitempty"`
 	OriginalFileID *string                              `json:"originalFileID,omitempty"`
 }
@@ -34745,6 +34747,7 @@ type Standard struct {
 	Owner                  *Organization                    `json:"owner,omitempty"`
 	Controls               *ControlConnection               `json:"controls"`
 	TrustCenterCompliances *TrustCenterComplianceConnection `json:"trustCenterCompliances"`
+	TrustCenterDocs        *TrustCenterDocConnection        `json:"trustCenterDocs"`
 }
 
 func (Standard) IsNode() {}
@@ -35515,6 +35518,9 @@ type StandardWhereInput struct {
 	// trust_center_compliances edge predicates
 	HasTrustCenterCompliances     *bool                              `json:"hasTrustCenterCompliances,omitempty"`
 	HasTrustCenterCompliancesWith []*TrustCenterComplianceWhereInput `json:"hasTrustCenterCompliancesWith,omitempty"`
+	// trust_center_docs edge predicates
+	HasTrustCenterDocs     *bool                       `json:"hasTrustCenterDocs,omitempty"`
+	HasTrustCenterDocsWith []*TrustCenterDocWhereInput `json:"hasTrustCenterDocsWith,omitempty"`
 }
 
 type Subcontrol struct {
@@ -39699,8 +39705,11 @@ type TrustCenterDoc struct {
 	// status of the watermarking
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
-	Visibility  *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
-	TrustCenter *TrustCenter                         `json:"trustCenter,omitempty"`
+	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	// ID of the standard
+	StandardID  *string      `json:"standardID,omitempty"`
+	TrustCenter *TrustCenter `json:"trustCenter,omitempty"`
+	Standard    *Standard    `json:"standard,omitempty"`
 	// the file containing the document content
 	File *File `json:"file,omitempty"`
 	// the file containing the document content, pre watermarking
@@ -39786,6 +39795,8 @@ type TrustCenterDocHistory struct {
 	WatermarkStatus *enums.WatermarkStatus `json:"watermarkStatus,omitempty"`
 	// visibility of the document
 	Visibility *enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	// ID of the standard
+	StandardID *string `json:"standardID,omitempty"`
 }
 
 func (TrustCenterDocHistory) IsNode() {}
@@ -40010,6 +40021,22 @@ type TrustCenterDocHistoryWhereInput struct {
 	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
 	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
 	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
+	// standard_id field predicates
+	StandardID             *string  `json:"standardID,omitempty"`
+	StandardIdneq          *string  `json:"standardIDNEQ,omitempty"`
+	StandardIDIn           []string `json:"standardIDIn,omitempty"`
+	StandardIDNotIn        []string `json:"standardIDNotIn,omitempty"`
+	StandardIdgt           *string  `json:"standardIDGT,omitempty"`
+	StandardIdgte          *string  `json:"standardIDGTE,omitempty"`
+	StandardIdlt           *string  `json:"standardIDLT,omitempty"`
+	StandardIdlte          *string  `json:"standardIDLTE,omitempty"`
+	StandardIDContains     *string  `json:"standardIDContains,omitempty"`
+	StandardIDHasPrefix    *string  `json:"standardIDHasPrefix,omitempty"`
+	StandardIDHasSuffix    *string  `json:"standardIDHasSuffix,omitempty"`
+	StandardIDIsNil        *bool    `json:"standardIDIsNil,omitempty"`
+	StandardIDNotNil       *bool    `json:"standardIDNotNil,omitempty"`
+	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
+	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 }
 
 // Ordering options for TrustCenterDoc connections
@@ -40190,9 +40217,28 @@ type TrustCenterDocWhereInput struct {
 	VisibilityNotIn  []enums.TrustCenterDocumentVisibility `json:"visibilityNotIn,omitempty"`
 	VisibilityIsNil  *bool                                 `json:"visibilityIsNil,omitempty"`
 	VisibilityNotNil *bool                                 `json:"visibilityNotNil,omitempty"`
+	// standard_id field predicates
+	StandardID             *string  `json:"standardID,omitempty"`
+	StandardIdneq          *string  `json:"standardIDNEQ,omitempty"`
+	StandardIDIn           []string `json:"standardIDIn,omitempty"`
+	StandardIDNotIn        []string `json:"standardIDNotIn,omitempty"`
+	StandardIdgt           *string  `json:"standardIDGT,omitempty"`
+	StandardIdgte          *string  `json:"standardIDGTE,omitempty"`
+	StandardIdlt           *string  `json:"standardIDLT,omitempty"`
+	StandardIdlte          *string  `json:"standardIDLTE,omitempty"`
+	StandardIDContains     *string  `json:"standardIDContains,omitempty"`
+	StandardIDHasPrefix    *string  `json:"standardIDHasPrefix,omitempty"`
+	StandardIDHasSuffix    *string  `json:"standardIDHasSuffix,omitempty"`
+	StandardIDIsNil        *bool    `json:"standardIDIsNil,omitempty"`
+	StandardIDNotNil       *bool    `json:"standardIDNotNil,omitempty"`
+	StandardIDEqualFold    *string  `json:"standardIDEqualFold,omitempty"`
+	StandardIDContainsFold *string  `json:"standardIDContainsFold,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
+	// standard edge predicates
+	HasStandard     *bool                 `json:"hasStandard,omitempty"`
+	HasStandardWith []*StandardWhereInput `json:"hasStandardWith,omitempty"`
 	// file edge predicates
 	HasFile     *bool             `json:"hasFile,omitempty"`
 	HasFileWith []*FileWhereInput `json:"hasFileWith,omitempty"`
@@ -45559,6 +45605,9 @@ type UpdateStandardInput struct {
 	AddTrustCenterComplianceIDs    []string            `json:"addTrustCenterComplianceIDs,omitempty"`
 	RemoveTrustCenterComplianceIDs []string            `json:"removeTrustCenterComplianceIDs,omitempty"`
 	ClearTrustCenterCompliances    *bool               `json:"clearTrustCenterCompliances,omitempty"`
+	AddTrustCenterDocIDs           []string            `json:"addTrustCenterDocIDs,omitempty"`
+	RemoveTrustCenterDocIDs        []string            `json:"removeTrustCenterDocIDs,omitempty"`
+	ClearTrustCenterDocs           *bool               `json:"clearTrustCenterDocs,omitempty"`
 	RevisionBump                   *models.VersionBump `json:"RevisionBump,omitempty"`
 }
 
@@ -45934,6 +45983,8 @@ type UpdateTrustCenterDocInput struct {
 	ClearVisibility   *bool                                `json:"clearVisibility,omitempty"`
 	TrustCenterID     *string                              `json:"trustCenterID,omitempty"`
 	ClearTrustCenter  *bool                                `json:"clearTrustCenter,omitempty"`
+	StandardID        *string                              `json:"standardID,omitempty"`
+	ClearStandard     *bool                                `json:"clearStandard,omitempty"`
 	FileID            *string                              `json:"fileID,omitempty"`
 	ClearFile         *bool                                `json:"clearFile,omitempty"`
 	OriginalFileID    *string                              `json:"originalFileID,omitempty"`

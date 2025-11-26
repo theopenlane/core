@@ -242,6 +242,20 @@ func (_c *TrustCenterDocHistoryCreate) SetNillableVisibility(v *enums.TrustCente
 	return _c
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_c *TrustCenterDocHistoryCreate) SetStandardID(v string) *TrustCenterDocHistoryCreate {
+	_c.mutation.SetStandardID(v)
+	return _c
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_c *TrustCenterDocHistoryCreate) SetNillableStandardID(v *string) *TrustCenterDocHistoryCreate {
+	if v != nil {
+		_c.SetStandardID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterDocHistoryCreate) SetID(v string) *TrustCenterDocHistoryCreate {
 	_c.mutation.SetID(v)
@@ -479,6 +493,10 @@ func (_c *TrustCenterDocHistoryCreate) createSpec() (*TrustCenterDocHistory, *sq
 	if value, ok := _c.mutation.Visibility(); ok {
 		_spec.SetField(trustcenterdochistory.FieldVisibility, field.TypeEnum, value)
 		_node.Visibility = value
+	}
+	if value, ok := _c.mutation.StandardID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldStandardID, field.TypeString, value)
+		_node.StandardID = value
 	}
 	return _node, _spec
 }

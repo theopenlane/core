@@ -520,7 +520,7 @@ func (ec *executionContext) marshalNMappedControlBulkCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNMappedControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -534,7 +534,7 @@ func (ec *executionContext) marshalNMappedControlBulkDeletePayload2githubᚗcom�
 func (ec *executionContext) marshalNMappedControlBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -548,7 +548,7 @@ func (ec *executionContext) marshalNMappedControlCreatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNMappedControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -562,7 +562,7 @@ func (ec *executionContext) marshalNMappedControlDeletePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNMappedControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -576,7 +576,7 @@ func (ec *executionContext) marshalNMappedControlUpdatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNMappedControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐMappedControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.MappedControlUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

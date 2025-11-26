@@ -15489,6 +15489,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetVisibility(visibility)
 	}
 
+	if standardID, exists := m.StandardID(); exists {
+		create = create.SetStandardID(standardID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15610,6 +15614,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetVisibility(trustcenterdoc.Visibility)
 		}
 
+		if standardID, exists := m.StandardID(); exists {
+			create = create.SetStandardID(standardID)
+		} else {
+			create = create.SetStandardID(trustcenterdoc.StandardID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15660,6 +15670,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetWatermarkingEnabled(trustcenterdoc.WatermarkingEnabled).
 			SetWatermarkStatus(trustcenterdoc.WatermarkStatus).
 			SetVisibility(trustcenterdoc.Visibility).
+			SetStandardID(trustcenterdoc.StandardID).
 			Save(ctx)
 		if err != nil {
 			return err

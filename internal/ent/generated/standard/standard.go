@@ -74,6 +74,8 @@ const (
 	EdgeControls = "controls"
 	// EdgeTrustCenterCompliances holds the string denoting the trust_center_compliances edge name in mutations.
 	EdgeTrustCenterCompliances = "trust_center_compliances"
+	// EdgeTrustCenterDocs holds the string denoting the trust_center_docs edge name in mutations.
+	EdgeTrustCenterDocs = "trust_center_docs"
 	// Table holds the table name of the standard in the database.
 	Table = "standards"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -97,6 +99,13 @@ const (
 	TrustCenterCompliancesInverseTable = "trust_center_compliances"
 	// TrustCenterCompliancesColumn is the table column denoting the trust_center_compliances relation/edge.
 	TrustCenterCompliancesColumn = "standard_id"
+	// TrustCenterDocsTable is the table that holds the trust_center_docs relation/edge.
+	TrustCenterDocsTable = "trust_center_docs"
+	// TrustCenterDocsInverseTable is the table name for the TrustCenterDoc entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterdoc" package.
+	TrustCenterDocsInverseTable = "trust_center_docs"
+	// TrustCenterDocsColumn is the table column denoting the trust_center_docs relation/edge.
+	TrustCenterDocsColumn = "standard_id"
 )
 
 // Columns holds all SQL columns for standard fields.
@@ -345,6 +354,20 @@ func ByTrustCenterCompliances(term sql.OrderTerm, terms ...sql.OrderTerm) OrderO
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterCompliancesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustCenterDocsCount orders the results by trust_center_docs count.
+func ByTrustCenterDocsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocsStep(), opts...)
+	}
+}
+
+// ByTrustCenterDocs orders the results by trust_center_docs terms.
+func ByTrustCenterDocs(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -364,6 +387,13 @@ func newTrustCenterCompliancesStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterCompliancesInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterCompliancesTable, TrustCenterCompliancesColumn),
+	)
+}
+func newTrustCenterDocsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
 	)
 }
 

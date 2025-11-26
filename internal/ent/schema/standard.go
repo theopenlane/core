@@ -139,6 +139,10 @@ func (s Standard) Edges() []ent.Edge {
 			fromSchema: s,
 			edgeSchema: TrustCenterCompliance{},
 		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: TrustCenterDoc{},
+		}),
 	}
 }
 

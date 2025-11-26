@@ -128,6 +128,11 @@ func WatermarkingEnabled(v bool) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldWatermarkingEnabled, v))
 }
 
+// StandardID applies equality check predicate on the "standard_id" field. It's identical to StandardIDEQ.
+func StandardID(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldStandardID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldEQ(FieldCreatedAt, v))
@@ -958,6 +963,81 @@ func VisibilityNotNil() predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldVisibility))
 }
 
+// StandardIDEQ applies the EQ predicate on the "standard_id" field.
+func StandardIDEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEQ(FieldStandardID, v))
+}
+
+// StandardIDNEQ applies the NEQ predicate on the "standard_id" field.
+func StandardIDNEQ(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNEQ(FieldStandardID, v))
+}
+
+// StandardIDIn applies the In predicate on the "standard_id" field.
+func StandardIDIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIn(FieldStandardID, vs...))
+}
+
+// StandardIDNotIn applies the NotIn predicate on the "standard_id" field.
+func StandardIDNotIn(vs ...string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotIn(FieldStandardID, vs...))
+}
+
+// StandardIDGT applies the GT predicate on the "standard_id" field.
+func StandardIDGT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGT(FieldStandardID, v))
+}
+
+// StandardIDGTE applies the GTE predicate on the "standard_id" field.
+func StandardIDGTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldGTE(FieldStandardID, v))
+}
+
+// StandardIDLT applies the LT predicate on the "standard_id" field.
+func StandardIDLT(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLT(FieldStandardID, v))
+}
+
+// StandardIDLTE applies the LTE predicate on the "standard_id" field.
+func StandardIDLTE(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldLTE(FieldStandardID, v))
+}
+
+// StandardIDContains applies the Contains predicate on the "standard_id" field.
+func StandardIDContains(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContains(FieldStandardID, v))
+}
+
+// StandardIDHasPrefix applies the HasPrefix predicate on the "standard_id" field.
+func StandardIDHasPrefix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasPrefix(FieldStandardID, v))
+}
+
+// StandardIDHasSuffix applies the HasSuffix predicate on the "standard_id" field.
+func StandardIDHasSuffix(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldHasSuffix(FieldStandardID, v))
+}
+
+// StandardIDIsNil applies the IsNil predicate on the "standard_id" field.
+func StandardIDIsNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldIsNull(FieldStandardID))
+}
+
+// StandardIDNotNil applies the NotNil predicate on the "standard_id" field.
+func StandardIDNotNil() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldNotNull(FieldStandardID))
+}
+
+// StandardIDEqualFold applies the EqualFold predicate on the "standard_id" field.
+func StandardIDEqualFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldEqualFold(FieldStandardID, v))
+}
+
+// StandardIDContainsFold applies the ContainsFold predicate on the "standard_id" field.
+func StandardIDContainsFold(v string) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(sql.FieldContainsFold(FieldStandardID, v))
+}
+
 // HasTrustCenter applies the HasEdge predicate on the "trust_center" edge.
 func HasTrustCenter() predicate.TrustCenterDoc {
 	return predicate.TrustCenterDoc(func(s *sql.Selector) {
@@ -978,6 +1058,35 @@ func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustCenterDoc
 		step := newTrustCenterStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasStandard applies the HasEdge predicate on the "standard" edge.
+func HasStandard() predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasStandardWith applies the HasEdge predicate on the "standard" edge with a given conditions (other predicates).
+func HasStandardWith(preds ...predicate.Standard) predicate.TrustCenterDoc {
+	return predicate.TrustCenterDoc(func(s *sql.Selector) {
+		step := newStandardStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.Standard
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {

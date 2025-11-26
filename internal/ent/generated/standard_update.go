@@ -17,6 +17,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -493,6 +494,21 @@ func (_u *StandardUpdate) AddTrustCenterCompliances(v ...*TrustCenterCompliance)
 	return _u.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_u *StandardUpdate) AddTrustCenterDocIDs(ids ...string) *StandardUpdate {
+	_u.mutation.AddTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (_u *StandardUpdate) Mutation() *StandardMutation {
 	return _u.mutation
@@ -544,6 +560,27 @@ func (_u *StandardUpdate) RemoveTrustCenterCompliances(v ...*TrustCenterComplian
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTrustCenterDocs clears all "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdate) ClearTrustCenterDocs() *StandardUpdate {
+	_u.mutation.ClearTrustCenterDocs()
+	return _u
+}
+
+// RemoveTrustCenterDocIDs removes the "trust_center_docs" edge to TrustCenterDoc entities by IDs.
+func (_u *StandardUpdate) RemoveTrustCenterDocIDs(ids ...string) *StandardUpdate {
+	_u.mutation.RemoveTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocs removes "trust_center_docs" edges to TrustCenterDoc entities.
+func (_u *StandardUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -900,6 +937,54 @@ func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1386,6 +1471,21 @@ func (_u *StandardUpdateOne) AddTrustCenterCompliances(v ...*TrustCenterComplian
 	return _u.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_u *StandardUpdateOne) AddTrustCenterDocIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.AddTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdateOne) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (_u *StandardUpdateOne) Mutation() *StandardMutation {
 	return _u.mutation
@@ -1437,6 +1537,27 @@ func (_u *StandardUpdateOne) RemoveTrustCenterCompliances(v ...*TrustCenterCompl
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTrustCenterDocs clears all "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdateOne) ClearTrustCenterDocs() *StandardUpdateOne {
+	_u.mutation.ClearTrustCenterDocs()
+	return _u
+}
+
+// RemoveTrustCenterDocIDs removes the "trust_center_docs" edge to TrustCenterDoc entities by IDs.
+func (_u *StandardUpdateOne) RemoveTrustCenterDocIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.RemoveTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocs removes "trust_center_docs" edges to TrustCenterDoc entities.
+func (_u *StandardUpdateOne) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocIDs(ids...)
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1823,6 +1944,54 @@ func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

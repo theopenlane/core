@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
 )
 
@@ -399,6 +400,21 @@ func (_c *StandardCreate) AddTrustCenterCompliances(v ...*TrustCenterCompliance)
 	return _c.AddTrustCenterComplianceIDs(ids...)
 }
 
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_c *StandardCreate) AddTrustCenterDocIDs(ids ...string) *StandardCreate {
+	_c.mutation.AddTrustCenterDocIDs(ids...)
+	return _c
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_c *StandardCreate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustCenterDocIDs(ids...)
+}
+
 // Mutation returns the StandardMutation object of the builder.
 func (_c *StandardCreate) Mutation() *StandardMutation {
 	return _c.mutation
@@ -693,6 +709,23 @@ func (_c *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

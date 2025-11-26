@@ -416,7 +416,7 @@ func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNTagDefinitionBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -430,7 +430,7 @@ func (ec *executionContext) marshalNTagDefinitionCreatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNTagDefinitionCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -444,7 +444,7 @@ func (ec *executionContext) marshalNTagDefinitionDeletePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNTagDefinitionDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -458,7 +458,7 @@ func (ec *executionContext) marshalNTagDefinitionUpdatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNTagDefinitionUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTagDefinitionUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TagDefinitionUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

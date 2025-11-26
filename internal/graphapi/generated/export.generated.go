@@ -490,7 +490,7 @@ func (ec *executionContext) marshalNExportBulkDeletePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNExportBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -504,7 +504,7 @@ func (ec *executionContext) marshalNExportCreatePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNExportCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -518,7 +518,7 @@ func (ec *executionContext) marshalNExportDeletePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNExportDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -532,7 +532,7 @@ func (ec *executionContext) marshalNExportUpdatePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNExportUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐExportUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ExportUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

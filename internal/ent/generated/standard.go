@@ -84,14 +84,17 @@ type StandardEdges struct {
 	Controls []*Control `json:"controls,omitempty"`
 	// TrustCenterCompliances holds the value of the trust_center_compliances edge.
 	TrustCenterCompliances []*TrustCenterCompliance `json:"trust_center_compliances,omitempty"`
+	// TrustCenterDocs holds the value of the trust_center_docs edge.
+	TrustCenterDocs []*TrustCenterDoc `json:"trust_center_docs,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [3]bool
+	loadedTypes [4]bool
 	// totalCount holds the count of the edges above.
-	totalCount [3]map[string]int
+	totalCount [4]map[string]int
 
 	namedControls               map[string][]*Control
 	namedTrustCenterCompliances map[string][]*TrustCenterCompliance
+	namedTrustCenterDocs        map[string][]*TrustCenterDoc
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -121,6 +124,15 @@ func (e StandardEdges) TrustCenterCompliancesOrErr() ([]*TrustCenterCompliance, 
 		return e.TrustCenterCompliances, nil
 	}
 	return nil, &NotLoadedError{edge: "trust_center_compliances"}
+}
+
+// TrustCenterDocsOrErr returns the TrustCenterDocs value or an error if the edge
+// was not loaded in eager-loading.
+func (e StandardEdges) TrustCenterDocsOrErr() ([]*TrustCenterDoc, error) {
+	if e.loadedTypes[3] {
+		return e.TrustCenterDocs, nil
+	}
+	return nil, &NotLoadedError{edge: "trust_center_docs"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -341,6 +353,11 @@ func (_m *Standard) QueryTrustCenterCompliances() *TrustCenterComplianceQuery {
 	return NewStandardClient(_m.config).QueryTrustCenterCompliances(_m)
 }
 
+// QueryTrustCenterDocs queries the "trust_center_docs" edge of the Standard entity.
+func (_m *Standard) QueryTrustCenterDocs() *TrustCenterDocQuery {
+	return NewStandardClient(_m.config).QueryTrustCenterDocs(_m)
+}
+
 // Update returns a builder for updating this Standard.
 // Note that you need to call Standard.Unwrap() before calling this method if this Standard
 // was returned from a transaction, and the transaction was committed or rolled back.
@@ -491,6 +508,30 @@ func (_m *Standard) appendNamedTrustCenterCompliances(name string, edges ...*Tru
 		_m.Edges.namedTrustCenterCompliances[name] = []*TrustCenterCompliance{}
 	} else {
 		_m.Edges.namedTrustCenterCompliances[name] = append(_m.Edges.namedTrustCenterCompliances[name], edges...)
+	}
+}
+
+// NamedTrustCenterDocs returns the TrustCenterDocs named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Standard) NamedTrustCenterDocs(name string) ([]*TrustCenterDoc, error) {
+	if _m.Edges.namedTrustCenterDocs == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedTrustCenterDocs[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Standard) appendNamedTrustCenterDocs(name string, edges ...*TrustCenterDoc) {
+	if _m.Edges.namedTrustCenterDocs == nil {
+		_m.Edges.namedTrustCenterDocs = make(map[string][]*TrustCenterDoc)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedTrustCenterDocs[name] = []*TrustCenterDoc{}
+	} else {
+		_m.Edges.namedTrustCenterDocs[name] = append(_m.Edges.namedTrustCenterDocs[name], edges...)
 	}
 }
 
