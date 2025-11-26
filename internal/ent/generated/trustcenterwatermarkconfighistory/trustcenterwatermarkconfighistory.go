@@ -40,6 +40,8 @@ const (
 	FieldOwnerID = "owner_id"
 	// FieldTrustCenterID holds the string denoting the trust_center_id field in the database.
 	FieldTrustCenterID = "trust_center_id"
+	// FieldIsEnabled holds the string denoting the is_enabled field in the database.
+	FieldIsEnabled = "is_enabled"
 	// FieldLogoID holds the string denoting the logo_id field in the database.
 	FieldLogoID = "logo_id"
 	// FieldText holds the string denoting the text field in the database.
@@ -72,6 +74,7 @@ var Columns = []string{
 	FieldDeletedBy,
 	FieldOwnerID,
 	FieldTrustCenterID,
+	FieldIsEnabled,
 	FieldLogoID,
 	FieldText,
 	FieldFontSize,
@@ -108,6 +111,8 @@ var (
 	DefaultUpdatedAt func() time.Time
 	// UpdateDefaultUpdatedAt holds the default value on update for the "updated_at" field.
 	UpdateDefaultUpdatedAt func() time.Time
+	// DefaultIsEnabled holds the default value on creation for the "is_enabled" field.
+	DefaultIsEnabled bool
 	// DefaultFontSize holds the default value on creation for the "font_size" field.
 	DefaultFontSize float64
 	// DefaultOpacity holds the default value on creation for the "opacity" field.
@@ -203,6 +208,11 @@ func ByOwnerID(opts ...sql.OrderTermOption) OrderOption {
 // ByTrustCenterID orders the results by the trust_center_id field.
 func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTrustCenterID, opts...).ToFunc()
+}
+
+// ByIsEnabled orders the results by the is_enabled field.
+func ByIsEnabled(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldIsEnabled, opts...).ToFunc()
 }
 
 // ByLogoID orders the results by the logo_id field.

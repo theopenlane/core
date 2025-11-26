@@ -79,6 +79,10 @@ const (
 	EdgeTemplateCreators = "template_creators"
 	// EdgeSubprocessorCreators holds the string denoting the subprocessor_creators edge name in mutations.
 	EdgeSubprocessorCreators = "subprocessor_creators"
+	// EdgeTrustCenterDocCreators holds the string denoting the trust_center_doc_creators edge name in mutations.
+	EdgeTrustCenterDocCreators = "trust_center_doc_creators"
+	// EdgeTrustCenterSubprocessorCreators holds the string denoting the trust_center_subprocessor_creators edge name in mutations.
+	EdgeTrustCenterSubprocessorCreators = "trust_center_subprocessor_creators"
 	// EdgeParent holds the string denoting the parent edge name in mutations.
 	EdgeParent = "parent"
 	// EdgeChildren holds the string denoting the children edge name in mutations.
@@ -334,6 +338,20 @@ const (
 	SubprocessorCreatorsInverseTable = "groups"
 	// SubprocessorCreatorsColumn is the table column denoting the subprocessor_creators relation/edge.
 	SubprocessorCreatorsColumn = "organization_subprocessor_creators"
+	// TrustCenterDocCreatorsTable is the table that holds the trust_center_doc_creators relation/edge.
+	TrustCenterDocCreatorsTable = "groups"
+	// TrustCenterDocCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	TrustCenterDocCreatorsInverseTable = "groups"
+	// TrustCenterDocCreatorsColumn is the table column denoting the trust_center_doc_creators relation/edge.
+	TrustCenterDocCreatorsColumn = "organization_trust_center_doc_creators"
+	// TrustCenterSubprocessorCreatorsTable is the table that holds the trust_center_subprocessor_creators relation/edge.
+	TrustCenterSubprocessorCreatorsTable = "groups"
+	// TrustCenterSubprocessorCreatorsInverseTable is the table name for the Group entity.
+	// It exists in this package in order to avoid circular dependency with the "group" package.
+	TrustCenterSubprocessorCreatorsInverseTable = "groups"
+	// TrustCenterSubprocessorCreatorsColumn is the table column denoting the trust_center_subprocessor_creators relation/edge.
+	TrustCenterSubprocessorCreatorsColumn = "organization_trust_center_subprocessor_creators"
 	// ParentTable is the table that holds the parent relation/edge.
 	ParentTable = "organizations"
 	// ParentColumn is the table column denoting the parent relation/edge.
@@ -893,7 +911,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [23]ent.Hook
+	Hooks        [25]ent.Hook
 	Interceptors [3]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -1219,6 +1237,34 @@ func BySubprocessorCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
 func BySubprocessorCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newSubprocessorCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterDocCreatorsCount orders the results by trust_center_doc_creators count.
+func ByTrustCenterDocCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterDocCreatorsStep(), opts...)
+	}
+}
+
+// ByTrustCenterDocCreators orders the results by trust_center_doc_creators terms.
+func ByTrustCenterDocCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterDocCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByTrustCenterSubprocessorCreatorsCount orders the results by trust_center_subprocessor_creators count.
+func ByTrustCenterSubprocessorCreatorsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustCenterSubprocessorCreatorsStep(), opts...)
+	}
+}
+
+// ByTrustCenterSubprocessorCreators orders the results by trust_center_subprocessor_creators terms.
+func ByTrustCenterSubprocessorCreators(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustCenterSubprocessorCreatorsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 
@@ -2339,6 +2385,20 @@ func newSubprocessorCreatorsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(SubprocessorCreatorsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, SubprocessorCreatorsTable, SubprocessorCreatorsColumn),
+	)
+}
+func newTrustCenterDocCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterDocCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocCreatorsTable, TrustCenterDocCreatorsColumn),
+	)
+}
+func newTrustCenterSubprocessorCreatorsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustCenterSubprocessorCreatorsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterSubprocessorCreatorsTable, TrustCenterSubprocessorCreatorsColumn),
 	)
 }
 func newParentStep() *sqlgraph.Step {

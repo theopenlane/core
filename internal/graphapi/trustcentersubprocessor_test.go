@@ -65,7 +65,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser2.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "trust center not found",
@@ -77,7 +77,7 @@ func TestMutationCreateTrustCenterSubprocessor(t *testing.T) {
 			},
 			client:      suite.client.api,
 			ctx:         testUser.UserCtx,
-			expectedErr: notFoundErrorMsg,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "subprocessor not found",

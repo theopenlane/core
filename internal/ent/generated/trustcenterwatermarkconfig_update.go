@@ -126,6 +126,26 @@ func (_u *TrustCenterWatermarkConfigUpdate) ClearTrustCenterID() *TrustCenterWat
 	return _u
 }
 
+// SetIsEnabled sets the "is_enabled" field.
+func (_u *TrustCenterWatermarkConfigUpdate) SetIsEnabled(v bool) *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.SetIsEnabled(v)
+	return _u
+}
+
+// SetNillableIsEnabled sets the "is_enabled" field if the given value is not nil.
+func (_u *TrustCenterWatermarkConfigUpdate) SetNillableIsEnabled(v *bool) *TrustCenterWatermarkConfigUpdate {
+	if v != nil {
+		_u.SetIsEnabled(*v)
+	}
+	return _u
+}
+
+// ClearIsEnabled clears the value of the "is_enabled" field.
+func (_u *TrustCenterWatermarkConfigUpdate) ClearIsEnabled() *TrustCenterWatermarkConfigUpdate {
+	_u.mutation.ClearIsEnabled()
+	return _u
+}
+
 // SetLogoID sets the "logo_id" field.
 func (_u *TrustCenterWatermarkConfigUpdate) SetLogoID(v string) *TrustCenterWatermarkConfigUpdate {
 	_u.mutation.SetLogoID(v)
@@ -484,6 +504,12 @@ func (_u *TrustCenterWatermarkConfigUpdate) sqlSave(ctx context.Context) (_node 
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)
 	}
+	if value, ok := _u.mutation.IsEnabled(); ok {
+		_spec.SetField(trustcenterwatermarkconfig.FieldIsEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.IsEnabledCleared() {
+		_spec.ClearField(trustcenterwatermarkconfig.FieldIsEnabled, field.TypeBool)
+	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldText, field.TypeString, value)
 	}
@@ -721,6 +747,26 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableTrustCenterID(v *strin
 // ClearTrustCenterID clears the value of the "trust_center_id" field.
 func (_u *TrustCenterWatermarkConfigUpdateOne) ClearTrustCenterID() *TrustCenterWatermarkConfigUpdateOne {
 	_u.mutation.ClearTrustCenterID()
+	return _u
+}
+
+// SetIsEnabled sets the "is_enabled" field.
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetIsEnabled(v bool) *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.SetIsEnabled(v)
+	return _u
+}
+
+// SetNillableIsEnabled sets the "is_enabled" field if the given value is not nil.
+func (_u *TrustCenterWatermarkConfigUpdateOne) SetNillableIsEnabled(v *bool) *TrustCenterWatermarkConfigUpdateOne {
+	if v != nil {
+		_u.SetIsEnabled(*v)
+	}
+	return _u
+}
+
+// ClearIsEnabled clears the value of the "is_enabled" field.
+func (_u *TrustCenterWatermarkConfigUpdateOne) ClearIsEnabled() *TrustCenterWatermarkConfigUpdateOne {
+	_u.mutation.ClearIsEnabled()
 	return _u
 }
 
@@ -1111,6 +1157,12 @@ func (_u *TrustCenterWatermarkConfigUpdateOne) sqlSave(ctx context.Context) (_no
 	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterwatermarkconfig.FieldTrustCenterID, field.TypeString)
+	}
+	if value, ok := _u.mutation.IsEnabled(); ok {
+		_spec.SetField(trustcenterwatermarkconfig.FieldIsEnabled, field.TypeBool, value)
+	}
+	if _u.mutation.IsEnabledCleared() {
+		_spec.ClearField(trustcenterwatermarkconfig.FieldIsEnabled, field.TypeBool)
 	}
 	if value, ok := _u.mutation.Text(); ok {
 		_spec.SetField(trustcenterwatermarkconfig.FieldText, field.TypeString, value)

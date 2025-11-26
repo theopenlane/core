@@ -16251,6 +16251,10 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if isEnabled, exists := m.IsEnabled(); exists {
+		create = create.SetIsEnabled(isEnabled)
+	}
+
 	if logoID, exists := m.LogoID(); exists {
 		create = create.SetNillableLogoID(&logoID)
 	}
@@ -16358,6 +16362,12 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			create = create.SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID)
 		}
 
+		if isEnabled, exists := m.IsEnabled(); exists {
+			create = create.SetIsEnabled(isEnabled)
+		} else {
+			create = create.SetIsEnabled(trustcenterwatermarkconfig.IsEnabled)
+		}
+
 		if logoID, exists := m.LogoID(); exists {
 			create = create.SetNillableLogoID(&logoID)
 		} else {
@@ -16443,6 +16453,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetDeletedBy(trustcenterwatermarkconfig.DeletedBy).
 			SetOwnerID(trustcenterwatermarkconfig.OwnerID).
 			SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID).
+			SetIsEnabled(trustcenterwatermarkconfig.IsEnabled).
 			SetNillableLogoID(trustcenterwatermarkconfig.LogoID).
 			SetText(trustcenterwatermarkconfig.Text).
 			SetFontSize(trustcenterwatermarkconfig.FontSize).

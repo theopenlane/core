@@ -18,17 +18,17 @@ require (
 	cloud.google.com/go/securitycenter v1.38.1
 	entgo.io/contrib v0.7.0
 	entgo.io/ent v0.14.6-0.20251120142408-49be309024df
-	github.com/99designs/gqlgen v0.17.83
+	github.com/99designs/gqlgen v0.17.84
 	github.com/AfterShip/email-verifier v1.4.1
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/Yamashou/gqlgenc v0.33.0
 	github.com/alicebob/miniredis/v2 v2.35.0
-	github.com/alitto/pond/v2 v2.5.0
+	github.com/alitto/pond/v2 v2.6.0
 	github.com/aws/aws-sdk-go-v2 v1.40.0
-	github.com/aws/aws-sdk-go-v2/config v1.32.1
-	github.com/aws/aws-sdk-go-v2/credentials v1.19.1
-	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.11
-	github.com/aws/aws-sdk-go-v2/service/s3 v1.92.0
+	github.com/aws/aws-sdk-go-v2/config v1.32.2
+	github.com/aws/aws-sdk-go-v2/credentials v1.19.2
+	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.12
+	github.com/aws/aws-sdk-go-v2/service/s3 v1.92.1
 	github.com/brianvoe/gofakeit/v7 v7.11.0
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.3.0
@@ -80,9 +80,9 @@ require (
 	github.com/prometheus/client_golang v1.23.2
 	github.com/ravilushqa/otelgqlgen v0.19.0
 	github.com/redis/go-redis/v9 v9.17.0
-	github.com/riverqueue/river v0.27.1
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.27.1
-	github.com/riverqueue/river/rivertype v0.27.1
+	github.com/riverqueue/river v0.28.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.28.0
+	github.com/riverqueue/river/rivertype v0.28.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
@@ -105,7 +105,7 @@ require (
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
 	github.com/vektah/gqlparser/v2 v2.5.31
-	github.com/windmill-labs/windmill-go-client v1.583.1
+	github.com/windmill-labs/windmill-go-client v1.584.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	gocloud.dev v0.43.0
@@ -123,7 +123,7 @@ require (
 
 require (
 	cloud.google.com/go/longrunning v0.7.0 // indirect
-	github.com/aws/aws-sdk-go-v2/service/signin v1.0.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/signin v1.0.2 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
 	github.com/di-wu/parser v0.2.2 // indirect
@@ -167,9 +167,9 @@ require (
 	github.com/aws/aws-sdk-go-v2/service/internal/checksum v1.9.5 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/presigned-url v1.13.14 // indirect
 	github.com/aws/aws-sdk-go-v2/service/internal/s3shared v1.19.14 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sso v1.30.4 // indirect
-	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.9 // indirect
-	github.com/aws/aws-sdk-go-v2/service/sts v1.41.1 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sso v1.30.5 // indirect
+	github.com/aws/aws-sdk-go-v2/service/ssooidc v1.35.10 // indirect
+	github.com/aws/aws-sdk-go-v2/service/sts v1.41.2 // indirect
 	github.com/aws/smithy-go v1.23.2 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/bahlo/generic-list-go v0.2.0 // indirect
@@ -328,8 +328,8 @@ require (
 	github.com/prometheus/common v0.67.3 // indirect
 	github.com/prometheus/procfs v0.19.2 // indirect
 	github.com/resend/resend-go/v2 v2.28.0 // indirect
-	github.com/riverqueue/river/riverdriver v0.27.1 // indirect
-	github.com/riverqueue/river/rivershared v0.27.1 // indirect
+	github.com/riverqueue/river/riverdriver v0.28.0 // indirect
+	github.com/riverqueue/river/rivershared v0.28.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.5.0 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect

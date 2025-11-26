@@ -10,6 +10,7 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+<<<<<<< HEAD
 	"github.com/stoewer/go-strcase"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
@@ -17,6 +18,10 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+||||||| 138b6784
+	"github.com/stretchr/testify/require"
+=======
+>>>>>>> origin/main
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -75,7 +80,6 @@ func TestQueryTrustCenterByID(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-
 			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenter.ID))
 			assert.Check(t, resp.TrustCenter.Slug != nil)
 			assert.Check(t, resp.TrustCenter.OwnerID != nil)
@@ -305,16 +309,23 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
 			expectedSlug := strcase.KebabCase(org.Name)
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
-
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
 			if tc.request.CreateTrustCenterSetting != nil && tc.request.CreateTrustCenterSetting.Title != nil {
-				require.NotNil(t, setting)
-				require.NotNil(t, setting.Title)
+				assert.Assert(t, setting != nil)
+				assert.Assert(t, setting.Title != nil)
 				assert.Equal(t, *tc.request.CreateTrustCenterSetting.Title, *setting.Title)
 			} else {
 				assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)
 			}
+
+			// ensure trust center preview settings object is created
+			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.PreviewSetting != nil)
+			assert.Check(t, resp.CreateTrustCenter.TrustCenter.PreviewSetting.ID != "")
+
+			// ensure trust center watermark config object is created
+			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig != nil)
+			assert.Check(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig.Text != nil)
 
 			// Clean up
 			(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: resp.CreateTrustCenter.TrustCenter.ID}).MustDelete(tc.ctx, t)
@@ -331,7 +342,7 @@ func TestGetAllTrustCenters(t *testing.T) {
 	// Clean up any existing trust centers
 	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
 	d, err := suite.client.db.TrustCenter.Query().All(deletectx)
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	for _, tc := range d {
 		suite.client.db.TrustCenter.DeleteOneID(tc.ID).ExecX(deletectx)
 	}
@@ -1061,7 +1072,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.CreateTrustCenter(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
@@ -1082,8 +1093,8 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
 			}
@@ -1138,7 +1149,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
 			if tc.expectedErr != "" {
@@ -1159,8 +1170,8 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
 			}
@@ -1186,7 +1197,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-for-update-test"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name                  string
@@ -1223,7 +1234,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
 			if tc.expectedErr != "" {
@@ -1244,8 +1255,8 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.UpdatePirschDomainArgs{}, nil)
 			}
@@ -1271,7 +1282,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-123"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Create trust center without custom domain for testUser2 (different organization)
 	trustCenterWithoutDomain := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -1304,7 +1315,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.DeleteTrustCenter(tc.ctx, tc.trustCenterID)
 			if tc.expectedErr != "" {
@@ -1323,10 +1334,10 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 							Args: corejobs.DeletePirschDomainArgs{},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 				// Verify the job has encoded args (PirschDomainID should be set)
-				require.NotEmpty(t, jobs[0].EncodedArgs)
+				assert.Assert(t, jobs[0].EncodedArgs != nil)
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.DeletePirschDomainArgs{}, nil)
 			}

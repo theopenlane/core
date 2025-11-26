@@ -42,3 +42,25 @@ func SanitizeOperationDescriptors(provider types.ProviderType, descriptors []typ
 
 	return out
 }
+
+// SanitizeClientDescriptors filters out invalid client descriptors and assigns provider type
+func SanitizeClientDescriptors(provider types.ProviderType, descriptors []types.ClientDescriptor) []types.ClientDescriptor {
+	if len(descriptors) == 0 {
+		return nil
+	}
+
+	out := make([]types.ClientDescriptor, 0, len(descriptors))
+	for _, descriptor := range descriptors {
+		if descriptor.Build == nil {
+			continue
+		}
+
+		if descriptor.Provider == types.ProviderUnknown {
+			descriptor.Provider = provider
+		}
+
+		out = append(out, descriptor)
+	}
+
+	return out
+}

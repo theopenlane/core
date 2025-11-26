@@ -108,6 +108,11 @@ func TrustCenterID(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
+// IsEnabled applies equality check predicate on the "is_enabled" field. It's identical to IsEnabledEQ.
+func IsEnabled(v bool) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldIsEnabled, v))
+}
+
 // LogoID applies equality check predicate on the "logo_id" field. It's identical to LogoIDEQ.
 func LogoID(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldLogoID, v))
@@ -661,6 +666,26 @@ func TrustCenterIDEqualFold(v string) predicate.TrustCenterWatermarkConfig {
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.TrustCenterWatermarkConfig {
 	return predicate.TrustCenterWatermarkConfig(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// IsEnabledEQ applies the EQ predicate on the "is_enabled" field.
+func IsEnabledEQ(v bool) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldEQ(FieldIsEnabled, v))
+}
+
+// IsEnabledNEQ applies the NEQ predicate on the "is_enabled" field.
+func IsEnabledNEQ(v bool) predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNEQ(FieldIsEnabled, v))
+}
+
+// IsEnabledIsNil applies the IsNil predicate on the "is_enabled" field.
+func IsEnabledIsNil() predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldIsNull(FieldIsEnabled))
+}
+
+// IsEnabledNotNil applies the NotNil predicate on the "is_enabled" field.
+func IsEnabledNotNil() predicate.TrustCenterWatermarkConfig {
+	return predicate.TrustCenterWatermarkConfig(sql.FieldNotNull(FieldIsEnabled))
 }
 
 // LogoIDEQ applies the EQ predicate on the "logo_id" field.

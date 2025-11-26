@@ -55,7 +55,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
 			),

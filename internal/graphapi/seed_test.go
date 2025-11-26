@@ -5,9 +5,9 @@ import (
 	"sync"
 	"testing"
 
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"gotest.tools/v3/assert"
 
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
@@ -195,7 +195,7 @@ func resetContext(ctx context.Context, t *testing.T) context.Context {
 	}
 
 	au, err := auth.GetAuthenticatedUserFromContext(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// ensure system admin context is kept in the new context
 	if au.IsSystemAdmin {

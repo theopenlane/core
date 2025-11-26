@@ -7,7 +7,6 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
@@ -23,7 +22,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
 
 	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	up := graphql.Upload{
 		File:        uploadFile.RawFile,
 		Filename:    uploadFile.OriginalName,
@@ -36,8 +35,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{&up})
 
-	require.Nil(t, err)
-	require.NotNil(t, trustCenterNDA)
+	assert.NilError(t, err)
+	assert.Assert(t, trustCenterNDA != nil)
 
 	// Create anonymous trust center context helper
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
@@ -74,8 +73,8 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	// check that the anonymous user can't query the protected doc's files
 	getTrustCenterDocResp, err := suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
-	require.Nil(t, err)
-	require.Nil(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile)
+	assert.NilError(t, err)
+	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile == nil)
 
 	resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
 
@@ -84,7 +83,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 
 	// now, check that the anonymous user can query the protected doc's files
 	getTrustCenterDocResp, err = suite.client.api.GetTrustCenterDocByID(anonCtx, trustCenterDocProtected.ID)
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	assert.Assert(t, getTrustCenterDocResp.TrustCenterDoc.OriginalFile != nil)
 
 	(&Cleanup[*generated.TemplateDeleteOne]{client: suite.client.db.Template, ID: trustCenterNDA.CreateTrustCenterNda.Template.ID}).MustDelete(testUser1.UserCtx, t)
@@ -117,7 +116,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 	t.Run("Test email scenarios with existing NDA", func(t *testing.T) {
 		// Create NDA template for trustCenter1
 		uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-		require.Nil(t, err)
+		assert.NilError(t, err)
 		up := graphql.Upload{
 			File:        uploadFile.RawFile,
 			Filename:    uploadFile.OriginalName,
@@ -129,8 +128,8 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 		trustCenterNDA, err := suite.client.api.CreateTrustCenterNda(testUser1.UserCtx, testclient.CreateTrustCenterNDAInput{
 			TrustCenterID: trustCenter1.ID,
 		}, []*graphql.Upload{&up})
-		require.Nil(t, err)
-		require.NotNil(t, trustCenterNDA)
+		assert.NilError(t, err)
+		assert.Assert(t, trustCenterNDA != nil)
 
 		// Create a user who has already signed the NDA
 		testEmail := gofakeit.Email()
@@ -165,8 +164,8 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 		}
 
 		resp, err := suite.client.api.SubmitTrustCenterNDAResponse(anonCtx, input)
-		require.Nil(t, err)
-		require.NotNil(t, resp)
+		assert.NilError(t, err)
+		assert.Assert(t, resp != nil)
 
 		// Now test sending email to user who has already signed - should send auth email
 		t.Run("Send auth email to user who already signed NDA", func(t *testing.T) {
@@ -494,7 +493,7 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustCenter2 := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
 	uploadFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	up := graphql.Upload{
 		File:        uploadFile.RawFile,
 		Filename:    uploadFile.OriginalName,
@@ -507,8 +506,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 		TrustCenterID: trustCenter.ID,
 	}, []*graphql.Upload{&up})
 
-	require.Nil(t, err)
-	require.NotNil(t, trustCenterNDA)
+	assert.NilError(t, err)
+	assert.Assert(t, trustCenterNDA != nil)
 
 	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
 	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())

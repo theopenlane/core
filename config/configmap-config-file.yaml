@@ -1143,15 +1143,15 @@ data:
     {{- end }}
     {{- if .Values.openlane.coreConfiguration.integrationoauthprovider }}
     integrationoauthprovider:
+      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
+      enabled: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.enabled }}
+      {{- end }}
       {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl }}
       successredirecturl: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.successredirecturl | quote }}
       {{- else if .Values.domain }}
       successredirecturl: "https://console.{{ .Values.domain }}/organization-settings/integrations"
       {{- else }}
       successredirecturl: ""
-      {{- end }}
-      {{- if .Values.openlane.coreConfiguration.integrationoauthprovider.providerspecpath }}
-      providerspecpath: {{ .Values.openlane.coreConfiguration.integrationoauthprovider.providerspecpath | quote }}
       {{- end }}
     {{- end }}
 {{- end }}

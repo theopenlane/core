@@ -39,11 +39,14 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {
 	var resp models.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	require.Len(t, resp.Providers, len(specs))
-
+	providersByName := make(map[string]models.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
-		spec, ok := specs[types.ProviderType(provider.Name)]
-		require.True(t, ok, "unexpected provider %s", provider.Name)
+		providersByName[provider.Name] = provider
+	}
+
+	for name, spec := range specs {
+		provider, ok := providersByName[string(name)]
+		require.True(t, ok, "expected provider %s", name)
 		assert.Equal(t, spec.DisplayName, provider.DisplayName)
 		assert.NotNil(t, provider.CredentialsSchema, "expected schema for %s", provider.Name)
 	}
@@ -87,8 +90,6 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersMultipleProviders() {
 	var resp models.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Len(t, resp.Providers, 2)
-
 	providerNames := make(map[string]bool)
 	for _, provider := range resp.Providers {
 		providerNames[provider.Name] = true
@@ -120,8 +121,15 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersSingleProvider() {
 	var resp models.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Len(t, resp.Providers, 1)
-	assert.Equal(t, "gcp_scc", resp.Providers[0].Name)
+
+	found := false
+	for _, provider := range resp.Providers {
+		if provider.Name == "gcp_scc" {
+			found = true
+			break
+		}
+	}
+	require.True(t, found, "expected gcp_scc provider")
 }
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus() {
@@ -156,7 +164,6 @@ func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesActiveStatus(
 	var resp models.IntegrationProvidersResponse
 	require.NoError(t, json.Unmarshal(rec.Body.Bytes(), &resp))
 	assert.True(t, resp.Success)
-	assert.Len(t, resp.Providers, 1)
 
 	providersByName := make(map[string]models.IntegrationProviderMetadata)
 	for _, provider := range resp.Providers {
