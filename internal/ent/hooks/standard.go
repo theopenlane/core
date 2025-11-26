@@ -379,25 +379,23 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 }
 
 func checkStandardLogoFile(ctx context.Context, m *generated.StandardMutation) (context.Context, error) {
-	// logoKey := "logoFile"
+	logoKey := "logoFile"
 
-	// logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
-	// if len(logoFiles) == 0 {
-	// 	return ctx, nil
-	// }
+	logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
+	if len(logoFiles) == 0 {
+		return ctx, nil
+	}
 
-	// if len(logoFiles) > 1 {
-	// 	return ctx, ErrTooManyLogoFiles
-	// }
+	if len(logoFiles) > 1 {
+		return ctx, ErrTooManyLogoFiles
+	}
 
-	// m.SetLogoFileID(logoFiles[0].ID)
+	m.SetLogoFileID(logoFiles[0].ID)
 
-	// adapter := pkgobjects.NewGenericMutationAdapter(m,
-	// 	func(mut *generated.StandardMutation) (string, bool) { return mut.ID() },
-	// 	func(mut *generated.StandardMutation) string { return mut.Type() },
-	// )
+	adapter := pkgobjects.NewGenericMutationAdapter(m,
+		func(mut *generated.StandardMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.StandardMutation) string { return mut.Type() },
+	)
 
-	// return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
-
-	return ctx, nil
+	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
 }
