@@ -740,7 +740,7 @@ func (ec *executionContext) marshalNFindingBulkCreatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNFindingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -754,7 +754,7 @@ func (ec *executionContext) marshalNFindingCreatePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNFindingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -768,7 +768,7 @@ func (ec *executionContext) marshalNFindingDeletePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNFindingDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -782,7 +782,7 @@ func (ec *executionContext) marshalNFindingUpdatePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNFindingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

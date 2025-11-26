@@ -8,7 +8,6 @@ linters:
     - bodyclose
     - err113
     - gocritic
-    - gocyclo
     - gosec
     - misspell
     - mnd

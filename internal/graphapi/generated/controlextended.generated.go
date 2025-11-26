@@ -888,7 +888,7 @@ func (ec *executionContext) _ControlGroupEdge(ctx context.Context, sel ast.Selec
 func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategory(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategory) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -898,7 +898,7 @@ func (ec *executionContext) marshalNControlCategory2ᚖgithubᚗcomᚋtheopenlan
 func (ec *executionContext) marshalNControlCategoryEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlCategoryEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlCategoryEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -923,7 +923,7 @@ func (ec *executionContext) marshalNControlCategoryOrderField2githubᚗcomᚋthe
 func (ec *executionContext) marshalNControlGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroup(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroup) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -937,7 +937,7 @@ func (ec *executionContext) marshalNControlGroupConnection2githubᚗcomᚋtheope
 func (ec *executionContext) marshalNControlGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupConnection(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -991,7 +991,7 @@ func (ec *executionContext) marshalNControlGroupEdge2ᚕᚖgithubᚗcomᚋtheope
 func (ec *executionContext) marshalNControlGroupEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐControlGroupEdge(ctx context.Context, sel ast.SelectionSet, v *model.ControlGroupEdge) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

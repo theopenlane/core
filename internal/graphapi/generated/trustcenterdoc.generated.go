@@ -628,7 +628,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkCreatePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -642,7 +642,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkDeletePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -656,7 +656,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -670,7 +670,7 @@ func (ec *executionContext) marshalNTrustCenterDocCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -684,7 +684,7 @@ func (ec *executionContext) marshalNTrustCenterDocDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -698,7 +698,7 @@ func (ec *executionContext) marshalNTrustCenterDocUpdatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

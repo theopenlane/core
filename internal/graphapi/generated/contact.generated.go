@@ -628,7 +628,7 @@ func (ec *executionContext) marshalNContactBulkCreatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNContactBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -642,7 +642,7 @@ func (ec *executionContext) marshalNContactBulkDeletePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNContactBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -656,7 +656,7 @@ func (ec *executionContext) marshalNContactBulkUpdatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNContactBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -670,7 +670,7 @@ func (ec *executionContext) marshalNContactCreatePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNContactCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -684,7 +684,7 @@ func (ec *executionContext) marshalNContactDeletePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNContactDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -698,7 +698,7 @@ func (ec *executionContext) marshalNContactUpdatePayload2githubᚗcomᚋtheopenl
 func (ec *executionContext) marshalNContactUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐContactUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ContactUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

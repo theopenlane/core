@@ -335,7 +335,7 @@ func (ec *executionContext) marshalNAssessmentCreatePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNAssessmentCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -349,7 +349,7 @@ func (ec *executionContext) marshalNAssessmentDeletePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNAssessmentDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -363,7 +363,7 @@ func (ec *executionContext) marshalNAssessmentUpdatePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNAssessmentUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssessmentUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssessmentUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

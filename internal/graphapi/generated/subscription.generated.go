@@ -157,7 +157,7 @@ func (ec *executionContext) _Subscription(ctx context.Context, sel ast.Selection
 		Object: "Subscription",
 	})
 	if len(fields) != 1 {
-		ec.Errorf(ctx, "must subscribe to exactly one stream")
+		graphql.AddErrorf(ctx, "must subscribe to exactly one stream")
 		return nil
 	}
 

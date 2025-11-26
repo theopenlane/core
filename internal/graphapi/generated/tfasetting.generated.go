@@ -378,7 +378,7 @@ func (ec *executionContext) marshalNTFASettingCreatePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNTFASettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -392,7 +392,7 @@ func (ec *executionContext) marshalNTFASettingUpdatePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNTFASettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTFASettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TFASettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

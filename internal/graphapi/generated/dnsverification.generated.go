@@ -502,7 +502,7 @@ func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2githubᚗco
 func (ec *executionContext) marshalNDNSVerificationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -516,7 +516,7 @@ func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2githubᚗco
 func (ec *executionContext) marshalNDNSVerificationBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -530,7 +530,7 @@ func (ec *executionContext) marshalNDNSVerificationCreatePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNDNSVerificationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -544,7 +544,7 @@ func (ec *executionContext) marshalNDNSVerificationDeletePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNDNSVerificationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -558,7 +558,7 @@ func (ec *executionContext) marshalNDNSVerificationUpdatePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNDNSVerificationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDNSVerificationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DNSVerificationUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
