@@ -2738,6 +2738,8 @@ func init() {
 	evidence.Hooks[7] = evidenceMixinHooks6[1]
 
 	evidence.Hooks[8] = evidenceHooks[0]
+
+	evidence.Hooks[9] = evidenceHooks[1]
 	evidenceMixinInters1 := evidenceMixin[1].Interceptors()
 	evidenceMixinInters2 := evidenceMixin[2].Interceptors()
 	evidenceMixinInters6 := evidenceMixin[6].Interceptors()
@@ -7922,6 +7924,8 @@ func init() {
 	task.Hooks[9] = taskHooks[0]
 
 	task.Hooks[10] = taskHooks[1]
+
+	task.Hooks[11] = taskHooks[2]
 	taskMixinInters1 := taskMixin[1].Interceptors()
 	taskMixinInters2 := taskMixin[2].Interceptors()
 	taskMixinInters6 := taskMixin[6].Interceptors()

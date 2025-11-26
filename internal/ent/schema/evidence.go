@@ -160,6 +160,7 @@ func (e Evidence) Annotations() []schema.Annotation {
 func (Evidence) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookEvidenceFiles(),
+		hooks.HookSystemOwnedControls(),
 	}
 }
 

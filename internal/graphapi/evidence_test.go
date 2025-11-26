@@ -222,6 +222,10 @@ func TestMutationCreateEvidence(t *testing.T) {
 	subcontrol1 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 	subcontrol2 := (&SubcontrolBuilder{client: suite.client}).MustNew(adminUser.UserCtx, t)
 
+	// create system owned control to test that it cannot be linked
+	systemOwnedSubcontrol := (&SubcontrolBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+	systemOwnedControl := (&ControlBuilder{client: suite.client}).MustNew(systemAdminUser.UserCtx, t)
+
 	// create a task for view only user
 	taskViewOnly := (&TaskBuilder{client: suite.client}).MustNew(viewOnlyUser.UserCtx, t)
 
@@ -311,6 +315,39 @@ func TestMutationCreateEvidence(t *testing.T) {
 			},
 			client: suite.client.api,
 			ctx:    adminUser.UserCtx,
+		},
+		{
+			name: "attempt to link system owned control",
+			request: testclient.CreateEvidenceInput{
+				Name:       "Test Evidence",
+				TaskIDs:    []string{taskViewOnly.ID},
+				ControlIDs: []string{systemOwnedControl.ID},
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "attempt to link system owned subcontrol",
+			request: testclient.CreateEvidenceInput{
+				Name:          "Test Evidence",
+				TaskIDs:       []string{taskViewOnly.ID},
+				SubcontrolIDs: []string{systemOwnedSubcontrol.ID},
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name: "attempt to link system owned control and org owned control",
+			request: testclient.CreateEvidenceInput{
+				Name:       "Test Evidence",
+				TaskIDs:    []string{taskViewOnly.ID},
+				ControlIDs: []string{systemOwnedControl.ID, control1.ID},
+			},
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
 		},
 		{
 			name: "happy path, using pat",
@@ -527,6 +564,9 @@ func TestMutationCreateEvidence(t *testing.T) {
 	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, IDs: []string{subcontrol1.ID, subcontrol2.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TaskDeleteOne]{client: suite.client.db.Task, IDs: []string{task.ID, taskViewOnly.ID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.ProgramDeleteOne]{client: suite.client.db.Program, ID: program.ID}).MustDelete(testUser1.UserCtx, t)
+	// delete system owned controls and subcontrols
+	(&Cleanup[*generated.SubcontrolDeleteOne]{client: suite.client.db.Subcontrol, ID: systemOwnedSubcontrol.ID}).MustDelete(systemAdminUser.UserCtx, t)
+	(&Cleanup[*generated.ControlDeleteOne]{client: suite.client.db.Control, IDs: []string{systemOwnedControl.ID, systemOwnedSubcontrol.ControlID}}).MustDelete(systemAdminUser.UserCtx, t)
 }
 
 func TestMutationUpdateEvidence(t *testing.T) {
