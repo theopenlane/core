@@ -13377,6 +13377,8 @@ input CreateStandardInput {
 	ownerID: ID
 	controlIDs: [ID!]
 	trustCenterComplianceIDs: [ID!]
+	trustCenterDocIDs: [ID!]
+	logoFileID: ID
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -13747,6 +13749,7 @@ input CreateTrustCenterDocInput {
 	"""
 	visibility: TrustCenterDocTrustCenterDocumentVisibility
 	trustCenterID: ID
+	standardID: ID
 	fileID: ID
 	originalFileID: ID
 }
@@ -43488,6 +43491,11 @@ type Mutation {
 		values of the standard
 		"""
 		input: CreateStandardInput!
+
+		"""
+		file to upload as the logo to represent the standard
+		"""
+		logoFile: Upload
 	): StandardCreatePayload!
 	"""
 	Update an existing standard
@@ -43502,6 +43510,11 @@ type Mutation {
 		New values for the standard
 		"""
 		input: UpdateStandardInput!
+
+		"""
+		file to upload as the logo to represent the standard
+		"""
+		logoFile: Upload
 	): StandardUpdatePayload!
 	"""
 	Delete an existing standard
@@ -43579,7 +43592,12 @@ type Mutation {
 		values of the subprocessor
 		"""
 		input: CreateSubprocessorInput!
-	logoFile: Upload): SubprocessorCreatePayload!
+
+		"""
+		file to upload as the logo of the subprocessor
+		"""
+		logoFile: Upload
+	): SubprocessorCreatePayload!
 	"""
 	Create multiple new subprocessors
 	"""
@@ -43611,7 +43629,12 @@ type Mutation {
 		New values for the subprocessor
 		"""
 		input: UpdateSubprocessorInput!
-	logoFile: Upload): SubprocessorUpdatePayload!
+
+		"""
+		file to upload as the logo of the subprocessor
+		"""
+		logoFile: Upload
+	): SubprocessorUpdatePayload!
 	"""
 	Delete an existing subprocessor
 	"""
@@ -70313,6 +70336,10 @@ type Standard implements Node {
 	version of the standard
 	"""
 	version: String
+	"""
+	URL of the logo
+	"""
+	logoFileID: ID
 	owner: Organization
 	controls(
 		"""
@@ -70376,6 +70403,38 @@ type Standard implements Node {
 		"""
 		where: TrustCenterComplianceWhereInput
 	): TrustCenterComplianceConnection!
+	trustCenterDocs(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustCenterDocs returned from the connection.
+		"""
+		orderBy: [TrustCenterDocOrder!]
+
+		"""
+		Filtering options for TrustCenterDocs returned from the connection.
+		"""
+		where: TrustCenterDocWhereInput
+	): TrustCenterDocConnection!
+	logoFile: File
 }
 """
 Return response for createBulkStandard mutation
@@ -70519,6 +70578,10 @@ type StandardHistory implements Node {
 	version of the standard
 	"""
 	version: String
+	"""
+	URL of the logo
+	"""
+	logoFileID: String
 }
 """
 A connection to a list of items.
@@ -70975,6 +71038,24 @@ input StandardHistoryWhereInput {
 	versionNotNil: Boolean
 	versionEqualFold: String
 	versionContainsFold: String
+	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: String
+	logoFileIDNEQ: String
+	logoFileIDIn: [String!]
+	logoFileIDNotIn: [String!]
+	logoFileIDGT: String
+	logoFileIDGTE: String
+	logoFileIDLT: String
+	logoFileIDLTE: String
+	logoFileIDContains: String
+	logoFileIDHasPrefix: String
+	logoFileIDHasSuffix: String
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: String
+	logoFileIDContainsFold: String
 }
 """
 Ordering options for Standard connections
@@ -71366,6 +71447,24 @@ input StandardWhereInput {
 	versionEqualFold: String
 	versionContainsFold: String
 	"""
+	logo_file_id field predicates
+	"""
+	logoFileID: ID
+	logoFileIDNEQ: ID
+	logoFileIDIn: [ID!]
+	logoFileIDNotIn: [ID!]
+	logoFileIDGT: ID
+	logoFileIDGTE: ID
+	logoFileIDLT: ID
+	logoFileIDLTE: ID
+	logoFileIDContains: ID
+	logoFileIDHasPrefix: ID
+	logoFileIDHasSuffix: ID
+	logoFileIDIsNil: Boolean
+	logoFileIDNotNil: Boolean
+	logoFileIDEqualFold: ID
+	logoFileIDContainsFold: ID
+	"""
 	owner edge predicates
 	"""
 	hasOwner: Boolean
@@ -71380,6 +71479,16 @@ input StandardWhereInput {
 	"""
 	hasTrustCenterCompliances: Boolean
 	hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+	"""
+	trust_center_docs edge predicates
+	"""
+	hasTrustCenterDocs: Boolean
+	hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+	"""
+	logo_file edge predicates
+	"""
+	hasLogoFile: Boolean
+	hasLogoFileWith: [FileWhereInput!]
 }
 type Subcontrol implements Node {
 	id: ID!
@@ -78116,7 +78225,12 @@ type TrustCenterDoc implements Node {
 	visibility of the document
 	"""
 	visibility: TrustCenterDocTrustCenterDocumentVisibility
+	"""
+	ID of the standard
+	"""
+	standardID: ID
 	trustCenter: TrustCenter
+	standard: Standard
 	"""
 	the file containing the document content
 	"""
@@ -78250,6 +78364,10 @@ type TrustCenterDocHistory implements Node {
 	visibility of the document
 	"""
 	visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+	"""
+	ID of the standard
+	"""
+	standardID: String
 }
 """
 A connection to a list of items.
@@ -78556,6 +78674,24 @@ input TrustCenterDocHistoryWhereInput {
 	visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
 	visibilityIsNil: Boolean
 	visibilityNotNil: Boolean
+	"""
+	standard_id field predicates
+	"""
+	standardID: String
+	standardIDNEQ: String
+	standardIDIn: [String!]
+	standardIDNotIn: [String!]
+	standardIDGT: String
+	standardIDGTE: String
+	standardIDLT: String
+	standardIDLTE: String
+	standardIDContains: String
+	standardIDHasPrefix: String
+	standardIDHasSuffix: String
+	standardIDIsNil: Boolean
+	standardIDNotNil: Boolean
+	standardIDEqualFold: String
+	standardIDContainsFold: String
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -78797,10 +78933,33 @@ input TrustCenterDocWhereInput {
 	visibilityIsNil: Boolean
 	visibilityNotNil: Boolean
 	"""
+	standard_id field predicates
+	"""
+	standardID: ID
+	standardIDNEQ: ID
+	standardIDIn: [ID!]
+	standardIDNotIn: [ID!]
+	standardIDGT: ID
+	standardIDGTE: ID
+	standardIDLT: ID
+	standardIDLTE: ID
+	standardIDContains: ID
+	standardIDHasPrefix: ID
+	standardIDHasSuffix: ID
+	standardIDIsNil: Boolean
+	standardIDNotNil: Boolean
+	standardIDEqualFold: ID
+	standardIDContainsFold: ID
+	"""
 	trust_center edge predicates
 	"""
 	hasTrustCenter: Boolean
 	hasTrustCenterWith: [TrustCenterWhereInput!]
+	"""
+	standard edge predicates
+	"""
+	hasStandard: Boolean
+	hasStandardWith: [StandardWhereInput!]
 	"""
 	file edge predicates
 	"""
@@ -86560,6 +86719,11 @@ input UpdateStandardInput {
 	addTrustCenterComplianceIDs: [ID!]
 	removeTrustCenterComplianceIDs: [ID!]
 	clearTrustCenterCompliances: Boolean
+	addTrustCenterDocIDs: [ID!]
+	removeTrustCenterDocIDs: [ID!]
+	clearTrustCenterDocs: Boolean
+	logoFileID: ID
+	clearLogoFile: Boolean
 	RevisionBump: VersionBump
 }
 """
@@ -87078,6 +87242,8 @@ input UpdateTrustCenterDocInput {
 	clearVisibility: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
+	standardID: ID
+	clearStandard: Boolean
 	fileID: ID
 	clearFile: Boolean
 	originalFileID: ID

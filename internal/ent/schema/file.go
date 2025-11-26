@@ -129,7 +129,8 @@ func (f File) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
 					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
-					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}, TrustCenterDoc{}, TrustcenterEntity{}), // used to create parent tuples for the file
+					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{},
+					TrustCenterDoc{}, Standard{}, TrustcenterEntity{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 			mixin.NewSystemOwnedMixin(),

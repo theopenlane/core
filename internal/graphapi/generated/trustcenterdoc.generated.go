@@ -80,8 +80,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -174,8 +178,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -268,8 +276,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -362,8 +374,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":

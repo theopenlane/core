@@ -178,6 +178,11 @@ func Version(v string) predicate.Standard {
 	return predicate.Standard(sql.FieldEQ(FieldVersion, v))
 }
 
+// LogoFileID applies equality check predicate on the "logo_file_id" field. It's identical to LogoFileIDEQ.
+func LogoFileID(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldEQ(FieldLogoFileID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.Standard {
 	return predicate.Standard(sql.FieldEQ(FieldCreatedAt, v))
@@ -1638,6 +1643,81 @@ func VersionContainsFold(v string) predicate.Standard {
 	return predicate.Standard(sql.FieldContainsFold(FieldVersion, v))
 }
 
+// LogoFileIDEQ applies the EQ predicate on the "logo_file_id" field.
+func LogoFileIDEQ(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDNEQ applies the NEQ predicate on the "logo_file_id" field.
+func LogoFileIDNEQ(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldNEQ(FieldLogoFileID, v))
+}
+
+// LogoFileIDIn applies the In predicate on the "logo_file_id" field.
+func LogoFileIDIn(vs ...string) predicate.Standard {
+	return predicate.Standard(sql.FieldIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDNotIn applies the NotIn predicate on the "logo_file_id" field.
+func LogoFileIDNotIn(vs ...string) predicate.Standard {
+	return predicate.Standard(sql.FieldNotIn(FieldLogoFileID, vs...))
+}
+
+// LogoFileIDGT applies the GT predicate on the "logo_file_id" field.
+func LogoFileIDGT(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldGT(FieldLogoFileID, v))
+}
+
+// LogoFileIDGTE applies the GTE predicate on the "logo_file_id" field.
+func LogoFileIDGTE(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldGTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDLT applies the LT predicate on the "logo_file_id" field.
+func LogoFileIDLT(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldLT(FieldLogoFileID, v))
+}
+
+// LogoFileIDLTE applies the LTE predicate on the "logo_file_id" field.
+func LogoFileIDLTE(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldLTE(FieldLogoFileID, v))
+}
+
+// LogoFileIDContains applies the Contains predicate on the "logo_file_id" field.
+func LogoFileIDContains(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldContains(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasPrefix applies the HasPrefix predicate on the "logo_file_id" field.
+func LogoFileIDHasPrefix(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldHasPrefix(FieldLogoFileID, v))
+}
+
+// LogoFileIDHasSuffix applies the HasSuffix predicate on the "logo_file_id" field.
+func LogoFileIDHasSuffix(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldHasSuffix(FieldLogoFileID, v))
+}
+
+// LogoFileIDIsNil applies the IsNil predicate on the "logo_file_id" field.
+func LogoFileIDIsNil() predicate.Standard {
+	return predicate.Standard(sql.FieldIsNull(FieldLogoFileID))
+}
+
+// LogoFileIDNotNil applies the NotNil predicate on the "logo_file_id" field.
+func LogoFileIDNotNil() predicate.Standard {
+	return predicate.Standard(sql.FieldNotNull(FieldLogoFileID))
+}
+
+// LogoFileIDEqualFold applies the EqualFold predicate on the "logo_file_id" field.
+func LogoFileIDEqualFold(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldEqualFold(FieldLogoFileID, v))
+}
+
+// LogoFileIDContainsFold applies the ContainsFold predicate on the "logo_file_id" field.
+func LogoFileIDContainsFold(v string) predicate.Standard {
+	return predicate.Standard(sql.FieldContainsFold(FieldLogoFileID, v))
+}
+
 // HasOwner applies the HasEdge predicate on the "owner" edge.
 func HasOwner() predicate.Standard {
 	return predicate.Standard(func(s *sql.Selector) {
@@ -1717,6 +1797,64 @@ func HasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) pre
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
 		step.To.Schema = schemaConfig.TrustCenterCompliance
 		step.Edge.Schema = schemaConfig.TrustCenterCompliance
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasTrustCenterDocs applies the HasEdge predicate on the "trust_center_docs" edge.
+func HasTrustCenterDocs() predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, TrustCenterDocsTable, TrustCenterDocsColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustCenterDocsWith applies the HasEdge predicate on the "trust_center_docs" edge with a given conditions (other predicates).
+func HasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := newTrustCenterDocsStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
+// HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
+func HasLogoFile() predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, LogoFileTable, LogoFileColumn),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Standard
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasLogoFileWith applies the HasEdge predicate on the "logo_file" edge with a given conditions (other predicates).
+func HasLogoFileWith(preds ...predicate.File) predicate.Standard {
+	return predicate.Standard(func(s *sql.Selector) {
+		step := newLogoFileStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Standard
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

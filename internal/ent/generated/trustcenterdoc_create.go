@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
@@ -209,6 +210,20 @@ func (_c *TrustCenterDocCreate) SetNillableVisibility(v *enums.TrustCenterDocume
 	return _c
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_c *TrustCenterDocCreate) SetStandardID(v string) *TrustCenterDocCreate {
+	_c.mutation.SetStandardID(v)
+	return _c
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_c *TrustCenterDocCreate) SetNillableStandardID(v *string) *TrustCenterDocCreate {
+	if v != nil {
+		_c.SetStandardID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustCenterDocCreate) SetID(v string) *TrustCenterDocCreate {
 	_c.mutation.SetID(v)
@@ -226,6 +241,11 @@ func (_c *TrustCenterDocCreate) SetNillableID(v *string) *TrustCenterDocCreate {
 // SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
 func (_c *TrustCenterDocCreate) SetTrustCenter(v *TrustCenter) *TrustCenterDocCreate {
 	return _c.SetTrustCenterID(v.ID)
+}
+
+// SetStandard sets the "standard" edge to the Standard entity.
+func (_c *TrustCenterDocCreate) SetStandard(v *Standard) *TrustCenterDocCreate {
+	return _c.SetStandardID(v.ID)
 }
 
 // SetFile sets the "file" edge to the File entity.
@@ -351,6 +371,11 @@ func (_c *TrustCenterDocCreate) check() error {
 			return &ValidationError{Name: "visibility", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.visibility": %w`, err)}
 		}
 	}
+	if v, ok := _c.mutation.StandardID(); ok {
+		if err := trustcenterdoc.StandardIDValidator(v); err != nil {
+			return &ValidationError{Name: "standard_id", err: fmt.Errorf(`generated: validator failed for field "TrustCenterDoc.standard_id": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -451,6 +476,24 @@ func (_c *TrustCenterDocCreate) createSpec() (*TrustCenterDoc, *sqlgraph.CreateS
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.TrustCenterID = nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.StandardIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.StandardTable,
+			Columns: []string{trustcenterdoc.StandardColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(standard.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.StandardID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.FileIDs(); len(nodes) > 0 {

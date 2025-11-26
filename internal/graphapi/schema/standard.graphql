@@ -19,6 +19,10 @@ extend type Mutation{
         values of the standard
         """
         input: CreateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -32,6 +36,10 @@ extend type Mutation{
         New values for the standard
         """
         input: UpdateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardUpdatePayload!
     """
     Delete an existing standard

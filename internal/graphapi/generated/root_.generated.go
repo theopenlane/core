@@ -3587,7 +3587,7 @@ type ComplexityRoot struct {
 		CreateScan                            func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                    func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                 func(childComplexity int, input generated.CreateScheduledJobRunInput) int
-		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput) int
+		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload) int
 		CreateSubcontrol                      func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                    func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                      func(childComplexity int, input generated.CreateSubscriberInput) int
@@ -3798,7 +3798,7 @@ type ComplexityRoot struct {
 		UpdateScan                            func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                    func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                 func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
-		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) int
 		UpdateSubcontrol                      func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                    func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
@@ -5696,6 +5696,8 @@ type ComplexityRoot struct {
 		InternalNotes          func(childComplexity int) int
 		IsPublic               func(childComplexity int) int
 		Link                   func(childComplexity int) int
+		LogoFile               func(childComplexity int) int
+		LogoFileID             func(childComplexity int) int
 		Name                   func(childComplexity int) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -5707,6 +5709,7 @@ type ComplexityRoot struct {
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDocs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		Version                func(childComplexity int) int
@@ -5749,6 +5752,7 @@ type ComplexityRoot struct {
 		InternalNotes        func(childComplexity int) int
 		IsPublic             func(childComplexity int) int
 		Link                 func(childComplexity int) int
+		LogoFileID           func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
@@ -6465,6 +6469,8 @@ type ComplexityRoot struct {
 		ID                  func(childComplexity int) int
 		OriginalFile        func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
+		Standard            func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenter         func(childComplexity int) int
@@ -6518,6 +6524,7 @@ type ComplexityRoot struct {
 		Operation           func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
 		Ref                 func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenterID       func(childComplexity int) int
@@ -26240,7 +26247,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput)), true
+		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createSubcontrol":
 		if e.complexity.Mutation.CreateSubcontrol == nil {
@@ -28767,7 +28774,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput)), true
+		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateSubcontrol":
 		if e.complexity.Mutation.UpdateSubcontrol == nil {
@@ -40865,6 +40872,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.Link(childComplexity), true
 
+	case "Standard.logoFile":
+		if e.complexity.Standard.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFile(childComplexity), true
+
+	case "Standard.logoFileID":
+		if e.complexity.Standard.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFileID(childComplexity), true
+
 	case "Standard.name":
 		if e.complexity.Standard.Name == nil {
 			break
@@ -40946,6 +40967,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Standard.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
+
+	case "Standard.trustCenterDocs":
+		if e.complexity.Standard.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Standard_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
 
 	case "Standard.updatedAt":
 		if e.complexity.Standard.UpdatedAt == nil {
@@ -41114,6 +41147,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.Link(childComplexity), true
+
+	case "StandardHistory.logoFileID":
+		if e.complexity.StandardHistory.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.LogoFileID(childComplexity), true
 
 	case "StandardHistory.name":
 		if e.complexity.StandardHistory.Name == nil {
@@ -44517,6 +44557,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.OriginalFileID(childComplexity), true
 
+	case "TrustCenterDoc.standard":
+		if e.complexity.TrustCenterDoc.Standard == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Standard(childComplexity), true
+
+	case "TrustCenterDoc.standardID":
+		if e.complexity.TrustCenterDoc.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.StandardID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -44719,6 +44773,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Ref(childComplexity), true
+
+	case "TrustCenterDocHistory.standardID":
+		if e.complexity.TrustCenterDocHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.StandardID(childComplexity), true
 
 	case "TrustCenterDocHistory.tags":
 		if e.complexity.TrustCenterDocHistory.Tags == nil {
@@ -66185,6 +66246,8 @@ input CreateStandardInput {
   ownerID: ID
   controlIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  trustCenterDocIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -66555,6 +66618,7 @@ input CreateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   trustCenterID: ID
+  standardID: ID
   fileID: ID
   originalFileID: ID
 }
@@ -114877,6 +114941,10 @@ type Standard implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: ID
   owner: Organization
   controls(
     """
@@ -114940,6 +115008,38 @@ type Standard implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -115056,6 +115156,10 @@ type StandardHistory implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: String
 }
 """
 A connection to a list of items.
@@ -115512,6 +115616,24 @@ input StandardHistoryWhereInput {
   versionNotNil: Boolean
   versionEqualFold: String
   versionContainsFold: String
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
 }
 """
 Ordering options for Standard connections
@@ -115894,6 +116016,24 @@ input StandardWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -115908,6 +116048,16 @@ input StandardWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -122274,7 +122424,12 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: ID
   trustCenter: TrustCenter
+  standard: Standard
   """
   the file containing the document content
   """
@@ -122359,6 +122514,10 @@ type TrustCenterDocHistory implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: String
 }
 """
 A connection to a list of items.
@@ -122665,6 +122824,24 @@ input TrustCenterDocHistoryWhereInput {
   visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: String
+  standardIDContainsFold: String
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -122897,10 +123074,33 @@ input TrustCenterDocWhereInput {
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
   """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
   """
   file edge predicates
   """
@@ -130460,6 +130660,11 @@ input UpdateStandardInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -130969,6 +131174,8 @@ input UpdateTrustCenterDocInput {
   clearVisibility: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  standardID: ID
+  clearStandard: Boolean
   fileID: ID
   clearFile: Boolean
   originalFileID: ID
@@ -146547,6 +146754,10 @@ extend type Mutation{
         values of the standard
         """
         input: CreateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -146560,6 +146771,10 @@ extend type Mutation{
         New values for the standard
         """
         input: UpdateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardUpdatePayload!
     """
     Delete an existing standard
@@ -146754,6 +146969,9 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorCreatePayload!
     """
@@ -146786,6 +147004,9 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
