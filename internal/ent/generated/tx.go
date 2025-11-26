@@ -276,6 +276,10 @@ type Tx struct {
 	TrustCenterWatermarkConfig *TrustCenterWatermarkConfigClient
 	// TrustCenterWatermarkConfigHistory is the client for interacting with the TrustCenterWatermarkConfigHistory builders.
 	TrustCenterWatermarkConfigHistory *TrustCenterWatermarkConfigHistoryClient
+	// TrustcenterEntity is the client for interacting with the TrustcenterEntity builders.
+	TrustcenterEntity *TrustcenterEntityClient
+	// TrustcenterEntityHistory is the client for interacting with the TrustcenterEntityHistory builders.
+	TrustcenterEntityHistory *TrustcenterEntityHistoryClient
 	// User is the client for interacting with the User builders.
 	User *UserClient
 	// UserHistory is the client for interacting with the UserHistory builders.
@@ -577,6 +581,8 @@ func (tx *Tx) init() {
 	tx.TrustCenterSubprocessorHistory = NewTrustCenterSubprocessorHistoryClient(tx.config)
 	tx.TrustCenterWatermarkConfig = NewTrustCenterWatermarkConfigClient(tx.config)
 	tx.TrustCenterWatermarkConfigHistory = NewTrustCenterWatermarkConfigHistoryClient(tx.config)
+	tx.TrustcenterEntity = NewTrustcenterEntityClient(tx.config)
+	tx.TrustcenterEntityHistory = NewTrustcenterEntityHistoryClient(tx.config)
 	tx.User = NewUserClient(tx.config)
 	tx.UserHistory = NewUserHistoryClient(tx.config)
 	tx.UserSetting = NewUserSettingClient(tx.config)

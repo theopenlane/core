@@ -536,7 +536,7 @@ func (ec *executionContext) marshalNDirectoryAccountBulkCreatePayload2githubᚗc
 func (ec *executionContext) marshalNDirectoryAccountBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryAccountBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -550,7 +550,7 @@ func (ec *executionContext) marshalNDirectoryAccountCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNDirectoryAccountCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryAccountCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -564,7 +564,7 @@ func (ec *executionContext) marshalNDirectoryAccountDeletePayload2githubᚗcom�
 func (ec *executionContext) marshalNDirectoryAccountDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryAccountDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -578,7 +578,7 @@ func (ec *executionContext) marshalNDirectoryAccountUpdatePayload2githubᚗcom�
 func (ec *executionContext) marshalNDirectoryAccountUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryAccountUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryAccountUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

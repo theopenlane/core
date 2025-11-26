@@ -143,6 +143,7 @@ entConfig:
   entitytypes:
     - vendor
     - account
+    - customer
 
   windmill:
     enabled: true

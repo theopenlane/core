@@ -1,0 +1,103 @@
+extend type Query {
+    """
+    Look up trustcenterEntity by ID
+    """
+     trustcenterEntity(
+        """
+        ID of the trustcenterEntity
+        """
+        id: ID!
+    ):  TrustcenterEntity!
+}
+
+extend type Mutation{
+    """
+    Create a new trustcenterEntity
+    """
+    createTrustcenterEntity(
+        """
+        values of the trustcenterEntity
+        """
+        input: CreateTrustcenterEntityInput!
+    ): TrustcenterEntityCreatePayload!
+    """
+    Create multiple new trustcenterEntitys
+    """
+    createBulkTrustcenterEntity(
+        """
+        values of the trustcenterEntity
+        """
+        input: [CreateTrustcenterEntityInput!]
+    ): TrustcenterEntityBulkCreatePayload!
+    """
+    Create multiple new trustcenterEntitys via file upload
+    """
+    createBulkCSVTrustcenterEntity(
+        """
+        csv file containing values of the trustcenterEntity
+        """
+        input: Upload!
+    ): TrustcenterEntityBulkCreatePayload!
+    """
+    Update an existing trustcenterEntity
+    """
+    updateTrustcenterEntity(
+        """
+        ID of the trustcenterEntity
+        """
+        id: ID!
+        """
+        New values for the trustcenterEntity
+        """
+        input: UpdateTrustcenterEntityInput!
+    ): TrustcenterEntityUpdatePayload!
+    """
+    Delete an existing trustcenterEntity
+    """
+    deleteTrustcenterEntity(
+        """
+        ID of the trustcenterEntity
+        """
+        id: ID!
+    ): TrustcenterEntityDeletePayload!
+}
+
+"""
+Return response for createTrustcenterEntity mutation
+"""
+type TrustcenterEntityCreatePayload {
+    """
+    Created trustcenterEntity
+    """
+    trustcenterEntity: TrustcenterEntity!
+}
+
+"""
+Return response for updateTrustcenterEntity mutation
+"""
+type TrustcenterEntityUpdatePayload {
+    """
+    Updated trustcenterEntity
+    """
+    trustcenterEntity: TrustcenterEntity!
+}
+
+"""
+Return response for deleteTrustcenterEntity mutation
+"""
+type TrustcenterEntityDeletePayload {
+    """
+    Deleted trustcenterEntity ID
+    """
+    deletedID: ID!
+}
+
+"""
+Return response for createBulkTrustcenterEntity mutation
+"""
+type TrustcenterEntityBulkCreatePayload {
+    """
+    Created trustcenterEntitys
+    """
+    trustcenterEntities: [TrustcenterEntity!]
+}

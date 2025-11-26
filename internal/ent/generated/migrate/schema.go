@@ -7467,6 +7467,77 @@ var (
 			},
 		},
 	}
+	// TrustcenterEntitiesColumns holds the columns for the "trustcenter_entities" table.
+	TrustcenterEntitiesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "name", Type: field.TypeString},
+		{Name: "trust_center_trustcenter_entities", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+	}
+	// TrustcenterEntitiesTable holds the schema information for the "trustcenter_entities" table.
+	TrustcenterEntitiesTable = &schema.Table{
+		Name:       "trustcenter_entities",
+		Columns:    TrustcenterEntitiesColumns,
+		PrimaryKey: []*schema.Column{TrustcenterEntitiesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trustcenter_entities_trust_centers_trustcenter_entities",
+				Columns:    []*schema.Column{TrustcenterEntitiesColumns[9]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trustcenter_entities_files_logo_file",
+				Columns:    []*schema.Column{TrustcenterEntitiesColumns[10]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trustcenter_entities_trust_centers_trust_center",
+				Columns:    []*schema.Column{TrustcenterEntitiesColumns[11]},
+				RefColumns: []*schema.Column{TrustCentersColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// TrustcenterEntityHistoryColumns holds the columns for the "trustcenter_entity_history" table.
+	TrustcenterEntityHistoryColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeString},
+		{Name: "history_time", Type: field.TypeTime},
+		{Name: "ref", Type: field.TypeString, Nullable: true},
+		{Name: "operation", Type: field.TypeEnum, Enums: []string{"INSERT", "UPDATE", "DELETE"}},
+		{Name: "created_at", Type: field.TypeTime, Nullable: true},
+		{Name: "updated_at", Type: field.TypeTime, Nullable: true},
+		{Name: "created_by", Type: field.TypeString, Nullable: true},
+		{Name: "updated_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
+		{Name: "url", Type: field.TypeString, Nullable: true, Size: 2048},
+		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
+		{Name: "name", Type: field.TypeString},
+	}
+	// TrustcenterEntityHistoryTable holds the schema information for the "trustcenter_entity_history" table.
+	TrustcenterEntityHistoryTable = &schema.Table{
+		Name:       "trustcenter_entity_history",
+		Columns:    TrustcenterEntityHistoryColumns,
+		PrimaryKey: []*schema.Column{TrustcenterEntityHistoryColumns[0]},
+		Indexes: []*schema.Index{
+			{
+				Name:    "trustcenterentityhistory_history_time",
+				Unique:  false,
+				Columns: []*schema.Column{TrustcenterEntityHistoryColumns[1]},
+			},
+		},
+	}
 	// UsersColumns holds the columns for the "users" table.
 	UsersColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeString},
@@ -11473,6 +11544,31 @@ var (
 			},
 		},
 	}
+	// TrustcenterEntityFilesColumns holds the columns for the "trustcenter_entity_files" table.
+	TrustcenterEntityFilesColumns = []*schema.Column{
+		{Name: "trustcenter_entity_id", Type: field.TypeString},
+		{Name: "file_id", Type: field.TypeString},
+	}
+	// TrustcenterEntityFilesTable holds the schema information for the "trustcenter_entity_files" table.
+	TrustcenterEntityFilesTable = &schema.Table{
+		Name:       "trustcenter_entity_files",
+		Columns:    TrustcenterEntityFilesColumns,
+		PrimaryKey: []*schema.Column{TrustcenterEntityFilesColumns[0], TrustcenterEntityFilesColumns[1]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "trustcenter_entity_files_trustcenter_entity_id",
+				Columns:    []*schema.Column{TrustcenterEntityFilesColumns[0]},
+				RefColumns: []*schema.Column{TrustcenterEntitiesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+			{
+				Symbol:     "trustcenter_entity_files_file_id",
+				Columns:    []*schema.Column{TrustcenterEntityFilesColumns[1]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
+				OnDelete:   schema.Cascade,
+			},
+		},
+	}
 	// UserEventsColumns holds the columns for the "user_events" table.
 	UserEventsColumns = []*schema.Column{
 		{Name: "user_id", Type: field.TypeString},
@@ -11657,6 +11753,8 @@ var (
 		TrustCenterSubprocessorHistoryTable,
 		TrustCenterWatermarkConfigsTable,
 		TrustCenterWatermarkConfigHistoryTable,
+		TrustcenterEntitiesTable,
+		TrustcenterEntityHistoryTable,
 		UsersTable,
 		UserHistoryTable,
 		UserSettingsTable,
@@ -11793,6 +11891,7 @@ var (
 		TaskEvidenceTable,
 		TemplateFilesTable,
 		TrustCenterSettingFilesTable,
+		TrustcenterEntityFilesTable,
 		UserEventsTable,
 		VulnerabilityActionPlansTable,
 	}
@@ -12262,6 +12361,12 @@ func init() {
 	TrustCenterWatermarkConfigHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_watermark_config_history",
 	}
+	TrustcenterEntitiesTable.ForeignKeys[0].RefTable = TrustCentersTable
+	TrustcenterEntitiesTable.ForeignKeys[1].RefTable = FilesTable
+	TrustcenterEntitiesTable.ForeignKeys[2].RefTable = TrustCentersTable
+	TrustcenterEntityHistoryTable.Annotation = &entsql.Annotation{
+		Table: "trustcenter_entity_history",
+	}
 	UsersTable.ForeignKeys[0].RefTable = FilesTable
 	UserHistoryTable.Annotation = &entsql.Annotation{
 		Table: "user_history",
@@ -12557,6 +12662,8 @@ func init() {
 	TemplateFilesTable.ForeignKeys[1].RefTable = FilesTable
 	TrustCenterSettingFilesTable.ForeignKeys[0].RefTable = TrustCenterSettingsTable
 	TrustCenterSettingFilesTable.ForeignKeys[1].RefTable = FilesTable
+	TrustcenterEntityFilesTable.ForeignKeys[0].RefTable = TrustcenterEntitiesTable
+	TrustcenterEntityFilesTable.ForeignKeys[1].RefTable = FilesTable
 	UserEventsTable.ForeignKeys[0].RefTable = UsersTable
 	UserEventsTable.ForeignKeys[1].RefTable = EventsTable
 	VulnerabilityActionPlansTable.ForeignKeys[0].RefTable = VulnerabilitiesTable

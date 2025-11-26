@@ -2284,6 +2284,35 @@ func HasSecretsWith(preds ...predicate.Hush) predicate.File {
 	})
 }
 
+// HasTrustcenterEntity applies the HasEdge predicate on the "trustcenter_entity" edge.
+func HasTrustcenterEntity() predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, TrustcenterEntityTable, TrustcenterEntityPrimaryKey...),
+		)
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasTrustcenterEntityWith applies the HasEdge predicate on the "trustcenter_entity" edge with a given conditions (other predicates).
+func HasTrustcenterEntityWith(preds ...predicate.TrustcenterEntity) predicate.File {
+	return predicate.File(func(s *sql.Selector) {
+		step := newTrustcenterEntityStep()
+		schemaConfig := internal.SchemaConfigFromContext(s.Context())
+		step.To.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // And groups predicates with the AND operator between them.
 func And(predicates ...predicate.File) predicate.File {
 	return predicate.File(sql.AndPredicates(predicates...))

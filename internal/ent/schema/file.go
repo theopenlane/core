@@ -6,8 +6,9 @@ import (
 	"entgo.io/ent/schema"
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/entfga"
+
+	"github.com/theopenlane/core/pkg/models"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
@@ -115,9 +116,9 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, Evidence{}),
 		defaultEdgeToWithPagination(f, Event{}),
 		defaultEdgeFrom(f, TrustCenterSetting{}),
-
 		defaultEdgeToWithPagination(f, Integration{}),
 		defaultEdgeToWithPagination(f, Hush{}),
+		defaultEdgeFrom(f, TrustcenterEntity{}),
 	}
 }
 
@@ -128,7 +129,7 @@ func (f File) Mixin() []ent.Mixin {
 			newObjectOwnedMixin[generated.File](f,
 				withParents(
 					Organization{}, Program{}, Control{}, Procedure{}, Template{}, Subcontrol{}, DocumentData{},
-					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}, TrustCenterDoc{}), // used to create parent tuples for the file
+					Contact{}, InternalPolicy{}, Narrative{}, Evidence{}, TrustCenterSetting{}, Subprocessor{}, Export{}, TrustCenterDoc{}, TrustcenterEntity{}), // used to create parent tuples for the file
 				withHookFuncs(), // use an empty hook, file processing is handled in middleware
 			),
 			mixin.NewSystemOwnedMixin(),

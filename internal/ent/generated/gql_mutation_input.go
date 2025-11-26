@@ -5236,6 +5236,7 @@ type CreateFileInput struct {
 	TrustCenterSettingIDs  []string
 	IntegrationIDs         []string
 	SecretIDs              []string
+	TrustcenterEntityIDs   []string
 }
 
 // Mutate applies the CreateFileInput on the FileMutation builder.
@@ -5333,6 +5334,9 @@ func (i *CreateFileInput) Mutate(m *FileMutation) {
 	if v := i.SecretIDs; len(v) > 0 {
 		m.AddSecretIDs(v...)
 	}
+	if v := i.TrustcenterEntityIDs; len(v) > 0 {
+		m.AddTrustcenterEntityIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateFileInput on the FileCreate builder.
@@ -5420,6 +5424,9 @@ type UpdateFileInput struct {
 	ClearSecrets                 bool
 	AddSecretIDs                 []string
 	RemoveSecretIDs              []string
+	ClearTrustcenterEntity       bool
+	AddTrustcenterEntityIDs      []string
+	RemoveTrustcenterEntityIDs   []string
 }
 
 // Mutate applies the UpdateFileInput on the FileMutation builder.
@@ -5654,6 +5661,15 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	}
 	if v := i.RemoveSecretIDs; len(v) > 0 {
 		m.RemoveSecretIDs(v...)
+	}
+	if i.ClearTrustcenterEntity {
+		m.ClearTrustcenterEntity()
+	}
+	if v := i.AddTrustcenterEntityIDs; len(v) > 0 {
+		m.AddTrustcenterEntityIDs(v...)
+	}
+	if v := i.RemoveTrustcenterEntityIDs; len(v) > 0 {
+		m.RemoveTrustcenterEntityIDs(v...)
 	}
 }
 
@@ -16522,6 +16538,7 @@ type CreateTrustCenterInput struct {
 	TrustCenterComplianceIDs   []string
 	TemplateIDs                []string
 	PostIDs                    []string
+	TrustcenterEntityIDs       []string
 }
 
 // Mutate applies the CreateTrustCenterInput on the TrustCenterMutation builder.
@@ -16571,6 +16588,9 @@ func (i *CreateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	if v := i.PostIDs; len(v) > 0 {
 		m.AddPostIDs(v...)
 	}
+	if v := i.TrustcenterEntityIDs; len(v) > 0 {
+		m.AddTrustcenterEntityIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateTrustCenterInput on the TrustCenterCreate builder.
@@ -16617,6 +16637,9 @@ type UpdateTrustCenterInput struct {
 	ClearPosts                       bool
 	AddPostIDs                       []string
 	RemovePostIDs                    []string
+	ClearTrustcenterEntities         bool
+	AddTrustcenterEntityIDs          []string
+	RemoveTrustcenterEntityIDs       []string
 }
 
 // Mutate applies the UpdateTrustCenterInput on the TrustCenterMutation builder.
@@ -16728,6 +16751,15 @@ func (i *UpdateTrustCenterInput) Mutate(m *TrustCenterMutation) {
 	}
 	if v := i.RemovePostIDs; len(v) > 0 {
 		m.RemovePostIDs(v...)
+	}
+	if i.ClearTrustcenterEntities {
+		m.ClearTrustcenterEntities()
+	}
+	if v := i.AddTrustcenterEntityIDs; len(v) > 0 {
+		m.AddTrustcenterEntityIDs(v...)
+	}
+	if v := i.RemoveTrustcenterEntityIDs; len(v) > 0 {
+		m.RemoveTrustcenterEntityIDs(v...)
 	}
 }
 
@@ -17407,6 +17439,94 @@ func (c *TrustCenterWatermarkConfigUpdate) SetInput(i UpdateTrustCenterWatermark
 
 // SetInput applies the change-set in the UpdateTrustCenterWatermarkConfigInput on the TrustCenterWatermarkConfigUpdateOne builder.
 func (c *TrustCenterWatermarkConfigUpdateOne) SetInput(i UpdateTrustCenterWatermarkConfigInput) *TrustCenterWatermarkConfigUpdateOne {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// CreateTrustcenterEntityInput represents a mutation input for creating trustcenterentities.
+type CreateTrustcenterEntityInput struct {
+	URL           *string
+	Name          string
+	LogoFileID    *string
+	TrustCenterID *string
+	FileIDs       []string
+}
+
+// Mutate applies the CreateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
+func (i *CreateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	m.SetName(i.Name)
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if v := i.FileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the CreateTrustcenterEntityInput on the TrustcenterEntityCreate builder.
+func (c *TrustcenterEntityCreate) SetInput(i CreateTrustcenterEntityInput) *TrustcenterEntityCreate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// UpdateTrustcenterEntityInput represents a mutation input for updating trustcenterentities.
+type UpdateTrustcenterEntityInput struct {
+	ClearURL         bool
+	URL              *string
+	ClearLogoFile    bool
+	LogoFileID       *string
+	ClearTrustCenter bool
+	TrustCenterID    *string
+	ClearFiles       bool
+	AddFileIDs       []string
+	RemoveFileIDs    []string
+}
+
+// Mutate applies the UpdateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
+func (i *UpdateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
+	if i.ClearURL {
+		m.ClearURL()
+	}
+	if v := i.URL; v != nil {
+		m.SetURL(*v)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
+	if i.ClearTrustCenter {
+		m.ClearTrustCenter()
+	}
+	if v := i.TrustCenterID; v != nil {
+		m.SetTrustCenterID(*v)
+	}
+	if i.ClearFiles {
+		m.ClearFiles()
+	}
+	if v := i.AddFileIDs; len(v) > 0 {
+		m.AddFileIDs(v...)
+	}
+	if v := i.RemoveFileIDs; len(v) > 0 {
+		m.RemoveFileIDs(v...)
+	}
+}
+
+// SetInput applies the change-set in the UpdateTrustcenterEntityInput on the TrustcenterEntityUpdate builder.
+func (c *TrustcenterEntityUpdate) SetInput(i UpdateTrustcenterEntityInput) *TrustcenterEntityUpdate {
+	i.Mutate(c.Mutation())
+	return c
+}
+
+// SetInput applies the change-set in the UpdateTrustcenterEntityInput on the TrustcenterEntityUpdateOne builder.
+func (c *TrustcenterEntityUpdateOne) SetInput(i UpdateTrustcenterEntityInput) *TrustcenterEntityUpdateOne {
 	i.Mutate(c.Mutation())
 	return c
 }

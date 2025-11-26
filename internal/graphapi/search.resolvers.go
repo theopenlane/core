@@ -53,6 +53,7 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		tagdefinitionResults      *generated.TagDefinitionConnection
 		taskResults               *generated.TaskConnection
 		templateResults           *generated.TemplateConnection
+		trustcenterentityResults  *generated.TrustcenterEntityConnection
 		vulnerabilityResults      *generated.VulnerabilityConnection
 	)
 
@@ -435,6 +436,18 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		},
 		func() {
 			var err error
+			trustcenterentityResults, err = searchTrustcenterEntities(ctx, query, after, first, before, last)
+			// ignore not found errors
+			if err != nil && !generated.IsNotFound(err) {
+				errors = append(errors, err)
+			}
+
+			if hasSearchContext {
+				highlightSearchContext(ctx, query, trustcenterentityResults, highlightTracker)
+			}
+		},
+		func() {
+			var err error
 			vulnerabilityResults, err = searchVulnerabilities(ctx, query, after, first, before, last)
 			// ignore not found errors
 			if err != nil && !generated.IsNotFound(err) {
@@ -611,6 +624,11 @@ func (r *queryResolver) Search(ctx context.Context, query string, after *entgql.
 		res.Templates = templateResults
 
 		res.TotalCount += templateResults.TotalCount
+	}
+	if trustcenterentityResults != nil && len(trustcenterentityResults.Edges) > 0 {
+		res.TrustcenterEntities = trustcenterentityResults
+
+		res.TotalCount += trustcenterentityResults.TotalCount
 	}
 	if vulnerabilityResults != nil && len(vulnerabilityResults.Edges) > 0 {
 		res.Vulnerabilities = vulnerabilityResults
@@ -929,6 +947,16 @@ func (r *queryResolver) TemplateSearch(ctx context.Context, query string, after 
 
 	// return the results
 	return templateResults, nil
+}
+func (r *queryResolver) TrustcenterEntitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
+	trustcenterentityResults, err := searchTrustcenterEntities(ctx, query, after, first, before, last)
+
+	if err != nil {
+		return nil, ErrSearchFailed
+	}
+
+	// return the results
+	return trustcenterentityResults, nil
 }
 func (r *queryResolver) VulnerabilitySearch(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.VulnerabilityConnection, error) {
 	vulnerabilityResults, err := searchVulnerabilities(ctx, query, after, first, before, last)

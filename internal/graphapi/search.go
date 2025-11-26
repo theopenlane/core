@@ -41,6 +41,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/tagdefinition"
 	"github.com/theopenlane/core/internal/ent/generated/task"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/ent/generated/vulnerability"
 )
 
@@ -1642,6 +1643,36 @@ func adminSearchTemplates(ctx context.Context, query string, after *entgql.Curso
 					s.Where(sql.ExprP("(uischema)::text LIKE $9", likeQuery)) // search by Uischema
 				},
 				template.TrustCenterIDContainsFold(query), // search by TrustCenterID
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustcenterEntity searches for TrustcenterEntity based on the query string looking for matches
+func searchTrustcenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
+	request := withTransactionalMutation(ctx).TrustcenterEntity.Query().
+		Where(
+			trustcenterentity.Or(
+				trustcenterentity.ID(query),               // search equal to ID
+				trustcenterentity.NameContainsFold(query), // search by Name
+				trustcenterentity.URLContainsFold(query),  // search by URL
+			),
+		)
+
+	return request.Paginate(ctx, after, first, before, last)
+}
+
+// searchTrustcenterEntity searches for TrustcenterEntity based on the query string looking for matches
+func adminSearchTrustcenterEntities(ctx context.Context, query string, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int) (*generated.TrustcenterEntityConnection, error) {
+	request := withTransactionalMutation(ctx).TrustcenterEntity.Query().
+		Where(
+			trustcenterentity.Or(
+				trustcenterentity.ID(query),                        // search equal to ID
+				trustcenterentity.LogoFileIDContainsFold(query),    // search by LogoFileID
+				trustcenterentity.URLContainsFold(query),           // search by URL
+				trustcenterentity.TrustCenterIDContainsFold(query), // search by TrustCenterID
+				trustcenterentity.NameContainsFold(query),          // search by Name
 			),
 		)
 

@@ -27,6 +27,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -52,6 +53,7 @@ type FileQuery struct {
 	withTrustCenterSetting       *TrustCenterSettingQuery
 	withIntegrations             *IntegrationQuery
 	withSecrets                  *HushQuery
+	withTrustcenterEntity        *TrustcenterEntityQuery
 	withFKs                      bool
 	loadTotal                    []func(context.Context, []*File) error
 	modifiers                    []func(*sql.Selector)
@@ -68,6 +70,7 @@ type FileQuery struct {
 	withNamedTrustCenterSetting  map[string]*TrustCenterSettingQuery
 	withNamedIntegrations        map[string]*IntegrationQuery
 	withNamedSecrets             map[string]*HushQuery
+	withNamedTrustcenterEntity   map[string]*TrustcenterEntityQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -429,6 +432,31 @@ func (_q *FileQuery) QuerySecrets() *HushQuery {
 	return query
 }
 
+// QueryTrustcenterEntity chains the current query on the "trustcenter_entity" edge.
+func (_q *FileQuery) QueryTrustcenterEntity() *TrustcenterEntityQuery {
+	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(file.Table, file.FieldID, selector),
+			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
+			sqlgraph.Edge(sqlgraph.M2M, true, file.TrustcenterEntityTable, file.TrustcenterEntityPrimaryKey...),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.TrustcenterEntity
+		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first File entity from the query.
 // Returns a *NotFoundError when no File was found.
 func (_q *FileQuery) First(ctx context.Context) (*File, error) {
@@ -634,6 +662,7 @@ func (_q *FileQuery) Clone() *FileQuery {
 		withTrustCenterSetting:  _q.withTrustCenterSetting.Clone(),
 		withIntegrations:        _q.withIntegrations.Clone(),
 		withSecrets:             _q.withSecrets.Clone(),
+		withTrustcenterEntity:   _q.withTrustcenterEntity.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -784,6 +813,17 @@ func (_q *FileQuery) WithSecrets(opts ...func(*HushQuery)) *FileQuery {
 	return _q
 }
 
+// WithTrustcenterEntity tells the query-builder to eager-load the nodes that are connected to
+// the "trustcenter_entity" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithTrustcenterEntity(opts ...func(*TrustcenterEntityQuery)) *FileQuery {
+	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withTrustcenterEntity = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -869,7 +909,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		nodes       = []*File{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [13]bool{
+		loadedTypes = [14]bool{
 			_q.withOrganization != nil,
 			_q.withGroups != nil,
 			_q.withContact != nil,
@@ -883,6 +923,7 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			_q.withTrustCenterSetting != nil,
 			_q.withIntegrations != nil,
 			_q.withSecrets != nil,
+			_q.withTrustcenterEntity != nil,
 		}
 	)
 	if withFKs {
@@ -1006,6 +1047,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 			return nil, err
 		}
 	}
+	if query := _q.withTrustcenterEntity; query != nil {
+		if err := _q.loadTrustcenterEntity(ctx, query, nodes,
+			func(n *File) { n.Edges.TrustcenterEntity = []*TrustcenterEntity{} },
+			func(n *File, e *TrustcenterEntity) { n.Edges.TrustcenterEntity = append(n.Edges.TrustcenterEntity, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedOrganization {
 		if err := _q.loadOrganization(ctx, query, nodes,
 			func(n *File) { n.appendNamedOrganization(name) },
@@ -1094,6 +1142,13 @@ func (_q *FileQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*File, e
 		if err := _q.loadSecrets(ctx, query, nodes,
 			func(n *File) { n.appendNamedSecrets(name) },
 			func(n *File, e *Hush) { n.appendNamedSecrets(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedTrustcenterEntity {
+		if err := _q.loadTrustcenterEntity(ctx, query, nodes,
+			func(n *File) { n.appendNamedTrustcenterEntity(name) },
+			func(n *File, e *TrustcenterEntity) { n.appendNamedTrustcenterEntity(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1880,6 +1935,68 @@ func (_q *FileQuery) loadSecrets(ctx context.Context, query *HushQuery, nodes []
 	}
 	return nil
 }
+func (_q *FileQuery) loadTrustcenterEntity(ctx context.Context, query *TrustcenterEntityQuery, nodes []*File, init func(*File), assign func(*File, *TrustcenterEntity)) error {
+	edgeIDs := make([]driver.Value, len(nodes))
+	byID := make(map[string]*File)
+	nids := make(map[string]map[*File]struct{})
+	for i, node := range nodes {
+		edgeIDs[i] = node.ID
+		byID[node.ID] = node
+		if init != nil {
+			init(node)
+		}
+	}
+	query.Where(func(s *sql.Selector) {
+		joinT := sql.Table(file.TrustcenterEntityTable)
+		joinT.Schema(_q.schemaConfig.TrustcenterEntityFiles)
+		s.Join(joinT).On(s.C(trustcenterentity.FieldID), joinT.C(file.TrustcenterEntityPrimaryKey[0]))
+		s.Where(sql.InValues(joinT.C(file.TrustcenterEntityPrimaryKey[1]), edgeIDs...))
+		columns := s.SelectedColumns()
+		s.Select(joinT.C(file.TrustcenterEntityPrimaryKey[1]))
+		s.AppendSelect(columns...)
+		s.SetDistinct(false)
+	})
+	if err := query.prepareQuery(ctx); err != nil {
+		return err
+	}
+	qr := QuerierFunc(func(ctx context.Context, q Query) (Value, error) {
+		return query.sqlAll(ctx, func(_ context.Context, spec *sqlgraph.QuerySpec) {
+			assign := spec.Assign
+			values := spec.ScanValues
+			spec.ScanValues = func(columns []string) ([]any, error) {
+				values, err := values(columns[1:])
+				if err != nil {
+					return nil, err
+				}
+				return append([]any{new(sql.NullString)}, values...), nil
+			}
+			spec.Assign = func(columns []string, values []any) error {
+				outValue := values[0].(*sql.NullString).String
+				inValue := values[1].(*sql.NullString).String
+				if nids[inValue] == nil {
+					nids[inValue] = map[*File]struct{}{byID[outValue]: {}}
+					return assign(columns[1:], values[1:])
+				}
+				nids[inValue][byID[outValue]] = struct{}{}
+				return nil
+			}
+		})
+	})
+	neighbors, err := withInterceptors[[]*TrustcenterEntity](ctx, query, qr, query.inters)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected "trustcenter_entity" node returned %v`, n.ID)
+		}
+		for kn := range nodes {
+			assign(kn, n)
+		}
+	}
+	return nil
+}
 
 func (_q *FileQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -2158,6 +2275,20 @@ func (_q *FileQuery) WithNamedSecrets(name string, opts ...func(*HushQuery)) *Fi
 		_q.withNamedSecrets = make(map[string]*HushQuery)
 	}
 	_q.withNamedSecrets[name] = query
+	return _q
+}
+
+// WithNamedTrustcenterEntity tells the query-builder to eager-load the nodes that are connected to the "trustcenter_entity"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *FileQuery) WithNamedTrustcenterEntity(name string, opts ...func(*TrustcenterEntityQuery)) *FileQuery {
+	query := (&TrustcenterEntityClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedTrustcenterEntity == nil {
+		_q.withNamedTrustcenterEntity = make(map[string]*TrustcenterEntityQuery)
+	}
+	_q.withNamedTrustcenterEntity[name] = query
 	return _q
 }
 
