@@ -10,7 +10,6 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
-<<<<<<< HEAD
 	"github.com/stoewer/go-strcase"
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
@@ -18,10 +17,6 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-||||||| 138b6784
-	"github.com/stretchr/testify/require"
-=======
->>>>>>> origin/main
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
