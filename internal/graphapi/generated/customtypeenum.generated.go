@@ -80,6 +80,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumBulkCreatePayload_customT
 				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
 			case "color":
 				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
+			case "icon":
+				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
 			case "tasks":
@@ -159,6 +161,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumCreatePayload_customTypeE
 				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
 			case "color":
 				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
+			case "icon":
+				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
 			case "tasks":
@@ -267,6 +271,8 @@ func (ec *executionContext) fieldContext_CustomTypeEnumUpdatePayload_customTypeE
 				return ec.fieldContext_CustomTypeEnum_description(ctx, field)
 			case "color":
 				return ec.fieldContext_CustomTypeEnum_color(ctx, field)
+			case "icon":
+				return ec.fieldContext_CustomTypeEnum_icon(ctx, field)
 			case "owner":
 				return ec.fieldContext_CustomTypeEnum_owner(ctx, field)
 			case "tasks":

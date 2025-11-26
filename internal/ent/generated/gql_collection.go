@@ -10490,6 +10490,11 @@ func (_q *CustomTypeEnumQuery) collectField(ctx context.Context, oneNode bool, o
 				selectedFields = append(selectedFields, customtypeenum.FieldColor)
 				fieldSeen[customtypeenum.FieldColor] = struct{}{}
 			}
+		case "icon":
+			if _, ok := fieldSeen[customtypeenum.FieldIcon]; !ok {
+				selectedFields = append(selectedFields, customtypeenum.FieldIcon)
+				fieldSeen[customtypeenum.FieldIcon] = struct{}{}
+			}
 		case "id":
 		case "__typename":
 		default:

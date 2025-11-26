@@ -165,20 +165,6 @@ func (_u *TagDefinitionUpdate) ClearSystemInternalID() *TagDefinitionUpdate {
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *TagDefinitionUpdate) SetName(v string) *TagDefinitionUpdate {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *TagDefinitionUpdate) SetNillableName(v *string) *TagDefinitionUpdate {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetAliases sets the "aliases" field.
 func (_u *TagDefinitionUpdate) SetAliases(v []string) *TagDefinitionUpdate {
 	_u.mutation.SetAliases(v)
@@ -317,11 +303,6 @@ func (_u *TagDefinitionUpdate) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TagDefinitionUpdate) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := tagdefinition.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "TagDefinition.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Slug(); ok {
 		if err := tagdefinition.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TagDefinition.slug": %w`, err)}
@@ -397,9 +378,6 @@ func (_u *TagDefinitionUpdate) sqlSave(ctx context.Context) (_node int, err erro
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(tagdefinition.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(tagdefinition.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(tagdefinition.FieldAliases, field.TypeJSON, value)
@@ -617,20 +595,6 @@ func (_u *TagDefinitionUpdateOne) ClearSystemInternalID() *TagDefinitionUpdateOn
 	return _u
 }
 
-// SetName sets the "name" field.
-func (_u *TagDefinitionUpdateOne) SetName(v string) *TagDefinitionUpdateOne {
-	_u.mutation.SetName(v)
-	return _u
-}
-
-// SetNillableName sets the "name" field if the given value is not nil.
-func (_u *TagDefinitionUpdateOne) SetNillableName(v *string) *TagDefinitionUpdateOne {
-	if v != nil {
-		_u.SetName(*v)
-	}
-	return _u
-}
-
 // SetAliases sets the "aliases" field.
 func (_u *TagDefinitionUpdateOne) SetAliases(v []string) *TagDefinitionUpdateOne {
 	_u.mutation.SetAliases(v)
@@ -782,11 +746,6 @@ func (_u *TagDefinitionUpdateOne) defaults() error {
 
 // check runs all checks and user-defined validators on the builder.
 func (_u *TagDefinitionUpdateOne) check() error {
-	if v, ok := _u.mutation.Name(); ok {
-		if err := tagdefinition.NameValidator(v); err != nil {
-			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "TagDefinition.name": %w`, err)}
-		}
-	}
 	if v, ok := _u.mutation.Slug(); ok {
 		if err := tagdefinition.SlugValidator(v); err != nil {
 			return &ValidationError{Name: "slug", err: fmt.Errorf(`generated: validator failed for field "TagDefinition.slug": %w`, err)}
@@ -879,9 +838,6 @@ func (_u *TagDefinitionUpdateOne) sqlSave(ctx context.Context) (_node *TagDefini
 	}
 	if _u.mutation.SystemInternalIDCleared() {
 		_spec.ClearField(tagdefinition.FieldSystemInternalID, field.TypeString)
-	}
-	if value, ok := _u.mutation.Name(); ok {
-		_spec.SetField(tagdefinition.FieldName, field.TypeString, value)
 	}
 	if value, ok := _u.mutation.Aliases(); ok {
 		_spec.SetField(tagdefinition.FieldAliases, field.TypeJSON, value)

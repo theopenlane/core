@@ -3,8 +3,6 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
-	"regexp"
-	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -12,6 +10,8 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
+	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -302,9 +302,8 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strings.ToLower(regexp.MustCompile(`[^a-zA-Z0-9]`).ReplaceAllString(org.Name, ""))
-			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.Slug != nil)
-
+			expectedSlug := strcase.KebabCase(org.Name)
+			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
 			if tc.request.CreateTrustCenterSetting != nil && tc.request.CreateTrustCenterSetting.Title != nil {

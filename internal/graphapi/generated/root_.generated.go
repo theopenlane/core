@@ -1090,6 +1090,7 @@ type ComplexityRoot struct {
 		Description      func(childComplexity int) int
 		Field            func(childComplexity int) int
 		ID               func(childComplexity int) int
+		Icon             func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
@@ -12749,6 +12750,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomTypeEnum.ID(childComplexity), true
+
+	case "CustomTypeEnum.icon":
+		if e.complexity.CustomTypeEnum.Icon == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Icon(childComplexity), true
 
 	case "CustomTypeEnum.internalNotes":
 		if e.complexity.CustomTypeEnum.InternalNotes == nil {
@@ -63409,6 +63417,10 @@ input CreateCustomTypeEnumInput {
   The color of the tag definition in hex format
   """
   color: String
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
   ownerID: ID
   taskIDs: [ID!]
   controlIDs: [ID!]
@@ -67400,6 +67412,10 @@ type CustomTypeEnum implements Node {
   The color of the tag definition in hex format
   """
   color: String
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
   owner: Organization
   tasks(
     """
@@ -67959,6 +67975,24 @@ input CustomTypeEnumWhereInput {
   colorNotNil: Boolean
   colorEqualFold: String
   colorContainsFold: String
+  """
+  icon field predicates
+  """
+  icon: String
+  iconNEQ: String
+  iconIn: [String!]
+  iconNotIn: [String!]
+  iconGT: String
+  iconGTE: String
+  iconLT: String
+  iconLTE: String
+  iconContains: String
+  iconHasPrefix: String
+  iconHasSuffix: String
+  iconIsNil: Boolean
+  iconNotNil: Boolean
+  iconEqualFold: String
+  iconContainsFold: String
   """
   owner edge predicates
   """
@@ -126127,10 +126161,6 @@ input UpdateCustomTypeEnumInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
-  The name of the enum value, for example evidence request
-  """
-  name: String
-  """
   The description of the custom type
   """
   description: String
@@ -126140,6 +126170,11 @@ input UpdateCustomTypeEnumInput {
   """
   color: String
   clearColor: Boolean
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
+  clearIcon: Boolean
   ownerID: ID
   clearOwner: Boolean
   addTaskIDs: [ID!]
@@ -129640,10 +129675,6 @@ input UpdateTagDefinitionInput {
   """
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
-  """
-  The name of the tag definition
-  """
-  name: String
   """
   common aliases or misspellings for the tag definition
   """
