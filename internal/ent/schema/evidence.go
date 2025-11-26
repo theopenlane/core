@@ -138,6 +138,15 @@ func (e Evidence) Edges() []ent.Edge {
 		defaultEdgeToWithPagination(e, File{}),
 		defaultEdgeFromWithPagination(e, Program{}),
 		defaultEdgeFromWithPagination(e, Task{}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: e,
+			name:       "comments",
+			t:          Note.Type,
+			comment:    "conversations related to the evidence",
+			annotations: []schema.Annotation{
+				accessmap.EdgeAuthCheck(Note{}.Name()),
+			},
+		}),
 	}
 }
 
