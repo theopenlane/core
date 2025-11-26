@@ -216,7 +216,7 @@ steps:
           size: $RUNNER_LARGE
           location: "NYC"
         cancel_on_build_failing: true
-        timeout_in_minutes: 20
+        timeout_in_minutes: 30
         key: "lint"
         plugins:
           - docker#v5.13.0:
