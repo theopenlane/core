@@ -2287,6 +2287,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_doc",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "logo_file": {
+	ObjectType:      "logo_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "subcontrol": {"evidence": {
 	ObjectType:      "evidence",

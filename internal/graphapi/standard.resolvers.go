@@ -8,6 +8,7 @@ package graphapi
 import (
 	"context"
 
+	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/graphapi/model"
@@ -16,7 +17,7 @@ import (
 )
 
 // CreateStandard is the resolver for the createStandard field.
-func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error) {
+func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error) {
 	// set the organization in the auth context if its not done for us
 	if err := setOrganizationInAuthContext(ctx, input.OwnerID); err != nil {
 		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
@@ -35,7 +36,7 @@ func (r *mutationResolver) CreateStandard(ctx context.Context, input generated.C
 }
 
 // UpdateStandard is the resolver for the updateStandard field.
-func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error) {
+func (r *mutationResolver) UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) (*model.StandardUpdatePayload, error) {
 	res, err := withTransactionalMutation(ctx).Standard.Get(ctx, id)
 	if err != nil {
 		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "standard"})

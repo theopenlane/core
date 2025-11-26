@@ -1332,6 +1332,7 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 				standard.LinkContainsFold(query),         // search by Link
 				standard.StandardTypeContainsFold(query), // search by StandardType
 				standard.VersionContainsFold(query),      // search by Version
+				standard.LogoFileIDContainsFold(query),   // search by LogoFileID
 			),
 		)
 

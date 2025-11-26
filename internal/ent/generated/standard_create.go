@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
@@ -351,6 +352,20 @@ func (_c *StandardCreate) SetNillableVersion(v *string) *StandardCreate {
 	return _c
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *StandardCreate) SetLogoFileID(v string) *StandardCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *StandardCreate) SetNillableLogoFileID(v *string) *StandardCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *StandardCreate) SetID(v string) *StandardCreate {
 	_c.mutation.SetID(v)
@@ -413,6 +428,11 @@ func (_c *StandardCreate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardCrea
 		ids[i] = v[i].ID
 	}
 	return _c.AddTrustCenterDocIDs(ids...)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_c *StandardCreate) SetLogoFile(v *File) *StandardCreate {
+	return _c.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -729,6 +749,24 @@ func (_c *StandardCreate) createSpec() (*Standard, *sqlgraph.CreateSpec) {
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Standard
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.LogoFileID = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

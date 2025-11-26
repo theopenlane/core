@@ -9330,6 +9330,14 @@ func (_m *Standard) TrustCenterDocs(
 	return _m.QueryTrustCenterDocs().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Standard) LogoFile(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Subcontrol) Evidence(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
 ) (*EvidenceConnection, error) {

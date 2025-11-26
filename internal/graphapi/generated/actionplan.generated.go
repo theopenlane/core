@@ -310,8 +310,8 @@ type MutationResolver interface {
 	CreateScheduledJobRun(ctx context.Context, input generated.CreateScheduledJobRunInput) (*model.ScheduledJobRunCreatePayload, error)
 	UpdateScheduledJobRun(ctx context.Context, id string, input generated.UpdateScheduledJobRunInput) (*model.ScheduledJobRunUpdatePayload, error)
 	DeleteScheduledJobRun(ctx context.Context, id string) (*model.ScheduledJobRunDeletePayload, error)
-	CreateStandard(ctx context.Context, input generated.CreateStandardInput) (*model.StandardCreatePayload, error)
-	UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput) (*model.StandardUpdatePayload, error)
+	CreateStandard(ctx context.Context, input generated.CreateStandardInput, logoFile *graphql.Upload) (*model.StandardCreatePayload, error)
+	UpdateStandard(ctx context.Context, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) (*model.StandardUpdatePayload, error)
 	DeleteStandard(ctx context.Context, id string) (*model.StandardDeletePayload, error)
 	CreateSubcontrol(ctx context.Context, input generated.CreateSubcontrolInput) (*model.SubcontrolCreatePayload, error)
 	CreateBulkSubcontrol(ctx context.Context, input []*generated.CreateSubcontrolInput) (*model.SubcontrolBulkCreatePayload, error)
@@ -2402,6 +2402,11 @@ func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Conte
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg1
 	return args, nil
 }
 
@@ -5110,6 +5115,11 @@ func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Conte
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg2
 	return args, nil
 }
 
@@ -19433,7 +19443,7 @@ func (ec *executionContext) _Mutation_createStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_createStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput))
+			return ec.resolvers.Mutation().CreateStandard(ctx, fc.Args["input"].(generated.CreateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload,
@@ -19478,7 +19488,7 @@ func (ec *executionContext) _Mutation_updateStandard(ctx context.Context, field 
 		ec.fieldContext_Mutation_updateStandard,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput))
+			return ec.resolvers.Mutation().UpdateStandard(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateStandardInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNStandardUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload,

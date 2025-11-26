@@ -382,6 +382,20 @@ func (_c *StandardHistoryCreate) SetNillableVersion(v *string) *StandardHistoryC
 	return _c
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_c *StandardHistoryCreate) SetLogoFileID(v string) *StandardHistoryCreate {
+	_c.mutation.SetLogoFileID(v)
+	return _c
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_c *StandardHistoryCreate) SetNillableLogoFileID(v *string) *StandardHistoryCreate {
+	if v != nil {
+		_c.SetLogoFileID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *StandardHistoryCreate) SetID(v string) *StandardHistoryCreate {
 	_c.mutation.SetID(v)
@@ -656,6 +670,10 @@ func (_c *StandardHistoryCreate) createSpec() (*StandardHistory, *sqlgraph.Creat
 	if value, ok := _c.mutation.Version(); ok {
 		_spec.SetField(standardhistory.FieldVersion, field.TypeString, value)
 		_node.Version = value
+	}
+	if value, ok := _c.mutation.LogoFileID(); ok {
+		_spec.SetField(standardhistory.FieldLogoFileID, field.TypeString, value)
+		_node.LogoFileID = &value
 	}
 	return _node, _spec
 }

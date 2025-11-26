@@ -55632,6 +55632,21 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			_q.WithNamedTrustCenterDocs(alias, func(wq *TrustCenterDocQuery) {
 				*wq = *query
 			})
+
+		case "logoFile":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&FileClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
+				return err
+			}
+			_q.withLogoFile = query
+			if _, ok := fieldSeen[standard.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldLogoFileID)
+				fieldSeen[standard.FieldLogoFileID] = struct{}{}
+			}
 		case "createdAt":
 			if _, ok := fieldSeen[standard.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, standard.FieldCreatedAt)
@@ -55746,6 +55761,11 @@ func (_q *StandardQuery) collectField(ctx context.Context, oneNode bool, opCtx *
 			if _, ok := fieldSeen[standard.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, standard.FieldVersion)
 				fieldSeen[standard.FieldVersion] = struct{}{}
+			}
+		case "logoFileID":
+			if _, ok := fieldSeen[standard.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, standard.FieldLogoFileID)
+				fieldSeen[standard.FieldLogoFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -55966,6 +55986,11 @@ func (_q *StandardHistoryQuery) collectField(ctx context.Context, oneNode bool, 
 			if _, ok := fieldSeen[standardhistory.FieldVersion]; !ok {
 				selectedFields = append(selectedFields, standardhistory.FieldVersion)
 				fieldSeen[standardhistory.FieldVersion] = struct{}{}
+			}
+		case "logoFileID":
+			if _, ok := fieldSeen[standardhistory.FieldLogoFileID]; !ok {
+				selectedFields = append(selectedFields, standardhistory.FieldLogoFileID)
+				fieldSeen[standardhistory.FieldLogoFileID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

@@ -6111,6 +6111,7 @@ var (
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
@@ -6122,6 +6123,12 @@ var (
 				Symbol:     "standards_organizations_standards",
 				Columns:    []*schema.Column{StandardsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_files_logo_file",
+				Columns:    []*schema.Column{StandardsColumns[26]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6167,6 +6174,7 @@ var (
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardHistoryTable holds the schema information for the "standard_history" table.
 	StandardHistoryTable = &schema.Table{
@@ -12183,6 +12191,7 @@ func init() {
 	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ScheduledJobsTable
 	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	StandardsTable.ForeignKeys[1].RefTable = FilesTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}

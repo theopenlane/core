@@ -3584,7 +3584,7 @@ type ComplexityRoot struct {
 		CreateScan                            func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                    func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                 func(childComplexity int, input generated.CreateScheduledJobRunInput) int
-		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput) int
+		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload) int
 		CreateSubcontrol                      func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                    func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                      func(childComplexity int, input generated.CreateSubscriberInput) int
@@ -3793,7 +3793,7 @@ type ComplexityRoot struct {
 		UpdateScan                            func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                    func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                 func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
-		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) int
 		UpdateSubcontrol                      func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                    func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
@@ -5685,6 +5685,8 @@ type ComplexityRoot struct {
 		InternalNotes          func(childComplexity int) int
 		IsPublic               func(childComplexity int) int
 		Link                   func(childComplexity int) int
+		LogoFile               func(childComplexity int) int
+		LogoFileID             func(childComplexity int) int
 		Name                   func(childComplexity int) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -5739,6 +5741,7 @@ type ComplexityRoot struct {
 		InternalNotes        func(childComplexity int) int
 		IsPublic             func(childComplexity int) int
 		Link                 func(childComplexity int) int
+		LogoFileID           func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
@@ -26126,7 +26129,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput)), true
+		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createSubcontrol":
 		if e.complexity.Mutation.CreateSubcontrol == nil {
@@ -28629,7 +28632,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput)), true
+		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateSubcontrol":
 		if e.complexity.Mutation.UpdateSubcontrol == nil {
@@ -40660,6 +40663,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.Link(childComplexity), true
 
+	case "Standard.logoFile":
+		if e.complexity.Standard.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFile(childComplexity), true
+
+	case "Standard.logoFileID":
+		if e.complexity.Standard.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFileID(childComplexity), true
+
 	case "Standard.name":
 		if e.complexity.Standard.Name == nil {
 			break
@@ -40921,6 +40938,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.Link(childComplexity), true
+
+	case "StandardHistory.logoFileID":
+		if e.complexity.StandardHistory.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.LogoFileID(childComplexity), true
 
 	case "StandardHistory.name":
 		if e.complexity.StandardHistory.Name == nil {
@@ -65715,6 +65739,7 @@ input CreateStandardInput {
   controlIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
   trustCenterDocIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -114292,6 +114317,10 @@ type Standard implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: ID
   owner: Organization
   controls(
     """
@@ -114386,6 +114415,7 @@ type Standard implements Node {
     """
     where: TrustCenterDocWhereInput
   ): TrustCenterDocConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -114502,6 +114532,10 @@ type StandardHistory implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: String
 }
 """
 A connection to a list of items.
@@ -114958,6 +114992,24 @@ input StandardHistoryWhereInput {
   versionNotNil: Boolean
   versionEqualFold: String
   versionContainsFold: String
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
 }
 """
 Ordering options for Standard connections
@@ -115340,6 +115392,24 @@ input StandardWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -115359,6 +115429,11 @@ input StandardWhereInput {
   """
   hasTrustCenterDocs: Boolean
   hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -129395,6 +129470,8 @@ input UpdateStandardInput {
   addTrustCenterDocIDs: [ID!]
   removeTrustCenterDocIDs: [ID!]
   clearTrustCenterDocs: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -145442,6 +145519,10 @@ extend type Mutation{
         values of the standard
         """
         input: CreateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -145455,6 +145536,10 @@ extend type Mutation{
         New values for the standard
         """
         input: UpdateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardUpdatePayload!
     """
     Delete an existing standard
@@ -145649,6 +145734,9 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorCreatePayload!
     """
@@ -145681,6 +145769,9 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
