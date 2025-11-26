@@ -8939,12 +8939,15 @@ func init() {
 	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
 	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
 	trustcenterentityMixinHooks2 := trustcenterentityMixin[2].Hooks()
+	trustcenterentityHooks := schema.TrustcenterEntity{}.Hooks()
 
 	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
 
 	trustcenterentity.Hooks[2] = trustcenterentityMixinHooks1[0]
 
 	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks2[0]
+
+	trustcenterentity.Hooks[4] = trustcenterentityHooks[0]
 	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
 	trustcenterentityMixinInters2 := trustcenterentityMixin[2].Interceptors()
 	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]

@@ -70,12 +70,14 @@ func (ec *executionContext) fieldContext_TrustcenterEntityBulkCreatePayload_trus
 				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
 			case "name":
 				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+			case "entityTypeID":
+				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustcenterEntity_files(ctx, field)
+			case "entityType":
+				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
 		},
@@ -125,12 +127,14 @@ func (ec *executionContext) fieldContext_TrustcenterEntityCreatePayload_trustcen
 				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
 			case "name":
 				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+			case "entityTypeID":
+				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustcenterEntity_files(ctx, field)
+			case "entityType":
+				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
 		},
@@ -209,12 +213,14 @@ func (ec *executionContext) fieldContext_TrustcenterEntityUpdatePayload_trustcen
 				return ec.fieldContext_TrustcenterEntity_trustCenterID(ctx, field)
 			case "name":
 				return ec.fieldContext_TrustcenterEntity_name(ctx, field)
+			case "entityTypeID":
+				return ec.fieldContext_TrustcenterEntity_entityTypeID(ctx, field)
 			case "logoFile":
 				return ec.fieldContext_TrustcenterEntity_logoFile(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustcenterEntity_trustCenter(ctx, field)
-			case "files":
-				return ec.fieldContext_TrustcenterEntity_files(ctx, field)
+			case "entityType":
+				return ec.fieldContext_TrustcenterEntity_entityType(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type TrustcenterEntity", field.Name)
 		},

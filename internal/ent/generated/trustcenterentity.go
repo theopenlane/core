@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -39,9 +40,12 @@ type TrustcenterEntity struct {
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// The name of the tag definition
 	Name string `json:"name,omitempty"`
+	// The entity type for the customer entity
+	EntityTypeID string `json:"entity_type_id,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the TrustcenterEntityQuery when eager-loading is set.
 	Edges                             TrustcenterEntityEdges `json:"edges"`
+	file_trustcenter_entities         *string
 	trust_center_trustcenter_entities *string
 	selectValues                      sql.SelectValues
 }
@@ -52,15 +56,13 @@ type TrustcenterEntityEdges struct {
 	LogoFile *File `json:"logo_file,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
-	// Files holds the value of the files edge.
-	Files []*File `json:"files,omitempty"`
+	// EntityType holds the value of the entity_type edge.
+	EntityType *EntityType `json:"entity_type,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [3]bool
 	// totalCount holds the count of the edges above.
 	totalCount [3]map[string]int
-
-	namedFiles map[string][]*File
 }
 
 // LogoFileOrErr returns the LogoFile value or an error if the edge
@@ -85,13 +87,15 @@ func (e TrustcenterEntityEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	return nil, &NotLoadedError{edge: "trust_center"}
 }
 
-// FilesOrErr returns the Files value or an error if the edge
-// was not loaded in eager-loading.
-func (e TrustcenterEntityEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[2] {
-		return e.Files, nil
+// EntityTypeOrErr returns the EntityType value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e TrustcenterEntityEdges) EntityTypeOrErr() (*EntityType, error) {
+	if e.EntityType != nil {
+		return e.EntityType, nil
+	} else if e.loadedTypes[2] {
+		return nil, &NotFoundError{label: entitytype.Label}
 	}
-	return nil, &NotLoadedError{edge: "files"}
+	return nil, &NotLoadedError{edge: "entity_type"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -99,11 +103,13 @@ func (*TrustcenterEntity) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case trustcenterentity.FieldID, trustcenterentity.FieldCreatedBy, trustcenterentity.FieldUpdatedBy, trustcenterentity.FieldDeletedBy, trustcenterentity.FieldLogoFileID, trustcenterentity.FieldURL, trustcenterentity.FieldTrustCenterID, trustcenterentity.FieldName:
+		case trustcenterentity.FieldID, trustcenterentity.FieldCreatedBy, trustcenterentity.FieldUpdatedBy, trustcenterentity.FieldDeletedBy, trustcenterentity.FieldLogoFileID, trustcenterentity.FieldURL, trustcenterentity.FieldTrustCenterID, trustcenterentity.FieldName, trustcenterentity.FieldEntityTypeID:
 			values[i] = new(sql.NullString)
 		case trustcenterentity.FieldCreatedAt, trustcenterentity.FieldUpdatedAt, trustcenterentity.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
-		case trustcenterentity.ForeignKeys[0]: // trust_center_trustcenter_entities
+		case trustcenterentity.ForeignKeys[0]: // file_trustcenter_entities
+			values[i] = new(sql.NullString)
+		case trustcenterentity.ForeignKeys[1]: // trust_center_trustcenter_entities
 			values[i] = new(sql.NullString)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -187,7 +193,20 @@ func (_m *TrustcenterEntity) assignValues(columns []string, values []any) error 
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case trustcenterentity.FieldEntityTypeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_type_id", values[i])
+			} else if value.Valid {
+				_m.EntityTypeID = value.String
+			}
 		case trustcenterentity.ForeignKeys[0]:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field file_trustcenter_entities", values[i])
+			} else if value.Valid {
+				_m.file_trustcenter_entities = new(string)
+				*_m.file_trustcenter_entities = value.String
+			}
+		case trustcenterentity.ForeignKeys[1]:
 			if value, ok := values[i].(*sql.NullString); !ok {
 				return fmt.Errorf("unexpected type %T for field trust_center_trustcenter_entities", values[i])
 			} else if value.Valid {
@@ -217,9 +236,9 @@ func (_m *TrustcenterEntity) QueryTrustCenter() *TrustCenterQuery {
 	return NewTrustcenterEntityClient(_m.config).QueryTrustCenter(_m)
 }
 
-// QueryFiles queries the "files" edge of the TrustcenterEntity entity.
-func (_m *TrustcenterEntity) QueryFiles() *FileQuery {
-	return NewTrustcenterEntityClient(_m.config).QueryFiles(_m)
+// QueryEntityType queries the "entity_type" edge of the TrustcenterEntity entity.
+func (_m *TrustcenterEntity) QueryEntityType() *EntityTypeQuery {
+	return NewTrustcenterEntityClient(_m.config).QueryEntityType(_m)
 }
 
 // Update returns a builder for updating this TrustcenterEntity.
@@ -276,32 +295,11 @@ func (_m *TrustcenterEntity) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("entity_type_id=")
+	builder.WriteString(_m.EntityTypeID)
 	builder.WriteByte(')')
 	return builder.String()
-}
-
-// NamedFiles returns the Files named value or an error if the edge was not
-// loaded in eager-loading with this name.
-func (_m *TrustcenterEntity) NamedFiles(name string) ([]*File, error) {
-	if _m.Edges.namedFiles == nil {
-		return nil, &NotLoadedError{edge: name}
-	}
-	nodes, ok := _m.Edges.namedFiles[name]
-	if !ok {
-		return nil, &NotLoadedError{edge: name}
-	}
-	return nodes, nil
-}
-
-func (_m *TrustcenterEntity) appendNamedFiles(name string, edges ...*File) {
-	if _m.Edges.namedFiles == nil {
-		_m.Edges.namedFiles = make(map[string][]*File)
-	}
-	if len(edges) == 0 {
-		_m.Edges.namedFiles[name] = []*File{}
-	} else {
-		_m.Edges.namedFiles[name] = append(_m.Edges.namedFiles[name], edges...)
-	}
 }
 
 // TrustcenterEntities is a parsable slice of TrustcenterEntity.

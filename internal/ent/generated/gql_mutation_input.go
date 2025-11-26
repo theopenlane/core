@@ -5432,7 +5432,7 @@ type UpdateFileInput struct {
 	ClearSecrets                 bool
 	AddSecretIDs                 []string
 	RemoveSecretIDs              []string
-	ClearTrustcenterEntity       bool
+	ClearTrustcenterEntities     bool
 	AddTrustcenterEntityIDs      []string
 	RemoveTrustcenterEntityIDs   []string
 }
@@ -5670,8 +5670,8 @@ func (i *UpdateFileInput) Mutate(m *FileMutation) {
 	if v := i.RemoveSecretIDs; len(v) > 0 {
 		m.RemoveSecretIDs(v...)
 	}
-	if i.ClearTrustcenterEntity {
-		m.ClearTrustcenterEntity()
+	if i.ClearTrustcenterEntities {
+		m.ClearTrustcenterEntities()
 	}
 	if v := i.AddTrustcenterEntityIDs; len(v) > 0 {
 		m.AddTrustcenterEntityIDs(v...)
@@ -17453,7 +17453,7 @@ type CreateTrustcenterEntityInput struct {
 	Name          string
 	LogoFileID    *string
 	TrustCenterID *string
-	FileIDs       []string
+	EntityTypeID  *string
 }
 
 // Mutate applies the CreateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
@@ -17468,8 +17468,8 @@ func (i *CreateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
 	}
-	if v := i.FileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
+	if v := i.EntityTypeID; v != nil {
+		m.SetEntityTypeID(*v)
 	}
 }
 
@@ -17481,15 +17481,10 @@ func (c *TrustcenterEntityCreate) SetInput(i CreateTrustcenterEntityInput) *Trus
 
 // UpdateTrustcenterEntityInput represents a mutation input for updating trustcenterentities.
 type UpdateTrustcenterEntityInput struct {
-	ClearURL         bool
-	URL              *string
-	ClearLogoFile    bool
-	LogoFileID       *string
-	ClearTrustCenter bool
-	TrustCenterID    *string
-	ClearFiles       bool
-	AddFileIDs       []string
-	RemoveFileIDs    []string
+	ClearURL      bool
+	URL           *string
+	ClearLogoFile bool
+	LogoFileID    *string
 }
 
 // Mutate applies the UpdateTrustcenterEntityInput on the TrustcenterEntityMutation builder.
@@ -17505,21 +17500,6 @@ func (i *UpdateTrustcenterEntityInput) Mutate(m *TrustcenterEntityMutation) {
 	}
 	if v := i.LogoFileID; v != nil {
 		m.SetLogoFileID(*v)
-	}
-	if i.ClearTrustCenter {
-		m.ClearTrustCenter()
-	}
-	if v := i.TrustCenterID; v != nil {
-		m.SetTrustCenterID(*v)
-	}
-	if i.ClearFiles {
-		m.ClearFiles()
-	}
-	if v := i.AddFileIDs; len(v) > 0 {
-		m.AddFileIDs(v...)
-	}
-	if v := i.RemoveFileIDs; len(v) > 0 {
-		m.RemoveFileIDs(v...)
 	}
 }
 

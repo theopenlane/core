@@ -16526,6 +16526,10 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 		create = create.SetName(name)
 	}
 
+	if entityTypeID, exists := m.EntityTypeID(); exists {
+		create = create.SetEntityTypeID(entityTypeID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -16617,6 +16621,12 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context)
 			create = create.SetName(trustcenterentity.Name)
 		}
 
+		if entityTypeID, exists := m.EntityTypeID(); exists {
+			create = create.SetEntityTypeID(entityTypeID)
+		} else {
+			create = create.SetEntityTypeID(trustcenterentity.EntityTypeID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -16662,6 +16672,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 			SetURL(trustcenterentity.URL).
 			SetTrustCenterID(trustcenterentity.TrustCenterID).
 			SetName(trustcenterentity.Name).
+			SetEntityTypeID(trustcenterentity.EntityTypeID).
 			Save(ctx)
 		if err != nil {
 			return err

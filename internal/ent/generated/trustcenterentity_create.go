@@ -10,6 +10,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/theopenlane/core/internal/ent/generated/entitytype"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
@@ -154,6 +155,20 @@ func (_c *TrustcenterEntityCreate) SetName(v string) *TrustcenterEntityCreate {
 	return _c
 }
 
+// SetEntityTypeID sets the "entity_type_id" field.
+func (_c *TrustcenterEntityCreate) SetEntityTypeID(v string) *TrustcenterEntityCreate {
+	_c.mutation.SetEntityTypeID(v)
+	return _c
+}
+
+// SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
+func (_c *TrustcenterEntityCreate) SetNillableEntityTypeID(v *string) *TrustcenterEntityCreate {
+	if v != nil {
+		_c.SetEntityTypeID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustcenterEntityCreate) SetID(v string) *TrustcenterEntityCreate {
 	_c.mutation.SetID(v)
@@ -178,19 +193,9 @@ func (_c *TrustcenterEntityCreate) SetTrustCenter(v *TrustCenter) *TrustcenterEn
 	return _c.SetTrustCenterID(v.ID)
 }
 
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_c *TrustcenterEntityCreate) AddFileIDs(ids ...string) *TrustcenterEntityCreate {
-	_c.mutation.AddFileIDs(ids...)
-	return _c
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_c *TrustcenterEntityCreate) AddFiles(v ...*File) *TrustcenterEntityCreate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _c.AddFileIDs(ids...)
+// SetEntityType sets the "entity_type" edge to the EntityType entity.
+func (_c *TrustcenterEntityCreate) SetEntityType(v *EntityType) *TrustcenterEntityCreate {
+	return _c.SetEntityTypeID(v.ID)
 }
 
 // Mutation returns the TrustcenterEntityMutation object of the builder.
@@ -368,21 +373,22 @@ func (_c *TrustcenterEntityCreate) createSpec() (*TrustcenterEntity, *sqlgraph.C
 		_node.TrustCenterID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.FilesIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.EntityTypeIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
+			Table:   trustcenterentity.EntityTypeTable,
+			Columns: []string{trustcenterentity.EntityTypeColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+				IDSpec: sqlgraph.NewFieldSpec(entitytype.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntityFiles
+		edge.Schema = _c.schemaConfig.TrustcenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
+		_node.EntityTypeID = nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec

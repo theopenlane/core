@@ -117,6 +117,11 @@ func Name(v string) predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(sql.FieldEQ(FieldName, v))
 }
 
+// EntityTypeID applies equality check predicate on the "entity_type_id" field. It's identical to EntityTypeIDEQ.
+func EntityTypeID(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldEQ(FieldEntityTypeID, v))
+}
+
 // CreatedAtEQ applies the EQ predicate on the "created_at" field.
 func CreatedAtEQ(v time.Time) predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(sql.FieldEQ(FieldCreatedAt, v))
@@ -782,6 +787,81 @@ func NameContainsFold(v string) predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(sql.FieldContainsFold(FieldName, v))
 }
 
+// EntityTypeIDEQ applies the EQ predicate on the "entity_type_id" field.
+func EntityTypeIDEQ(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldEQ(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDNEQ applies the NEQ predicate on the "entity_type_id" field.
+func EntityTypeIDNEQ(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldNEQ(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDIn applies the In predicate on the "entity_type_id" field.
+func EntityTypeIDIn(vs ...string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldIn(FieldEntityTypeID, vs...))
+}
+
+// EntityTypeIDNotIn applies the NotIn predicate on the "entity_type_id" field.
+func EntityTypeIDNotIn(vs ...string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldNotIn(FieldEntityTypeID, vs...))
+}
+
+// EntityTypeIDGT applies the GT predicate on the "entity_type_id" field.
+func EntityTypeIDGT(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldGT(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDGTE applies the GTE predicate on the "entity_type_id" field.
+func EntityTypeIDGTE(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldGTE(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDLT applies the LT predicate on the "entity_type_id" field.
+func EntityTypeIDLT(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldLT(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDLTE applies the LTE predicate on the "entity_type_id" field.
+func EntityTypeIDLTE(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldLTE(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDContains applies the Contains predicate on the "entity_type_id" field.
+func EntityTypeIDContains(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldContains(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDHasPrefix applies the HasPrefix predicate on the "entity_type_id" field.
+func EntityTypeIDHasPrefix(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldHasPrefix(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDHasSuffix applies the HasSuffix predicate on the "entity_type_id" field.
+func EntityTypeIDHasSuffix(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldHasSuffix(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDIsNil applies the IsNil predicate on the "entity_type_id" field.
+func EntityTypeIDIsNil() predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldIsNull(FieldEntityTypeID))
+}
+
+// EntityTypeIDNotNil applies the NotNil predicate on the "entity_type_id" field.
+func EntityTypeIDNotNil() predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldNotNull(FieldEntityTypeID))
+}
+
+// EntityTypeIDEqualFold applies the EqualFold predicate on the "entity_type_id" field.
+func EntityTypeIDEqualFold(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldEqualFold(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDContainsFold applies the ContainsFold predicate on the "entity_type_id" field.
+func EntityTypeIDContainsFold(v string) predicate.TrustcenterEntity {
+	return predicate.TrustcenterEntity(sql.FieldContainsFold(FieldEntityTypeID, v))
+}
+
 // HasLogoFile applies the HasEdge predicate on the "logo_file" edge.
 func HasLogoFile() predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(func(s *sql.Selector) {
@@ -840,27 +920,27 @@ func HasTrustCenterWith(preds ...predicate.TrustCenter) predicate.TrustcenterEnt
 	})
 }
 
-// HasFiles applies the HasEdge predicate on the "files" edge.
-func HasFiles() predicate.TrustcenterEntity {
+// HasEntityType applies the HasEdge predicate on the "entity_type" edge.
+func HasEntityType() predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 		)
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		step.To.Schema = schemaConfig.EntityType
+		step.Edge.Schema = schemaConfig.TrustcenterEntity
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasFilesWith applies the HasEdge predicate on the "files" edge with a given conditions (other predicates).
-func HasFilesWith(preds ...predicate.File) predicate.TrustcenterEntity {
+// HasEntityTypeWith applies the HasEdge predicate on the "entity_type" edge with a given conditions (other predicates).
+func HasEntityTypeWith(preds ...predicate.EntityType) predicate.TrustcenterEntity {
 	return predicate.TrustcenterEntity(func(s *sql.Selector) {
-		step := newFilesStep()
+		step := newEntityTypeStep()
 		schemaConfig := internal.SchemaConfigFromContext(s.Context())
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		step.To.Schema = schemaConfig.EntityType
+		step.Edge.Schema = schemaConfig.TrustcenterEntity
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

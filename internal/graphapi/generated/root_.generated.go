@@ -2048,7 +2048,7 @@ type ComplexityRoot struct {
 		Tags                  func(childComplexity int) int
 		Template              func(childComplexity int) int
 		TrustCenterSetting    func(childComplexity int) int
-		TrustcenterEntity     func(childComplexity int) int
+		TrustcenterEntities   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustcenterEntityOrder, where *generated.TrustcenterEntityWhereInput) int
 		URI                   func(childComplexity int) int
 		UpdatedAt             func(childComplexity int) int
 		UpdatedBy             func(childComplexity int) int
@@ -6840,7 +6840,8 @@ type ComplexityRoot struct {
 	TrustcenterEntity struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
-		Files         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		EntityType    func(childComplexity int) int
+		EntityTypeID  func(childComplexity int) int
 		ID            func(childComplexity int) int
 		LogoFile      func(childComplexity int) int
 		LogoFileID    func(childComplexity int) int
@@ -6878,6 +6879,7 @@ type ComplexityRoot struct {
 	TrustcenterEntityHistory struct {
 		CreatedAt     func(childComplexity int) int
 		CreatedBy     func(childComplexity int) int
+		EntityTypeID  func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
 		LogoFileID    func(childComplexity int) int
@@ -17419,12 +17421,17 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.File.TrustCenterSetting(childComplexity), true
 
-	case "File.trustcenterEntity":
-		if e.complexity.File.TrustcenterEntity == nil {
+	case "File.trustcenterEntities":
+		if e.complexity.File.TrustcenterEntities == nil {
 			break
 		}
 
-		return e.complexity.File.TrustcenterEntity(childComplexity), true
+		args, err := ec.field_File_trustcenterEntities_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.File.TrustcenterEntities(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustcenterEntityOrder), args["where"].(*generated.TrustcenterEntityWhereInput)), true
 
 	case "File.uri":
 		if e.complexity.File.URI == nil {
@@ -46069,17 +46076,19 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustcenterEntity.CreatedBy(childComplexity), true
 
-	case "TrustcenterEntity.files":
-		if e.complexity.TrustcenterEntity.Files == nil {
+	case "TrustcenterEntity.entityType":
+		if e.complexity.TrustcenterEntity.EntityType == nil {
 			break
 		}
 
-		args, err := ec.field_TrustcenterEntity_files_args(ctx, rawArgs)
-		if err != nil {
-			return 0, false
+		return e.complexity.TrustcenterEntity.EntityType(childComplexity), true
+
+	case "TrustcenterEntity.entityTypeID":
+		if e.complexity.TrustcenterEntity.EntityTypeID == nil {
+			break
 		}
 
-		return e.complexity.TrustcenterEntity.Files(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.FileOrder), args["where"].(*generated.FileWhereInput)), true
+		return e.complexity.TrustcenterEntity.EntityTypeID(childComplexity), true
 
 	case "TrustcenterEntity.id":
 		if e.complexity.TrustcenterEntity.ID == nil {
@@ -46213,6 +46222,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustcenterEntityHistory.CreatedBy(childComplexity), true
+
+	case "TrustcenterEntityHistory.entityTypeID":
+		if e.complexity.TrustcenterEntityHistory.EntityTypeID == nil {
+			break
+		}
+
+		return e.complexity.TrustcenterEntityHistory.EntityTypeID(childComplexity), true
 
 	case "TrustcenterEntityHistory.historyTime":
 		if e.complexity.TrustcenterEntityHistory.HistoryTime == nil {
@@ -66713,7 +66729,7 @@ input CreateTrustcenterEntityInput {
   name: String!
   logoFileID: ID
   trustCenterID: ID
-  fileIDs: [ID!]
+  entityTypeID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -77447,7 +77463,37 @@ type File implements Node {
     """
     where: HushWhereInput
   ): HushConnection!
-  trustcenterEntity: [TrustcenterEntity!]
+  trustcenterEntities(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustcenterEntities returned from the connection.
+    """
+    orderBy: [TrustcenterEntityOrder!]
+
+    """
+    Filtering options for TrustcenterEntities returned from the connection.
+    """
+    where: TrustcenterEntityWhereInput
+  ): TrustcenterEntityConnection!
 }
 """
 A connection to a list of items.
@@ -78537,10 +78583,10 @@ input FileWhereInput {
   hasSecrets: Boolean
   hasSecretsWith: [HushWhereInput!]
   """
-  trustcenter_entity edge predicates
+  trustcenter_entities edge predicates
   """
-  hasTrustcenterEntity: Boolean
-  hasTrustcenterEntityWith: [TrustcenterEntityWhereInput!]
+  hasTrustcenterEntities: Boolean
+  hasTrustcenterEntitiesWith: [TrustcenterEntityWhereInput!]
 }
 type Finding implements Node {
   id: ID!
@@ -125845,39 +125891,13 @@ type TrustcenterEntity implements Node {
   The name of the tag definition
   """
   name: String!
+  """
+  The entity type for the customer entity
+  """
+  entityTypeID: ID
   logoFile: File
   trustCenter: TrustCenter
-  files(
-    """
-    Returns the elements in the list that come after the specified cursor.
-    """
-    after: Cursor
-
-    """
-    Returns the first _n_ elements from the list.
-    """
-    first: Int
-
-    """
-    Returns the elements in the list that come before the specified cursor.
-    """
-    before: Cursor
-
-    """
-    Returns the last _n_ elements from the list.
-    """
-    last: Int
-
-    """
-    Ordering options for Files returned from the connection.
-    """
-    orderBy: [FileOrder!]
-
-    """
-    Filtering options for Files returned from the connection.
-    """
-    where: FileWhereInput
-  ): FileConnection!
+  entityType: EntityType
 }
 """
 A connection to a list of items.
@@ -125934,6 +125954,10 @@ type TrustcenterEntityHistory implements Node {
   The name of the tag definition
   """
   name: String!
+  """
+  The entity type for the customer entity
+  """
+  entityTypeID: String
 }
 """
 A connection to a list of items.
@@ -126370,10 +126394,10 @@ input TrustcenterEntityWhereInput {
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
   """
-  files edge predicates
+  entity_type edge predicates
   """
-  hasFiles: Boolean
-  hasFilesWith: [FileWhereInput!]
+  hasEntityType: Boolean
+  hasEntityTypeWith: [EntityTypeWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -127979,7 +128003,7 @@ input UpdateFileInput {
   clearSecrets: Boolean
   addTrustcenterEntityIDs: [ID!]
   removeTrustcenterEntityIDs: [ID!]
-  clearTrustcenterEntity: Boolean
+  clearTrustcenterEntities: Boolean
 }
 """
 UpdateFindingControlInput is used for update FindingControl object.
@@ -131167,11 +131191,6 @@ input UpdateTrustcenterEntityInput {
   clearURL: Boolean
   logoFileID: ID
   clearLogoFile: Boolean
-  trustCenterID: ID
-  clearTrustCenter: Boolean
-  addFileIDs: [ID!]
-  removeFileIDs: [ID!]
-  clearFiles: Boolean
 }
 """
 UpdateUserInput is used for update User object.

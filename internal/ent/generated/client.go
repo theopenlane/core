@@ -10547,19 +10547,19 @@ func (c *FileClient) QuerySecrets(_m *File) *HushQuery {
 	return query
 }
 
-// QueryTrustcenterEntity queries the trustcenter_entity edge of a File.
-func (c *FileClient) QueryTrustcenterEntity(_m *File) *TrustcenterEntityQuery {
+// QueryTrustcenterEntities queries the trustcenter_entities edge of a File.
+func (c *FileClient) QueryTrustcenterEntities(_m *File) *TrustcenterEntityQuery {
 	query := (&TrustcenterEntityClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(file.Table, file.FieldID, id),
 			sqlgraph.To(trustcenterentity.Table, trustcenterentity.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, true, file.TrustcenterEntityTable, file.TrustcenterEntityPrimaryKey...),
+			sqlgraph.Edge(sqlgraph.O2M, false, file.TrustcenterEntitiesTable, file.TrustcenterEntitiesColumn),
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustcenterEntity
-		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		step.Edge.Schema = schemaConfig.TrustcenterEntity
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}
@@ -31572,19 +31572,19 @@ func (c *TrustcenterEntityClient) QueryTrustCenter(_m *TrustcenterEntity) *Trust
 	return query
 }
 
-// QueryFiles queries the files edge of a TrustcenterEntity.
-func (c *TrustcenterEntityClient) QueryFiles(_m *TrustcenterEntity) *FileQuery {
-	query := (&FileClient{config: c.config}).Query()
+// QueryEntityType queries the entity_type edge of a TrustcenterEntity.
+func (c *TrustcenterEntityClient) QueryEntityType(_m *TrustcenterEntity) *EntityTypeQuery {
+	query := (&EntityTypeClient{config: c.config}).Query()
 	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
 		id := _m.ID
 		step := sqlgraph.NewStep(
 			sqlgraph.From(trustcenterentity.Table, trustcenterentity.FieldID, id),
-			sqlgraph.To(file.Table, file.FieldID),
-			sqlgraph.Edge(sqlgraph.M2M, false, trustcenterentity.FilesTable, trustcenterentity.FilesPrimaryKey...),
+			sqlgraph.To(entitytype.Table, entitytype.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, trustcenterentity.EntityTypeTable, trustcenterentity.EntityTypeColumn),
 		)
 		schemaConfig := _m.schemaConfig
-		step.To.Schema = schemaConfig.File
-		step.Edge.Schema = schemaConfig.TrustcenterEntityFiles
+		step.To.Schema = schemaConfig.EntityType
+		step.Edge.Schema = schemaConfig.TrustcenterEntity
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil
 	}

@@ -15,7 +15,6 @@ query GetAllTrustcenterEntityHistories {
         createdBy
         historyTime
         id
-        logoFileID
         name
         operation
         ref
@@ -43,7 +42,6 @@ query GetTrustcenterEntityHistories($first: Int, $last: Int, $where: Trustcenter
         createdBy
         historyTime
         id
-        logoFileID
         name
         operation
         ref

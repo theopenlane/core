@@ -8441,10 +8441,10 @@ type CreateTrustcenterEntityInput struct {
 	// URL of customer's website
 	URL *string `json:"url,omitempty"`
 	// The name of the tag definition
-	Name          string   `json:"name"`
-	LogoFileID    *string  `json:"logoFileID,omitempty"`
-	TrustCenterID *string  `json:"trustCenterID,omitempty"`
-	FileIDs       []string `json:"fileIDs,omitempty"`
+	Name          string  `json:"name"`
+	LogoFileID    *string `json:"logoFileID,omitempty"`
+	TrustCenterID *string `json:"trustCenterID,omitempty"`
+	EntityTypeID  *string `json:"entityTypeID,omitempty"`
 }
 
 // CreateUserInput is used for create User object.
@@ -15347,23 +15347,23 @@ type File struct {
 	// the region the file is stored in, if applicable
 	StorageRegion *string `json:"storageRegion,omitempty"`
 	// the storage provider the file is stored in, if applicable
-	StorageProvider     *string                `json:"storageProvider,omitempty"`
-	LastAccessedAt      *time.Time             `json:"lastAccessedAt,omitempty"`
-	Organization        []*Organization        `json:"organization,omitempty"`
-	Groups              *GroupConnection       `json:"groups"`
-	Contact             []*Contact             `json:"contact,omitempty"`
-	Entity              []*Entity              `json:"entity,omitempty"`
-	OrganizationSetting []*OrganizationSetting `json:"organizationSetting,omitempty"`
-	Template            []*Template            `json:"template,omitempty"`
-	Document            []*DocumentData        `json:"document,omitempty"`
-	Program             []*Program             `json:"program,omitempty"`
-	Evidence            []*Evidence            `json:"evidence,omitempty"`
-	Events              *EventConnection       `json:"events"`
-	TrustCenterSetting  []*TrustCenterSetting  `json:"trustCenterSetting,omitempty"`
-	Integrations        *IntegrationConnection `json:"integrations"`
-	Secrets             *HushConnection        `json:"secrets"`
-	TrustcenterEntity   []*TrustcenterEntity   `json:"trustcenterEntity,omitempty"`
-	PresignedURL        *string                `json:"presignedURL,omitempty"`
+	StorageProvider     *string                      `json:"storageProvider,omitempty"`
+	LastAccessedAt      *time.Time                   `json:"lastAccessedAt,omitempty"`
+	Organization        []*Organization              `json:"organization,omitempty"`
+	Groups              *GroupConnection             `json:"groups"`
+	Contact             []*Contact                   `json:"contact,omitempty"`
+	Entity              []*Entity                    `json:"entity,omitempty"`
+	OrganizationSetting []*OrganizationSetting       `json:"organizationSetting,omitempty"`
+	Template            []*Template                  `json:"template,omitempty"`
+	Document            []*DocumentData              `json:"document,omitempty"`
+	Program             []*Program                   `json:"program,omitempty"`
+	Evidence            []*Evidence                  `json:"evidence,omitempty"`
+	Events              *EventConnection             `json:"events"`
+	TrustCenterSetting  []*TrustCenterSetting        `json:"trustCenterSetting,omitempty"`
+	Integrations        *IntegrationConnection       `json:"integrations"`
+	Secrets             *HushConnection              `json:"secrets"`
+	TrustcenterEntities *TrustcenterEntityConnection `json:"trustcenterEntities"`
+	PresignedURL        *string                      `json:"presignedURL,omitempty"`
 }
 
 func (File) IsNode() {}
@@ -16236,9 +16236,9 @@ type FileWhereInput struct {
 	// secrets edge predicates
 	HasSecrets     *bool             `json:"hasSecrets,omitempty"`
 	HasSecretsWith []*HushWhereInput `json:"hasSecretsWith,omitempty"`
-	// trustcenter_entity edge predicates
-	HasTrustcenterEntity     *bool                          `json:"hasTrustcenterEntity,omitempty"`
-	HasTrustcenterEntityWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntityWith,omitempty"`
+	// trustcenter_entities edge predicates
+	HasTrustcenterEntities     *bool                          `json:"hasTrustcenterEntities,omitempty"`
+	HasTrustcenterEntitiesWith []*TrustcenterEntityWhereInput `json:"hasTrustcenterEntitiesWith,omitempty"`
 }
 
 type Finding struct {
@@ -42540,10 +42540,12 @@ type TrustcenterEntity struct {
 	// The trust center this entity belongs to
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// The name of the tag definition
-	Name        string          `json:"name"`
-	LogoFile    *File           `json:"logoFile,omitempty"`
-	TrustCenter *TrustCenter    `json:"trustCenter,omitempty"`
-	Files       *FileConnection `json:"files"`
+	Name string `json:"name"`
+	// The entity type for the customer entity
+	EntityTypeID *string      `json:"entityTypeID,omitempty"`
+	LogoFile     *File        `json:"logoFile,omitempty"`
+	TrustCenter  *TrustCenter `json:"trustCenter,omitempty"`
+	EntityType   *EntityType  `json:"entityType,omitempty"`
 }
 
 func (TrustcenterEntity) IsNode() {}
@@ -42601,6 +42603,8 @@ type TrustcenterEntityHistory struct {
 	TrustCenterID *string `json:"trustCenterID,omitempty"`
 	// The name of the tag definition
 	Name string `json:"name"`
+	// The entity type for the customer entity
+	EntityTypeID *string `json:"entityTypeID,omitempty"`
 }
 
 func (TrustcenterEntityHistory) IsNode() {}
@@ -42949,9 +42953,9 @@ type TrustcenterEntityWhereInput struct {
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
-	// files edge predicates
-	HasFiles     *bool             `json:"hasFiles,omitempty"`
-	HasFilesWith []*FileWhereInput `json:"hasFilesWith,omitempty"`
+	// entity_type edge predicates
+	HasEntityType     *bool                   `json:"hasEntityType,omitempty"`
+	HasEntityTypeWith []*EntityTypeWhereInput `json:"hasEntityTypeWith,omitempty"`
 }
 
 // UpdateAPITokenInput is used for update APIToken object.
@@ -44124,7 +44128,7 @@ type UpdateFileInput struct {
 	ClearSecrets                 *bool      `json:"clearSecrets,omitempty"`
 	AddTrustcenterEntityIDs      []string   `json:"addTrustcenterEntityIDs,omitempty"`
 	RemoveTrustcenterEntityIDs   []string   `json:"removeTrustcenterEntityIDs,omitempty"`
-	ClearTrustcenterEntity       *bool      `json:"clearTrustcenterEntity,omitempty"`
+	ClearTrustcenterEntities     *bool      `json:"clearTrustcenterEntities,omitempty"`
 }
 
 // UpdateFindingControlInput is used for update FindingControl object.
@@ -46548,15 +46552,10 @@ type UpdateTrustCenterWatermarkConfigInput struct {
 // Input was generated by ent.
 type UpdateTrustcenterEntityInput struct {
 	// URL of customer's website
-	URL              *string  `json:"url,omitempty"`
-	ClearURL         *bool    `json:"clearURL,omitempty"`
-	LogoFileID       *string  `json:"logoFileID,omitempty"`
-	ClearLogoFile    *bool    `json:"clearLogoFile,omitempty"`
-	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
-	ClearTrustCenter *bool    `json:"clearTrustCenter,omitempty"`
-	AddFileIDs       []string `json:"addFileIDs,omitempty"`
-	RemoveFileIDs    []string `json:"removeFileIDs,omitempty"`
-	ClearFiles       *bool    `json:"clearFiles,omitempty"`
+	URL           *string `json:"url,omitempty"`
+	ClearURL      *bool   `json:"clearURL,omitempty"`
+	LogoFileID    *string `json:"logoFileID,omitempty"`
+	ClearLogoFile *bool   `json:"clearLogoFile,omitempty"`
 }
 
 // UpdateUserInput is used for update User object.

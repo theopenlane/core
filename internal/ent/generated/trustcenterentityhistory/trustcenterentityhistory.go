@@ -43,6 +43,8 @@ const (
 	FieldTrustCenterID = "trust_center_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
+	FieldEntityTypeID = "entity_type_id"
 	// Table holds the table name of the trustcenterentityhistory in the database.
 	Table = "trustcenter_entity_history"
 )
@@ -63,6 +65,7 @@ var Columns = []string{
 	FieldURL,
 	FieldTrustCenterID,
 	FieldName,
+	FieldEntityTypeID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -177,6 +180,11 @@ func ByTrustCenterID(opts ...sql.OrderTermOption) OrderOption {
 // ByName orders the results by the name field.
 func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
+}
+
+// ByEntityTypeID orders the results by the entity_type_id field.
+func ByEntityTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityTypeID, opts...).ToFunc()
 }
 
 var (

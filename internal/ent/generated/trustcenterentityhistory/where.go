@@ -125,6 +125,11 @@ func Name(v string) predicate.TrustcenterEntityHistory {
 	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldName, v))
 }
 
+// EntityTypeID applies equality check predicate on the "entity_type_id" field. It's identical to EntityTypeIDEQ.
+func EntityTypeID(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
+}
+
 // HistoryTimeEQ applies the EQ predicate on the "history_time" field.
 func HistoryTimeEQ(v time.Time) predicate.TrustcenterEntityHistory {
 	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldHistoryTime, v))
@@ -923,6 +928,81 @@ func NameEqualFold(v string) predicate.TrustcenterEntityHistory {
 // NameContainsFold applies the ContainsFold predicate on the "name" field.
 func NameContainsFold(v string) predicate.TrustcenterEntityHistory {
 	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldName, v))
+}
+
+// EntityTypeIDEQ applies the EQ predicate on the "entity_type_id" field.
+func EntityTypeIDEQ(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldEQ(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDNEQ applies the NEQ predicate on the "entity_type_id" field.
+func EntityTypeIDNEQ(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldNEQ(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDIn applies the In predicate on the "entity_type_id" field.
+func EntityTypeIDIn(vs ...string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldIn(FieldEntityTypeID, vs...))
+}
+
+// EntityTypeIDNotIn applies the NotIn predicate on the "entity_type_id" field.
+func EntityTypeIDNotIn(vs ...string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldNotIn(FieldEntityTypeID, vs...))
+}
+
+// EntityTypeIDGT applies the GT predicate on the "entity_type_id" field.
+func EntityTypeIDGT(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldGT(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDGTE applies the GTE predicate on the "entity_type_id" field.
+func EntityTypeIDGTE(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldGTE(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDLT applies the LT predicate on the "entity_type_id" field.
+func EntityTypeIDLT(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldLT(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDLTE applies the LTE predicate on the "entity_type_id" field.
+func EntityTypeIDLTE(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldLTE(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDContains applies the Contains predicate on the "entity_type_id" field.
+func EntityTypeIDContains(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldContains(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDHasPrefix applies the HasPrefix predicate on the "entity_type_id" field.
+func EntityTypeIDHasPrefix(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldHasPrefix(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDHasSuffix applies the HasSuffix predicate on the "entity_type_id" field.
+func EntityTypeIDHasSuffix(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldHasSuffix(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDIsNil applies the IsNil predicate on the "entity_type_id" field.
+func EntityTypeIDIsNil() predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldIsNull(FieldEntityTypeID))
+}
+
+// EntityTypeIDNotNil applies the NotNil predicate on the "entity_type_id" field.
+func EntityTypeIDNotNil() predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldNotNull(FieldEntityTypeID))
+}
+
+// EntityTypeIDEqualFold applies the EqualFold predicate on the "entity_type_id" field.
+func EntityTypeIDEqualFold(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldEqualFold(FieldEntityTypeID, v))
+}
+
+// EntityTypeIDContainsFold applies the ContainsFold predicate on the "entity_type_id" field.
+func EntityTypeIDContainsFold(v string) predicate.TrustcenterEntityHistory {
+	return predicate.TrustcenterEntityHistory(sql.FieldContainsFold(FieldEntityTypeID, v))
 }
 
 // And groups predicates with the AND operator between them.

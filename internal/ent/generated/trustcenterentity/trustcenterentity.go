@@ -35,12 +35,14 @@ const (
 	FieldTrustCenterID = "trust_center_id"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
+	// FieldEntityTypeID holds the string denoting the entity_type_id field in the database.
+	FieldEntityTypeID = "entity_type_id"
 	// EdgeLogoFile holds the string denoting the logo_file edge name in mutations.
 	EdgeLogoFile = "logo_file"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
-	// EdgeFiles holds the string denoting the files edge name in mutations.
-	EdgeFiles = "files"
+	// EdgeEntityType holds the string denoting the entity_type edge name in mutations.
+	EdgeEntityType = "entity_type"
 	// Table holds the table name of the trustcenterentity in the database.
 	Table = "trustcenter_entities"
 	// LogoFileTable is the table that holds the logo_file relation/edge.
@@ -57,11 +59,13 @@ const (
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
-	// FilesTable is the table that holds the files relation/edge. The primary key declared below.
-	FilesTable = "trustcenter_entity_files"
-	// FilesInverseTable is the table name for the File entity.
-	// It exists in this package in order to avoid circular dependency with the "file" package.
-	FilesInverseTable = "files"
+	// EntityTypeTable is the table that holds the entity_type relation/edge.
+	EntityTypeTable = "trustcenter_entities"
+	// EntityTypeInverseTable is the table name for the EntityType entity.
+	// It exists in this package in order to avoid circular dependency with the "entitytype" package.
+	EntityTypeInverseTable = "entity_types"
+	// EntityTypeColumn is the table column denoting the entity_type relation/edge.
+	EntityTypeColumn = "entity_type_id"
 )
 
 // Columns holds all SQL columns for trustcenterentity fields.
@@ -77,19 +81,15 @@ var Columns = []string{
 	FieldURL,
 	FieldTrustCenterID,
 	FieldName,
+	FieldEntityTypeID,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "trustcenter_entities"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
+	"file_trustcenter_entities",
 	"trust_center_trustcenter_entities",
 }
-
-var (
-	// FilesPrimaryKey and FilesColumn2 are the table columns denoting the
-	// primary key for the files relation (M2M).
-	FilesPrimaryKey = []string{"trustcenter_entity_id", "file_id"}
-)
 
 // ValidColumn reports if the column name is valid (part of the table columns).
 func ValidColumn(column string) bool {
@@ -112,7 +112,7 @@ func ValidColumn(column string) bool {
 //
 //	import _ "github.com/theopenlane/core/internal/ent/generated/runtime"
 var (
-	Hooks        [4]ent.Hook
+	Hooks        [5]ent.Hook
 	Interceptors [2]ent.Interceptor
 	Policy       ent.Policy
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -185,6 +185,11 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldName, opts...).ToFunc()
 }
 
+// ByEntityTypeID orders the results by the entity_type_id field.
+func ByEntityTypeID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldEntityTypeID, opts...).ToFunc()
+}
+
 // ByLogoFileField orders the results by logo_file field.
 func ByLogoFileField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -199,17 +204,10 @@ func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	}
 }
 
-// ByFilesCount orders the results by files count.
-func ByFilesCount(opts ...sql.OrderTermOption) OrderOption {
+// ByEntityTypeField orders the results by entity_type field.
+func ByEntityTypeField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newFilesStep(), opts...)
-	}
-}
-
-// ByFiles orders the results by files terms.
-func ByFiles(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
-	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newFilesStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newEntityTypeStep(), sql.OrderByField(field, opts...))
 	}
 }
 func newLogoFileStep() *sqlgraph.Step {
@@ -226,10 +224,10 @@ func newTrustCenterStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2O, false, TrustCenterTable, TrustCenterColumn),
 	)
 }
-func newFilesStep() *sqlgraph.Step {
+func newEntityTypeStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(FilesInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, false, FilesTable, FilesPrimaryKey...),
+		sqlgraph.To(EntityTypeInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, false, EntityTypeTable, EntityTypeColumn),
 	)
 }

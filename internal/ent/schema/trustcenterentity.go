@@ -9,6 +9,7 @@ import (
 
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
@@ -55,6 +56,7 @@ func (TrustcenterEntity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 			),
 		field.String("trust_center_id").
+			Immutable().
 			Comment("The trust center this entity belongs to").
 			Optional(),
 		field.String("name").
@@ -64,6 +66,11 @@ func (TrustcenterEntity) Fields() []ent.Field {
 				entx.FieldSearchable(),
 				entgql.OrderField("NAME"),
 			),
+		field.String("entity_type_id").
+			Immutable().
+			Comment("The entity type for the customer entity").
+			Annotations(entgql.Skip(^entgql.SkipType)).
+			Optional(),
 	}
 }
 
@@ -88,8 +95,14 @@ func (t TrustcenterEntity) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
+			immutable:  true,
 		}),
-		defaultEdgeToWithPagination(t, File{}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: EntityType{},
+			field:      "entity_type_id",
+			immutable:  true,
+		}),
 	}
 }
 
@@ -105,7 +118,9 @@ func (TrustcenterEntity) Annotations() []schema.Annotation {
 
 // Hooks of the TrustcenterEntity
 func (TrustcenterEntity) Hooks() []ent.Hook {
-	return []ent.Hook{}
+	return []ent.Hook{
+		hooks.HookTrustcenterEntityCreate(),
+	}
 }
 
 // Interceptors of the TrustcenterEntity
@@ -120,15 +135,9 @@ func (TrustcenterEntity) Modules() []models.OrgModule {
 
 // Policy of the TrustcenterEntity
 func (TrustcenterEntity) Policy() ent.Policy {
-	// add the new policy here, the default post-policy is to deny all
-	// so you need to ensure there are rules in place to allow the actions you want
 	return policy.NewPolicy(
 		policy.WithMutationRules(
-			// add mutation rules here, the below is the recommended default
-			policy.CheckCreateAccess(),
-			// this needs to be commented out for the first run that had the entfga annotation
-			// the first run will generate the functions required based on the entfa annotation
-			// entfga.CheckEditAccess[*generated.TrustcenterEntityMutation](),
+			policy.CheckOrgWriteAccess(),
 		),
 	)
 }

@@ -187,6 +187,20 @@ func (_c *TrustcenterEntityHistoryCreate) SetName(v string) *TrustcenterEntityHi
 	return _c
 }
 
+// SetEntityTypeID sets the "entity_type_id" field.
+func (_c *TrustcenterEntityHistoryCreate) SetEntityTypeID(v string) *TrustcenterEntityHistoryCreate {
+	_c.mutation.SetEntityTypeID(v)
+	return _c
+}
+
+// SetNillableEntityTypeID sets the "entity_type_id" field if the given value is not nil.
+func (_c *TrustcenterEntityHistoryCreate) SetNillableEntityTypeID(v *string) *TrustcenterEntityHistoryCreate {
+	if v != nil {
+		_c.SetEntityTypeID(*v)
+	}
+	return _c
+}
+
 // SetID sets the "id" field.
 func (_c *TrustcenterEntityHistoryCreate) SetID(v string) *TrustcenterEntityHistoryCreate {
 	_c.mutation.SetID(v)
@@ -372,6 +386,10 @@ func (_c *TrustcenterEntityHistoryCreate) createSpec() (*TrustcenterEntityHistor
 	if value, ok := _c.mutation.Name(); ok {
 		_spec.SetField(trustcenterentityhistory.FieldName, field.TypeString, value)
 		_node.Name = value
+	}
+	if value, ok := _c.mutation.EntityTypeID(); ok {
+		_spec.SetField(trustcenterentityhistory.FieldEntityTypeID, field.TypeString, value)
+		_node.EntityTypeID = value
 	}
 	return _node, _spec
 }

@@ -13941,7 +13941,7 @@ input CreateTrustcenterEntityInput {
 	name: String!
 	logoFileID: ID
 	trustCenterID: ID
-	fileIDs: [ID!]
+	entityTypeID: ID
 }
 """
 CreateUserInput is used for create User object.
@@ -25218,7 +25218,37 @@ type File implements Node {
 		"""
 		where: HushWhereInput
 	): HushConnection!
-	trustcenterEntity: [TrustcenterEntity!]
+	trustcenterEntities(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for TrustcenterEntities returned from the connection.
+		"""
+		orderBy: [TrustcenterEntityOrder!]
+
+		"""
+		Filtering options for TrustcenterEntities returned from the connection.
+		"""
+		where: TrustcenterEntityWhereInput
+	): TrustcenterEntityConnection!
 	presignedURL: String
 }
 """
@@ -26318,10 +26348,10 @@ input FileWhereInput {
 	hasSecrets: Boolean
 	hasSecretsWith: [HushWhereInput!]
 	"""
-	trustcenter_entity edge predicates
+	trustcenter_entities edge predicates
 	"""
-	hasTrustcenterEntity: Boolean
-	hasTrustcenterEntityWith: [TrustcenterEntityWhereInput!]
+	hasTrustcenterEntities: Boolean
+	hasTrustcenterEntitiesWith: [TrustcenterEntityWhereInput!]
 }
 type Finding implements Node {
 	id: ID!
@@ -81899,39 +81929,13 @@ type TrustcenterEntity implements Node {
 	The name of the tag definition
 	"""
 	name: String!
+	"""
+	The entity type for the customer entity
+	"""
+	entityTypeID: ID
 	logoFile: File
 	trustCenter: TrustCenter
-	files(
-		"""
-		Returns the elements in the list that come after the specified cursor.
-		"""
-		after: Cursor
-
-		"""
-		Returns the first _n_ elements from the list.
-		"""
-		first: Int
-
-		"""
-		Returns the elements in the list that come before the specified cursor.
-		"""
-		before: Cursor
-
-		"""
-		Returns the last _n_ elements from the list.
-		"""
-		last: Int
-
-		"""
-		Ordering options for Files returned from the connection.
-		"""
-		orderBy: [FileOrder!]
-
-		"""
-		Filtering options for Files returned from the connection.
-		"""
-		where: FileWhereInput
-	): FileConnection!
+	entityType: EntityType
 }
 """
 Return response for createBulkTrustcenterEntity mutation
@@ -82015,6 +82019,10 @@ type TrustcenterEntityHistory implements Node {
 	The name of the tag definition
 	"""
 	name: String!
+	"""
+	The entity type for the customer entity
+	"""
+	entityTypeID: String
 }
 """
 A connection to a list of items.
@@ -82460,10 +82468,10 @@ input TrustcenterEntityWhereInput {
 	hasTrustCenter: Boolean
 	hasTrustCenterWith: [TrustCenterWhereInput!]
 	"""
-	files edge predicates
+	entity_type edge predicates
 	"""
-	hasFiles: Boolean
-	hasFilesWith: [FileWhereInput!]
+	hasEntityType: Boolean
+	hasEntityTypeWith: [EntityTypeWhereInput!]
 }
 """
 UpdateAPITokenInput is used for update APIToken object.
@@ -84074,7 +84082,7 @@ input UpdateFileInput {
 	clearSecrets: Boolean
 	addTrustcenterEntityIDs: [ID!]
 	removeTrustcenterEntityIDs: [ID!]
-	clearTrustcenterEntity: Boolean
+	clearTrustcenterEntities: Boolean
 }
 """
 UpdateFindingControlInput is used for update FindingControl object.
@@ -87301,11 +87309,6 @@ input UpdateTrustcenterEntityInput {
 	clearURL: Boolean
 	logoFileID: ID
 	clearLogoFile: Boolean
-	trustCenterID: ID
-	clearTrustCenter: Boolean
-	addFileIDs: [ID!]
-	removeFileIDs: [ID!]
-	clearFiles: Boolean
 }
 """
 UpdateUserInput is used for update User object.

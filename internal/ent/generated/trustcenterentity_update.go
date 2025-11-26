@@ -13,7 +13,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -145,49 +144,9 @@ func (_u *TrustcenterEntityUpdate) ClearURL() *TrustcenterEntityUpdate {
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustcenterEntityUpdate) SetTrustCenterID(v string) *TrustcenterEntityUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdate) SetNillableTrustCenterID(v *string) *TrustcenterEntityUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustcenterEntityUpdate) ClearTrustCenterID() *TrustcenterEntityUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *TrustcenterEntityUpdate) SetLogoFile(v *File) *TrustcenterEntityUpdate {
 	return _u.SetLogoFileID(v.ID)
-}
-
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustcenterEntityUpdate) SetTrustCenter(v *TrustCenter) *TrustcenterEntityUpdate {
-	return _u.SetTrustCenterID(v.ID)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *TrustcenterEntityUpdate) AddFileIDs(ids ...string) *TrustcenterEntityUpdate {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *TrustcenterEntityUpdate) AddFiles(v ...*File) *TrustcenterEntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the TrustcenterEntityMutation object of the builder.
@@ -199,33 +158,6 @@ func (_u *TrustcenterEntityUpdate) Mutation() *TrustcenterEntityMutation {
 func (_u *TrustcenterEntityUpdate) ClearLogoFile() *TrustcenterEntityUpdate {
 	_u.mutation.ClearLogoFile()
 	return _u
-}
-
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustcenterEntityUpdate) ClearTrustCenter() *TrustcenterEntityUpdate {
-	_u.mutation.ClearTrustCenter()
-	return _u
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *TrustcenterEntityUpdate) ClearFiles() *TrustcenterEntityUpdate {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *TrustcenterEntityUpdate) RemoveFileIDs(ids ...string) *TrustcenterEntityUpdate {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *TrustcenterEntityUpdate) RemoveFiles(v ...*File) *TrustcenterEntityUpdate {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -360,85 +292,6 @@ func (_u *TrustcenterEntityUpdate) sqlSave(ctx context.Context) (_node int, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TrustCenterCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.TrustCenterTable,
-			Columns: []string{trustcenterentity.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.TrustCenterTable,
-			Columns: []string{trustcenterentity.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -580,49 +433,9 @@ func (_u *TrustcenterEntityUpdateOne) ClearURL() *TrustcenterEntityUpdateOne {
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustcenterEntityUpdateOne) SetTrustCenterID(v string) *TrustcenterEntityUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustcenterEntityUpdateOne) SetNillableTrustCenterID(v *string) *TrustcenterEntityUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustcenterEntityUpdateOne) ClearTrustCenterID() *TrustcenterEntityUpdateOne {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // SetLogoFile sets the "logo_file" edge to the File entity.
 func (_u *TrustcenterEntityUpdateOne) SetLogoFile(v *File) *TrustcenterEntityUpdateOne {
 	return _u.SetLogoFileID(v.ID)
-}
-
-// SetTrustCenter sets the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustcenterEntityUpdateOne) SetTrustCenter(v *TrustCenter) *TrustcenterEntityUpdateOne {
-	return _u.SetTrustCenterID(v.ID)
-}
-
-// AddFileIDs adds the "files" edge to the File entity by IDs.
-func (_u *TrustcenterEntityUpdateOne) AddFileIDs(ids ...string) *TrustcenterEntityUpdateOne {
-	_u.mutation.AddFileIDs(ids...)
-	return _u
-}
-
-// AddFiles adds the "files" edges to the File entity.
-func (_u *TrustcenterEntityUpdateOne) AddFiles(v ...*File) *TrustcenterEntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.AddFileIDs(ids...)
 }
 
 // Mutation returns the TrustcenterEntityMutation object of the builder.
@@ -634,33 +447,6 @@ func (_u *TrustcenterEntityUpdateOne) Mutation() *TrustcenterEntityMutation {
 func (_u *TrustcenterEntityUpdateOne) ClearLogoFile() *TrustcenterEntityUpdateOne {
 	_u.mutation.ClearLogoFile()
 	return _u
-}
-
-// ClearTrustCenter clears the "trust_center" edge to the TrustCenter entity.
-func (_u *TrustcenterEntityUpdateOne) ClearTrustCenter() *TrustcenterEntityUpdateOne {
-	_u.mutation.ClearTrustCenter()
-	return _u
-}
-
-// ClearFiles clears all "files" edges to the File entity.
-func (_u *TrustcenterEntityUpdateOne) ClearFiles() *TrustcenterEntityUpdateOne {
-	_u.mutation.ClearFiles()
-	return _u
-}
-
-// RemoveFileIDs removes the "files" edge to File entities by IDs.
-func (_u *TrustcenterEntityUpdateOne) RemoveFileIDs(ids ...string) *TrustcenterEntityUpdateOne {
-	_u.mutation.RemoveFileIDs(ids...)
-	return _u
-}
-
-// RemoveFiles removes "files" edges to File entities.
-func (_u *TrustcenterEntityUpdateOne) RemoveFiles(v ...*File) *TrustcenterEntityUpdateOne {
-	ids := make([]string, len(v))
-	for i := range v {
-		ids[i] = v[i].ID
-	}
-	return _u.RemoveFileIDs(ids...)
 }
 
 // Where appends a list predicates to the TrustcenterEntityUpdate builder.
@@ -825,85 +611,6 @@ func (_u *TrustcenterEntityUpdateOne) sqlSave(ctx context.Context) (_node *Trust
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.TrustCenterCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.TrustCenterTable,
-			Columns: []string{trustcenterentity.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.TrustCenterIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2O,
-			Inverse: false,
-			Table:   trustcenterentity.TrustCenterTable,
-			Columns: []string{trustcenterentity.TrustCenterColumn},
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(trustcenter.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntity
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Add = append(_spec.Edges.Add, edge)
-	}
-	if _u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.RemovedFilesIDs(); len(nodes) > 0 && !_u.mutation.FilesCleared() {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
-		for _, k := range nodes {
-			edge.Target.Nodes = append(edge.Target.Nodes, k)
-		}
-		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
-	}
-	if nodes := _u.mutation.FilesIDs(); len(nodes) > 0 {
-		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
-			Bidi:    false,
-			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
-			},
-		}
-		edge.Schema = _u.schemaConfig.TrustcenterEntityFiles
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

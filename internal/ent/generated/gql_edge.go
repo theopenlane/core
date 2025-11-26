@@ -2941,16 +2941,25 @@ func (_m *File) Secrets(
 	return _m.QuerySecrets().Paginate(ctx, after, first, before, last, opts...)
 }
 
-func (_m *File) TrustcenterEntity(ctx context.Context) (result []*TrustcenterEntity, err error) {
-	if fc := graphql.GetFieldContext(ctx); fc != nil && fc.Field.Alias != "" {
-		result, err = _m.NamedTrustcenterEntity(graphql.GetFieldContext(ctx).Field.Alias)
-	} else {
-		result, err = _m.Edges.TrustcenterEntityOrErr()
+func (_m *File) TrustcenterEntities(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustcenterEntityOrder, where *TrustcenterEntityWhereInput,
+) (*TrustcenterEntityConnection, error) {
+	opts := []TrustcenterEntityPaginateOption{
+		WithTrustcenterEntityOrder(orderBy),
+		WithTrustcenterEntityFilter(where.Filter),
 	}
-	if IsNotLoaded(err) {
-		result, err = _m.QueryTrustcenterEntity().All(ctx)
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[13][alias]
+	if nodes, err := _m.NamedTrustcenterEntities(alias); err == nil || hasTotalCount {
+		pager, err := newTrustcenterEntityPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustcenterEntityConnection{Edges: []*TrustcenterEntityEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
 	}
-	return result, err
+	return _m.QueryTrustcenterEntities().Paginate(ctx, after, first, before, last, opts...)
 }
 
 func (_m *Finding) Owner(ctx context.Context) (*Organization, error) {
@@ -10377,25 +10386,12 @@ func (_m *TrustcenterEntity) TrustCenter(ctx context.Context) (*TrustCenter, err
 	return result, MaskNotFound(err)
 }
 
-func (_m *TrustcenterEntity) Files(
-	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*FileOrder, where *FileWhereInput,
-) (*FileConnection, error) {
-	opts := []FilePaginateOption{
-		WithFileOrder(orderBy),
-		WithFileFilter(where.Filter),
+func (_m *TrustcenterEntity) EntityType(ctx context.Context) (*EntityType, error) {
+	result, err := _m.Edges.EntityTypeOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEntityType().Only(ctx)
 	}
-	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[2][alias]
-	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
-		pager, err := newFilePager(opts, last != nil)
-		if err != nil {
-			return nil, err
-		}
-		conn := &FileConnection{Edges: []*FileEdge{}, TotalCount: totalCount}
-		conn.build(nodes, pager, after, first, before, last)
-		return conn, nil
-	}
-	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
+	return result, MaskNotFound(err)
 }
 
 func (_m *User) PersonalAccessTokens(

@@ -587,14 +587,14 @@ func (_c *FileCreate) AddSecrets(v ...*Hush) *FileCreate {
 	return _c.AddSecretIDs(ids...)
 }
 
-// AddTrustcenterEntityIDs adds the "trustcenter_entity" edge to the TrustcenterEntity entity by IDs.
+// AddTrustcenterEntityIDs adds the "trustcenter_entities" edge to the TrustcenterEntity entity by IDs.
 func (_c *FileCreate) AddTrustcenterEntityIDs(ids ...string) *FileCreate {
 	_c.mutation.AddTrustcenterEntityIDs(ids...)
 	return _c
 }
 
-// AddTrustcenterEntity adds the "trustcenter_entity" edges to the TrustcenterEntity entity.
-func (_c *FileCreate) AddTrustcenterEntity(v ...*TrustcenterEntity) *FileCreate {
+// AddTrustcenterEntities adds the "trustcenter_entities" edges to the TrustcenterEntity entity.
+func (_c *FileCreate) AddTrustcenterEntities(v ...*TrustcenterEntity) *FileCreate {
 	ids := make([]string, len(v))
 	for i := range v {
 		ids[i] = v[i].ID
@@ -1061,18 +1061,18 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 		}
 		_spec.Edges = append(_spec.Edges, edge)
 	}
-	if nodes := _c.mutation.TrustcenterEntityIDs(); len(nodes) > 0 {
+	if nodes := _c.mutation.TrustcenterEntitiesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.TrustcenterEntityTable,
-			Columns: file.TrustcenterEntityPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.TrustcenterEntitiesTable,
+			Columns: []string{file.TrustcenterEntitiesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
 			},
 		}
-		edge.Schema = _c.schemaConfig.TrustcenterEntityFiles
+		edge.Schema = _c.schemaConfig.TrustcenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

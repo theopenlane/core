@@ -4507,6 +4507,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentity.FieldURL:           {Type: field.TypeString, Column: trustcenterentity.FieldURL},
 			trustcenterentity.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterentity.FieldTrustCenterID},
 			trustcenterentity.FieldName:          {Type: field.TypeString, Column: trustcenterentity.FieldName},
+			trustcenterentity.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentity.FieldEntityTypeID},
 		},
 	}
 	graph.Nodes[133] = &sqlgraph.Node{
@@ -4533,6 +4534,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterentityhistory.FieldURL:           {Type: field.TypeString, Column: trustcenterentityhistory.FieldURL},
 			trustcenterentityhistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterentityhistory.FieldTrustCenterID},
 			trustcenterentityhistory.FieldName:          {Type: field.TypeString, Column: trustcenterentityhistory.FieldName},
+			trustcenterentityhistory.FieldEntityTypeID:  {Type: field.TypeString, Column: trustcenterentityhistory.FieldEntityTypeID},
 		},
 	}
 	graph.Nodes[134] = &sqlgraph.Node{
@@ -7292,12 +7294,12 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Hush",
 	)
 	graph.MustAddE(
-		"trustcenter_entity",
+		"trustcenter_entities",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
-			Inverse: true,
-			Table:   file.TrustcenterEntityTable,
-			Columns: file.TrustcenterEntityPrimaryKey,
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.TrustcenterEntitiesTable,
+			Columns: []string{file.TrustcenterEntitiesColumn},
 			Bidi:    false,
 		},
 		"File",
@@ -12728,16 +12730,16 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenter",
 	)
 	graph.MustAddE(
-		"files",
+		"entity_type",
 		&sqlgraph.EdgeSpec{
-			Rel:     sqlgraph.M2M,
+			Rel:     sqlgraph.M2O,
 			Inverse: false,
-			Table:   trustcenterentity.FilesTable,
-			Columns: trustcenterentity.FilesPrimaryKey,
+			Table:   trustcenterentity.EntityTypeTable,
+			Columns: []string{trustcenterentity.EntityTypeColumn},
 			Bidi:    false,
 		},
 		"TrustcenterEntity",
-		"File",
+		"EntityType",
 	)
 	graph.MustAddE(
 		"personal_access_tokens",
@@ -21894,14 +21896,14 @@ func (f *FileFilter) WhereHasSecretsWith(preds ...predicate.Hush) {
 	})))
 }
 
-// WhereHasTrustcenterEntity applies a predicate to check if query has an edge trustcenter_entity.
-func (f *FileFilter) WhereHasTrustcenterEntity() {
-	f.Where(entql.HasEdge("trustcenter_entity"))
+// WhereHasTrustcenterEntities applies a predicate to check if query has an edge trustcenter_entities.
+func (f *FileFilter) WhereHasTrustcenterEntities() {
+	f.Where(entql.HasEdge("trustcenter_entities"))
 }
 
-// WhereHasTrustcenterEntityWith applies a predicate to check if query has an edge trustcenter_entity with a given conditions (other predicates).
-func (f *FileFilter) WhereHasTrustcenterEntityWith(preds ...predicate.TrustcenterEntity) {
-	f.Where(entql.HasEdgeWith("trustcenter_entity", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasTrustcenterEntitiesWith applies a predicate to check if query has an edge trustcenter_entities with a given conditions (other predicates).
+func (f *FileFilter) WhereHasTrustcenterEntitiesWith(preds ...predicate.TrustcenterEntity) {
+	f.Where(entql.HasEdgeWith("trustcenter_entities", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40773,6 +40775,11 @@ func (f *TrustcenterEntityFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(trustcenterentity.FieldName))
 }
 
+// WhereEntityTypeID applies the entql string predicate on the entity_type_id field.
+func (f *TrustcenterEntityFilter) WhereEntityTypeID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentity.FieldEntityTypeID))
+}
+
 // WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
 func (f *TrustcenterEntityFilter) WhereHasLogoFile() {
 	f.Where(entql.HasEdge("logo_file"))
@@ -40801,14 +40808,14 @@ func (f *TrustcenterEntityFilter) WhereHasTrustCenterWith(preds ...predicate.Tru
 	})))
 }
 
-// WhereHasFiles applies a predicate to check if query has an edge files.
-func (f *TrustcenterEntityFilter) WhereHasFiles() {
-	f.Where(entql.HasEdge("files"))
+// WhereHasEntityType applies a predicate to check if query has an edge entity_type.
+func (f *TrustcenterEntityFilter) WhereHasEntityType() {
+	f.Where(entql.HasEdge("entity_type"))
 }
 
-// WhereHasFilesWith applies a predicate to check if query has an edge files with a given conditions (other predicates).
-func (f *TrustcenterEntityFilter) WhereHasFilesWith(preds ...predicate.File) {
-	f.Where(entql.HasEdgeWith("files", sqlgraph.WrapFunc(func(s *sql.Selector) {
+// WhereHasEntityTypeWith applies a predicate to check if query has an edge entity_type with a given conditions (other predicates).
+func (f *TrustcenterEntityFilter) WhereHasEntityTypeWith(preds ...predicate.EntityType) {
+	f.Where(entql.HasEdgeWith("entity_type", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -40918,6 +40925,11 @@ func (f *TrustcenterEntityHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 // WhereName applies the entql string predicate on the name field.
 func (f *TrustcenterEntityHistoryFilter) WhereName(p entql.StringP) {
 	f.Where(p.Field(trustcenterentityhistory.FieldName))
+}
+
+// WhereEntityTypeID applies the entql string predicate on the entity_type_id field.
+func (f *TrustcenterEntityHistoryFilter) WhereEntityTypeID(p entql.StringP) {
+	f.Where(p.Field(trustcenterentityhistory.FieldEntityTypeID))
 }
 
 // addPredicate implements the predicateAdder interface.

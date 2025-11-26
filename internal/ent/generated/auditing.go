@@ -4879,6 +4879,9 @@ func (_m *TrustcenterEntityHistory) changes(new *TrustcenterEntityHistory) []Cha
 	if !reflect.DeepEqual(_m.Name, new.Name) {
 		changes = append(changes, NewChange(trustcenterentityhistory.FieldName, _m.Name, new.Name))
 	}
+	if !reflect.DeepEqual(_m.EntityTypeID, new.EntityTypeID) {
+		changes = append(changes, NewChange(trustcenterentityhistory.FieldEntityTypeID, _m.EntityTypeID, new.EntityTypeID))
+	}
 	return changes
 }
 

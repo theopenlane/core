@@ -97,8 +97,8 @@ const (
 	EdgeIntegrations = "integrations"
 	// EdgeSecrets holds the string denoting the secrets edge name in mutations.
 	EdgeSecrets = "secrets"
-	// EdgeTrustcenterEntity holds the string denoting the trustcenter_entity edge name in mutations.
-	EdgeTrustcenterEntity = "trustcenter_entity"
+	// EdgeTrustcenterEntities holds the string denoting the trustcenter_entities edge name in mutations.
+	EdgeTrustcenterEntities = "trustcenter_entities"
 	// Table holds the table name of the file in the database.
 	Table = "files"
 	// OrganizationTable is the table that holds the organization relation/edge. The primary key declared below.
@@ -168,11 +168,13 @@ const (
 	// SecretsInverseTable is the table name for the Hush entity.
 	// It exists in this package in order to avoid circular dependency with the "hush" package.
 	SecretsInverseTable = "hushes"
-	// TrustcenterEntityTable is the table that holds the trustcenter_entity relation/edge. The primary key declared below.
-	TrustcenterEntityTable = "trustcenter_entity_files"
-	// TrustcenterEntityInverseTable is the table name for the TrustcenterEntity entity.
+	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
+	TrustcenterEntitiesTable = "trustcenter_entities"
+	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
 	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
-	TrustcenterEntityInverseTable = "trustcenter_entities"
+	TrustcenterEntitiesInverseTable = "trustcenter_entities"
+	// TrustcenterEntitiesColumn is the table column denoting the trustcenter_entities relation/edge.
+	TrustcenterEntitiesColumn = "file_trustcenter_entities"
 )
 
 // Columns holds all SQL columns for file fields.
@@ -257,9 +259,6 @@ var (
 	// SecretsPrimaryKey and SecretsColumn2 are the table columns denoting the
 	// primary key for the secrets relation (M2M).
 	SecretsPrimaryKey = []string{"file_id", "hush_id"}
-	// TrustcenterEntityPrimaryKey and TrustcenterEntityColumn2 are the table columns denoting the
-	// primary key for the trustcenter_entity relation (M2M).
-	TrustcenterEntityPrimaryKey = []string{"trustcenter_entity_id", "file_id"}
 )
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -619,17 +618,17 @@ func BySecrets(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	}
 }
 
-// ByTrustcenterEntityCount orders the results by trustcenter_entity count.
-func ByTrustcenterEntityCount(opts ...sql.OrderTermOption) OrderOption {
+// ByTrustcenterEntitiesCount orders the results by trustcenter_entities count.
+func ByTrustcenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntityStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntitiesStep(), opts...)
 	}
 }
 
-// ByTrustcenterEntity orders the results by trustcenter_entity terms.
-func ByTrustcenterEntity(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByTrustcenterEntities orders the results by trustcenter_entities terms.
+func ByTrustcenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntityStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
 func newOrganizationStep() *sqlgraph.Step {
@@ -723,10 +722,10 @@ func newSecretsStep() *sqlgraph.Step {
 		sqlgraph.Edge(sqlgraph.M2M, false, SecretsTable, SecretsPrimaryKey...),
 	)
 }
-func newTrustcenterEntityStep() *sqlgraph.Step {
+func newTrustcenterEntitiesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(TrustcenterEntityInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.M2M, true, TrustcenterEntityTable, TrustcenterEntityPrimaryKey...),
+		sqlgraph.To(TrustcenterEntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
 	)
 }

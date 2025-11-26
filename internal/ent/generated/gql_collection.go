@@ -18786,16 +18786,92 @@ func (_q *FileQuery) collectField(ctx context.Context, oneNode bool, opCtx *grap
 				*wq = *query
 			})
 
-		case "trustcenterEntity":
+		case "trustcenterEntities":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
 				query = (&TrustcenterEntityClient{config: _q.config}).Query()
 			)
-			if err := query.collectField(ctx, false, opCtx, field, path, mayAddCondition(satisfies, trustcenterentityImplementors)...); err != nil {
+			args := newTrustcenterEntityPaginateArgs(fieldArgs(ctx, new(TrustcenterEntityWhereInput), path...))
+			if err := validateFirstLast(args.first, args.last); err != nil {
+				return fmt.Errorf("validate first and last in path %q: %w", path, err)
+			}
+			pager, err := newTrustcenterEntityPager(args.opts, args.last != nil)
+			if err != nil {
+				return fmt.Errorf("create new pager in path %q: %w", path, err)
+			}
+			if query, err = pager.applyFilter(query); err != nil {
 				return err
 			}
-			_q.WithNamedTrustcenterEntity(alias, func(wq *TrustcenterEntityQuery) {
+			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
+			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
+				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
+				if hasPagination || ignoredEdges {
+					query := query.Clone()
+					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*File) error {
+						ids := make([]driver.Value, len(nodes))
+						for i := range nodes {
+							ids[i] = nodes[i].ID
+						}
+						var v []struct {
+							NodeID string `sql:"file_trustcenter_entities"`
+							Count  int    `sql:"count"`
+						}
+						query.Where(func(s *sql.Selector) {
+							s.Where(sql.InValues(s.C(file.TrustcenterEntitiesColumn), ids...))
+						})
+						if err := query.GroupBy(file.TrustcenterEntitiesColumn).Aggregate(Count()).Scan(ctx, &v); err != nil {
+							return err
+						}
+						m := make(map[string]int, len(v))
+						for i := range v {
+							m[v[i].NodeID] = v[i].Count
+						}
+						for i := range nodes {
+							n := m[nodes[i].ID]
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				} else {
+					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*File) error {
+						for i := range nodes {
+							n := len(nodes[i].Edges.TrustcenterEntities)
+							if nodes[i].Edges.totalCount[13] == nil {
+								nodes[i].Edges.totalCount[13] = make(map[string]int)
+							}
+							nodes[i].Edges.totalCount[13][alias] = n
+						}
+						return nil
+					})
+				}
+			}
+			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
+				continue
+			}
+			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
+				return err
+			}
+			path = append(path, edgesField, nodeField)
+			if field := collectedField(ctx, path...); field != nil {
+				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, trustcenterentityImplementors)...); err != nil {
+					return err
+				}
+			}
+			if limit := paginateLimit(args.first, args.last); limit > 0 {
+				if oneNode {
+					pager.applyOrder(query.Limit(limit))
+				} else {
+					modify := entgql.LimitPerRow(file.TrustcenterEntitiesColumn, limit, pager.orderExpr(query))
+					query.modifiers = append(query.modifiers, modify)
+				}
+			} else {
+				query = pager.applyOrder(query)
+			}
+			_q.WithNamedTrustcenterEntities(alias, func(wq *TrustcenterEntityQuery) {
 				*wq = *query
 			})
 		case "createdAt":
@@ -63731,98 +63807,20 @@ func (_q *TrustcenterEntityQuery) collectField(ctx context.Context, oneNode bool
 				fieldSeen[trustcenterentity.FieldTrustCenterID] = struct{}{}
 			}
 
-		case "files":
+		case "entityType":
 			var (
 				alias = field.Alias
 				path  = append(path, alias)
-				query = (&FileClient{config: _q.config}).Query()
+				query = (&EntityTypeClient{config: _q.config}).Query()
 			)
-			args := newFilePaginateArgs(fieldArgs(ctx, new(FileWhereInput), path...))
-			if err := validateFirstLast(args.first, args.last); err != nil {
-				return fmt.Errorf("validate first and last in path %q: %w", path, err)
-			}
-			pager, err := newFilePager(args.opts, args.last != nil)
-			if err != nil {
-				return fmt.Errorf("create new pager in path %q: %w", path, err)
-			}
-			if query, err = pager.applyFilter(query); err != nil {
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, entitytypeImplementors)...); err != nil {
 				return err
 			}
-			ignoredEdges := !hasCollectedField(ctx, append(path, edgesField)...)
-			if hasCollectedField(ctx, append(path, totalCountField)...) || hasCollectedField(ctx, append(path, pageInfoField)...) {
-				hasPagination := args.after != nil || args.first != nil || args.before != nil || args.last != nil
-				if hasPagination || ignoredEdges {
-					query := query.Clone()
-					_q.loadTotal = append(_q.loadTotal, func(ctx context.Context, nodes []*TrustcenterEntity) error {
-						ids := make([]driver.Value, len(nodes))
-						for i := range nodes {
-							ids[i] = nodes[i].ID
-						}
-						var v []struct {
-							NodeID string `sql:"trustcenter_entity_id"`
-							Count  int    `sql:"count"`
-						}
-						query.Where(func(s *sql.Selector) {
-							joinT := sql.Table(trustcenterentity.FilesTable)
-							s.Join(joinT).On(s.C(file.FieldID), joinT.C(trustcenterentity.FilesPrimaryKey[1]))
-							s.Where(sql.InValues(joinT.C(trustcenterentity.FilesPrimaryKey[0]), ids...))
-							s.Select(joinT.C(trustcenterentity.FilesPrimaryKey[0]), sql.Count("*"))
-							s.GroupBy(joinT.C(trustcenterentity.FilesPrimaryKey[0]))
-						})
-						if err := query.Select().Scan(ctx, &v); err != nil {
-							return err
-						}
-						m := make(map[string]int, len(v))
-						for i := range v {
-							m[v[i].NodeID] = v[i].Count
-						}
-						for i := range nodes {
-							n := m[nodes[i].ID]
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[2][alias] = n
-						}
-						return nil
-					})
-				} else {
-					_q.loadTotal = append(_q.loadTotal, func(_ context.Context, nodes []*TrustcenterEntity) error {
-						for i := range nodes {
-							n := len(nodes[i].Edges.Files)
-							if nodes[i].Edges.totalCount[2] == nil {
-								nodes[i].Edges.totalCount[2] = make(map[string]int)
-							}
-							nodes[i].Edges.totalCount[2][alias] = n
-						}
-						return nil
-					})
-				}
+			_q.withEntityType = query
+			if _, ok := fieldSeen[trustcenterentity.FieldEntityTypeID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentity.FieldEntityTypeID)
+				fieldSeen[trustcenterentity.FieldEntityTypeID] = struct{}{}
 			}
-			if ignoredEdges || (args.first != nil && *args.first == 0) || (args.last != nil && *args.last == 0) {
-				continue
-			}
-			if query, err = pager.applyCursors(query, args.after, args.before); err != nil {
-				return err
-			}
-			path = append(path, edgesField, nodeField)
-			if field := collectedField(ctx, path...); field != nil {
-				if err := query.collectField(ctx, false, opCtx, *field, path, mayAddCondition(satisfies, fileImplementors)...); err != nil {
-					return err
-				}
-			}
-			if limit := paginateLimit(args.first, args.last); limit > 0 {
-				if oneNode {
-					pager.applyOrder(query.Limit(limit))
-				} else {
-					modify := entgql.LimitPerRow(trustcenterentity.FilesPrimaryKey[0], limit, pager.orderExpr(query))
-					query.modifiers = append(query.modifiers, modify)
-				}
-			} else {
-				query = pager.applyOrder(query)
-			}
-			_q.WithNamedFiles(alias, func(wq *FileQuery) {
-				*wq = *query
-			})
 		case "createdAt":
 			if _, ok := fieldSeen[trustcenterentity.FieldCreatedAt]; !ok {
 				selectedFields = append(selectedFields, trustcenterentity.FieldCreatedAt)
@@ -63862,6 +63860,11 @@ func (_q *TrustcenterEntityQuery) collectField(ctx context.Context, oneNode bool
 			if _, ok := fieldSeen[trustcenterentity.FieldName]; !ok {
 				selectedFields = append(selectedFields, trustcenterentity.FieldName)
 				fieldSeen[trustcenterentity.FieldName] = struct{}{}
+			}
+		case "entityTypeID":
+			if _, ok := fieldSeen[trustcenterentity.FieldEntityTypeID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentity.FieldEntityTypeID)
+				fieldSeen[trustcenterentity.FieldEntityTypeID] = struct{}{}
 			}
 		case "id":
 		case "__typename":
@@ -64007,6 +64010,11 @@ func (_q *TrustcenterEntityHistoryQuery) collectField(ctx context.Context, oneNo
 			if _, ok := fieldSeen[trustcenterentityhistory.FieldName]; !ok {
 				selectedFields = append(selectedFields, trustcenterentityhistory.FieldName)
 				fieldSeen[trustcenterentityhistory.FieldName] = struct{}{}
+			}
+		case "entityTypeID":
+			if _, ok := fieldSeen[trustcenterentityhistory.FieldEntityTypeID]; !ok {
+				selectedFields = append(selectedFields, trustcenterentityhistory.FieldEntityTypeID)
+				fieldSeen[trustcenterentityhistory.FieldEntityTypeID] = struct{}{}
 			}
 		case "id":
 		case "__typename":

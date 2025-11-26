@@ -43,7 +43,9 @@ type TrustcenterEntityHistory struct {
 	// The trust center this entity belongs to
 	TrustCenterID string `json:"trust_center_id,omitempty"`
 	// The name of the tag definition
-	Name         string `json:"name,omitempty"`
+	Name string `json:"name,omitempty"`
+	// The entity type for the customer entity
+	EntityTypeID string `json:"entity_type_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -54,7 +56,7 @@ func (*TrustcenterEntityHistory) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case trustcenterentityhistory.FieldOperation:
 			values[i] = new(history.OpType)
-		case trustcenterentityhistory.FieldID, trustcenterentityhistory.FieldRef, trustcenterentityhistory.FieldCreatedBy, trustcenterentityhistory.FieldUpdatedBy, trustcenterentityhistory.FieldDeletedBy, trustcenterentityhistory.FieldLogoFileID, trustcenterentityhistory.FieldURL, trustcenterentityhistory.FieldTrustCenterID, trustcenterentityhistory.FieldName:
+		case trustcenterentityhistory.FieldID, trustcenterentityhistory.FieldRef, trustcenterentityhistory.FieldCreatedBy, trustcenterentityhistory.FieldUpdatedBy, trustcenterentityhistory.FieldDeletedBy, trustcenterentityhistory.FieldLogoFileID, trustcenterentityhistory.FieldURL, trustcenterentityhistory.FieldTrustCenterID, trustcenterentityhistory.FieldName, trustcenterentityhistory.FieldEntityTypeID:
 			values[i] = new(sql.NullString)
 		case trustcenterentityhistory.FieldHistoryTime, trustcenterentityhistory.FieldCreatedAt, trustcenterentityhistory.FieldUpdatedAt, trustcenterentityhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -158,6 +160,12 @@ func (_m *TrustcenterEntityHistory) assignValues(columns []string, values []any)
 			} else if value.Valid {
 				_m.Name = value.String
 			}
+		case trustcenterentityhistory.FieldEntityTypeID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field entity_type_id", values[i])
+			} else if value.Valid {
+				_m.EntityTypeID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -234,6 +242,9 @@ func (_m *TrustcenterEntityHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(_m.Name)
+	builder.WriteString(", ")
+	builder.WriteString("entity_type_id=")
+	builder.WriteString(_m.EntityTypeID)
 	builder.WriteByte(')')
 	return builder.String()
 }

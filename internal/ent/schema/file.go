@@ -118,7 +118,7 @@ func (f File) Edges() []ent.Edge {
 		defaultEdgeFrom(f, TrustCenterSetting{}),
 		defaultEdgeToWithPagination(f, Integration{}),
 		defaultEdgeToWithPagination(f, Hush{}),
-		defaultEdgeFrom(f, TrustcenterEntity{}),
+		defaultEdgeToWithPagination(f, TrustcenterEntity{}),
 	}
 }
 

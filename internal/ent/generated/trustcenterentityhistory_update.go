@@ -143,26 +143,6 @@ func (_u *TrustcenterEntityHistoryUpdate) ClearURL() *TrustcenterEntityHistoryUp
 	return _u
 }
 
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustcenterEntityHistoryUpdate) SetTrustCenterID(v string) *TrustcenterEntityHistoryUpdate {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdate) SetNillableTrustCenterID(v *string) *TrustcenterEntityHistoryUpdate {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustcenterEntityHistoryUpdate) ClearTrustCenterID() *TrustcenterEntityHistoryUpdate {
-	_u.mutation.ClearTrustCenterID()
-	return _u
-}
-
 // Mutation returns the TrustcenterEntityHistoryMutation object of the builder.
 func (_u *TrustcenterEntityHistoryUpdate) Mutation() *TrustcenterEntityHistoryMutation {
 	return _u.mutation
@@ -270,11 +250,11 @@ func (_u *TrustcenterEntityHistoryUpdate) sqlSave(ctx context.Context) (_node in
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterentityhistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldTrustCenterID, field.TypeString)
+	}
+	if _u.mutation.EntityTypeIDCleared() {
+		_spec.ClearField(trustcenterentityhistory.FieldEntityTypeID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -409,26 +389,6 @@ func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableURL(v *string) *Trustcen
 // ClearURL clears the value of the "url" field.
 func (_u *TrustcenterEntityHistoryUpdateOne) ClearURL() *TrustcenterEntityHistoryUpdateOne {
 	_u.mutation.ClearURL()
-	return _u
-}
-
-// SetTrustCenterID sets the "trust_center_id" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetTrustCenterID(v string) *TrustcenterEntityHistoryUpdateOne {
-	_u.mutation.SetTrustCenterID(v)
-	return _u
-}
-
-// SetNillableTrustCenterID sets the "trust_center_id" field if the given value is not nil.
-func (_u *TrustcenterEntityHistoryUpdateOne) SetNillableTrustCenterID(v *string) *TrustcenterEntityHistoryUpdateOne {
-	if v != nil {
-		_u.SetTrustCenterID(*v)
-	}
-	return _u
-}
-
-// ClearTrustCenterID clears the value of the "trust_center_id" field.
-func (_u *TrustcenterEntityHistoryUpdateOne) ClearTrustCenterID() *TrustcenterEntityHistoryUpdateOne {
-	_u.mutation.ClearTrustCenterID()
 	return _u
 }
 
@@ -569,11 +529,11 @@ func (_u *TrustcenterEntityHistoryUpdateOne) sqlSave(ctx context.Context) (_node
 	if _u.mutation.URLCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldURL, field.TypeString)
 	}
-	if value, ok := _u.mutation.TrustCenterID(); ok {
-		_spec.SetField(trustcenterentityhistory.FieldTrustCenterID, field.TypeString, value)
-	}
 	if _u.mutation.TrustCenterIDCleared() {
 		_spec.ClearField(trustcenterentityhistory.FieldTrustCenterID, field.TypeString)
+	}
+	if _u.mutation.EntityTypeIDCleared() {
+		_spec.ClearField(trustcenterentityhistory.FieldEntityTypeID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustcenterEntityHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

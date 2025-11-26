@@ -118,8 +118,8 @@ type FileEdges struct {
 	Integrations []*Integration `json:"integrations,omitempty"`
 	// Secrets holds the value of the secrets edge.
 	Secrets []*Hush `json:"secrets,omitempty"`
-	// TrustcenterEntity holds the value of the trustcenter_entity edge.
-	TrustcenterEntity []*TrustcenterEntity `json:"trustcenter_entity,omitempty"`
+	// TrustcenterEntities holds the value of the trustcenter_entities edge.
+	TrustcenterEntities []*TrustcenterEntity `json:"trustcenter_entities,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [14]bool
@@ -139,7 +139,7 @@ type FileEdges struct {
 	namedTrustCenterSetting  map[string][]*TrustCenterSetting
 	namedIntegrations        map[string][]*Integration
 	namedSecrets             map[string][]*Hush
-	namedTrustcenterEntity   map[string][]*TrustcenterEntity
+	namedTrustcenterEntities map[string][]*TrustcenterEntity
 }
 
 // OrganizationOrErr returns the Organization value or an error if the edge
@@ -259,13 +259,13 @@ func (e FileEdges) SecretsOrErr() ([]*Hush, error) {
 	return nil, &NotLoadedError{edge: "secrets"}
 }
 
-// TrustcenterEntityOrErr returns the TrustcenterEntity value or an error if the edge
+// TrustcenterEntitiesOrErr returns the TrustcenterEntities value or an error if the edge
 // was not loaded in eager-loading.
-func (e FileEdges) TrustcenterEntityOrErr() ([]*TrustcenterEntity, error) {
+func (e FileEdges) TrustcenterEntitiesOrErr() ([]*TrustcenterEntity, error) {
 	if e.loadedTypes[13] {
-		return e.TrustcenterEntity, nil
+		return e.TrustcenterEntities, nil
 	}
-	return nil, &NotLoadedError{edge: "trustcenter_entity"}
+	return nil, &NotLoadedError{edge: "trustcenter_entities"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -620,9 +620,9 @@ func (_m *File) QuerySecrets() *HushQuery {
 	return NewFileClient(_m.config).QuerySecrets(_m)
 }
 
-// QueryTrustcenterEntity queries the "trustcenter_entity" edge of the File entity.
-func (_m *File) QueryTrustcenterEntity() *TrustcenterEntityQuery {
-	return NewFileClient(_m.config).QueryTrustcenterEntity(_m)
+// QueryTrustcenterEntities queries the "trustcenter_entities" edge of the File entity.
+func (_m *File) QueryTrustcenterEntities() *TrustcenterEntityQuery {
+	return NewFileClient(_m.config).QueryTrustcenterEntities(_m)
 }
 
 // Update returns a builder for updating this File.
@@ -1053,27 +1053,27 @@ func (_m *File) appendNamedSecrets(name string, edges ...*Hush) {
 	}
 }
 
-// NamedTrustcenterEntity returns the TrustcenterEntity named value or an error if the edge was not
+// NamedTrustcenterEntities returns the TrustcenterEntities named value or an error if the edge was not
 // loaded in eager-loading with this name.
-func (_m *File) NamedTrustcenterEntity(name string) ([]*TrustcenterEntity, error) {
-	if _m.Edges.namedTrustcenterEntity == nil {
+func (_m *File) NamedTrustcenterEntities(name string) ([]*TrustcenterEntity, error) {
+	if _m.Edges.namedTrustcenterEntities == nil {
 		return nil, &NotLoadedError{edge: name}
 	}
-	nodes, ok := _m.Edges.namedTrustcenterEntity[name]
+	nodes, ok := _m.Edges.namedTrustcenterEntities[name]
 	if !ok {
 		return nil, &NotLoadedError{edge: name}
 	}
 	return nodes, nil
 }
 
-func (_m *File) appendNamedTrustcenterEntity(name string, edges ...*TrustcenterEntity) {
-	if _m.Edges.namedTrustcenterEntity == nil {
-		_m.Edges.namedTrustcenterEntity = make(map[string][]*TrustcenterEntity)
+func (_m *File) appendNamedTrustcenterEntities(name string, edges ...*TrustcenterEntity) {
+	if _m.Edges.namedTrustcenterEntities == nil {
+		_m.Edges.namedTrustcenterEntities = make(map[string][]*TrustcenterEntity)
 	}
 	if len(edges) == 0 {
-		_m.Edges.namedTrustcenterEntity[name] = []*TrustcenterEntity{}
+		_m.Edges.namedTrustcenterEntities[name] = []*TrustcenterEntity{}
 	} else {
-		_m.Edges.namedTrustcenterEntity[name] = append(_m.Edges.namedTrustcenterEntity[name], edges...)
+		_m.Edges.namedTrustcenterEntities[name] = append(_m.Edges.namedTrustcenterEntities[name], edges...)
 	}
 }
 
