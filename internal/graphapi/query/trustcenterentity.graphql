@@ -7,6 +7,7 @@ mutation CreateBulkCSVTrustcenterEntity($input: Upload!) {
       id
       name
       trustCenterID
+      entityTypeID
       updatedAt
       updatedBy
       url
@@ -22,6 +23,7 @@ mutation CreateBulkTrustcenterEntity($input: [CreateTrustcenterEntityInput!]) {
       id
       name
       trustCenterID
+      entityTypeID
       updatedAt
       updatedBy
       url
@@ -37,6 +39,7 @@ mutation CreateTrustcenterEntity($input: CreateTrustcenterEntityInput!) {
       id
       name
       trustCenterID
+      entityTypeID
       updatedAt
       updatedBy
       url
@@ -66,6 +69,7 @@ query GetAllTrustcenterEntities {
         id
         name
         trustCenterID
+        entityTypeID
         updatedAt
         updatedBy
         url
@@ -80,6 +84,7 @@ query GetTrustcenterEntityByID($trustcenterEntityId: ID!) {
     id
     name
     trustCenterID
+    entityTypeID
     updatedAt
     updatedBy
     url
@@ -102,6 +107,7 @@ query GetTrustcenterEntities($first: Int, $last: Int, $where: TrustcenterEntityW
         id
         name
         trustCenterID
+        entityTypeID
         updatedAt
         updatedBy
         url
@@ -117,6 +123,7 @@ mutation UpdateTrustcenterEntity($updateTrustcenterEntityId: ID!, $input: Update
       id
       name
       trustCenterID
+      entityTypeID
       updatedAt
       updatedBy
       url
