@@ -496,7 +496,7 @@ func (ec *executionContext) marshalNScheduledJobBulkCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNScheduledJobBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -510,7 +510,7 @@ func (ec *executionContext) marshalNScheduledJobBulkDeletePayload2githubᚗcom�
 func (ec *executionContext) marshalNScheduledJobBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -524,7 +524,7 @@ func (ec *executionContext) marshalNScheduledJobCreatePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNScheduledJobCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -538,7 +538,7 @@ func (ec *executionContext) marshalNScheduledJobDeletePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNScheduledJobDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -552,7 +552,7 @@ func (ec *executionContext) marshalNScheduledJobUpdatePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNScheduledJobUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐScheduledJobUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ScheduledJobUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

@@ -476,7 +476,7 @@ func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2githubᚗcom
 func (ec *executionContext) marshalNCustomTypeEnumBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -490,7 +490,7 @@ func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNCustomTypeEnumCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -504,7 +504,7 @@ func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNCustomTypeEnumDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -518,7 +518,7 @@ func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNCustomTypeEnumUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐCustomTypeEnumUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.CustomTypeEnumUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

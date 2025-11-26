@@ -323,7 +323,7 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContext(ctx context.Context, sel ast.SelectionSet, v *models.SearchContext) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -333,7 +333,7 @@ func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlane�
 func (ec *executionContext) marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchSnippet(ctx context.Context, sel ast.SelectionSet, v *models.SearchSnippet) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

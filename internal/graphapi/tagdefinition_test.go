@@ -485,32 +485,32 @@ func TestMutationDeleteTagDefinition(t *testing.T) {
 			ctx:         testUser2.UserCtx,
 			expectedErr: notFoundErrorMsg,
 		},
-	{
-		name:        "view only user cannot delete, not authorized",
-		idToDelete:  tagDefinition1.ID,
-		client:      suite.client.api,
-		ctx:         viewOnlyUser.UserCtx,
-		expectedErr: notAuthorizedErrorMsg,
-	},
-	{
-		name:       "happy path, delete tagDefinition1",
-		idToDelete: tagDefinition1.ID,
-		client:     suite.client.api,
-		ctx:        testUser1.UserCtx,
-	},
-	{
-		name:        "already deleted, not found",
-		idToDelete:  tagDefinition1.ID,
-		client:      suite.client.api,
-		ctx:         testUser1.UserCtx,
-		expectedErr: "not found",
-	},
-	{
-		name:       "happy path, delete tagDefinition2",
-		idToDelete: tagDefinition2.ID,
-		client:     suite.client.api,
-		ctx:        testUser1.UserCtx,
-	},
+		{
+			name:        "view only user cannot delete, not authorized",
+			idToDelete:  tagDefinition1.ID,
+			client:      suite.client.api,
+			ctx:         viewOnlyUser.UserCtx,
+			expectedErr: notAuthorizedErrorMsg,
+		},
+		{
+			name:       "happy path, delete tagDefinition1",
+			idToDelete: tagDefinition1.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
+		{
+			name:        "already deleted, not found",
+			idToDelete:  tagDefinition1.ID,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "not found",
+		},
+		{
+			name:       "happy path, delete tagDefinition2",
+			idToDelete: tagDefinition2.ID,
+			client:     suite.client.api,
+			ctx:        testUser1.UserCtx,
+		},
 		{
 			name:       "happy path, delete using personal access token",
 			idToDelete: tagDefinition3.ID,
@@ -556,14 +556,16 @@ func TestMutationDeleteTagDefinitionInUse(t *testing.T) {
 	}).MustNew(testUser1.UserCtx, t)
 
 	// create a workflow definition that uses the tag definition
-	workflowResp, err := suite.client.api.CreateWorkflowDefinition(testUser1.UserCtx, testclient.CreateWorkflowDefinitionInput{
-		Name:             "Test Workflow",
-		WorkflowKind:     enums.WorkflowKindApproval,
-		SchemaType:       "control",
-		TagDefinitionIDs: []string{tagDef.ID},
-	})
+	ctx := setContext(testUser1.UserCtx, suite.client.db)
+	workflowResp, err := suite.client.db.WorkflowDefinition.Create().
+		SetName("Test Workflow").
+		SetWorkflowKind(enums.WorkflowKindApproval).
+		SetSchemaType("control").
+		AddTagDefinitionIDs(tagDef.ID).
+		Save(ctx)
 	assert.NilError(t, err)
-	workflowID := workflowResp.CreateWorkflowDefinition.WorkflowDefinition.ID
+
+	workflowID := workflowResp.ID
 
 	t.Run("delete tag definition in use by workflow definition", func(t *testing.T) {
 		_, err := suite.client.api.DeleteTagDefinition(testUser1.UserCtx, tagDef.ID)

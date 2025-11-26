@@ -608,7 +608,7 @@ func (ec *executionContext) marshalNReviewBulkCreatePayload2githubᚗcomᚋtheop
 func (ec *executionContext) marshalNReviewBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -622,7 +622,7 @@ func (ec *executionContext) marshalNReviewCreatePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNReviewCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -636,7 +636,7 @@ func (ec *executionContext) marshalNReviewDeletePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNReviewDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -650,7 +650,7 @@ func (ec *executionContext) marshalNReviewUpdatePayload2githubᚗcomᚋtheopenla
 func (ec *executionContext) marshalNReviewUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐReviewUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.ReviewUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

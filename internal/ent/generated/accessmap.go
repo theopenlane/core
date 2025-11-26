@@ -2814,7 +2814,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 }, "tag_definitions": {
 	ObjectType:      "tag_definition",
 	SkipEditCheck:   true,
-	CheckViewAccess: false,
+	CheckViewAccess: true,
 }, "groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   false,

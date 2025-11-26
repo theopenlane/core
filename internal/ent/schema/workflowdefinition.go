@@ -99,7 +99,7 @@ func (WorkflowDefinition) Edges() []ent.Edge {
 			edgeSchema: TagDefinition{},
 			comment:    "Tags this workflow targets for scoping",
 			annotations: []schema.Annotation{
-				accessmap.EdgeNoAuthCheck(),
+				accessmap.EdgeViewCheck(TagDefinition{}.Name()),
 			},
 		}),
 		edgeToWithPagination(&edgeDefinition{

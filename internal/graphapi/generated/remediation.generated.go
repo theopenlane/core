@@ -614,7 +614,7 @@ func (ec *executionContext) marshalNRemediationBulkCreatePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNRemediationBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -628,7 +628,7 @@ func (ec *executionContext) marshalNRemediationCreatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNRemediationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -642,7 +642,7 @@ func (ec *executionContext) marshalNRemediationDeletePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNRemediationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -656,7 +656,7 @@ func (ec *executionContext) marshalNRemediationUpdatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNRemediationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐRemediationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.RemediationUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
