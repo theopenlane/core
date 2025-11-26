@@ -9,7 +9,9 @@ import (
 
 	"github.com/theopenlane/entx"
 
+	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/models"
@@ -77,8 +79,12 @@ func (TrustcenterEntity) Fields() []ent.Field {
 // Mixin of the TrustcenterEntity
 func (t TrustcenterEntity) Mixin() []ent.Mixin {
 	return mixinConfig{
-		excludeTags:      true,
-		additionalMixins: []ent.Mixin{},
+		excludeTags: true,
+		additionalMixins: []ent.Mixin{
+			newObjectOwnedMixin[generated.TrustcenterEntity](t,
+				withParents(TrustCenter{}),
+			),
+		},
 	}.getMixins(t)
 }
 
@@ -125,7 +131,9 @@ func (TrustcenterEntity) Hooks() []ent.Hook {
 
 // Interceptors of the TrustcenterEntity
 func (TrustcenterEntity) Interceptors() []ent.Interceptor {
-	return []ent.Interceptor{}
+	return []ent.Interceptor{
+		interceptors.InterceptorTrustCenterChild(),
+	}
 }
 
 // Modules this schema has access to

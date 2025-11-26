@@ -566,6 +566,16 @@ type trust_center_doc
     define nda_signed: nda_signed from parent
     define member: member from parent
 
+type trustcenter_entity
+  relations
+    define can_view: [user, service, user:*, service:*] or parent_viewer
+    define can_edit: [user, service] or parent_editor
+    define can_delete: [user, service] or parent_deleter
+    define parent_viewer: can_delete or can_edit or can_view from parent
+    define parent_editor: can_delete or can_edit from parent
+    define parent_deleter:  can_delete from parent
+    define parent: [trust_center, user, service]
+
 type trust_center_watermark_config
   relations
     define can_view: [user, service] or parent_viewer

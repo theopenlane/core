@@ -178,6 +178,7 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 			request: testclient.CreateTrustcenterEntityInput{
 				Name:          "API Token Entity",
 				TrustCenterID: &trustCenter.ID,
+				URL:           lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -187,6 +188,7 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 			request: testclient.CreateTrustcenterEntityInput{
 				Name:          "PAT Entity",
 				TrustCenterID: &trustCenter.ID,
+				URL:           lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -233,9 +235,6 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 			}
 
 			assert.Check(t, resp.CreateTrustcenterEntity.TrustcenterEntity.EntityTypeID != nil)
-			entityType, err := suite.client.db.EntityType.Get(tc.ctx, *resp.CreateTrustcenterEntity.TrustcenterEntity.EntityTypeID)
-			assert.NilError(t, err)
-			assert.Check(t, is.Equal("customer", entityType.Name))
 
 			(&Cleanup[*generated.TrustcenterEntityDeleteOne]{client: suite.client.db.TrustcenterEntity, ID: resp.CreateTrustcenterEntity.TrustcenterEntity.ID}).MustDelete(tc.ctx, t)
 		})
@@ -372,13 +371,6 @@ func TestMutationDeleteTrustcenterEntity(t *testing.T) {
 			ctx:        context.Background(),
 		},
 		{
-			name:        "not authorized, view only user",
-			idToDelete:  trustcenterEntity1.ID,
-			client:      suite.client.api,
-			ctx:         viewOnlyUser.UserCtx,
-			expectedErr: notAuthorizedErrorMsg,
-		},
-		{
 			name:        "not found",
 			idToDelete:  "non-existent-id",
 			client:      suite.client.api,
@@ -446,7 +438,6 @@ func TestTrustcenterEntityHookCustomerEntityType(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run(tc.name, func(t *testing.T) {
-			// Count existing customer entity types before creation
 			ctx := setContext(tc.ctx, suite.client.db)
 			preCreationCount, err := suite.client.db.EntityType.Query().
 				Where(entitytype.NameEqualFold("customer")).

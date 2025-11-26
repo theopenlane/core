@@ -8945,6 +8945,7 @@ func init() {
 	trustcenterentityMixinHooks0 := trustcenterentityMixin[0].Hooks()
 	trustcenterentityMixinHooks1 := trustcenterentityMixin[1].Hooks()
 	trustcenterentityMixinHooks2 := trustcenterentityMixin[2].Hooks()
+	trustcenterentityMixinHooks5 := trustcenterentityMixin[5].Hooks()
 	trustcenterentityHooks := schema.TrustcenterEntity{}.Hooks()
 
 	trustcenterentity.Hooks[1] = trustcenterentityMixinHooks0[0]
@@ -8953,11 +8954,17 @@ func init() {
 
 	trustcenterentity.Hooks[3] = trustcenterentityMixinHooks2[0]
 
-	trustcenterentity.Hooks[4] = trustcenterentityHooks[0]
+	trustcenterentity.Hooks[4] = trustcenterentityMixinHooks5[0]
+
+	trustcenterentity.Hooks[5] = trustcenterentityHooks[0]
 	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
 	trustcenterentityMixinInters2 := trustcenterentityMixin[2].Interceptors()
+	trustcenterentityMixinInters5 := trustcenterentityMixin[5].Interceptors()
+	trustcenterentityInters := schema.TrustcenterEntity{}.Interceptors()
 	trustcenterentity.Interceptors[0] = trustcenterentityMixinInters1[0]
 	trustcenterentity.Interceptors[1] = trustcenterentityMixinInters2[0]
+	trustcenterentity.Interceptors[2] = trustcenterentityMixinInters5[0]
+	trustcenterentity.Interceptors[3] = trustcenterentityInters[0]
 	trustcenterentityMixinFields0 := trustcenterentityMixin[0].Fields()
 	_ = trustcenterentityMixinFields0
 	trustcenterentityMixinFields3 := trustcenterentityMixin[3].Fields()
