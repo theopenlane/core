@@ -1,0 +1,15 @@
+-- +goose Up
+-- create "trustcenter_entity_history" table
+CREATE TABLE "trustcenter_entity_history" ("id" character varying NOT NULL, "history_time" timestamptz NOT NULL, "ref" character varying NULL, "operation" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "logo_file_id" character varying NULL, "url" character varying NULL, "trust_center_id" character varying NULL, "name" character varying NOT NULL, "entity_type_id" character varying NULL, PRIMARY KEY ("id"));
+-- create index "trustcenterentityhistory_history_time" to table: "trustcenter_entity_history"
+CREATE INDEX "trustcenterentityhistory_history_time" ON "trustcenter_entity_history" ("history_time");
+-- create "trustcenter_entities" table
+CREATE TABLE "trustcenter_entities" ("id" character varying NOT NULL, "created_at" timestamptz NULL, "updated_at" timestamptz NULL, "created_by" character varying NULL, "updated_by" character varying NULL, "deleted_at" timestamptz NULL, "deleted_by" character varying NULL, "url" character varying NULL, "name" character varying NOT NULL, "file_trustcenter_entities" character varying NULL, "trust_center_trustcenter_entities" character varying NULL, "logo_file_id" character varying NULL, "trust_center_id" character varying NULL, "entity_type_id" character varying NULL, PRIMARY KEY ("id"), CONSTRAINT "trustcenter_entities_entity_types_entity_type" FOREIGN KEY ("entity_type_id") REFERENCES "entity_types" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, CONSTRAINT "trustcenter_entities_files_logo_file" FOREIGN KEY ("logo_file_id") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, CONSTRAINT "trustcenter_entities_files_trustcenter_entities" FOREIGN KEY ("file_trustcenter_entities") REFERENCES "files" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, CONSTRAINT "trustcenter_entities_trust_centers_trust_center" FOREIGN KEY ("trust_center_id") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL, CONSTRAINT "trustcenter_entities_trust_centers_trustcenter_entities" FOREIGN KEY ("trust_center_trustcenter_entities") REFERENCES "trust_centers" ("id") ON UPDATE NO ACTION ON DELETE SET NULL);
+
+-- +goose Down
+-- reverse: create "trustcenter_entities" table
+DROP TABLE "trustcenter_entities";
+-- reverse: create index "trustcenterentityhistory_history_time" to table: "trustcenter_entity_history"
+DROP INDEX "trustcenterentityhistory_history_time";
+-- reverse: create "trustcenter_entity_history" table
+DROP TABLE "trustcenter_entity_history";
