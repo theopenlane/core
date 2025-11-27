@@ -367,10 +367,10 @@ type MutationResolver interface {
 	DeleteTrustCenterDoc(ctx context.Context, id string) (*model.TrustCenterDocDeletePayload, error)
 	DeleteBulkTrustCenterDoc(ctx context.Context, ids []string) (*model.TrustCenterDocBulkDeletePayload, error)
 	CreateTrustCenterDomain(ctx context.Context, input model.CreateTrustCenterDomainInput) (*model.TrustCenterDomainCreatePayload, error)
-	CreateTrustcenterEntity(ctx context.Context, input generated.CreateTrustcenterEntityInput) (*model.TrustcenterEntityCreatePayload, error)
+	CreateTrustcenterEntity(ctx context.Context, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityCreatePayload, error)
 	CreateBulkTrustcenterEntity(ctx context.Context, input []*generated.CreateTrustcenterEntityInput) (*model.TrustcenterEntityBulkCreatePayload, error)
 	CreateBulkCSVTrustcenterEntity(ctx context.Context, input graphql.Upload) (*model.TrustcenterEntityBulkCreatePayload, error)
-	UpdateTrustcenterEntity(ctx context.Context, id string, input generated.UpdateTrustcenterEntityInput) (*model.TrustcenterEntityUpdatePayload, error)
+	UpdateTrustcenterEntity(ctx context.Context, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) (*model.TrustcenterEntityUpdatePayload, error)
 	DeleteTrustcenterEntity(ctx context.Context, id string) (*model.TrustcenterEntityDeletePayload, error)
 	CreateTrustCenterNda(ctx context.Context, input model.CreateTrustCenterNDAInput, templateFiles []*graphql.Upload) (*model.TrustCenterNDACreatePayload, error)
 	UpdateTrustCenterNda(ctx context.Context, id string, templateFiles []*graphql.Upload) (*model.TrustCenterNDAUpdatePayload, error)
@@ -2645,6 +2645,11 @@ func (ec *executionContext) field_Mutation_createTrustcenterEntity_args(ctx cont
 		return nil, err
 	}
 	args["input"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg1
 	return args, nil
 }
 
@@ -5523,6 +5528,11 @@ func (ec *executionContext) field_Mutation_updateTrustcenterEntity_args(ctx cont
 		return nil, err
 	}
 	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "logoFile", ec.unmarshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUpload)
+	if err != nil {
+		return nil, err
+	}
+	args["logoFile"] = arg2
 	return args, nil
 }
 
@@ -22087,7 +22097,7 @@ func (ec *executionContext) _Mutation_createTrustcenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_createTrustcenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().CreateTrustcenterEntity(ctx, fc.Args["input"].(generated.CreateTrustcenterEntityInput))
+			return ec.resolvers.Mutation().CreateTrustcenterEntity(ctx, fc.Args["input"].(generated.CreateTrustcenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustcenterEntityCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityCreatePayload,
@@ -22222,7 +22232,7 @@ func (ec *executionContext) _Mutation_updateTrustcenterEntity(ctx context.Contex
 		ec.fieldContext_Mutation_updateTrustcenterEntity,
 		func(ctx context.Context) (any, error) {
 			fc := graphql.GetFieldContext(ctx)
-			return ec.resolvers.Mutation().UpdateTrustcenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustcenterEntityInput))
+			return ec.resolvers.Mutation().UpdateTrustcenterEntity(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateTrustcenterEntityInput), fc.Args["logoFile"].(*graphql.Upload))
 		},
 		nil,
 		ec.marshalNTrustcenterEntityUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustcenterEntityUpdatePayload,

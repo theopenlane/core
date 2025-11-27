@@ -44089,6 +44089,11 @@ type Mutation {
 		values of the trustcenterEntity
 		"""
 		input: CreateTrustcenterEntityInput!
+
+		"""
+		logo file for the trustcenterEntity
+		"""
+		logoFile: Upload
 	): TrustcenterEntityCreatePayload!
 	"""
 	Create multiple new trustcenterEntitys
@@ -44121,6 +44126,11 @@ type Mutation {
 		New values for the trustcenterEntity
 		"""
 		input: UpdateTrustcenterEntityInput!
+
+		"""
+		logo file for the trustcenterEntity
+		"""
+		logoFile: Upload
 	): TrustcenterEntityUpdatePayload!
 	"""
 	Delete an existing trustcenterEntity

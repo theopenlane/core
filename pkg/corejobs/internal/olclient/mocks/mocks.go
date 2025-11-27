@@ -15112,12 +15112,12 @@ func (_c *MockOpenlaneGraphClient_CreateTrustCenterWatermarkConfig_Call) RunAndR
 }
 
 // CreateTrustcenterEntity provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) CreateTrustcenterEntity(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error) {
+func (_mock *MockOpenlaneGraphClient) CreateTrustcenterEntity(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, input, interceptors)
+		tmpRet = _mock.Called(ctx, input, logoFile, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, input)
+		tmpRet = _mock.Called(ctx, input, logoFile)
 	}
 	ret := tmpRet
 
@@ -15127,18 +15127,18 @@ func (_mock *MockOpenlaneGraphClient) CreateTrustcenterEntity(ctx context.Contex
 
 	var r0 *openlaneclient.CreateTrustcenterEntity
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error)); ok {
-		return returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error)); ok {
+		return returnFunc(ctx, input, logoFile, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustcenterEntity); ok {
-		r0 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.CreateTrustcenterEntity); ok {
+		r0 = returnFunc(ctx, input, logoFile, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.CreateTrustcenterEntity)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, openlaneclient.CreateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, input, logoFile, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -15153,13 +15153,14 @@ type MockOpenlaneGraphClient_CreateTrustcenterEntity_Call struct {
 // CreateTrustcenterEntity is a helper method to define mock.On call
 //   - ctx context.Context
 //   - input openlaneclient.CreateTrustcenterEntityInput
+//   - logoFile *graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustcenterEntity(ctx interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) CreateTrustcenterEntity(ctx interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
 	return &MockOpenlaneGraphClient_CreateTrustcenterEntity_Call{Call: _e.mock.On("CreateTrustcenterEntity",
-		append([]interface{}{ctx, input}, interceptors...)...)}
+		append([]interface{}{ctx, input, logoFile}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
+func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) Run(run func(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -15169,16 +15170,21 @@ func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) Run(run func(ctx
 		if args[1] != nil {
 			arg1 = args[1].(openlaneclient.CreateTrustcenterEntityInput)
 		}
-		var arg2 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 2 {
-			variadicArgs = args[2].([]clientv2.RequestInterceptor)
+		var arg2 *graphql.Upload
+		if args[2] != nil {
+			arg2 = args[2].(*graphql.Upload)
 		}
-		arg2 = variadicArgs
+		var arg3 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 3 {
+			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		}
+		arg3 = variadicArgs
 		run(
 			arg0,
 			arg1,
-			arg2...,
+			arg2,
+			arg3...,
 		)
 	})
 	return _c
@@ -15189,7 +15195,7 @@ func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) Return(createTru
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error)) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
+func (_c *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call) RunAndReturn(run func(ctx context.Context, input openlaneclient.CreateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.CreateTrustcenterEntity, error)) *MockOpenlaneGraphClient_CreateTrustcenterEntity_Call {
 	_c.Call.Return(run)
 	return _c
 }
@@ -60091,12 +60097,12 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustCenterWatermarkConfig_Call) RunAndR
 }
 
 // UpdateTrustcenterEntity provides a mock function for the type MockOpenlaneGraphClient
-func (_mock *MockOpenlaneGraphClient) UpdateTrustcenterEntity(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error) {
+func (_mock *MockOpenlaneGraphClient) UpdateTrustcenterEntity(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error) {
 	var tmpRet mock.Arguments
 	if len(interceptors) > 0 {
-		tmpRet = _mock.Called(ctx, updateTrustcenterEntityID, input, interceptors)
+		tmpRet = _mock.Called(ctx, updateTrustcenterEntityID, input, logoFile, interceptors)
 	} else {
-		tmpRet = _mock.Called(ctx, updateTrustcenterEntityID, input)
+		tmpRet = _mock.Called(ctx, updateTrustcenterEntityID, input, logoFile)
 	}
 	ret := tmpRet
 
@@ -60106,18 +60112,18 @@ func (_mock *MockOpenlaneGraphClient) UpdateTrustcenterEntity(ctx context.Contex
 
 	var r0 *openlaneclient.UpdateTrustcenterEntity
 	var r1 error
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error)); ok {
-		return returnFunc(ctx, updateTrustcenterEntityID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error)); ok {
+		return returnFunc(ctx, updateTrustcenterEntityID, input, logoFile, interceptors...)
 	}
-	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustcenterEntity); ok {
-		r0 = returnFunc(ctx, updateTrustcenterEntityID, input, interceptors...)
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateTrustcenterEntity); ok {
+		r0 = returnFunc(ctx, updateTrustcenterEntityID, input, logoFile, interceptors...)
 	} else {
 		if ret.Get(0) != nil {
 			r0 = ret.Get(0).(*openlaneclient.UpdateTrustcenterEntity)
 		}
 	}
-	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, ...clientv2.RequestInterceptor) error); ok {
-		r1 = returnFunc(ctx, updateTrustcenterEntityID, input, interceptors...)
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateTrustcenterEntityInput, *graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateTrustcenterEntityID, input, logoFile, interceptors...)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -60133,13 +60139,14 @@ type MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call struct {
 //   - ctx context.Context
 //   - updateTrustcenterEntityID string
 //   - input openlaneclient.UpdateTrustcenterEntityInput
+//   - logoFile *graphql.Upload
 //   - interceptors ...clientv2.RequestInterceptor
-func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustcenterEntity(ctx interface{}, updateTrustcenterEntityID interface{}, input interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateTrustcenterEntity(ctx interface{}, updateTrustcenterEntityID interface{}, input interface{}, logoFile interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
 	return &MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call{Call: _e.mock.On("UpdateTrustcenterEntity",
-		append([]interface{}{ctx, updateTrustcenterEntityID, input}, interceptors...)...)}
+		append([]interface{}{ctx, updateTrustcenterEntityID, input, logoFile}, interceptors...)...)}
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) Run(run func(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
+func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) Run(run func(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
 	_c.Call.Run(func(args mock.Arguments) {
 		var arg0 context.Context
 		if args[0] != nil {
@@ -60153,17 +60160,22 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) Run(run func(ctx
 		if args[2] != nil {
 			arg2 = args[2].(openlaneclient.UpdateTrustcenterEntityInput)
 		}
-		var arg3 []clientv2.RequestInterceptor
-		var variadicArgs []clientv2.RequestInterceptor
-		if len(args) > 3 {
-			variadicArgs = args[3].([]clientv2.RequestInterceptor)
+		var arg3 *graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].(*graphql.Upload)
 		}
-		arg3 = variadicArgs
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
 		run(
 			arg0,
 			arg1,
 			arg2,
-			arg3...,
+			arg3,
+			arg4...,
 		)
 	})
 	return _c
@@ -60174,7 +60186,7 @@ func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) Return(updateTru
 	return _c
 }
 
-func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) RunAndReturn(run func(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error)) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
+func (_c *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call) RunAndReturn(run func(ctx context.Context, updateTrustcenterEntityID string, input openlaneclient.UpdateTrustcenterEntityInput, logoFile *graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateTrustcenterEntity, error)) *MockOpenlaneGraphClient_UpdateTrustcenterEntity_Call {
 	_c.Call.Return(run)
 	return _c
 }

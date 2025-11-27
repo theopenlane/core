@@ -1944,7 +1944,8 @@ type TrustcenterEntityBuilder struct {
 
 func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustcenterEntity {
 	userCtx := ctx
-	ctx = setContext(ctx, te.client.db)
+	ctx = ent.NewContext(ctx, te.client.db)
+	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
 
 	if te.Name == "" {
 		te.Name = gofakeit.Company()

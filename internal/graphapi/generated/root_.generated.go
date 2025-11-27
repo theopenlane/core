@@ -3603,7 +3603,7 @@ type ComplexityRoot struct {
 		CreateTrustCenterSetting              func(childComplexity int, input generated.CreateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		CreateTrustCenterSubprocessor         func(childComplexity int, input generated.CreateTrustCenterSubprocessorInput) int
 		CreateTrustCenterWatermarkConfig      func(childComplexity int, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
-		CreateTrustcenterEntity               func(childComplexity int, input generated.CreateTrustcenterEntityInput) int
+		CreateTrustcenterEntity               func(childComplexity int, input generated.CreateTrustcenterEntityInput, logoFile *graphql.Upload) int
 		CreateUploadInternalPolicy            func(childComplexity int, internalPolicyFile graphql.Upload, ownerID *string) int
 		CreateUploadProcedure                 func(childComplexity int, procedureFile graphql.Upload, ownerID *string) int
 		CreateUser                            func(childComplexity int, input generated.CreateUserInput, avatarFile *graphql.Upload) int
@@ -3817,7 +3817,7 @@ type ComplexityRoot struct {
 		UpdateTrustCenterSetting              func(childComplexity int, id string, input generated.UpdateTrustCenterSettingInput, logoFile *graphql.Upload, faviconFile *graphql.Upload) int
 		UpdateTrustCenterSubprocessor         func(childComplexity int, id string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateTrustCenterWatermarkConfig      func(childComplexity int, id string, input generated.UpdateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) int
-		UpdateTrustcenterEntity               func(childComplexity int, id string, input generated.UpdateTrustcenterEntityInput) int
+		UpdateTrustcenterEntity               func(childComplexity int, id string, input generated.UpdateTrustcenterEntityInput, logoFile *graphql.Upload) int
 		UpdateUser                            func(childComplexity int, id string, input generated.UpdateUserInput, avatarFile *graphql.Upload) int
 		UpdateUserSetting                     func(childComplexity int, id string, input generated.UpdateUserSettingInput) int
 		UpdateVulnerability                   func(childComplexity int, id string, input generated.UpdateVulnerabilityInput) int
@@ -26439,7 +26439,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateTrustcenterEntity(childComplexity, args["input"].(generated.CreateTrustcenterEntityInput)), true
+		return e.complexity.Mutation.CreateTrustcenterEntity(childComplexity, args["input"].(generated.CreateTrustcenterEntityInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createUploadInternalPolicy":
 		if e.complexity.Mutation.CreateUploadInternalPolicy == nil {
@@ -29002,7 +29002,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateTrustcenterEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustcenterEntityInput)), true
+		return e.complexity.Mutation.UpdateTrustcenterEntity(childComplexity, args["id"].(string), args["input"].(generated.UpdateTrustcenterEntityInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateUser":
 		if e.complexity.Mutation.UpdateUser == nil {
@@ -148010,6 +148010,10 @@ extend type Mutation{
         values of the trustcenterEntity
         """
         input: CreateTrustcenterEntityInput!
+        """
+        logo file for the trustcenterEntity
+        """
+        logoFile: Upload
     ): TrustcenterEntityCreatePayload!
     """
     Create multiple new trustcenterEntitys
@@ -148041,6 +148045,10 @@ extend type Mutation{
         New values for the trustcenterEntity
         """
         input: UpdateTrustcenterEntityInput!
+        """
+        logo file for the trustcenterEntity
+        """
+        logoFile: Upload
     ): TrustcenterEntityUpdatePayload!
     """
     Delete an existing trustcenterEntity

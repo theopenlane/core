@@ -8957,6 +8957,8 @@ func init() {
 	trustcenterentity.Hooks[4] = trustcenterentityMixinHooks5[0]
 
 	trustcenterentity.Hooks[5] = trustcenterentityHooks[0]
+
+	trustcenterentity.Hooks[6] = trustcenterentityHooks[1]
 	trustcenterentityMixinInters1 := trustcenterentityMixin[1].Interceptors()
 	trustcenterentityMixinInters2 := trustcenterentityMixin[2].Interceptors()
 	trustcenterentityMixinInters5 := trustcenterentityMixin[5].Interceptors()

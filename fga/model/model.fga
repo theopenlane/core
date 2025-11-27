@@ -131,6 +131,9 @@ type organization
     define trust_center_subprocessor_creator: [group#member]
     define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
 
+
+    define can_create_trust_center_entity: can_edit
+
     # additional relations
     define user_in_context: [user]
 
@@ -179,7 +182,7 @@ type file
     define tc_doc_deleter: can_delete from tc_doc_parent
     define tc_doc_parent: [trust_center_doc]
 
-    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard]
+    define parent: [user, program, organization, control, procedure, template, document_data, contact, internal_policy, narrative, evidence, note, trust_center_setting, subprocessor, export, trust_center_watermark_config, standard,trustcenter_entity]
 # programs are associated with an organization but do not inherit access from the organization with
 # the exception of the owner of the organization who will have access to all programs
 # the program creator will be made the admin of the program and all other access with be assigned directly
