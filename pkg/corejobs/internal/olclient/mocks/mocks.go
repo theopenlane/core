@@ -55260,6 +55260,101 @@ func (_c *MockOpenlaneGraphClient_UpdateEvidence_Call) RunAndReturn(run func(ctx
 	return _c
 }
 
+// UpdateEvidenceComment provides a mock function for the type MockOpenlaneGraphClient
+func (_mock *MockOpenlaneGraphClient) UpdateEvidenceComment(ctx context.Context, updateEvidenceCommentID string, input openlaneclient.UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateEvidenceComment, error) {
+	var tmpRet mock.Arguments
+	if len(interceptors) > 0 {
+		tmpRet = _mock.Called(ctx, updateEvidenceCommentID, input, noteFiles, interceptors)
+	} else {
+		tmpRet = _mock.Called(ctx, updateEvidenceCommentID, input, noteFiles)
+	}
+	ret := tmpRet
+
+	if len(ret) == 0 {
+		panic("no return value specified for UpdateEvidenceComment")
+	}
+
+	var r0 *openlaneclient.UpdateEvidenceComment
+	var r1 error
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateNoteInput, []*graphql.Upload, ...clientv2.RequestInterceptor) (*openlaneclient.UpdateEvidenceComment, error)); ok {
+		return returnFunc(ctx, updateEvidenceCommentID, input, noteFiles, interceptors...)
+	}
+	if returnFunc, ok := ret.Get(0).(func(context.Context, string, openlaneclient.UpdateNoteInput, []*graphql.Upload, ...clientv2.RequestInterceptor) *openlaneclient.UpdateEvidenceComment); ok {
+		r0 = returnFunc(ctx, updateEvidenceCommentID, input, noteFiles, interceptors...)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*openlaneclient.UpdateEvidenceComment)
+		}
+	}
+	if returnFunc, ok := ret.Get(1).(func(context.Context, string, openlaneclient.UpdateNoteInput, []*graphql.Upload, ...clientv2.RequestInterceptor) error); ok {
+		r1 = returnFunc(ctx, updateEvidenceCommentID, input, noteFiles, interceptors...)
+	} else {
+		r1 = ret.Error(1)
+	}
+	return r0, r1
+}
+
+// MockOpenlaneGraphClient_UpdateEvidenceComment_Call is a *mock.Call that shadows Run/Return methods with type explicit version for method 'UpdateEvidenceComment'
+type MockOpenlaneGraphClient_UpdateEvidenceComment_Call struct {
+	*mock.Call
+}
+
+// UpdateEvidenceComment is a helper method to define mock.On call
+//   - ctx context.Context
+//   - updateEvidenceCommentID string
+//   - input openlaneclient.UpdateNoteInput
+//   - noteFiles []*graphql.Upload
+//   - interceptors ...clientv2.RequestInterceptor
+func (_e *MockOpenlaneGraphClient_Expecter) UpdateEvidenceComment(ctx interface{}, updateEvidenceCommentID interface{}, input interface{}, noteFiles interface{}, interceptors ...interface{}) *MockOpenlaneGraphClient_UpdateEvidenceComment_Call {
+	return &MockOpenlaneGraphClient_UpdateEvidenceComment_Call{Call: _e.mock.On("UpdateEvidenceComment",
+		append([]interface{}{ctx, updateEvidenceCommentID, input, noteFiles}, interceptors...)...)}
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateEvidenceComment_Call) Run(run func(ctx context.Context, updateEvidenceCommentID string, input openlaneclient.UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor)) *MockOpenlaneGraphClient_UpdateEvidenceComment_Call {
+	_c.Call.Run(func(args mock.Arguments) {
+		var arg0 context.Context
+		if args[0] != nil {
+			arg0 = args[0].(context.Context)
+		}
+		var arg1 string
+		if args[1] != nil {
+			arg1 = args[1].(string)
+		}
+		var arg2 openlaneclient.UpdateNoteInput
+		if args[2] != nil {
+			arg2 = args[2].(openlaneclient.UpdateNoteInput)
+		}
+		var arg3 []*graphql.Upload
+		if args[3] != nil {
+			arg3 = args[3].([]*graphql.Upload)
+		}
+		var arg4 []clientv2.RequestInterceptor
+		var variadicArgs []clientv2.RequestInterceptor
+		if len(args) > 4 {
+			variadicArgs = args[4].([]clientv2.RequestInterceptor)
+		}
+		arg4 = variadicArgs
+		run(
+			arg0,
+			arg1,
+			arg2,
+			arg3,
+			arg4...,
+		)
+	})
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateEvidenceComment_Call) Return(updateEvidenceComment *openlaneclient.UpdateEvidenceComment, err error) *MockOpenlaneGraphClient_UpdateEvidenceComment_Call {
+	_c.Call.Return(updateEvidenceComment, err)
+	return _c
+}
+
+func (_c *MockOpenlaneGraphClient_UpdateEvidenceComment_Call) RunAndReturn(run func(ctx context.Context, updateEvidenceCommentID string, input openlaneclient.UpdateNoteInput, noteFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateEvidenceComment, error)) *MockOpenlaneGraphClient_UpdateEvidenceComment_Call {
+	_c.Call.Return(run)
+	return _c
+}
+
 // UpdateExport provides a mock function for the type MockOpenlaneGraphClient
 func (_mock *MockOpenlaneGraphClient) UpdateExport(ctx context.Context, id string, input openlaneclient.UpdateExportInput, exportFiles []*graphql.Upload, interceptors ...clientv2.RequestInterceptor) (*openlaneclient.UpdateExport, error) {
 	var tmpRet mock.Arguments

@@ -11,6 +11,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/procedure"
@@ -197,6 +198,30 @@ func (r *mutationResolver) UpdateTrustCenterPost(ctx context.Context, id string,
 
 	return &model.TrustCenterUpdatePayload{
 		TrustCenter: objectRes,
+	}, nil
+}
+
+// UpdateEvidenceComment is the resolver for the updateEvidenceComment field.
+func (r *mutationResolver) UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error) {
+	res, err := withTransactionalMutation(ctx).Note.Get(ctx, id)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "evidence"})
+	}
+
+	// setup update request
+	req := res.Update().SetInput(input)
+
+	if err = req.Exec(ctx); err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "evidence"})
+	}
+
+	objectRes, err := withTransactionalMutation(ctx).Evidence.Query().Where(evidence.HasCommentsWith(note.ID(id))).Only(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionUpdate, object: "evidence"})
+	}
+
+	return &model.EvidenceUpdatePayload{
+		Evidence: objectRes,
 	}, nil
 }
 
