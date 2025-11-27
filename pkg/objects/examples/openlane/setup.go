@@ -11,6 +11,7 @@ import (
 	"strings"
 
 	"github.com/99designs/gqlgen/graphql"
+
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	models "github.com/theopenlane/core/pkg/openapi"
@@ -208,7 +209,7 @@ func CreateUpload(filePath string) (*graphql.Upload, error) {
 
 // CreateEvidenceWithFile creates evidence with an attached file
 func CreateEvidenceWithFile(ctx context.Context, client *openlaneclient.OpenlaneClient, name, desc string, upload *graphql.Upload) (*openlaneclient.CreateEvidence, error) {
-	status := enums.EvidenceSubmitted
+	status := enums.EvidenceStatusSubmitted
 
 	input := openlaneclient.CreateEvidenceInput{
 		Name:        name,

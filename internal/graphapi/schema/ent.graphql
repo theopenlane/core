@@ -22559,13 +22559,13 @@ type EvidenceEdge {
 EvidenceEvidenceStatus is enum for the field status
 """
 enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
-  APPROVED
-  READY
-  MISSING_ARTIFACT
-  REJECTED
-  NEEDS_RENEWAL
   SUBMITTED
+  READY_FOR_AUDITOR
+  AUDITOR_APPROVED
   IN_REVIEW
+  MISSING_ARTIFACT
+  NEEDS_RENEWAL
+  REJECTED
 }
 type EvidenceHistory implements Node {
   id: ID!
@@ -22659,13 +22659,13 @@ type EvidenceHistoryEdge {
 EvidenceHistoryEvidenceStatus is enum for the field status
 """
 enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
-  APPROVED
-  READY
-  MISSING_ARTIFACT
-  REJECTED
-  NEEDS_RENEWAL
   SUBMITTED
+  READY_FOR_AUDITOR
+  AUDITOR_APPROVED
   IN_REVIEW
+  MISSING_ARTIFACT
+  NEEDS_RENEWAL
+  REJECTED
 }
 """
 EvidenceHistoryOpType is enum for the field operation
