@@ -80,11 +80,13 @@ type EvidenceEdges struct {
 	Programs []*Program `json:"programs,omitempty"`
 	// Tasks holds the value of the tasks edge.
 	Tasks []*Task `json:"tasks,omitempty"`
+	// conversations related to the evidence
+	Comments []*Note `json:"comments,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [8]bool
+	loadedTypes [9]bool
 	// totalCount holds the count of the edges above.
-	totalCount [8]map[string]int
+	totalCount [9]map[string]int
 
 	namedControls               map[string][]*Control
 	namedSubcontrols            map[string][]*Subcontrol
@@ -93,6 +95,7 @@ type EvidenceEdges struct {
 	namedFiles                  map[string][]*File
 	namedPrograms               map[string][]*Program
 	namedTasks                  map[string][]*Task
+	namedComments               map[string][]*Note
 }
 
 // OwnerOrErr returns the Owner value or an error if the edge
@@ -167,6 +170,15 @@ func (e EvidenceEdges) TasksOrErr() ([]*Task, error) {
 		return e.Tasks, nil
 	}
 	return nil, &NotLoadedError{edge: "tasks"}
+}
+
+// CommentsOrErr returns the Comments value or an error if the edge
+// was not loaded in eager-loading.
+func (e EvidenceEdges) CommentsOrErr() ([]*Note, error) {
+	if e.loadedTypes[8] {
+		return e.Comments, nil
+	}
+	return nil, &NotLoadedError{edge: "comments"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -364,6 +376,11 @@ func (_m *Evidence) QueryPrograms() *ProgramQuery {
 // QueryTasks queries the "tasks" edge of the Evidence entity.
 func (_m *Evidence) QueryTasks() *TaskQuery {
 	return NewEvidenceClient(_m.config).QueryTasks(_m)
+}
+
+// QueryComments queries the "comments" edge of the Evidence entity.
+func (_m *Evidence) QueryComments() *NoteQuery {
+	return NewEvidenceClient(_m.config).QueryComments(_m)
 }
 
 // Update returns a builder for updating this Evidence.
@@ -611,6 +628,30 @@ func (_m *Evidence) appendNamedTasks(name string, edges ...*Task) {
 		_m.Edges.namedTasks[name] = []*Task{}
 	} else {
 		_m.Edges.namedTasks[name] = append(_m.Edges.namedTasks[name], edges...)
+	}
+}
+
+// NamedComments returns the Comments named value or an error if the edge was not
+// loaded in eager-loading with this name.
+func (_m *Evidence) NamedComments(name string) ([]*Note, error) {
+	if _m.Edges.namedComments == nil {
+		return nil, &NotLoadedError{edge: name}
+	}
+	nodes, ok := _m.Edges.namedComments[name]
+	if !ok {
+		return nil, &NotLoadedError{edge: name}
+	}
+	return nodes, nil
+}
+
+func (_m *Evidence) appendNamedComments(name string, edges ...*Note) {
+	if _m.Edges.namedComments == nil {
+		_m.Edges.namedComments = make(map[string][]*Note)
+	}
+	if len(edges) == 0 {
+		_m.Edges.namedComments[name] = []*Note{}
+	} else {
+		_m.Edges.namedComments[name] = append(_m.Edges.namedComments[name], edges...)
 	}
 }
 

@@ -4197,6 +4197,7 @@ var (
 		{Name: "text", Type: field.TypeString, Size: 2147483647},
 		{Name: "control_comments", Type: field.TypeString, Nullable: true},
 		{Name: "entity_notes", Type: field.TypeString, Nullable: true},
+		{Name: "evidence_comments", Type: field.TypeString, Nullable: true},
 		{Name: "finding_comments", Type: field.TypeString, Nullable: true},
 		{Name: "internal_policy_comments", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
@@ -4229,74 +4230,80 @@ var (
 				OnDelete:   schema.SetNull,
 			},
 			{
-				Symbol:     "notes_findings_comments",
+				Symbol:     "notes_evidences_comments",
 				Columns:    []*schema.Column{NotesColumns[11]},
+				RefColumns: []*schema.Column{EvidencesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "notes_findings_comments",
+				Columns:    []*schema.Column{NotesColumns[12]},
 				RefColumns: []*schema.Column{FindingsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_internal_policies_comments",
-				Columns:    []*schema.Column{NotesColumns[12]},
+				Columns:    []*schema.Column{NotesColumns[13]},
 				RefColumns: []*schema.Column{InternalPoliciesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_organizations_notes",
-				Columns:    []*schema.Column{NotesColumns[13]},
+				Columns:    []*schema.Column{NotesColumns[14]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_procedures_comments",
-				Columns:    []*schema.Column{NotesColumns[14]},
+				Columns:    []*schema.Column{NotesColumns[15]},
 				RefColumns: []*schema.Column{ProceduresColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_programs_notes",
-				Columns:    []*schema.Column{NotesColumns[15]},
+				Columns:    []*schema.Column{NotesColumns[16]},
 				RefColumns: []*schema.Column{ProgramsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_remediations_comments",
-				Columns:    []*schema.Column{NotesColumns[16]},
+				Columns:    []*schema.Column{NotesColumns[17]},
 				RefColumns: []*schema.Column{RemediationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_reviews_comments",
-				Columns:    []*schema.Column{NotesColumns[17]},
+				Columns:    []*schema.Column{NotesColumns[18]},
 				RefColumns: []*schema.Column{ReviewsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_risks_comments",
-				Columns:    []*schema.Column{NotesColumns[18]},
+				Columns:    []*schema.Column{NotesColumns[19]},
 				RefColumns: []*schema.Column{RisksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_subcontrols_comments",
-				Columns:    []*schema.Column{NotesColumns[19]},
+				Columns:    []*schema.Column{NotesColumns[20]},
 				RefColumns: []*schema.Column{SubcontrolsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_tasks_comments",
-				Columns:    []*schema.Column{NotesColumns[20]},
+				Columns:    []*schema.Column{NotesColumns[21]},
 				RefColumns: []*schema.Column{TasksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_trust_centers_posts",
-				Columns:    []*schema.Column{NotesColumns[21]},
+				Columns:    []*schema.Column{NotesColumns[22]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "notes_vulnerabilities_comments",
-				Columns:    []*schema.Column{NotesColumns[22]},
+				Columns:    []*schema.Column{NotesColumns[23]},
 				RefColumns: []*schema.Column{VulnerabilitiesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -4305,12 +4312,12 @@ var (
 			{
 				Name:    "note_display_id_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{NotesColumns[7], NotesColumns[13]},
+				Columns: []*schema.Column{NotesColumns[7], NotesColumns[14]},
 			},
 			{
 				Name:    "note_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{NotesColumns[13]},
+				Columns: []*schema.Column{NotesColumns[14]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -12069,18 +12076,19 @@ func init() {
 	}
 	NotesTable.ForeignKeys[0].RefTable = ControlsTable
 	NotesTable.ForeignKeys[1].RefTable = EntitiesTable
-	NotesTable.ForeignKeys[2].RefTable = FindingsTable
-	NotesTable.ForeignKeys[3].RefTable = InternalPoliciesTable
-	NotesTable.ForeignKeys[4].RefTable = OrganizationsTable
-	NotesTable.ForeignKeys[5].RefTable = ProceduresTable
-	NotesTable.ForeignKeys[6].RefTable = ProgramsTable
-	NotesTable.ForeignKeys[7].RefTable = RemediationsTable
-	NotesTable.ForeignKeys[8].RefTable = ReviewsTable
-	NotesTable.ForeignKeys[9].RefTable = RisksTable
-	NotesTable.ForeignKeys[10].RefTable = SubcontrolsTable
-	NotesTable.ForeignKeys[11].RefTable = TasksTable
-	NotesTable.ForeignKeys[12].RefTable = TrustCentersTable
-	NotesTable.ForeignKeys[13].RefTable = VulnerabilitiesTable
+	NotesTable.ForeignKeys[2].RefTable = EvidencesTable
+	NotesTable.ForeignKeys[3].RefTable = FindingsTable
+	NotesTable.ForeignKeys[4].RefTable = InternalPoliciesTable
+	NotesTable.ForeignKeys[5].RefTable = OrganizationsTable
+	NotesTable.ForeignKeys[6].RefTable = ProceduresTable
+	NotesTable.ForeignKeys[7].RefTable = ProgramsTable
+	NotesTable.ForeignKeys[8].RefTable = RemediationsTable
+	NotesTable.ForeignKeys[9].RefTable = ReviewsTable
+	NotesTable.ForeignKeys[10].RefTable = RisksTable
+	NotesTable.ForeignKeys[11].RefTable = SubcontrolsTable
+	NotesTable.ForeignKeys[12].RefTable = TasksTable
+	NotesTable.ForeignKeys[13].RefTable = TrustCentersTable
+	NotesTable.ForeignKeys[14].RefTable = VulnerabilitiesTable
 	NoteHistoryTable.Annotation = &entsql.Annotation{
 		Table: "note_history",
 	}
