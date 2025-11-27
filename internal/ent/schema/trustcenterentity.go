@@ -60,6 +60,7 @@ func (TrustcenterEntity) Fields() []ent.Field {
 		field.String("trust_center_id").
 			Immutable().
 			Comment("The trust center this entity belongs to").
+			Annotations(entgql.Skip(^entgql.SkipType)).
 			Optional(),
 		field.String("name").
 			Comment("The name of the tag definition").

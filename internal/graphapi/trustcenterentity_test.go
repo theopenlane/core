@@ -157,8 +157,7 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "happy path, minimal input",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Test Entity",
-				TrustCenterID: &trustCenter.ID,
+				Name: "Test Entity",
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -166,9 +165,8 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "happy path, full input",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Full Test Entity",
-				URL:           lo.ToPtr("https://example.com"),
-				TrustCenterID: &trustCenter.ID,
+				Name: "Full Test Entity",
+				URL:  lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.api,
 			ctx:    testUser1.UserCtx,
@@ -176,9 +174,8 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "happy path, using api token",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "API Token Entity",
-				TrustCenterID: &trustCenter.ID,
-				URL:           lo.ToPtr("https://example.com"),
+				Name: "API Token Entity",
+				URL:  lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.apiWithToken,
 			ctx:    context.Background(),
@@ -186,9 +183,8 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "happy path, using pat",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "PAT Entity",
-				TrustCenterID: &trustCenter.ID,
-				URL:           lo.ToPtr("https://example.com"),
+				Name: "PAT Entity",
+				URL:  lo.ToPtr("https://example.com"),
 			},
 			client: suite.client.apiWithPAT,
 			ctx:    context.Background(),
@@ -196,8 +192,7 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "not authorized, view only user",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Unauthorized Entity",
-				TrustCenterID: &trustCenter.ID,
+				Name: "Unauthorized Entity",
 			},
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
@@ -206,9 +201,8 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 		{
 			name: "invalid URL",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Invalid URL Entity",
-				URL:           lo.ToPtr("not-a-valid-url"),
-				TrustCenterID: &trustCenter.ID,
+				Name: "Invalid URL Entity",
+				URL:  lo.ToPtr("not-a-valid-url"),
 			},
 			client:      suite.client.api,
 			ctx:         testUser1.UserCtx,
@@ -246,8 +240,7 @@ func TestMutationCreateTrustcenterEntity(t *testing.T) {
 func TestMutationUpdateTrustcenterEntity(t *testing.T) {
 	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	trustcenterEntity := (&TrustcenterEntityBuilder{
-		client:        suite.client,
-		TrustCenterID: trustCenter.ID,
+		client: suite.client,
 	}).MustNew(testUser1.UserCtx, t)
 
 	testCases := []struct {
@@ -417,8 +410,7 @@ func TestTrustcenterEntityHookCustomerEntityType(t *testing.T) {
 		{
 			name: "creates customer entity type if it doesn't exist",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Test Entity",
-				TrustCenterID: &trustCenter.ID,
+				Name: "Test Entity",
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,
@@ -427,8 +419,7 @@ func TestTrustcenterEntityHookCustomerEntityType(t *testing.T) {
 		{
 			name: "uses existing customer entity type if it exists",
 			request: testclient.CreateTrustcenterEntityInput{
-				Name:          "Test Entity 2",
-				TrustCenterID: &trustCenter.ID,
+				Name: "Test Entity 2",
 			},
 			client:               suite.client.api,
 			ctx:                  testUser1.UserCtx,

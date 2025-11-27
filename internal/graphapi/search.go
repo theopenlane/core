@@ -1670,11 +1670,10 @@ func adminSearchTrustcenterEntities(ctx context.Context, query string, after *en
 	request := withTransactionalMutation(ctx).TrustcenterEntity.Query().
 		Where(
 			trustcenterentity.Or(
-				trustcenterentity.ID(query),                        // search equal to ID
-				trustcenterentity.LogoFileIDContainsFold(query),    // search by LogoFileID
-				trustcenterentity.URLContainsFold(query),           // search by URL
-				trustcenterentity.TrustCenterIDContainsFold(query), // search by TrustCenterID
-				trustcenterentity.NameContainsFold(query),          // search by Name
+				trustcenterentity.ID(query),                     // search equal to ID
+				trustcenterentity.LogoFileIDContainsFold(query), // search by LogoFileID
+				trustcenterentity.URLContainsFold(query),        // search by URL
+				trustcenterentity.NameContainsFold(query),       // search by Name
 			),
 		)
 

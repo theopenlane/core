@@ -72756,24 +72756,6 @@ input TrustcenterEntityHistoryWhereInput {
   urlEqualFold: String
   urlContainsFold: String
   """
-  trust_center_id field predicates
-  """
-  trustCenterID: String
-  trustCenterIDNEQ: String
-  trustCenterIDIn: [String!]
-  trustCenterIDNotIn: [String!]
-  trustCenterIDGT: String
-  trustCenterIDGTE: String
-  trustCenterIDLT: String
-  trustCenterIDLTE: String
-  trustCenterIDContains: String
-  trustCenterIDHasPrefix: String
-  trustCenterIDHasSuffix: String
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: String
-  trustCenterIDContainsFold: String
-  """
   name field predicates
   """
   name: String
@@ -72930,24 +72912,6 @@ input TrustcenterEntityWhereInput {
   urlNotNil: Boolean
   urlEqualFold: String
   urlContainsFold: String
-  """
-  trust_center_id field predicates
-  """
-  trustCenterID: ID
-  trustCenterIDNEQ: ID
-  trustCenterIDIn: [ID!]
-  trustCenterIDNotIn: [ID!]
-  trustCenterIDGT: ID
-  trustCenterIDGTE: ID
-  trustCenterIDLT: ID
-  trustCenterIDLTE: ID
-  trustCenterIDContains: ID
-  trustCenterIDHasPrefix: ID
-  trustCenterIDHasSuffix: ID
-  trustCenterIDIsNil: Boolean
-  trustCenterIDNotNil: Boolean
-  trustCenterIDEqualFold: ID
-  trustCenterIDContainsFold: ID
   """
   name field predicates
   """

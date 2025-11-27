@@ -2,6 +2,7 @@ package hooks
 
 import (
 	"context"
+	"errors"
 
 	"entgo.io/ent"
 
@@ -22,16 +23,16 @@ func HookTrustcenterEntityCreate() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.TrustcenterEntityFunc(func(ctx context.Context, m *generated.TrustcenterEntityMutation) (generated.Value, error) {
 
-			trustCenterID, ok := m.TrustCenterID()
-			if !ok || trustCenterID == "" {
+			trustCenter, err := m.Client().TrustCenter.Query().Only(ctx)
+			if generated.IsNotFound(err) {
 				return nil, ErrTrustCenterIDRequired
 			}
 
-			_, err := m.Client().TrustCenter.Get(ctx, trustCenterID)
 			if err != nil {
-				logx.FromContext(ctx).Error().Err(err).Msg("unable to get trust center")
-				return nil, err
+				return nil, errors.New("sdiddk")
 			}
+
+			m.SetTrustCenterID(trustCenter.ID)
 
 			existingEntityType, err := m.Client().EntityType.Query().
 				Where(

@@ -42875,22 +42875,6 @@ type TrustcenterEntityHistoryWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
-	// trust_center_id field predicates
-	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
-	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
-	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
-	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
-	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
-	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
-	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
-	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
-	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
-	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
-	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
-	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
-	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
-	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
@@ -43024,22 +43008,6 @@ type TrustcenterEntityWhereInput struct {
 	URLNotNil       *bool    `json:"urlNotNil,omitempty"`
 	URLEqualFold    *string  `json:"urlEqualFold,omitempty"`
 	URLContainsFold *string  `json:"urlContainsFold,omitempty"`
-	// trust_center_id field predicates
-	TrustCenterID             *string  `json:"trustCenterID,omitempty"`
-	TrustCenterIdneq          *string  `json:"trustCenterIDNEQ,omitempty"`
-	TrustCenterIDIn           []string `json:"trustCenterIDIn,omitempty"`
-	TrustCenterIDNotIn        []string `json:"trustCenterIDNotIn,omitempty"`
-	TrustCenterIdgt           *string  `json:"trustCenterIDGT,omitempty"`
-	TrustCenterIdgte          *string  `json:"trustCenterIDGTE,omitempty"`
-	TrustCenterIdlt           *string  `json:"trustCenterIDLT,omitempty"`
-	TrustCenterIdlte          *string  `json:"trustCenterIDLTE,omitempty"`
-	TrustCenterIDContains     *string  `json:"trustCenterIDContains,omitempty"`
-	TrustCenterIDHasPrefix    *string  `json:"trustCenterIDHasPrefix,omitempty"`
-	TrustCenterIDHasSuffix    *string  `json:"trustCenterIDHasSuffix,omitempty"`
-	TrustCenterIDIsNil        *bool    `json:"trustCenterIDIsNil,omitempty"`
-	TrustCenterIDNotNil       *bool    `json:"trustCenterIDNotNil,omitempty"`
-	TrustCenterIDEqualFold    *string  `json:"trustCenterIDEqualFold,omitempty"`
-	TrustCenterIDContainsFold *string  `json:"trustCenterIDContainsFold,omitempty"`
 	// name field predicates
 	Name             *string  `json:"name,omitempty"`
 	NameNeq          *string  `json:"nameNEQ,omitempty"`
