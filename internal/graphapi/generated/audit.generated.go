@@ -673,7 +673,7 @@ func (ec *executionContext) marshalNAuditLogConnection2githubᚗcomᚋtheopenlan
 func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -689,7 +689,7 @@ func (ec *executionContext) unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheop
 func (ec *executionContext) marshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogOrderField) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

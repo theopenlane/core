@@ -80,8 +80,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkCreatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -174,8 +178,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocBulkUpdatePayload_trustCe
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -268,8 +276,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocCreatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -362,8 +374,12 @@ func (ec *executionContext) fieldContext_TrustCenterDocUpdatePayload_trustCenter
 				return ec.fieldContext_TrustCenterDoc_watermarkStatus(ctx, field)
 			case "visibility":
 				return ec.fieldContext_TrustCenterDoc_visibility(ctx, field)
+			case "standardID":
+				return ec.fieldContext_TrustCenterDoc_standardID(ctx, field)
 			case "trustCenter":
 				return ec.fieldContext_TrustCenterDoc_trustCenter(ctx, field)
+			case "standard":
+				return ec.fieldContext_TrustCenterDoc_standard(ctx, field)
 			case "file":
 				return ec.fieldContext_TrustCenterDoc_file(ctx, field)
 			case "originalFile":
@@ -628,7 +644,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkCreatePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -642,7 +658,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkDeletePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -656,7 +672,7 @@ func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2githubᚗcom
 func (ec *executionContext) marshalNTrustCenterDocBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocBulkUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocBulkUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -670,7 +686,7 @@ func (ec *executionContext) marshalNTrustCenterDocCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -684,7 +700,7 @@ func (ec *executionContext) marshalNTrustCenterDocDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -698,7 +714,7 @@ func (ec *executionContext) marshalNTrustCenterDocUpdatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNTrustCenterDocUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDocUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDocUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

@@ -13,10 +13,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliance"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/pkg/enums"
 
 	"github.com/theopenlane/core/internal/ent/generated/internal"
@@ -458,6 +460,26 @@ func (_u *StandardUpdate) ClearVersion() *StandardUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardUpdate) SetLogoFileID(v string) *StandardUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardUpdate) SetNillableLogoFileID(v *string) *StandardUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardUpdate) ClearLogoFileID() *StandardUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *StandardUpdate) SetOwner(v *Organization) *StandardUpdate {
 	return _u.SetOwnerID(v.ID)
@@ -491,6 +513,26 @@ func (_u *StandardUpdate) AddTrustCenterCompliances(v ...*TrustCenterCompliance)
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterComplianceIDs(ids...)
+}
+
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_u *StandardUpdate) AddTrustCenterDocIDs(ids ...string) *StandardUpdate {
+	_u.mutation.AddTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdate) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *StandardUpdate) SetLogoFile(v *File) *StandardUpdate {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -544,6 +586,33 @@ func (_u *StandardUpdate) RemoveTrustCenterCompliances(v ...*TrustCenterComplian
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTrustCenterDocs clears all "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdate) ClearTrustCenterDocs() *StandardUpdate {
+	_u.mutation.ClearTrustCenterDocs()
+	return _u
+}
+
+// RemoveTrustCenterDocIDs removes the "trust_center_docs" edge to TrustCenterDoc entities by IDs.
+func (_u *StandardUpdate) RemoveTrustCenterDocIDs(ids ...string) *StandardUpdate {
+	_u.mutation.RemoveTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocs removes "trust_center_docs" edges to TrustCenterDoc entities.
+func (_u *StandardUpdate) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *StandardUpdate) ClearLogoFile() *StandardUpdate {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -900,6 +969,85 @@ func (_u *StandardUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
@@ -1351,6 +1499,26 @@ func (_u *StandardUpdateOne) ClearVersion() *StandardUpdateOne {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardUpdateOne) SetLogoFileID(v string) *StandardUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardUpdateOne) SetNillableLogoFileID(v *string) *StandardUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardUpdateOne) ClearLogoFileID() *StandardUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // SetOwner sets the "owner" edge to the Organization entity.
 func (_u *StandardUpdateOne) SetOwner(v *Organization) *StandardUpdateOne {
 	return _u.SetOwnerID(v.ID)
@@ -1384,6 +1552,26 @@ func (_u *StandardUpdateOne) AddTrustCenterCompliances(v ...*TrustCenterComplian
 		ids[i] = v[i].ID
 	}
 	return _u.AddTrustCenterComplianceIDs(ids...)
+}
+
+// AddTrustCenterDocIDs adds the "trust_center_docs" edge to the TrustCenterDoc entity by IDs.
+func (_u *StandardUpdateOne) AddTrustCenterDocIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.AddTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// AddTrustCenterDocs adds the "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdateOne) AddTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.AddTrustCenterDocIDs(ids...)
+}
+
+// SetLogoFile sets the "logo_file" edge to the File entity.
+func (_u *StandardUpdateOne) SetLogoFile(v *File) *StandardUpdateOne {
+	return _u.SetLogoFileID(v.ID)
 }
 
 // Mutation returns the StandardMutation object of the builder.
@@ -1437,6 +1625,33 @@ func (_u *StandardUpdateOne) RemoveTrustCenterCompliances(v ...*TrustCenterCompl
 		ids[i] = v[i].ID
 	}
 	return _u.RemoveTrustCenterComplianceIDs(ids...)
+}
+
+// ClearTrustCenterDocs clears all "trust_center_docs" edges to the TrustCenterDoc entity.
+func (_u *StandardUpdateOne) ClearTrustCenterDocs() *StandardUpdateOne {
+	_u.mutation.ClearTrustCenterDocs()
+	return _u
+}
+
+// RemoveTrustCenterDocIDs removes the "trust_center_docs" edge to TrustCenterDoc entities by IDs.
+func (_u *StandardUpdateOne) RemoveTrustCenterDocIDs(ids ...string) *StandardUpdateOne {
+	_u.mutation.RemoveTrustCenterDocIDs(ids...)
+	return _u
+}
+
+// RemoveTrustCenterDocs removes "trust_center_docs" edges to TrustCenterDoc entities.
+func (_u *StandardUpdateOne) RemoveTrustCenterDocs(v ...*TrustCenterDoc) *StandardUpdateOne {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _u.RemoveTrustCenterDocIDs(ids...)
+}
+
+// ClearLogoFile clears the "logo_file" edge to the File entity.
+func (_u *StandardUpdateOne) ClearLogoFile() *StandardUpdateOne {
+	_u.mutation.ClearLogoFile()
+	return _u
 }
 
 // Where appends a list predicates to the StandardUpdate builder.
@@ -1823,6 +2038,85 @@ func (_u *StandardUpdateOne) sqlSave(ctx context.Context) (_node *Standard, err 
 			},
 		}
 		edge.Schema = _u.schemaConfig.TrustCenterCompliance
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.RemovedTrustCenterDocsIDs(); len(nodes) > 0 && !_u.mutation.TrustCenterDocsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.TrustCenterDocsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterdoc.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.TrustCenterDoc
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.LogoFileCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.LogoFileIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(file.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Standard
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}

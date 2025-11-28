@@ -472,6 +472,7 @@ func adminSearchCustomTypeEnums(ctx context.Context, query string, after *entgql
 				customtypeenum.NameContainsFold(query),             // search by Name
 				customtypeenum.DescriptionContainsFold(query),      // search by Description
 				customtypeenum.ColorContainsFold(query),            // search by Color
+				customtypeenum.IconContainsFold(query),             // search by Icon
 			),
 		)
 
@@ -1331,6 +1332,7 @@ func adminSearchStandards(ctx context.Context, query string, after *entgql.Curso
 				standard.LinkContainsFold(query),         // search by Link
 				standard.StandardTypeContainsFold(query), // search by StandardType
 				standard.VersionContainsFold(query),      // search by Version
+				standard.LogoFileIDContainsFold(query),   // search by LogoFileID
 			),
 		)
 

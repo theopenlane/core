@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 )
 
@@ -82,6 +83,10 @@ func (TrustCenterDoc) Fields() []ent.Field {
 			Default(enums.TrustCenterDocumentVisibilityNotVisible.String()).
 			Optional().
 			Comment("visibility of the document"),
+		field.String("standard_id").
+			Comment("ID of the standard").
+			NotEmpty().
+			Optional(),
 	}
 }
 
@@ -103,6 +108,14 @@ func (t TrustCenterDoc) Edges() []ent.Edge {
 			fromSchema: t,
 			edgeSchema: TrustCenter{},
 			field:      "trust_center_id",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: t,
+			edgeSchema: Standard{},
+			field:      "standard_id",
+			annotations: []schema.Annotation{
+				accessmap.EdgeViewCheck(Standard{}.Name()),
+			},
 		}),
 		uniqueEdgeTo(&edgeDefinition{
 			fromSchema: t,

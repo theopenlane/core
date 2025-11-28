@@ -9309,6 +9309,35 @@ func (_m *Standard) TrustCenterCompliances(
 	return _m.QueryTrustCenterCompliances().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Standard) TrustCenterDocs(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*TrustCenterDocOrder, where *TrustCenterDocWhereInput,
+) (*TrustCenterDocConnection, error) {
+	opts := []TrustCenterDocPaginateOption{
+		WithTrustCenterDocOrder(orderBy),
+		WithTrustCenterDocFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[3][alias]
+	if nodes, err := _m.NamedTrustCenterDocs(alias); err == nil || hasTotalCount {
+		pager, err := newTrustCenterDocPager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &TrustCenterDocConnection{Edges: []*TrustCenterDocEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryTrustCenterDocs().Paginate(ctx, after, first, before, last, opts...)
+}
+
+func (_m *Standard) LogoFile(ctx context.Context) (*File, error) {
+	result, err := _m.Edges.LogoFileOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryLogoFile().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Subcontrol) Evidence(
 	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*EvidenceOrder, where *EvidenceWhereInput,
 ) (*EvidenceConnection, error) {
@@ -10227,6 +10256,14 @@ func (_m *TrustCenterDoc) TrustCenter(ctx context.Context) (*TrustCenter, error)
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
 		result, err = _m.QueryTrustCenter().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
+func (_m *TrustCenterDoc) Standard(ctx context.Context) (*Standard, error) {
+	result, err := _m.Edges.StandardOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryStandard().Only(ctx)
 	}
 	return result, MaskNotFound(err)
 }

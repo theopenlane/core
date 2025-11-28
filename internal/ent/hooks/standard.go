@@ -16,6 +16,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/standard"
+	pkgobjects "github.com/theopenlane/core/pkg/objects"
 )
 
 var (
@@ -118,6 +119,27 @@ func HookStandardCreate() ent.Hook {
 		})
 	},
 		hook.HasOp(ent.OpCreate),
+	)
+}
+
+func HookStandardFileUpload() ent.Hook {
+	return hook.If(func(next ent.Mutator) ent.Mutator {
+		return hook.StandardFunc(func(ctx context.Context, m *generated.StandardMutation) (generated.Value, error) {
+			// check for uploaded files (e.g. logo image)
+			fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+			if len(fileIDs) > 0 {
+				var err error
+
+				ctx, err = checkStandardLogoFile(ctx, m)
+				if err != nil {
+					return nil, err
+				}
+			}
+
+			return next.Mutate(ctx, m)
+		})
+	},
+		hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne),
 	)
 }
 
@@ -354,4 +376,26 @@ func standardTupleOneUpdate(ctx context.Context, m *generated.StandardMutation) 
 	}
 
 	return false, false, nil
+}
+
+func checkStandardLogoFile(ctx context.Context, m *generated.StandardMutation) (context.Context, error) {
+	logoKey := "logoFile"
+
+	logoFiles, _ := pkgobjects.FilesFromContextWithKey(ctx, logoKey)
+	if len(logoFiles) == 0 {
+		return ctx, nil
+	}
+
+	if len(logoFiles) > 1 {
+		return ctx, ErrTooManyLogoFiles
+	}
+
+	m.SetLogoFileID(logoFiles[0].ID)
+
+	adapter := pkgobjects.NewGenericMutationAdapter(m,
+		func(mut *generated.StandardMutation) (string, bool) { return mut.ID() },
+		func(mut *generated.StandardMutation) string { return mut.Type() },
+	)
+
+	return pkgobjects.ProcessFilesForMutation(ctx, adapter, logoKey)
 }

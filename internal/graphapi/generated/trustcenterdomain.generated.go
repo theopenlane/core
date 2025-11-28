@@ -191,7 +191,7 @@ func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNTrustCenterDomainCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterDomainCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterDomainCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

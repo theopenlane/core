@@ -404,7 +404,7 @@ func (ec *executionContext) marshalNWorkflowEventBulkCreatePayload2githubᚗcom�
 func (ec *executionContext) marshalNWorkflowEventBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowEventBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowEventBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -418,7 +418,7 @@ func (ec *executionContext) marshalNWorkflowEventCreatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNWorkflowEventCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowEventCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowEventCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -432,7 +432,7 @@ func (ec *executionContext) marshalNWorkflowEventDeletePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNWorkflowEventDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowEventDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowEventDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -446,7 +446,7 @@ func (ec *executionContext) marshalNWorkflowEventUpdatePayload2githubᚗcomᚋth
 func (ec *executionContext) marshalNWorkflowEventUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐWorkflowEventUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.WorkflowEventUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

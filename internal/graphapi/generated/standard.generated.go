@@ -100,12 +100,18 @@ func (ec *executionContext) fieldContext_StandardBulkCreatePayload_standards(_ c
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Standard_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
 			case "trustCenterCompliances":
 				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Standard_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -185,12 +191,18 @@ func (ec *executionContext) fieldContext_StandardCreatePayload_standard(_ contex
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Standard_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
 			case "trustCenterCompliances":
 				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Standard_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -299,12 +311,18 @@ func (ec *executionContext) fieldContext_StandardUpdatePayload_standard(_ contex
 				return ec.fieldContext_Standard_standardType(ctx, field)
 			case "version":
 				return ec.fieldContext_Standard_version(ctx, field)
+			case "logoFileID":
+				return ec.fieldContext_Standard_logoFileID(ctx, field)
 			case "owner":
 				return ec.fieldContext_Standard_owner(ctx, field)
 			case "controls":
 				return ec.fieldContext_Standard_controls(ctx, field)
 			case "trustCenterCompliances":
 				return ec.fieldContext_Standard_trustCenterCompliances(ctx, field)
+			case "trustCenterDocs":
+				return ec.fieldContext_Standard_trustCenterDocs(ctx, field)
+			case "logoFile":
+				return ec.fieldContext_Standard_logoFile(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Standard", field.Name)
 		},
@@ -488,7 +506,7 @@ func (ec *executionContext) marshalNStandardCreatePayload2githubᚗcomᚋtheopen
 func (ec *executionContext) marshalNStandardCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -502,7 +520,7 @@ func (ec *executionContext) marshalNStandardDeletePayload2githubᚗcomᚋtheopen
 func (ec *executionContext) marshalNStandardDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -516,7 +534,7 @@ func (ec *executionContext) marshalNStandardUpdatePayload2githubᚗcomᚋtheopen
 func (ec *executionContext) marshalNStandardUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐStandardUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.StandardUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

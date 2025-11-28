@@ -118,7 +118,7 @@ func (ec *executionContext) marshalNNoteDeletePayload2githubᚗcomᚋtheopenlane
 func (ec *executionContext) marshalNNoteDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐNoteDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.NoteDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

@@ -1529,6 +1529,7 @@ func init() {
 	customtypeenumMixinHooks2 := customtypeenumMixin[2].Hooks()
 	customtypeenumMixinHooks5 := customtypeenumMixin[5].Hooks()
 	customtypeenumMixinHooks6 := customtypeenumMixin[6].Hooks()
+	customtypeenumHooks := schema.CustomTypeEnum{}.Hooks()
 
 	customtypeenum.Hooks[1] = customtypeenumMixinHooks0[0]
 
@@ -1539,6 +1540,8 @@ func init() {
 	customtypeenum.Hooks[4] = customtypeenumMixinHooks5[0]
 
 	customtypeenum.Hooks[5] = customtypeenumMixinHooks6[0]
+
+	customtypeenum.Hooks[6] = customtypeenumHooks[0]
 	customtypeenumMixinInters1 := customtypeenumMixin[1].Interceptors()
 	customtypeenumMixinInters2 := customtypeenumMixin[2].Interceptors()
 	customtypeenumMixinInters5 := customtypeenumMixin[5].Interceptors()
@@ -7239,6 +7242,8 @@ func init() {
 	standard.Hooks[10] = standardHooks[2]
 
 	standard.Hooks[11] = standardHooks[3]
+
+	standard.Hooks[12] = standardHooks[4]
 	standardMixinInters1 := standardMixin[1].Interceptors()
 	standardMixinInters2 := standardMixin[2].Interceptors()
 	standardMixinInters7 := standardMixin[7].Interceptors()
@@ -7846,6 +7851,7 @@ func init() {
 	tagdefinitionMixinHooks2 := tagdefinitionMixin[2].Hooks()
 	tagdefinitionMixinHooks5 := tagdefinitionMixin[5].Hooks()
 	tagdefinitionMixinHooks6 := tagdefinitionMixin[6].Hooks()
+	tagdefinitionHooks := schema.TagDefinition{}.Hooks()
 
 	tagdefinition.Hooks[1] = tagdefinitionMixinHooks0[0]
 
@@ -7856,6 +7862,10 @@ func init() {
 	tagdefinition.Hooks[4] = tagdefinitionMixinHooks5[0]
 
 	tagdefinition.Hooks[5] = tagdefinitionMixinHooks6[0]
+
+	tagdefinition.Hooks[6] = tagdefinitionHooks[0]
+
+	tagdefinition.Hooks[7] = tagdefinitionHooks[1]
 	tagdefinitionMixinInters1 := tagdefinitionMixin[1].Interceptors()
 	tagdefinitionMixinInters2 := tagdefinitionMixin[2].Interceptors()
 	tagdefinitionMixinInters5 := tagdefinitionMixin[5].Interceptors()
@@ -8414,6 +8424,10 @@ func init() {
 	trustcenterdocDescWatermarkingEnabled := trustcenterdocFields[5].Descriptor()
 	// trustcenterdoc.DefaultWatermarkingEnabled holds the default value on creation for the watermarking_enabled field.
 	trustcenterdoc.DefaultWatermarkingEnabled = trustcenterdocDescWatermarkingEnabled.Default.(bool)
+	// trustcenterdocDescStandardID is the schema descriptor for standard_id field.
+	trustcenterdocDescStandardID := trustcenterdocFields[8].Descriptor()
+	// trustcenterdoc.StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
+	trustcenterdoc.StandardIDValidator = trustcenterdocDescStandardID.Validators[0].(func(string) error)
 	// trustcenterdocDescID is the schema descriptor for id field.
 	trustcenterdocDescID := trustcenterdocMixinFields3[0].Descriptor()
 	// trustcenterdoc.DefaultID holds the default value on creation for the id field.

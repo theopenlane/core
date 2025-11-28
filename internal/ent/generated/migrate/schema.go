@@ -1199,6 +1199,7 @@ var (
 		{Name: "name", Type: field.TypeString, SchemaType: map[string]string{"postgres": "citext"}},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "color", Type: field.TypeString, Nullable: true},
+		{Name: "icon", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// CustomTypeEnumsTable holds the schema information for the "custom_type_enums" table.
@@ -1209,7 +1210,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "custom_type_enums_organizations_custom_type_enums",
-				Columns:    []*schema.Column{CustomTypeEnumsColumns[15]},
+				Columns:    []*schema.Column{CustomTypeEnumsColumns[16]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -1218,7 +1219,7 @@ var (
 			{
 				Name:    "customtypeenum_owner_id",
 				Unique:  false,
-				Columns: []*schema.Column{CustomTypeEnumsColumns[15]},
+				Columns: []*schema.Column{CustomTypeEnumsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -1226,7 +1227,7 @@ var (
 			{
 				Name:    "customtypeenum_name_owner_id",
 				Unique:  true,
-				Columns: []*schema.Column{CustomTypeEnumsColumns[12], CustomTypeEnumsColumns[15]},
+				Columns: []*schema.Column{CustomTypeEnumsColumns[12], CustomTypeEnumsColumns[16]},
 				Annotation: &entsql.IndexAnnotation{
 					Where: "deleted_at is NULL",
 				},
@@ -6114,6 +6115,7 @@ var (
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardsTable holds the schema information for the "standards" table.
 	StandardsTable = &schema.Table{
@@ -6125,6 +6127,12 @@ var (
 				Symbol:     "standards_organizations_standards",
 				Columns:    []*schema.Column{StandardsColumns[25]},
 				RefColumns: []*schema.Column{OrganizationsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "standards_files_logo_file",
+				Columns:    []*schema.Column{StandardsColumns[26]},
+				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -6170,6 +6178,7 @@ var (
 		{Name: "free_to_use", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "standard_type", Type: field.TypeString, Nullable: true},
 		{Name: "version", Type: field.TypeString, Nullable: true},
+		{Name: "logo_file_id", Type: field.TypeString, Nullable: true},
 	}
 	// StandardHistoryTable holds the schema information for the "standard_history" table.
 	StandardHistoryTable = &schema.Table{
@@ -7106,6 +7115,7 @@ var (
 		{Name: "watermarking_enabled", Type: field.TypeBool, Default: false},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
+		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 		{Name: "trust_center_id", Type: field.TypeString, Nullable: true},
 		{Name: "file_id", Type: field.TypeString, Nullable: true},
 		{Name: "original_file_id", Type: field.TypeString, Nullable: true},
@@ -7117,20 +7127,26 @@ var (
 		PrimaryKey: []*schema.Column{TrustCenterDocsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "trust_center_docs_trust_centers_trust_center_docs",
+				Symbol:     "trust_center_docs_standards_trust_center_docs",
 				Columns:    []*schema.Column{TrustCenterDocsColumns[13]},
+				RefColumns: []*schema.Column{StandardsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "trust_center_docs_trust_centers_trust_center_docs",
+				Columns:    []*schema.Column{TrustCenterDocsColumns[14]},
 				RefColumns: []*schema.Column{TrustCentersColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[14]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[15]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 			{
 				Symbol:     "trust_center_docs_files_original_file",
-				Columns:    []*schema.Column{TrustCenterDocsColumns[15]},
+				Columns:    []*schema.Column{TrustCenterDocsColumns[16]},
 				RefColumns: []*schema.Column{FilesColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -7157,6 +7173,7 @@ var (
 		{Name: "watermarking_enabled", Type: field.TypeBool, Default: false},
 		{Name: "watermark_status", Type: field.TypeEnum, Nullable: true, Enums: []string{"PENDING", "IN_PROGRESS", "SUCCESS", "FAILED", "DISABLED"}, Default: "DISABLED"},
 		{Name: "visibility", Type: field.TypeEnum, Nullable: true, Enums: []string{"PUBLICLY_VISIBLE", "PROTECTED", "NOT_VISIBLE"}, Default: "NOT_VISIBLE"},
+		{Name: "standard_id", Type: field.TypeString, Nullable: true},
 	}
 	// TrustCenterDocHistoryTable holds the schema information for the "trust_center_doc_history" table.
 	TrustCenterDocHistoryTable = &schema.Table{
@@ -12178,6 +12195,7 @@ func init() {
 	ScheduledJobRunsTable.ForeignKeys[1].RefTable = ScheduledJobsTable
 	ScheduledJobRunsTable.ForeignKeys[2].RefTable = JobRunnersTable
 	StandardsTable.ForeignKeys[0].RefTable = OrganizationsTable
+	StandardsTable.ForeignKeys[1].RefTable = FilesTable
 	StandardHistoryTable.Annotation = &entsql.Annotation{
 		Table: "standard_history",
 	}
@@ -12238,9 +12256,10 @@ func init() {
 	TrustCenterComplianceHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_compliance_history",
 	}
-	TrustCenterDocsTable.ForeignKeys[0].RefTable = TrustCentersTable
-	TrustCenterDocsTable.ForeignKeys[1].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[0].RefTable = StandardsTable
+	TrustCenterDocsTable.ForeignKeys[1].RefTable = TrustCentersTable
 	TrustCenterDocsTable.ForeignKeys[2].RefTable = FilesTable
+	TrustCenterDocsTable.ForeignKeys[3].RefTable = FilesTable
 	TrustCenterDocHistoryTable.Annotation = &entsql.Annotation{
 		Table: "trust_center_doc_history",
 	}

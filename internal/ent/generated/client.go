@@ -26737,6 +26737,44 @@ func (c *StandardClient) QueryTrustCenterCompliances(_m *Standard) *TrustCenterC
 	return query
 }
 
+// QueryTrustCenterDocs queries the trust_center_docs edge of a Standard.
+func (c *StandardClient) QueryTrustCenterDocs(_m *Standard) *TrustCenterDocQuery {
+	query := (&TrustCenterDocClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(trustcenterdoc.Table, trustcenterdoc.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, standard.TrustCenterDocsTable, standard.TrustCenterDocsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.TrustCenterDoc
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryLogoFile queries the logo_file edge of a Standard.
+func (c *StandardClient) QueryLogoFile(_m *Standard) *FileQuery {
+	query := (&FileClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(standard.Table, standard.FieldID, id),
+			sqlgraph.To(file.Table, file.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, false, standard.LogoFileTable, standard.LogoFileColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.File
+		step.Edge.Schema = schemaConfig.Standard
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *StandardClient) Hooks() []Hook {
 	hooks := c.hooks.Standard
@@ -30068,6 +30106,25 @@ func (c *TrustCenterDocClient) QueryTrustCenter(_m *TrustCenterDoc) *TrustCenter
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.TrustCenter
+		step.Edge.Schema = schemaConfig.TrustCenterDoc
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryStandard queries the standard edge of a TrustCenterDoc.
+func (c *TrustCenterDocClient) QueryStandard(_m *TrustCenterDoc) *StandardQuery {
+	query := (&StandardClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(trustcenterdoc.Table, trustcenterdoc.FieldID, id),
+			sqlgraph.To(standard.Table, standard.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, trustcenterdoc.StandardTable, trustcenterdoc.StandardColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Standard
 		step.Edge.Schema = schemaConfig.TrustCenterDoc
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

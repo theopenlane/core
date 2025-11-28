@@ -323,7 +323,7 @@ func (ec *executionContext) marshalNJobRunnerTokenCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNJobRunnerTokenCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobRunnerTokenCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -337,7 +337,7 @@ func (ec *executionContext) marshalNJobRunnerTokenDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNJobRunnerTokenDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐJobRunnerTokenDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.JobRunnerTokenDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

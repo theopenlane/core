@@ -48,8 +48,12 @@ const (
 	FieldWatermarkStatus = "watermark_status"
 	// FieldVisibility holds the string denoting the visibility field in the database.
 	FieldVisibility = "visibility"
+	// FieldStandardID holds the string denoting the standard_id field in the database.
+	FieldStandardID = "standard_id"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
+	// EdgeStandard holds the string denoting the standard edge name in mutations.
+	EdgeStandard = "standard"
 	// EdgeFile holds the string denoting the file edge name in mutations.
 	EdgeFile = "file"
 	// EdgeOriginalFile holds the string denoting the original_file edge name in mutations.
@@ -63,6 +67,13 @@ const (
 	TrustCenterInverseTable = "trust_centers"
 	// TrustCenterColumn is the table column denoting the trust_center relation/edge.
 	TrustCenterColumn = "trust_center_id"
+	// StandardTable is the table that holds the standard relation/edge.
+	StandardTable = "trust_center_docs"
+	// StandardInverseTable is the table name for the Standard entity.
+	// It exists in this package in order to avoid circular dependency with the "standard" package.
+	StandardInverseTable = "standards"
+	// StandardColumn is the table column denoting the standard relation/edge.
+	StandardColumn = "standard_id"
 	// FileTable is the table that holds the file relation/edge.
 	FileTable = "trust_center_docs"
 	// FileInverseTable is the table name for the File entity.
@@ -97,6 +108,7 @@ var Columns = []string{
 	FieldWatermarkingEnabled,
 	FieldWatermarkStatus,
 	FieldVisibility,
+	FieldStandardID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -134,6 +146,8 @@ var (
 	CategoryValidator func(string) error
 	// DefaultWatermarkingEnabled holds the default value on creation for the "watermarking_enabled" field.
 	DefaultWatermarkingEnabled bool
+	// StandardIDValidator is a validator for the "standard_id" field. It is called by the builders before save.
+	StandardIDValidator func(string) error
 	// DefaultID holds the default value on creation for the "id" field.
 	DefaultID func() string
 )
@@ -240,10 +254,22 @@ func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
 }
 
+// ByStandardID orders the results by the standard_id field.
+func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newTrustCenterStep(), sql.OrderByField(field, opts...))
+	}
+}
+
+// ByStandardField orders the results by standard field.
+func ByStandardField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newStandardStep(), sql.OrderByField(field, opts...))
 	}
 }
 
@@ -265,6 +291,13 @@ func newTrustCenterStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TrustCenterInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, TrustCenterTable, TrustCenterColumn),
+	)
+}
+func newStandardStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(StandardInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, StandardTable, StandardColumn),
 	)
 }
 func newFileStep() *sqlgraph.Step {

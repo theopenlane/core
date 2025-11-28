@@ -12,6 +12,12 @@ mutation CreateTrustCenterDoc($input: CreateTrustCenterDocInput!, $trustCenterDo
       category
       fileID
       visibility
+      standardID
+      standard {
+        id
+        name
+        shortName
+      }
       file {
         id
         md5Hash
@@ -85,6 +91,12 @@ query GetTrustCenterDocByID($trustCenterDocId: ID!) {
     category
     fileID
     visibility
+    standardID
+    standard {
+      id
+      name
+      shortName
+    }
     file {
       id
       md5Hash
@@ -152,6 +164,12 @@ mutation UpdateTrustCenterDoc($updateTrustCenterDocId: ID!, $input: UpdateTrustC
       category
       fileID
       visibility
+      standardID
+      standard {
+        id
+        name
+        shortName
+      }
       file {
         id
         md5Hash

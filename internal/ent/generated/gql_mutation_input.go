@@ -2878,6 +2878,7 @@ type CreateCustomTypeEnumInput struct {
 	Name              string
 	Description       *string
 	Color             *string
+	Icon              *string
 	OwnerID           *string
 	TaskIDs           []string
 	ControlIDs        []string
@@ -2908,6 +2909,9 @@ func (i *CreateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
+	}
+	if v := i.Icon; v != nil {
+		m.SetIcon(*v)
 	}
 	if v := i.OwnerID; v != nil {
 		m.SetOwnerID(*v)
@@ -2953,11 +2957,12 @@ type UpdateCustomTypeEnumInput struct {
 	InternalNotes           *string
 	ClearSystemInternalID   bool
 	SystemInternalID        *string
-	Name                    *string
 	ClearDescription        bool
 	Description             *string
 	ClearColor              bool
 	Color                   *string
+	ClearIcon               bool
+	Icon                    *string
 	ClearOwner              bool
 	OwnerID                 *string
 	ClearTasks              bool
@@ -3003,9 +3008,6 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
 	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
-	}
 	if i.ClearDescription {
 		m.ClearDescription()
 	}
@@ -3017,6 +3019,12 @@ func (i *UpdateCustomTypeEnumInput) Mutate(m *CustomTypeEnumMutation) {
 	}
 	if v := i.Color; v != nil {
 		m.SetColor(*v)
+	}
+	if i.ClearIcon {
+		m.ClearIcon()
+	}
+	if v := i.Icon; v != nil {
+		m.SetIcon(*v)
 	}
 	if i.ClearOwner {
 		m.ClearOwner()
@@ -14699,6 +14707,8 @@ type CreateStandardInput struct {
 	OwnerID                  *string
 	ControlIDs               []string
 	TrustCenterComplianceIDs []string
+	TrustCenterDocIDs        []string
+	LogoFileID               *string
 }
 
 // Mutate applies the CreateStandardInput on the StandardMutation builder.
@@ -14761,6 +14771,12 @@ func (i *CreateStandardInput) Mutate(m *StandardMutation) {
 	if v := i.TrustCenterComplianceIDs; len(v) > 0 {
 		m.AddTrustCenterComplianceIDs(v...)
 	}
+	if v := i.TrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
+	}
 }
 
 // SetInput applies the change-set in the CreateStandardInput on the StandardCreate builder.
@@ -14814,6 +14830,11 @@ type UpdateStandardInput struct {
 	ClearTrustCenterCompliances    bool
 	AddTrustCenterComplianceIDs    []string
 	RemoveTrustCenterComplianceIDs []string
+	ClearTrustCenterDocs           bool
+	AddTrustCenterDocIDs           []string
+	RemoveTrustCenterDocIDs        []string
+	ClearLogoFile                  bool
+	LogoFileID                     *string
 }
 
 // Mutate applies the UpdateStandardInput on the StandardMutation builder.
@@ -14946,6 +14967,21 @@ func (i *UpdateStandardInput) Mutate(m *StandardMutation) {
 	}
 	if v := i.RemoveTrustCenterComplianceIDs; len(v) > 0 {
 		m.RemoveTrustCenterComplianceIDs(v...)
+	}
+	if i.ClearTrustCenterDocs {
+		m.ClearTrustCenterDocs()
+	}
+	if v := i.AddTrustCenterDocIDs; len(v) > 0 {
+		m.AddTrustCenterDocIDs(v...)
+	}
+	if v := i.RemoveTrustCenterDocIDs; len(v) > 0 {
+		m.RemoveTrustCenterDocIDs(v...)
+	}
+	if i.ClearLogoFile {
+		m.ClearLogoFile()
+	}
+	if v := i.LogoFileID; v != nil {
+		m.SetLogoFileID(*v)
 	}
 }
 
@@ -15891,7 +15927,6 @@ type UpdateTagDefinitionInput struct {
 	InternalNotes         *string
 	ClearSystemInternalID bool
 	SystemInternalID      *string
-	Name                  *string
 	ClearAliases          bool
 	Aliases               []string
 	AppendAliases         []string
@@ -15916,9 +15951,6 @@ func (i *UpdateTagDefinitionInput) Mutate(m *TagDefinitionMutation) {
 	}
 	if v := i.SystemInternalID; v != nil {
 		m.SetSystemInternalID(*v)
-	}
-	if v := i.Name; v != nil {
-		m.SetName(*v)
 	}
 	if i.ClearAliases {
 		m.ClearAliases()
@@ -16868,6 +16900,7 @@ type CreateTrustCenterDocInput struct {
 	WatermarkStatus     *enums.WatermarkStatus
 	Visibility          *enums.TrustCenterDocumentVisibility
 	TrustCenterID       *string
+	StandardID          *string
 	FileID              *string
 	OriginalFileID      *string
 }
@@ -16890,6 +16923,9 @@ func (i *CreateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
 	if v := i.FileID; v != nil {
 		m.SetFileID(*v)
@@ -16919,6 +16955,8 @@ type UpdateTrustCenterDocInput struct {
 	Visibility           *enums.TrustCenterDocumentVisibility
 	ClearTrustCenter     bool
 	TrustCenterID        *string
+	ClearStandard        bool
+	StandardID           *string
 	ClearFile            bool
 	FileID               *string
 	ClearOriginalFile    bool
@@ -16962,6 +17000,12 @@ func (i *UpdateTrustCenterDocInput) Mutate(m *TrustCenterDocMutation) {
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
+	}
+	if i.ClearStandard {
+		m.ClearStandard()
+	}
+	if v := i.StandardID; v != nil {
+		m.SetStandardID(*v)
 	}
 	if i.ClearFile {
 		m.ClearFile()

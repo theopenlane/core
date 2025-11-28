@@ -265,6 +265,26 @@ func (_u *TrustCenterDocHistoryUpdate) ClearVisibility() *TrustCenterDocHistoryU
 	return _u
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_u *TrustCenterDocHistoryUpdate) SetStandardID(v string) *TrustCenterDocHistoryUpdate {
+	_u.mutation.SetStandardID(v)
+	return _u
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdate) SetNillableStandardID(v *string) *TrustCenterDocHistoryUpdate {
+	if v != nil {
+		_u.SetStandardID(*v)
+	}
+	return _u
+}
+
+// ClearStandardID clears the value of the "standard_id" field.
+func (_u *TrustCenterDocHistoryUpdate) ClearStandardID() *TrustCenterDocHistoryUpdate {
+	_u.mutation.ClearStandardID()
+	return _u
+}
+
 // Mutation returns the TrustCenterDocHistoryMutation object of the builder.
 func (_u *TrustCenterDocHistoryUpdate) Mutation() *TrustCenterDocHistoryMutation {
 	return _u.mutation
@@ -427,6 +447,12 @@ func (_u *TrustCenterDocHistoryUpdate) sqlSave(ctx context.Context) (_node int, 
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.StandardID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldStandardID, field.TypeString, value)
+	}
+	if _u.mutation.StandardIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldStandardID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -684,6 +710,26 @@ func (_u *TrustCenterDocHistoryUpdateOne) ClearVisibility() *TrustCenterDocHisto
 	return _u
 }
 
+// SetStandardID sets the "standard_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) SetStandardID(v string) *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.SetStandardID(v)
+	return _u
+}
+
+// SetNillableStandardID sets the "standard_id" field if the given value is not nil.
+func (_u *TrustCenterDocHistoryUpdateOne) SetNillableStandardID(v *string) *TrustCenterDocHistoryUpdateOne {
+	if v != nil {
+		_u.SetStandardID(*v)
+	}
+	return _u
+}
+
+// ClearStandardID clears the value of the "standard_id" field.
+func (_u *TrustCenterDocHistoryUpdateOne) ClearStandardID() *TrustCenterDocHistoryUpdateOne {
+	_u.mutation.ClearStandardID()
+	return _u
+}
+
 // Mutation returns the TrustCenterDocHistoryMutation object of the builder.
 func (_u *TrustCenterDocHistoryUpdateOne) Mutation() *TrustCenterDocHistoryMutation {
 	return _u.mutation
@@ -876,6 +922,12 @@ func (_u *TrustCenterDocHistoryUpdateOne) sqlSave(ctx context.Context) (_node *T
 	}
 	if _u.mutation.VisibilityCleared() {
 		_spec.ClearField(trustcenterdochistory.FieldVisibility, field.TypeEnum)
+	}
+	if value, ok := _u.mutation.StandardID(); ok {
+		_spec.SetField(trustcenterdochistory.FieldStandardID, field.TypeString, value)
+	}
+	if _u.mutation.StandardIDCleared() {
+		_spec.ClearField(trustcenterdochistory.FieldStandardID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.TrustCenterDocHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

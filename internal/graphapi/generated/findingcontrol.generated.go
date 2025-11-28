@@ -428,7 +428,7 @@ func (ec *executionContext) marshalNFindingControlBulkCreatePayload2githubᚗcom
 func (ec *executionContext) marshalNFindingControlBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -442,7 +442,7 @@ func (ec *executionContext) marshalNFindingControlCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNFindingControlCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -456,7 +456,7 @@ func (ec *executionContext) marshalNFindingControlDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNFindingControlDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -470,7 +470,7 @@ func (ec *executionContext) marshalNFindingControlUpdatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNFindingControlUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐFindingControlUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.FindingControlUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

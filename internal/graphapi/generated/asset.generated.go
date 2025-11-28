@@ -538,7 +538,7 @@ func (ec *executionContext) marshalNAssetBulkCreatePayload2githubᚗcomᚋtheope
 func (ec *executionContext) marshalNAssetBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -552,7 +552,7 @@ func (ec *executionContext) marshalNAssetBulkDeletePayload2githubᚗcomᚋtheope
 func (ec *executionContext) marshalNAssetBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -566,7 +566,7 @@ func (ec *executionContext) marshalNAssetCreatePayload2githubᚗcomᚋtheopenlan
 func (ec *executionContext) marshalNAssetCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -580,7 +580,7 @@ func (ec *executionContext) marshalNAssetDeletePayload2githubᚗcomᚋtheopenlan
 func (ec *executionContext) marshalNAssetDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -594,7 +594,7 @@ func (ec *executionContext) marshalNAssetUpdatePayload2githubᚗcomᚋtheopenlan
 func (ec *executionContext) marshalNAssetUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐAssetUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.AssetUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

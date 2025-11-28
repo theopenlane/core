@@ -2283,6 +2283,14 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center_compliance",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trust_center_docs": {
+	ObjectType:      "trust_center_doc",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "logo_file": {
+	ObjectType:      "logo_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "subcontrol": {"evidence": {
 	ObjectType:      "evidence",
@@ -2541,6 +2549,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "trust_center",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "standard": {
+	ObjectType:      "standard",
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "file": {
 	ObjectType:      "file",
 	SkipEditCheck:   false,
@@ -2813,8 +2825,8 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "tag_definitions": {
 	ObjectType:      "tag_definition",
-	SkipEditCheck:   false,
-	CheckViewAccess: false,
+	SkipEditCheck:   true,
+	CheckViewAccess: true,
 }, "groups": {
 	ObjectType:      "group",
 	SkipEditCheck:   false,
