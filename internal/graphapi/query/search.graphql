@@ -546,6 +546,22 @@ query GlobalSearch($query: String!) {
         }
       }
     }
+    trustcenterEntities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          url
+        }
+      }
+    }
     vulnerabilities {
       totalCount
       pageInfo {

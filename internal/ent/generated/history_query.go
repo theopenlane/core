@@ -58,6 +58,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/templatehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessorhistory"
@@ -2554,6 +2555,52 @@ func (tcwchq *TrustCenterWatermarkConfigHistoryQuery) AsOf(ctx context.Context, 
 	return tcwchq.
 		Where(trustcenterwatermarkconfighistory.HistoryTimeLTE(time)).
 		Order(trustcenterwatermarkconfighistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (_m *TrustcenterEntity) History() *TrustcenterEntityHistoryQuery {
+	historyClient := NewTrustcenterEntityHistoryClient(_m.config)
+	return historyClient.Query().Where(trustcenterentityhistory.Ref(_m.ID))
+}
+
+func (_m *TrustcenterEntityHistory) Next(ctx context.Context) (*TrustcenterEntityHistory, error) {
+	client := NewTrustcenterEntityHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcenterentityhistory.Ref(_m.Ref),
+			trustcenterentityhistory.HistoryTimeGT(_m.HistoryTime),
+		).
+		Order(trustcenterentityhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (_m *TrustcenterEntityHistory) Prev(ctx context.Context) (*TrustcenterEntityHistory, error) {
+	client := NewTrustcenterEntityHistoryClient(_m.config)
+	return client.Query().
+		Where(
+			trustcenterentityhistory.Ref(_m.Ref),
+			trustcenterentityhistory.HistoryTimeLT(_m.HistoryTime),
+		).
+		Order(trustcenterentityhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tehq *TrustcenterEntityHistoryQuery) Earliest(ctx context.Context) (*TrustcenterEntityHistory, error) {
+	return tehq.
+		Order(trustcenterentityhistory.ByHistoryTime()).
+		First(ctx)
+}
+
+func (tehq *TrustcenterEntityHistoryQuery) Latest(ctx context.Context) (*TrustcenterEntityHistory, error) {
+	return tehq.
+		Order(trustcenterentityhistory.ByHistoryTime(sql.OrderDesc())).
+		First(ctx)
+}
+
+func (tehq *TrustcenterEntityHistoryQuery) AsOf(ctx context.Context, time time.Time) (*TrustcenterEntityHistory, error) {
+	return tehq.
+		Where(trustcenterentityhistory.HistoryTimeLTE(time)).
+		Order(trustcenterentityhistory.ByHistoryTime(sql.OrderDesc())).
 		First(ctx)
 }
 

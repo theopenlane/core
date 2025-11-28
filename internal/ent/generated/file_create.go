@@ -23,6 +23,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/internal/ent/generated/program"
 	"github.com/theopenlane/core/internal/ent/generated/template"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 )
 
@@ -586,6 +587,21 @@ func (_c *FileCreate) AddSecrets(v ...*Hush) *FileCreate {
 	return _c.AddSecretIDs(ids...)
 }
 
+// AddTrustcenterEntityIDs adds the "trustcenter_entities" edge to the TrustcenterEntity entity by IDs.
+func (_c *FileCreate) AddTrustcenterEntityIDs(ids ...string) *FileCreate {
+	_c.mutation.AddTrustcenterEntityIDs(ids...)
+	return _c
+}
+
+// AddTrustcenterEntities adds the "trustcenter_entities" edges to the TrustcenterEntity entity.
+func (_c *FileCreate) AddTrustcenterEntities(v ...*TrustcenterEntity) *FileCreate {
+	ids := make([]string, len(v))
+	for i := range v {
+		ids[i] = v[i].ID
+	}
+	return _c.AddTrustcenterEntityIDs(ids...)
+}
+
 // Mutation returns the FileMutation object of the builder.
 func (_c *FileCreate) Mutation() *FileMutation {
 	return _c.mutation
@@ -1040,6 +1056,23 @@ func (_c *FileCreate) createSpec() (*File, *sqlgraph.CreateSpec) {
 			},
 		}
 		edge.Schema = _c.schemaConfig.FileSecrets
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.TrustcenterEntitiesIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   file.TrustcenterEntitiesTable,
+			Columns: []string{file.TrustcenterEntitiesColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(trustcenterentity.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.TrustcenterEntity
 		for _, k := range nodes {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
