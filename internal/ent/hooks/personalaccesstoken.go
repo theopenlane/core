@@ -2,10 +2,11 @@ package hooks
 
 import (
 	"context"
+	"encoding/base64"
 
 	"entgo.io/ent"
-
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -30,6 +31,23 @@ func HookCreatePersonalAccessToken() ent.Hook {
 
 			// set user on the token
 			m.SetOwnerID(userID)
+
+			// generate the token
+			publicID, secretBytes, err := tokens.GenerateAPITokenKeyMaterial()
+			if err != nil {
+				return nil, err
+			}
+
+			// construct the token string
+			// default prefix is "tolp_"
+			// default delimiter is "_"
+			// secret is base64 encoded
+			secret := base64.RawStdEncoding.EncodeToString(secretBytes)
+			tokenStr := "tolp_" + publicID + "_" + secret
+
+			m.SetToken(tokenStr)
+			m.SetTokenPublicID(publicID)
+			m.SetTokenSecret(secret)
 
 			return next.Mutate(ctx, m)
 		})

@@ -158,6 +158,46 @@ func (_u *APITokenUpdate) SetNillableName(v *string) *APITokenUpdate {
 	return _u
 }
 
+// SetTokenPublicID sets the "token_public_id" field.
+func (_u *APITokenUpdate) SetTokenPublicID(v string) *APITokenUpdate {
+	_u.mutation.SetTokenPublicID(v)
+	return _u
+}
+
+// SetNillableTokenPublicID sets the "token_public_id" field if the given value is not nil.
+func (_u *APITokenUpdate) SetNillableTokenPublicID(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetTokenPublicID(*v)
+	}
+	return _u
+}
+
+// ClearTokenPublicID clears the value of the "token_public_id" field.
+func (_u *APITokenUpdate) ClearTokenPublicID() *APITokenUpdate {
+	_u.mutation.ClearTokenPublicID()
+	return _u
+}
+
+// SetTokenSecret sets the "token_secret" field.
+func (_u *APITokenUpdate) SetTokenSecret(v string) *APITokenUpdate {
+	_u.mutation.SetTokenSecret(v)
+	return _u
+}
+
+// SetNillableTokenSecret sets the "token_secret" field if the given value is not nil.
+func (_u *APITokenUpdate) SetNillableTokenSecret(v *string) *APITokenUpdate {
+	if v != nil {
+		_u.SetTokenSecret(*v)
+	}
+	return _u
+}
+
+// ClearTokenSecret clears the value of the "token_secret" field.
+func (_u *APITokenUpdate) ClearTokenSecret() *APITokenUpdate {
+	_u.mutation.ClearTokenSecret()
+	return _u
+}
+
 // SetExpiresAt sets the "expires_at" field.
 func (_u *APITokenUpdate) SetExpiresAt(v time.Time) *APITokenUpdate {
 	_u.mutation.SetExpiresAt(v)
@@ -398,6 +438,16 @@ func (_u *APITokenUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "APIToken.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TokenPublicID(); ok {
+		if err := apitoken.TokenPublicIDValidator(v); err != nil {
+			return &ValidationError{Name: "token_public_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_public_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TokenSecret(); ok {
+		if err := apitoken.TokenSecretValidator(v); err != nil {
+			return &ValidationError{Name: "token_secret", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_secret": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -462,6 +512,18 @@ func (_u *APITokenUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TokenPublicID(); ok {
+		_spec.SetField(apitoken.FieldTokenPublicID, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(apitoken.FieldTokenPublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TokenSecret(); ok {
+		_spec.SetField(apitoken.FieldTokenSecret, field.TypeString, value)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(apitoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)
@@ -698,6 +760,46 @@ func (_u *APITokenUpdateOne) SetNillableName(v *string) *APITokenUpdateOne {
 	if v != nil {
 		_u.SetName(*v)
 	}
+	return _u
+}
+
+// SetTokenPublicID sets the "token_public_id" field.
+func (_u *APITokenUpdateOne) SetTokenPublicID(v string) *APITokenUpdateOne {
+	_u.mutation.SetTokenPublicID(v)
+	return _u
+}
+
+// SetNillableTokenPublicID sets the "token_public_id" field if the given value is not nil.
+func (_u *APITokenUpdateOne) SetNillableTokenPublicID(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetTokenPublicID(*v)
+	}
+	return _u
+}
+
+// ClearTokenPublicID clears the value of the "token_public_id" field.
+func (_u *APITokenUpdateOne) ClearTokenPublicID() *APITokenUpdateOne {
+	_u.mutation.ClearTokenPublicID()
+	return _u
+}
+
+// SetTokenSecret sets the "token_secret" field.
+func (_u *APITokenUpdateOne) SetTokenSecret(v string) *APITokenUpdateOne {
+	_u.mutation.SetTokenSecret(v)
+	return _u
+}
+
+// SetNillableTokenSecret sets the "token_secret" field if the given value is not nil.
+func (_u *APITokenUpdateOne) SetNillableTokenSecret(v *string) *APITokenUpdateOne {
+	if v != nil {
+		_u.SetTokenSecret(*v)
+	}
+	return _u
+}
+
+// ClearTokenSecret clears the value of the "token_secret" field.
+func (_u *APITokenUpdateOne) ClearTokenSecret() *APITokenUpdateOne {
+	_u.mutation.ClearTokenSecret()
 	return _u
 }
 
@@ -954,6 +1056,16 @@ func (_u *APITokenUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "APIToken.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TokenPublicID(); ok {
+		if err := apitoken.TokenPublicIDValidator(v); err != nil {
+			return &ValidationError{Name: "token_public_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_public_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TokenSecret(); ok {
+		if err := apitoken.TokenSecretValidator(v); err != nil {
+			return &ValidationError{Name: "token_secret", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_secret": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -1035,6 +1147,18 @@ func (_u *APITokenUpdateOne) sqlSave(ctx context.Context) (_node *APIToken, err 
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(apitoken.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TokenPublicID(); ok {
+		_spec.SetField(apitoken.FieldTokenPublicID, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(apitoken.FieldTokenPublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TokenSecret(); ok {
+		_spec.SetField(apitoken.FieldTokenSecret, field.TypeString, value)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(apitoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)

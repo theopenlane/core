@@ -241,8 +241,16 @@ func init() {
 	apitokenDescToken := apitokenFields[1].Descriptor()
 	// apitoken.DefaultToken holds the default value on creation for the token field.
 	apitoken.DefaultToken = apitokenDescToken.Default.(func() string)
+	// apitokenDescTokenPublicID is the schema descriptor for token_public_id field.
+	apitokenDescTokenPublicID := apitokenFields[2].Descriptor()
+	// apitoken.TokenPublicIDValidator is a validator for the "token_public_id" field. It is called by the builders before save.
+	apitoken.TokenPublicIDValidator = apitokenDescTokenPublicID.Validators[0].(func(string) error)
+	// apitokenDescTokenSecret is the schema descriptor for token_secret field.
+	apitokenDescTokenSecret := apitokenFields[3].Descriptor()
+	// apitoken.TokenSecretValidator is a validator for the "token_secret" field. It is called by the builders before save.
+	apitoken.TokenSecretValidator = apitokenDescTokenSecret.Validators[0].(func(string) error)
 	// apitokenDescIsActive is the schema descriptor for is_active field.
-	apitokenDescIsActive := apitokenFields[6].Descriptor()
+	apitokenDescIsActive := apitokenFields[8].Descriptor()
 	// apitoken.DefaultIsActive holds the default value on creation for the is_active field.
 	apitoken.DefaultIsActive = apitokenDescIsActive.Default.(bool)
 	// apitokenDescID is the schema descriptor for id field.
@@ -6056,8 +6064,16 @@ func init() {
 	personalaccesstokenDescToken := personalaccesstokenFields[1].Descriptor()
 	// personalaccesstoken.DefaultToken holds the default value on creation for the token field.
 	personalaccesstoken.DefaultToken = personalaccesstokenDescToken.Default.(func() string)
+	// personalaccesstokenDescTokenPublicID is the schema descriptor for token_public_id field.
+	personalaccesstokenDescTokenPublicID := personalaccesstokenFields[2].Descriptor()
+	// personalaccesstoken.TokenPublicIDValidator is a validator for the "token_public_id" field. It is called by the builders before save.
+	personalaccesstoken.TokenPublicIDValidator = personalaccesstokenDescTokenPublicID.Validators[0].(func(string) error)
+	// personalaccesstokenDescTokenSecret is the schema descriptor for token_secret field.
+	personalaccesstokenDescTokenSecret := personalaccesstokenFields[3].Descriptor()
+	// personalaccesstoken.TokenSecretValidator is a validator for the "token_secret" field. It is called by the builders before save.
+	personalaccesstoken.TokenSecretValidator = personalaccesstokenDescTokenSecret.Validators[0].(func(string) error)
 	// personalaccesstokenDescIsActive is the schema descriptor for is_active field.
-	personalaccesstokenDescIsActive := personalaccesstokenFields[7].Descriptor()
+	personalaccesstokenDescIsActive := personalaccesstokenFields[9].Descriptor()
 	// personalaccesstoken.DefaultIsActive holds the default value on creation for the is_active field.
 	personalaccesstoken.DefaultIsActive = personalaccesstokenDescIsActive.Default.(bool)
 	// personalaccesstokenDescID is the schema descriptor for id field.

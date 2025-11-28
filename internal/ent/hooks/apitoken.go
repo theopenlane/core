@@ -2,11 +2,13 @@ package hooks
 
 import (
 	"context"
+	"encoding/base64"
 	"time"
 
 	"entgo.io/ent"
 	"github.com/samber/lo"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/iam/tokens"
 
 	"github.com/theopenlane/iam/auth"
 
@@ -43,6 +45,23 @@ func HookCreateAPIToken() ent.Hook {
 
 			// set organization on the token
 			m.SetOwnerID(orgID)
+
+			// generate the token
+			publicID, secretBytes, err := tokens.GenerateAPITokenKeyMaterial()
+			if err != nil {
+				return nil, err
+			}
+
+			// construct the token string
+			// default prefix is "tola_"
+			// default delimiter is "_"
+			// secret is base64 encoded
+			secret := base64.RawStdEncoding.EncodeToString(secretBytes)
+			tokenStr := "tola_" + publicID + "_" + secret
+
+			m.SetToken(tokenStr)
+			m.SetTokenPublicID(publicID)
+			m.SetTokenSecret(secret)
 
 			if err := validateExpirationTime(m); err != nil {
 				return nil, err

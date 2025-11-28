@@ -112,6 +112,16 @@ func Token(v string) predicate.APIToken {
 	return predicate.APIToken(sql.FieldEQ(FieldToken, v))
 }
 
+// TokenPublicID applies equality check predicate on the "token_public_id" field. It's identical to TokenPublicIDEQ.
+func TokenPublicID(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldTokenPublicID, v))
+}
+
+// TokenSecret applies equality check predicate on the "token_secret" field. It's identical to TokenSecretEQ.
+func TokenSecret(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldTokenSecret, v))
+}
+
 // ExpiresAt applies equality check predicate on the "expires_at" field. It's identical to ExpiresAtEQ.
 func ExpiresAt(v time.Time) predicate.APIToken {
 	return predicate.APIToken(sql.FieldEQ(FieldExpiresAt, v))
@@ -735,6 +745,156 @@ func TokenEqualFold(v string) predicate.APIToken {
 // TokenContainsFold applies the ContainsFold predicate on the "token" field.
 func TokenContainsFold(v string) predicate.APIToken {
 	return predicate.APIToken(sql.FieldContainsFold(FieldToken, v))
+}
+
+// TokenPublicIDEQ applies the EQ predicate on the "token_public_id" field.
+func TokenPublicIDEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDNEQ applies the NEQ predicate on the "token_public_id" field.
+func TokenPublicIDNEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDIn applies the In predicate on the "token_public_id" field.
+func TokenPublicIDIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldIn(FieldTokenPublicID, vs...))
+}
+
+// TokenPublicIDNotIn applies the NotIn predicate on the "token_public_id" field.
+func TokenPublicIDNotIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotIn(FieldTokenPublicID, vs...))
+}
+
+// TokenPublicIDGT applies the GT predicate on the "token_public_id" field.
+func TokenPublicIDGT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGT(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDGTE applies the GTE predicate on the "token_public_id" field.
+func TokenPublicIDGTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGTE(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDLT applies the LT predicate on the "token_public_id" field.
+func TokenPublicIDLT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLT(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDLTE applies the LTE predicate on the "token_public_id" field.
+func TokenPublicIDLTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLTE(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDContains applies the Contains predicate on the "token_public_id" field.
+func TokenPublicIDContains(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContains(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDHasPrefix applies the HasPrefix predicate on the "token_public_id" field.
+func TokenPublicIDHasPrefix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasPrefix(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDHasSuffix applies the HasSuffix predicate on the "token_public_id" field.
+func TokenPublicIDHasSuffix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasSuffix(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDIsNil applies the IsNil predicate on the "token_public_id" field.
+func TokenPublicIDIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldTokenPublicID))
+}
+
+// TokenPublicIDNotNil applies the NotNil predicate on the "token_public_id" field.
+func TokenPublicIDNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldTokenPublicID))
+}
+
+// TokenPublicIDEqualFold applies the EqualFold predicate on the "token_public_id" field.
+func TokenPublicIDEqualFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEqualFold(FieldTokenPublicID, v))
+}
+
+// TokenPublicIDContainsFold applies the ContainsFold predicate on the "token_public_id" field.
+func TokenPublicIDContainsFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContainsFold(FieldTokenPublicID, v))
+}
+
+// TokenSecretEQ applies the EQ predicate on the "token_secret" field.
+func TokenSecretEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEQ(FieldTokenSecret, v))
+}
+
+// TokenSecretNEQ applies the NEQ predicate on the "token_secret" field.
+func TokenSecretNEQ(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNEQ(FieldTokenSecret, v))
+}
+
+// TokenSecretIn applies the In predicate on the "token_secret" field.
+func TokenSecretIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldIn(FieldTokenSecret, vs...))
+}
+
+// TokenSecretNotIn applies the NotIn predicate on the "token_secret" field.
+func TokenSecretNotIn(vs ...string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotIn(FieldTokenSecret, vs...))
+}
+
+// TokenSecretGT applies the GT predicate on the "token_secret" field.
+func TokenSecretGT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGT(FieldTokenSecret, v))
+}
+
+// TokenSecretGTE applies the GTE predicate on the "token_secret" field.
+func TokenSecretGTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldGTE(FieldTokenSecret, v))
+}
+
+// TokenSecretLT applies the LT predicate on the "token_secret" field.
+func TokenSecretLT(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLT(FieldTokenSecret, v))
+}
+
+// TokenSecretLTE applies the LTE predicate on the "token_secret" field.
+func TokenSecretLTE(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldLTE(FieldTokenSecret, v))
+}
+
+// TokenSecretContains applies the Contains predicate on the "token_secret" field.
+func TokenSecretContains(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContains(FieldTokenSecret, v))
+}
+
+// TokenSecretHasPrefix applies the HasPrefix predicate on the "token_secret" field.
+func TokenSecretHasPrefix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasPrefix(FieldTokenSecret, v))
+}
+
+// TokenSecretHasSuffix applies the HasSuffix predicate on the "token_secret" field.
+func TokenSecretHasSuffix(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldHasSuffix(FieldTokenSecret, v))
+}
+
+// TokenSecretIsNil applies the IsNil predicate on the "token_secret" field.
+func TokenSecretIsNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldIsNull(FieldTokenSecret))
+}
+
+// TokenSecretNotNil applies the NotNil predicate on the "token_secret" field.
+func TokenSecretNotNil() predicate.APIToken {
+	return predicate.APIToken(sql.FieldNotNull(FieldTokenSecret))
+}
+
+// TokenSecretEqualFold applies the EqualFold predicate on the "token_secret" field.
+func TokenSecretEqualFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldEqualFold(FieldTokenSecret, v))
+}
+
+// TokenSecretContainsFold applies the ContainsFold predicate on the "token_secret" field.
+func TokenSecretContainsFold(v string) predicate.APIToken {
+	return predicate.APIToken(sql.FieldContainsFold(FieldTokenSecret, v))
 }
 
 // ExpiresAtEQ applies the EQ predicate on the "expires_at" field.

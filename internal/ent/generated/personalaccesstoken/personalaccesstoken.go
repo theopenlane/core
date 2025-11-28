@@ -35,6 +35,10 @@ const (
 	FieldName = "name"
 	// FieldToken holds the string denoting the token field in the database.
 	FieldToken = "token"
+	// FieldTokenPublicID holds the string denoting the token_public_id field in the database.
+	FieldTokenPublicID = "token_public_id"
+	// FieldTokenSecret holds the string denoting the token_secret field in the database.
+	FieldTokenSecret = "token_secret"
 	// FieldExpiresAt holds the string denoting the expires_at field in the database.
 	FieldExpiresAt = "expires_at"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -93,6 +97,8 @@ var Columns = []string{
 	FieldOwnerID,
 	FieldName,
 	FieldToken,
+	FieldTokenPublicID,
+	FieldTokenSecret,
 	FieldExpiresAt,
 	FieldDescription,
 	FieldScopes,
@@ -144,6 +150,10 @@ var (
 	NameValidator func(string) error
 	// DefaultToken holds the default value on creation for the "token" field.
 	DefaultToken func() string
+	// TokenPublicIDValidator is a validator for the "token_public_id" field. It is called by the builders before save.
+	TokenPublicIDValidator func(string) error
+	// TokenSecretValidator is a validator for the "token_secret" field. It is called by the builders before save.
+	TokenSecretValidator func(string) error
 	// DefaultIsActive holds the default value on creation for the "is_active" field.
 	DefaultIsActive bool
 	// DefaultID holds the default value on creation for the "id" field.
@@ -201,6 +211,16 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByToken orders the results by the token field.
 func ByToken(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldToken, opts...).ToFunc()
+}
+
+// ByTokenPublicID orders the results by the token_public_id field.
+func ByTokenPublicID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenPublicID, opts...).ToFunc()
+}
+
+// ByTokenSecret orders the results by the token_secret field.
+func ByTokenSecret(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldTokenSecret, opts...).ToFunc()
 }
 
 // ByExpiresAt orders the results by the expires_at field.

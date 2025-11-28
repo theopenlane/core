@@ -154,6 +154,46 @@ func (_u *PersonalAccessTokenUpdate) SetNillableName(v *string) *PersonalAccessT
 	return _u
 }
 
+// SetTokenPublicID sets the "token_public_id" field.
+func (_u *PersonalAccessTokenUpdate) SetTokenPublicID(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetTokenPublicID(v)
+	return _u
+}
+
+// SetNillableTokenPublicID sets the "token_public_id" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdate) SetNillableTokenPublicID(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetTokenPublicID(*v)
+	}
+	return _u
+}
+
+// ClearTokenPublicID clears the value of the "token_public_id" field.
+func (_u *PersonalAccessTokenUpdate) ClearTokenPublicID() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearTokenPublicID()
+	return _u
+}
+
+// SetTokenSecret sets the "token_secret" field.
+func (_u *PersonalAccessTokenUpdate) SetTokenSecret(v string) *PersonalAccessTokenUpdate {
+	_u.mutation.SetTokenSecret(v)
+	return _u
+}
+
+// SetNillableTokenSecret sets the "token_secret" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdate) SetNillableTokenSecret(v *string) *PersonalAccessTokenUpdate {
+	if v != nil {
+		_u.SetTokenSecret(*v)
+	}
+	return _u
+}
+
+// ClearTokenSecret clears the value of the "token_secret" field.
+func (_u *PersonalAccessTokenUpdate) ClearTokenSecret() *PersonalAccessTokenUpdate {
+	_u.mutation.ClearTokenSecret()
+	return _u
+}
+
 // SetExpiresAt sets the "expires_at" field.
 func (_u *PersonalAccessTokenUpdate) SetExpiresAt(v time.Time) *PersonalAccessTokenUpdate {
 	_u.mutation.SetExpiresAt(v)
@@ -461,6 +501,16 @@ func (_u *PersonalAccessTokenUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TokenPublicID(); ok {
+		if err := personalaccesstoken.TokenPublicIDValidator(v); err != nil {
+			return &ValidationError{Name: "token_public_id", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.token_public_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TokenSecret(); ok {
+		if err := personalaccesstoken.TokenSecretValidator(v); err != nil {
+			return &ValidationError{Name: "token_secret", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.token_secret": %w`, err)}
+		}
+	}
 	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PersonalAccessToken.owner"`)
 	}
@@ -528,6 +578,18 @@ func (_u *PersonalAccessTokenUpdate) sqlSave(ctx context.Context) (_node int, er
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TokenPublicID(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenPublicID, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenPublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TokenSecret(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenSecret, field.TypeString, value)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)
@@ -857,6 +919,46 @@ func (_u *PersonalAccessTokenUpdateOne) SetNillableName(v *string) *PersonalAcce
 	return _u
 }
 
+// SetTokenPublicID sets the "token_public_id" field.
+func (_u *PersonalAccessTokenUpdateOne) SetTokenPublicID(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetTokenPublicID(v)
+	return _u
+}
+
+// SetNillableTokenPublicID sets the "token_public_id" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdateOne) SetNillableTokenPublicID(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetTokenPublicID(*v)
+	}
+	return _u
+}
+
+// ClearTokenPublicID clears the value of the "token_public_id" field.
+func (_u *PersonalAccessTokenUpdateOne) ClearTokenPublicID() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearTokenPublicID()
+	return _u
+}
+
+// SetTokenSecret sets the "token_secret" field.
+func (_u *PersonalAccessTokenUpdateOne) SetTokenSecret(v string) *PersonalAccessTokenUpdateOne {
+	_u.mutation.SetTokenSecret(v)
+	return _u
+}
+
+// SetNillableTokenSecret sets the "token_secret" field if the given value is not nil.
+func (_u *PersonalAccessTokenUpdateOne) SetNillableTokenSecret(v *string) *PersonalAccessTokenUpdateOne {
+	if v != nil {
+		_u.SetTokenSecret(*v)
+	}
+	return _u
+}
+
+// ClearTokenSecret clears the value of the "token_secret" field.
+func (_u *PersonalAccessTokenUpdateOne) ClearTokenSecret() *PersonalAccessTokenUpdateOne {
+	_u.mutation.ClearTokenSecret()
+	return _u
+}
+
 // SetExpiresAt sets the "expires_at" field.
 func (_u *PersonalAccessTokenUpdateOne) SetExpiresAt(v time.Time) *PersonalAccessTokenUpdateOne {
 	_u.mutation.SetExpiresAt(v)
@@ -1177,6 +1279,16 @@ func (_u *PersonalAccessTokenUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.name": %w`, err)}
 		}
 	}
+	if v, ok := _u.mutation.TokenPublicID(); ok {
+		if err := personalaccesstoken.TokenPublicIDValidator(v); err != nil {
+			return &ValidationError{Name: "token_public_id", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.token_public_id": %w`, err)}
+		}
+	}
+	if v, ok := _u.mutation.TokenSecret(); ok {
+		if err := personalaccesstoken.TokenSecretValidator(v); err != nil {
+			return &ValidationError{Name: "token_secret", err: fmt.Errorf(`generated: validator failed for field "PersonalAccessToken.token_secret": %w`, err)}
+		}
+	}
 	if _u.mutation.OwnerCleared() && len(_u.mutation.OwnerIDs()) > 0 {
 		return errors.New(`generated: clearing a required unique edge "PersonalAccessToken.owner"`)
 	}
@@ -1261,6 +1373,18 @@ func (_u *PersonalAccessTokenUpdateOne) sqlSave(ctx context.Context) (_node *Per
 	}
 	if value, ok := _u.mutation.Name(); ok {
 		_spec.SetField(personalaccesstoken.FieldName, field.TypeString, value)
+	}
+	if value, ok := _u.mutation.TokenPublicID(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenPublicID, field.TypeString, value)
+	}
+	if _u.mutation.TokenPublicIDCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenPublicID, field.TypeString)
+	}
+	if value, ok := _u.mutation.TokenSecret(); ok {
+		_spec.SetField(personalaccesstoken.FieldTokenSecret, field.TypeString, value)
+	}
+	if _u.mutation.TokenSecretCleared() {
+		_spec.ClearField(personalaccesstoken.FieldTokenSecret, field.TypeString)
 	}
 	if value, ok := _u.mutation.ExpiresAt(); ok {
 		_spec.SetField(personalaccesstoken.FieldExpiresAt, field.TypeTime, value)

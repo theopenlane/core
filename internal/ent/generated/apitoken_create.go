@@ -146,6 +146,34 @@ func (_c *APITokenCreate) SetNillableToken(v *string) *APITokenCreate {
 	return _c
 }
 
+// SetTokenPublicID sets the "token_public_id" field.
+func (_c *APITokenCreate) SetTokenPublicID(v string) *APITokenCreate {
+	_c.mutation.SetTokenPublicID(v)
+	return _c
+}
+
+// SetNillableTokenPublicID sets the "token_public_id" field if the given value is not nil.
+func (_c *APITokenCreate) SetNillableTokenPublicID(v *string) *APITokenCreate {
+	if v != nil {
+		_c.SetTokenPublicID(*v)
+	}
+	return _c
+}
+
+// SetTokenSecret sets the "token_secret" field.
+func (_c *APITokenCreate) SetTokenSecret(v string) *APITokenCreate {
+	_c.mutation.SetTokenSecret(v)
+	return _c
+}
+
+// SetNillableTokenSecret sets the "token_secret" field if the given value is not nil.
+func (_c *APITokenCreate) SetNillableTokenSecret(v *string) *APITokenCreate {
+	if v != nil {
+		_c.SetTokenSecret(*v)
+	}
+	return _c
+}
+
 // SetExpiresAt sets the "expires_at" field.
 func (_c *APITokenCreate) SetExpiresAt(v time.Time) *APITokenCreate {
 	_c.mutation.SetExpiresAt(v)
@@ -369,6 +397,16 @@ func (_c *APITokenCreate) check() error {
 	if _, ok := _c.mutation.Token(); !ok {
 		return &ValidationError{Name: "token", err: errors.New(`generated: missing required field "APIToken.token"`)}
 	}
+	if v, ok := _c.mutation.TokenPublicID(); ok {
+		if err := apitoken.TokenPublicIDValidator(v); err != nil {
+			return &ValidationError{Name: "token_public_id", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_public_id": %w`, err)}
+		}
+	}
+	if v, ok := _c.mutation.TokenSecret(); ok {
+		if err := apitoken.TokenSecretValidator(v); err != nil {
+			return &ValidationError{Name: "token_secret", err: fmt.Errorf(`generated: validator failed for field "APIToken.token_secret": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -440,6 +478,14 @@ func (_c *APITokenCreate) createSpec() (*APIToken, *sqlgraph.CreateSpec) {
 	if value, ok := _c.mutation.Token(); ok {
 		_spec.SetField(apitoken.FieldToken, field.TypeString, value)
 		_node.Token = value
+	}
+	if value, ok := _c.mutation.TokenPublicID(); ok {
+		_spec.SetField(apitoken.FieldTokenPublicID, field.TypeString, value)
+		_node.TokenPublicID = value
+	}
+	if value, ok := _c.mutation.TokenSecret(); ok {
+		_spec.SetField(apitoken.FieldTokenSecret, field.TypeString, value)
+		_node.TokenSecret = value
 	}
 	if value, ok := _c.mutation.ExpiresAt(); ok {
 		_spec.SetField(apitoken.FieldExpiresAt, field.TypeTime, value)

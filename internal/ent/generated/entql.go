@@ -186,6 +186,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			apitoken.FieldOwnerID:           {Type: field.TypeString, Column: apitoken.FieldOwnerID},
 			apitoken.FieldName:              {Type: field.TypeString, Column: apitoken.FieldName},
 			apitoken.FieldToken:             {Type: field.TypeString, Column: apitoken.FieldToken},
+			apitoken.FieldTokenPublicID:     {Type: field.TypeString, Column: apitoken.FieldTokenPublicID},
+			apitoken.FieldTokenSecret:       {Type: field.TypeString, Column: apitoken.FieldTokenSecret},
 			apitoken.FieldExpiresAt:         {Type: field.TypeTime, Column: apitoken.FieldExpiresAt},
 			apitoken.FieldDescription:       {Type: field.TypeString, Column: apitoken.FieldDescription},
 			apitoken.FieldScopes:            {Type: field.TypeJSON, Column: apitoken.FieldScopes},
@@ -3051,6 +3053,8 @@ var schemaGraph = func() *sqlgraph.Schema {
 			personalaccesstoken.FieldOwnerID:           {Type: field.TypeString, Column: personalaccesstoken.FieldOwnerID},
 			personalaccesstoken.FieldName:              {Type: field.TypeString, Column: personalaccesstoken.FieldName},
 			personalaccesstoken.FieldToken:             {Type: field.TypeString, Column: personalaccesstoken.FieldToken},
+			personalaccesstoken.FieldTokenPublicID:     {Type: field.TypeString, Column: personalaccesstoken.FieldTokenPublicID},
+			personalaccesstoken.FieldTokenSecret:       {Type: field.TypeString, Column: personalaccesstoken.FieldTokenSecret},
 			personalaccesstoken.FieldExpiresAt:         {Type: field.TypeTime, Column: personalaccesstoken.FieldExpiresAt},
 			personalaccesstoken.FieldDescription:       {Type: field.TypeString, Column: personalaccesstoken.FieldDescription},
 			personalaccesstoken.FieldScopes:            {Type: field.TypeJSON, Column: personalaccesstoken.FieldScopes},
@@ -13600,6 +13604,16 @@ func (f *APITokenFilter) WhereName(p entql.StringP) {
 // WhereToken applies the entql string predicate on the token field.
 func (f *APITokenFilter) WhereToken(p entql.StringP) {
 	f.Where(p.Field(apitoken.FieldToken))
+}
+
+// WhereTokenPublicID applies the entql string predicate on the token_public_id field.
+func (f *APITokenFilter) WhereTokenPublicID(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldTokenPublicID))
+}
+
+// WhereTokenSecret applies the entql string predicate on the token_secret field.
+func (f *APITokenFilter) WhereTokenSecret(p entql.StringP) {
+	f.Where(p.Field(apitoken.FieldTokenSecret))
 }
 
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
@@ -31832,6 +31846,16 @@ func (f *PersonalAccessTokenFilter) WhereName(p entql.StringP) {
 // WhereToken applies the entql string predicate on the token field.
 func (f *PersonalAccessTokenFilter) WhereToken(p entql.StringP) {
 	f.Where(p.Field(personalaccesstoken.FieldToken))
+}
+
+// WhereTokenPublicID applies the entql string predicate on the token_public_id field.
+func (f *PersonalAccessTokenFilter) WhereTokenPublicID(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldTokenPublicID))
+}
+
+// WhereTokenSecret applies the entql string predicate on the token_secret field.
+func (f *PersonalAccessTokenFilter) WhereTokenSecret(p entql.StringP) {
+	f.Where(p.Field(personalaccesstoken.FieldTokenSecret))
 }
 
 // WhereExpiresAt applies the entql time.Time predicate on the expires_at field.
