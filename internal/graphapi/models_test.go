@@ -14,6 +14,11 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/utils/contextx"
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
@@ -30,10 +35,6 @@ import (
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-	"github.com/theopenlane/utils/contextx"
-	"github.com/theopenlane/utils/ulids"
 )
 
 type OrganizationBuilder struct {
@@ -1928,6 +1929,49 @@ func (tccb *TrustCenterComplianceBuilder) MustNew(ctx context.Context, t *testin
 	requireNoError(err)
 
 	return trustCenterCompliance
+}
+
+// TrustcenterEntityBuilder is used to create trustcenter entities
+type TrustcenterEntityBuilder struct {
+	client *client
+
+	// Fields
+	Name          string
+	URL           *string
+	TrustCenterID string
+	LogoFileID    *string
+}
+
+func (te *TrustcenterEntityBuilder) MustNew(ctx context.Context, t *testing.T) *ent.TrustcenterEntity {
+	userCtx := ctx
+	ctx = ent.NewContext(ctx, te.client.db)
+	ctx = graphql.WithResponseContext(ctx, gqlerrors.ErrorPresenter, graphql.DefaultRecover)
+
+	if te.Name == "" {
+		te.Name = gofakeit.Company()
+	}
+
+	if te.TrustCenterID == "" {
+		trustCenter := (&TrustCenterBuilder{client: te.client}).MustNew(userCtx, t)
+		te.TrustCenterID = trustCenter.ID
+	}
+
+	mutation := te.client.db.TrustcenterEntity.Create().
+		SetName(te.Name).
+		SetTrustCenterID(te.TrustCenterID)
+
+	if te.URL != nil {
+		mutation.SetURL(*te.URL)
+	}
+
+	if te.LogoFileID != nil {
+		mutation.SetLogoFileID(*te.LogoFileID)
+	}
+
+	trustcenterEntity, err := mutation.Save(ctx)
+	requireNoError(err)
+
+	return trustcenterEntity
 }
 
 // IntegrationBuilder is used to create integrations

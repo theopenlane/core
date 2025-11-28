@@ -170,6 +170,9 @@ func (c *Client) WithHistory() {
 	for _, hook := range history.Hooks[*TrustCenterWatermarkConfigMutation]() {
 		c.TrustCenterWatermarkConfig.Use(hook)
 	}
+	for _, hook := range history.Hooks[*TrustcenterEntityMutation]() {
+		c.TrustcenterEntity.Use(hook)
+	}
 	for _, hook := range history.Hooks[*UserMutation]() {
 		c.User.Use(hook)
 	}

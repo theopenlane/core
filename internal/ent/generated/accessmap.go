@@ -738,6 +738,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "secret",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trustcenter_entities": {
+	ObjectType:      "trustcenter_entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "file_download_token": {"owner": {
 	ObjectType:      "owner",
@@ -2539,6 +2543,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "note",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "trustcenter_entities": {
+	ObjectType:      "trustcenter_entity",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "trust_center_compliance": {"trust_center": {
 	ObjectType:      "trust_center",
@@ -2598,6 +2606,19 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "file": {
 	ObjectType:      "file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+},
+}, "trustcenter_entity": {"logo_file": {
+	ObjectType:      "logo_file",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "trust_center": {
+	ObjectType:      "trust_center",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "entity_type": {
+	ObjectType:      "entity_type",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 },
