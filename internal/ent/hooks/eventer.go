@@ -132,10 +132,10 @@ func registerDefaultMutationListeners(e *Eventer) {
     e.AddMutationListener(entgen.TypeUser, handleUserMutation)
 
     // Register notification listeners from notifications package
-    notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext) error) {
+    notifications.RegisterListeners(func(entityType string, handler func(*soiree.EventContext, any) error) {
         // Wrap the soiree-based handler to match the MutationHandler signature expected by AddMutationListener
-        e.AddMutationListener(entityType, func(ctx *soiree.EventContext, _ *MutationPayload) error {
-            return handler(ctx)
+        e.AddMutationListener(entityType, func(ctx *soiree.EventContext, payload *MutationPayload) error {
+            return handler(ctx, payload)
         })
     })
 }
