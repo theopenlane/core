@@ -80,11 +80,27 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			// Get access token from the request, if not available then attempt to refresh
 			// using the refresh token cookie.
-			bearerToken, err := auth.GetBearerToken(c)
+			var bearerToken string
+			authHeader := c.Request().Header.Get("Authorization")
+			if authHeader == "" {
+				err = ErrNoAuthorization
+			} else {
+				parts := strings.Split(authHeader, " ")
+				if len(parts) != 2 || parts[0] != "Bearer" {
+					err = ErrParseBearer
+				} else {
+					bearerToken = parts[1]
+				}
+			}
+
 			if err != nil {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
 					if bearerToken, err = reauthenticate(c); err != nil {
+						if errors.Is(err, ErrRefreshDisabled) {
+							return unauthorized(c, ErrNoAuthorization, conf, validator)
+						}
+
 						return unauthorized(c, err, conf, validator)
 					}
 				default:
@@ -651,15 +667,16 @@ var (
 
 // parseToken parses the token string and returns the public ID and secret
 func parseToken(token string) (publicID, secret string, err error) {
+	const PartsCount int = 3
 	if strings.HasPrefix(token, "tola_") {
 		parts := strings.Split(token, "_")
-		if len(parts) != 3 {
+		if len(parts) != PartsCount {
 			return "", "", rout.ErrInvalidCredentials
 		}
 		return parts[1], parts[2], nil
 	} else if strings.HasPrefix(token, "tolp_") {
 		parts := strings.Split(token, "_")
-		if len(parts) != 3 {
+		if len(parts) != PartsCount {
 			return "", "", rout.ErrInvalidCredentials
 		}
 		return parts[1], parts[2], nil
