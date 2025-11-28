@@ -70,15 +70,6 @@ VALUES
         true, NOW(), NOW(), 'system', 'system'
     ),
     (
-        'E3NVV62HSKHW59RX7AD3JW7RFN',
-        'task',
-        'kind',
-        'Uncategorized',
-        'Tasks whose kind does not fit any defined task kind or where a more specific kind is not required.',
-        '#9CA3AF',
-        true, NOW(), NOW(), 'system', 'system'
-    ),
-    (
         '97V9YB9VJNKXPH03HGZDPS3MAC',
         'procedure',
         'kind',
