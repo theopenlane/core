@@ -68,6 +68,8 @@ const (
 	EdgeTemplates = "templates"
 	// EdgePosts holds the string denoting the posts edge name in mutations.
 	EdgePosts = "posts"
+	// EdgeTrustcenterEntities holds the string denoting the trustcenter_entities edge name in mutations.
+	EdgeTrustcenterEntities = "trustcenter_entities"
 	// Table holds the table name of the trustcenter in the database.
 	Table = "trust_centers"
 	// OwnerTable is the table that holds the owner relation/edge.
@@ -147,6 +149,13 @@ const (
 	PostsInverseTable = "notes"
 	// PostsColumn is the table column denoting the posts relation/edge.
 	PostsColumn = "trust_center_posts"
+	// TrustcenterEntitiesTable is the table that holds the trustcenter_entities relation/edge.
+	TrustcenterEntitiesTable = "trustcenter_entities"
+	// TrustcenterEntitiesInverseTable is the table name for the TrustcenterEntity entity.
+	// It exists in this package in order to avoid circular dependency with the "trustcenterentity" package.
+	TrustcenterEntitiesInverseTable = "trustcenter_entities"
+	// TrustcenterEntitiesColumn is the table column denoting the trustcenter_entities relation/edge.
+	TrustcenterEntitiesColumn = "trust_center_trustcenter_entities"
 )
 
 // Columns holds all SQL columns for trustcenter fields.
@@ -410,6 +419,20 @@ func ByPosts(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newPostsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByTrustcenterEntitiesCount orders the results by trustcenter_entities count.
+func ByTrustcenterEntitiesCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newTrustcenterEntitiesStep(), opts...)
+	}
+}
+
+// ByTrustcenterEntities orders the results by trustcenter_entities terms.
+func ByTrustcenterEntities(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newTrustcenterEntitiesStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newOwnerStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
@@ -485,6 +508,13 @@ func newPostsStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(PostsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, PostsTable, PostsColumn),
+	)
+}
+func newTrustcenterEntitiesStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(TrustcenterEntitiesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, TrustcenterEntitiesTable, TrustcenterEntitiesColumn),
 	)
 }
 

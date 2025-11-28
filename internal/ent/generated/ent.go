@@ -137,6 +137,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/trustcentercompliancehistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterdochistory"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentity"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterentityhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenterhistory"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersetting"
 	"github.com/theopenlane/core/internal/ent/generated/trustcentersettinghistory"
@@ -355,6 +357,8 @@ func checkColumn(t, c string) error {
 			trustcentersubprocessorhistory.Table:    trustcentersubprocessorhistory.ValidColumn,
 			trustcenterwatermarkconfig.Table:        trustcenterwatermarkconfig.ValidColumn,
 			trustcenterwatermarkconfighistory.Table: trustcenterwatermarkconfighistory.ValidColumn,
+			trustcenterentity.Table:                 trustcenterentity.ValidColumn,
+			trustcenterentityhistory.Table:          trustcenterentityhistory.ValidColumn,
 			user.Table:                              user.ValidColumn,
 			userhistory.Table:                       userhistory.ValidColumn,
 			usersetting.Table:                       usersetting.ValidColumn,

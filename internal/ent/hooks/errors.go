@@ -99,6 +99,9 @@ var (
 	ErrTemplateNotFound = errors.New("template does not exist")
 	// ErrTemplateNotQuestionnaire is returned when an assessment tries to use a wrong template type
 	ErrTemplateNotQuestionnaire = errors.New("template must be a questionnaire")
+	// ErrTrustCenterIDRequired is returned when the trustcenter id is not provided
+	// when creating a customer for the trust center
+	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.
