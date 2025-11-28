@@ -874,6 +874,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			customtypeenum.FieldName:             {Type: field.TypeString, Column: customtypeenum.FieldName},
 			customtypeenum.FieldDescription:      {Type: field.TypeString, Column: customtypeenum.FieldDescription},
 			customtypeenum.FieldColor:            {Type: field.TypeString, Column: customtypeenum.FieldColor},
+			customtypeenum.FieldIcon:             {Type: field.TypeString, Column: customtypeenum.FieldIcon},
 		},
 	}
 	graph.Nodes[20] = &sqlgraph.Node{
@@ -3705,6 +3706,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standard.FieldFreeToUse:            {Type: field.TypeBool, Column: standard.FieldFreeToUse},
 			standard.FieldStandardType:         {Type: field.TypeString, Column: standard.FieldStandardType},
 			standard.FieldVersion:              {Type: field.TypeString, Column: standard.FieldVersion},
+			standard.FieldLogoFileID:           {Type: field.TypeString, Column: standard.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[108] = &sqlgraph.Node{
@@ -3746,6 +3748,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			standardhistory.FieldFreeToUse:            {Type: field.TypeBool, Column: standardhistory.FieldFreeToUse},
 			standardhistory.FieldStandardType:         {Type: field.TypeString, Column: standardhistory.FieldStandardType},
 			standardhistory.FieldVersion:              {Type: field.TypeString, Column: standardhistory.FieldVersion},
+			standardhistory.FieldLogoFileID:           {Type: field.TypeString, Column: standardhistory.FieldLogoFileID},
 		},
 	}
 	graph.Nodes[109] = &sqlgraph.Node{
@@ -4237,6 +4240,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdoc.FieldWatermarkingEnabled: {Type: field.TypeBool, Column: trustcenterdoc.FieldWatermarkingEnabled},
 			trustcenterdoc.FieldWatermarkStatus:     {Type: field.TypeEnum, Column: trustcenterdoc.FieldWatermarkStatus},
 			trustcenterdoc.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdoc.FieldVisibility},
+			trustcenterdoc.FieldStandardID:          {Type: field.TypeString, Column: trustcenterdoc.FieldStandardID},
 		},
 	}
 	graph.Nodes[124] = &sqlgraph.Node{
@@ -4268,6 +4272,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterdochistory.FieldWatermarkingEnabled: {Type: field.TypeBool, Column: trustcenterdochistory.FieldWatermarkingEnabled},
 			trustcenterdochistory.FieldWatermarkStatus:     {Type: field.TypeEnum, Column: trustcenterdochistory.FieldWatermarkStatus},
 			trustcenterdochistory.FieldVisibility:          {Type: field.TypeEnum, Column: trustcenterdochistory.FieldVisibility},
+			trustcenterdochistory.FieldStandardID:          {Type: field.TypeString, Column: trustcenterdochistory.FieldStandardID},
 		},
 	}
 	graph.Nodes[125] = &sqlgraph.Node{
@@ -4441,6 +4446,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfig.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldDeletedBy},
 			trustcenterwatermarkconfig.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldOwnerID},
 			trustcenterwatermarkconfig.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldTrustCenterID},
+			trustcenterwatermarkconfig.FieldIsEnabled:     {Type: field.TypeBool, Column: trustcenterwatermarkconfig.FieldIsEnabled},
 			trustcenterwatermarkconfig.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldLogoID},
 			trustcenterwatermarkconfig.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfig.FieldText},
 			trustcenterwatermarkconfig.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfig.FieldFontSize},
@@ -4472,6 +4478,7 @@ var schemaGraph = func() *sqlgraph.Schema {
 			trustcenterwatermarkconfighistory.FieldDeletedBy:     {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldDeletedBy},
 			trustcenterwatermarkconfighistory.FieldOwnerID:       {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldOwnerID},
 			trustcenterwatermarkconfighistory.FieldTrustCenterID: {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldTrustCenterID},
+			trustcenterwatermarkconfighistory.FieldIsEnabled:     {Type: field.TypeBool, Column: trustcenterwatermarkconfighistory.FieldIsEnabled},
 			trustcenterwatermarkconfighistory.FieldLogoID:        {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldLogoID},
 			trustcenterwatermarkconfighistory.FieldText:          {Type: field.TypeString, Column: trustcenterwatermarkconfighistory.FieldText},
 			trustcenterwatermarkconfighistory.FieldFontSize:      {Type: field.TypeFloat64, Column: trustcenterwatermarkconfighistory.FieldFontSize},
@@ -9446,6 +9453,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"Group",
 	)
 	graph.MustAddE(
+		"trust_center_doc_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterDocCreatorsTable,
+			Columns: []string{organization.TrustCenterDocCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
+		"trust_center_subprocessor_creators",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   organization.TrustCenterSubprocessorCreatorsTable,
+			Columns: []string{organization.TrustCenterSubprocessorCreatorsColumn},
+			Bidi:    false,
+		},
+		"Organization",
+		"Group",
+	)
+	graph.MustAddE(
 		"parent",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -11738,6 +11769,30 @@ var schemaGraph = func() *sqlgraph.Schema {
 		"TrustCenterCompliance",
 	)
 	graph.MustAddE(
+		"trust_center_docs",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   standard.TrustCenterDocsTable,
+			Columns: []string{standard.TrustCenterDocsColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"TrustCenterDoc",
+	)
+	graph.MustAddE(
+		"logo_file",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: false,
+			Table:   standard.LogoFileTable,
+			Columns: []string{standard.LogoFileColumn},
+			Bidi:    false,
+		},
+		"Standard",
+		"File",
+	)
+	graph.MustAddE(
 		"evidence",
 		&sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2M,
@@ -12480,6 +12535,18 @@ var schemaGraph = func() *sqlgraph.Schema {
 		},
 		"TrustCenterDoc",
 		"TrustCenter",
+	)
+	graph.MustAddE(
+		"standard",
+		&sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   trustcenterdoc.StandardTable,
+			Columns: []string{trustcenterdoc.StandardColumn},
+			Bidi:    false,
+		},
+		"TrustCenterDoc",
+		"Standard",
 	)
 	graph.MustAddE(
 		"file",
@@ -17729,6 +17796,11 @@ func (f *CustomTypeEnumFilter) WhereDescription(p entql.StringP) {
 // WhereColor applies the entql string predicate on the color field.
 func (f *CustomTypeEnumFilter) WhereColor(p entql.StringP) {
 	f.Where(p.Field(customtypeenum.FieldColor))
+}
+
+// WhereIcon applies the entql string predicate on the icon field.
+func (f *CustomTypeEnumFilter) WhereIcon(p entql.StringP) {
+	f.Where(p.Field(customtypeenum.FieldIcon))
 }
 
 // WhereHasOwner applies a predicate to check if query has an edge owner.
@@ -29962,6 +30034,34 @@ func (f *OrganizationFilter) WhereHasSubprocessorCreatorsWith(preds ...predicate
 	})))
 }
 
+// WhereHasTrustCenterDocCreators applies a predicate to check if query has an edge trust_center_doc_creators.
+func (f *OrganizationFilter) WhereHasTrustCenterDocCreators() {
+	f.Where(entql.HasEdge("trust_center_doc_creators"))
+}
+
+// WhereHasTrustCenterDocCreatorsWith applies a predicate to check if query has an edge trust_center_doc_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterDocCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("trust_center_doc_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterSubprocessorCreators applies a predicate to check if query has an edge trust_center_subprocessor_creators.
+func (f *OrganizationFilter) WhereHasTrustCenterSubprocessorCreators() {
+	f.Where(entql.HasEdge("trust_center_subprocessor_creators"))
+}
+
+// WhereHasTrustCenterSubprocessorCreatorsWith applies a predicate to check if query has an edge trust_center_subprocessor_creators with a given conditions (other predicates).
+func (f *OrganizationFilter) WhereHasTrustCenterSubprocessorCreatorsWith(preds ...predicate.Group) {
+	f.Where(entql.HasEdgeWith("trust_center_subprocessor_creators", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
 // WhereHasParent applies a predicate to check if query has an edge parent.
 func (f *OrganizationFilter) WhereHasParent() {
 	f.Where(entql.HasEdge("parent"))
@@ -36154,6 +36254,11 @@ func (f *StandardFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standard.FieldVersion))
 }
 
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *StandardFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(standard.FieldLogoFileID))
+}
+
 // WhereHasOwner applies a predicate to check if query has an edge owner.
 func (f *StandardFilter) WhereHasOwner() {
 	f.Where(entql.HasEdge("owner"))
@@ -36190,6 +36295,34 @@ func (f *StandardFilter) WhereHasTrustCenterCompliances() {
 // WhereHasTrustCenterCompliancesWith applies a predicate to check if query has an edge trust_center_compliances with a given conditions (other predicates).
 func (f *StandardFilter) WhereHasTrustCenterCompliancesWith(preds ...predicate.TrustCenterCompliance) {
 	f.Where(entql.HasEdgeWith("trust_center_compliances", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasTrustCenterDocs applies a predicate to check if query has an edge trust_center_docs.
+func (f *StandardFilter) WhereHasTrustCenterDocs() {
+	f.Where(entql.HasEdge("trust_center_docs"))
+}
+
+// WhereHasTrustCenterDocsWith applies a predicate to check if query has an edge trust_center_docs with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasTrustCenterDocsWith(preds ...predicate.TrustCenterDoc) {
+	f.Where(entql.HasEdgeWith("trust_center_docs", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasLogoFile applies a predicate to check if query has an edge logo_file.
+func (f *StandardFilter) WhereHasLogoFile() {
+	f.Where(entql.HasEdge("logo_file"))
+}
+
+// WhereHasLogoFileWith applies a predicate to check if query has an edge logo_file with a given conditions (other predicates).
+func (f *StandardFilter) WhereHasLogoFileWith(preds ...predicate.File) {
+	f.Where(entql.HasEdgeWith("logo_file", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -36374,6 +36507,11 @@ func (f *StandardHistoryFilter) WhereStandardType(p entql.StringP) {
 // WhereVersion applies the entql string predicate on the version field.
 func (f *StandardHistoryFilter) WhereVersion(p entql.StringP) {
 	f.Where(p.Field(standardhistory.FieldVersion))
+}
+
+// WhereLogoFileID applies the entql string predicate on the logo_file_id field.
+func (f *StandardHistoryFilter) WhereLogoFileID(p entql.StringP) {
+	f.Where(p.Field(standardhistory.FieldLogoFileID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -39310,6 +39448,11 @@ func (f *TrustCenterDocFilter) WhereVisibility(p entql.StringP) {
 	f.Where(p.Field(trustcenterdoc.FieldVisibility))
 }
 
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *TrustCenterDocFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(trustcenterdoc.FieldStandardID))
+}
+
 // WhereHasTrustCenter applies a predicate to check if query has an edge trust_center.
 func (f *TrustCenterDocFilter) WhereHasTrustCenter() {
 	f.Where(entql.HasEdge("trust_center"))
@@ -39318,6 +39461,20 @@ func (f *TrustCenterDocFilter) WhereHasTrustCenter() {
 // WhereHasTrustCenterWith applies a predicate to check if query has an edge trust_center with a given conditions (other predicates).
 func (f *TrustCenterDocFilter) WhereHasTrustCenterWith(preds ...predicate.TrustCenter) {
 	f.Where(entql.HasEdgeWith("trust_center", sqlgraph.WrapFunc(func(s *sql.Selector) {
+		for _, p := range preds {
+			p(s)
+		}
+	})))
+}
+
+// WhereHasStandard applies a predicate to check if query has an edge standard.
+func (f *TrustCenterDocFilter) WhereHasStandard() {
+	f.Where(entql.HasEdge("standard"))
+}
+
+// WhereHasStandardWith applies a predicate to check if query has an edge standard with a given conditions (other predicates).
+func (f *TrustCenterDocFilter) WhereHasStandardWith(preds ...predicate.Standard) {
+	f.Where(entql.HasEdgeWith("standard", sqlgraph.WrapFunc(func(s *sql.Selector) {
 		for _, p := range preds {
 			p(s)
 		}
@@ -39480,6 +39637,11 @@ func (f *TrustCenterDocHistoryFilter) WhereWatermarkStatus(p entql.StringP) {
 // WhereVisibility applies the entql string predicate on the visibility field.
 func (f *TrustCenterDocHistoryFilter) WhereVisibility(p entql.StringP) {
 	f.Where(p.Field(trustcenterdochistory.FieldVisibility))
+}
+
+// WhereStandardID applies the entql string predicate on the standard_id field.
+func (f *TrustCenterDocHistoryFilter) WhereStandardID(p entql.StringP) {
+	f.Where(p.Field(trustcenterdochistory.FieldStandardID))
 }
 
 // addPredicate implements the predicateAdder interface.
@@ -40267,6 +40429,11 @@ func (f *TrustCenterWatermarkConfigFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldTrustCenterID))
 }
 
+// WhereIsEnabled applies the entql bool predicate on the is_enabled field.
+func (f *TrustCenterWatermarkConfigFilter) WhereIsEnabled(p entql.BoolP) {
+	f.Where(p.Field(trustcenterwatermarkconfig.FieldIsEnabled))
+}
+
 // WhereLogoID applies the entql string predicate on the logo_id field.
 func (f *TrustCenterWatermarkConfigFilter) WhereLogoID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfig.FieldLogoID))
@@ -40437,6 +40604,11 @@ func (f *TrustCenterWatermarkConfigHistoryFilter) WhereOwnerID(p entql.StringP) 
 // WhereTrustCenterID applies the entql string predicate on the trust_center_id field.
 func (f *TrustCenterWatermarkConfigHistoryFilter) WhereTrustCenterID(p entql.StringP) {
 	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldTrustCenterID))
+}
+
+// WhereIsEnabled applies the entql bool predicate on the is_enabled field.
+func (f *TrustCenterWatermarkConfigHistoryFilter) WhereIsEnabled(p entql.BoolP) {
+	f.Where(p.Field(trustcenterwatermarkconfighistory.FieldIsEnabled))
 }
 
 // WhereLogoID applies the entql string predicate on the logo_id field.

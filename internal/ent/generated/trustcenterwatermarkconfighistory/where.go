@@ -116,6 +116,11 @@ func TrustCenterID(v string) predicate.TrustCenterWatermarkConfigHistory {
 	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldEQ(FieldTrustCenterID, v))
 }
 
+// IsEnabled applies equality check predicate on the "is_enabled" field. It's identical to IsEnabledEQ.
+func IsEnabled(v bool) predicate.TrustCenterWatermarkConfigHistory {
+	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldEQ(FieldIsEnabled, v))
+}
+
 // LogoID applies equality check predicate on the "logo_id" field. It's identical to LogoIDEQ.
 func LogoID(v string) predicate.TrustCenterWatermarkConfigHistory {
 	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldEQ(FieldLogoID, v))
@@ -804,6 +809,26 @@ func TrustCenterIDEqualFold(v string) predicate.TrustCenterWatermarkConfigHistor
 // TrustCenterIDContainsFold applies the ContainsFold predicate on the "trust_center_id" field.
 func TrustCenterIDContainsFold(v string) predicate.TrustCenterWatermarkConfigHistory {
 	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldContainsFold(FieldTrustCenterID, v))
+}
+
+// IsEnabledEQ applies the EQ predicate on the "is_enabled" field.
+func IsEnabledEQ(v bool) predicate.TrustCenterWatermarkConfigHistory {
+	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldEQ(FieldIsEnabled, v))
+}
+
+// IsEnabledNEQ applies the NEQ predicate on the "is_enabled" field.
+func IsEnabledNEQ(v bool) predicate.TrustCenterWatermarkConfigHistory {
+	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldNEQ(FieldIsEnabled, v))
+}
+
+// IsEnabledIsNil applies the IsNil predicate on the "is_enabled" field.
+func IsEnabledIsNil() predicate.TrustCenterWatermarkConfigHistory {
+	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldIsNull(FieldIsEnabled))
+}
+
+// IsEnabledNotNil applies the NotNil predicate on the "is_enabled" field.
+func IsEnabledNotNil() predicate.TrustCenterWatermarkConfigHistory {
+	return predicate.TrustCenterWatermarkConfigHistory(sql.FieldNotNull(FieldIsEnabled))
 }
 
 // LogoIDEQ applies the EQ predicate on the "logo_id" field.

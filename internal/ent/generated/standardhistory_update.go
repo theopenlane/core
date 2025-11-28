@@ -455,6 +455,26 @@ func (_u *StandardHistoryUpdate) ClearVersion() *StandardHistoryUpdate {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardHistoryUpdate) SetLogoFileID(v string) *StandardHistoryUpdate {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardHistoryUpdate) SetNillableLogoFileID(v *string) *StandardHistoryUpdate {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardHistoryUpdate) ClearLogoFileID() *StandardHistoryUpdate {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // Mutation returns the StandardHistoryMutation object of the builder.
 func (_u *StandardHistoryUpdate) Mutation() *StandardHistoryMutation {
 	return _u.mutation
@@ -680,6 +700,12 @@ func (_u *StandardHistoryUpdate) sqlSave(ctx context.Context) (_node int, err er
 	}
 	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standardhistory.FieldVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(standardhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(standardhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.StandardHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)
@@ -1127,6 +1153,26 @@ func (_u *StandardHistoryUpdateOne) ClearVersion() *StandardHistoryUpdateOne {
 	return _u
 }
 
+// SetLogoFileID sets the "logo_file_id" field.
+func (_u *StandardHistoryUpdateOne) SetLogoFileID(v string) *StandardHistoryUpdateOne {
+	_u.mutation.SetLogoFileID(v)
+	return _u
+}
+
+// SetNillableLogoFileID sets the "logo_file_id" field if the given value is not nil.
+func (_u *StandardHistoryUpdateOne) SetNillableLogoFileID(v *string) *StandardHistoryUpdateOne {
+	if v != nil {
+		_u.SetLogoFileID(*v)
+	}
+	return _u
+}
+
+// ClearLogoFileID clears the value of the "logo_file_id" field.
+func (_u *StandardHistoryUpdateOne) ClearLogoFileID() *StandardHistoryUpdateOne {
+	_u.mutation.ClearLogoFileID()
+	return _u
+}
+
 // Mutation returns the StandardHistoryMutation object of the builder.
 func (_u *StandardHistoryUpdateOne) Mutation() *StandardHistoryMutation {
 	return _u.mutation
@@ -1382,6 +1428,12 @@ func (_u *StandardHistoryUpdateOne) sqlSave(ctx context.Context) (_node *Standar
 	}
 	if _u.mutation.VersionCleared() {
 		_spec.ClearField(standardhistory.FieldVersion, field.TypeString)
+	}
+	if value, ok := _u.mutation.LogoFileID(); ok {
+		_spec.SetField(standardhistory.FieldLogoFileID, field.TypeString, value)
+	}
+	if _u.mutation.LogoFileIDCleared() {
+		_spec.ClearField(standardhistory.FieldLogoFileID, field.TypeString)
 	}
 	_spec.Node.Schema = _u.schemaConfig.StandardHistory
 	ctx = internal.NewSchemaConfigContext(ctx, _u.schemaConfig)

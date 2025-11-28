@@ -54,6 +54,8 @@ const (
 	FieldWatermarkStatus = "watermark_status"
 	// FieldVisibility holds the string denoting the visibility field in the database.
 	FieldVisibility = "visibility"
+	// FieldStandardID holds the string denoting the standard_id field in the database.
+	FieldStandardID = "standard_id"
 	// Table holds the table name of the trustcenterdochistory in the database.
 	Table = "trust_center_doc_history"
 )
@@ -79,6 +81,7 @@ var Columns = []string{
 	FieldWatermarkingEnabled,
 	FieldWatermarkStatus,
 	FieldVisibility,
+	FieldStandardID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -241,6 +244,11 @@ func ByWatermarkStatus(opts ...sql.OrderTermOption) OrderOption {
 // ByVisibility orders the results by the visibility field.
 func ByVisibility(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVisibility, opts...).ToFunc()
+}
+
+// ByStandardID orders the results by the standard_id field.
+func ByStandardID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldStandardID, opts...).ToFunc()
 }
 
 var (

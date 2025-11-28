@@ -74,6 +74,8 @@ const (
 	FieldStandardType = "standard_type"
 	// FieldVersion holds the string denoting the version field in the database.
 	FieldVersion = "version"
+	// FieldLogoFileID holds the string denoting the logo_file_id field in the database.
+	FieldLogoFileID = "logo_file_id"
 	// Table holds the table name of the standardhistory in the database.
 	Table = "standard_history"
 )
@@ -109,6 +111,7 @@ var Columns = []string{
 	FieldFreeToUse,
 	FieldStandardType,
 	FieldVersion,
+	FieldLogoFileID,
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -310,6 +313,11 @@ func ByStandardType(opts ...sql.OrderTermOption) OrderOption {
 // ByVersion orders the results by the version field.
 func ByVersion(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldVersion, opts...).ToFunc()
+}
+
+// ByLogoFileID orders the results by the logo_file_id field.
+func ByLogoFileID(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldLogoFileID, opts...).ToFunc()
 }
 
 var (

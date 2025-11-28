@@ -6,17 +6,17 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/stretchr/testify/require"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
+
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
 )
 
 func TestQueryTrustCenterDocByID(t *testing.T) {
@@ -155,6 +155,134 @@ func TestQueryTrustCenterDocByID(t *testing.T) {
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocNotVisible.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
+}
+
+func TestQueryTrustCenterDocByIDWithStandardForAnonymousUsers(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	compliance := (&TrustCenterComplianceBuilder{
+		client:        suite.client,
+		TrustCenterID: trustCenter.ID,
+		StandardID:    standard.ID,
+	}).MustNew(testUser1.UserCtx, t)
+
+	trustCenterDocProtected := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityProtected}).MustNew(testUser1.UserCtx, t)
+	trustCenterDocPublic := (&TrustCenterDocBuilder{client: suite.client, TrustCenterID: trustCenter.ID, Visibility: enums.TrustCenterDocumentVisibilityPubliclyVisible}).MustNew(testUser1.UserCtx, t)
+
+	dbCtx := setContext(testUser1.UserCtx, suite.client.db)
+	_, err := suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDocProtected.ID).SetStandardID(standard.ID).Save(dbCtx)
+	assert.NilError(t, err)
+	_, err = suite.client.db.TrustCenterDoc.UpdateOneID(trustCenterDocPublic.ID).SetStandardID(standard.ID).Save(dbCtx)
+	assert.NilError(t, err)
+
+	// anonymous contexts
+	anonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	signedNdaAnonCtx := createAnonymousTrustCenterContext(trustCenter.ID, testUser1.OrganizationID)
+	signedNDAAnonUser, _ := auth.AnonymousTrustCenterUserFromContext(signedNdaAnonCtx)
+	req := fgax.TupleRequest{
+		SubjectID:   signedNDAAnonUser.SubjectID,
+		SubjectType: "user",
+		ObjectID:    trustCenter.ID,
+		ObjectType:  "trust_center",
+		Relation:    "nda_signed",
+	}
+
+	tuple := fgax.GetTupleKey(req)
+	if _, err := suite.client.db.Authz.WriteTupleKeys(testUser1.UserCtx, []fgax.TupleKey{tuple}, nil); err != nil {
+		requireNoError(err)
+	}
+
+	testCases := []struct {
+		name                  string
+		queryID               string
+		client                *testclient.TestClient
+		ctx                   context.Context
+		errorMsg              string
+		shouldShowFileDetails bool
+		shouldHaveStandard    bool
+	}{
+		{
+			name:                  "anonymous user can query protected doc and get standard",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   anonCtx,
+			shouldShowFileDetails: false,
+			shouldHaveStandard:    true,
+		},
+		{
+			name:                  "anonymous user with signed NDA can query protected doc and get standard",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   signedNdaAnonCtx,
+			shouldShowFileDetails: true,
+			shouldHaveStandard:    true,
+		},
+		{
+			name:                  "anonymous user can query public doc and get standard",
+			queryID:               trustCenterDocPublic.ID,
+			client:                suite.client.api,
+			ctx:                   anonCtx,
+			shouldShowFileDetails: true,
+			shouldHaveStandard:    true,
+		},
+		{
+			name:                  "anonymous user with signed NDA can query public doc and get standard",
+			queryID:               trustCenterDocPublic.ID,
+			client:                suite.client.api,
+			ctx:                   signedNdaAnonCtx,
+			shouldShowFileDetails: true,
+			shouldHaveStandard:    true,
+		},
+		{
+			name:                  "regular user can query protected doc and get standard",
+			queryID:               trustCenterDocProtected.ID,
+			client:                suite.client.api,
+			ctx:                   testUser1.UserCtx,
+			shouldShowFileDetails: true,
+			shouldHaveStandard:    true,
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run("Get "+tc.name, func(t *testing.T) {
+			resp, err := tc.client.GetTrustCenterDocByID(tc.ctx, tc.queryID)
+
+			if tc.errorMsg != "" {
+				assert.ErrorContains(t, err, tc.errorMsg)
+				return
+			}
+
+			assert.NilError(t, err)
+			assert.Assert(t, resp != nil)
+
+			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenterDoc.ID))
+			assert.Check(t, resp.TrustCenterDoc.Title != "")
+			assert.Check(t, resp.TrustCenterDoc.Category != "")
+			assert.Check(t, resp.TrustCenterDoc.TrustCenterID != nil)
+			assert.Check(t, resp.TrustCenterDoc.OriginalFileID != nil)
+
+			// verify the standard is accessible
+			if tc.shouldHaveStandard {
+				assert.Check(t, resp.TrustCenterDoc.StandardID != nil, "StandardID should be present")
+				assert.Check(t, is.Equal(standard.ID, *resp.TrustCenterDoc.StandardID), "StandardID should match")
+				assert.Check(t, resp.TrustCenterDoc.Standard != nil, "Standard object should be present")
+				assert.Check(t, is.Equal(standard.ID, resp.TrustCenterDoc.Standard.ID), "Standard ID should match")
+				assert.Check(t, is.Equal(standard.Name, resp.TrustCenterDoc.Standard.Name), "Standard name should match")
+			}
+
+			if tc.shouldShowFileDetails {
+				assert.Check(t, resp.TrustCenterDoc.OriginalFile != nil)
+			} else {
+				assert.Check(t, resp.TrustCenterDoc.OriginalFile == nil)
+			}
+		})
+	}
+
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocProtected.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: trustCenterDocPublic.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterComplianceDeleteOne]{client: suite.client.db.TrustCenterCompliance, ID: compliance.ID}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -1125,7 +1253,7 @@ func TestGetAllTrustCenterDocs(t *testing.T) {
 	// Clean up any existing trust center docs
 	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
 	d, err := suite.client.db.TrustCenterDoc.Query().All(deletectx)
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	for _, doc := range d {
 		suite.client.db.TrustCenterDoc.DeleteOneID(doc.ID).ExecX(deletectx)
 	}
@@ -1320,8 +1448,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 					return
 				}
 
-				require.NoError(t, err)
-				require.NotNil(t, trustCenterDoc)
+				assert.NilError(t, err)
+				assert.Assert(t, trustCenterDoc != nil)
 
 				assert.Check(t, trustCenterDoc.ID != "")
 				assert.Check(t, trustCenterDoc.OriginalFileID == nil, "Original file ID should be nil")
@@ -1358,8 +1486,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 		}
 
 		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *upload)
-		require.NoError(t, err)
-		require.NotNil(t, createResp)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
 
 		trustCenterDoc := createResp.CreateTrustCenterDoc.TrustCenterDoc
 		assert.Check(t, trustCenterDoc.OriginalFileID != nil, "Original file ID should be set")
@@ -1371,8 +1499,8 @@ func TestTrustCenterDoc_NotVisible(t *testing.T) {
 			ClearOriginalFileID().
 			ClearFileID().
 			Save(allowCtx)
-		require.NoError(t, err)
-		require.NotNil(t, updatedDoc)
+		assert.NilError(t, err)
+		assert.Assert(t, updatedDoc != nil)
 
 		assert.Check(t, updatedDoc.OriginalFileID == nil, "Original file ID should be nil after clearing")
 		assert.Check(t, updatedDoc.FileID == nil, "File ID should be nil after clearing")

@@ -422,7 +422,7 @@ func (ec *executionContext) marshalNUserSettingBulkCreatePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNUserSettingBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -436,7 +436,7 @@ func (ec *executionContext) marshalNUserSettingBulkDeletePayload2githubᚗcomᚋ
 func (ec *executionContext) marshalNUserSettingBulkDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingBulkDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingBulkDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -450,7 +450,7 @@ func (ec *executionContext) marshalNUserSettingCreatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNUserSettingCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -464,7 +464,7 @@ func (ec *executionContext) marshalNUserSettingUpdatePayload2githubᚗcomᚋtheo
 func (ec *executionContext) marshalNUserSettingUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐUserSettingUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.UserSettingUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

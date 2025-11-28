@@ -55,7 +55,9 @@ type TrustCenterDocHistory struct {
 	// status of the watermarking
 	WatermarkStatus enums.WatermarkStatus `json:"watermark_status,omitempty"`
 	// visibility of the document
-	Visibility   enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	Visibility enums.TrustCenterDocumentVisibility `json:"visibility,omitempty"`
+	// ID of the standard
+	StandardID   string `json:"standard_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -70,7 +72,7 @@ func (*TrustCenterDocHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case trustcenterdochistory.FieldWatermarkingEnabled:
 			values[i] = new(sql.NullBool)
-		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility:
+		case trustcenterdochistory.FieldID, trustcenterdochistory.FieldRef, trustcenterdochistory.FieldCreatedBy, trustcenterdochistory.FieldUpdatedBy, trustcenterdochistory.FieldDeletedBy, trustcenterdochistory.FieldTrustCenterID, trustcenterdochistory.FieldTitle, trustcenterdochistory.FieldCategory, trustcenterdochistory.FieldFileID, trustcenterdochistory.FieldOriginalFileID, trustcenterdochistory.FieldWatermarkStatus, trustcenterdochistory.FieldVisibility, trustcenterdochistory.FieldStandardID:
 			values[i] = new(sql.NullString)
 		case trustcenterdochistory.FieldHistoryTime, trustcenterdochistory.FieldCreatedAt, trustcenterdochistory.FieldUpdatedAt, trustcenterdochistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -207,6 +209,12 @@ func (_m *TrustCenterDocHistory) assignValues(columns []string, values []any) er
 			} else if value.Valid {
 				_m.Visibility = enums.TrustCenterDocumentVisibility(value.String)
 			}
+		case trustcenterdochistory.FieldStandardID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field standard_id", values[i])
+			} else if value.Valid {
+				_m.StandardID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -300,6 +308,9 @@ func (_m *TrustCenterDocHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("visibility=")
 	builder.WriteString(fmt.Sprintf("%v", _m.Visibility))
+	builder.WriteString(", ")
+	builder.WriteString("standard_id=")
+	builder.WriteString(_m.StandardID)
 	builder.WriteByte(')')
 	return builder.String()
 }

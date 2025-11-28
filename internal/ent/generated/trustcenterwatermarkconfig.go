@@ -36,6 +36,8 @@ type TrustCenterWatermarkConfig struct {
 	OwnerID string `json:"owner_id,omitempty"`
 	// ID of the trust center
 	TrustCenterID string `json:"trust_center_id,omitempty"`
+	// whether the watermarking is enabled for all trust center documents, default is true
+	IsEnabled bool `json:"is_enabled,omitempty"`
 	// ID of the file containing the document
 	LogoID *string `json:"logo_id,omitempty"`
 	// text to watermark the document with
@@ -109,6 +111,8 @@ func (*TrustCenterWatermarkConfig) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case trustcenterwatermarkconfig.FieldIsEnabled:
+			values[i] = new(sql.NullBool)
 		case trustcenterwatermarkconfig.FieldFontSize, trustcenterwatermarkconfig.FieldOpacity, trustcenterwatermarkconfig.FieldRotation:
 			values[i] = new(sql.NullFloat64)
 		case trustcenterwatermarkconfig.FieldID, trustcenterwatermarkconfig.FieldCreatedBy, trustcenterwatermarkconfig.FieldUpdatedBy, trustcenterwatermarkconfig.FieldDeletedBy, trustcenterwatermarkconfig.FieldOwnerID, trustcenterwatermarkconfig.FieldTrustCenterID, trustcenterwatermarkconfig.FieldLogoID, trustcenterwatermarkconfig.FieldText, trustcenterwatermarkconfig.FieldColor, trustcenterwatermarkconfig.FieldFont:
@@ -183,6 +187,12 @@ func (_m *TrustCenterWatermarkConfig) assignValues(columns []string, values []an
 				return fmt.Errorf("unexpected type %T for field trust_center_id", values[i])
 			} else if value.Valid {
 				_m.TrustCenterID = value.String
+			}
+		case trustcenterwatermarkconfig.FieldIsEnabled:
+			if value, ok := values[i].(*sql.NullBool); !ok {
+				return fmt.Errorf("unexpected type %T for field is_enabled", values[i])
+			} else if value.Valid {
+				_m.IsEnabled = value.Bool
 			}
 		case trustcenterwatermarkconfig.FieldLogoID:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -301,6 +311,9 @@ func (_m *TrustCenterWatermarkConfig) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("trust_center_id=")
 	builder.WriteString(_m.TrustCenterID)
+	builder.WriteString(", ")
+	builder.WriteString("is_enabled=")
+	builder.WriteString(fmt.Sprintf("%v", _m.IsEnabled))
 	builder.WriteString(", ")
 	if v := _m.LogoID; v != nil {
 		builder.WriteString("logo_id=")

@@ -19,6 +19,9 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorCreatePayload!
     """
@@ -51,6 +54,9 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """

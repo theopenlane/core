@@ -112,6 +112,10 @@ func (ec *executionContext) fieldContext_OrganizationBulkCreatePayload_organizat
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "subprocessorCreators":
 				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
+			case "trustCenterDocCreators":
+				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
+			case "trustCenterSubprocessorCreators":
+				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -341,6 +345,10 @@ func (ec *executionContext) fieldContext_OrganizationCreatePayload_organization(
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "subprocessorCreators":
 				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
+			case "trustCenterDocCreators":
+				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
+			case "trustCenterSubprocessorCreators":
+				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -599,6 +607,10 @@ func (ec *executionContext) fieldContext_OrganizationUpdatePayload_organization(
 				return ec.fieldContext_Organization_templateCreators(ctx, field)
 			case "subprocessorCreators":
 				return ec.fieldContext_Organization_subprocessorCreators(ctx, field)
+			case "trustCenterDocCreators":
+				return ec.fieldContext_Organization_trustCenterDocCreators(ctx, field)
+			case "trustCenterSubprocessorCreators":
+				return ec.fieldContext_Organization_trustCenterSubprocessorCreators(ctx, field)
 			case "parent":
 				return ec.fieldContext_Organization_parent(ctx, field)
 			case "children":
@@ -920,7 +932,7 @@ func (ec *executionContext) marshalNOrganizationCreatePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNOrganizationCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -934,7 +946,7 @@ func (ec *executionContext) marshalNOrganizationDeletePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNOrganizationDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -948,7 +960,7 @@ func (ec *executionContext) marshalNOrganizationUpdatePayload2githubᚗcomᚋthe
 func (ec *executionContext) marshalNOrganizationUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐOrganizationUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.OrganizationUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

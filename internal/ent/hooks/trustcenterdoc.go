@@ -8,10 +8,12 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 )
@@ -61,10 +63,25 @@ func HookCreateTrustCenterDoc() ent.Hook {
 			}
 
 			watermarkingEnabled, watermarkingEnabledSet := m.WatermarkingEnabled()
+			if !watermarkingEnabledSet {
+				orgID, _ := auth.GetOrganizationIDFromContext(ctx)
+
+				if orgID != "" {
+					// check the config to see if watermarking is enabled by default
+					config, err := m.Client().TrustCenterWatermarkConfig.Query().
+						Where(trustcenterwatermarkconfig.OwnerID(orgID)).
+						Only(ctx)
+					if err == nil && config != nil {
+						watermarkingEnabled = config.IsEnabled
+
+						m.SetWatermarkingEnabled(watermarkingEnabled)
+					}
+				}
+			}
 
 			// if we have no uploaded files
 			if !mutationSetsOriginalFileID && len(docFiles) == 0 {
-				// check if watermarking is enabled. because if it is,a file must be present
+				// check if watermarking is enabled because if it is a file must be present
 				if watermarkingEnabledSet && watermarkingEnabled {
 					return nil, errMissingFileID
 				}

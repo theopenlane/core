@@ -3,10 +3,12 @@ package hooks
 import (
 	"context"
 	"fmt"
-	"regexp"
-	"strings"
 
 	"entgo.io/ent"
+
+	"github.com/stoewer/go-strcase"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
@@ -14,13 +16,6 @@ import (
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/iam/fgax"
-)
-
-var (
-	// compile this only once
-	reg = regexp.MustCompile(`[^a-zA-Z0-9]`)
 )
 
 // HookTrustCenter runs on trust center create mutations
@@ -50,17 +45,14 @@ func HookTrustCenter() ent.Hook {
 				return nil, err
 			}
 
-			// Remove all spaces and non-alphanumeric characters from org.Name, then lowercase
-			cleanedName := reg.ReplaceAllString(org.Name, "")
-			slug := strings.ToLower(cleanedName)
-
-			m.SetSlug(slug)
+			m.SetSlug(strcase.KebabCase(org.Name))
 
 			retVal, err := next.Mutate(ctx, m)
 			if err != nil {
 				return nil, err
 			}
 
+			// create trust center settings automatically unless setting IDs were provided
 			settingIDs := m.SettingIDs()
 
 			createLive, createPreview := false, false
@@ -139,6 +131,32 @@ func HookTrustCenter() ent.Hook {
 				trustCenter.Edges.PreviewSetting = previewSetting
 			}
 
+			// create watermark config for trust center with default values
+			if id, ok := m.WatermarkConfigID(); ok && id != "" {
+				// watermark config was provided, skip creation
+				return trustCenter, nil
+			}
+
+			if ids := m.WatermarkConfigIDs(); len(ids) > 0 {
+				// watermark config IDs were provided, skip creation
+				return trustCenter, nil
+			}
+
+			input := generated.CreateTrustCenterWatermarkConfigInput{
+				TrustCenterID:  &id,
+				Text:           &defaultWatermarkText,
+				OwnerID:        &orgID,
+				TrustCenterIDs: []string{trustCenter.ID},
+			}
+
+			if err := m.Client().TrustCenterWatermarkConfig.Create().
+				SetInput(input).
+				Exec(ctx); err != nil {
+				logx.FromContext(ctx).Error().Err(err).Msg("failed to create trust center watermark config")
+
+				return nil, err
+			}
+
 			wildcardTuples := fgax.CreateWildcardViewerTuple(trustCenter.ID, "trust_center")
 
 			// Create system tuple for system admin access
@@ -167,11 +185,17 @@ func HookTrustCenter() ent.Hook {
 	}, ent.OpCreate)
 }
 
-const defaultOverview = `
+const (
+	defaultOverview = `
 # Welcome to your Trust Center
 
 This is the default overview for your trust center. You can customize this by editing the trust center settings.
 `
+)
+
+var (
+	defaultWatermarkText = "Controlled Copy — Watermark Required"
+)
 
 // HookTrustCenterDelete runs on trust center delete mutations
 func HookTrustCenterDelete() ent.Hook {

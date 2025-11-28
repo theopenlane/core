@@ -4011,6 +4011,9 @@ func (_m *StandardHistory) changes(new *StandardHistory) []Change {
 	if !reflect.DeepEqual(_m.Version, new.Version) {
 		changes = append(changes, NewChange(standardhistory.FieldVersion, _m.Version, new.Version))
 	}
+	if !reflect.DeepEqual(_m.LogoFileID, new.LogoFileID) {
+		changes = append(changes, NewChange(standardhistory.FieldLogoFileID, _m.LogoFileID, new.LogoFileID))
+	}
 	return changes
 }
 
@@ -4596,6 +4599,9 @@ func (_m *TrustCenterDocHistory) changes(new *TrustCenterDocHistory) []Change {
 	if !reflect.DeepEqual(_m.Visibility, new.Visibility) {
 		changes = append(changes, NewChange(trustcenterdochistory.FieldVisibility, _m.Visibility, new.Visibility))
 	}
+	if !reflect.DeepEqual(_m.StandardID, new.StandardID) {
+		changes = append(changes, NewChange(trustcenterdochistory.FieldStandardID, _m.StandardID, new.StandardID))
+	}
 	return changes
 }
 
@@ -4796,6 +4802,9 @@ func (_m *TrustCenterWatermarkConfigHistory) changes(new *TrustCenterWatermarkCo
 	}
 	if !reflect.DeepEqual(_m.TrustCenterID, new.TrustCenterID) {
 		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldTrustCenterID, _m.TrustCenterID, new.TrustCenterID))
+	}
+	if !reflect.DeepEqual(_m.IsEnabled, new.IsEnabled) {
+		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldIsEnabled, _m.IsEnabled, new.IsEnabled))
 	}
 	if !reflect.DeepEqual(_m.LogoID, new.LogoID) {
 		changes = append(changes, NewChange(trustcenterwatermarkconfighistory.FieldLogoID, _m.LogoID, new.LogoID))

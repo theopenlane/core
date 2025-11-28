@@ -125,6 +125,14 @@ func (Standard) Fields() []ent.Field {
 		field.String("version").
 			Optional().
 			Comment("version of the standard"),
+		field.String("logo_file_id").
+			Comment("URL of the logo").
+			Optional().
+			Annotations(
+				// this field is not exposed to the graphql schema, it is set by the file upload handler
+				entgql.Skip(entgql.SkipMutationCreateInput, entgql.SkipMutationUpdateInput),
+			).
+			Nillable(),
 	}
 }
 
@@ -138,6 +146,16 @@ func (s Standard) Edges() []ent.Edge {
 		edgeToWithPagination(&edgeDefinition{
 			fromSchema: s,
 			edgeSchema: TrustCenterCompliance{},
+		}),
+		edgeToWithPagination(&edgeDefinition{
+			fromSchema: s,
+			edgeSchema: TrustCenterDoc{},
+		}),
+		uniqueEdgeTo(&edgeDefinition{
+			fromSchema: s,
+			name:       "logo_file",
+			t:          File.Type,
+			field:      "logo_file_id",
 		}),
 	}
 }
@@ -160,6 +178,7 @@ func (Standard) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookStandardPublicAccessTuples(),
 		hooks.HookStandardCreate(),
+		hooks.HookStandardFileUpload(),
 		hooks.HookStandardDelete(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),

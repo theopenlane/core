@@ -1092,6 +1092,7 @@ type ComplexityRoot struct {
 		Description      func(childComplexity int) int
 		Field            func(childComplexity int) int
 		ID               func(childComplexity int) int
+		Icon             func(childComplexity int) int
 		InternalNotes    func(childComplexity int) int
 		InternalPolicies func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
 		Name             func(childComplexity int) int
@@ -3585,7 +3586,7 @@ type ComplexityRoot struct {
 		CreateScan                            func(childComplexity int, input generated.CreateScanInput) int
 		CreateScheduledJob                    func(childComplexity int, input generated.CreateScheduledJobInput) int
 		CreateScheduledJobRun                 func(childComplexity int, input generated.CreateScheduledJobRunInput) int
-		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput) int
+		CreateStandard                        func(childComplexity int, input generated.CreateStandardInput, logoFile *graphql.Upload) int
 		CreateSubcontrol                      func(childComplexity int, input generated.CreateSubcontrolInput) int
 		CreateSubprocessor                    func(childComplexity int, input generated.CreateSubprocessorInput, logoFile *graphql.Upload) int
 		CreateSubscriber                      func(childComplexity int, input generated.CreateSubscriberInput) int
@@ -3794,7 +3795,7 @@ type ComplexityRoot struct {
 		UpdateScan                            func(childComplexity int, id string, input generated.UpdateScanInput) int
 		UpdateScheduledJob                    func(childComplexity int, id string, input generated.UpdateScheduledJobInput) int
 		UpdateScheduledJobRun                 func(childComplexity int, id string, input generated.UpdateScheduledJobRunInput) int
-		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput) int
+		UpdateStandard                        func(childComplexity int, id string, input generated.UpdateStandardInput, logoFile *graphql.Upload) int
 		UpdateSubcontrol                      func(childComplexity int, id string, input generated.UpdateSubcontrolInput) int
 		UpdateSubcontrolComment               func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateSubprocessor                    func(childComplexity int, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) int
@@ -4137,105 +4138,107 @@ type ComplexityRoot struct {
 	}
 
 	Organization struct {
-		APITokens                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
-		ActionPlans                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
-		AssessmentResponses           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
-		Assessments                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
-		Assets                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
-		AvatarFile                    func(childComplexity int) int
-		AvatarLocalFileID             func(childComplexity int) int
-		AvatarRemoteURL               func(childComplexity int) int
-		AvatarUpdatedAt               func(childComplexity int) int
-		Children                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
-		Contacts                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
-		ControlCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlImplementationCreators func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlImplementations        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
-		ControlObjectiveCreators      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ControlObjectives             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
-		Controls                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
-		CreatedAt                     func(childComplexity int) int
-		CreatedBy                     func(childComplexity int) int
-		CustomDomains                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
-		CustomTypeEnums               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
-		DNSVerifications              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
-		DedicatedDb                   func(childComplexity int) int
-		Description                   func(childComplexity int) int
-		DirectoryAccounts             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
-		DirectoryGroups               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
-		DirectoryMemberships          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
-		DirectorySyncRuns             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
-		DisplayName                   func(childComplexity int) int
-		Documents                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
-		Entities                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
-		EntityTypes                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
-		Events                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
-		Evidence                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
-		EvidenceCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Exports                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
-		Files                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
-		Findings                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
-		GroupCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Groups                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ID                            func(childComplexity int) int
-		Integrations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
-		InternalPolicies              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
-		InternalPolicyCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Invites                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
-		JobResults                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
-		JobRunnerRegistrationTokens   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
-		JobRunnerTokens               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
-		JobRunners                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
-		JobTemplates                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
-		MappedControlCreators         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		MappedControls                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
-		Members                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
-		Name                          func(childComplexity int) int
-		NarrativeCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Narratives                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
-		Notes                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
-		OrgSubscriptions              func(childComplexity int) int
-		Parent                        func(childComplexity int) int
-		PersonalAccessTokens          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
-		PersonalOrg                   func(childComplexity int) int
-		ProcedureCreators             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Procedures                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
-		ProgramCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Programs                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
-		Remediations                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
-		Reviews                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
-		RiskCreators                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Risks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
-		Scans                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
-		ScheduledJobCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		ScheduledJobRuns              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
-		ScheduledJobs                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
-		Secrets                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
-		Setting                       func(childComplexity int) int
-		StandardCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Standards                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
-		StripeCustomerID              func(childComplexity int) int
-		Subcontrols                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
-		SubprocessorCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Subprocessors                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
-		Subscribers                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
-		TagDefinitions                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
-		Tags                          func(childComplexity int) int
-		Tasks                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
-		TemplateCreators              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
-		Templates                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
-		TrustCenterWatermarkConfigs   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
-		TrustCenters                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
-		UpdatedAt                     func(childComplexity int) int
-		UpdatedBy                     func(childComplexity int) int
-		Users                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
-		Vulnerabilities               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
-		WorkflowAssignmentTargets     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
-		WorkflowAssignments           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
-		WorkflowDefinitions           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
-		WorkflowEvents                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
-		WorkflowInstances             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
-		WorkflowObjectRefs            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
+		APITokens                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.APITokenOrder, where *generated.APITokenWhereInput) int
+		ActionPlans                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ActionPlanOrder, where *generated.ActionPlanWhereInput) int
+		AssessmentResponses             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentResponseOrder, where *generated.AssessmentResponseWhereInput) int
+		Assessments                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssessmentOrder, where *generated.AssessmentWhereInput) int
+		Assets                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.AssetOrder, where *generated.AssetWhereInput) int
+		AvatarFile                      func(childComplexity int) int
+		AvatarLocalFileID               func(childComplexity int) int
+		AvatarRemoteURL                 func(childComplexity int) int
+		AvatarUpdatedAt                 func(childComplexity int) int
+		Children                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrganizationOrder, where *generated.OrganizationWhereInput) int
+		Contacts                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ContactOrder, where *generated.ContactWhereInput) int
+		ControlCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlImplementationCreators   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlImplementations          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
+		ControlObjectiveCreators        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ControlObjectives               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
+		Controls                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
+		CreatedAt                       func(childComplexity int) int
+		CreatedBy                       func(childComplexity int) int
+		CustomDomains                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomDomainOrder, where *generated.CustomDomainWhereInput) int
+		CustomTypeEnums                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.CustomTypeEnumOrder, where *generated.CustomTypeEnumWhereInput) int
+		DNSVerifications                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DNSVerificationOrder, where *generated.DNSVerificationWhereInput) int
+		DedicatedDb                     func(childComplexity int) int
+		Description                     func(childComplexity int) int
+		DirectoryAccounts               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryAccountOrder, where *generated.DirectoryAccountWhereInput) int
+		DirectoryGroups                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryGroupOrder, where *generated.DirectoryGroupWhereInput) int
+		DirectoryMemberships            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectoryMembershipOrder, where *generated.DirectoryMembershipWhereInput) int
+		DirectorySyncRuns               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DirectorySyncRunOrder, where *generated.DirectorySyncRunWhereInput) int
+		DisplayName                     func(childComplexity int) int
+		Documents                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.DocumentDataOrder, where *generated.DocumentDataWhereInput) int
+		Entities                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityOrder, where *generated.EntityWhereInput) int
+		EntityTypes                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EntityTypeOrder, where *generated.EntityTypeWhereInput) int
+		Events                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EventOrder, where *generated.EventWhereInput) int
+		Evidence                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.EvidenceOrder, where *generated.EvidenceWhereInput) int
+		EvidenceCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Exports                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ExportOrder, where *generated.ExportWhereInput) int
+		Files                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
+		Findings                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FindingOrder, where *generated.FindingWhereInput) int
+		GroupCreators                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Groups                          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ID                              func(childComplexity int) int
+		Integrations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.IntegrationOrder, where *generated.IntegrationWhereInput) int
+		InternalPolicies                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InternalPolicyOrder, where *generated.InternalPolicyWhereInput) int
+		InternalPolicyCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Invites                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.InviteOrder, where *generated.InviteWhereInput) int
+		JobResults                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobResultOrder, where *generated.JobResultWhereInput) int
+		JobRunnerRegistrationTokens     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerRegistrationTokenOrder, where *generated.JobRunnerRegistrationTokenWhereInput) int
+		JobRunnerTokens                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerTokenOrder, where *generated.JobRunnerTokenWhereInput) int
+		JobRunners                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobRunnerOrder, where *generated.JobRunnerWhereInput) int
+		JobTemplates                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.JobTemplateOrder, where *generated.JobTemplateWhereInput) int
+		MappedControlCreators           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		MappedControls                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.MappedControlOrder, where *generated.MappedControlWhereInput) int
+		Members                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.OrgMembershipOrder, where *generated.OrgMembershipWhereInput) int
+		Name                            func(childComplexity int) int
+		NarrativeCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Narratives                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NarrativeOrder, where *generated.NarrativeWhereInput) int
+		Notes                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
+		OrgSubscriptions                func(childComplexity int) int
+		Parent                          func(childComplexity int) int
+		PersonalAccessTokens            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.PersonalAccessTokenOrder, where *generated.PersonalAccessTokenWhereInput) int
+		PersonalOrg                     func(childComplexity int) int
+		ProcedureCreators               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Procedures                      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProcedureOrder, where *generated.ProcedureWhereInput) int
+		ProgramCreators                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Programs                        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ProgramOrder, where *generated.ProgramWhereInput) int
+		Remediations                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RemediationOrder, where *generated.RemediationWhereInput) int
+		Reviews                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ReviewOrder, where *generated.ReviewWhereInput) int
+		RiskCreators                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Risks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.RiskOrder, where *generated.RiskWhereInput) int
+		Scans                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScanOrder, where *generated.ScanWhereInput) int
+		ScheduledJobCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		ScheduledJobRuns                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobRunOrder, where *generated.ScheduledJobRunWhereInput) int
+		ScheduledJobs                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ScheduledJobOrder, where *generated.ScheduledJobWhereInput) int
+		Secrets                         func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.HushOrder, where *generated.HushWhereInput) int
+		Setting                         func(childComplexity int) int
+		StandardCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Standards                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.StandardOrder, where *generated.StandardWhereInput) int
+		StripeCustomerID                func(childComplexity int) int
+		Subcontrols                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubcontrolOrder, where *generated.SubcontrolWhereInput) int
+		SubprocessorCreators            func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Subprocessors                   func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubprocessorOrder, where *generated.SubprocessorWhereInput) int
+		Subscribers                     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.SubscriberOrder, where *generated.SubscriberWhereInput) int
+		TagDefinitions                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TagDefinitionOrder, where *generated.TagDefinitionWhereInput) int
+		Tags                            func(childComplexity int) int
+		Tasks                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TaskOrder, where *generated.TaskWhereInput) int
+		TemplateCreators                func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		Templates                       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TemplateOrder, where *generated.TemplateWhereInput) int
+		TrustCenterDocCreators          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		TrustCenterSubprocessorCreators func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.GroupOrder, where *generated.GroupWhereInput) int
+		TrustCenterWatermarkConfigs     func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterWatermarkConfigOrder, where *generated.TrustCenterWatermarkConfigWhereInput) int
+		TrustCenters                    func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterOrder, where *generated.TrustCenterWhereInput) int
+		UpdatedAt                       func(childComplexity int) int
+		UpdatedBy                       func(childComplexity int) int
+		Users                           func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) int
+		Vulnerabilities                 func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.VulnerabilityOrder, where *generated.VulnerabilityWhereInput) int
+		WorkflowAssignmentTargets       func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentTargetOrder, where *generated.WorkflowAssignmentTargetWhereInput) int
+		WorkflowAssignments             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowAssignmentOrder, where *generated.WorkflowAssignmentWhereInput) int
+		WorkflowDefinitions             func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowDefinitionOrder, where *generated.WorkflowDefinitionWhereInput) int
+		WorkflowEvents                  func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowEventOrder, where *generated.WorkflowEventWhereInput) int
+		WorkflowInstances               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowInstanceOrder, where *generated.WorkflowInstanceWhereInput) int
+		WorkflowObjectRefs              func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.WorkflowObjectRefOrder, where *generated.WorkflowObjectRefWhereInput) int
 	}
 
 	OrganizationBulkCreatePayload struct {
@@ -5704,6 +5707,8 @@ type ComplexityRoot struct {
 		InternalNotes          func(childComplexity int) int
 		IsPublic               func(childComplexity int) int
 		Link                   func(childComplexity int) int
+		LogoFile               func(childComplexity int) int
+		LogoFileID             func(childComplexity int) int
 		Name                   func(childComplexity int) int
 		Owner                  func(childComplexity int) int
 		OwnerID                func(childComplexity int) int
@@ -5715,6 +5720,7 @@ type ComplexityRoot struct {
 		SystemOwned            func(childComplexity int) int
 		Tags                   func(childComplexity int) int
 		TrustCenterCompliances func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterComplianceOrder, where *generated.TrustCenterComplianceWhereInput) int
+		TrustCenterDocs        func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustCenterDocOrder, where *generated.TrustCenterDocWhereInput) int
 		UpdatedAt              func(childComplexity int) int
 		UpdatedBy              func(childComplexity int) int
 		Version                func(childComplexity int) int
@@ -5757,6 +5763,7 @@ type ComplexityRoot struct {
 		InternalNotes        func(childComplexity int) int
 		IsPublic             func(childComplexity int) int
 		Link                 func(childComplexity int) int
+		LogoFileID           func(childComplexity int) int
 		Name                 func(childComplexity int) int
 		Operation            func(childComplexity int) int
 		OwnerID              func(childComplexity int) int
@@ -6472,6 +6479,8 @@ type ComplexityRoot struct {
 		ID                  func(childComplexity int) int
 		OriginalFile        func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
+		Standard            func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenter         func(childComplexity int) int
@@ -6525,6 +6534,7 @@ type ComplexityRoot struct {
 		Operation           func(childComplexity int) int
 		OriginalFileID      func(childComplexity int) int
 		Ref                 func(childComplexity int) int
+		StandardID          func(childComplexity int) int
 		Tags                func(childComplexity int) int
 		Title               func(childComplexity int) int
 		TrustCenterID       func(childComplexity int) int
@@ -6772,6 +6782,7 @@ type ComplexityRoot struct {
 		Font          func(childComplexity int) int
 		FontSize      func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsEnabled     func(childComplexity int) int
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
 		Owner         func(childComplexity int) int
@@ -6815,6 +6826,7 @@ type ComplexityRoot struct {
 		FontSize      func(childComplexity int) int
 		HistoryTime   func(childComplexity int) int
 		ID            func(childComplexity int) int
+		IsEnabled     func(childComplexity int) int
 		LogoID        func(childComplexity int) int
 		Opacity       func(childComplexity int) int
 		Operation     func(childComplexity int) int
@@ -12763,6 +12775,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.CustomTypeEnum.ID(childComplexity), true
+
+	case "CustomTypeEnum.icon":
+		if e.complexity.CustomTypeEnum.Icon == nil {
+			break
+		}
+
+		return e.complexity.CustomTypeEnum.Icon(childComplexity), true
 
 	case "CustomTypeEnum.internalNotes":
 		if e.complexity.CustomTypeEnum.InternalNotes == nil {
@@ -26132,7 +26151,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput)), true
+		return e.complexity.Mutation.CreateStandard(childComplexity, args["input"].(generated.CreateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.createSubcontrol":
 		if e.complexity.Mutation.CreateSubcontrol == nil {
@@ -28635,7 +28654,7 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput)), true
+		return e.complexity.Mutation.UpdateStandard(childComplexity, args["id"].(string), args["input"].(generated.UpdateStandardInput), args["logoFile"].(*graphql.Upload)), true
 
 	case "Mutation.updateSubcontrol":
 		if e.complexity.Mutation.UpdateSubcontrol == nil {
@@ -31355,6 +31374,30 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Organization.Templates(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TemplateOrder), args["where"].(*generated.TemplateWhereInput)), true
+
+	case "Organization.trustCenterDocCreators":
+		if e.complexity.Organization.TrustCenterDocCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterDocCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterDocCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
+
+	case "Organization.trustCenterSubprocessorCreators":
+		if e.complexity.Organization.TrustCenterSubprocessorCreators == nil {
+			break
+		}
+
+		args, err := ec.field_Organization_trustCenterSubprocessorCreators_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Organization.TrustCenterSubprocessorCreators(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.GroupOrder), args["where"].(*generated.GroupWhereInput)), true
 
 	case "Organization.trustCenterWatermarkConfigs":
 		if e.complexity.Organization.TrustCenterWatermarkConfigs == nil {
@@ -40761,6 +40804,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Standard.Link(childComplexity), true
 
+	case "Standard.logoFile":
+		if e.complexity.Standard.LogoFile == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFile(childComplexity), true
+
+	case "Standard.logoFileID":
+		if e.complexity.Standard.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.Standard.LogoFileID(childComplexity), true
+
 	case "Standard.name":
 		if e.complexity.Standard.Name == nil {
 			break
@@ -40842,6 +40899,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Standard.TrustCenterCompliances(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterComplianceOrder), args["where"].(*generated.TrustCenterComplianceWhereInput)), true
+
+	case "Standard.trustCenterDocs":
+		if e.complexity.Standard.TrustCenterDocs == nil {
+			break
+		}
+
+		args, err := ec.field_Standard_trustCenterDocs_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Standard.TrustCenterDocs(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.TrustCenterDocOrder), args["where"].(*generated.TrustCenterDocWhereInput)), true
 
 	case "Standard.updatedAt":
 		if e.complexity.Standard.UpdatedAt == nil {
@@ -41010,6 +41079,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.StandardHistory.Link(childComplexity), true
+
+	case "StandardHistory.logoFileID":
+		if e.complexity.StandardHistory.LogoFileID == nil {
+			break
+		}
+
+		return e.complexity.StandardHistory.LogoFileID(childComplexity), true
 
 	case "StandardHistory.name":
 		if e.complexity.StandardHistory.Name == nil {
@@ -44401,6 +44477,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterDoc.OriginalFileID(childComplexity), true
 
+	case "TrustCenterDoc.standard":
+		if e.complexity.TrustCenterDoc.Standard == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.Standard(childComplexity), true
+
+	case "TrustCenterDoc.standardID":
+		if e.complexity.TrustCenterDoc.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDoc.StandardID(childComplexity), true
+
 	case "TrustCenterDoc.tags":
 		if e.complexity.TrustCenterDoc.Tags == nil {
 			break
@@ -44603,6 +44693,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterDocHistory.Ref(childComplexity), true
+
+	case "TrustCenterDocHistory.standardID":
+		if e.complexity.TrustCenterDocHistory.StandardID == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterDocHistory.StandardID(childComplexity), true
 
 	case "TrustCenterDocHistory.tags":
 		if e.complexity.TrustCenterDocHistory.Tags == nil {
@@ -45645,6 +45742,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.TrustCenterWatermarkConfig.ID(childComplexity), true
 
+	case "TrustCenterWatermarkConfig.isEnabled":
+		if e.complexity.TrustCenterWatermarkConfig.IsEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfig.IsEnabled(childComplexity), true
+
 	case "TrustCenterWatermarkConfig.logoID":
 		if e.complexity.TrustCenterWatermarkConfig.LogoID == nil {
 			break
@@ -45819,6 +45923,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterWatermarkConfigHistory.ID(childComplexity), true
+
+	case "TrustCenterWatermarkConfigHistory.isEnabled":
+		if e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterWatermarkConfigHistory.IsEnabled(childComplexity), true
 
 	case "TrustCenterWatermarkConfigHistory.logoID":
 		if e.complexity.TrustCenterWatermarkConfigHistory.LogoID == nil {
@@ -63472,6 +63583,10 @@ input CreateCustomTypeEnumInput {
   The color of the tag definition in hex format
   """
   color: String
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
   ownerID: ID
   taskIDs: [ID!]
   controlIDs: [ID!]
@@ -64971,6 +65086,8 @@ input CreateOrganizationInput {
   standardCreatorIDs: [ID!]
   templateCreatorIDs: [ID!]
   subprocessorCreatorIDs: [ID!]
+  trustCenterDocCreatorIDs: [ID!]
+  trustCenterSubprocessorCreatorIDs: [ID!]
   parentID: ID
   settingID: ID
   personalAccessTokenIDs: [ID!]
@@ -65806,6 +65923,8 @@ input CreateStandardInput {
   ownerID: ID
   controlIDs: [ID!]
   trustCenterComplianceIDs: [ID!]
+  trustCenterDocIDs: [ID!]
+  logoFileID: ID
 }
 """
 CreateSubcontrolInput is used for create Subcontrol object.
@@ -66176,6 +66295,7 @@ input CreateTrustCenterDocInput {
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
   trustCenterID: ID
+  standardID: ID
   fileID: ID
   originalFileID: ID
 }
@@ -66302,6 +66422,10 @@ input CreateTrustCenterWatermarkConfigInput {
   ID of the trust center
   """
   trustCenterID: String
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
   """
   text to watermark the document with
   """
@@ -67498,6 +67622,10 @@ type CustomTypeEnum implements Node {
   The color of the tag definition in hex format
   """
   color: String
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
   owner: Organization
   tasks(
     """
@@ -68057,6 +68185,24 @@ input CustomTypeEnumWhereInput {
   colorNotNil: Boolean
   colorEqualFold: String
   colorContainsFold: String
+  """
+  icon field predicates
+  """
+  icon: String
+  iconNEQ: String
+  iconIn: [String!]
+  iconNotIn: [String!]
+  iconGT: String
+  iconGTE: String
+  iconLT: String
+  iconLTE: String
+  iconContains: String
+  iconHasPrefix: String
+  iconHasSuffix: String
+  iconIsNil: Boolean
+  iconNotNil: Boolean
+  iconEqualFold: String
+  iconContainsFold: String
   """
   owner edge predicates
   """
@@ -94633,6 +94779,68 @@ type Organization implements Node {
     """
     where: GroupWhereInput
   ): GroupConnection!
+  trustCenterDocCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
+  trustCenterSubprocessorCreators(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Groups returned from the connection.
+    """
+    orderBy: [GroupOrder!]
+
+    """
+    Filtering options for Groups returned from the connection.
+    """
+    where: GroupWhereInput
+  ): GroupConnection!
   parent: Organization
   children(
     """
@@ -98494,6 +98702,16 @@ input OrganizationWhereInput {
   """
   hasSubprocessorCreators: Boolean
   hasSubprocessorCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_doc_creators edge predicates
+  """
+  hasTrustCenterDocCreators: Boolean
+  hasTrustCenterDocCreatorsWith: [GroupWhereInput!]
+  """
+  trust_center_subprocessor_creators edge predicates
+  """
+  hasTrustCenterSubprocessorCreators: Boolean
+  hasTrustCenterSubprocessorCreatorsWith: [GroupWhereInput!]
   """
   parent edge predicates
   """
@@ -114343,6 +114561,10 @@ type Standard implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: ID
   owner: Organization
   controls(
     """
@@ -114406,6 +114628,38 @@ type Standard implements Node {
     """
     where: TrustCenterComplianceWhereInput
   ): TrustCenterComplianceConnection!
+  trustCenterDocs(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for TrustCenterDocs returned from the connection.
+    """
+    orderBy: [TrustCenterDocOrder!]
+
+    """
+    Filtering options for TrustCenterDocs returned from the connection.
+    """
+    where: TrustCenterDocWhereInput
+  ): TrustCenterDocConnection!
+  logoFile: File
 }
 """
 A connection to a list of items.
@@ -114522,6 +114776,10 @@ type StandardHistory implements Node {
   version of the standard
   """
   version: String
+  """
+  URL of the logo
+  """
+  logoFileID: String
 }
 """
 A connection to a list of items.
@@ -114978,6 +115236,24 @@ input StandardHistoryWhereInput {
   versionNotNil: Boolean
   versionEqualFold: String
   versionContainsFold: String
+  """
+  logo_file_id field predicates
+  """
+  logoFileID: String
+  logoFileIDNEQ: String
+  logoFileIDIn: [String!]
+  logoFileIDNotIn: [String!]
+  logoFileIDGT: String
+  logoFileIDGTE: String
+  logoFileIDLT: String
+  logoFileIDLTE: String
+  logoFileIDContains: String
+  logoFileIDHasPrefix: String
+  logoFileIDHasSuffix: String
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: String
+  logoFileIDContainsFold: String
 }
 """
 Ordering options for Standard connections
@@ -115360,6 +115636,24 @@ input StandardWhereInput {
   versionEqualFold: String
   versionContainsFold: String
   """
+  logo_file_id field predicates
+  """
+  logoFileID: ID
+  logoFileIDNEQ: ID
+  logoFileIDIn: [ID!]
+  logoFileIDNotIn: [ID!]
+  logoFileIDGT: ID
+  logoFileIDGTE: ID
+  logoFileIDLT: ID
+  logoFileIDLTE: ID
+  logoFileIDContains: ID
+  logoFileIDHasPrefix: ID
+  logoFileIDHasSuffix: ID
+  logoFileIDIsNil: Boolean
+  logoFileIDNotNil: Boolean
+  logoFileIDEqualFold: ID
+  logoFileIDContainsFold: ID
+  """
   owner edge predicates
   """
   hasOwner: Boolean
@@ -115374,6 +115668,16 @@ input StandardWhereInput {
   """
   hasTrustCenterCompliances: Boolean
   hasTrustCenterCompliancesWith: [TrustCenterComplianceWhereInput!]
+  """
+  trust_center_docs edge predicates
+  """
+  hasTrustCenterDocs: Boolean
+  hasTrustCenterDocsWith: [TrustCenterDocWhereInput!]
+  """
+  logo_file edge predicates
+  """
+  hasLogoFile: Boolean
+  hasLogoFileWith: [FileWhereInput!]
 }
 type Subcontrol implements Node {
   id: ID!
@@ -121709,7 +122013,12 @@ type TrustCenterDoc implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: ID
   trustCenter: TrustCenter
+  standard: Standard
   """
   the file containing the document content
   """
@@ -121794,6 +122103,10 @@ type TrustCenterDocHistory implements Node {
   visibility of the document
   """
   visibility: TrustCenterDocHistoryTrustCenterDocumentVisibility
+  """
+  ID of the standard
+  """
+  standardID: String
 }
 """
 A connection to a list of items.
@@ -122100,6 +122413,24 @@ input TrustCenterDocHistoryWhereInput {
   visibilityNotIn: [TrustCenterDocHistoryTrustCenterDocumentVisibility!]
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
+  """
+  standard_id field predicates
+  """
+  standardID: String
+  standardIDNEQ: String
+  standardIDIn: [String!]
+  standardIDNotIn: [String!]
+  standardIDGT: String
+  standardIDGTE: String
+  standardIDLT: String
+  standardIDLTE: String
+  standardIDContains: String
+  standardIDHasPrefix: String
+  standardIDHasSuffix: String
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: String
+  standardIDContainsFold: String
 }
 """
 Ordering options for TrustCenterDoc connections
@@ -122332,10 +122663,33 @@ input TrustCenterDocWhereInput {
   visibilityIsNil: Boolean
   visibilityNotNil: Boolean
   """
+  standard_id field predicates
+  """
+  standardID: ID
+  standardIDNEQ: ID
+  standardIDIn: [ID!]
+  standardIDNotIn: [ID!]
+  standardIDGT: ID
+  standardIDGTE: ID
+  standardIDLT: ID
+  standardIDLTE: ID
+  standardIDContains: ID
+  standardIDHasPrefix: ID
+  standardIDHasSuffix: ID
+  standardIDIsNil: Boolean
+  standardIDNotNil: Boolean
+  standardIDEqualFold: ID
+  standardIDContainsFold: ID
+  """
   trust_center edge predicates
   """
   hasTrustCenter: Boolean
   hasTrustCenterWith: [TrustCenterWhereInput!]
+  """
+  standard edge predicates
+  """
+  hasStandard: Boolean
+  hasStandardWith: [StandardWhereInput!]
   """
   file edge predicates
   """
@@ -124301,6 +124655,10 @@ type TrustCenterWatermarkConfig implements Node {
   """
   trustCenterID: String
   """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  """
   ID of the file containing the document
   """
   logoID: ID
@@ -124400,6 +124758,10 @@ type TrustCenterWatermarkConfigHistory implements Node {
   ID of the trust center
   """
   trustCenterID: String
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
   """
   ID of the file containing the document
   """
@@ -124662,6 +125024,13 @@ input TrustCenterWatermarkConfigHistoryWhereInput {
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
   """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
+  """
   logo_id field predicates
   """
   logoID: String
@@ -124903,6 +125272,13 @@ input TrustCenterWatermarkConfigWhereInput {
   trustCenterIDNotNil: Boolean
   trustCenterIDEqualFold: String
   trustCenterIDContainsFold: String
+  """
+  is_enabled field predicates
+  """
+  isEnabled: Boolean
+  isEnabledNEQ: Boolean
+  isEnabledIsNil: Boolean
+  isEnabledNotNil: Boolean
   """
   logo_id field predicates
   """
@@ -126104,10 +126480,6 @@ input UpdateCustomTypeEnumInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
-  The name of the enum value, for example evidence request
-  """
-  name: String
-  """
   The description of the custom type
   """
   description: String
@@ -126117,6 +126489,11 @@ input UpdateCustomTypeEnumInput {
   """
   color: String
   clearColor: Boolean
+  """
+  The icon of the custom type enum in SVG format
+  """
+  icon: String
+  clearIcon: Boolean
   ownerID: ID
   clearOwner: Boolean
   addTaskIDs: [ID!]
@@ -128046,6 +128423,12 @@ input UpdateOrganizationInput {
   addSubprocessorCreatorIDs: [ID!]
   removeSubprocessorCreatorIDs: [ID!]
   clearSubprocessorCreators: Boolean
+  addTrustCenterDocCreatorIDs: [ID!]
+  removeTrustCenterDocCreatorIDs: [ID!]
+  clearTrustCenterDocCreators: Boolean
+  addTrustCenterSubprocessorCreatorIDs: [ID!]
+  removeTrustCenterSubprocessorCreatorIDs: [ID!]
+  clearTrustCenterSubprocessorCreators: Boolean
   settingID: ID
   clearSetting: Boolean
   addPersonalAccessTokenIDs: [ID!]
@@ -129328,6 +129711,11 @@ input UpdateStandardInput {
   addTrustCenterComplianceIDs: [ID!]
   removeTrustCenterComplianceIDs: [ID!]
   clearTrustCenterCompliances: Boolean
+  addTrustCenterDocIDs: [ID!]
+  removeTrustCenterDocIDs: [ID!]
+  clearTrustCenterDocs: Boolean
+  logoFileID: ID
+  clearLogoFile: Boolean
 }
 """
 UpdateSubcontrolInput is used for update Subcontrol object.
@@ -129609,10 +129997,6 @@ input UpdateTagDefinitionInput {
   systemInternalID: String @readOnly
   clearSystemInternalID: Boolean
   """
-  The name of the tag definition
-  """
-  name: String
-  """
   common aliases or misspellings for the tag definition
   """
   aliases: [String!]
@@ -129841,6 +130225,8 @@ input UpdateTrustCenterDocInput {
   clearVisibility: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
+  standardID: ID
+  clearStandard: Boolean
   fileID: ID
   clearFile: Boolean
   originalFileID: ID
@@ -130007,6 +130393,11 @@ input UpdateTrustCenterWatermarkConfigInput {
   """
   trustCenterID: String
   clearTrustCenterID: Boolean
+  """
+  whether the watermarking is enabled for all trust center documents, default is true
+  """
+  isEnabled: Boolean
+  clearIsEnabled: Boolean
   """
   text to watermark the document with
   """
@@ -145375,6 +145766,10 @@ extend type Mutation{
         values of the standard
         """
         input: CreateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardCreatePayload!
     """
     Update an existing standard
@@ -145388,6 +145783,10 @@ extend type Mutation{
         New values for the standard
         """
         input: UpdateStandardInput!
+        """
+        file to upload as the logo to represent the standard
+        """
+        logoFile: Upload
     ): StandardUpdatePayload!
     """
     Delete an existing standard
@@ -145582,6 +145981,9 @@ extend type Mutation{
         values of the subprocessor
         """
         input: CreateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorCreatePayload!
     """
@@ -145614,6 +146016,9 @@ extend type Mutation{
         New values for the subprocessor
         """
         input: UpdateSubprocessorInput!
+        """
+        file to upload as the logo of the subprocessor
+        """
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """

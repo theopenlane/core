@@ -3,8 +3,6 @@ package graphapi_test
 import (
 	"context"
 	"fmt"
-	"regexp"
-	"strings"
 	"testing"
 
 	"github.com/99designs/gqlgen/graphql"
@@ -12,17 +10,19 @@ import (
 	"github.com/riverqueue/river/riverdriver/riverpgxv5"
 	"github.com/riverqueue/river/rivertest"
 	"github.com/samber/lo"
+	"github.com/stoewer/go-strcase"
 	"github.com/stretchr/testify/require"
+	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/utils/ulids"
+	"gotest.tools/v3/assert"
+	is "gotest.tools/v3/assert/cmp"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
-	"gotest.tools/v3/assert"
-	is "gotest.tools/v3/assert/cmp"
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
@@ -75,7 +75,6 @@ func TestQueryTrustCenterByID(t *testing.T) {
 
 			assert.NilError(t, err)
 			assert.Assert(t, resp != nil)
-
 			assert.Check(t, is.Equal(tc.queryID, resp.TrustCenter.ID))
 			assert.Check(t, resp.TrustCenter.Slug != nil)
 			assert.Check(t, resp.TrustCenter.OwnerID != nil)
@@ -303,18 +302,25 @@ func TestMutationCreateTrustCenter(t *testing.T) {
 			assert.NilError(t, err)
 
 			// Generate expected slug: remove non-alphanumeric chars and lowercase
-			expectedSlug := strings.ToLower(regexp.MustCompile(`[^a-zA-Z0-9]`).ReplaceAllString(org.Name, ""))
+			expectedSlug := strcase.KebabCase(org.Name)
 			require.NotNil(t, resp.CreateTrustCenter.TrustCenter.Slug)
-
 			assert.Equal(t, expectedSlug, *resp.CreateTrustCenter.TrustCenter.Slug)
 			setting := resp.CreateTrustCenter.TrustCenter.GetSetting()
 			if tc.request.CreateTrustCenterSetting != nil && tc.request.CreateTrustCenterSetting.Title != nil {
-				require.NotNil(t, setting)
-				require.NotNil(t, setting.Title)
+				assert.Assert(t, setting != nil)
+				assert.Assert(t, setting.Title != nil)
 				assert.Equal(t, *tc.request.CreateTrustCenterSetting.Title, *setting.Title)
 			} else {
 				assert.Equal(t, fmt.Sprintf("%s Trust Center", org.Name), *setting.Title)
 			}
+
+			// ensure trust center preview settings object is created
+			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.PreviewSetting != nil)
+			assert.Check(t, resp.CreateTrustCenter.TrustCenter.PreviewSetting.ID != "")
+
+			// ensure trust center watermark config object is created
+			assert.Assert(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig != nil)
+			assert.Check(t, resp.CreateTrustCenter.TrustCenter.WatermarkConfig.Text != nil)
 
 			// Clean up
 			(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: resp.CreateTrustCenter.TrustCenter.ID}).MustDelete(tc.ctx, t)
@@ -331,7 +337,7 @@ func TestGetAllTrustCenters(t *testing.T) {
 	// Clean up any existing trust centers
 	deletectx := setContext(systemAdminUser.UserCtx, suite.client.db)
 	d, err := suite.client.db.TrustCenter.Query().All(deletectx)
-	require.Nil(t, err)
+	assert.NilError(t, err)
 	for _, tc := range d {
 		suite.client.db.TrustCenter.DeleteOneID(tc.ID).ExecX(deletectx)
 	}
@@ -1061,7 +1067,7 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.CreateTrustCenter(tc.ctx, tc.request)
 			if tc.expectedErr != "" {
@@ -1082,8 +1088,8 @@ func TestTrustCenterCreateHookWithCustomDomain(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
 			}
@@ -1138,7 +1144,7 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
 			if tc.expectedErr != "" {
@@ -1159,8 +1165,8 @@ func TestTrustCenterUpdateHookWithCustomDomain(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.CreatePirschDomainArgs{}, nil)
 			}
@@ -1186,7 +1192,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-for-update-test"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	testCases := []struct {
 		name                  string
@@ -1223,7 +1229,7 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.UpdateTrustCenter(tc.ctx, tc.trustCenterID, tc.request)
 			if tc.expectedErr != "" {
@@ -1244,8 +1250,8 @@ func TestTrustCenterUpdateHookWithPirschDomainUpdate(t *testing.T) {
 							},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.UpdatePirschDomainArgs{}, nil)
 			}
@@ -1271,7 +1277,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 	ctx := setContext(testUser1.UserCtx, suite.client.db)
 	fakePirschDomainID := "fake-pirsch-domain-id-123"
 	_, err := suite.client.db.TrustCenter.UpdateOneID(trustCenterWithDomain.ID).SetPirschDomainID(fakePirschDomainID).Save(ctx)
-	require.NoError(t, err)
+	assert.NilError(t, err)
 
 	// Create trust center without custom domain for testUser2 (different organization)
 	trustCenterWithoutDomain := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser2.UserCtx, t)
@@ -1304,7 +1310,7 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			// Clear any existing jobs
 			err := suite.client.db.Job.TruncateRiverTables(tc.ctx)
-			require.NoError(t, err)
+			assert.NilError(t, err)
 
 			resp, err := tc.client.DeleteTrustCenter(tc.ctx, tc.trustCenterID)
 			if tc.expectedErr != "" {
@@ -1323,10 +1329,10 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 							Args: corejobs.DeletePirschDomainArgs{},
 						},
 					})
-				require.NotNil(t, jobs)
-				require.Len(t, jobs, 1)
+				assert.Assert(t, jobs != nil)
+				assert.Assert(t, is.Len(jobs, 1))
 				// Verify the job has encoded args (PirschDomainID should be set)
-				require.NotEmpty(t, jobs[0].EncodedArgs)
+				assert.Assert(t, jobs[0].EncodedArgs != nil)
 			} else {
 				rivertest.RequireNotInserted(tc.ctx, t, riverpgxv5.New(suite.client.db.Job.GetPool()), &corejobs.DeletePirschDomainArgs{}, nil)
 			}
@@ -1336,4 +1342,130 @@ func TestTrustCenterDeleteHookWithPirschDomain(t *testing.T) {
 	// Clean up custom domain
 	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(systemAdminUser.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(systemAdminUser.UserCtx, t)
+}
+
+func TestTrustCenterDocStandards(t *testing.T) {
+	trustCenter := (&TrustCenterBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard1 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	standard2 := (&StandardBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	createPDFUpload := func() *graphql.Upload {
+		pdfFile, err := storage.NewUploadFile("testdata/uploads/hello.pdf")
+		assert.NilError(t, err)
+		return &graphql.Upload{
+			File:        pdfFile.RawFile,
+			Filename:    pdfFile.OriginalName,
+			Size:        pdfFile.Size,
+			ContentType: pdfFile.ContentType,
+		}
+	}
+
+	t.Run("create trust center doc with standard and retrieve it", func(t *testing.T) {
+		fileUpload := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+
+		input := testclient.CreateTrustCenterDocInput{
+			Title:         "Test Document with Standard",
+			Category:      "Policy",
+			TrustCenterID: &trustCenter.ID,
+			StandardID:    &standard1.ID,
+			Tags:          []string{"test", "standard"},
+		}
+
+		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, input, *fileUpload)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
+
+		doc := createResp.CreateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, doc.ID != "")
+		assert.Check(t, doc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *doc.StandardID))
+		assert.Check(t, doc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, doc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, doc.Standard.Name))
+
+		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, doc.ID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp != nil)
+		assert.Check(t, getResp.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *getResp.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, getResp.TrustCenterDoc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, getResp.TrustCenterDoc.Standard.Name))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: doc.ID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	t.Run("update trust center doc to set standard and retrieve it", func(t *testing.T) {
+		fileUpload := createPDFUpload()
+		expectUpload(t, suite.client.mockProvider, []graphql.Upload{*fileUpload})
+
+		createInput := testclient.CreateTrustCenterDocInput{
+			Title:         "Test Document without Standard",
+			Category:      "Policy",
+			TrustCenterID: &trustCenter.ID,
+			Tags:          []string{"test"},
+		}
+
+		createResp, err := suite.client.api.CreateTrustCenterDoc(testUser1.UserCtx, createInput, *fileUpload)
+		assert.NilError(t, err)
+		assert.Assert(t, createResp != nil)
+
+		docID := createResp.CreateTrustCenterDoc.TrustCenterDoc.ID
+
+		getResp, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp != nil)
+		assert.Check(t, getResp.TrustCenterDoc.StandardID == nil || *getResp.TrustCenterDoc.StandardID == "")
+
+		updateInput := testclient.UpdateTrustCenterDocInput{
+			StandardID: &standard1.ID,
+		}
+
+		updateResp, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp != nil)
+
+		updatedDoc := updateResp.UpdateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, updatedDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *updatedDoc.StandardID))
+		assert.Check(t, updatedDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, updatedDoc.Standard.ID))
+		assert.Check(t, is.Equal(standard1.Name, updatedDoc.Standard.Name))
+
+		getResp2, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp2 != nil)
+		assert.Check(t, getResp2.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard1.ID, *getResp2.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp2.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard1.ID, getResp2.TrustCenterDoc.Standard.ID))
+
+		updateInput2 := testclient.UpdateTrustCenterDocInput{
+			StandardID: &standard2.ID,
+		}
+
+		updateResp2, err := suite.client.api.UpdateTrustCenterDoc(testUser1.UserCtx, docID, updateInput2, nil, nil)
+		assert.NilError(t, err)
+		assert.Assert(t, updateResp2 != nil)
+
+		updatedDoc2 := updateResp2.UpdateTrustCenterDoc.TrustCenterDoc
+		assert.Check(t, updatedDoc2.StandardID != nil)
+		assert.Check(t, is.Equal(standard2.ID, *updatedDoc2.StandardID))
+		assert.Check(t, updatedDoc2.Standard != nil)
+		assert.Check(t, is.Equal(standard2.ID, updatedDoc2.Standard.ID))
+		assert.Check(t, is.Equal(standard2.Name, updatedDoc2.Standard.Name))
+
+		getResp3, err := suite.client.api.GetTrustCenterDocByID(testUser1.UserCtx, docID)
+		assert.NilError(t, err)
+		assert.Assert(t, getResp3 != nil)
+		assert.Check(t, getResp3.TrustCenterDoc.StandardID != nil)
+		assert.Check(t, is.Equal(standard2.ID, *getResp3.TrustCenterDoc.StandardID))
+		assert.Check(t, getResp3.TrustCenterDoc.Standard != nil)
+		assert.Check(t, is.Equal(standard2.ID, getResp3.TrustCenterDoc.Standard.ID))
+
+		(&Cleanup[*generated.TrustCenterDocDeleteOne]{client: suite.client.db.TrustCenterDoc, ID: docID}).MustDelete(testUser1.UserCtx, t)
+	})
+
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
 }

@@ -66,6 +66,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigBulkCreatePay
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":
@@ -131,6 +133,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigCreatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":
@@ -225,6 +229,8 @@ func (ec *executionContext) fieldContext_TrustCenterWatermarkConfigUpdatePayload
 				return ec.fieldContext_TrustCenterWatermarkConfig_ownerID(ctx, field)
 			case "trustCenterID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_trustCenterID(ctx, field)
+			case "isEnabled":
+				return ec.fieldContext_TrustCenterWatermarkConfig_isEnabled(ctx, field)
 			case "logoID":
 				return ec.fieldContext_TrustCenterWatermarkConfig_logoID(ctx, field)
 			case "text":
@@ -428,7 +434,7 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2gith
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -442,7 +448,7 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2gith
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -456,7 +462,7 @@ func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2gith
 func (ec *executionContext) marshalNTrustCenterWatermarkConfigUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterWatermarkConfigUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.TrustCenterWatermarkConfigUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}

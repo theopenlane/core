@@ -75,7 +75,9 @@ type StandardHistory struct {
 	// type of the standard - cybersecurity, healthcare , financial, etc.
 	StandardType string `json:"standard_type,omitempty"`
 	// version of the standard
-	Version      string `json:"version,omitempty"`
+	Version string `json:"version,omitempty"`
+	// URL of the logo
+	LogoFileID   *string `json:"logo_file_id,omitempty"`
 	selectValues sql.SelectValues
 }
 
@@ -90,7 +92,7 @@ func (*StandardHistory) scanValues(columns []string) ([]any, error) {
 			values[i] = new(history.OpType)
 		case standardhistory.FieldSystemOwned, standardhistory.FieldIsPublic, standardhistory.FieldFreeToUse:
 			values[i] = new(sql.NullBool)
-		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldInternalNotes, standardhistory.FieldSystemInternalID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion:
+		case standardhistory.FieldID, standardhistory.FieldRef, standardhistory.FieldCreatedBy, standardhistory.FieldUpdatedBy, standardhistory.FieldDeletedBy, standardhistory.FieldRevision, standardhistory.FieldOwnerID, standardhistory.FieldInternalNotes, standardhistory.FieldSystemInternalID, standardhistory.FieldName, standardhistory.FieldShortName, standardhistory.FieldFramework, standardhistory.FieldDescription, standardhistory.FieldGoverningBodyLogoURL, standardhistory.FieldGoverningBody, standardhistory.FieldLink, standardhistory.FieldStatus, standardhistory.FieldStandardType, standardhistory.FieldVersion, standardhistory.FieldLogoFileID:
 			values[i] = new(sql.NullString)
 		case standardhistory.FieldHistoryTime, standardhistory.FieldCreatedAt, standardhistory.FieldUpdatedAt, standardhistory.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
@@ -289,6 +291,13 @@ func (_m *StandardHistory) assignValues(columns []string, values []any) error {
 			} else if value.Valid {
 				_m.Version = value.String
 			}
+		case standardhistory.FieldLogoFileID:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field logo_file_id", values[i])
+			} else if value.Valid {
+				_m.LogoFileID = new(string)
+				*_m.LogoFileID = value.String
+			}
 		default:
 			_m.selectValues.Set(columns[i], values[i])
 		}
@@ -412,6 +421,11 @@ func (_m *StandardHistory) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("version=")
 	builder.WriteString(_m.Version)
+	builder.WriteString(", ")
+	if v := _m.LogoFileID; v != nil {
+		builder.WriteString("logo_file_id=")
+		builder.WriteString(*v)
+	}
 	builder.WriteByte(')')
 	return builder.String()
 }

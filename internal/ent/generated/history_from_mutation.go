@@ -13330,6 +13330,10 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 		create = create.SetVersion(version)
 	}
 
+	if logoFileID, exists := m.LogoFileID(); exists {
+		create = create.SetNillableLogoFileID(&logoFileID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -13511,6 +13515,12 @@ func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 			create = create.SetVersion(standard.Version)
 		}
 
+		if logoFileID, exists := m.LogoFileID(); exists {
+			create = create.SetNillableLogoFileID(&logoFileID)
+		} else {
+			create = create.SetNillableLogoFileID(standard.LogoFileID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -13571,6 +13581,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 			SetFreeToUse(standard.FreeToUse).
 			SetStandardType(standard.StandardType).
 			SetVersion(standard.Version).
+			SetNillableLogoFileID(standard.LogoFileID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -15489,6 +15500,10 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 		create = create.SetVisibility(visibility)
 	}
 
+	if standardID, exists := m.StandardID(); exists {
+		create = create.SetStandardID(standardID)
+	}
+
 	_, err := create.Save(ctx)
 
 	return err
@@ -15610,6 +15625,12 @@ func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) er
 			create = create.SetVisibility(trustcenterdoc.Visibility)
 		}
 
+		if standardID, exists := m.StandardID(); exists {
+			create = create.SetStandardID(standardID)
+		} else {
+			create = create.SetStandardID(trustcenterdoc.StandardID)
+		}
+
 		if _, err := create.Save(ctx); err != nil {
 			return err
 		}
@@ -15660,6 +15681,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 			SetWatermarkingEnabled(trustcenterdoc.WatermarkingEnabled).
 			SetWatermarkStatus(trustcenterdoc.WatermarkStatus).
 			SetVisibility(trustcenterdoc.Visibility).
+			SetStandardID(trustcenterdoc.StandardID).
 			Save(ctx)
 		if err != nil {
 			return err
@@ -16251,6 +16273,10 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 		create = create.SetTrustCenterID(trustCenterID)
 	}
 
+	if isEnabled, exists := m.IsEnabled(); exists {
+		create = create.SetIsEnabled(isEnabled)
+	}
+
 	if logoID, exists := m.LogoID(); exists {
 		create = create.SetNillableLogoID(&logoID)
 	}
@@ -16358,6 +16384,12 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context
 			create = create.SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID)
 		}
 
+		if isEnabled, exists := m.IsEnabled(); exists {
+			create = create.SetIsEnabled(isEnabled)
+		} else {
+			create = create.SetIsEnabled(trustcenterwatermarkconfig.IsEnabled)
+		}
+
 		if logoID, exists := m.LogoID(); exists {
 			create = create.SetNillableLogoID(&logoID)
 		} else {
@@ -16443,6 +16475,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 			SetDeletedBy(trustcenterwatermarkconfig.DeletedBy).
 			SetOwnerID(trustcenterwatermarkconfig.OwnerID).
 			SetTrustCenterID(trustcenterwatermarkconfig.TrustCenterID).
+			SetIsEnabled(trustcenterwatermarkconfig.IsEnabled).
 			SetNillableLogoID(trustcenterwatermarkconfig.LogoID).
 			SetText(trustcenterwatermarkconfig.Text).
 			SetFontSize(trustcenterwatermarkconfig.FontSize).

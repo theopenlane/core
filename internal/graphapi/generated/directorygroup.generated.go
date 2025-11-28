@@ -500,7 +500,7 @@ func (ec *executionContext) marshalNDirectoryGroupBulkCreatePayload2githubᚗcom
 func (ec *executionContext) marshalNDirectoryGroupBulkCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupBulkCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryGroupBulkCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -514,7 +514,7 @@ func (ec *executionContext) marshalNDirectoryGroupCreatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNDirectoryGroupCreatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupCreatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryGroupCreatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -528,7 +528,7 @@ func (ec *executionContext) marshalNDirectoryGroupDeletePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNDirectoryGroupDeletePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupDeletePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryGroupDeletePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
@@ -542,7 +542,7 @@ func (ec *executionContext) marshalNDirectoryGroupUpdatePayload2githubᚗcomᚋt
 func (ec *executionContext) marshalNDirectoryGroupUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐDirectoryGroupUpdatePayload(ctx context.Context, sel ast.SelectionSet, v *model.DirectoryGroupUpdatePayload) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "the requested element is null which the schema does not allow")
+			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
 		}
 		return graphql.Null
 	}
