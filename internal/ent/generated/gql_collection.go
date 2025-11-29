@@ -82,6 +82,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/narrativehistory"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/notehistory"
+	"github.com/theopenlane/core/internal/ent/generated/notification"
 	"github.com/theopenlane/core/internal/ent/generated/onboarding"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/organizationhistory"
@@ -34749,6 +34750,177 @@ func newNoteHistoryPaginateArgs(rv map[string]any) *notehistoryPaginateArgs {
 	}
 	if v, ok := rv[whereField].(*NoteHistoryWhereInput); ok {
 		args.opts = append(args.opts, WithNoteHistoryFilter(v.Filter))
+	}
+	return args
+}
+
+// CollectFields tells the query-builder to eagerly load connected nodes by resolver context.
+func (_q *NotificationQuery) CollectFields(ctx context.Context, satisfies ...string) (*NotificationQuery, error) {
+	fc := graphql.GetFieldContext(ctx)
+	if fc == nil {
+		return _q, nil
+	}
+	if err := _q.collectField(ctx, false, graphql.GetOperationContext(ctx), fc.Field, nil, satisfies...); err != nil {
+		return nil, err
+	}
+	return _q, nil
+}
+
+func (_q *NotificationQuery) collectField(ctx context.Context, oneNode bool, opCtx *graphql.OperationContext, collected graphql.CollectedField, path []string, satisfies ...string) error {
+	path = append([]string(nil), path...)
+	var (
+		unknownSeen    bool
+		fieldSeen      = make(map[string]struct{}, len(notification.Columns))
+		selectedFields = []string{notification.FieldID}
+	)
+	for _, field := range graphql.CollectFields(opCtx, collected.Selections, satisfies) {
+		switch field.Name {
+
+		case "owner":
+			var (
+				alias = field.Alias
+				path  = append(path, alias)
+				query = (&OrganizationClient{config: _q.config}).Query()
+			)
+			if err := query.collectField(ctx, oneNode, opCtx, field, path, mayAddCondition(satisfies, organizationImplementors)...); err != nil {
+				return err
+			}
+			_q.withOwner = query
+			if _, ok := fieldSeen[notification.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, notification.FieldOwnerID)
+				fieldSeen[notification.FieldOwnerID] = struct{}{}
+			}
+		case "createdAt":
+			if _, ok := fieldSeen[notification.FieldCreatedAt]; !ok {
+				selectedFields = append(selectedFields, notification.FieldCreatedAt)
+				fieldSeen[notification.FieldCreatedAt] = struct{}{}
+			}
+		case "updatedAt":
+			if _, ok := fieldSeen[notification.FieldUpdatedAt]; !ok {
+				selectedFields = append(selectedFields, notification.FieldUpdatedAt)
+				fieldSeen[notification.FieldUpdatedAt] = struct{}{}
+			}
+		case "createdBy":
+			if _, ok := fieldSeen[notification.FieldCreatedBy]; !ok {
+				selectedFields = append(selectedFields, notification.FieldCreatedBy)
+				fieldSeen[notification.FieldCreatedBy] = struct{}{}
+			}
+		case "updatedBy":
+			if _, ok := fieldSeen[notification.FieldUpdatedBy]; !ok {
+				selectedFields = append(selectedFields, notification.FieldUpdatedBy)
+				fieldSeen[notification.FieldUpdatedBy] = struct{}{}
+			}
+		case "tags":
+			if _, ok := fieldSeen[notification.FieldTags]; !ok {
+				selectedFields = append(selectedFields, notification.FieldTags)
+				fieldSeen[notification.FieldTags] = struct{}{}
+			}
+		case "ownerID":
+			if _, ok := fieldSeen[notification.FieldOwnerID]; !ok {
+				selectedFields = append(selectedFields, notification.FieldOwnerID)
+				fieldSeen[notification.FieldOwnerID] = struct{}{}
+			}
+		case "userID":
+			if _, ok := fieldSeen[notification.FieldUserID]; !ok {
+				selectedFields = append(selectedFields, notification.FieldUserID)
+				fieldSeen[notification.FieldUserID] = struct{}{}
+			}
+		case "notificationType":
+			if _, ok := fieldSeen[notification.FieldNotificationType]; !ok {
+				selectedFields = append(selectedFields, notification.FieldNotificationType)
+				fieldSeen[notification.FieldNotificationType] = struct{}{}
+			}
+		case "objectType":
+			if _, ok := fieldSeen[notification.FieldObjectType]; !ok {
+				selectedFields = append(selectedFields, notification.FieldObjectType)
+				fieldSeen[notification.FieldObjectType] = struct{}{}
+			}
+		case "title":
+			if _, ok := fieldSeen[notification.FieldTitle]; !ok {
+				selectedFields = append(selectedFields, notification.FieldTitle)
+				fieldSeen[notification.FieldTitle] = struct{}{}
+			}
+		case "body":
+			if _, ok := fieldSeen[notification.FieldBody]; !ok {
+				selectedFields = append(selectedFields, notification.FieldBody)
+				fieldSeen[notification.FieldBody] = struct{}{}
+			}
+		case "data":
+			if _, ok := fieldSeen[notification.FieldData]; !ok {
+				selectedFields = append(selectedFields, notification.FieldData)
+				fieldSeen[notification.FieldData] = struct{}{}
+			}
+		case "readAt":
+			if _, ok := fieldSeen[notification.FieldReadAt]; !ok {
+				selectedFields = append(selectedFields, notification.FieldReadAt)
+				fieldSeen[notification.FieldReadAt] = struct{}{}
+			}
+		case "channels":
+			if _, ok := fieldSeen[notification.FieldChannels]; !ok {
+				selectedFields = append(selectedFields, notification.FieldChannels)
+				fieldSeen[notification.FieldChannels] = struct{}{}
+			}
+		case "topic":
+			if _, ok := fieldSeen[notification.FieldTopic]; !ok {
+				selectedFields = append(selectedFields, notification.FieldTopic)
+				fieldSeen[notification.FieldTopic] = struct{}{}
+			}
+		case "id":
+		case "__typename":
+		default:
+			unknownSeen = true
+		}
+	}
+	if !unknownSeen {
+		_q.Select(selectedFields...)
+	}
+	return nil
+}
+
+type notificationPaginateArgs struct {
+	first, last   *int
+	after, before *Cursor
+	opts          []NotificationPaginateOption
+}
+
+func newNotificationPaginateArgs(rv map[string]any) *notificationPaginateArgs {
+	args := &notificationPaginateArgs{}
+	if rv == nil {
+		return args
+	}
+	if v := rv[firstField]; v != nil {
+		args.first = v.(*int)
+	}
+	if v := rv[lastField]; v != nil {
+		args.last = v.(*int)
+	}
+	if v := rv[afterField]; v != nil {
+		args.after = v.(*Cursor)
+	}
+	if v := rv[beforeField]; v != nil {
+		args.before = v.(*Cursor)
+	}
+	if v, ok := rv[orderByField]; ok {
+		switch v := v.(type) {
+		case map[string]any:
+			var (
+				err1, err2 error
+				order      = &NotificationOrder{Field: &NotificationOrderField{}, Direction: entgql.OrderDirectionAsc}
+			)
+			if d, ok := v[directionField]; ok {
+				err1 = order.Direction.UnmarshalGQL(d)
+			}
+			if f, ok := v[fieldField]; ok {
+				err2 = order.Field.UnmarshalGQL(f)
+			}
+			if err1 == nil && err2 == nil {
+				args.opts = append(args.opts, WithNotificationOrder(order))
+			}
+		case *NotificationOrder:
+			if v != nil {
+				args.opts = append(args.opts, WithNotificationOrder(v))
+			}
+		}
 	}
 	return args
 }

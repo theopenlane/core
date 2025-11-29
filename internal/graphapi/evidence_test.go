@@ -10,11 +10,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
+	"github.com/theopenlane/utils/ulids"
+
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func TestQueryEvidence(t *testing.T) {
@@ -510,7 +511,7 @@ func TestMutationCreateEvidence(t *testing.T) {
 			}
 
 			if tc.request.Status == nil {
-				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceSubmitted))
+				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceStatusSubmitted))
 			} else {
 				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, *tc.request.Status))
 			}

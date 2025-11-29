@@ -5447,6 +5447,14 @@ func (_m *Note) Files(
 	return _m.QueryFiles().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Notification) Owner(ctx context.Context) (*Organization, error) {
+	result, err := _m.Edges.OwnerOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryOwner().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Onboarding) Organization(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OrganizationOrErr()
 	if IsNotLoaded(err) {

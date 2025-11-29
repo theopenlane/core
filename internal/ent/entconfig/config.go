@@ -23,6 +23,8 @@ type Config struct {
 	EmailValidation validator.EmailVerificationConfig `json:"emailvalidation" koanf:"emailvalidation"`
 	// Billing contains configuration for billing related features
 	Billing Billing `json:"billing" koanf:"billing"`
+	// Notifications contains configuration for notifications sent to users based on events
+	Notifications Notifications `json:"notifications" koanf:"notifications"`
 }
 
 // Windmill holds configuration for the Windmill workflow automation platform
@@ -68,4 +70,10 @@ type Billing struct {
 	// BypassEmailDomains is a list of domains that should be allowed to bypass
 	// the checks if RequirePaymentMethod above is enabled
 	BypassEmailDomains []string `json:"bypassemaildomains" koanf:"bypassemaildomains"`
+}
+
+// Notifications settings for notifications sent to users based on events
+type Notifications struct {
+	// ConsoleURL for ui links used in notifications
+	ConsoleURL string `koanf:"consoleurl" json:"consoleurl" default:"http://localhost:3001" domain:"inherit" domainPrefix:"https://console"`
 }
