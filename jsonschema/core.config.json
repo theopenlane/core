@@ -501,6 +501,10 @@
         "billing": {
           "$ref": "#/$defs/entconfig.Billing",
           "description": "Billing contains configuration for billing related features"
+        },
+        "notifications": {
+          "$ref": "#/$defs/entconfig.Notifications",
+          "description": "Notifications contains configuration for notifications sent to users based on events"
         }
       },
       "additionalProperties": false,
@@ -521,6 +525,17 @@
       "additionalProperties": false,
       "type": "object",
       "description": "Modules settings for features access"
+    },
+    "entconfig.Notifications": {
+      "properties": {
+        "consoleurl": {
+          "type": "string",
+          "description": "ConsoleURL for ui links used in notifications"
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Notifications settings for notifications sent to users based on events"
     },
     "entconfig.Windmill": {
       "properties": {

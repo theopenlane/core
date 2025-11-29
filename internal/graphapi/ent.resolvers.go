@@ -15,6 +15,16 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
+// Channels is the resolver for the channels field.
+func (r *notificationResolver) Channels(ctx context.Context, obj *generated.Notification) ([]string, error) {
+	channels := []string{}
+	for _, channel := range obj.Channels {
+		channels = append(channels, string(channel))
+	}
+
+	return channels, nil
+}
+
 // Node is the resolver for the node field.
 func (r *queryResolver) Node(ctx context.Context, id string) (generated.Noder, error) {
 	res, err := withTransactionalMutation(ctx).Noder(ctx, id)
@@ -4792,8 +4802,24 @@ func (r *queryResolver) WorkflowObjectRefHistories(ctx context.Context, after *e
 	return res, err
 }
 
+// Channels is the resolver for the channels field.
+func (r *createNotificationInputResolver) Channels(ctx context.Context, obj *generated.CreateNotificationInput, data []string) error {
+	channels := []enums.Channel{}
+
+	for _, channel := range data {
+		channels = append(channels, enums.Channel(channel))
+	}
+
+	obj.Channels = channels
+
+	return nil
+}
+
 // Group returns gqlgenerated.GroupResolver implementation.
 func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r} }
+
+// Notification returns gqlgenerated.NotificationResolver implementation.
+func (r *Resolver) Notification() gqlgenerated.NotificationResolver { return &notificationResolver{r} }
 
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
@@ -4811,6 +4837,11 @@ func (r *Resolver) CreateGroupInput() gqlgenerated.CreateGroupInputResolver {
 // CreateMappedControlInput returns gqlgenerated.CreateMappedControlInputResolver implementation.
 func (r *Resolver) CreateMappedControlInput() gqlgenerated.CreateMappedControlInputResolver {
 	return &createMappedControlInputResolver{r}
+}
+
+// CreateNotificationInput returns gqlgenerated.CreateNotificationInputResolver implementation.
+func (r *Resolver) CreateNotificationInput() gqlgenerated.CreateNotificationInputResolver {
+	return &createNotificationInputResolver{r}
 }
 
 // CreateOrganizationInput returns gqlgenerated.CreateOrganizationInputResolver implementation.
@@ -4899,10 +4930,12 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 }
 
 type groupResolver struct{ *Resolver }
+type notificationResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
+type createNotificationInputResolver struct{ *Resolver }
 type createOrganizationInputResolver struct{ *Resolver }
 type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }

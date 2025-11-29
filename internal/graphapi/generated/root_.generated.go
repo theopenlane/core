@@ -39,11 +39,13 @@ type ResolverRoot interface {
 	AuditLog() AuditLogResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
+	Notification() NotificationResolver
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
+	CreateNotificationInput() CreateNotificationInputResolver
 	CreateOrganizationInput() CreateOrganizationInputResolver
 	CreateTrustCenterInput() CreateTrustCenterInputResolver
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
@@ -3974,6 +3976,26 @@ type ComplexityRoot struct {
 	NoteHistoryEdge struct {
 		Cursor func(childComplexity int) int
 		Node   func(childComplexity int) int
+	}
+
+	Notification struct {
+		Body             func(childComplexity int) int
+		Channels         func(childComplexity int) int
+		CreatedAt        func(childComplexity int) int
+		CreatedBy        func(childComplexity int) int
+		Data             func(childComplexity int) int
+		ID               func(childComplexity int) int
+		NotificationType func(childComplexity int) int
+		ObjectType       func(childComplexity int) int
+		Owner            func(childComplexity int) int
+		OwnerID          func(childComplexity int) int
+		ReadAt           func(childComplexity int) int
+		Tags             func(childComplexity int) int
+		Title            func(childComplexity int) int
+		Topic            func(childComplexity int) int
+		UpdatedAt        func(childComplexity int) int
+		UpdatedBy        func(childComplexity int) int
+		UserID           func(childComplexity int) int
 	}
 
 	Onboarding struct {
@@ -29803,6 +29825,125 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.NoteHistoryEdge.Node(childComplexity), true
 
+	case "Notification.body":
+		if e.complexity.Notification.Body == nil {
+			break
+		}
+
+		return e.complexity.Notification.Body(childComplexity), true
+
+	case "Notification.channels":
+		if e.complexity.Notification.Channels == nil {
+			break
+		}
+
+		return e.complexity.Notification.Channels(childComplexity), true
+
+	case "Notification.createdAt":
+		if e.complexity.Notification.CreatedAt == nil {
+			break
+		}
+
+		return e.complexity.Notification.CreatedAt(childComplexity), true
+
+	case "Notification.createdBy":
+		if e.complexity.Notification.CreatedBy == nil {
+			break
+		}
+
+		return e.complexity.Notification.CreatedBy(childComplexity), true
+
+	case "Notification.data":
+		if e.complexity.Notification.Data == nil {
+			break
+		}
+
+		return e.complexity.Notification.Data(childComplexity), true
+
+	case "Notification.id":
+		if e.complexity.Notification.ID == nil {
+			break
+		}
+
+		return e.complexity.Notification.ID(childComplexity), true
+
+	case "Notification.notificationType":
+		if e.complexity.Notification.NotificationType == nil {
+			break
+		}
+
+		return e.complexity.Notification.NotificationType(childComplexity), true
+
+	case "Notification.objectType":
+		if e.complexity.Notification.ObjectType == nil {
+			break
+		}
+
+		return e.complexity.Notification.ObjectType(childComplexity), true
+
+	case "Notification.owner":
+		if e.complexity.Notification.Owner == nil {
+			break
+		}
+
+		return e.complexity.Notification.Owner(childComplexity), true
+
+	case "Notification.ownerID":
+		if e.complexity.Notification.OwnerID == nil {
+			break
+		}
+
+		return e.complexity.Notification.OwnerID(childComplexity), true
+
+	case "Notification.readAt":
+		if e.complexity.Notification.ReadAt == nil {
+			break
+		}
+
+		return e.complexity.Notification.ReadAt(childComplexity), true
+
+	case "Notification.tags":
+		if e.complexity.Notification.Tags == nil {
+			break
+		}
+
+		return e.complexity.Notification.Tags(childComplexity), true
+
+	case "Notification.title":
+		if e.complexity.Notification.Title == nil {
+			break
+		}
+
+		return e.complexity.Notification.Title(childComplexity), true
+
+	case "Notification.topic":
+		if e.complexity.Notification.Topic == nil {
+			break
+		}
+
+		return e.complexity.Notification.Topic(childComplexity), true
+
+	case "Notification.updatedAt":
+		if e.complexity.Notification.UpdatedAt == nil {
+			break
+		}
+
+		return e.complexity.Notification.UpdatedAt(childComplexity), true
+
+	case "Notification.updatedBy":
+		if e.complexity.Notification.UpdatedBy == nil {
+			break
+		}
+
+		return e.complexity.Notification.UpdatedBy(childComplexity), true
+
+	case "Notification.userID":
+		if e.complexity.Notification.UserID == nil {
+			break
+		}
+
+		return e.complexity.Notification.UserID(childComplexity), true
+
 	case "Onboarding.companyDetails":
 		if e.complexity.Onboarding.CompanyDetails == nil {
 			break
@@ -50770,6 +50911,7 @@ func (e *executableSchema) Exec(ctx context.Context) graphql.ResponseHandler {
 		ec.unmarshalInputCreateMemberWithProgramInput,
 		ec.unmarshalInputCreateNarrativeInput,
 		ec.unmarshalInputCreateNoteInput,
+		ec.unmarshalInputCreateNotificationInput,
 		ec.unmarshalInputCreateOnboardingInput,
 		ec.unmarshalInputCreateOrgMembershipInput,
 		ec.unmarshalInputCreateOrganizationInput,
@@ -65319,6 +65461,49 @@ input CreateNoteInput {
   internalPolicyID: ID
   trustCenterID: ID
   fileIDs: [ID!]
+}
+"""
+CreateNotificationInput is used for create Notification object.
+Input was generated by ent.
+"""
+input CreateNotificationInput {
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the type of notification - organization or user
+  """
+  notificationType: NotificationNotificationType!
+  """
+  the event type this notification is related to (e.g., task.created, control.updated)
+  """
+  objectType: String!
+  """
+  the title of the notification
+  """
+  title: String!
+  """
+  the body text of the notification
+  """
+  body: String!
+  """
+  structured payload containing IDs, links, and other notification data
+  """
+  data: Map
+  """
+  the time the notification was read
+  """
+  readAt: DateTime
+  """
+  the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
+  """
+  channels: [Channel!]
+  """
+  the topic of the notification
+  """
+  topic: String
+  ownerID: ID
 }
 """
 CreateOnboardingInput is used for create Onboarding object.
@@ -93401,6 +93586,65 @@ input NoteWhereInput {
   """
   hasFiles: Boolean
   hasFilesWith: [FileWhereInput!]
+}
+type Notification implements Node {
+  id: ID!
+  createdAt: Time
+  updatedAt: Time
+  createdBy: String
+  updatedBy: String
+  """
+  tags associated with the object
+  """
+  tags: [String!]
+  """
+  the organization id that owns the object
+  """
+  ownerID: ID
+  """
+  the user this notification is for
+  """
+  userID: ID
+  """
+  the type of notification - organization or user
+  """
+  notificationType: NotificationNotificationType!
+  """
+  the event type this notification is related to (e.g., task.created, control.updated)
+  """
+  objectType: String!
+  """
+  the title of the notification
+  """
+  title: String!
+  """
+  the body text of the notification
+  """
+  body: String!
+  """
+  structured payload containing IDs, links, and other notification data
+  """
+  data: Map
+  """
+  the time the notification was read
+  """
+  readAt: DateTime
+  """
+  the channels this notification should be sent to (IN_APP, SLACK, EMAIL)
+  """
+  channels: [Channel!]
+  """
+  the topic of the notification
+  """
+  topic: String
+  owner: Organization
+}
+"""
+NotificationNotificationType is enum for the field notification_type
+"""
+enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/pkg/enums.NotificationType") {
+  ORGANIZATION
+  USER
 }
 type Onboarding implements Node {
   id: ID!
@@ -145408,7 +145652,10 @@ scalar WorkflowInstanceContext
 WorkflowEventPayload stores payloads emitted by workflow events and actions.
 """
 scalar WorkflowEventPayload
-`, BuiltIn: false},
+"""
+Channel notifications will be sent to including in-app, slack, etc
+"""
+scalar Channel`, BuiltIn: false},
 	{Name: "../schema/scan.graphql", Input: `extend type Query {
     """
     Look up scan by ID
