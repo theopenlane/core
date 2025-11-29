@@ -77,7 +77,7 @@ func handleTaskMutation(ctx *soiree.EventContext, payload any) error {
 	}
 
 	// Get other fields from props and payload, fallback to database query if missing
-	fields, err := getTaskFields(ctx, props, payload)
+	fields, err := fetchTaskFields(ctx, props, payload)
 	if err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get task fields")
 		return err
@@ -98,84 +98,99 @@ func handleTaskMutation(ctx *soiree.EventContext, payload any) error {
 	return nil
 }
 
+// fetchTaskFields retrieves task fields from payload, props, or queries database if missing
+func fetchTaskFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*taskFields, error) {
+	fields := &taskFields{}
 
+	extractTaskFromPayload(payload, fields)
+	extractTaskFromProps(props, fields)
 
-// getTaskFields retrieves task fields from payload, props, or queries database if missing
-func getTaskFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*taskFields, error) {
-	var fields taskFields
-
-	// First, try to get fields from the mutation payload
-	if payload != nil {
-		if mutPayload, ok := payload.(*mutationPayload); ok {
-			// Get entity ID from payload
-			if mutPayload.EntityID != "" {
-				fields.entityID = mutPayload.EntityID
-			}
-
-			// Try to get fields from the mutation if available
-			if taskMut, ok := mutPayload.Mutation.(*generated.TaskMutation); ok {
-				if title, exists := taskMut.Title(); exists {
-					fields.title = title
-				}
-				if ownerID, exists := taskMut.OwnerID(); exists {
-					fields.ownerID = ownerID
-				}
-			}
+	if needsTaskDBQuery(fields) {
+		if err := queryTaskFromDB(ctx, fields); err != nil {
+			return nil, err
 		}
 	}
 
-	// Try to get fields from props if not found in payload
+	return fields, nil
+}
+
+// extractTaskFromPayload extracts task fields from mutation payload
+func extractTaskFromPayload(payload any, fields *taskFields) {
+	mutPayload, ok := payload.(*mutationPayload)
+	if !ok || mutPayload == nil {
+		return
+	}
+
+	if mutPayload.EntityID != "" {
+		fields.entityID = mutPayload.EntityID
+	}
+
+	taskMut, ok := mutPayload.Mutation.(*generated.TaskMutation)
+	if !ok {
+		return
+	}
+
+	if title, exists := taskMut.Title(); exists {
+		fields.title = title
+	}
+
+	if ownerID, exists := taskMut.OwnerID(); exists {
+		fields.ownerID = ownerID
+	}
+}
+
+// extractTaskFromProps extracts task fields from properties
+func extractTaskFromProps(props soiree.Properties, fields *taskFields) {
 	if fields.title == "" {
-		if titleVal := props.GetKey(task.FieldTitle); titleVal != nil {
-			if t, ok := titleVal.(string); ok {
-				fields.title = t
-			}
+		if title, ok := props.GetKey(task.FieldTitle).(string); ok {
+			fields.title = title
 		}
 	}
 
 	if fields.entityID == "" {
-		if idVal := props.GetKey(task.FieldID); idVal != nil {
-			if id, ok := idVal.(string); ok {
-				fields.entityID = id
-			}
+		if id, ok := props.GetKey(task.FieldID).(string); ok {
+			fields.entityID = id
 		}
 	}
 
 	if fields.ownerID == "" {
-		if ownerVal := props.GetKey(task.FieldOwnerID); ownerVal != nil {
-			if o, ok := ownerVal.(string); ok {
-				fields.ownerID = o
-			}
+		if ownerID, ok := props.GetKey(task.FieldOwnerID).(string); ok {
+			fields.ownerID = ownerID
 		}
 	}
+}
 
-	// If any field is missing, query the database
-	if fields.title == "" || fields.entityID == "" || fields.ownerID == "" {
-		client, ok := soiree.ClientAs[*generated.Client](ctx)
-		if !ok {
-			return nil, ErrFailedToGetClient
-		}
+// needsTaskDBQuery checks if database query is needed
+func needsTaskDBQuery(fields *taskFields) bool {
+	return fields.title == "" || fields.entityID == "" || fields.ownerID == ""
+}
 
-		// Use the entity ID from props to query
-		if fields.entityID == "" {
-			return nil, ErrEntityIDNotFound
-		}
-
-		allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
-		taskEntity, err := client.Task.Get(allowCtx, fields.entityID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to query task: %w", err)
-		}
-
-		if fields.title == "" {
-			fields.title = taskEntity.Title
-		}
-		if fields.ownerID == "" {
-			fields.ownerID = taskEntity.OwnerID
-		}
+// queryTaskFromDB queries task from database to fill missing fields
+func queryTaskFromDB(ctx *soiree.EventContext, fields *taskFields) error {
+	if fields.entityID == "" {
+		return ErrEntityIDNotFound
 	}
 
-	return &fields, nil
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	taskEntity, err := client.Task.Get(allowCtx, fields.entityID)
+	if err != nil {
+		return fmt.Errorf("failed to query task: %w", err)
+	}
+
+	if fields.title == "" {
+		fields.title = taskEntity.Title
+	}
+
+	if fields.ownerID == "" {
+		fields.ownerID = taskEntity.OwnerID
+	}
+
+	return nil
 }
 
 // handleInternalPolicyMutation processes internal policy mutations and creates notifications when status = NEEDS_APPROVAL
@@ -204,7 +219,7 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload any) error {
 	}
 
 	// Get approver_id from payload and props, fallback to database query if missing
-	fields, err := getInternalPolicyFields(ctx, props, payload)
+	fields, err := fetchPolicyFields(ctx, props, payload)
 	if err != nil {
 		logx.FromContext(ctx.Context()).Error().Err(err).Msg("failed to get internal policy fields")
 		return err
@@ -230,96 +245,113 @@ func handleInternalPolicyMutation(ctx *soiree.EventContext, payload any) error {
 	return nil
 }
 
-// getInternalPolicyFields retrieves internal policy fields from payload, props, or queries database if missing
-func getInternalPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*policyFields, error) {
-	var fields policyFields
+// fetchPolicyFields retrieves internal policy fields from payload, props, or queries database if missing
+func fetchPolicyFields(ctx *soiree.EventContext, props soiree.Properties, payload any) (*policyFields, error) {
+	fields := &policyFields{}
 
-	// First, try to get fields from the mutation payload
-	if payload != nil {
-		if mutPayload, ok := payload.(*mutationPayload); ok {
-			// Get entity ID from payload
-			if mutPayload.EntityID != "" {
-				fields.entityID = mutPayload.EntityID
-			}
+	extractPolicyFromPayload(payload, fields)
+	extractPolicyFromProps(props, fields)
 
-			// Try to get fields from the mutation if available
-			if policyMut, ok := mutPayload.Mutation.(*generated.InternalPolicyMutation); ok {
-				if name, exists := policyMut.Name(); exists {
-					fields.name = name
-				}
-				if ownerID, exists := policyMut.OwnerID(); exists {
-					fields.ownerID = ownerID
-				}
-				if approverID, exists := policyMut.ApproverID(); exists {
-					fields.approverID = approverID
-				}
-			}
+	if needsPolicyDBQuery(fields) {
+		if err := queryPolicyFromDB(ctx, fields); err != nil {
+			return nil, err
 		}
 	}
 
-	// Try to get fields from props if not found in payload
+	return fields, nil
+}
+
+// extractPolicyFromPayload extracts policy fields from mutation payload
+func extractPolicyFromPayload(payload any, fields *policyFields) {
+	mutPayload, ok := payload.(*mutationPayload)
+	if !ok || mutPayload == nil {
+		return
+	}
+
+	if mutPayload.EntityID != "" {
+		fields.entityID = mutPayload.EntityID
+	}
+
+	policyMut, ok := mutPayload.Mutation.(*generated.InternalPolicyMutation)
+	if !ok {
+		return
+	}
+
+	if name, exists := policyMut.Name(); exists {
+		fields.name = name
+	}
+
+	if ownerID, exists := policyMut.OwnerID(); exists {
+		fields.ownerID = ownerID
+	}
+
+	if approverID, exists := policyMut.ApproverID(); exists {
+		fields.approverID = approverID
+	}
+}
+
+// extractPolicyFromProps extracts policy fields from properties
+func extractPolicyFromProps(props soiree.Properties, fields *policyFields) {
 	if fields.approverID == "" {
-		if approverVal := props.GetKey(internalpolicy.FieldApproverID); approverVal != nil {
-			if a, ok := approverVal.(string); ok {
-				fields.approverID = a
-			}
+		if approverID, ok := props.GetKey(internalpolicy.FieldApproverID).(string); ok {
+			fields.approverID = approverID
 		}
 	}
 
 	if fields.name == "" {
-		if nameVal := props.GetKey(internalpolicy.FieldName); nameVal != nil {
-			if n, ok := nameVal.(string); ok {
-				fields.name = n
-			}
+		if name, ok := props.GetKey(internalpolicy.FieldName).(string); ok {
+			fields.name = name
 		}
 	}
 
 	if fields.entityID == "" {
-		if idVal := props.GetKey(internalpolicy.FieldID); idVal != nil {
-			if id, ok := idVal.(string); ok {
-				fields.entityID = id
-			}
+		if id, ok := props.GetKey(internalpolicy.FieldID).(string); ok {
+			fields.entityID = id
 		}
 	}
 
 	if fields.ownerID == "" {
-		if ownerVal := props.GetKey(internalpolicy.FieldOwnerID); ownerVal != nil {
-			if o, ok := ownerVal.(string); ok {
-				fields.ownerID = o
-			}
+		if ownerID, ok := props.GetKey(internalpolicy.FieldOwnerID).(string); ok {
+			fields.ownerID = ownerID
 		}
 	}
+}
 
-	// If any field is missing, query the database
-	if fields.name == "" || fields.entityID == "" || fields.ownerID == "" || fields.approverID == "" {
-		client, ok := soiree.ClientAs[*generated.Client](ctx)
-		if !ok {
-			return nil, ErrFailedToGetClient
-		}
+// needsPolicyDBQuery checks if database query is needed
+func needsPolicyDBQuery(fields *policyFields) bool {
+	return fields.name == "" || fields.entityID == "" || fields.ownerID == "" || fields.approverID == ""
+}
 
-		// Use the entity ID from props to query
-		if fields.entityID == "" {
-			return nil, ErrEntityIDNotFound
-		}
-
-		allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
-		policy, err := client.InternalPolicy.Get(allowCtx, fields.entityID)
-		if err != nil {
-			return nil, fmt.Errorf("failed to query internal policy: %w", err)
-		}
-
-		if fields.name == "" {
-			fields.name = policy.Name
-		}
-		if fields.ownerID == "" {
-			fields.ownerID = policy.OwnerID
-		}
-		if fields.approverID == "" && policy.ApproverID != "" {
-			fields.approverID = policy.ApproverID
-		}
+// queryPolicyFromDB queries policy from database to fill missing fields
+func queryPolicyFromDB(ctx *soiree.EventContext, fields *policyFields) error {
+	if fields.entityID == "" {
+		return ErrEntityIDNotFound
 	}
 
-	return &fields, nil
+	client, ok := soiree.ClientAs[*generated.Client](ctx)
+	if !ok {
+		return ErrFailedToGetClient
+	}
+
+	allowCtx := privacy.DecisionContext(ctx.Context(), privacy.Allow)
+	policy, err := client.InternalPolicy.Get(allowCtx, fields.entityID)
+	if err != nil {
+		return fmt.Errorf("failed to query internal policy: %w", err)
+	}
+
+	if fields.name == "" {
+		fields.name = policy.Name
+	}
+
+	if fields.ownerID == "" {
+		fields.ownerID = policy.OwnerID
+	}
+
+	if fields.approverID == "" && policy.ApproverID != "" {
+		fields.approverID = policy.ApproverID
+	}
+
+	return nil
 }
 
 func addTaskAssigneeNotification(ctx *soiree.EventContext, input taskNotificationInput) error {
