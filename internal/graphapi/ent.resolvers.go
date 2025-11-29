@@ -4110,6 +4110,72 @@ func (r *queryResolver) TrustCenterWatermarkConfigHistories(ctx context.Context,
 	return res, err
 }
 
+// TrustcenterEntities is the resolver for the trustcenterEntities field.
+func (r *queryResolver) TrustcenterEntities(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.TrustcenterEntityOrder, where *generated.TrustcenterEntityWhereInput) (*generated.TrustcenterEntityConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = []*generated.TrustcenterEntityOrder{
+			{
+				Field:     generated.TrustcenterEntityOrderFieldCreatedAt,
+				Direction: entgql.OrderDirectionDesc,
+			},
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustcenterEntity.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentity"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustcenterEntityOrder(orderBy),
+		generated.WithTrustcenterEntityFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentity"})
+	}
+
+	return res, err
+}
+
+// TrustcenterEntityHistories is the resolver for the trustcenterEntityHistories field.
+func (r *queryResolver) TrustcenterEntityHistories(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy *generated.TrustcenterEntityHistoryOrder, where *generated.TrustcenterEntityHistoryWhereInput) (*generated.TrustcenterEntityHistoryConnection, error) {
+	// set page limit if nothing was set
+	first, last = graphutils.SetFirstLastDefaults(first, last, r.maxResultLimit)
+
+	if orderBy == nil {
+		orderBy = &generated.TrustcenterEntityHistoryOrder{
+			Field:     generated.TrustcenterEntityHistoryOrderFieldCreatedAt,
+			Direction: entgql.OrderDirectionDesc,
+		}
+	}
+
+	query, err := withTransactionalMutation(ctx).TrustcenterEntityHistory.Query().CollectFields(ctx)
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentityhistory"})
+	}
+
+	res, err := query.Paginate(
+		ctx,
+		after,
+		first,
+		before,
+		last,
+		generated.WithTrustcenterEntityHistoryOrder(orderBy),
+		generated.WithTrustcenterEntityHistoryFilter(where.Filter))
+	if err != nil {
+		return nil, parseRequestError(ctx, err, action{action: ActionGet, object: "trustcenterentityhistory"})
+	}
+
+	return res, err
+}
+
 // Users is the resolver for the users field.
 func (r *queryResolver) Users(ctx context.Context, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.UserOrder, where *generated.UserWhereInput) (*generated.UserConnection, error) {
 	// set page limit if nothing was set

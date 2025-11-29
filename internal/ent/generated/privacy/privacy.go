@@ -3279,6 +3279,54 @@ func (f TrustCenterWatermarkConfigHistoryMutationRuleFunc) EvalMutation(ctx cont
 	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustCenterWatermarkConfigHistoryMutation", m)
 }
 
+// The TrustcenterEntityQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustcenterEntityQueryRuleFunc func(context.Context, *generated.TrustcenterEntityQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustcenterEntityQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustcenterEntityQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustcenterEntityQuery", q)
+}
+
+// The TrustcenterEntityMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustcenterEntityMutationRuleFunc func(context.Context, *generated.TrustcenterEntityMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustcenterEntityMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustcenterEntityMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustcenterEntityMutation", m)
+}
+
+// The TrustcenterEntityHistoryQueryRuleFunc type is an adapter to allow the use of ordinary
+// functions as a query rule.
+type TrustcenterEntityHistoryQueryRuleFunc func(context.Context, *generated.TrustcenterEntityHistoryQuery) error
+
+// EvalQuery return f(ctx, q).
+func (f TrustcenterEntityHistoryQueryRuleFunc) EvalQuery(ctx context.Context, q generated.Query) error {
+	if q, ok := q.(*generated.TrustcenterEntityHistoryQuery); ok {
+		return f(ctx, q)
+	}
+	return Denyf("generated/privacy: unexpected query type %T, expect *generated.TrustcenterEntityHistoryQuery", q)
+}
+
+// The TrustcenterEntityHistoryMutationRuleFunc type is an adapter to allow the use of ordinary
+// functions as a mutation rule.
+type TrustcenterEntityHistoryMutationRuleFunc func(context.Context, *generated.TrustcenterEntityHistoryMutation) error
+
+// EvalMutation calls f(ctx, m).
+func (f TrustcenterEntityHistoryMutationRuleFunc) EvalMutation(ctx context.Context, m generated.Mutation) error {
+	if m, ok := m.(*generated.TrustcenterEntityHistoryMutation); ok {
+		return f(ctx, m)
+	}
+	return Denyf("generated/privacy: unexpected mutation type %T, expect *generated.TrustcenterEntityHistoryMutation", m)
+}
+
 // The UserQueryRuleFunc type is an adapter to allow the use of ordinary
 // functions as a query rule.
 type UserQueryRuleFunc func(context.Context, *generated.UserQuery) error
@@ -4034,6 +4082,10 @@ func queryFilter(q generated.Query) (Filter, error) {
 		return q.Filter(), nil
 	case *generated.TrustCenterWatermarkConfigHistoryQuery:
 		return q.Filter(), nil
+	case *generated.TrustcenterEntityQuery:
+		return q.Filter(), nil
+	case *generated.TrustcenterEntityHistoryQuery:
+		return q.Filter(), nil
 	case *generated.UserQuery:
 		return q.Filter(), nil
 	case *generated.UserHistoryQuery:
@@ -4342,6 +4394,10 @@ func mutationFilter(m generated.Mutation) (Filter, error) {
 	case *generated.TrustCenterWatermarkConfigMutation:
 		return m.Filter(), nil
 	case *generated.TrustCenterWatermarkConfigHistoryMutation:
+		return m.Filter(), nil
+	case *generated.TrustcenterEntityMutation:
+		return m.Filter(), nil
+	case *generated.TrustcenterEntityHistoryMutation:
 		return m.Filter(), nil
 	case *generated.UserMutation:
 		return m.Filter(), nil
