@@ -80,19 +80,7 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 
 			// Get access token from the request, if not available then attempt to refresh
 			// using the refresh token cookie.
-			var bearerToken string
-			authHeader := c.Request().Header.Get("Authorization")
-			if authHeader == "" {
-				err = ErrNoAuthorization
-			} else {
-				parts := strings.Split(authHeader, " ")
-				if len(parts) != 2 || parts[0] != "Bearer" {
-					err = ErrParseBearer
-				} else {
-					bearerToken = parts[1]
-				}
-			}
-
+			bearerToken, err := auth.GetBearerToken(c)
 			if err != nil {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
