@@ -2197,7 +2197,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "SUBMITTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}, Default: "SUBMITTED"},
 		{Name: "owner_id", Type: field.TypeString, Nullable: true},
 	}
 	// EvidencesTable holds the schema information for the "evidences" table.
@@ -2252,7 +2252,7 @@ var (
 		{Name: "source", Type: field.TypeString, Nullable: true},
 		{Name: "is_automated", Type: field.TypeBool, Nullable: true, Default: false},
 		{Name: "url", Type: field.TypeString, Nullable: true},
-		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"APPROVED", "READY", "MISSING_ARTIFACT", "REJECTED", "NEEDS_RENEWAL", "SUBMITTED", "IN_REVIEW"}, Default: "SUBMITTED"},
+		{Name: "status", Type: field.TypeEnum, Nullable: true, Enums: []string{"SUBMITTED", "READY_FOR_AUDITOR", "AUDITOR_APPROVED", "IN_REVIEW", "MISSING_ARTIFACT", "NEEDS_RENEWAL", "REJECTED"}, Default: "SUBMITTED"},
 	}
 	// EvidenceHistoryTable holds the schema information for the "evidence_history" table.
 	EvidenceHistoryTable = &schema.Table{
