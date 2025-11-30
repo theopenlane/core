@@ -78,9 +78,27 @@ func Authenticate(conf *Options) echo.MiddlewareFunc {
 			// Create a reauthenticator function to handle refresh tokens if they are provided.
 			reauthenticate := Reauthenticate(conf, validator)
 
-			// Get access token from the request, if not available then attempt to refresh
-			// using the refresh token cookie.
-			bearerToken, err := auth.GetBearerToken(c)
+			var bearerToken string
+			authHeader := c.Request().Header.Get("Authorization")
+			if authHeader != "" {
+				parts := strings.Split(authHeader, " ")
+				if len(parts) == 2 && parts[0] == "Bearer" {
+					bearerToken = parts[1]
+					err = nil
+				} else {
+					err = ErrParseBearer
+				}
+			}
+			if bearerToken == "" || err != nil {
+				externalToken, externalErr := auth.GetBearerToken(c)
+				if externalErr == nil {
+					bearerToken = externalToken
+					err = nil
+				} else {
+					err = externalErr
+				}
+			}
+
 			if err != nil {
 				switch {
 				case errors.Is(err, ErrNoAuthorization):
