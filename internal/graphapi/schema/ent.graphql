@@ -11699,6 +11699,7 @@ input CreateNoteInput {
   procedureID: ID
   riskID: ID
   internalPolicyID: ID
+  evidenceID: ID
   trustCenterID: ID
   fileIDs: [ID!]
 }
@@ -39307,6 +39308,7 @@ type Note implements Node {
   procedure: Procedure
   risk: Risk
   internalPolicy: InternalPolicy
+  evidence: Evidence
   trustCenter: TrustCenter
   files(
     """
@@ -39809,6 +39811,11 @@ input NoteWhereInput {
   """
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
   """
   trust_center edge predicates
   """
@@ -75662,6 +75669,8 @@ input UpdateNoteInput {
   clearRisk: Boolean
   internalPolicyID: ID
   clearInternalPolicy: Boolean
+  evidenceID: ID
+  clearEvidence: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]

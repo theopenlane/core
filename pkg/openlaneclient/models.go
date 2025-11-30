@@ -7481,6 +7481,7 @@ type CreateNoteInput struct {
 	ProcedureID      *string  `json:"procedureID,omitempty"`
 	RiskID           *string  `json:"riskID,omitempty"`
 	InternalPolicyID *string  `json:"internalPolicyID,omitempty"`
+	EvidenceID       *string  `json:"evidenceID,omitempty"`
 	TrustCenterID    *string  `json:"trustCenterID,omitempty"`
 	FileIDs          []string `json:"fileIDs,omitempty"`
 }
@@ -25083,6 +25084,7 @@ type Note struct {
 	Procedure      *Procedure      `json:"procedure,omitempty"`
 	Risk           *Risk           `json:"risk,omitempty"`
 	InternalPolicy *InternalPolicy `json:"internalPolicy,omitempty"`
+	Evidence       *Evidence       `json:"evidence,omitempty"`
 	TrustCenter    *TrustCenter    `json:"trustCenter,omitempty"`
 	Files          *FileConnection `json:"files"`
 }
@@ -25449,6 +25451,9 @@ type NoteWhereInput struct {
 	// internal_policy edge predicates
 	HasInternalPolicy     *bool                       `json:"hasInternalPolicy,omitempty"`
 	HasInternalPolicyWith []*InternalPolicyWhereInput `json:"hasInternalPolicyWith,omitempty"`
+	// evidence edge predicates
+	HasEvidence     *bool                 `json:"hasEvidence,omitempty"`
+	HasEvidenceWith []*EvidenceWhereInput `json:"hasEvidenceWith,omitempty"`
 	// trust_center edge predicates
 	HasTrustCenter     *bool                    `json:"hasTrustCenter,omitempty"`
 	HasTrustCenterWith []*TrustCenterWhereInput `json:"hasTrustCenterWith,omitempty"`
@@ -44071,6 +44076,8 @@ type UpdateEvidenceInput struct {
 	AddCommentIDs                  []string              `json:"addCommentIDs,omitempty"`
 	RemoveCommentIDs               []string              `json:"removeCommentIDs,omitempty"`
 	ClearComments                  *bool                 `json:"clearComments,omitempty"`
+	AddComment                     *CreateNoteInput      `json:"addComment,omitempty"`
+	DeleteComment                  *string               `json:"deleteComment,omitempty"`
 }
 
 // UpdateExportInput is used for update Export object.
@@ -44999,6 +45006,8 @@ type UpdateNoteInput struct {
 	ClearRisk           *bool    `json:"clearRisk,omitempty"`
 	InternalPolicyID    *string  `json:"internalPolicyID,omitempty"`
 	ClearInternalPolicy *bool    `json:"clearInternalPolicy,omitempty"`
+	EvidenceID          *string  `json:"evidenceID,omitempty"`
+	ClearEvidence       *bool    `json:"clearEvidence,omitempty"`
 	TrustCenterID       *string  `json:"trustCenterID,omitempty"`
 	ClearTrustCenter    *bool    `json:"clearTrustCenter,omitempty"`
 	AddFileIDs          []string `json:"addFileIDs,omitempty"`

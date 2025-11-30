@@ -17776,6 +17776,25 @@ func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
 	return query
 }
 
+// QueryEvidence queries the evidence edge of a Note.
+func (c *NoteClient) QueryEvidence(_m *Note) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.EvidenceTable, note.EvidenceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // QueryTrustCenter queries the trust_center edge of a Note.
 func (c *NoteClient) QueryTrustCenter(_m *Note) *TrustCenterQuery {
 	query := (&TrustCenterClient{config: c.config}).Query()

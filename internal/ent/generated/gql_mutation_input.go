@@ -9537,6 +9537,7 @@ type CreateNoteInput struct {
 	ProcedureID      *string
 	RiskID           *string
 	InternalPolicyID *string
+	EvidenceID       *string
 	TrustCenterID    *string
 	FileIDs          []string
 }
@@ -9564,6 +9565,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -9594,6 +9598,8 @@ type UpdateNoteInput struct {
 	RiskID              *string
 	ClearInternalPolicy bool
 	InternalPolicyID    *string
+	ClearEvidence       bool
+	EvidenceID          *string
 	ClearTrustCenter    bool
 	TrustCenterID       *string
 	ClearFiles          bool
@@ -9641,6 +9647,12 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()

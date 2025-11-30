@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -239,6 +240,25 @@ func (_u *NoteUpdate) SetInternalPolicy(v *InternalPolicy) *NoteUpdate {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
+func (_u *NoteUpdate) SetEvidenceID(id string) *NoteUpdate {
+	_u.mutation.SetEvidenceID(id)
+	return _u
+}
+
+// SetNillableEvidenceID sets the "evidence" edge to the Evidence entity by ID if the given value is not nil.
+func (_u *NoteUpdate) SetNillableEvidenceID(id *string) *NoteUpdate {
+	if id != nil {
+		_u = _u.SetEvidenceID(*id)
+	}
+	return _u
+}
+
+// SetEvidence sets the "evidence" edge to the Evidence entity.
+func (_u *NoteUpdate) SetEvidence(v *Evidence) *NoteUpdate {
+	return _u.SetEvidenceID(v.ID)
+}
+
 // SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
 func (_u *NoteUpdate) SetTrustCenterID(id string) *NoteUpdate {
 	_u.mutation.SetTrustCenterID(id)
@@ -311,6 +331,12 @@ func (_u *NoteUpdate) ClearRisk() *NoteUpdate {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdate) ClearInternalPolicy() *NoteUpdate {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (_u *NoteUpdate) ClearEvidence() *NoteUpdate {
+	_u.mutation.ClearEvidence()
 	return _u
 }
 
@@ -630,6 +656,37 @@ func (_u *NoteUpdate) sqlSave(ctx context.Context) (_node int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.EvidenceTable,
+			Columns: []string{note.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.EvidenceTable,
+			Columns: []string{note.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if _u.mutation.TrustCenterCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.M2O,
@@ -933,6 +990,25 @@ func (_u *NoteUpdateOne) SetInternalPolicy(v *InternalPolicy) *NoteUpdateOne {
 	return _u.SetInternalPolicyID(v.ID)
 }
 
+// SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
+func (_u *NoteUpdateOne) SetEvidenceID(id string) *NoteUpdateOne {
+	_u.mutation.SetEvidenceID(id)
+	return _u
+}
+
+// SetNillableEvidenceID sets the "evidence" edge to the Evidence entity by ID if the given value is not nil.
+func (_u *NoteUpdateOne) SetNillableEvidenceID(id *string) *NoteUpdateOne {
+	if id != nil {
+		_u = _u.SetEvidenceID(*id)
+	}
+	return _u
+}
+
+// SetEvidence sets the "evidence" edge to the Evidence entity.
+func (_u *NoteUpdateOne) SetEvidence(v *Evidence) *NoteUpdateOne {
+	return _u.SetEvidenceID(v.ID)
+}
+
 // SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
 func (_u *NoteUpdateOne) SetTrustCenterID(id string) *NoteUpdateOne {
 	_u.mutation.SetTrustCenterID(id)
@@ -1005,6 +1081,12 @@ func (_u *NoteUpdateOne) ClearRisk() *NoteUpdateOne {
 // ClearInternalPolicy clears the "internal_policy" edge to the InternalPolicy entity.
 func (_u *NoteUpdateOne) ClearInternalPolicy() *NoteUpdateOne {
 	_u.mutation.ClearInternalPolicy()
+	return _u
+}
+
+// ClearEvidence clears the "evidence" edge to the Evidence entity.
+func (_u *NoteUpdateOne) ClearEvidence() *NoteUpdateOne {
+	_u.mutation.ClearEvidence()
 	return _u
 }
 
@@ -1346,6 +1428,37 @@ func (_u *NoteUpdateOne) sqlSave(ctx context.Context) (_node *Note, err error) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(internalpolicy.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if _u.mutation.EvidenceCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.EvidenceTable,
+			Columns: []string{note.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _u.schemaConfig.Note
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := _u.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.EvidenceTable,
+			Columns: []string{note.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
 			},
 		}
 		edge.Schema = _u.schemaConfig.Note

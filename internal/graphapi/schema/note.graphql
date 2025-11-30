@@ -40,6 +40,11 @@ extend input UpdateProcedureInput {
     deleteComment: ID
 }
 
+extend input UpdateEvidenceInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input UpdateTrustCenterInput {
     """
     adds a post for the trust center feed

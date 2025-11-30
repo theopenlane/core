@@ -47,6 +47,8 @@ const (
 	EdgeRisk = "risk"
 	// EdgeInternalPolicy holds the string denoting the internal_policy edge name in mutations.
 	EdgeInternalPolicy = "internal_policy"
+	// EdgeEvidence holds the string denoting the evidence edge name in mutations.
+	EdgeEvidence = "evidence"
 	// EdgeTrustCenter holds the string denoting the trust_center edge name in mutations.
 	EdgeTrustCenter = "trust_center"
 	// EdgeFiles holds the string denoting the files edge name in mutations.
@@ -102,6 +104,13 @@ const (
 	InternalPolicyInverseTable = "internal_policies"
 	// InternalPolicyColumn is the table column denoting the internal_policy relation/edge.
 	InternalPolicyColumn = "internal_policy_comments"
+	// EvidenceTable is the table that holds the evidence relation/edge.
+	EvidenceTable = "notes"
+	// EvidenceInverseTable is the table name for the Evidence entity.
+	// It exists in this package in order to avoid circular dependency with the "evidence" package.
+	EvidenceInverseTable = "evidences"
+	// EvidenceColumn is the table column denoting the evidence relation/edge.
+	EvidenceColumn = "evidence_comments"
 	// TrustCenterTable is the table that holds the trust_center relation/edge.
 	TrustCenterTable = "notes"
 	// TrustCenterInverseTable is the table name for the TrustCenter entity.
@@ -293,6 +302,13 @@ func ByInternalPolicyField(field string, opts ...sql.OrderTermOption) OrderOptio
 	}
 }
 
+// ByEvidenceField orders the results by evidence field.
+func ByEvidenceField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newEvidenceStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByTrustCenterField orders the results by trust_center field.
 func ByTrustCenterField(field string, opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -360,6 +376,13 @@ func newInternalPolicyStep() *sqlgraph.Step {
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(InternalPolicyInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.M2O, true, InternalPolicyTable, InternalPolicyColumn),
+	)
+}
+func newEvidenceStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(EvidenceInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, EvidenceTable, EvidenceColumn),
 	)
 }
 func newTrustCenterStep() *sqlgraph.Step {

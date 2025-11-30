@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
@@ -79,15 +80,17 @@ type NoteEdges struct {
 	Risk *Risk `json:"risk,omitempty"`
 	// InternalPolicy holds the value of the internal_policy edge.
 	InternalPolicy *InternalPolicy `json:"internal_policy,omitempty"`
+	// Evidence holds the value of the evidence edge.
+	Evidence *Evidence `json:"evidence,omitempty"`
 	// TrustCenter holds the value of the trust_center edge.
 	TrustCenter *TrustCenter `json:"trust_center,omitempty"`
 	// Files holds the value of the files edge.
 	Files []*File `json:"files,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [9]bool
+	loadedTypes [10]bool
 	// totalCount holds the count of the edges above.
-	totalCount [9]map[string]int
+	totalCount [10]map[string]int
 
 	namedFiles map[string][]*File
 }
@@ -169,12 +172,23 @@ func (e NoteEdges) InternalPolicyOrErr() (*InternalPolicy, error) {
 	return nil, &NotLoadedError{edge: "internal_policy"}
 }
 
+// EvidenceOrErr returns the Evidence value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e NoteEdges) EvidenceOrErr() (*Evidence, error) {
+	if e.Evidence != nil {
+		return e.Evidence, nil
+	} else if e.loadedTypes[7] {
+		return nil, &NotFoundError{label: evidence.Label}
+	}
+	return nil, &NotLoadedError{edge: "evidence"}
+}
+
 // TrustCenterOrErr returns the TrustCenter value or an error if the edge
 // was not loaded in eager-loading, or loaded but was not found.
 func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 	if e.TrustCenter != nil {
 		return e.TrustCenter, nil
-	} else if e.loadedTypes[7] {
+	} else if e.loadedTypes[8] {
 		return nil, &NotFoundError{label: trustcenter.Label}
 	}
 	return nil, &NotLoadedError{edge: "trust_center"}
@@ -183,7 +197,7 @@ func (e NoteEdges) TrustCenterOrErr() (*TrustCenter, error) {
 // FilesOrErr returns the Files value or an error if the edge
 // was not loaded in eager-loading.
 func (e NoteEdges) FilesOrErr() ([]*File, error) {
-	if e.loadedTypes[8] {
+	if e.loadedTypes[9] {
 		return e.Files, nil
 	}
 	return nil, &NotLoadedError{edge: "files"}
@@ -445,6 +459,11 @@ func (_m *Note) QueryRisk() *RiskQuery {
 // QueryInternalPolicy queries the "internal_policy" edge of the Note entity.
 func (_m *Note) QueryInternalPolicy() *InternalPolicyQuery {
 	return NewNoteClient(_m.config).QueryInternalPolicy(_m)
+}
+
+// QueryEvidence queries the "evidence" edge of the Note entity.
+func (_m *Note) QueryEvidence() *EvidenceQuery {
+	return NewNoteClient(_m.config).QueryEvidence(_m)
 }
 
 // QueryTrustCenter queries the "trust_center" edge of the Note entity.

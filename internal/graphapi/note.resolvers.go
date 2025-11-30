@@ -294,6 +294,44 @@ func (r *updateControlInputResolver) DeleteComment(ctx context.Context, obj *gen
 }
 
 // AddComment is the resolver for the addComment field.
+func (r *updateEvidenceInputResolver) AddComment(ctx context.Context, obj *generated.UpdateEvidenceInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.EvidenceID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.EvidenceID == nil {
+		return newNotFoundError("evidence")
+	}
+
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
+	}
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateEvidenceInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateEvidenceInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
 func (r *updateInternalPolicyInputResolver) AddComment(ctx context.Context, obj *generated.UpdateInternalPolicyInput, data *generated.CreateNoteInput) error {
 	if data == nil {
 		return nil

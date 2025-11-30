@@ -5439,6 +5439,14 @@ func (_m *Note) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Evidence(ctx context.Context) (*Evidence, error) {
+	result, err := _m.Edges.EvidenceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEvidence().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
@@ -5455,7 +5463,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {

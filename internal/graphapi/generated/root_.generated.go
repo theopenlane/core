@@ -50,6 +50,7 @@ type ResolverRoot interface {
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
+	UpdateEvidenceInput() UpdateEvidenceInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
@@ -3923,6 +3924,7 @@ type ComplexityRoot struct {
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
 		DisplayID      func(childComplexity int) int
+		Evidence       func(childComplexity int) int
 		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID             func(childComplexity int) int
 		InternalPolicy func(childComplexity int) int
@@ -29578,6 +29580,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.DisplayID(childComplexity), true
+
+	case "Note.evidence":
+		if e.complexity.Note.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Note.Evidence(childComplexity), true
 
 	case "Note.files":
 		if e.complexity.Note.Files == nil {
@@ -65344,6 +65353,7 @@ input CreateNoteInput {
   procedureID: ID
   riskID: ID
   internalPolicyID: ID
+  evidenceID: ID
   trustCenterID: ID
   fileIDs: [ID!]
 }
@@ -92952,6 +92962,7 @@ type Note implements Node {
   procedure: Procedure
   risk: Risk
   internalPolicy: InternalPolicy
+  evidence: Evidence
   trustCenter: TrustCenter
   files(
     """
@@ -93454,6 +93465,11 @@ input NoteWhereInput {
   """
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
   """
   trust_center edge predicates
   """
@@ -129307,6 +129323,8 @@ input UpdateNoteInput {
   clearRisk: Boolean
   internalPolicyID: ID
   clearInternalPolicy: Boolean
+  evidenceID: ID
+  clearEvidence: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -143826,6 +143844,11 @@ extend input UpdateInternalPolicyInput {
 }
 
 extend input UpdateProcedureInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
+extend input UpdateEvidenceInput {
     addComment: CreateNoteInput
     deleteComment: ID
 }
