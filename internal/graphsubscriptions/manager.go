@@ -14,18 +14,18 @@ const TaskChannelBufferSize = 10
 // Manager manages all active subscriptions for real-time updates
 type Manager struct {
 	mu          sync.RWMutex
-	subscribers map[string][]chan *generated.Task // map of userID to list of task channels
+	subscribers map[string][]chan *generated.Notification // mxap of userID to list of notification channels
 }
 
 // NewManager creates a new subscription manager
 func NewManager() *Manager {
 	return &Manager{
-		subscribers: make(map[string][]chan *generated.Task),
+		subscribers: make(map[string][]chan *generated.Notification),
 	}
 }
 
-// Subscribe adds a new subscriber for a user's task creations
-func (sm *Manager) Subscribe(userID string, ch chan *generated.Task) {
+// Subscribe adds a new subscriber for a user's notification creations
+func (sm *Manager) Subscribe(userID string, ch chan *generated.Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
@@ -33,7 +33,7 @@ func (sm *Manager) Subscribe(userID string, ch chan *generated.Task) {
 }
 
 // Unsubscribe removes a subscriber
-func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Task) {
+func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
@@ -57,8 +57,8 @@ func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Task) {
 	}
 }
 
-// Publish sends a task to all subscribers for that user
-func (sm *Manager) Publish(userID string, task *generated.Task) error {
+// Publish sends a notification to all subscribers for that user
+func (sm *Manager) Publish(userID string, notification *generated.Notification) error {
 	sm.mu.RLock()
 	defer sm.mu.RUnlock()
 
@@ -71,12 +71,12 @@ func (sm *Manager) Publish(userID string, task *generated.Task) error {
 	// Send to all subscribers
 	for _, ch := range channels {
 		select {
-		case ch <- task:
+		case ch <- notification:
 			// Successfully sent
-			log.Debug().Str("user_id", userID).Msg("task successfully sent to subscriber")
+			log.Debug().Str("user_id", userID).Msg("notification successfully sent to subscriber")
 		default:
 			// Channel is full or closed, skip
-			log.Warn().Str("user_id", userID).Msg("channel closed, unable to send task to subscriber for user")
+			log.Warn().Str("user_id", userID).Msg("channel closed, unable to send notification to subscriber for user")
 		}
 	}
 
