@@ -668,6 +668,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	ObjectType:      "task",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
+}, "comments": {
+	ObjectType:      "note",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
 },
 }, "export": {"owner": {
 	ObjectType:      "owner",
@@ -1332,6 +1336,10 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "internal_policy": {
 	ObjectType:      "internal_policy",
+	SkipEditCheck:   false,
+	CheckViewAccess: false,
+}, "evidence": {
+	ObjectType:      "evidence",
 	SkipEditCheck:   false,
 	CheckViewAccess: false,
 }, "trust_center": {

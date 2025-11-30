@@ -14,6 +14,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -42,6 +43,7 @@ type NoteQuery struct {
 	withProcedure      *ProcedureQuery
 	withRisk           *RiskQuery
 	withInternalPolicy *InternalPolicyQuery
+	withEvidence       *EvidenceQuery
 	withTrustCenter    *TrustCenterQuery
 	withFiles          *FileQuery
 	withFKs            bool
@@ -252,6 +254,31 @@ func (_q *NoteQuery) QueryInternalPolicy() *InternalPolicyQuery {
 		)
 		schemaConfig := _q.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryEvidence chains the current query on the "evidence" edge.
+func (_q *NoteQuery) QueryEvidence() *EvidenceQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, selector),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.EvidenceTable, note.EvidenceColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.Note
 		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
 		return fromU, nil
@@ -508,6 +535,7 @@ func (_q *NoteQuery) Clone() *NoteQuery {
 		withProcedure:      _q.withProcedure.Clone(),
 		withRisk:           _q.withRisk.Clone(),
 		withInternalPolicy: _q.withInternalPolicy.Clone(),
+		withEvidence:       _q.withEvidence.Clone(),
 		withTrustCenter:    _q.withTrustCenter.Clone(),
 		withFiles:          _q.withFiles.Clone(),
 		// clone intermediate query.
@@ -591,6 +619,17 @@ func (_q *NoteQuery) WithInternalPolicy(opts ...func(*InternalPolicyQuery)) *Not
 		opt(query)
 	}
 	_q.withInternalPolicy = query
+	return _q
+}
+
+// WithEvidence tells the query-builder to eager-load the nodes that are connected to
+// the "evidence" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *NoteQuery) WithEvidence(opts ...func(*EvidenceQuery)) *NoteQuery {
+	query := (&EvidenceClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withEvidence = query
 	return _q
 }
 
@@ -701,7 +740,7 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 		nodes       = []*Note{}
 		withFKs     = _q.withFKs
 		_spec       = _q.querySpec()
-		loadedTypes = [9]bool{
+		loadedTypes = [10]bool{
 			_q.withOwner != nil,
 			_q.withTask != nil,
 			_q.withControl != nil,
@@ -709,11 +748,12 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 			_q.withProcedure != nil,
 			_q.withRisk != nil,
 			_q.withInternalPolicy != nil,
+			_q.withEvidence != nil,
 			_q.withTrustCenter != nil,
 			_q.withFiles != nil,
 		}
 	)
-	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withTrustCenter != nil {
+	if _q.withTask != nil || _q.withControl != nil || _q.withSubcontrol != nil || _q.withProcedure != nil || _q.withRisk != nil || _q.withInternalPolicy != nil || _q.withEvidence != nil || _q.withTrustCenter != nil {
 		withFKs = true
 	}
 	if withFKs {
@@ -781,6 +821,12 @@ func (_q *NoteQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Note, e
 	if query := _q.withInternalPolicy; query != nil {
 		if err := _q.loadInternalPolicy(ctx, query, nodes, nil,
 			func(n *Note, e *InternalPolicy) { n.Edges.InternalPolicy = e }); err != nil {
+			return nil, err
+		}
+	}
+	if query := _q.withEvidence; query != nil {
+		if err := _q.loadEvidence(ctx, query, nodes, nil,
+			func(n *Note, e *Evidence) { n.Edges.Evidence = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1026,6 +1072,38 @@ func (_q *NoteQuery) loadInternalPolicy(ctx context.Context, query *InternalPoli
 		nodes, ok := nodeids[n.ID]
 		if !ok {
 			return fmt.Errorf(`unexpected foreign-key "internal_policy_comments" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
+func (_q *NoteQuery) loadEvidence(ctx context.Context, query *EvidenceQuery, nodes []*Note, init func(*Note), assign func(*Note, *Evidence)) error {
+	ids := make([]string, 0, len(nodes))
+	nodeids := make(map[string][]*Note)
+	for i := range nodes {
+		if nodes[i].evidence_comments == nil {
+			continue
+		}
+		fk := *nodes[i].evidence_comments
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(evidence.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "evidence_comments" returned %v`, n.ID)
 		}
 		for i := range nodes {
 			assign(nodes[i], n)

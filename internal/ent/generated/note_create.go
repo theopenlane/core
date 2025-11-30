@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/theopenlane/core/internal/ent/generated/control"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/internalpolicy"
 	"github.com/theopenlane/core/internal/ent/generated/note"
@@ -270,6 +271,25 @@ func (_c *NoteCreate) SetNillableInternalPolicyID(id *string) *NoteCreate {
 // SetInternalPolicy sets the "internal_policy" edge to the InternalPolicy entity.
 func (_c *NoteCreate) SetInternalPolicy(v *InternalPolicy) *NoteCreate {
 	return _c.SetInternalPolicyID(v.ID)
+}
+
+// SetEvidenceID sets the "evidence" edge to the Evidence entity by ID.
+func (_c *NoteCreate) SetEvidenceID(id string) *NoteCreate {
+	_c.mutation.SetEvidenceID(id)
+	return _c
+}
+
+// SetNillableEvidenceID sets the "evidence" edge to the Evidence entity by ID if the given value is not nil.
+func (_c *NoteCreate) SetNillableEvidenceID(id *string) *NoteCreate {
+	if id != nil {
+		_c = _c.SetEvidenceID(*id)
+	}
+	return _c
+}
+
+// SetEvidence sets the "evidence" edge to the Evidence entity.
+func (_c *NoteCreate) SetEvidence(v *Evidence) *NoteCreate {
+	return _c.SetEvidenceID(v.ID)
 }
 
 // SetTrustCenterID sets the "trust_center" edge to the TrustCenter entity by ID.
@@ -582,6 +602,24 @@ func (_c *NoteCreate) createSpec() (*Note, *sqlgraph.CreateSpec) {
 			edge.Target.Nodes = append(edge.Target.Nodes, k)
 		}
 		_node.internal_policy_comments = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := _c.mutation.EvidenceIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   note.EvidenceTable,
+			Columns: []string{note.EvidenceColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(evidence.FieldID, field.TypeString),
+			},
+		}
+		edge.Schema = _c.schemaConfig.Note
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.evidence_comments = &nodes[0]
 		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := _c.mutation.TrustCenterIDs(); len(nodes) > 0 {
