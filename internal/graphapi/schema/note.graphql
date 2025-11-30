@@ -172,6 +172,23 @@ extend type Mutation{
         noteFiles: [Upload!]
     ): TrustCenterUpdatePayload!
     """
+    Update an existing evidence comment
+    """
+    updateEvidenceComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): EvidenceUpdatePayload!
+    """
     Delete an existing note
     """
     deleteNote(

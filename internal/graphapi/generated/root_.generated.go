@@ -1875,6 +1875,7 @@ type ComplexityRoot struct {
 
 	Evidence struct {
 		CollectionProcedure    func(childComplexity int) int
+		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -3769,6 +3770,7 @@ type ComplexityRoot struct {
 		UpdateEntityType                      func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                           func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                        func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateEvidenceComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateExport                          func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
 		UpdateFinding                         func(childComplexity int, id string, input generated.UpdateFindingInput) int
 		UpdateFindingControl                  func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
@@ -16538,6 +16540,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Evidence.CollectionProcedure(childComplexity), true
 
+	case "Evidence.comments":
+		if e.complexity.Evidence.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
+
 	case "Evidence.controlImplementations":
 		if e.complexity.Evidence.ControlImplementations == nil {
 			break
@@ -28413,6 +28427,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateEvidence(childComplexity, args["id"].(string), args["input"].(generated.UpdateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateEvidenceComment":
+		if e.complexity.Mutation.UpdateEvidenceComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEvidenceComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEvidenceComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateExport":
 		if e.complexity.Mutation.UpdateExport == nil {
@@ -64553,6 +64579,7 @@ input CreateEvidenceInput {
   fileIDs: [ID!]
   programIDs: [ID!]
   taskIDs: [ID!]
+  commentIDs: [ID!]
 }
 """
 CreateExportInput is used for create Export object.
@@ -76347,6 +76374,37 @@ type Evidence implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -77114,6 +77172,11 @@ input EvidenceWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Export implements Node {
   id: ID!
@@ -128249,6 +128312,9 @@ input UpdateEvidenceInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateExportInput is used for update Export object.
@@ -144139,6 +144205,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): TrustCenterUpdatePayload!
+    """
+    Update an existing evidence comment
+    """
+    updateEvidenceComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): EvidenceUpdatePayload!
     """
     Delete an existing note
     """

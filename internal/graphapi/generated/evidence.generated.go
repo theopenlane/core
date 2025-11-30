@@ -102,6 +102,8 @@ func (ec *executionContext) fieldContext_EvidenceBulkCreatePayload_evidences(_ c
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Evidence_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -183,6 +185,8 @@ func (ec *executionContext) fieldContext_EvidenceCreatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Evidence_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},
@@ -293,6 +297,8 @@ func (ec *executionContext) fieldContext_EvidenceUpdatePayload_evidence(_ contex
 				return ec.fieldContext_Evidence_programs(ctx, field)
 			case "tasks":
 				return ec.fieldContext_Evidence_tasks(ctx, field)
+			case "comments":
+				return ec.fieldContext_Evidence_comments(ctx, field)
 			}
 			return nil, fmt.Errorf("no field named %q was found under type Evidence", field.Name)
 		},

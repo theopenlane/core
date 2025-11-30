@@ -226,3 +226,71 @@ mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $e
     }
   }
 }
+
+mutation UpdateEvidenceComment($updateEvidenceCommentId: ID!, $input: UpdateNoteInput!, $noteFiles: [Upload!]) {
+  updateEvidenceComment(
+    id: $updateEvidenceCommentId
+    input: $input
+    noteFiles: $noteFiles
+  ) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+      comments {
+        edges {
+          node {
+            id
+            displayID
+            text
+            createdAt
+            createdBy
+            updatedAt
+            updatedBy
+            files {
+              edges {
+                node {
+                  id
+                  storagePath
+                  storageScheme
+                  storageVolume
+                }
+              }
+            }
+          }
+        }
+      }
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+    }
+  }
+}

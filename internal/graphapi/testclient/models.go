@@ -6893,6 +6893,7 @@ type CreateEvidenceInput struct {
 	FileIDs                  []string              `json:"fileIDs,omitempty"`
 	ProgramIDs               []string              `json:"programIDs,omitempty"`
 	TaskIDs                  []string              `json:"taskIDs,omitempty"`
+	CommentIDs               []string              `json:"commentIDs,omitempty"`
 }
 
 // CreateExportInput is used for create Export object.
@@ -14487,6 +14488,7 @@ type Evidence struct {
 	Files                  *FileConnection                  `json:"files"`
 	Programs               *ProgramConnection               `json:"programs"`
 	Tasks                  *TaskConnection                  `json:"tasks"`
+	Comments               *NoteConnection                  `json:"comments"`
 }
 
 func (Evidence) IsNode() {}
@@ -15082,6 +15084,9 @@ type EvidenceWhereInput struct {
 	// tasks edge predicates
 	HasTasks     *bool             `json:"hasTasks,omitempty"`
 	HasTasksWith []*TaskWhereInput `json:"hasTasksWith,omitempty"`
+	// comments edge predicates
+	HasComments     *bool             `json:"hasComments,omitempty"`
+	HasCommentsWith []*NoteWhereInput `json:"hasCommentsWith,omitempty"`
 }
 
 type Export struct {
@@ -44140,6 +44145,9 @@ type UpdateEvidenceInput struct {
 	AddTaskIDs                     []string              `json:"addTaskIDs,omitempty"`
 	RemoveTaskIDs                  []string              `json:"removeTaskIDs,omitempty"`
 	ClearTasks                     *bool                 `json:"clearTasks,omitempty"`
+	AddCommentIDs                  []string              `json:"addCommentIDs,omitempty"`
+	RemoveCommentIDs               []string              `json:"removeCommentIDs,omitempty"`
+	ClearComments                  *bool                 `json:"clearComments,omitempty"`
 }
 
 // UpdateExportInput is used for update Export object.

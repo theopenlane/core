@@ -137,6 +137,7 @@ var Columns = []string{
 var ForeignKeys = []string{
 	"control_comments",
 	"entity_notes",
+	"evidence_comments",
 	"finding_comments",
 	"internal_policy_comments",
 	"procedure_comments",

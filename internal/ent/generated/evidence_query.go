@@ -18,6 +18,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/controlobjective"
 	"github.com/theopenlane/core/internal/ent/generated/evidence"
 	"github.com/theopenlane/core/internal/ent/generated/file"
+	"github.com/theopenlane/core/internal/ent/generated/note"
 	"github.com/theopenlane/core/internal/ent/generated/organization"
 	"github.com/theopenlane/core/internal/ent/generated/predicate"
 	"github.com/theopenlane/core/internal/ent/generated/program"
@@ -42,6 +43,7 @@ type EvidenceQuery struct {
 	withFiles                       *FileQuery
 	withPrograms                    *ProgramQuery
 	withTasks                       *TaskQuery
+	withComments                    *NoteQuery
 	loadTotal                       []func(context.Context, []*Evidence) error
 	modifiers                       []func(*sql.Selector)
 	withNamedControls               map[string]*ControlQuery
@@ -51,6 +53,7 @@ type EvidenceQuery struct {
 	withNamedFiles                  map[string]*FileQuery
 	withNamedPrograms               map[string]*ProgramQuery
 	withNamedTasks                  map[string]*TaskQuery
+	withNamedComments               map[string]*NoteQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -287,6 +290,31 @@ func (_q *EvidenceQuery) QueryTasks() *TaskQuery {
 	return query
 }
 
+// QueryComments chains the current query on the "comments" edge.
+func (_q *EvidenceQuery) QueryComments() *NoteQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := _q.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := _q.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, selector),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.CommentsTable, evidence.CommentsColumn),
+		)
+		schemaConfig := _q.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromU = sqlgraph.SetNeighbors(_q.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
 // First returns the first Evidence entity from the query.
 // Returns a *NotFoundError when no Evidence was found.
 func (_q *EvidenceQuery) First(ctx context.Context) (*Evidence, error) {
@@ -487,6 +515,7 @@ func (_q *EvidenceQuery) Clone() *EvidenceQuery {
 		withFiles:                  _q.withFiles.Clone(),
 		withPrograms:               _q.withPrograms.Clone(),
 		withTasks:                  _q.withTasks.Clone(),
+		withComments:               _q.withComments.Clone(),
 		// clone intermediate query.
 		sql:       _q.sql.Clone(),
 		path:      _q.path,
@@ -582,6 +611,17 @@ func (_q *EvidenceQuery) WithTasks(opts ...func(*TaskQuery)) *EvidenceQuery {
 	return _q
 }
 
+// WithComments tells the query-builder to eager-load the nodes that are connected to
+// the "comments" edge. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithComments(opts ...func(*NoteQuery)) *EvidenceQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	_q.withComments = query
+	return _q
+}
+
 // GroupBy is used to group vertices by one or more fields/columns.
 // It is often used with aggregate functions, like: count, max, mean, min, sum.
 //
@@ -666,7 +706,7 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	var (
 		nodes       = []*Evidence{}
 		_spec       = _q.querySpec()
-		loadedTypes = [8]bool{
+		loadedTypes = [9]bool{
 			_q.withOwner != nil,
 			_q.withControls != nil,
 			_q.withSubcontrols != nil,
@@ -675,6 +715,7 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			_q.withFiles != nil,
 			_q.withPrograms != nil,
 			_q.withTasks != nil,
+			_q.withComments != nil,
 		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
@@ -759,6 +800,13 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 			return nil, err
 		}
 	}
+	if query := _q.withComments; query != nil {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Evidence) { n.Edges.Comments = []*Note{} },
+			func(n *Evidence, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			return nil, err
+		}
+	}
 	for name, query := range _q.withNamedControls {
 		if err := _q.loadControls(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedControls(name) },
@@ -805,6 +853,13 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 		if err := _q.loadTasks(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedTasks(name) },
 			func(n *Evidence, e *Task) { n.appendNamedTasks(name, e) }); err != nil {
+			return nil, err
+		}
+	}
+	for name, query := range _q.withNamedComments {
+		if err := _q.loadComments(ctx, query, nodes,
+			func(n *Evidence) { n.appendNamedComments(name) },
+			func(n *Evidence, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1248,6 +1303,37 @@ func (_q *EvidenceQuery) loadTasks(ctx context.Context, query *TaskQuery, nodes 
 	}
 	return nil
 }
+func (_q *EvidenceQuery) loadComments(ctx context.Context, query *NoteQuery, nodes []*Evidence, init func(*Evidence), assign func(*Evidence, *Note)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[string]*Evidence)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Note(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(evidence.CommentsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.evidence_comments
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "evidence_comments" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "evidence_comments" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
 
 func (_q *EvidenceQuery) sqlCount(ctx context.Context) (int, error) {
 	_spec := _q.querySpec()
@@ -1445,6 +1531,20 @@ func (_q *EvidenceQuery) WithNamedTasks(name string, opts ...func(*TaskQuery)) *
 		_q.withNamedTasks = make(map[string]*TaskQuery)
 	}
 	_q.withNamedTasks[name] = query
+	return _q
+}
+
+// WithNamedComments tells the query-builder to eager-load the nodes that are connected to the "comments"
+// edge with the given name. The optional arguments are used to configure the query builder of the edge.
+func (_q *EvidenceQuery) WithNamedComments(name string, opts ...func(*NoteQuery)) *EvidenceQuery {
+	query := (&NoteClient{config: _q.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	if _q.withNamedComments == nil {
+		_q.withNamedComments = make(map[string]*NoteQuery)
+	}
+	_q.withNamedComments[name] = query
 	return _q
 }
 
