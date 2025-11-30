@@ -11,6 +11,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/dnsverification"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
+	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/logx"
@@ -80,10 +81,20 @@ func HookDeleteCustomDomain() ent.Hook {
 					return nil, err
 				}
 
+				// Use a fresh context without DeleteTuplesFirstKey to avoid deleting trust center FGA tuples
+				// when clearing the custom domain reference. We need to create a new context from the
+				// background context to ensure the DeleteTuplesFirstKey is not propagated.
+				authedUser, hasUser := auth.AuthenticatedUserFromContext(ctx)
+				freshCtx := context.Background()
+				if hasUser {
+					freshCtx = auth.WithAuthenticatedUser(freshCtx, authedUser)
+				}
+				freshCtx = privacy.DecisionContext(freshCtx, privacy.Allow)
+
 				for _, tc := range trustCenters {
 					if err = m.Client().TrustCenter.UpdateOneID(tc.ID).
 						ClearCustomDomain().
-						Exec(ctx); err != nil {
+						Exec(freshCtx); err != nil {
 						return nil, err
 					}
 				}
