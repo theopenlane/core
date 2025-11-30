@@ -109,6 +109,19 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			if createPreview {
+				if trustCenter.PreviewDomainID != "" {
+					// delete the old preview if it exists
+					if _, err = m.Job.Insert(
+						ctx,
+						corejobs.DeletePreviewDomainArgs{
+							CustomDomainID:           trustCenter.PreviewDomainID,
+							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+						}, nil,
+					); err != nil {
+						return nil, err
+					}
+				}
+
 				// create preview settings with same values but environment set to "preview"
 				previewSetting, err := m.Client().TrustCenterSetting.Create().
 					SetTrustCenterID(id).
@@ -230,7 +243,26 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			// Store the domain IDs before deletion
+			previewDomainID := tc.PreviewDomainID
+
+			// Execute the trust center deletion first
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// If preview domain is set, kick off the delete preview job
+			if previewDomainID != "" {
+				if _, err := m.Job.Insert(ctx, corejobs.DeletePreviewDomainArgs{
+					CustomDomainID:           previewDomainID,
+					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
+			return retVal, nil
 		})
 	}
 }
