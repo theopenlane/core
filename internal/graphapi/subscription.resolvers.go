@@ -7,41 +7,15 @@ package graphapi
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/iam/auth"
 )
 
-// TaskCreated is the resolver for the taskCreated field.
-func (r *subscriptionResolver) TaskCreated(ctx context.Context) (<-chan *generated.Task, error) {
-	userID, err := auth.GetSubjectIDFromContext(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Error().Err(err).Msg("unable to get subject ID from context")
-		return nil, newPermissionDeniedError()
-	}
-
-	// Check if subscription manager is available
-	if r.subscriptionManager == nil {
-		logx.FromContext(ctx).Info().Str("user_id", userID).Msg("subscription manager is not initialized, unable to process request")
-		return nil, ErrInternalServerError
-	}
-
-	// Create a buffered channel to send task events
-	taskChan := make(chan *generated.Task, graphsubscriptions.TaskChannelBufferSize)
-
-	// Subscribe to task creation events for this user
-	r.subscriptionManager.Subscribe(userID, taskChan)
-
-	// Clean up subscription when context is done
-	go func() {
-		<-ctx.Done()
-		r.subscriptionManager.Unsubscribe(userID, taskChan)
-	}()
-
-	return taskChan, nil
+// NotificationCreated is the resolver for the notificationCreated field.
+func (r *subscriptionResolver) NotificationCreated(ctx context.Context) (<-chan *generated.Notification, error) {
+	panic(fmt.Errorf("not implemented: NotificationCreated - notificationCreated"))
 }
 
 // Subscription returns gqlgenerated.SubscriptionResolver implementation.

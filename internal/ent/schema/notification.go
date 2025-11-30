@@ -14,6 +14,7 @@ import (
 	"github.com/theopenlane/entx/history"
 
 	"github.com/theopenlane/core/internal/ent/hooks"
+	"github.com/theopenlane/core/internal/ent/interceptors"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
 )
@@ -78,6 +79,13 @@ func (Notification) Fields() []ent.Field {
 func (Notification) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNotification(),
+	}
+}
+
+// Interceptors of the Notification
+func (Notification) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{
+		interceptors.NotificationQueryFilter(),
 	}
 }
 
