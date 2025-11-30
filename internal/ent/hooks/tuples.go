@@ -16,6 +16,8 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
+type SkipDeletePermissionsKey struct{}
+
 // HookDeletePermissions is an ent hook that deletes all relationship tuples associated with an object
 // on either delete or soft-delete operations
 func HookDeletePermissions() ent.Hook {
@@ -92,6 +94,10 @@ func DeletePermissionsHook(ctx context.Context, m utils.GenericMutation) error {
 func skipDeleteHook(ctx context.Context, m utils.GenericMutation) bool {
 	// skip if internal request
 	if rule.IsInternalRequest(ctx) {
+		return true
+	}
+
+	if _, skip := ctx.Value(SkipDeletePermissionsKey{}).(bool); skip {
 		return true
 	}
 
