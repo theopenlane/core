@@ -438,7 +438,7 @@ func (_c *TrustCenterHistoryCreate) createSpec() (*TrustCenterHistory, *sqlgraph
 	}
 	if value, ok := _c.mutation.CustomDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldCustomDomainID, field.TypeString, value)
-		_node.CustomDomainID = value
+		_node.CustomDomainID = &value
 	}
 	if value, ok := _c.mutation.PreviewDomainID(); ok {
 		_spec.SetField(trustcenterhistory.FieldPreviewDomainID, field.TypeString, value)

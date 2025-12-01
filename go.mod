@@ -4,6 +4,8 @@ go 1.25.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
+replace github.com/theopenlane/entx => ../entx
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema
@@ -97,7 +99,7 @@ require (
 	github.com/theopenlane/entx v0.18.0
 	github.com/theopenlane/gqlgen-plugins v0.12.1
 	github.com/theopenlane/httpsling v0.3.0
-	github.com/theopenlane/iam v0.22.6-0.20251201184755-2a90360d6dbe
+	github.com/theopenlane/iam v0.23.0
 	github.com/theopenlane/newman v0.2.1
 	github.com/theopenlane/riverboat v0.6.2
 	github.com/theopenlane/utils v0.6.1

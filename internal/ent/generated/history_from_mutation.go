@@ -15042,7 +15042,7 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 	}
 
 	if customDomainID, exists := m.CustomDomainID(); exists {
-		create = create.SetCustomDomainID(customDomainID)
+		create = create.SetNillableCustomDomainID(&customDomainID)
 	}
 
 	if previewDomainID, exists := m.PreviewDomainID(); exists {
@@ -15147,9 +15147,9 @@ func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error
 		}
 
 		if customDomainID, exists := m.CustomDomainID(); exists {
-			create = create.SetCustomDomainID(customDomainID)
+			create = create.SetNillableCustomDomainID(&customDomainID)
 		} else {
-			create = create.SetCustomDomainID(trustcenter.CustomDomainID)
+			create = create.SetNillableCustomDomainID(trustcenter.CustomDomainID)
 		}
 
 		if previewDomainID, exists := m.PreviewDomainID(); exists {
@@ -15220,7 +15220,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 			SetTags(trustcenter.Tags).
 			SetOwnerID(trustcenter.OwnerID).
 			SetSlug(trustcenter.Slug).
-			SetCustomDomainID(trustcenter.CustomDomainID).
+			SetNillableCustomDomainID(trustcenter.CustomDomainID).
 			SetPreviewDomainID(trustcenter.PreviewDomainID).
 			SetPirschDomainID(trustcenter.PirschDomainID).
 			SetPirschIdentificationCode(trustcenter.PirschIdentificationCode).

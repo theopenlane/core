@@ -43,7 +43,7 @@ func (r *mutationResolver) CreateTrustCenterDomain(ctx context.Context, input mo
 		}
 	}
 
-	if trustCenter.CustomDomainID != "" {
+	if trustCenter.CustomDomainID != nil {
 		return nil, parseRequestError(ctx, ErrTrustCenterDomainAlreadyExists, action{action: ActionCreate, object: "trustcenterdomain"})
 	}
 

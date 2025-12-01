@@ -244,6 +244,10 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	customDomain2 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
 	customDomain3 := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+
+	anotherUser := suite.userBuilder(context.Background(), t)
+	custDomainForTrustCenter := (&CustomDomainBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: custDomainForTrustCenter.ID}).MustNew(anotherUser.UserCtx, t)
 	nonExistentID := "non-existent-id"
 
 	testCases := []struct {
@@ -254,14 +258,26 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 		expectedErr string
 	}{
 		{
-			name:   "delete domain",
+			name:   "delete domain, system admin user",
 			id:     customDomain.ID,
 			client: suite.client.api,
 			ctx:    systemAdminUser.UserCtx,
 		},
 		{
+			name:   "delete domain, owner user",
+			id:     customDomain3.ID,
+			client: suite.client.api,
+			ctx:    testUser1.UserCtx,
+		},
+		{
+			name:   "delete domain, owner user with trust center",
+			id:     custDomainForTrustCenter.ID,
+			client: suite.client.api,
+			ctx:    anotherUser.UserCtx,
+		},
+		{
 			name:        "unauthorized",
-			id:          customDomain3.ID,
+			id:          customDomain2.ID,
 			client:      suite.client.api,
 			ctx:         viewOnlyUser.UserCtx,
 			expectedErr: notAuthorizedErrorMsg,
@@ -277,6 +293,15 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 
 	for _, tc := range testCases {
 		t.Run("Delete "+tc.name, func(t *testing.T) {
+			// if trust center domain was delete, verify trust center has a custom domain first
+			if tc.id == custDomainForTrustCenter.ID {
+				tcResp, err := tc.client.GetTrustCenterByID(tc.ctx, trustCenter.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, tcResp != nil)
+				assert.Assert(t, tcResp.TrustCenter.CustomDomainID != nil)
+				assert.Check(t, is.Equal(*tcResp.TrustCenter.CustomDomainID, custDomainForTrustCenter.ID))
+			}
+
 			resp, err := tc.client.DeleteCustomDomain(tc.ctx, tc.id)
 			if tc.expectedErr != "" {
 				assert.ErrorContains(t, err, tc.expectedErr)
@@ -292,10 +317,18 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 			// Verify the domain is deleted
 			_, err = tc.client.GetCustomDomainByID(tc.ctx, tc.id)
 			assert.ErrorContains(t, err, notFoundErrorMsg)
+
+			// if trust center domain was delete, verify trust center no longer has custom domain
+			if tc.id == custDomainForTrustCenter.ID {
+				tcResp, err := tc.client.GetTrustCenterByID(tc.ctx, trustCenter.ID)
+				assert.NilError(t, err)
+				assert.Assert(t, tcResp != nil)
+				assert.Check(t, tcResp.TrustCenter.CustomDomainID == nil)
+			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID, customDomain3.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain3.ID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
 func TestUpdateCustomDomain(t *testing.T) {
