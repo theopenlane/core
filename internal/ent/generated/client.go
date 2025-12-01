@@ -9838,6 +9838,25 @@ func (c *EvidenceClient) QueryTasks(_m *Evidence) *TaskQuery {
 	return query
 }
 
+// QueryComments queries the comments edge of a Evidence.
+func (c *EvidenceClient) QueryComments(_m *Evidence) *NoteQuery {
+	query := (&NoteClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(evidence.Table, evidence.FieldID, id),
+			sqlgraph.To(note.Table, note.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, evidence.CommentsTable, evidence.CommentsColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Note
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *EvidenceClient) Hooks() []Hook {
 	hooks := c.hooks.Evidence
@@ -17750,6 +17769,25 @@ func (c *NoteClient) QueryInternalPolicy(_m *Note) *InternalPolicyQuery {
 		)
 		schemaConfig := _m.schemaConfig
 		step.To.Schema = schemaConfig.InternalPolicy
+		step.Edge.Schema = schemaConfig.Note
+		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryEvidence queries the evidence edge of a Note.
+func (c *NoteClient) QueryEvidence(_m *Note) *EvidenceQuery {
+	query := (&EvidenceClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := _m.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(note.Table, note.FieldID, id),
+			sqlgraph.To(evidence.Table, evidence.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, note.EvidenceTable, note.EvidenceColumn),
+		)
+		schemaConfig := _m.schemaConfig
+		step.To.Schema = schemaConfig.Evidence
 		step.Edge.Schema = schemaConfig.Note
 		fromV = sqlgraph.Neighbors(_m.driver.Dialect(), step)
 		return fromV, nil

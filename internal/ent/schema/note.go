@@ -55,7 +55,7 @@ func (n Note) Mixin() []ent.Mixin {
 		additionalMixins: []ent.Mixin{
 			newObjectOwnedMixin[generated.Note](
 				n,
-				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}),
+				withParents(InternalPolicy{}, Procedure{}, Control{}, Subcontrol{}, ControlObjective{}, Program{}, Task{}, TrustCenter{}, Risk{}, Evidence{}),
 				withOrganizationOwner(false),
 				withOwnerRelation(fgax.OwnerRelation),
 			),
@@ -94,6 +94,11 @@ func (n Note) Edges() []ent.Edge {
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: n,
 			edgeSchema: InternalPolicy{},
+			ref:        "comments",
+		}),
+		uniqueEdgeFrom(&edgeDefinition{
+			fromSchema: n,
+			edgeSchema: Evidence{},
 			ref:        "comments",
 		}),
 		uniqueEdgeFrom(&edgeDefinition{

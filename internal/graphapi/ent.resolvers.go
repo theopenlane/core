@@ -4874,6 +4874,11 @@ func (r *Resolver) UpdateEntityInput() gqlgenerated.UpdateEntityInputResolver {
 	return &updateEntityInputResolver{r}
 }
 
+// UpdateEvidenceInput returns gqlgenerated.UpdateEvidenceInputResolver implementation.
+func (r *Resolver) UpdateEvidenceInput() gqlgenerated.UpdateEvidenceInputResolver {
+	return &updateEvidenceInputResolver{r}
+}
+
 // UpdateGroupInput returns gqlgenerated.UpdateGroupInputResolver implementation.
 func (r *Resolver) UpdateGroupInput() gqlgenerated.UpdateGroupInputResolver {
 	return &updateGroupInputResolver{r}
@@ -4942,6 +4947,7 @@ type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
+type updateEvidenceInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateInternalPolicyInputResolver struct{ *Resolver }
 type updateOrganizationInputResolver struct{ *Resolver }

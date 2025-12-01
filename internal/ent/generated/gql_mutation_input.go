@@ -4885,6 +4885,7 @@ type CreateEvidenceInput struct {
 	FileIDs                  []string
 	ProgramIDs               []string
 	TaskIDs                  []string
+	CommentIDs               []string
 }
 
 // Mutate applies the CreateEvidenceInput on the EvidenceMutation builder.
@@ -4941,6 +4942,9 @@ func (i *CreateEvidenceInput) Mutate(m *EvidenceMutation) {
 	if v := i.TaskIDs; len(v) > 0 {
 		m.AddTaskIDs(v...)
 	}
+	if v := i.CommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
 }
 
 // SetInput applies the change-set in the CreateEvidenceInput on the EvidenceCreate builder.
@@ -4991,6 +4995,9 @@ type UpdateEvidenceInput struct {
 	ClearTasks                     bool
 	AddTaskIDs                     []string
 	RemoveTaskIDs                  []string
+	ClearComments                  bool
+	AddCommentIDs                  []string
+	RemoveCommentIDs               []string
 }
 
 // Mutate applies the UpdateEvidenceInput on the EvidenceMutation builder.
@@ -5114,6 +5121,15 @@ func (i *UpdateEvidenceInput) Mutate(m *EvidenceMutation) {
 	}
 	if v := i.RemoveTaskIDs; len(v) > 0 {
 		m.RemoveTaskIDs(v...)
+	}
+	if i.ClearComments {
+		m.ClearComments()
+	}
+	if v := i.AddCommentIDs; len(v) > 0 {
+		m.AddCommentIDs(v...)
+	}
+	if v := i.RemoveCommentIDs; len(v) > 0 {
+		m.RemoveCommentIDs(v...)
 	}
 }
 
@@ -9545,6 +9561,7 @@ type CreateNoteInput struct {
 	ProcedureID      *string
 	RiskID           *string
 	InternalPolicyID *string
+	EvidenceID       *string
 	TrustCenterID    *string
 	FileIDs          []string
 }
@@ -9572,6 +9589,9 @@ func (i *CreateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
 	}
 	if v := i.TrustCenterID; v != nil {
 		m.SetTrustCenterID(*v)
@@ -9602,6 +9622,8 @@ type UpdateNoteInput struct {
 	RiskID              *string
 	ClearInternalPolicy bool
 	InternalPolicyID    *string
+	ClearEvidence       bool
+	EvidenceID          *string
 	ClearTrustCenter    bool
 	TrustCenterID       *string
 	ClearFiles          bool
@@ -9649,6 +9671,12 @@ func (i *UpdateNoteInput) Mutate(m *NoteMutation) {
 	}
 	if v := i.InternalPolicyID; v != nil {
 		m.SetInternalPolicyID(*v)
+	}
+	if i.ClearEvidence {
+		m.ClearEvidence()
+	}
+	if v := i.EvidenceID; v != nil {
+		m.SetEvidenceID(*v)
 	}
 	if i.ClearTrustCenter {
 		m.ClearTrustCenter()

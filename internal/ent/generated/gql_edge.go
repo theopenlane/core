@@ -2699,6 +2699,27 @@ func (_m *Evidence) Tasks(
 	return _m.QueryTasks().Paginate(ctx, after, first, before, last, opts...)
 }
 
+func (_m *Evidence) Comments(
+	ctx context.Context, after *Cursor, first *int, before *Cursor, last *int, orderBy []*NoteOrder, where *NoteWhereInput,
+) (*NoteConnection, error) {
+	opts := []NotePaginateOption{
+		WithNoteOrder(orderBy),
+		WithNoteFilter(where.Filter),
+	}
+	alias := graphql.GetFieldContext(ctx).Field.Alias
+	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	if nodes, err := _m.NamedComments(alias); err == nil || hasTotalCount {
+		pager, err := newNotePager(opts, last != nil)
+		if err != nil {
+			return nil, err
+		}
+		conn := &NoteConnection{Edges: []*NoteEdge{}, TotalCount: totalCount}
+		conn.build(nodes, pager, after, first, before, last)
+		return conn, nil
+	}
+	return _m.QueryComments().Paginate(ctx, after, first, before, last, opts...)
+}
+
 func (_m *Export) Owner(ctx context.Context) (*Organization, error) {
 	result, err := _m.Edges.OwnerOrErr()
 	if IsNotLoaded(err) {
@@ -5418,6 +5439,14 @@ func (_m *Note) InternalPolicy(ctx context.Context) (*InternalPolicy, error) {
 	return result, MaskNotFound(err)
 }
 
+func (_m *Note) Evidence(ctx context.Context) (*Evidence, error) {
+	result, err := _m.Edges.EvidenceOrErr()
+	if IsNotLoaded(err) {
+		result, err = _m.QueryEvidence().Only(ctx)
+	}
+	return result, MaskNotFound(err)
+}
+
 func (_m *Note) TrustCenter(ctx context.Context) (*TrustCenter, error) {
 	result, err := _m.Edges.TrustCenterOrErr()
 	if IsNotLoaded(err) {
@@ -5434,7 +5463,7 @@ func (_m *Note) Files(
 		WithFileFilter(where.Filter),
 	}
 	alias := graphql.GetFieldContext(ctx).Field.Alias
-	totalCount, hasTotalCount := _m.Edges.totalCount[8][alias]
+	totalCount, hasTotalCount := _m.Edges.totalCount[9][alias]
 	if nodes, err := _m.NamedFiles(alias); err == nil || hasTotalCount {
 		pager, err := newFilePager(opts, last != nil)
 		if err != nil {
