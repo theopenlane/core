@@ -103,7 +103,7 @@ func HookJobRunnerDelete() ent.Hook {
 	return hook.On(func(next ent.Mutator) ent.Mutator {
 		return hook.JobRunnerFunc(
 			func(ctx context.Context, m *generated.JobRunnerMutation) (generated.Value, error) {
-				if !entx.CheckIsSoftDelete(ctx) {
+				if !entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 					return next.Mutate(ctx, m)
 				}
 

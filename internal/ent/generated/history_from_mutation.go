@@ -224,7 +224,7 @@ func (m *ActionPlanMutation) CreateHistoryFromCreate(ctx context.Context) error 
 func (m *ActionPlanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -517,7 +517,7 @@ func (m *ActionPlanMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -672,7 +672,7 @@ func (m *AssessmentMutation) CreateHistoryFromCreate(ctx context.Context) error 
 func (m *AssessmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -791,7 +791,7 @@ func (m *AssessmentMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -925,7 +925,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromCreate(ctx context.Context
 func (m *AssessmentResponseMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -1056,7 +1056,7 @@ func (m *AssessmentResponseMutation) CreateHistoryFromDelete(ctx context.Context
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -1200,7 +1200,7 @@ func (m *AssetMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *AssetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -1343,7 +1343,7 @@ func (m *AssetMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -1477,7 +1477,7 @@ func (m *ContactMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ContactMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -1602,7 +1602,7 @@ func (m *ContactMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -1829,7 +1829,7 @@ func (m *ControlMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -2098,7 +2098,7 @@ func (m *ControlMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -2257,7 +2257,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromCreate(ctx context.Cont
 func (m *ControlImplementationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -2388,7 +2388,7 @@ func (m *ControlImplementationMutation) CreateHistoryFromDelete(ctx context.Cont
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -2540,7 +2540,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromCreate(ctx context.Context) 
 func (m *ControlObjectiveMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -2695,7 +2695,7 @@ func (m *ControlObjectiveMutation) CreateHistoryFromDelete(ctx context.Context) 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -2827,7 +2827,7 @@ func (m *CustomDomainMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *CustomDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -2946,7 +2946,7 @@ func (m *CustomDomainMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -3084,7 +3084,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromCreate(ctx context.Context) e
 func (m *DNSVerificationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -3221,7 +3221,7 @@ func (m *DNSVerificationMutation) CreateHistoryFromDelete(ctx context.Context) e
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -3406,7 +3406,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromCreate(ctx context.Context) 
 func (m *DirectoryAccountMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -3609,7 +3609,7 @@ func (m *DirectoryAccountMutation) CreateHistoryFromDelete(ctx context.Context) 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -3781,7 +3781,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromCreate(ctx context.Context) er
 func (m *DirectoryGroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -3948,7 +3948,7 @@ func (m *DirectoryGroupMutation) CreateHistoryFromDelete(ctx context.Context) er
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -4094,7 +4094,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromCreate(ctx context.Contex
 func (m *DirectoryMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -4231,7 +4231,7 @@ func (m *DirectoryMembershipMutation) CreateHistoryFromDelete(ctx context.Contex
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -4344,7 +4344,7 @@ func (m *DocumentDataMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *DocumentDataMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -4439,7 +4439,7 @@ func (m *DocumentDataMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -4573,7 +4573,7 @@ func (m *EntityMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *EntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -4710,7 +4710,7 @@ func (m *EntityMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -4831,7 +4831,7 @@ func (m *EntityTypeMutation) CreateHistoryFromCreate(ctx context.Context) error 
 func (m *EntityTypeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -4938,7 +4938,7 @@ func (m *EntityTypeMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -5078,7 +5078,7 @@ func (m *EvidenceMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *EvidenceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -5221,7 +5221,7 @@ func (m *EvidenceMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -5407,7 +5407,7 @@ func (m *FileMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *FileMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -5610,7 +5610,7 @@ func (m *FileMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -5890,7 +5890,7 @@ func (m *FindingMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *FindingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -6219,7 +6219,7 @@ func (m *FindingMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -6376,7 +6376,7 @@ func (m *FindingControlMutation) CreateHistoryFromCreate(ctx context.Context) er
 func (m *FindingControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -6489,7 +6489,7 @@ func (m *FindingControlMutation) CreateHistoryFromDelete(ctx context.Context) er
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -6634,7 +6634,7 @@ func (m *GroupMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *GroupMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -6783,7 +6783,7 @@ func (m *GroupMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -6886,7 +6886,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromCreate(ctx context.Context) e
 func (m *GroupMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -6963,7 +6963,7 @@ func (m *GroupMembershipMutation) CreateHistoryFromDelete(ctx context.Context) e
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -7070,7 +7070,7 @@ func (m *GroupSettingMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *GroupSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -7171,7 +7171,7 @@ func (m *GroupSettingMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -7314,7 +7314,7 @@ func (m *HushMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *HushMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -7463,7 +7463,7 @@ func (m *HushMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -7602,7 +7602,7 @@ func (m *IntegrationMutation) CreateHistoryFromCreate(ctx context.Context) error
 func (m *IntegrationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -7733,7 +7733,7 @@ func (m *IntegrationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -7937,7 +7937,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromCreate(ctx context.Context) er
 func (m *InternalPolicyMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -8170,7 +8170,7 @@ func (m *InternalPolicyMutation) CreateHistoryFromDelete(ctx context.Context) er
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -8335,7 +8335,7 @@ func (m *JobTemplateMutation) CreateHistoryFromCreate(ctx context.Context) error
 func (m *JobTemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -8484,7 +8484,7 @@ func (m *JobTemplateMutation) CreateHistoryFromDelete(ctx context.Context) error
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -8595,7 +8595,7 @@ func (m *MappableDomainMutation) CreateHistoryFromCreate(ctx context.Context) er
 func (m *MappableDomainMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -8684,7 +8684,7 @@ func (m *MappableDomainMutation) CreateHistoryFromDelete(ctx context.Context) er
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -8809,7 +8809,7 @@ func (m *MappedControlMutation) CreateHistoryFromCreate(ctx context.Context) err
 func (m *MappedControlMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -8934,7 +8934,7 @@ func (m *MappedControlMutation) CreateHistoryFromDelete(ctx context.Context) err
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -9065,7 +9065,7 @@ func (m *NarrativeMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *NarrativeMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -9190,7 +9190,7 @@ func (m *NarrativeMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -9297,7 +9297,7 @@ func (m *NoteMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *NoteMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -9386,7 +9386,7 @@ func (m *NoteMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -9479,7 +9479,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromCreate(ctx context.Context) err
 func (m *OrgMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -9556,7 +9556,7 @@ func (m *OrgMembershipMutation) CreateHistoryFromDelete(ctx context.Context) err
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -9675,7 +9675,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromCreate(ctx context.Context) e
 func (m *OrgSubscriptionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -9794,7 +9794,7 @@ func (m *OrgSubscriptionMutation) CreateHistoryFromDelete(ctx context.Context) e
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -9932,7 +9932,7 @@ func (m *OrganizationMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *OrganizationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -10069,7 +10069,7 @@ func (m *OrganizationMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -10270,7 +10270,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromCreate(ctx context.Contex
 func (m *OrganizationSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -10497,7 +10497,7 @@ func (m *OrganizationSettingMutation) CreateHistoryFromDelete(ctx context.Contex
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -10717,7 +10717,7 @@ func (m *ProcedureMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ProcedureMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -10950,7 +10950,7 @@ func (m *ProcedureMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -11139,7 +11139,7 @@ func (m *ProgramMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ProgramMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -11324,7 +11324,7 @@ func (m *ProgramMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -11433,7 +11433,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromCreate(ctx context.Context)
 func (m *ProgramMembershipMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -11510,7 +11510,7 @@ func (m *ProgramMembershipMutation) CreateHistoryFromDelete(ctx context.Context)
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -11697,7 +11697,7 @@ func (m *RemediationMutation) CreateHistoryFromCreate(ctx context.Context) error
 func (m *RemediationMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -11918,7 +11918,7 @@ func (m *RemediationMutation) CreateHistoryFromDelete(ctx context.Context) error
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -12121,7 +12121,7 @@ func (m *ReviewMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ReviewMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -12330,7 +12330,7 @@ func (m *ReviewMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -12515,7 +12515,7 @@ func (m *RiskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *RiskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -12700,7 +12700,7 @@ func (m *RiskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -12829,7 +12829,7 @@ func (m *ScanMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *ScanMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -12936,7 +12936,7 @@ func (m *ScanMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -13056,7 +13056,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *ScheduledJobMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -13169,7 +13169,7 @@ func (m *ScheduledJobMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -13342,7 +13342,7 @@ func (m *StandardMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *StandardMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -13533,7 +13533,7 @@ func (m *StandardMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -13771,7 +13771,7 @@ func (m *SubcontrolMutation) CreateHistoryFromCreate(ctx context.Context) error 
 func (m *SubcontrolMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -14040,7 +14040,7 @@ func (m *SubcontrolMutation) CreateHistoryFromDelete(ctx context.Context) error 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -14195,7 +14195,7 @@ func (m *SubprocessorMutation) CreateHistoryFromCreate(ctx context.Context) erro
 func (m *SubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -14320,7 +14320,7 @@ func (m *SubprocessorMutation) CreateHistoryFromDelete(ctx context.Context) erro
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -14479,7 +14479,7 @@ func (m *TaskMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *TaskMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -14646,7 +14646,7 @@ func (m *TaskMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -14796,7 +14796,7 @@ func (m *TemplateMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *TemplateMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -14939,7 +14939,7 @@ func (m *TemplateMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -15069,7 +15069,7 @@ func (m *TrustCenterMutation) CreateHistoryFromCreate(ctx context.Context) error
 func (m *TrustCenterMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -15188,7 +15188,7 @@ func (m *TrustCenterMutation) CreateHistoryFromDelete(ctx context.Context) error
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -15294,7 +15294,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromCreate(ctx context.Cont
 func (m *TrustCenterComplianceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -15383,7 +15383,7 @@ func (m *TrustCenterComplianceMutation) CreateHistoryFromDelete(ctx context.Cont
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -15512,7 +15512,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromCreate(ctx context.Context) er
 func (m *TrustCenterDocMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -15643,7 +15643,7 @@ func (m *TrustCenterDocMutation) CreateHistoryFromDelete(ctx context.Context) er
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -15803,7 +15803,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromCreate(ctx context.Context
 func (m *TrustCenterSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -15970,7 +15970,7 @@ func (m *TrustCenterSettingMutation) CreateHistoryFromDelete(ctx context.Context
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -16088,7 +16088,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromCreate(ctx context.Co
 func (m *TrustCenterSubprocessorMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -16183,7 +16183,7 @@ func (m *TrustCenterSubprocessorMutation) CreateHistoryFromDelete(ctx context.Co
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -16313,7 +16313,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromCreate(ctx context
 func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -16444,7 +16444,7 @@ func (m *TrustCenterWatermarkConfigMutation) CreateHistoryFromDelete(ctx context
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -16560,7 +16560,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromCreate(ctx context.Context)
 func (m *TrustcenterEntityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -16661,7 +16661,7 @@ func (m *TrustcenterEntityMutation) CreateHistoryFromDelete(ctx context.Context)
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -16832,7 +16832,7 @@ func (m *UserMutation) CreateHistoryFromCreate(ctx context.Context) error {
 func (m *UserMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -17023,7 +17023,7 @@ func (m *UserMutation) CreateHistoryFromDelete(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -17169,7 +17169,7 @@ func (m *UserSettingMutation) CreateHistoryFromCreate(ctx context.Context) error
 func (m *UserSettingMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -17300,7 +17300,7 @@ func (m *UserSettingMutation) CreateHistoryFromDelete(ctx context.Context) error
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -17536,7 +17536,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromCreate(ctx context.Context) err
 func (m *VulnerabilityMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -17817,7 +17817,7 @@ func (m *VulnerabilityMutation) CreateHistoryFromDelete(ctx context.Context) err
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -17994,7 +17994,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromCreate(ctx context.Context
 func (m *WorkflowAssignmentMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -18149,7 +18149,7 @@ func (m *WorkflowAssignmentMutation) CreateHistoryFromDelete(ctx context.Context
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -18281,7 +18281,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromCreate(ctx context.C
 func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -18400,7 +18400,7 @@ func (m *WorkflowAssignmentTargetMutation) CreateHistoryFromDelete(ctx context.C
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -18574,7 +18574,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromCreate(ctx context.Context
 func (m *WorkflowDefinitionMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -18765,7 +18765,7 @@ func (m *WorkflowDefinitionMutation) CreateHistoryFromDelete(ctx context.Context
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -18895,7 +18895,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromCreate(ctx context.Context) err
 func (m *WorkflowEventMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -19002,7 +19002,7 @@ func (m *WorkflowEventMutation) CreateHistoryFromDelete(ctx context.Context) err
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -19126,7 +19126,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromCreate(ctx context.Context) 
 func (m *WorkflowInstanceMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -19245,7 +19245,7 @@ func (m *WorkflowInstanceMutation) CreateHistoryFromDelete(ctx context.Context) 
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 
@@ -19371,7 +19371,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromCreate(ctx context.Context)
 func (m *WorkflowObjectRefMutation) CreateHistoryFromUpdate(ctx context.Context) error {
 	ctx = history.WithContext(ctx)
 	// check for soft delete operation and delete instead
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return m.CreateHistoryFromDelete(ctx)
 	}
 	client := m.Client()
@@ -19490,7 +19490,7 @@ func (m *WorkflowObjectRefMutation) CreateHistoryFromDelete(ctx context.Context)
 	ctx = history.WithContext(ctx)
 
 	// check for soft delete operation and skip so it happens on update
-	if entx.CheckIsSoftDelete(ctx) {
+	if entx.CheckIsSoftDeleteType(ctx, m.Type()) {
 		return nil
 	}
 

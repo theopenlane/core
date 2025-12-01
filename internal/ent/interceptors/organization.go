@@ -38,6 +38,7 @@ func InterceptorOrganization() ent.Interceptor {
 		// after logging in, check this first before using the AddIDPredicate and requiring a
 		// query to fga
 		authorizedOrgs, err := auth.GetOrganizationIDsFromContext(ctx)
+		auth.GetAuthenticatedUserFromContext(ctx)
 
 		authType := auth.GetAuthTypeFromContext(ctx)
 		if err == nil && len(authorizedOrgs) > 0 {
