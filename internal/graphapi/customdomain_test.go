@@ -327,7 +327,8 @@ func TestMutationDeleteCustomDomain(t *testing.T) {
 			}
 		})
 	}
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID, customDomain2.MappableDomainID, customDomain3.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{custDomainForTrustCenter.MappableDomainID}}).MustDelete(anotherUser.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain2.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -396,7 +397,7 @@ func TestUpdateCustomDomain(t *testing.T) {
 		})
 	}
 	(&Cleanup[*generated.DNSVerificationDeleteOne]{client: suite.client.db.DNSVerification, ID: dnsVerification.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, IDs: []string{customDomain.MappableDomainID}}).MustDelete(testUser1.UserCtx, t)
 	(&Cleanup[*generated.CustomDomainDeleteOne]{client: suite.client.db.CustomDomain, ID: customDomain.ID}).MustDelete(testUser1.UserCtx, t)
 }
 
@@ -641,20 +642,21 @@ func TestGetAllCustomDomains(t *testing.T) {
 }
 
 func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
+	anotherUser := suite.userBuilder(context.Background(), t)
 	// This test validates the fix for the bug where deleting a custom domain
 	// was causing trust center FGA tuples to be deleted, making the trust center inaccessible.
 	// The bug occurred because the DeleteTuplesFirstKey context marker was being propagated
 	// to the trust center update operation when clearing the custom domain reference.
 
 	// Create a custom domain
-	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(testUser1.UserCtx, t)
+	customDomain := (&CustomDomainBuilder{client: suite.client}).MustNew(anotherUser.UserCtx, t)
 
 	// Create a trust center with the custom domain
-	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(testUser1.UserCtx, t)
+	trustCenter := (&TrustCenterBuilder{client: suite.client, CustomDomainID: customDomain.ID}).MustNew(anotherUser.UserCtx, t)
 
 	// Verify the trust center has the expected FGA tuples before deletion
 	// Check for wildcard user can_view tuple
-	userWildcardCheck, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	userWildcardCheck, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "*",
 		SubjectType: "user",
 		Relation:    "can_view",
@@ -665,7 +667,7 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, userWildcardCheck, "trust center should have user:* can_view tuple before custom domain deletion")
 
 	// Check for wildcard service can_view tuple
-	serviceWildcardCheck, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	serviceWildcardCheck, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "*",
 		SubjectType: "service",
 		Relation:    "can_view",
@@ -676,7 +678,7 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, serviceWildcardCheck, "trust center should have service:* can_view tuple before custom domain deletion")
 
 	// Check for system tuple
-	systemCheck, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	systemCheck, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "openlane_core",
 		SubjectType: "system",
 		Relation:    "system",
@@ -687,17 +689,17 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, systemCheck, "trust center should have system:openlane_core system tuple before custom domain deletion")
 
 	// Delete the custom domain
-	resp, err := suite.client.api.DeleteCustomDomain(testUser1.UserCtx, customDomain.ID)
+	resp, err := suite.client.api.DeleteCustomDomain(anotherUser.UserCtx, customDomain.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, resp != nil)
 	assert.Check(t, is.Equal(customDomain.ID, resp.DeleteCustomDomain.DeletedID))
 
 	// Verify the custom domain is deleted
-	_, err = suite.client.api.GetCustomDomainByID(testUser1.UserCtx, customDomain.ID)
+	_, err = suite.client.api.GetCustomDomainByID(anotherUser.UserCtx, customDomain.ID)
 	assert.ErrorContains(t, err, notFoundErrorMsg)
 
 	// Verify the trust center still exists and is accessible
-	tcResp, err := suite.client.api.GetTrustCenterByID(testUser1.UserCtx, trustCenter.ID)
+	tcResp, err := suite.client.api.GetTrustCenterByID(anotherUser.UserCtx, trustCenter.ID)
 	assert.NilError(t, err)
 	assert.Assert(t, tcResp != nil)
 	assert.Check(t, is.Equal(trustCenter.ID, tcResp.TrustCenter.ID))
@@ -707,7 +709,7 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 
 	// Verify the trust center's FGA tuples are still present after custom domain deletion
 	// Check for wildcard user can_view tuple
-	userWildcardCheckAfter, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	userWildcardCheckAfter, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "*",
 		SubjectType: "user",
 		Relation:    "can_view",
@@ -718,7 +720,7 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, userWildcardCheckAfter, "trust center should still have user:* can_view tuple after custom domain deletion")
 
 	// Check for wildcard service can_view tuple
-	serviceWildcardCheckAfter, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	serviceWildcardCheckAfter, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "*",
 		SubjectType: "service",
 		Relation:    "can_view",
@@ -729,7 +731,7 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, serviceWildcardCheckAfter, "trust center should still have service:* can_view tuple after custom domain deletion")
 
 	// Check for system tuple
-	systemCheckAfter, err := suite.client.fga.CheckAccess(testUser1.UserCtx, fgax.AccessCheck{
+	systemCheckAfter, err := suite.client.fga.CheckAccess(anotherUser.UserCtx, fgax.AccessCheck{
 		SubjectID:   "openlane_core",
 		SubjectType: "system",
 		Relation:    "system",
@@ -740,6 +742,6 @@ func TestMutationDeleteCustomDomainWithTrustCenter(t *testing.T) {
 	assert.Check(t, systemCheckAfter, "trust center should still have system:openlane_core system tuple after custom domain deletion")
 
 	// Cleanup
-	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(testUser1.UserCtx, t)
-	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(testUser1.UserCtx, t)
+	(&Cleanup[*generated.TrustCenterDeleteOne]{client: suite.client.db.TrustCenter, ID: trustCenter.ID}).MustDelete(anotherUser.UserCtx, t)
+	(&Cleanup[*generated.MappableDomainDeleteOne]{client: suite.client.db.MappableDomain, ID: customDomain.MappableDomainID}).MustDelete(anotherUser.UserCtx, t)
 }
