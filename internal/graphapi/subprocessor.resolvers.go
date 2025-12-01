@@ -73,6 +73,15 @@ func (r *mutationResolver) UpdateSubprocessor(ctx context.Context, id string, in
 	}, nil
 }
 
+// UpdateBulkSubprocessor is the resolver for the updateBulkSubprocessor field.
+func (r *mutationResolver) UpdateBulkSubprocessor(ctx context.Context, ids []string, input generated.UpdateSubprocessorInput) (*model.SubprocessorBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateSubprocessor(ctx, ids, input)
+}
+
 // DeleteSubprocessor is the resolver for the deleteSubprocessor field.
 func (r *mutationResolver) DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).Subprocessor.DeleteOneID(id).Exec(ctx); err != nil {

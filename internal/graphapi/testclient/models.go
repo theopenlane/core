@@ -36888,6 +36888,14 @@ type SubprocessorBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkSubprocessor mutation
+type SubprocessorBulkUpdatePayload struct {
+	// Updated subprocessors
+	Subprocessors []*Subprocessor `json:"subprocessors,omitempty"`
+	// IDs of the updated subprocessors
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // A connection to a list of items.
 type SubprocessorConnection struct {
 	// A list of edges.
@@ -41542,6 +41550,14 @@ type TrustCenterSubprocessorBulkCreatePayload struct {
 type TrustCenterSubprocessorBulkDeletePayload struct {
 	// Deleted trustCenterSubprocessor IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorBulkUpdatePayload struct {
+	// Updated trustCenterSubprocessors
+	TrustCenterSubprocessors []*TrustCenterSubprocessor `json:"trustCenterSubprocessors,omitempty"`
+	// IDs of the updated trustCenterSubprocessors
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // A connection to a list of items.

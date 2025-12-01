@@ -1866,6 +1866,14 @@ type SubprocessorBulkDeletePayload struct {
 	DeletedIDs []string `json:"deletedIDs"`
 }
 
+// Return response for updateBulkSubprocessor mutation
+type SubprocessorBulkUpdatePayload struct {
+	// Updated subprocessors
+	Subprocessors []*generated.Subprocessor `json:"subprocessors,omitempty"`
+	// IDs of the updated subprocessors
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
+}
+
 // Return response for createSubprocessor mutation
 type SubprocessorCreatePayload struct {
 	// Created subprocessor
@@ -2147,6 +2155,14 @@ type TrustCenterSubprocessorBulkCreatePayload struct {
 type TrustCenterSubprocessorBulkDeletePayload struct {
 	// Deleted trustCenterSubprocessor IDs
 	DeletedIDs []string `json:"deletedIDs"`
+}
+
+// Return response for updateBulkTrustCenterSubprocessor mutation
+type TrustCenterSubprocessorBulkUpdatePayload struct {
+	// Updated trustCenterSubprocessors
+	TrustCenterSubprocessors []*generated.TrustCenterSubprocessor `json:"trustCenterSubprocessors,omitempty"`
+	// IDs of the updated trustCenterSubprocessors
+	UpdatedIDs []string `json:"updatedIDs,omitempty"`
 }
 
 // Return response for createTrustCenterSubprocessor mutation
