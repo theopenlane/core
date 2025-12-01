@@ -108,7 +108,7 @@ require (
 	github.com/windmill-labs/windmill-go-client v1.586.0
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
-	gocloud.dev v0.43.0
+	gocloud.dev v0.44.0
 	golang.org/x/crypto v0.45.0
 	golang.org/x/mod v0.30.0
 	golang.org/x/oauth2 v0.33.0
