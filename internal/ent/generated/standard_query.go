@@ -611,7 +611,12 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	if query := _q.withTrustCenterDocs; query != nil {
 		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
 			func(n *Standard) { n.Edges.TrustCenterDocs = []*TrustCenterDoc{} },
-			func(n *Standard, e *TrustCenterDoc) { n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e) }); err != nil {
+			func(n *Standard, e *TrustCenterDoc) {
+				n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e)
+				if !e.Edges.loadedTypes[1] {
+					e.Edges.Standard = n
+				}
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -648,7 +653,12 @@ func (_q *StandardQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Sta
 	for name, query := range _q.withNamedTrustCenterDocs {
 		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
 			func(n *Standard) { n.appendNamedTrustCenterDocs(name) },
-			func(n *Standard, e *TrustCenterDoc) { n.appendNamedTrustCenterDocs(name, e) }); err != nil {
+			func(n *Standard, e *TrustCenterDoc) {
+				n.appendNamedTrustCenterDocs(name, e)
+				if !e.Edges.loadedTypes[1] {
+					e.Edges.Standard = n
+				}
+			}); err != nil {
 			return nil, err
 		}
 	}

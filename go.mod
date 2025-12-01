@@ -333,7 +333,6 @@ require (
 	github.com/riverqueue/river/riverdriver v0.28.0 // indirect
 	github.com/riverqueue/river/rivershared v0.28.0 // indirect
 	github.com/riverqueue/rivercontrib/otelriver v0.6.0 // indirect
-	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/russross/blackfriday/v2 v2.1.0 // indirect
 	github.com/sagikazarmark/locafero v0.12.0 // indirect
 	github.com/samber/mo v1.16.0

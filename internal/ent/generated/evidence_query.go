@@ -805,7 +805,12 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Evidence) { n.Edges.Comments = []*Note{} },
-			func(n *Evidence, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
+			func(n *Evidence, e *Note) {
+				n.Edges.Comments = append(n.Edges.Comments, e)
+				if !e.Edges.loadedTypes[7] {
+					e.Edges.Evidence = n
+				}
+			}); err != nil {
 			return nil, err
 		}
 	}
@@ -861,7 +866,12 @@ func (_q *EvidenceQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Evi
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Evidence) { n.appendNamedComments(name) },
-			func(n *Evidence, e *Note) { n.appendNamedComments(name, e) }); err != nil {
+			func(n *Evidence, e *Note) {
+				n.appendNamedComments(name, e)
+				if !e.Edges.loadedTypes[7] {
+					e.Edges.Evidence = n
+				}
+			}); err != nil {
 			return nil, err
 		}
 	}

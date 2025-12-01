@@ -956,7 +956,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *TrustCenter) { n.Edges.Posts = []*Note{} },
 			func(n *TrustCenter, e *Note) {
 				n.Edges.Posts = append(n.Edges.Posts, e)
-				if !e.Edges.loadedTypes[7] {
+				if !e.Edges.loadedTypes[8] {
 					e.Edges.TrustCenter = n
 				}
 			}); err != nil {
@@ -1025,7 +1025,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *TrustCenter) { n.appendNamedPosts(name) },
 			func(n *TrustCenter, e *Note) {
 				n.appendNamedPosts(name, e)
-				if !e.Edges.loadedTypes[7] {
+				if !e.Edges.loadedTypes[8] {
 					e.Edges.TrustCenter = n
 				}
 			}); err != nil {
