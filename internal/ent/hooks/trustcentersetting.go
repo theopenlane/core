@@ -7,13 +7,12 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/corejobs"
 )
 
-var ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 var ErrTooManyFaviconFiles = errors.New("too many favicon files uploaded, only one is allowed")
 var ErrMissingTrustCenterID = errors.New("trust center id is required")
 

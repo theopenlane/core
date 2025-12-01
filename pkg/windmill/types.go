@@ -1,3 +1,5 @@
+//go:build windmill
+
 package windmill
 
 import (

@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
-	"github.com/theopenlane/core/pkg/corejobs"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/corejobs"
 	"github.com/theopenlane/iam/auth"
 )
 

@@ -79,6 +79,7 @@ func (JobTemplate) Fields() []ent.Field {
 						entgql.SkipWhereInput,
 				),
 			).
+			Validate(models.ValidateDownloadURLnloadURL()).
 			Comment("the url from where to download the script from"),
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
@@ -132,7 +133,6 @@ func (JobTemplate) Annotations() []schema.Annotation {
 // Hooks of the JobTemplate
 func (JobTemplate) Hooks() []ent.Hook {
 	return []ent.Hook{
-		hooks.HookJobTemplate(),
 		hook.On(
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,

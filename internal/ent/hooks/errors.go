@@ -102,6 +102,8 @@ var (
 	// ErrTrustCenterIDRequired is returned when the trustcenter id is not provided
 	// when creating a customer for the trust center
 	ErrTrustCenterIDRequired = errors.New("trustcenter entity must include a trustcenter id")
+	// ErrTooManyLogoFiles is returned when a user uploads more than one logo file
+	ErrTooManyLogoFiles = errors.New("too many logo files uploaded, only one is allowed")
 )
 
 // IsUniqueConstraintError reports if the error resulted from a DB uniqueness constraint violation.

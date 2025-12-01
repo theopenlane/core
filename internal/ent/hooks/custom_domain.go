@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/mappabledomain"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/corejobs"
 	"github.com/theopenlane/iam/auth"
 )
 

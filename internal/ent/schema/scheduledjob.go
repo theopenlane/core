@@ -8,7 +8,6 @@ import (
 	"github.com/gertd/go-pluralize"
 
 	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/internal/ent/privacy/policy"
 	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
@@ -142,9 +141,7 @@ func (ScheduledJob) Annotations() []schema.Annotation {
 
 // Hooks of the ScheduledJob
 func (ScheduledJob) Hooks() []ent.Hook {
-	return []ent.Hook{
-		hooks.HookScheduledJobCreate(),
-	}
+	return []ent.Hook{}
 }
 
 // Interceptors of the ScheduledJob

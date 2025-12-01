@@ -43,7 +43,7 @@ env:
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
-  GO_INLINE_FLAG: "-gcflags=all=-l"
+  GO_INLINE_FLAG: "-gcflags=all=-l -tags=corejobs,windmill,entgenerated"
 
 # load the .env file for windmill
 dotenv: ['docker/configs/windmill/.env']
@@ -133,20 +133,17 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
-      - pkg/corejobs/internal/**/*.go
       - .mockery.yml
       - internal/httpserve/**/*.go
       - pkg/openapi/*.go
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
-      - pkg/corejobs/internal/cloudflare/mocks/mocks.go
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
-      - go generate pkg/corejobs/internal/generate.go
       - go generate internal/httpserve/specs/generate/generate.go
 
   # Buildkite automation tasks
@@ -264,7 +261,7 @@ tasks:
       TEST_DB_URL: "docker://postgres:17-alpine"
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go test -v ./... -tags test
+      - go test -v ./... -tags test,corejobs
 
   go:test:cover:
     desc: runs and outputs results of created go tests with coverage
@@ -272,7 +269,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test
+      - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test,corejobs
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage
@@ -290,7 +287,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: [testsum]
     cmds:
-      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
+      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test,corejobs
 
   go:testsum:verbose:
     silent: true
@@ -299,7 +296,7 @@ tasks:
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
+      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test,corejobs
 
   go:testsum:slow:
     silent: true

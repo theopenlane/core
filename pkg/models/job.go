@@ -58,33 +58,39 @@ func (job *JobConfiguration) UnmarshalGQL(v interface{}) error {
 	return unmarshalGQLJSON(v, job)
 }
 
-// ValidateURL takes in url and makes sure it is a valid url
+// ValidateDownloadURL takes in url and makes sure it is a valid url
 // - it must be https
 // - it must not be localhost
 // - it must not be a loopback address to our machine
-func ValidateURL(s string) (string, error) {
+func ValidateDownloadURLnloadURL() func(s string) error {
+	return func(s string) error {
+		return validateURL(s)
+	}
+}
+
+func validateURL(s string) error {
 	if s == "" {
-		return "", ErrInvalidURL
+		return ErrInvalidURL
 	}
 
 	u, err := url.Parse(s)
 	if err != nil {
-		return "", ErrInvalidURL
+		return ErrInvalidURL
 	}
 
 	hostname := strings.ToLower(u.Hostname())
 
 	if hostname == "localhost" || hostname == "127.0.0.1" {
-		return "", ErrLocalHostNotAllowed
+		return ErrLocalHostNotAllowed
 	}
 
 	if ip := net.ParseIP(hostname); ip != nil && ip.IsLoopback() {
-		return "", ErrNoLoopbackAddressAllowed
+		return ErrNoLoopbackAddressAllowed
 	}
 
 	if u.Scheme != "https" {
-		return "", ErrHTTPSOnlyURL
+		return ErrHTTPSOnlyURL
 	}
 
-	return s, nil
+	return nil
 }
