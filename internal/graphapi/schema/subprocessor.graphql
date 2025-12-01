@@ -60,6 +60,19 @@ extend type Mutation{
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
+    Update multiple existing subprocessors
+    """
+    updateBulkSubprocessor(
+        """
+        IDs of the subprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the subprocessors with
+        """
+        input: UpdateSubprocessorInput!
+    ): SubprocessorBulkUpdatePayload!
+    """
     Delete an existing subprocessor
     """
     deleteSubprocessor(
@@ -117,6 +130,20 @@ type SubprocessorBulkCreatePayload {
     Created subprocessors
     """
     subprocessors: [Subprocessor!]
+}
+
+"""
+Return response for updateBulkSubprocessor mutation
+"""
+type SubprocessorBulkUpdatePayload {
+    """
+    Updated subprocessors
+    """
+    subprocessors: [Subprocessor!]
+    """
+    IDs of the updated subprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """

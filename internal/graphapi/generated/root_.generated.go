@@ -3752,8 +3752,10 @@ type ComplexityRoot struct {
 		UpdateBulkProcedure                   func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkRisk                        func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                        func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkSubprocessor                func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
 		UpdateBulkTask                        func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateBulkTrustCenterDoc              func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
+		UpdateBulkTrustCenterSubprocessor     func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateContact                         func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                         func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
@@ -5986,6 +5988,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	SubprocessorBulkUpdatePayload struct {
+		Subprocessors func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+	}
+
 	SubprocessorConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -6735,6 +6742,11 @@ type ComplexityRoot struct {
 
 	TrustCenterSubprocessorBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorBulkUpdatePayload struct {
+		TrustCenterSubprocessors func(childComplexity int) int
+		UpdatedIDs               func(childComplexity int) int
 	}
 
 	TrustCenterSubprocessorConnection struct {
@@ -28202,6 +28214,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScanInput)), true
 
+	case "Mutation.updateBulkSubprocessor":
+		if e.complexity.Mutation.UpdateBulkSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSubprocessorInput)), true
+
 	case "Mutation.updateBulkTask":
 		if e.complexity.Mutation.UpdateBulkTask == nil {
 			break
@@ -28225,6 +28249,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkTrustCenterDoc(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+
+	case "Mutation.updateBulkTrustCenterSubprocessor":
+		if e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -42448,6 +42484,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "SubprocessorBulkUpdatePayload.subprocessors":
+		if e.complexity.SubprocessorBulkUpdatePayload.Subprocessors == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkUpdatePayload.Subprocessors(childComplexity), true
+
+	case "SubprocessorBulkUpdatePayload.updatedIDs":
+		if e.complexity.SubprocessorBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "SubprocessorConnection.edges":
 		if e.complexity.SubprocessorConnection.Edges == nil {
 			break
@@ -45766,6 +45816,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkUpdatePayload.trustCenterSubprocessors":
+		if e.complexity.TrustCenterSubprocessorBulkUpdatePayload.TrustCenterSubprocessors == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkUpdatePayload.TrustCenterSubprocessors(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkUpdatePayload.updatedIDs":
+		if e.complexity.TrustCenterSubprocessorBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "TrustCenterSubprocessorConnection.edges":
 		if e.complexity.TrustCenterSubprocessorConnection.Edges == nil {
@@ -147327,6 +147391,19 @@ extend type Mutation{
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
+    Update multiple existing subprocessors
+    """
+    updateBulkSubprocessor(
+        """
+        IDs of the subprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the subprocessors with
+        """
+        input: UpdateSubprocessorInput!
+    ): SubprocessorBulkUpdatePayload!
+    """
     Delete an existing subprocessor
     """
     deleteSubprocessor(
@@ -147384,6 +147461,20 @@ type SubprocessorBulkCreatePayload {
     Created subprocessors
     """
     subprocessors: [Subprocessor!]
+}
+
+"""
+Return response for updateBulkSubprocessor mutation
+"""
+type SubprocessorBulkUpdatePayload {
+    """
+    Updated subprocessors
+    """
+    subprocessors: [Subprocessor!]
+    """
+    IDs of the updated subprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """
@@ -148707,6 +148798,19 @@ extend type Mutation{
         input: UpdateTrustCenterSubprocessorInput!
     ): TrustCenterSubprocessorUpdatePayload!
     """
+    Update multiple existing trustCenterSubprocessors
+    """
+    updateBulkTrustCenterSubprocessor(
+        """
+        IDs of the trustCenterSubprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterSubprocessors with
+        """
+        input: UpdateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorBulkUpdatePayload!
+    """
     Delete an existing trustCenterSubprocessor
     """
     deleteTrustCenterSubprocessor(
@@ -148764,6 +148868,20 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+
+"""
+Return response for updateBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkUpdatePayload {
+    """
+    Updated trustCenterSubprocessors
+    """
+    trustCenterSubprocessors: [TrustCenterSubprocessor!]
+    """
+    IDs of the updated trustCenterSubprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """

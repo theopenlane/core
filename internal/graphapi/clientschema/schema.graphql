@@ -43740,6 +43740,20 @@ type Mutation {
 		logoFile: Upload
 	): SubprocessorUpdatePayload!
 	"""
+	Update multiple existing subprocessors
+	"""
+	updateBulkSubprocessor(
+		"""
+		IDs of the subprocessors to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the subprocessors with
+		"""
+		input: UpdateSubprocessorInput!
+	): SubprocessorBulkUpdatePayload!
+	"""
 	Delete an existing subprocessor
 	"""
 	deleteSubprocessor(
@@ -44371,6 +44385,20 @@ type Mutation {
 		"""
 		input: UpdateTrustCenterSubprocessorInput!
 	): TrustCenterSubprocessorUpdatePayload!
+	"""
+	Update multiple existing trustCenterSubprocessors
+	"""
+	updateBulkTrustCenterSubprocessor(
+		"""
+		IDs of the trustCenterSubprocessors to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the trustCenterSubprocessors with
+		"""
+		input: UpdateTrustCenterSubprocessorInput!
+	): TrustCenterSubprocessorBulkUpdatePayload!
 	"""
 	Delete an existing trustCenterSubprocessor
 	"""
@@ -73712,6 +73740,19 @@ type SubprocessorBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkSubprocessor mutation
+"""
+type SubprocessorBulkUpdatePayload {
+	"""
+	Updated subprocessors
+	"""
+	subprocessors: [Subprocessor!]
+	"""
+	IDs of the updated subprocessors
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type SubprocessorConnection {
@@ -80695,6 +80736,19 @@ type TrustCenterSubprocessorBulkDeletePayload {
 	Deleted trustCenterSubprocessor IDs
 	"""
 	deletedIDs: [ID!]!
+}
+"""
+Return response for updateBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkUpdatePayload {
+	"""
+	Updated trustCenterSubprocessors
+	"""
+	trustCenterSubprocessors: [TrustCenterSubprocessor!]
+	"""
+	IDs of the updated trustCenterSubprocessors
+	"""
+	updatedIDs: [ID!]
 }
 """
 A connection to a list of items.
