@@ -158,3 +158,20 @@ mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $i
     }
   }
 }
+
+mutation UpdateBulkTrustCenterSubprocessor($ids: [ID!]!, $input: UpdateTrustCenterSubprocessorInput!) {
+  updateBulkTrustCenterSubprocessor(ids: $ids, input: $input) {
+    trustCenterSubprocessors {
+      category
+      countries
+      createdAt
+      createdBy
+      id
+      subprocessorID
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}

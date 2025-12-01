@@ -52,6 +52,19 @@ extend type Mutation{
         input: UpdateTrustCenterSubprocessorInput!
     ): TrustCenterSubprocessorUpdatePayload!
     """
+    Update multiple existing trustCenterSubprocessors
+    """
+    updateBulkTrustCenterSubprocessor(
+        """
+        IDs of the trustCenterSubprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterSubprocessors with
+        """
+        input: UpdateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorBulkUpdatePayload!
+    """
     Delete an existing trustCenterSubprocessor
     """
     deleteTrustCenterSubprocessor(
@@ -109,6 +122,20 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+
+"""
+Return response for updateBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkUpdatePayload {
+    """
+    Updated trustCenterSubprocessors
+    """
+    trustCenterSubprocessors: [TrustCenterSubprocessor!]
+    """
+    IDs of the updated trustCenterSubprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """

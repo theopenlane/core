@@ -79,6 +79,15 @@ func (r *mutationResolver) UpdateTrustCenterSubprocessor(ctx context.Context, id
 	}, nil
 }
 
+// UpdateBulkTrustCenterSubprocessor is the resolver for the updateBulkTrustCenterSubprocessor field.
+func (r *mutationResolver) UpdateBulkTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	return r.bulkUpdateTrustCenterSubprocessor(ctx, ids, input)
+}
+
 // DeleteTrustCenterSubprocessor is the resolver for the deleteTrustCenterSubprocessor field.
 func (r *mutationResolver) DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error) {
 	if err := withTransactionalMutation(ctx).TrustCenterSubprocessor.DeleteOneID(id).Exec(ctx); err != nil {
