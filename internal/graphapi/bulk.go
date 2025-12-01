@@ -2722,6 +2722,47 @@ func (r *mutationResolver) bulkCreateSubprocessor(ctx context.Context, input []*
 	}, nil
 }
 
+// bulkUpdateSubprocessor updates multiple Subprocessor entities
+func (r *mutationResolver) bulkUpdateSubprocessor(ctx context.Context, ids []string, input generated.UpdateSubprocessorInput) (*model.SubprocessorBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.Subprocessor, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each subprocessor individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for subprocessor")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.Subprocessor.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to get subprocessor in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("subprocessor_id", id).Msg("failed to update subprocessor in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.SubprocessorBulkUpdatePayload{
+		Subprocessors: results,
+		UpdatedIDs:    updatedIDs,
+	}, nil
+}
+
 // bulkDeleteSubprocessor deletes multiple Subprocessor entities by their IDs
 func (r *mutationResolver) bulkDeleteSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error) {
 	if len(ids) == 0 {
@@ -3193,6 +3234,47 @@ func (r *mutationResolver) bulkCreateTrustCenterSubprocessor(ctx context.Context
 	// return response
 	return &model.TrustCenterSubprocessorBulkCreatePayload{
 		TrustCenterSubprocessors: res,
+	}, nil
+}
+
+// bulkUpdateTrustCenterSubprocessor updates multiple TrustCenterSubprocessor entities
+func (r *mutationResolver) bulkUpdateTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error) {
+	if len(ids) == 0 {
+		return nil, rout.NewMissingRequiredFieldError("ids")
+	}
+
+	c := withTransactionalMutation(ctx)
+	results := make([]*generated.TrustCenterSubprocessor, 0, len(ids))
+	updatedIDs := make([]string, 0, len(ids))
+
+	// update each trustcentersubprocessor individually to ensure proper validation
+	for _, id := range ids {
+		if id == "" {
+			logx.FromContext(ctx).Error().Msg("empty id in bulk update for trustcentersubprocessor")
+			continue
+		}
+
+		// get the existing entity first
+		existing, err := c.TrustCenterSubprocessor.Get(ctx, id)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to get trustcentersubprocessor in bulk update operation")
+			continue
+		}
+
+		// setup update request
+		updatedEntity, err := existing.Update().SetInput(input).Save(ctx)
+		if err != nil {
+			logx.FromContext(ctx).Error().Err(err).Str("trustcentersubprocessor_id", id).Msg("failed to update trustcentersubprocessor in bulk operation")
+			continue
+		}
+
+		results = append(results, updatedEntity)
+		updatedIDs = append(updatedIDs, id)
+	}
+
+	return &model.TrustCenterSubprocessorBulkUpdatePayload{
+		TrustCenterSubprocessors: results,
+		UpdatedIDs:               updatedIDs,
 	}, nil
 }
 
