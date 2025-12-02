@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestSwitchHandlerSSOEnforced() {

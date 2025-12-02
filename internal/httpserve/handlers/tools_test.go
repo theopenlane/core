@@ -30,11 +30,7 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
@@ -44,16 +40,20 @@ import (
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/core/pkg/objects/objstore"
+	"github.com/theopenlane/core/pkg/olauth"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/ent/entconfig"
+	"github.com/theopenlane/ent/entdb"
+	ent "github.com/theopenlane/ent/generated"
 
 	// import generated runtime which is required to prevent cyclical dependencies
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/ent/generated/runtime"
 )
 
 // TestOperations consolidates all test operations for easier access
@@ -105,7 +105,7 @@ type HandlerTestSuite struct {
 	tf                   *testutils.TestFixture
 	ofgaTF               *fgatest.OpenFGATestFixture
 	stripeMockBackend    *mocks.MockStripeBackend
-	objectStore          *objects.Service
+	objectStore          *objstore.Service
 	sharedTokenManager   *tokens.TokenManager
 	sharedRedisClient    *redis.Client
 	sharedSessionManager sessions.Store[map[string]any]
@@ -362,7 +362,7 @@ func setupRouter() (*route.Router, error) {
 
 // handlerSetup to be used for required references in the handler tests
 func handlerSetup(db *ent.Client) *handlers.Handler {
-	as := authmanager.New(db)
+	as := olauth.New(db)
 
 	h := &handlers.Handler{
 		IsTest:        true,

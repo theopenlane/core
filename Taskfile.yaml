@@ -80,15 +80,15 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
-      - internal/ent/schema/**/*.go
-      - internal/ent/generate/**/*.go
-      - internal/ent/mixin/**/*.go
-      - internal/ent/templates/**/*
+      - ent/schema/**/*.go
+      - ent/generate/**/*.go
+      - ent/mixin/**/*.go
+      - ent/templates/**/*
     generates:
-      - internal/ent/generated/**/*.go
+      - ent/generated/**/*.go
     method: checksum
     cmds:
-      - go generate internal/ent/generate/generate.go
+      - go generate ent/generate/generate.go
 
   generate:graphql:smart:
     env:
@@ -97,7 +97,7 @@ tasks:
       - internal/graphapi/generate/**/*.go
       - internal/graphapi/schema/*.graphql
       - internal/graphapi/query/**/*.graphql
-      - internal/ent/generated/**/*.go
+      - ent/generated/**/*.go
     generates:
       - internal/graphapi/generated/**/*.go
       - internal/graphapi/model/gen_models.go
@@ -404,17 +404,17 @@ tasks:
   hush:keyset:
     desc: Generates a new Tink keyset for field encryption
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate
+      - go run -tags generate ./ent/hush/cmd/hush generate
 
   hush:quiet:
     desc: Generates a new Tink keyset (output only)
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
+      - go run -tags generate ./ent/hush/cmd/hush generate --quiet
 
   hush:export:
     desc: Generates a new Tink keyset in export format
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --export
+      - go run -tags generate ./ent/hush/cmd/hush generate --export
 
   # dev tasks
   run-dev:

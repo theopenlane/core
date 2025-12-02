@@ -1,0 +1,131 @@
+package schema
+
+import (
+	"entgo.io/ent"
+	"entgo.io/ent/schema"
+	"github.com/gertd/go-pluralize"
+
+	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/ent/privacy/policy"
+)
+
+{{- /* schemas should always be the singular this will ensure they are created with singular even if the file name is plural */}}
+{{- $name := . | singular }}
+{{- $firstChar :=  printf "%.*s" 1 $name | lower }}
+
+{{- if ne . $name }}
+// !!WARNING: the provided schema name {{ . }} was plural, schemas should be singular
+// {{ $name }} was used instead. Ensure the file name is updated to match the singular form
+// if you are sure you want the plural, you can update the names in the schema manually
+{{- end }}
+
+// {{ $name }} holds the schema definition for the {{ $name }} entity
+type {{ $name }} struct {
+  	SchemaFuncs
+
+	ent.Schema
+}
+
+// Schema{{ $name }}is the name of the schema in snake case
+const Schema{{ $name }} = "{{ $name | snake }}"
+
+// Name is the name of the schema in snake case
+func ({{ $name }}) Name() string {
+	return Schema{{ . | singular }}
+}
+
+// GetType returns the type of the schema
+func ({{ $name }}) GetType() any {
+	return {{ $name }}.Type
+}
+
+// PluralName returns the plural name of the schema
+func ({{ $name }}) PluralName() string {
+	return pluralize.NewClient().Plural(Schema{{ $name }})
+}
+
+// Fields of the {{ $name }}
+func ({{ $name }}) Fields() []ent.Field {
+    return []ent.Field{
+        // Fields go here
+        // Example:
+        //	field.String("name").
+        //		Comment("the name of the cat").
+        //		Annotations(
+        //			// makes field searchable
+        //			entx.FieldSearchable(),
+        //			// allows field to be used for sort order
+        //			entgql.OrderField("name"),
+        //		)
+    }
+}
+
+// Mixin of the {{ $name }}
+func ({{ $firstChar }} {{ $name }}) Mixin() []ent.Mixin {
+	// getDefaultMixins returns the default mixins for all entities
+	// see mixingConfig{} for more configuration options
+	return getDefaultMixins({{ $firstChar }})
+}
+
+// Edges of the {{ $name }}
+func ({{ $firstChar }} {{ $name }}) Edges() []ent.Edge {
+	return []ent.Edge{
+		// Edges go here
+		// see defaultEdgeToWithPagination({{ $firstChar }}, Meow{}) and similar functions
+		// in default.go for helper functions
+	}
+}
+
+// Indexes of the {{ $name }}
+func ({{ $name }}) Indexes() []ent.Index {
+	return []ent.Index{}
+}
+
+// Annotations of the {{ $name }}
+func ({{ $name }}) Annotations() []schema.Annotation {
+	return []schema.Annotation{
+		// the AnnotationMixin provides the common annotations for
+		// to create all the graphQL goodness; if you need the schema only and not the endpoints, use the below annotation instead and set the mixinConfig to `excludeAnnotations: true
+
+        // if you do not need the graphql bits
+		// entgql.Skip(entgql.SkipAll),
+		// entx.SchemaGenSkip(true),
+		// entx.QueryGenSkip(true)
+
+		// the below annotation adds the entfga policy that will check access to the entity
+		// remove this annotation (or replace with another policy) if you want checks to be defined
+		// by another object
+		// uncomment after the first run
+		// entfga.SelfAccessChecks(),
+	}
+}
+
+// Hooks of the {{ $name }}
+func ({{ $name }}) Hooks() []ent.Hook {
+	return []ent.Hook{}
+}
+
+// Interceptors of the {{ $name }}
+func ({{ $name }}) Interceptors() []ent.Interceptor {
+	return []ent.Interceptor{}
+}
+
+// Modules this schema has access to
+func ({{ $name }}) Modules() []models.OrgModule {
+	return []models.OrgModule{}
+}
+
+// Policy of the {{ $name }}
+func ({{ $name }}) Policy() ent.Policy {
+	// add the new policy here, the default post-policy is to deny all
+	// so you need to ensure there are rules in place to allow the actions you want
+	return policy.NewPolicy(
+		policy.WithMutationRules(
+			// add mutation rules here, the below is the recommended default
+			policy.CheckCreateAccess(),
+			// this needs to be commented out for the first run that had the entfga annotation
+			// the first run will generate the functions required based on the entfa annotation
+			// entfga.CheckEditAccess[*generated.{{ $name }}Mutation](),
+		),
+	)
+}

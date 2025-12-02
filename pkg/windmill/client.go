@@ -14,8 +14,8 @@ import (
 	api "github.com/windmill-labs/windmill-go-client/api"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/entconfig"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/httpsling/httpclient"
 )

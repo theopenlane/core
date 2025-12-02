@@ -25,8 +25,8 @@ linters:
       - internal/graphapi/model/gen_models.go
       - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
-      - internal/ent/generated/*
-      - internal/ent/templates/*
+      - ent/generated/*
+      - ent/templates/*
       - jsonschema/templates/*
       - pkg/objects/mocks/*
       - internal/graphapi/generate/*
@@ -37,7 +37,7 @@ linters:
       - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
-      - internal/ent/hush/examples/*
+      - ent/hush/examples/*
       - pkg/objects/examples/*
 formatters:
   enable:
@@ -53,4 +53,4 @@ formatters:
       - cmd/cli/cmd/*
       - pkg/events/soiree/examples/*
       - pkg/sleuth/dnsx/* # this should be fixed in the future
-      - internal/ent/hush/examples/*
+      - ent/hush/examples/*

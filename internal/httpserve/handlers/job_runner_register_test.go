@@ -12,8 +12,8 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestRegisterJobRunner() {

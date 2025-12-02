@@ -135,7 +135,7 @@ package schema
 import (
     "entgo.io/ent"
     "entgo.io/ent/schema/field"
-    "github.com/theopenlane/core/internal/ent/hush"
+    "github.com/theopenlane/ent/hush"
 )
 
 type SecretStore struct {
@@ -462,7 +462,7 @@ import (
     "database/sql"
     "log"
 
-    "github.com/theopenlane/core/internal/ent/hush"
+    "github.com/theopenlane/ent/hush"
 )
 
 func main() {
@@ -595,7 +595,7 @@ package schema
 import (
     "entgo.io/ent"
     "entgo.io/ent/schema/field"
-    "github.com/theopenlane/core/internal/ent/hush"
+    "github.com/theopenlane/ent/hush"
 )
 
 type OAuthIntegration struct {

@@ -6,12 +6,12 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	generated "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	ent "github.com/theopenlane/ent/generated"
+	generated "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 )

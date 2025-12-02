@@ -7,10 +7,10 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/privacy/rule"
 )
 
 // RefreshHandler allows users to refresh their access token using their refresh token

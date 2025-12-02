@@ -15,17 +15,17 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"github.com/google/uuid"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/documentdata"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	gentemplate "github.com/theopenlane/core/internal/ent/generated/template"
-	"github.com/theopenlane/core/internal/ent/privacy/rule"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/olauth"
 	"github.com/theopenlane/emailtemplates"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/documentdata"
+	"github.com/theopenlane/ent/generated/privacy"
+	gentemplate "github.com/theopenlane/ent/generated/template"
+	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
@@ -201,7 +201,7 @@ func sendTrustCenterNDAEmail(ctx context.Context, input model.SendTrustCenterNDA
 		}
 
 		anonymousUser = &auth.AnonymousTrustCenterUser{
-			SubjectID:          fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, uuid.New().String()),
+			SubjectID:          fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, uuid.New().String()),
 			SubjectName:        "Anonymous User",
 			AuthenticationType: auth.JWTAuthentication,
 			TrustCenterID:      input.TrustCenterID,

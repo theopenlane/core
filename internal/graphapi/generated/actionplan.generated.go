@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 

@@ -6,7 +6,7 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/gqlerrors"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
@@ -23,6 +23,8 @@ const (
 	TraceExtensionKey = "trace_id"
 	// ModulesExtensionKey is the key used to store the missing module in the extensions map
 	ModulesExtensionKey = "missing_module"
+	// Test
+	TestExtensionKey = "test_extension"
 )
 
 // Auth contains the authentication data to be added to the extensions map

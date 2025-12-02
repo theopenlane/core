@@ -1,4 +1,5 @@
-//go:build cli
+//go:build climanagedgroups
+
 package main
 
 import (
@@ -11,17 +12,17 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
-	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/ent/entdb"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/group"
+	"github.com/theopenlane/ent/generated/groupmembership"
+	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/ent/generated/orgmembership"
+	"github.com/theopenlane/ent/generated/predicate"
+	"github.com/theopenlane/ent/generated/privacy"
+	_ "github.com/theopenlane/ent/generated/runtime"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"

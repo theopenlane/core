@@ -9,16 +9,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/filedownloadtoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	handlerpkg "github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/objects/resolver"
-	"github.com/theopenlane/core/internal/objects/upload"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects/objstore"
+	"github.com/theopenlane/core/pkg/objects/resolver"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	"github.com/theopenlane/core/pkg/objects/upload"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/filedownloadtoken"
+	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 )
@@ -39,14 +39,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_Success() {
 
 	fileContent := []byte("test file content for download")
 
-	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []pkgobjects.File{
+	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []objects.File{
 		{
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "testfile.txt",
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
+			FileMetadata: objects.FileMetadata{
 				ContentType: "text/plain",
 			},
 		},
@@ -106,14 +106,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_WithUserID() {
 
 	fileContent := []byte("user specific download test")
 
-	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []pkgobjects.File{
+	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []objects.File{
 		{
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "userfile.txt",
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
+			FileMetadata: objects.FileMetadata{
 				ContentType: "text/plain",
 			},
 		},
@@ -196,14 +196,14 @@ func (suite *HandlerTestSuite) TestDatabaseFileDownloadHandler_PresignedURLGener
 
 	fileContent := []byte("presigned url test")
 
-	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []pkgobjects.File{
+	uploadCtx, uploadedFiles, err := upload.HandleUploads(uploadCtx, suite.objectStore, []objects.File{
 		{
 			RawFile:              bytes.NewReader(fileContent),
 			OriginalName:         "presigned.txt",
 			FieldName:            "uploadFile",
 			CorrelatedObjectID:   user.PersonalOrgID,
 			CorrelatedObjectType: "organization",
-			FileMetadata: pkgobjects.FileMetadata{
+			FileMetadata: objects.FileMetadata{
 				ContentType: "text/plain",
 			},
 		},
@@ -273,7 +273,7 @@ func (suite *HandlerTestSuite) swapObjectStoreToDatabase() func() {
 	}
 }
 
-func (suite *HandlerTestSuite) createDatabaseStoreWithPresignConfig(cfg storage.ProviderConfig, baseURL string) *objects.Service {
+func (suite *HandlerTestSuite) createDatabaseStoreWithPresignConfig(cfg storage.ProviderConfig, baseURL string) *objstore.Service {
 	return resolver.NewServiceFromConfig(cfg,
 		resolver.WithPresignConfig(func() *tokens.TokenManager {
 			return suite.sharedTokenManager

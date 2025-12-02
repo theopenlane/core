@@ -6,12 +6,12 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/trustcenterwatermarkconfig"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/ent/generated/trustcenterwatermarkconfig"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

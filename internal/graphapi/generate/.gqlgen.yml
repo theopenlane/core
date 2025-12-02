@@ -60,7 +60,7 @@ go_build_tags:
 # if they match it will use them, otherwise it will generate them.
 autobind:
   - "github.com/theopenlane/core/internal/graphapi"
-  - "github.com/theopenlane/core/internal/ent/generated"
+  - "github.com/theopenlane/ent/generated"
 # This section declares type mapping between the GraphQL and go type systems
 #
 # The first line in each type will be used as defaults for resolver arguments and

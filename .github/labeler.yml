@@ -16,13 +16,13 @@ ci:
       - any-glob-to-any-file: .buildkite/**
 mixin:
   - changed-files:
-      - any-glob-to-any-file: internal/ent/mixin/*
+      - any-glob-to-any-file: ent/mixin/*
 privacy:
   - changed-files:
-      - any-glob-to-any-file: internal/ent/privacy/*
+      - any-glob-to-any-file: ent/privacy/*
 dbschema:
   - changed-files:
-      - any-glob-to-any-file: internal/ent/schema/*
+      - any-glob-to-any-file: ent/schema/*
 graphqlschema:
   - changed-files:
       - any-glob-to-any-file: internal/graphapi/schema/**/**
@@ -57,8 +57,8 @@ codegenerators:
       - any-glob-to-any-file: internal/graphapi/generate/generate.go
       - any-glob-to-any-file: internal/graphapi/generate/.gqlgen.yml
       - any-glob-to-any-file: internal/graphapi/generate/.gqlgenc.yml
-      - any-glob-to-any-file: internal/ent/generate/entc.go
-      - any-glob-to-any-file: internal/ent/templates/**
+      - any-glob-to-any-file: ent/generate/entc.go
+      - any-glob-to-any-file: ent/templates/**
 coreclient:
   - changed-files:
       - any-glob-to-any-file: pkg/openlaneclient/**

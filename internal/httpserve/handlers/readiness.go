@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
-	"github.com/theopenlane/core/internal/entdb"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/ent/entdb"
 )
 
 // StatusReply returns server status

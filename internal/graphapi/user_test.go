@@ -12,10 +12,10 @@ import (
 
 	auth "github.com/theopenlane/iam/auth"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func TestQueryUser(t *testing.T) {

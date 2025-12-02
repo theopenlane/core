@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
+	"github.com/theopenlane/ent/entdb"
 )
 
 // TestHealthEndpointsShutdown verifies liveness and readiness handlers return ServiceUnavailable during shutdown

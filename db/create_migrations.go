@@ -18,8 +18,8 @@ import (
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"ariga.io/atlas/sql/sqltool"
-	"github.com/theopenlane/core/internal/ent/generated/migrate"
-	"github.com/theopenlane/core/internal/entdb"
+	"github.com/theopenlane/ent/entdb"
+	"github.com/theopenlane/ent/generated/migrate"
 	"github.com/theopenlane/utils/testutils"
 )
 

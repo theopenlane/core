@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/privacy/token"
 )
 
 // VerifySubscriptionHandler is the handler for the subscription verification endpoint

@@ -6,8 +6,8 @@ import (
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/ent/schema"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 	"github.com/theopenlane/gqlgen-plugins/searchgen"
@@ -32,8 +32,8 @@ func main() {
 	}
 
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
-	entPackage := "github.com/theopenlane/core/internal/ent/generated"
-	rulePackage := "github.com/theopenlane/core/internal/ent/privacy/rule"
+	entPackage := "github.com/theopenlane/ent/generated"
+	rulePackage := "github.com/theopenlane/ent/privacy/rule"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(

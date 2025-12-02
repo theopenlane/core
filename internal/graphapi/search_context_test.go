@@ -4,7 +4,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/ent/generated"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

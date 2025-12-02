@@ -27,8 +27,6 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/cache"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -39,6 +37,8 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/ent/entconfig"
+	"github.com/theopenlane/ent/hush/crypto"
 )
 
 const (

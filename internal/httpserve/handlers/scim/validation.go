@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/organizationsetting"
 )
 
 // ValidateSSOEnforced checks if SSO is enforced for the organization

@@ -27,25 +27,25 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/ent/entconfig"
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/validator"
-	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/objects"
-	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/entitlements/mocks"
 	"github.com/theopenlane/core/pkg/events/soiree"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/objects"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
+	"github.com/theopenlane/core/pkg/objects/objstore"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/validators"
 	"github.com/theopenlane/core/pkg/summarizer"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+	"github.com/theopenlane/ent/entconfig"
+	"github.com/theopenlane/ent/entdb"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/validator"
 	openlaneclient "github.com/theopenlane/go-client"
 
 	// import generated runtime which is required to prevent cyclical dependencies
-	_ "github.com/theopenlane/core/internal/ent/generated/runtime"
+	_ "github.com/theopenlane/ent/generated/runtime"
 )
 
 const (
@@ -76,7 +76,7 @@ type client struct {
 	apiWithPAT   *testclient.TestClient
 	apiWithToken *testclient.TestClient
 	fga          *fgax.Client
-	objectStore  *objects.Service
+	objectStore  *objstore.Service
 	mockProvider *mock_shared.MockProvider
 }
 
@@ -250,7 +250,7 @@ func expectUpload(t *testing.T, mockProvider *mock_shared.MockProvider, expected
 		mockProvider.On("GetScheme").Return(&mockScheme).Once()
 		mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
 		mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-			FileMetadata: pkgobjects.FileMetadata{
+			FileMetadata: objects.FileMetadata{
 				Key:          "test-key",
 				Size:         upload.Size,
 				Folder:       "test-folder",
@@ -292,7 +292,7 @@ func expectUploadNillable(t *testing.T, mockProvider *mock_shared.MockProvider, 
 			mockProvider.On("GetScheme").Return(&mockScheme).Once()
 			mockProvider.On("ProviderType").Return(storage.DiskProvider).Maybe()
 			mockProvider.On("Upload", mock.Anything, mock.Anything, mock.Anything).Return(&storage.UploadedMetadata{
-				FileMetadata: pkgobjects.FileMetadata{
+				FileMetadata: objects.FileMetadata{
 					Key:          "test-key",
 					Size:         upload.Size,
 					Folder:       "test-folder",

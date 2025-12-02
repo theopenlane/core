@@ -9,12 +9,12 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/models"
 	coreutils "github.com/theopenlane/core/pkg/testutils"
+	ent "github.com/theopenlane/ent/generated"
 	openlaneclient "github.com/theopenlane/go-client"
 )
 

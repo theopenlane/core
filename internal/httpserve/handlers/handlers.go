@@ -19,19 +19,19 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/internal/objects"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/core/pkg/objects/objstore"
+	"github.com/theopenlane/core/pkg/olauth"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/summarizer"
+	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )
@@ -87,7 +87,7 @@ type Handler struct {
 	// RedisClient to interact with redis
 	RedisClient *redis.Client
 	// AuthManager contains the required configuration for the auth session creation
-	AuthManager *authmanager.Client
+	AuthManager *olauth.Client
 	// TokenManager contains the token manager in order to validate auth requests
 	TokenManager *tokens.TokenManager
 	// ReadyChecks is a set of checkFuncs to determine if the application is "ready" upon startup
@@ -118,7 +118,7 @@ type Handler struct {
 	// DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
 	DefaultTrustCenterDomain string
 	// ObjectStore handles file storage operations
-	ObjectStore *objects.Service
+	ObjectStore *objstore.Service
 	// IntegrationRegistry contains the declarative provider runtimes for third-party integrations
 	IntegrationRegistry ProviderRegistry
 	// IntegrationStore handles persistence for integration metadata and secrets

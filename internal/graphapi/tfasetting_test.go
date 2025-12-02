@@ -11,8 +11,8 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/ent/generated"
 )
 
 func TestQueryTFASetting(t *testing.T) {

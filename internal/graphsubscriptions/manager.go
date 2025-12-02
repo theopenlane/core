@@ -5,7 +5,7 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/ent/generated"
 )
 
 // TaskChannelBufferSize is the buffer size for task subscription channels

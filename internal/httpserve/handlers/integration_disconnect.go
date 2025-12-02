@@ -8,9 +8,9 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/integration"
 	models "github.com/theopenlane/core/pkg/openapi"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/integration"
 	"github.com/theopenlane/utils/rout"
 )
 

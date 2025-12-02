@@ -19,13 +19,14 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/directives"
 	"github.com/theopenlane/core/pkg/events/soiree"
+	"github.com/theopenlane/core/pkg/gqlerrors"
+	"github.com/theopenlane/core/pkg/objects/objstore"
+	objects "github.com/theopenlane/core/pkg/objects/objstore"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 // This file will not be regenerated automatically.
@@ -53,7 +54,7 @@ type Resolver struct {
 	db                *ent.Client
 	pool              *soiree.PondPool
 	extensionsEnabled bool
-	uploader          *objects.Service
+	uploader          *objstore.Service
 	isDevelopment     bool
 	complexityLimit   int
 	maxResultLimit    *int
@@ -65,7 +66,7 @@ type Resolver struct {
 }
 
 // NewResolver returns a resolver configured with the given ent client
-func NewResolver(db *ent.Client, u *objects.Service) *Resolver {
+func NewResolver(db *ent.Client, u *objstore.Service) *Resolver {
 	return &Resolver{
 		db:       db,
 		uploader: u,
@@ -132,7 +133,7 @@ type Handler struct {
 func (r *Resolver) Handler() *Handler {
 	c := &gqlgenerated.Config{Resolvers: r}
 
-	implementAllDirectives(c)
+	ImplementAllDirectives(c)
 
 	srv := handler.New(gqlgenerated.NewExecutableSchema(
 		*c,
@@ -207,9 +208,9 @@ func (r *Resolver) Handler() *Handler {
 	return h
 }
 
-// implementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
+// ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
 // in the resolver setup
-func implementAllDirectives(cfg *gqlgenerated.Config) {
+func ImplementAllDirectives(cfg *gqlgenerated.Config) {
 	cfg.Directives.Hidden = directives.HiddenDirective
 	cfg.Directives.ReadOnly = directives.ReadOnlyDirective
 	cfg.Directives.ExternalReadOnly = directives.ExternalReadOnlyDirective

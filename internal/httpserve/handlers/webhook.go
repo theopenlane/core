@@ -17,18 +17,18 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgsubscription"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	em "github.com/theopenlane/core/internal/entitlements/entmapping"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	models "github.com/theopenlane/core/pkg/openapi"
+	em "github.com/theopenlane/ent/entitlements/entmapping"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/apitoken"
+	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/ent/generated/organizationsetting"
+	"github.com/theopenlane/ent/generated/orgsubscription"
+	"github.com/theopenlane/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 const (

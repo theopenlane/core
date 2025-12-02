@@ -13,14 +13,13 @@ import (
 	"github.com/99designs/gqlgen/graphql/handler/transport"
 	"github.com/labstack/gommon/log"
 	"github.com/theopenlane/core/internal/graphapi"
-	"github.com/theopenlane/core/internal/graphapi/directives"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/objects"
+	"github.com/theopenlane/core/pkg/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
+	objects "github.com/theopenlane/core/pkg/objects/objstore"
 	"github.com/theopenlane/core/pkg/objects/storage"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
@@ -30,7 +29,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 var (
@@ -194,7 +193,7 @@ func testGraphServer(c *ent.Client, u *objects.Service) *handler.Server {
 
 	conf := gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(&conf)
+	graphapi.ImplementAllDirectives(&conf)
 
 	srv := handler.New(
 		gqlgenerated.NewExecutableSchema(

@@ -18,12 +18,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/iam/tokens"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/apitoken"
-	"github.com/theopenlane/core/internal/ent/generated/organizationsetting"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
@@ -31,6 +25,12 @@ import (
 	api "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/core/pkg/permissioncache"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/apitoken"
+	"github.com/theopenlane/ent/generated/organizationsetting"
+	"github.com/theopenlane/ent/generated/orgmembership"
+	"github.com/theopenlane/ent/generated/personalaccesstoken"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 // These are stored here, instead of iam because they are specific

@@ -19,9 +19,9 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestForgotPasswordHandler() {

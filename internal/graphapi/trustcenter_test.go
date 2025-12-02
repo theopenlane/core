@@ -18,12 +18,12 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/olauth"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/customdomain"
 )
 
 func TestQueryTrustCenterByID(t *testing.T) {
@@ -653,7 +653,7 @@ func TestMutationDeleteTrustCenter(t *testing.T) {
 
 // createAnonymousTrustCenterContext creates a context for an anonymous trust center user
 func createAnonymousTrustCenterContext(trustCenterID, organizationID string) context.Context {
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,

@@ -13,15 +13,15 @@ import (
 
 	"github.com/theopenlane/utils/cache"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hooks"
-	"github.com/theopenlane/core/internal/entdb"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
 	"github.com/theopenlane/core/pkg/events/soiree"
 	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/core/pkg/olauth"
+	"github.com/theopenlane/ent/entdb"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/hooks"
 )
 
 var serveCmd = &cobra.Command{
@@ -185,7 +185,7 @@ func serve(ctx context.Context) error {
 	defer entdb.GracefulClose(context.Background(), dbClient, time.Second)
 
 	// add auth session manager
-	so.Config.Handler.AuthManager = authmanager.New(dbClient)
+	so.Config.Handler.AuthManager = olauth.New(dbClient)
 
 	// Add Driver to the Handlers Config
 	so.Config.Handler.DBClient = dbClient

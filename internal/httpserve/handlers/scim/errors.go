@@ -7,7 +7,7 @@ import (
 
 	scimerrors "github.com/elimity-com/scim/errors"
 
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/ent/generated"
 )
 
 var (

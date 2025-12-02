@@ -4,13 +4,13 @@ import (
 	"context"
 	"strings"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/orgmembership"
+	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/utils/rout"
 )
 

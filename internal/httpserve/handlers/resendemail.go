@@ -7,10 +7,10 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
 	"github.com/theopenlane/core/pkg/logx"
 	models "github.com/theopenlane/core/pkg/openapi"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/privacy/token"
 )
 
 // ResendEmail will resend an email verification email if the provided email exists

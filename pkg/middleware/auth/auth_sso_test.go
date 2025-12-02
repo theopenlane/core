@@ -13,9 +13,9 @@ import (
 	iamauth "github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/enums"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+	generated "github.com/theopenlane/ent/generated"
 )
 
 // withOverrides allows us to inject custom functions for testing

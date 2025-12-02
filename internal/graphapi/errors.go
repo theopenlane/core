@@ -9,11 +9,11 @@ import (
 	"github.com/lib/pq"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/graphapi/gqlerrors"
+	"github.com/theopenlane/core/pkg/gqlerrors"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 var (

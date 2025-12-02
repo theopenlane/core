@@ -3,10 +3,10 @@ package serveropts
 import (
 	"github.com/rs/zerolog/log"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/integrations/registry"
 	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 // WithIntegrationStore wires the integration persistence layer into the handlers
