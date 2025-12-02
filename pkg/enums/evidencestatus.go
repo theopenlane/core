@@ -26,6 +26,12 @@ var (
 	EvidenceStatusRejected EvidenceStatus = "REJECTED"
 	// EvidenceStatusInvalid is used when an unknown or unsupported value is provided.
 	EvidenceStatusInvalid EvidenceStatus = "EVIDENCESTATUS_INVALID"
+	// EvidenceReady is the status to indicate that the evidence is ready for auditor review
+	EvidenceReady EvidenceStatus = "READY"
+	// EvidenceApproved is the status to indicate that the evidence has been approved by the auditor
+	EvidenceApproved EvidenceStatus = "APPROVED"
+	// EvidenceInvalid is the status to indicate that the evidence is invalid
+	EvidenceInvalid EvidenceStatus = "EVIDENCE_STATUS_INVALID"
 )
 
 // Values returns a slice of strings representing all valid EvidenceStatus values.
@@ -38,6 +44,8 @@ func (EvidenceStatus) Values() []string {
 		string(EvidenceStatusMissingArtifact),
 		string(EvidenceStatusNeedsRenewal),
 		string(EvidenceStatusRejected),
+		string(EvidenceReady),
+		string(EvidenceApproved),
 	}
 }
 
@@ -63,6 +71,10 @@ func ToEvidenceStatus(r string) *EvidenceStatus {
 		return &EvidenceStatusNeedsRenewal
 	case EvidenceStatusRejected.String():
 		return &EvidenceStatusRejected
+	case EvidenceReady.String():
+		return &EvidenceReady
+	case EvidenceApproved.String():
+		return &EvidenceApproved
 	default:
 		return &EvidenceStatusInvalid
 	}
