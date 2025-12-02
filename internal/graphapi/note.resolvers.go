@@ -9,6 +9,8 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/evidence"
@@ -21,9 +23,6 @@ import (
 	"github.com/theopenlane/ent/generated/trustcenter"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // UpdateTaskComment is the resolver for the updateTaskComment field.

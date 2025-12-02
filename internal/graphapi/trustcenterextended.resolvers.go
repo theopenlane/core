@@ -8,11 +8,10 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.

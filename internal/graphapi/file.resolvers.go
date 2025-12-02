@@ -8,10 +8,9 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/file"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteFile is the resolver for the deleteFile field.

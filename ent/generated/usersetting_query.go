@@ -462,12 +462,7 @@ func (_q *UserSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	}
 	if query := _q.withUser; query != nil {
 		if err := _q.loadUser(ctx, query, nodes, nil,
-			func(n *UserSetting, e *User) {
-				n.Edges.User = e
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Setting = n
-				}
-			}); err != nil {
+			func(n *UserSetting, e *User) { n.Edges.User = e }); err != nil {
 			return nil, err
 		}
 	}

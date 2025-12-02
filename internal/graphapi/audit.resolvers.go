@@ -9,11 +9,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/ent/generated"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // Changes is the resolver for the changes field.

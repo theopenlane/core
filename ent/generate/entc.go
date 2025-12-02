@@ -45,6 +45,11 @@ const (
 	schemaPath      = "./ent/schema"
 	templateDir     = "./ent/generate/templates/ent"
 	featureMapDir   = "./ent/entitlements/features/"
+
+	// TODO: Split these generated files into their own directories
+	// historySchemaPath = "./ent/historyschema"
+	// entHistoryGeneratedDir = "./ent/generatedhistory"
+	// entGeneratedDirAuthz = "./ent/generatedauthz"
 )
 
 func main() {
@@ -88,6 +93,7 @@ func main() {
 		log.Fatal().Err(err).Msg("creating entgql extension")
 	}
 
+	// TODO: move to generated authz dir
 	accessMapExt := accessmap.New(
 		accessmap.WithSchemaPath(schemaPath),
 		accessmap.WithGeneratedDir(entGeneratedDir),
@@ -116,7 +122,7 @@ func main() {
 			gen.FeatureSchemaConfig,
 			gen.FeatureIntercept,
 			gen.FeatureModifier,
-			gen.FeatureBidiEdgeRefs,
+			// gen.FeatureBidiEdgeRefs,
 			// this is disabled because it is not compatible with the entcache driver
 			// gen.FeatureExecQuery,
 		},

@@ -1327,12 +1327,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Program) { n.Edges.Members = []*ProgramMembership{} },
-			func(n *Program, e *ProgramMembership) {
-				n.Edges.Members = append(n.Edges.Members, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Program = n
-				}
-			}); err != nil {
+			func(n *Program, e *ProgramMembership) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1451,12 +1446,7 @@ func (_q *ProgramQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Prog
 	for name, query := range _q.withNamedMembers {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Program) { n.appendNamedMembers(name) },
-			func(n *Program, e *ProgramMembership) {
-				n.appendNamedMembers(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Program = n
-				}
-			}); err != nil {
+			func(n *Program, e *ProgramMembership) { n.appendNamedMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}

@@ -46,17 +46,8 @@ omit_gqlgen_version_in_file_notice: true
 # Optional: set to speed up generation time by not performing a final validation pass.
 # skip_validation: true
 
-omit_resolver_fields: true
-
-# Optional: set build tags that will be used to load packages
-go_build_tags:
- - windmill
- - entgenerated
-
 # Optional: set to skip running `go mod tidy` when generating server code
-skip_mod_tidy: true
-
-local_prefix: github.com/theopenlane/core
+# skip_mod_tidy: true
 
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.

@@ -8,12 +8,11 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/assessmentresponse"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CreateAssessmentResponse is the resolver for the createAssessmentResponse field.

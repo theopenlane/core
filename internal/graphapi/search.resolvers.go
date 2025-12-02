@@ -6,11 +6,10 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/ent/generated"
-	"github.com/theopenlane/gqlgen-plugins/graphutils"
-
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 )
 
 // Search is the resolver for the search field.

@@ -8,12 +8,11 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/ent/generated"
-	"github.com/theopenlane/iam/auth"
-
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/iam/auth"
 )
 
 // TaskCreated is the resolver for the taskCreated field.

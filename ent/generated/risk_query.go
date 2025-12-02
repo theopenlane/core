@@ -1271,12 +1271,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Risk) { n.Edges.Comments = []*Note{} },
-			func(n *Risk, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.Risk = n
-				}
-			}); err != nil {
+			func(n *Risk, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1374,12 +1369,7 @@ func (_q *RiskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Risk, e
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Risk) { n.appendNamedComments(name) },
-			func(n *Risk, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.Risk = n
-				}
-			}); err != nil {
+			func(n *Risk, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}

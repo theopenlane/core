@@ -8,12 +8,11 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // Note is the resolver for the Note field.

@@ -8,12 +8,11 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/mappabledomain"
 	"github.com/theopenlane/utils/rout"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.

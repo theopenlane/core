@@ -9,10 +9,9 @@ import (
 	"strconv"
 
 	"entgo.io/contrib/entgql"
-	"github.com/theopenlane/ent/generated"
-
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
 )
 
 // Return response for createBulkAPIToken mutation
@@ -2216,7 +2215,7 @@ type TrustCenterWatermarkConfigUpdatePayload struct {
 
 // Return response for createBulkTrustcenterEntity mutation
 type TrustcenterEntityBulkCreatePayload struct {
-	// Created trustcenterEntitys
+	// Created trustcenterEntities
 	TrustcenterEntities []*generated.TrustcenterEntity `json:"trustcenterEntities,omitempty"`
 }
 

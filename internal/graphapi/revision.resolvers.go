@@ -8,9 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/ent/generated"
-
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
 )
 
 // RevisionBump is the resolver for the RevisionBump field.

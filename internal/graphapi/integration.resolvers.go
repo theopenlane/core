@@ -8,10 +8,9 @@ package graphapi
 import (
 	"context"
 
+	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/integration"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteIntegration is the resolver for the deleteIntegration field.

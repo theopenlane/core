@@ -2151,12 +2151,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	}
 	if query := _q.withSetting; query != nil {
 		if err := _q.loadSetting(ctx, query, nodes, nil,
-			func(n *Group, e *GroupSetting) {
-				n.Edges.Setting = e
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Group = n
-				}
-			}); err != nil {
+			func(n *Group, e *GroupSetting) { n.Edges.Setting = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -2205,12 +2200,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.Edges.Members = []*GroupMembership{} },
-			func(n *Group, e *GroupMembership) {
-				n.Edges.Members = append(n.Edges.Members, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Group = n
-				}
-			}); err != nil {
+			func(n *Group, e *GroupMembership) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -2462,12 +2452,7 @@ func (_q *GroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Group,
 	for name, query := range _q.withNamedMembers {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *Group) { n.appendNamedMembers(name) },
-			func(n *Group, e *GroupMembership) {
-				n.appendNamedMembers(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Group = n
-				}
-			}); err != nil {
+			func(n *Group, e *GroupMembership) { n.appendNamedMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}

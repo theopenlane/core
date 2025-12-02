@@ -1097,12 +1097,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.Edges.Comments = []*Note{} },
-			func(n *Task, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Task = n
-				}
-			}); err != nil {
+			func(n *Task, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1190,9 +1185,6 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 			func(n *Task) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *Task, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Task = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1200,12 +1192,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Task) { n.appendNamedComments(name) },
-			func(n *Task, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Task = n
-				}
-			}); err != nil {
+			func(n *Task, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1289,12 +1276,7 @@ func (_q *TaskQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Task, e
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Task) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *Task, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Task = n
-				}
-			}); err != nil {
+			func(n *Task, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}

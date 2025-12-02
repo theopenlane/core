@@ -511,9 +511,6 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 			func(n *Subprocessor) { n.Edges.TrustCenterSubprocessors = []*TrustCenterSubprocessor{} },
 			func(n *Subprocessor, e *TrustCenterSubprocessor) {
 				n.Edges.TrustCenterSubprocessors = append(n.Edges.TrustCenterSubprocessors, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Subprocessor = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -521,12 +518,7 @@ func (_q *SubprocessorQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	for name, query := range _q.withNamedTrustCenterSubprocessors {
 		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *Subprocessor) { n.appendNamedTrustCenterSubprocessors(name) },
-			func(n *Subprocessor, e *TrustCenterSubprocessor) {
-				n.appendNamedTrustCenterSubprocessors(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Subprocessor = n
-				}
-			}); err != nil {
+			func(n *Subprocessor, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
 			return nil, err
 		}
 	}

@@ -9,11 +9,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/ent/generated"
-	"github.com/theopenlane/ent/generated/trustcentersetting"
-
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/trustcentersetting"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.

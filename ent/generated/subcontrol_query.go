@@ -1210,12 +1210,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Subcontrol) { n.Edges.Comments = []*Note{} },
-			func(n *Subcontrol, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Subcontrol = n
-				}
-			}); err != nil {
+			func(n *Subcontrol, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1348,12 +1343,7 @@ func (_q *SubcontrolQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*S
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Subcontrol) { n.appendNamedComments(name) },
-			func(n *Subcontrol, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Subcontrol = n
-				}
-			}); err != nil {
+			func(n *Subcontrol, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
