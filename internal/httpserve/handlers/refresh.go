@@ -39,7 +39,7 @@ func (h *Handler) RefreshHandler(ctx echo.Context, openapi *OpenAPIContext) erro
 	user, err := h.getUserDetailsByID(reqCtx, claims.Subject)
 	if err != nil {
 		if ent.IsNotFound(err) {
-			logx.Ctx(reqCtx).Info().Str("userID", user.ID).Msg("user not found during token refresh")
+			logx.FromContext(reqCtx).Info().Str("userID", user.ID).Msg("user not found during token refresh")
 			return h.NotFound(ctx, ErrProcessingRequest, openapi)
 		}
 
