@@ -9,12 +9,13 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/utils/rout"
+
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CreateActionPlan is the resolver for the createActionPlan field.

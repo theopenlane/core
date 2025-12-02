@@ -9,10 +9,11 @@ import (
 	"context"
 
 	"entgo.io/contrib/entgql"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+
+	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/pkg/enums"
 )
 
 // Channels is the resolver for the channels field.

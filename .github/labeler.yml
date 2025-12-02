@@ -59,10 +59,6 @@ codegenerators:
       - any-glob-to-any-file: internal/graphapi/generate/.gqlgenc.yml
       - any-glob-to-any-file: ent/generate/entc.go
       - any-glob-to-any-file: ent/templates/**
-coreclient:
-  - changed-files:
-      - any-glob-to-any-file: pkg/openlaneclient/**
-      - any-glob-to-any-file: internal/graphapi/query/**
 config:
   - changed-files:
       - any-glob-to-any-file: config/**

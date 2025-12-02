@@ -9,9 +9,10 @@ import (
 	"strconv"
 
 	"entgo.io/contrib/entgql"
+	"github.com/theopenlane/ent/generated"
+
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/ent/generated"
 )
 
 // Return response for createBulkAPIToken mutation

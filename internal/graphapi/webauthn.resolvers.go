@@ -8,8 +8,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/ent/generated"
+
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // DeleteWebauthn is the resolver for the deleteWebauthn field.

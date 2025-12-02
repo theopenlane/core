@@ -12,9 +12,10 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx/history"
 	"github.com/vektah/gqlparser/v2/ast"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // region    ************************** generated!.gotpl **************************

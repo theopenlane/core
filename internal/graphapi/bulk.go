@@ -6,10 +6,11 @@ import (
 	"context"
 	"sync"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // bulkCreateActionPlan uses the CreateBulk function to create multiple ActionPlan entities

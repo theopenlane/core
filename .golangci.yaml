@@ -23,7 +23,6 @@ linters:
       - std-error-handling
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - ent/generated/*
       - ent/templates/*
@@ -33,7 +32,6 @@ linters:
       - internal/graphapi/generated/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
       - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
@@ -47,10 +45,8 @@ formatters:
     warn-unused: true
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
       - pkg/events/soiree/examples/*
-      - pkg/sleuth/dnsx/* # this should be fixed in the future
       - ent/hush/examples/*

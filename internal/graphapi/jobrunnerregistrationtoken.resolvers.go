@@ -8,11 +8,12 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/jobrunnerregistrationtoken"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/core/pkg/logx"
 )
 
 // CreateJobRunnerRegistrationToken is the resolver for the createJobRunnerRegistrationToken field.

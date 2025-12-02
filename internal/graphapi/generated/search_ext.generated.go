@@ -11,8 +11,9 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/vektah/gqlparser/v2/ast"
+
+	"github.com/theopenlane/core/pkg/models"
 )
 
 // region    ************************** generated!.gotpl **************************
