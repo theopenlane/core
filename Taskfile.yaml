@@ -38,7 +38,7 @@ env:
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
-  GO_INLINE_FLAG: "-gcflags=all=-l -tags=corejobs"
+  GO_INLINE_FLAG: "-gcflags=all=-l"
 
 # load the .env file for windmill
 dotenv: ['docker/configs/windmill/.env']
@@ -80,12 +80,14 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
-      - ent/schema/**/*.go
-      - ent/generate/**/*.go
-      - ent/mixin/**/*.go
-      - ent/templates/**/*
+      - ent/schema/*.go
+      - ent/generate/*.go
+      - ent/generate/templates/**/*
+      - ent/mixin/*.go
     generates:
       - ent/generated/**/*.go
+      - internal/graphapi/schema/*.graphql
+      - internal/graphapi/query/*.graphql
     method: checksum
     cmds:
       - go generate ent/generate/generate.go
@@ -94,9 +96,9 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
-      - internal/graphapi/generate/**/*.go
+      - internal/graphapi/generate/*.go
       - internal/graphapi/schema/*.graphql
-      - internal/graphapi/query/**/*.graphql
+      - internal/graphapi/query/*.graphql
       - ent/generated/**/*.go
     generates:
       - internal/graphapi/generated/**/*.go
@@ -104,9 +106,6 @@ tasks:
       - internal/graphapi/*.resolvers.go
       - internal/graphapi/testclient/graphqlclient.go
       - internal/graphapi/testclient/models.go
-      - pkg/openlaneclient/models.go
-      - pkg/openlaneclient/graphqlclient.go
-      - pkg/openlaneclient/models.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     cmds:
@@ -246,7 +245,7 @@ tasks:
       TEST_DB_URL: "docker://postgres:17-alpine"
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go test -v ./... -tags test,corejobs
+      - go test -v ./... -tags test
 
   go:test:cover:
     desc: runs and outputs results of created go tests with coverage
@@ -254,7 +253,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test,corejobs
+      - go test -v ./... -coverprofile=coverage.out -timeout 20m -tags test
 
   go:test:coverout:
     desc: runs and outputs results of created go tests with coverage
@@ -272,7 +271,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     aliases: [testsum]
     cmds:
-      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test,corejobs
+      - gotestsum --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
 
   go:testsum:verbose:
     silent: true
@@ -281,7 +280,7 @@ tasks:
     desc: runs tests using gotestsum
     aliases: [testsum]
     cmds:
-      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test,corejobs
+      - gotestsum --format standard-verbose --format-hide-empty-pkg --packages "./..." --format-hide-empty-pkg --rerun-fails --hide-summary output -- -p 20 -tags test
 
   go:testsum:slow:
     silent: true
