@@ -1,4 +1,4 @@
-// go:build cligen
+//go:build cligen
 
 package gencmd
 

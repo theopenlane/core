@@ -25,7 +25,6 @@ import (
 	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/core/pkg/gqlerrors"
 	"github.com/theopenlane/core/pkg/objects/objstore"
-	objects "github.com/theopenlane/core/pkg/objects/objstore"
 	ent "github.com/theopenlane/ent/generated"
 )
 
@@ -248,7 +247,7 @@ func WithTransactions(h *handler.Server, d *ent.Client) {
 
 // WithFileUploader adds the file uploader to the graphql handler
 // this will handle the file upload process for the multipart form
-func WithFileUploader(h *handler.Server, u *objects.Service) {
+func WithFileUploader(h *handler.Server, u *objstore.Service) {
 	h.AroundFields(injectFileUploader(u))
 }
 
