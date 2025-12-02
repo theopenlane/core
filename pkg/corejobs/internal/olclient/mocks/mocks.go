@@ -10,7 +10,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/Yamashou/gqlgenc/clientv2"
 	mock "github.com/stretchr/testify/mock"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 // NewMockOpenlaneGraphClient creates a new instance of MockOpenlaneGraphClient. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.

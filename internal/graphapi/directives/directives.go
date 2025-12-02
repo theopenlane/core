@@ -9,11 +9,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/samber/lo"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/controls"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -31,15 +29,6 @@ const (
 	// would affect the ability to update the field
 	ExternalSource = "externalSource"
 )
-
-// ImplementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
-// in the resolver setup
-func ImplementAllDirectives(cfg *gqlgenerated.Config) {
-	cfg.Directives.Hidden = HiddenDirective
-	cfg.Directives.ReadOnly = ReadOnlyDirective
-	cfg.Directives.ExternalReadOnly = ExternalReadOnlyDirective
-	cfg.Directives.ExternalSource = ExternalSourceDirective
-}
 
 // NewHiddenDirective returns a new hidden directive with the value set
 // to add @hidden(if: true) to a field or object
@@ -127,7 +116,7 @@ var ExternalReadOnlyDirective = func(ctx context.Context, _ any, next graphql.Re
 	}
 
 	fieldSet := checkFieldSet(ctx, skipCreateOperations)
-	allowed := checkSourceAllowed(ctx, source)
+	allowed := controls.CheckSourceAllowed(ctx, source)
 
 	if fieldSet && !allowed {
 		return nil, ErrReadOnlyField
@@ -204,47 +193,6 @@ func checkFieldSet(ctx context.Context, skip func(*graphql.OperationContext) boo
 	}
 
 	return false
-}
-
-// checkIsSystemOwned checks if the object is system owned
-// this is used in the externalReadOnly directive to prevent non-system admin users
-// from setting fields that are populated by an external source on system-owned objects
-func checkSourceAllowed(ctx context.Context, restrictedSource *enums.ControlSource) bool {
-	if restrictedSource == nil {
-		return true
-	}
-
-	id := graphutils.GetStringInputVariableByName(ctx, "id")
-	if id == nil {
-		logx.FromContext(ctx).Error().Msg("no id found in context for externalReadOnly directive")
-		return true
-	}
-
-	// now get the object from the database
-	client := ent.FromContext(ctx)
-	if client == nil {
-		logx.FromContext(ctx).Error().Msg("no ent client found in context for externalReadOnly directive")
-		return true
-	}
-
-	var objSource *enums.ControlSource
-	obj, err := client.Control.Get(ctx, *id)
-	if err == nil {
-		objSource = &obj.Source
-	} else {
-		obj, err := client.Subcontrol.Get(ctx, *id)
-		if err != nil {
-			logx.FromContext(ctx).Error().Msg("failed to check for object source in externalReadOnly directive")
-
-			return true
-		}
-
-		objSource = &obj.Source
-	}
-
-	// only allow if the source is different than the one on the object
-	// the specified source is not allowed to make changes
-	return *objSource != *restrictedSource
 }
 
 // skipCreateOperations is a helper function that can be used to skip create operations

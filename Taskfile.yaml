@@ -35,11 +35,6 @@ env:
   # for test container settings
   RYUK_CONNECTION_TIMEOUT: "5m"
   RYUK_VERBOSE: "true"
-  ## generate env vars for caching
-  GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
-  GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
-  GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
-  GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
@@ -67,16 +62,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go-generate-fast ./...
-      - task: tidy
-
-  regenerate:
-    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
-    env:
-      GO_GENERATE_FAST_RECACHE: "true"
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
-    cmds:
-      - go-generate-fast ./...
+      - task: generate:checksums
       - task: tidy
 
   generate:checksums:
@@ -105,12 +91,11 @@ tasks:
       - go generate internal/ent/generate/generate.go
 
   generate:graphql:smart:
-    internal: true
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - internal/graphapi/generate/**/*.go
-      - internal/graphapi/schema/**/*.graphql
+      - internal/graphapi/schema/*.graphql
       - internal/graphapi/query/**/*.graphql
       - internal/ent/generated/**/*.go
     generates:
@@ -201,13 +186,13 @@ tasks:
   generate:ent:
     desc: generate ent models
     cmds:
-      - go-generate-fast internal/ent/generate/generate.go
+      - task: generate:ent:smart
       - task: tidy
 
   generate:gql:
     desc: generate gql graphql models and resolvers, along with the client
     cmds:
-      - go-generate-fast internal/graphapi/generate/generate.go
+      - task: generate:graphql:smart
       - task: tidy
 
   ## Go tasks

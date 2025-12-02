@@ -132,7 +132,7 @@ type Handler struct {
 func (r *Resolver) Handler() *Handler {
 	c := &gqlgenerated.Config{Resolvers: r}
 
-	directives.ImplementAllDirectives(c)
+	implementAllDirectives(c)
 
 	srv := handler.New(gqlgenerated.NewExecutableSchema(
 		*c,
@@ -205,6 +205,15 @@ func (r *Resolver) Handler() *Handler {
 	}
 
 	return h
+}
+
+// implementAllDirectives is a helper function that can be used to add all active directives to the gqlgen config
+// in the resolver setup
+func implementAllDirectives(cfg *gqlgenerated.Config) {
+	cfg.Directives.Hidden = directives.HiddenDirective
+	cfg.Directives.ReadOnly = directives.ReadOnlyDirective
+	cfg.Directives.ExternalReadOnly = directives.ExternalReadOnlyDirective
+	cfg.Directives.ExternalSource = directives.ExternalSourceDirective
 }
 
 func (r *Resolver) WithComplexityLimit(h *handler.Server) {

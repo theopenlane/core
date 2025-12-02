@@ -22,11 +22,11 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/auth"
 	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/eddy"
 	"github.com/theopenlane/eddy/helpers"
+	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/vektah/gqlparser/v2/ast"
 

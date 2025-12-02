@@ -15,10 +15,10 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/standard"
 	"github.com/theopenlane/core/internal/ent/generated/subcontrol"
 	"github.com/theopenlane/core/internal/ent/privacy/rule"
-	"github.com/theopenlane/core/internal/ent/schema"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/rout"
@@ -126,7 +126,7 @@ func (r *mutationResolver) cloneControls(ctx context.Context, controlsToClone []
 	if r.db.EntConfig != nil && r.db.EntConfig.Modules.Enabled {
 		// check if the organization has the required modules for Control entities before the parallel execution
 		// this prevents multiple queries to the database for each control
-		hasModules, _, err := rule.HasAnyFeature(ctx, schema.Control{}.Modules()...)
+		hasModules, _, err := rule.HasAnyFeature(ctx, models.CatalogComplianceModule)
 		if err != nil {
 			return nil, err
 		}

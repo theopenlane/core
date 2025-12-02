@@ -25,7 +25,7 @@ dbschema:
       - any-glob-to-any-file: internal/ent/schema/*
 graphqlschema:
   - changed-files:
-      - any-glob-to-any-file: internal/graphapi/schema/**
+      - any-glob-to-any-file: internal/graphapi/schema/**/**
 migrations:
   - changed-files:
       - any-glob-to-any-file: db/**
@@ -47,7 +47,7 @@ graphapi:
   - changed-files:
       - any-glob-to-any-file: internal/graphapi/**
       - any-glob-to-any-file: internal/graphapi/query/**
-      - any-glob-to-any-file: internal/graphapi/schema/**
+      - any-glob-to-any-file: internal/graphapi/schema/**/**
       - any-glob-to-any-file: internal/graphapi/generated/**
       - any-glob-to-any-file: internal/graphapi/model/**
       - any-glob-to-any-file: internal/graphapi/clientschema/**

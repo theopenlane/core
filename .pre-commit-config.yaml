@@ -31,6 +31,6 @@ repos:
       - id: generate
         name: Run Go Generate
         description: This hook runs go generate on the project
-        entry: go-generate-fast ./...
+        entry: task generated:checksums
         language: golang
         files: \.(go|graphql|tmpl)$

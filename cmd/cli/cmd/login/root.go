@@ -13,7 +13,7 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	models "github.com/theopenlane/core/pkg/openapi"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 var command = &cobra.Command{

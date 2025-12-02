@@ -1,3 +1,5 @@
+// go:build cligen
+
 package gencmd
 
 import (

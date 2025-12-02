@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/utils/cli/tables"
 )
 

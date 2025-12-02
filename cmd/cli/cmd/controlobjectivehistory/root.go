@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 // command represents the base controlObjectiveHistory command when called without any subcommands

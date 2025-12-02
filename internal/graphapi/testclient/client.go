@@ -1,7 +1,7 @@
 package testclient
 
 import (
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 // TestClient includes the generated GraphQL client and the Openlane REST client

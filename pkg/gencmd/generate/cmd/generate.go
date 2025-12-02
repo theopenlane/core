@@ -1,3 +1,4 @@
+// go:build cligen
 package cmd
 
 import (

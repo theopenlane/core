@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/utils/keyring"
 
 	models "github.com/theopenlane/core/pkg/openapi"
-	"github.com/theopenlane/core/pkg/openlaneclient"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 const (

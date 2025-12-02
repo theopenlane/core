@@ -19,8 +19,8 @@ import (
 
 	corecmd "github.com/theopenlane/core/cmd/cli/cmd"
 	models "github.com/theopenlane/core/pkg/openapi"
-	"github.com/theopenlane/core/pkg/openlaneclient"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+	openlaneclient "github.com/theopenlane/go-client"
 )
 
 // ssoConfig configures the local SSO login server
