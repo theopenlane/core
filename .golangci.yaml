@@ -23,20 +23,20 @@ linters:
       - std-error-handling
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/testutils/*
+      - internal/testutils/*
       - ent/generated/*
       - ent/templates/*
       - jsonschema/templates/*
-      - pkg/objects/mocks/*
+      - shared/objects/mocks/*
       - internal/graphapi/generate/*
       - internal/graphapi/generated/*
-      - pkg/entitlements/test/*
+      - shared/entitlements/test/*
       - cmd/cli/cmd/*
-      - pkg/entitlements/mocks/*
-      - pkg/events/soiree/examples/*
-      - pkg/middleware/ratelimiter/examples/*
+      - shared/entitlements/mocks/*
+      - shared/soiree/examples/*
+      - shared/middleware/ratelimiter/examples/*
       - ent/hush/examples/*
-      - pkg/objects/examples/*
+      - shared/objects/examples/*
 formatters:
   enable:
     - gofmt
@@ -45,8 +45,8 @@ formatters:
     warn-unused: true
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/testutils/*
-      - pkg/entitlements/test/*
+      - shared/testutils/*
+      - shared/entitlements/test/*
       - cmd/cli/cmd/*
-      - pkg/events/soiree/examples/*
+      - shared/soiree/examples/*
       - ent/hush/examples/*

@@ -87,17 +87,14 @@
           "type": "boolean"
         },
         "nocacheheaders": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "noCacheHeaders is the header \u003c-\u003e match map pair to match in http for entity headers to remove"
+          "$ref": "#/$defs/map[string]string"
         },
         "etagheaders": {
-          "$ref": "#/$defs/[]string",
-          "description": "etagHeaders is the string of entity headers to remove"
+          "$ref": "#/$defs/[]string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config is the config values for the cache-control middleware"
+      "type": "object"
     },
     "config.Auth": {
       "properties": {
@@ -314,25 +311,20 @@
     "cors.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enable or disable the CORS middleware"
+          "type": "boolean"
         },
         "prefixes": {
-          "$ref": "#/$defs/map[string][]string",
-          "description": "Prefixes is a map of prefixes to allowed origins"
+          "$ref": "#/$defs/map[string][]string"
         },
         "alloworigins": {
-          "$ref": "#/$defs/[]string",
-          "description": "AllowOrigins is a list of allowed origins"
+          "$ref": "#/$defs/[]string"
         },
         "cookieinsecure": {
-          "type": "boolean",
-          "description": "CookieInsecure sets the cookie to be insecure"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config holds the cors configuration settings"
+      "type": "object"
     },
     "crypto.Config": {
       "properties": {
@@ -349,41 +341,32 @@
     "csrf.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates whether CSRF protection is enabled."
+          "type": "boolean"
         },
         "header": {
-          "type": "string",
-          "description": "Header specifies the header name to look for the CSRF token."
+          "type": "string"
         },
         "cookie": {
-          "type": "string",
-          "description": "Cookie specifies the cookie name used to store the CSRF token."
+          "type": "string"
         },
         "secure": {
-          "type": "boolean",
-          "description": "Secure sets the Secure flag on the CSRF cookie."
+          "type": "boolean"
         },
         "samesite": {
-          "type": "string",
-          "description": "SameSite configures the SameSite attribute on the CSRF cookie. Valid\nvalues are \"Lax\", \"Strict\", \"None\" and \"Default\"."
+          "type": "string"
         },
         "cookiehttponly": {
-          "type": "boolean",
-          "description": "CookieHTTPOnly indicates whether the CSRF cookie is HTTP only."
+          "type": "boolean"
         },
         "cookiedomain": {
-          "type": "string",
-          "description": "CookieDomain specifies the domain for the CSRF cookie, default to no domain"
+          "type": "string"
         },
         "cookiepath": {
-          "type": "string",
-          "description": "CookiePath specifies the path for the CSRF cookie, default to \"/\""
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config defines configuration for the CSRF middleware wrapper."
+      "type": "object"
     },
     "emailtemplates.Config": {
       "properties": {
@@ -517,44 +500,34 @@
     "entitlements.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled determines if the entitlements service is enabled"
+          "type": "boolean"
         },
         "privatestripekey": {
-          "type": "string",
-          "description": "PrivateStripeKey is the key for the stripe service"
+          "type": "string"
         },
         "stripewebhooksecret": {
-          "type": "string",
-          "description": "StripeWebhookSecret is the secret for the stripe service (legacy, use StripeWebhookSecrets for version-specific secrets)"
+          "type": "string"
         },
         "stripewebhooksecrets": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "StripeWebhookSecrets is a map of API version to webhook secrets for safe migration rollback"
+          "$ref": "#/$defs/map[string]string"
         },
         "stripewebhookurl": {
-          "type": "string",
-          "description": "StripeWebhookURL is the URL for the stripe webhook"
+          "type": "string"
         },
         "stripebillingportalsuccessurl": {
-          "type": "string",
-          "description": "StripeBillingPortalSuccessURL"
+          "type": "string"
         },
         "stripecancellationreturnurl": {
-          "type": "string",
-          "description": "StripeCancellationReturnURL is the URL for the stripe cancellation return"
+          "type": "string"
         },
         "stripewebhookevents": {
-          "$ref": "#/$defs/[]string",
-          "description": "StripeWebhookEvents is the list of events to register when creating a webhook endpoint"
+          "$ref": "#/$defs/[]string"
         },
         "stripewebhookapiversion": {
-          "type": "string",
-          "description": "StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler"
+          "type": "string"
         },
         "stripewebhookdiscardapiversion": {
-          "type": "string",
-          "description": "StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration"
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -811,21 +784,17 @@
     "mime.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the mime middleware should be enabled"
+          "type": "boolean"
         },
         "mimetypesfile": {
-          "type": "string",
-          "description": "MimeTypesFile is the file to load mime types from"
+          "type": "string"
         },
         "defaultcontenttype": {
-          "type": "string",
-          "description": "DefaultContentType is the default content type to set if no mime type is found"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config defines the config for Mime middleware"
+      "type": "object"
     },
     "otelx.Config": {
       "properties": {
@@ -890,91 +859,71 @@
           "type": "boolean"
         },
         "options": {
-          "$ref": "#/$defs/[]ratelimit.RateOption",
-          "description": "Options enables configuring multiple concurrent rate windows that must all pass."
+          "$ref": "#/$defs/[]ratelimit.RateOption"
         },
         "headers": {
-          "$ref": "#/$defs/[]string",
-          "description": "Headers determines which headers are inspected to determine the origin IP.\nDefaults to X-Forwarded-For, True-Client-IP, RemoteAddr."
+          "$ref": "#/$defs/[]string"
         },
         "forwardedindexfrombehind": {
-          "type": "integer",
-          "description": "ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.\n0 means the closest client, 1 the proxy behind it, etc."
+          "type": "integer"
         },
         "includepath": {
-          "type": "boolean",
-          "description": "IncludePath appends the request path to the limiter key when true."
+          "type": "boolean"
         },
         "includemethod": {
-          "type": "boolean",
-          "description": "IncludeMethod appends the request method to the limiter key when true."
+          "type": "boolean"
         },
         "keyprefix": {
-          "type": "string",
-          "description": "KeyPrefix allows scoping the limiter key space with a static prefix."
+          "type": "string"
         },
         "denystatus": {
-          "type": "integer",
-          "description": "DenyStatus overrides the HTTP status code returned when a rate limit is exceeded."
+          "type": "integer"
         },
         "denymessage": {
-          "type": "string",
-          "description": "DenyMessage customises the error payload when a rate limit is exceeded."
+          "type": "string"
         },
         "sendretryafterheader": {
-          "type": "boolean",
-          "description": "SendRetryAfterHeader toggles whether the Retry-After header should be added when available."
+          "type": "boolean"
         },
         "dryrun": {
-          "type": "boolean",
-          "description": "DryRun enables logging rate limit decisions without blocking requests."
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config defines the configuration settings for the rate limiter middleware."
+      "type": "object"
     },
     "ratelimit.RateOption": {
       "properties": {
         "requests": {
-          "type": "integer",
-          "description": "Requests is the number of requests allowed within the configured window."
+          "type": "integer"
         },
         "window": {
-          "type": "integer",
-          "description": "Window is the duration of the sliding window."
+          "type": "integer"
         },
         "expiration": {
-          "type": "integer",
-          "description": "Expiration controls how long counters are retained before eviction.\nWhen unset, Expiration defaults to twice the Window duration."
+          "type": "integer"
         },
         "flushinterval": {
-          "type": "integer",
-          "description": "FlushInterval defines how frequently expired values are purged from memory.\nWhen unset, FlushInterval defaults to 10s."
+          "type": "integer"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "RateOption defines a distinct rate limiting window and request allowance."
+      "type": "object"
     },
     "redirect.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the redirect middleware should be enabled"
+          "type": "boolean"
         },
         "redirects": {
-          "$ref": "#/$defs/map[string]string",
-          "description": "Redirects is a map of paths to redirect to"
+          "$ref": "#/$defs/map[string]string"
         },
         "code": {
-          "type": "integer",
-          "description": "Code is the HTTP status code to use for the redirect"
+          "type": "integer"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config contains the types used in executing redirects via the redirect middleware"
+      "type": "object"
     },
     "river.Config": {
       "properties": {
@@ -1134,45 +1083,35 @@
     "secure.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if the secure middleware should be enabled"
+          "type": "boolean"
         },
         "xssprotection": {
-          "type": "string",
-          "description": "XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block"
+          "type": "string"
         },
         "contenttypenosniff": {
-          "type": "string",
-          "description": "ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff"
+          "type": "string"
         },
         "xframeoptions": {
-          "type": "string",
-          "description": "XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN"
+          "type": "string"
         },
         "hstspreloadenabled": {
-          "type": "boolean",
-          "description": "HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false"
+          "type": "boolean"
         },
         "hstsmaxage": {
-          "type": "integer",
-          "description": "HSTSMaxAge is the max age to set the HSTS header to - default is 31536000"
+          "type": "integer"
         },
         "contentsecuritypolicy": {
-          "type": "string",
-          "description": "ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'"
+          "type": "string"
         },
         "referrerpolicy": {
-          "type": "string",
-          "description": "ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin"
+          "type": "string"
         },
         "cspreportonly": {
-          "type": "boolean",
-          "description": "CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config contains the types used in the mw middleware"
+      "type": "object"
     },
     "sessions.Config": {
       "properties": {
@@ -1209,121 +1148,94 @@
     "storage.ProviderConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if object storage is enabled"
+          "type": "boolean"
         },
         "keys": {
-          "$ref": "#/$defs/[]string",
-          "description": "Keys are the form field keys that will be processed for uploads"
+          "$ref": "#/$defs/[]string"
         },
         "maxsizemb": {
-          "type": "integer",
-          "description": "MaxSizeMB is the maximum file size allowed in MB"
+          "type": "integer"
         },
         "maxmemorymb": {
-          "type": "integer",
-          "description": "MaxMemoryMB is the maximum memory to use for file uploads in MB"
+          "type": "integer"
         },
         "devmode": {
-          "type": "boolean",
-          "description": "DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs"
+          "type": "boolean"
         },
         "providers": {
-          "$ref": "#/$defs/storage.Providers",
-          "description": "Providers contains configuration for each storage provider"
+          "$ref": "#/$defs/storage.Providers"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "ProviderConfig contains configuration for object storage providers"
+      "type": "object"
     },
     "storage.ProviderConfigs": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates if this provider is enabled"
+          "type": "boolean"
         },
         "ensureavailable": {
-          "type": "boolean",
-          "description": "EnsureAvailable enforces provider availability before completing server startup"
+          "type": "boolean"
         },
         "region": {
-          "type": "string",
-          "description": "Region for cloud providers"
+          "type": "string"
         },
         "bucket": {
-          "type": "string",
-          "description": "Bucket name for cloud providers"
+          "type": "string"
         },
         "endpoint": {
-          "type": "string",
-          "description": "Endpoint for custom endpoints"
+          "type": "string"
         },
         "proxypresignenabled": {
-          "type": "boolean",
-          "description": "ProxyPresignEnabled toggles proxy-signed download URL generation"
+          "type": "boolean"
         },
         "baseurl": {
-          "type": "string",
-          "description": "BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files)."
+          "type": "string"
         },
         "credentials": {
-          "$ref": "#/$defs/storage.ProviderCredentials",
-          "description": "Credentials contains the credentials for accessing the provider"
+          "$ref": "#/$defs/storage.ProviderCredentials"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "ProviderConfigs contains configuration for all storage providers This is structured to allow easy extension for additional providers in the future"
+      "type": "object"
     },
     "storage.ProviderCredentials": {
       "properties": {
         "accesskeyid": {
-          "type": "string",
-          "description": "AccessKeyID for cloud providers"
+          "type": "string"
         },
         "secretaccesskey": {
-          "type": "string",
-          "description": "SecretAccessKey for cloud providers"
+          "type": "string"
         },
         "projectid": {
-          "type": "string",
-          "description": "ProjectID for GCS"
+          "type": "string"
         },
         "accountid": {
-          "type": "string",
-          "description": "AccountID for Cloudflare R2"
+          "type": "string"
         },
         "apitoken": {
-          "type": "string",
-          "description": "APIToken for Cloudflare R2"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "ProviderCredentials contains credentials for a storage provider"
+      "type": "object"
     },
     "storage.Providers": {
       "properties": {
         "s3": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "S3 provider configuration"
+          "$ref": "#/$defs/storage.ProviderConfigs"
         },
         "cloudflarer2": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "CloudflareR2 provider configuration"
+          "$ref": "#/$defs/storage.ProviderConfigs"
         },
         "gcs": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "GCS provider configuration"
+          "$ref": "#/$defs/storage.ProviderConfigs"
         },
         "disk": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "Disk provider configuration"
+          "$ref": "#/$defs/storage.ProviderConfigs"
         },
         "database": {
-          "$ref": "#/$defs/storage.ProviderConfigs",
-          "description": "Database provider configuration"
+          "$ref": "#/$defs/storage.ProviderConfigs"
         }
       },
       "additionalProperties": false,
@@ -1332,117 +1244,92 @@
     "summarizer.AnthropicConfig": {
       "properties": {
         "betaheader": {
-          "type": "string",
-          "description": "BetaHeader specifies the beta API features to enable"
+          "type": "string"
         },
         "legacytextcompletion": {
-          "type": "boolean",
-          "description": "LegacyTextCompletion enables legacy text completion API"
+          "type": "boolean"
         },
         "baseurl": {
-          "type": "string",
-          "description": "BaseURL specifies the API endpoint"
+          "type": "string"
         },
         "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
+          "type": "string"
         },
         "apikey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "AnthropicConfig contains Anthropic specific configuration"
+      "type": "object"
     },
     "summarizer.CloudflareConfig": {
       "properties": {
         "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
+          "type": "string"
         },
         "apikey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
+          "type": "string"
         },
         "accountid": {
-          "type": "string",
-          "description": "AccountID specifies the Cloudflare account ID"
+          "type": "string"
         },
         "serverurl": {
-          "type": "string",
-          "description": "ServerURL specifies the API endpoint"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "CloudflareConfig contains Cloudflare specific configuration"
+      "type": "object"
     },
     "summarizer.Config": {
       "properties": {
         "type": {
-          "type": "string",
-          "description": "Type specifies the summarization algorithm to use"
+          "type": "string"
         },
         "llm": {
-          "$ref": "#/$defs/summarizer.LLM",
-          "description": "LLM contains configuration for large language model based summarization"
+          "$ref": "#/$defs/summarizer.LLM"
         },
         "maximumsentences": {
-          "type": "integer",
-          "description": "MaximumSentences specifies the maximum number of sentences in the summary"
+          "type": "integer"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config holds configuration for the text summarization functionality"
+      "type": "object"
     },
     "summarizer.LLM": {
       "properties": {
         "provider": {
-          "type": "string",
-          "description": "Provider specifies which LLM service to use"
+          "type": "string"
         },
         "anthropic": {
-          "$ref": "#/$defs/summarizer.AnthropicConfig",
-          "description": "Anthropic contains configuration for Anthropic's API"
+          "$ref": "#/$defs/summarizer.AnthropicConfig"
         },
         "cloudflare": {
-          "$ref": "#/$defs/summarizer.CloudflareConfig",
-          "description": "Cloudflare contains configuration for Cloudflare's API"
+          "$ref": "#/$defs/summarizer.CloudflareConfig"
         },
         "openai": {
-          "$ref": "#/$defs/summarizer.OpenAIConfig",
-          "description": "OpenAI contains configuration for OpenAI's API"
+          "$ref": "#/$defs/summarizer.OpenAIConfig"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "LLM contains configuration for multiple LLM providers"
+      "type": "object"
     },
     "summarizer.OpenAIConfig": {
       "properties": {
         "model": {
-          "type": "string",
-          "description": "Model specifies the model name to use"
+          "type": "string"
         },
         "apikey": {
-          "type": "string",
-          "description": "APIKey contains the authentication key for the service"
+          "type": "string"
         },
         "url": {
-          "type": "string",
-          "description": "URL specifies the API endpoint"
+          "type": "string"
         },
         "organizationid": {
-          "type": "string",
-          "description": "OrganizationID specifies the OpenAI organization ID"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "OpenAIConfig contains OpenAI specific configuration"
+      "type": "object"
     },
     "tokens.APITokenConfig": {
       "properties": {

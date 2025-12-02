@@ -47,11 +47,11 @@ var includedPackages = []string{
 	"./ent",
 	"./ent/entdb",
 	"./internal/httpserve/handlers",
-	"./pkg/middleware",
-	"./pkg/objects",
+	"./shared/middleware",
+	"./shared/objects",
 	"./ent/entconfig",
-	"./pkg/entitlements",
-	"./pkg/summarizer",
+	"./shared/entitlements",
+	"./shared/summarizer",
 }
 
 // sensitiveFields lists configuration paths that are sensitive but reside in external packages

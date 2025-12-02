@@ -43,56 +43,35 @@ coreConfiguration:
       autocert: false  # @schema type:boolean; default:false
     # -- CORS contains settings to allow cross origin settings and insecure cookies
     cors:
-      # -- Enable or disable the CORS middleware
       enabled: true  # @schema type:boolean; default:true
-      # -- Prefixes is a map of prefixes to allowed origins
       prefixes: {}
-      # -- AllowOrigins is a list of allowed origins
       alloworigins: []
-      # -- CookieInsecure sets the cookie to be insecure
       cookieinsecure: false  # @schema type:boolean
     # -- Secure contains settings for the secure middleware
     secure:
-      # -- Enabled indicates if the secure middleware should be enabled
       enabled: true  # @schema type:boolean; default:true
-      # -- XSSProtection is the value to set the X-XSS-Protection header to - default is 1; mode=block
       xssprotection: "1; mode=block"  # @schema type:string; default:1; mode=block
-      # -- ContentTypeNosniff is the value to set the X-Content-Type-Options header to - default is nosniff
       contenttypenosniff: "nosniff"  # @schema type:string; default:nosniff
-      # -- XFrameOptions is the value to set the X-Frame-Options header to - default is SAMEORIGIN
       xframeoptions: "SAMEORIGIN"  # @schema type:string; default:SAMEORIGIN
-      # -- HSTSPreloadEnabled is a boolean to enable HSTS preloading - default is false
       hstspreloadenabled: false  # @schema type:boolean; default:false
-      # -- HSTSMaxAge is the max age to set the HSTS header to - default is 31536000
       hstsmaxage: 31536000  # @schema type:integer; default:31536000
-      # -- ContentSecurityPolicy is the value to set the Content-Security-Policy header to - default is default-src 'self'
       contentsecuritypolicy: "default-src 'self'"  # @schema type:string; default:default-src 'self'
-      # -- ReferrerPolicy is the value to set the Referrer-Policy header to - default is same-origin
       referrerpolicy: "same-origin"  # @schema type:string; default:same-origin
-      # -- CSPReportOnly is a boolean to enable the Content-Security-Policy-Report-Only header - default is false
       cspreportonly: false  # @schema type:boolean; default:false
     # -- Redirect contains settings for the redirect middleware
     redirects:
-      # -- Enabled indicates if the redirect middleware should be enabled
       enabled: true  # @schema type:boolean; default:true
-      # -- Redirects is a map of paths to redirect to
       redirects: {}
-      # -- Code is the HTTP status code to use for the redirect
       code: 0  # @schema type:integer
     # -- CacheControl contains settings for the cache control middleware
     cachecontrol:
       enabled: true  # @schema type:boolean; default:true
-      # -- noCacheHeaders is the header <-> match map pair to match in http for entity headers to remove
       nocacheheaders: {}
-      # -- etagHeaders is the string of entity headers to remove
       etagheaders: []
     # -- Mime contains settings for the mime middleware
     mime:
-      # -- Enabled indicates if the mime middleware should be enabled
       enabled: true  # @schema type:boolean; default:true
-      # -- MimeTypesFile is the file to load mime types from
       mimetypesfile: ""  # @schema type:string
-      # -- DefaultContentType is the default content type to set if no mime type is found
       defaultcontenttype: "application/data"  # @schema type:string; default:application/data
     # -- GraphPool contains settings for the goroutine pool used by the graph resolvers
     graphpool:
@@ -108,22 +87,13 @@ coreConfiguration:
     maxresultlimit: 100  # @schema type:integer; default:100
     # -- CSRFProtection enables CSRF protection for the server
     csrfprotection:
-      # -- Enabled indicates whether CSRF protection is enabled.
       enabled: false  # @schema type:boolean; default:false
-      # -- Header specifies the header name to look for the CSRF token.
       header: "X-CSRF-Token"  # @schema type:string; default:X-CSRF-Token
-      # -- Cookie specifies the cookie name used to store the CSRF token.
       cookie: "ol.csrf-token"  # @schema type:string; default:ol.csrf-token
-      # -- Secure sets the Secure flag on the CSRF cookie.
       secure: true  # @schema type:boolean; default:true
-      # -- SameSite configures the SameSite attribute on the CSRF cookie. Valid
-      # values are "Lax", "Strict", "None" and "Default".
       samesite: "Lax"  # @schema type:string; default:Lax
-      # -- CookieHTTPOnly indicates whether the CSRF cookie is HTTP only.
       cookiehttponly: false  # @schema type:boolean; default:false
-      # -- CookieDomain specifies the domain for the CSRF cookie, default to no domain
       cookiedomain: ""  # @schema type:string
-      # -- CookiePath specifies the path for the CSRF cookie, default to "/"
       cookiepath: "/"  # @schema type:string; default:/
     # -- DefaultTrustCenterDomain is the default domain to use for the trust center if no custom domain is set
     defaulttrustcenterdomain: ""  # @schema type:string
@@ -139,33 +109,19 @@ coreConfiguration:
   entconfig:
     entitytypes: []
     summarizer:
-      # -- Type specifies the summarization algorithm to use
       type: lexrank  # @schema type:string; default:lexrank
-      # -- LLM contains configuration for large language model based summarization
       llm:
-        # -- Provider specifies which LLM service to use
         provider: none  # @schema type:string; default:none
-        # -- Anthropic contains configuration for Anthropic's API
         anthropic:
-          # -- BetaHeader specifies the beta API features to enable
           betaheader: ""  # @schema type:string
-          # -- LegacyTextCompletion enables legacy text completion API
           legacytextcompletion: false  # @schema type:boolean
-          # -- BaseURL specifies the API endpoint
           baseurl: ""  # @schema type:string
-        # -- Cloudflare contains configuration for Cloudflare's API
         cloudflare:
-          # -- AccountID specifies the Cloudflare account ID
           accountid: ""  # @schema type:string
-          # -- ServerURL specifies the API endpoint
           serverurl: ""  # @schema type:string
-        # -- OpenAI contains configuration for OpenAI's API
         openai:
-          # -- URL specifies the API endpoint
           url: ""  # @schema type:string
-          # -- OrganizationID specifies the OpenAI organization ID
           organizationid: ""  # @schema type:string
-      # -- MaximumSentences specifies the maximum number of sentences in the summary
       maximumsentences: 10  # @schema type:integer; default:10
     maxpoolsize: 100  # @schema type:integer; default:100
     modules:
@@ -381,153 +337,83 @@ coreConfiguration:
   # -- Ratelimit contains the configuration for the rate limiter
   ratelimit:
     enabled: false  # @schema type:boolean; default:false
-    # -- Options enables configuring multiple concurrent rate windows that must all pass.
     options:
       - expiration: 0s
         flushinterval: 0s
         requests: 500
         window: 1m0s
-    # -- Headers determines which headers are inspected to determine the origin IP.
-    # Defaults to X-Forwarded-For, True-Client-IP, RemoteAddr.
     headers:
         - True-Client-IP
-    # -- ForwardedIndexFromBehind selects which IP from X-Forwarded-For should be used.
-    # 0 means the closest client, 1 the proxy behind it, etc.
     forwardedindexfrombehind: 0  # @schema type:integer; default:0
-    # -- IncludePath appends the request path to the limiter key when true.
     includepath: false  # @schema type:boolean; default:false
-    # -- IncludeMethod appends the request method to the limiter key when true.
     includemethod: false  # @schema type:boolean; default:false
-    # -- KeyPrefix allows scoping the limiter key space with a static prefix.
     keyprefix: ""  # @schema type:string
-    # -- DenyStatus overrides the HTTP status code returned when a rate limit is exceeded.
     denystatus: 429  # @schema type:integer; default:429
-    # -- DenyMessage customises the error payload when a rate limit is exceeded.
     denymessage: "Too many requests"  # @schema type:string; default:Too many requests
-    # -- SendRetryAfterHeader toggles whether the Retry-After header should be added when available.
     sendretryafterheader: true  # @schema type:boolean; default:true
-    # -- DryRun enables logging rate limit decisions without blocking requests.
     dryrun: true  # @schema type:boolean; default:true
   # -- ObjectStorage contains the configuration for the object storage backend
   objectstorage:
-    # -- Enabled indicates if object storage is enabled
     enabled: true  # @schema type:boolean; default:true
-    # -- Keys are the form field keys that will be processed for uploads
     keys:
         - uploadFile
-    # -- MaxSizeMB is the maximum file size allowed in MB
     maxsizemb: 0  # @schema type:integer
-    # -- MaxMemoryMB is the maximum memory to use for file uploads in MB
     maxmemorymb: 0  # @schema type:integer
-    # -- DevMode automatically configures a local disk storage provider (and ensures directories exist) and ignores other provider configs
     devmode: false  # @schema type:boolean; default:false
-    # -- Providers contains configuration for each storage provider
     providers:
-      # -- S3 provider configuration
       s3:
-        # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
-        # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
         region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
         proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
         credentials:
-      # -- CloudflareR2 provider configuration
       cloudflarer2:
-        # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
-        # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
         region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
         proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
         credentials:
-      # -- GCS provider configuration
       gcs:
-        # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
-        # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
         region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
         proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
         credentials:
-      # -- Disk provider configuration
       disk:
-        # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
-        # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
         region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
         proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
         credentials:
-      # -- Database provider configuration
       database:
-        # -- Enabled indicates if this provider is enabled
         enabled: false  # @schema type:boolean; default:false
-        # -- EnsureAvailable enforces provider availability before completing server startup
         ensureavailable: false  # @schema type:boolean; default:false
-        # -- Region for cloud providers
         region: ""  # @schema type:string
-        # -- Bucket name for cloud providers
         bucket: ""  # @schema type:string
-        # -- Endpoint for custom endpoints
         endpoint: ""  # @schema type:string
-        # -- ProxyPresignEnabled toggles proxy-signed download URL generation
         proxypresignenabled: false  # @schema type:boolean; default:false
-        # -- BaseURL is the prefix for proxy download URLs (e.g., http://localhost:17608/v1/files).
         baseurl: "http://localhost:17608/v1/files"  # @schema type:string; default:http://localhost:17608/v1/files
-        # -- Credentials contains the credentials for accessing the provider
         credentials:
   # -- Entitlements contains the configuration for the entitlements service
   subscription:
-    # -- Enabled determines if the entitlements service is enabled
     enabled: false  # @schema type:boolean; default:false
-    # -- StripeWebhookURL is the URL for the stripe webhook
     stripewebhookurl: "https://api.theopenlane.io/stripe/webhook"  # @schema type:string; default:https://api.theopenlane.io/stripe/webhook
-    # -- StripeBillingPortalSuccessURL
     stripebillingportalsuccessurl: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
-    # -- StripeCancellationReturnURL is the URL for the stripe cancellation return
     stripecancellationreturnurl: "https://console.theopenlane.io/organization-settings/billing"  # @schema type:string; default:https://console.theopenlane.io/organization-settings/billing
-    # -- StripeWebhookEvents is the list of events to register when creating a webhook endpoint
     stripewebhookevents: []
-    # -- StripeWebhookAPIVersion is the Stripe API version currently accepted by the webhook handler
     stripewebhookapiversion: "2025_10_29_CLOVER"  # @schema type:string; default:2025_10_29_CLOVER
-    # -- StripeWebhookDiscardAPIVersion is the Stripe API version to discard during migration
     stripewebhookdiscardapiversion: ""  # @schema type:string
   # -- Keywatcher contains the configuration for the key watcher that manages JWT signing keys
   keywatcher:
