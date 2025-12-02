@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/pkg/browser"
+	goclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/httpsling"
 	"golang.org/x/oauth2"
 
@@ -20,7 +21,6 @@ import (
 	corecmd "github.com/theopenlane/core/cmd/cli/cmd"
 	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
-	openlaneclient "github.com/theopenlane/go-client"
 )
 
 // ssoConfig configures the local SSO login server
@@ -61,7 +61,7 @@ func newSSOConfig(opts ...SSOOption) *ssoConfig {
 }
 
 // fetchSSOStatus queries the webfinger endpoint for SSO enforcement status
-func fetchSSOStatus(ctx context.Context, client *openlaneclient.OpenlaneClient, email string) (models.SSOStatusReply, error) {
+func fetchSSOStatus(ctx context.Context, client *goclient.OpenlaneClient, email string) (models.SSOStatusReply, error) {
 	var out models.SSOStatusReply
 	resp, err := client.HTTPSlingRequester().ReceiveWithContext(ctx, &out,
 		httpsling.Get("/.well-known/webfinger"),
@@ -83,7 +83,7 @@ func fetchSSOStatus(ctx context.Context, client *openlaneclient.OpenlaneClient, 
 }
 
 // ssoAuth handles SSO login by opening the browser and capturing the callback
-func ssoAuth(ctx context.Context, client *openlaneclient.OpenlaneClient, orgID string, opts ...SSOOption) (*oauth2.Token, error) {
+func ssoAuth(ctx context.Context, client *goclient.OpenlaneClient, orgID string, opts ...SSOOption) (*oauth2.Token, error) {
 	cfg := newSSOConfig(opts...)
 
 	l, err := net.Listen("tcp", cfg.listenAddr)

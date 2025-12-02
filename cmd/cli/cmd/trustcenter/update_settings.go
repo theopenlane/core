@@ -10,12 +10,13 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/spf13/cobra"
 
+	goclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	openlaneclient "github.com/theopenlane/go-client"
+	openlaneclient "github.com/theopenlane/go-client/genclient"
 )
 
 var updateSettingsCmd = &cobra.Command{
@@ -137,7 +138,7 @@ func updateSettingsValidation() (id string, input openlaneclient.UpdateTrustCent
 }
 
 // findSettingIDByTrustCenter finds the setting ID for a given trust center ID
-func findSettingIDByTrustCenter(ctx context.Context, client *openlaneclient.OpenlaneClient, trustCenterID string) (string, error) {
+func findSettingIDByTrustCenter(ctx context.Context, client *goclient.OpenlaneClient, trustCenterID string) (string, error) {
 	// Get the trust center to find its setting
 	trustCenter, err := client.GetTrustCenterByID(ctx, trustCenterID)
 	if err != nil {

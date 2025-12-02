@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	openlaneclient "github.com/theopenlane/go-client"
+	openlaneclient "github.com/theopenlane/go-client/genclient"
 )
 
 var updateCmd = &cobra.Command{

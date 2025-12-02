@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	openlaneclient "github.com/theopenlane/go-client"
+	openlaneclient "github.com/theopenlane/go-client/genclient"
 )
 
 // command represents the base controlObjective command when called without any subcommands

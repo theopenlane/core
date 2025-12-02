@@ -13,7 +13,7 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	models "github.com/theopenlane/core/pkg/openapi"
-	openlaneclient "github.com/theopenlane/go-client"
+	goclient "github.com/theopenlane/go-client"
 )
 
 var command = &cobra.Command{
@@ -85,7 +85,7 @@ func login(ctx context.Context) (*oauth2.Token, error) {
 	return tokens, nil
 }
 
-func passwordAuth(ctx context.Context, client *openlaneclient.OpenlaneClient, username string) (*oauth2.Token, error) {
+func passwordAuth(ctx context.Context, client *goclient.OpenlaneClient, username string) (*oauth2.Token, error) {
 	// read password from terminal if not set in environment variable
 	password := cmd.Config.String("password")
 
@@ -135,7 +135,7 @@ func passwordAuth(ctx context.Context, client *openlaneclient.OpenlaneClient, us
 }
 
 // handle2FAVerification prompts the user for their 2FA code and validates it
-func handle2FAVerification(ctx context.Context, client *openlaneclient.OpenlaneClient) error {
+func handle2FAVerification(ctx context.Context, client *goclient.OpenlaneClient) error {
 	const maxAttempts = 3
 
 	for attempt := 1; attempt <= maxAttempts; attempt++ {

@@ -11,7 +11,8 @@ import (
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
 	"github.com/theopenlane/core/pkg/objects/storage"
-	openlaneclient "github.com/theopenlane/go-client"
+	goclient "github.com/theopenlane/go-client"
+	openlaneclient "github.com/theopenlane/go-client/genclient"
 )
 
 var createCmd = &cobra.Command{
@@ -43,7 +44,7 @@ func init() {
 }
 
 // createValidation validates the required fields for the command
-func createValidation(ctx context.Context, client *openlaneclient.OpenlaneClient) (input openlaneclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
+func createValidation(ctx context.Context, client *goclient.OpenlaneClient) (input openlaneclient.CreateEvidenceInput, uploads []*graphql.Upload, err error) {
 	// validation of required fields for the create command
 	// output the input struct with the required fields and optional fields based on the command line flags
 	input.Name = cmd.Config.String("name")

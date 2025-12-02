@@ -11,7 +11,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	openlaneclient "github.com/theopenlane/go-client"
+	openlaneclient "github.com/theopenlane/go-client/genclient"
 )
 
 // cmd represents the base org command when called without any subcommands

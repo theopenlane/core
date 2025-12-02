@@ -10,11 +10,11 @@ import (
 	"github.com/knadh/koanf/v2"
 	"golang.org/x/oauth2"
 
+	goclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/keyring"
 
 	models "github.com/theopenlane/core/pkg/openapi"
-	openlaneclient "github.com/theopenlane/go-client"
 )
 
 const (
@@ -26,7 +26,7 @@ const (
 
 // TokenAuth uses the token or personal access token to authenticate the client
 // if the token is not provided, it will fall back to JWT and session auth
-func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneClient, error) {
+func TokenAuth(ctx context.Context, k *koanf.Koanf) (*goclient.OpenlaneClient, error) {
 	var token string
 	for _, key := range []string{"token", "pat", "jwt"} {
 		token = k.String(key)
@@ -44,17 +44,17 @@ func TokenAuth(ctx context.Context, k *koanf.Koanf) (*openlaneclient.OpenlaneCli
 		return nil, err
 	}
 
-	opts = append(opts, openlaneclient.WithCredentials(openlaneclient.Authorization{
+	opts = append(opts, goclient.WithCredentials(goclient.Authorization{
 		BearerToken: token,
 	}))
 
-	return openlaneclient.New(config, opts...)
+	return goclient.New(config, opts...)
 }
 
 // SetupClientWithAuth will setup the openlane client with the the bearer token passed in the Authorization header
 // and the session cookie passed in the Cookie header. If the token is expired, it will be refreshed.
 // The token and session will be stored in the keyring for future requests
-func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
+func SetupClientWithAuth(ctx context.Context) (*goclient.OpenlaneClient, error) {
 	// setup interceptors
 	token, session, err := GetTokenFromKeyring(ctx)
 	if err != nil {
@@ -86,12 +86,12 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, e
 		return nil, err
 	}
 
-	opts = append(opts, openlaneclient.WithCredentials(openlaneclient.Authorization{
+	opts = append(opts, goclient.WithCredentials(goclient.Authorization{
 		BearerToken: token.AccessToken,
 		Session:     session,
 	}))
 
-	client, err := openlaneclient.New(config, opts...)
+	client, err := goclient.New(config, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -106,13 +106,13 @@ func SetupClientWithAuth(ctx context.Context) (*openlaneclient.OpenlaneClient, e
 
 // SetupClient will setup the client without the Authorization header
 // this is used for endpoints that do not require authentication, e.g. `v1/login`
-func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
+func SetupClient(ctx context.Context) (*goclient.OpenlaneClient, error) {
 	config, opts, err := configureDefaultOpts()
 	if err != nil {
 		return nil, err
 	}
 
-	client, err := openlaneclient.New(config, opts...)
+	client, err := goclient.New(config, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -126,12 +126,12 @@ func SetupClient(ctx context.Context) (*openlaneclient.OpenlaneClient, error) {
 }
 
 // configureDefaultOpts will setup the default options for the client
-func configureDefaultOpts() (openlaneclient.Config, []openlaneclient.ClientOption, error) {
-	config := openlaneclient.NewDefaultConfig()
+func configureDefaultOpts() (goclient.Config, []goclient.ClientOption, error) {
+	config := goclient.NewDefaultConfig()
 
 	// setup the logging interceptor
 	if Config.Bool("debug") {
-		config.Interceptors = append(config.Interceptors, openlaneclient.WithLoggingInterceptor())
+		config.Interceptors = append(config.Interceptors, goclient.WithLoggingInterceptor())
 	}
 
 	endpointOpt, err := configureClientEndpoints()
@@ -139,22 +139,22 @@ func configureDefaultOpts() (openlaneclient.Config, []openlaneclient.ClientOptio
 		return config, nil, err
 	}
 
-	return config, []openlaneclient.ClientOption{endpointOpt}, nil
+	return config, []goclient.ClientOption{endpointOpt}, nil
 }
 
 // configureClientEndpoints will setup the base URL for the client
-func configureClientEndpoints() (openlaneclient.ClientOption, error) {
+func configureClientEndpoints() (goclient.ClientOption, error) {
 	baseURL, err := url.Parse(RootHost)
 	if err != nil {
 		return nil, err
 	}
 
-	return openlaneclient.WithBaseURL(baseURL), nil
+	return goclient.WithBaseURL(baseURL), nil
 }
 
 // StoreSessionCookies gets the session cookie from the cookie jar
 // and stores it in the keychain for future requests
-func StoreSessionCookies(client *openlaneclient.OpenlaneClient) {
+func StoreSessionCookies(client *goclient.OpenlaneClient) {
 	session, err := client.GetSessionFromCookieJar()
 	if err != nil || session == "" {
 		fmt.Println("unable to get session from cookie jar")
@@ -174,7 +174,7 @@ func StoreSessionCookies(client *openlaneclient.OpenlaneClient) {
 
 // StoreAuthCookies gets the auth cookies from the cookie jar if they exist
 // and stores them in the keychain for future requests
-func StoreAuthCookies(client *openlaneclient.OpenlaneClient) {
+func StoreAuthCookies(client *goclient.OpenlaneClient) {
 	token := client.GetAuthTokensFromCookieJar()
 
 	if token == nil {
