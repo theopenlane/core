@@ -6,13 +6,13 @@ import (
 	"io"
 	"time"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/file"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/metrics"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/core/pkg/objects/storage/proxy"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/file"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 const (

@@ -38,7 +38,7 @@ func (ec *executionContext) _PersonalAccessTokenBulkCreatePayload_personalAccess
 			return obj.PersonalAccessTokens, nil
 		},
 		nil,
-		ec.marshalOPersonalAccessToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessTokenᚄ,
+		ec.marshalOPersonalAccessToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐPersonalAccessTokenᚄ,
 		true,
 		false,
 	)
@@ -109,7 +109,7 @@ func (ec *executionContext) _PersonalAccessTokenCreatePayload_personalAccessToke
 			return obj.PersonalAccessToken, nil
 		},
 		nil,
-		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
+		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐPersonalAccessToken,
 		true,
 		true,
 	)
@@ -209,7 +209,7 @@ func (ec *executionContext) _PersonalAccessTokenUpdatePayload_personalAccessToke
 			return obj.PersonalAccessToken, nil
 		},
 		nil,
-		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐPersonalAccessToken,
+		ec.marshalNPersonalAccessToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐPersonalAccessToken,
 		true,
 		true,
 	)

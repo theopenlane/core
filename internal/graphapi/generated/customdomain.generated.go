@@ -38,7 +38,7 @@ func (ec *executionContext) _CustomDomainBulkCreatePayload_customDomains(ctx con
 			return obj.CustomDomains, nil
 		},
 		nil,
-		ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomainᚄ,
+		ec.marshalOCustomDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomDomainᚄ,
 		true,
 		false,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _CustomDomainCreatePayload_customDomain(ctx context.
 			return obj.CustomDomain, nil
 		},
 		nil,
-		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
+		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomDomain,
 		true,
 		true,
 	)
@@ -222,7 +222,7 @@ func (ec *executionContext) _CustomDomainUpdatePayload_customDomain(ctx context.
 			return obj.CustomDomain, nil
 		},
 		nil,
-		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
+		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomDomain,
 		true,
 		true,
 	)

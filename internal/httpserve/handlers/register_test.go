@@ -21,13 +21,13 @@ import (
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/generated/usersetting"
-	"github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"
 	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/ent/generated/usersetting"
+	"github.com/theopenlane/ent/validator"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {

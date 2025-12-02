@@ -38,7 +38,7 @@ func (ec *executionContext) _TaskBulkCreatePayload_tasks(ctx context.Context, fi
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
+		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTaskᚄ,
 		true,
 		false,
 	)
@@ -174,7 +174,7 @@ func (ec *executionContext) _TaskBulkUpdatePayload_tasks(ctx context.Context, fi
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskᚄ,
+		ec.marshalOTask2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTaskᚄ,
 		true,
 		false,
 	)
@@ -310,7 +310,7 @@ func (ec *executionContext) _TaskCreatePayload_task(ctx context.Context, field g
 			return obj.Task, nil
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTask,
 		true,
 		true,
 	)
@@ -446,7 +446,7 @@ func (ec *executionContext) _TaskUpdatePayload_task(ctx context.Context, field g
 			return obj.Task, nil
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTask,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _DocumentDataBulkCreatePayload_documentData(ctx cont
 			return obj.DocumentData, nil
 		},
 		nil,
-		ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentDataᚄ,
+		ec.marshalODocumentData2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDocumentDataᚄ,
 		true,
 		false,
 	)
@@ -124,7 +124,7 @@ func (ec *executionContext) _DocumentDataCreatePayload_documentData(ctx context.
 			return obj.DocumentData, nil
 		},
 		nil,
-		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDocumentData,
 		true,
 		true,
 	)
@@ -210,7 +210,7 @@ func (ec *executionContext) _DocumentDataUpdatePayload_documentData(ctx context.
 			return obj.DocumentData, nil
 		},
 		nil,
-		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDocumentData,
 		true,
 		true,
 	)

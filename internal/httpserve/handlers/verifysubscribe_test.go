@@ -16,10 +16,10 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	models "github.com/theopenlane/core/pkg/openapi"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {

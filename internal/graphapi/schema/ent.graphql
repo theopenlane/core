@@ -39320,7 +39320,7 @@ input NarrativeWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/theopenlane/core/internal/ent/generated.Noder") {
+interface Node @goModel(model: "github.com/theopenlane/ent/generated.Noder") {
   """
   The id of the object.
   """

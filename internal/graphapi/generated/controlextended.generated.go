@@ -262,7 +262,7 @@ func (ec *executionContext) _ControlGroup_controls(ctx context.Context, field gr
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		ec.marshalNControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlConnection,
 		true,
 		true,
 	)
@@ -571,7 +571,7 @@ func (ec *executionContext) unmarshalInputCloneControlUploadInput(ctx context.Co
 			it.InternalPolicyID = data
 		case "controlInput":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("controlInput"))
-			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
+			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
 			if err != nil {
 				return it, err
 			}

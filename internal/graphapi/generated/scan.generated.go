@@ -38,7 +38,7 @@ func (ec *executionContext) _ScanBulkCreatePayload_scans(ctx context.Context, fi
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
+		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScanᚄ,
 		true,
 		false,
 	)
@@ -132,7 +132,7 @@ func (ec *executionContext) _ScanBulkUpdatePayload_scans(ctx context.Context, fi
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanᚄ,
+		ec.marshalOScan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScanᚄ,
 		true,
 		false,
 	)
@@ -226,7 +226,7 @@ func (ec *executionContext) _ScanCreatePayload_scan(ctx context.Context, field g
 			return obj.Scan, nil
 		},
 		nil,
-		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
+		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScan,
 		true,
 		true,
 	)
@@ -320,7 +320,7 @@ func (ec *executionContext) _ScanUpdatePayload_scan(ctx context.Context, field g
 			return obj.Scan, nil
 		},
 		nil,
-		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScan,
+		ec.marshalNScan2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScan,
 		true,
 		true,
 	)

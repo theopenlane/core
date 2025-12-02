@@ -12,12 +12,12 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 // LoginHandler validates the user credentials and returns a valid cookie

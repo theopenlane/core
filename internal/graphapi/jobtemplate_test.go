@@ -8,9 +8,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/utils/ulids"
 )
 
@@ -226,8 +226,9 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Title:    "Test Job Template",
 				Platform: enums.JobPlatformTypeGo,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "invalid input provided",
 		},
 		{
 			name: "invalid cron",

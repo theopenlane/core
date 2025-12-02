@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkCreatePayload_trustCente
 			return obj.TrustCenterSubprocessors, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
+		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
 		true,
 		false,
 	)
@@ -120,7 +120,7 @@ func (ec *executionContext) _TrustCenterSubprocessorBulkUpdatePayload_trustCente
 			return obj.TrustCenterSubprocessors, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
+		ec.marshalOTrustCenterSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSubprocessorᚄ,
 		true,
 		false,
 	)
@@ -202,7 +202,7 @@ func (ec *executionContext) _TrustCenterSubprocessorCreatePayload_trustCenterSub
 			return obj.TrustCenterSubprocessor, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSubprocessor,
 		true,
 		true,
 	)
@@ -284,7 +284,7 @@ func (ec *executionContext) _TrustCenterSubprocessorUpdatePayload_trustCenterSub
 			return obj.TrustCenterSubprocessor, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSubprocessor,
+		ec.marshalNTrustCenterSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSubprocessor,
 		true,
 		true,
 	)

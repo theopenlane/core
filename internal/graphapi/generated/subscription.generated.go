@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -40,7 +40,7 @@ func (ec *executionContext) _Subscription_taskCreated(ctx context.Context, field
 			return ec.resolvers.Subscription().TaskCreated(ctx)
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTask,
 		true,
 		true,
 	)

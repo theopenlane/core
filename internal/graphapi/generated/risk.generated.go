@@ -38,7 +38,7 @@ func (ec *executionContext) _RiskBulkCreatePayload_risks(ctx context.Context, fi
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRiskᚄ,
 		true,
 		false,
 	)
@@ -184,7 +184,7 @@ func (ec *executionContext) _RiskBulkUpdatePayload_risks(ctx context.Context, fi
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskᚄ,
+		ec.marshalORisk2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRiskᚄ,
 		true,
 		false,
 	)
@@ -330,7 +330,7 @@ func (ec *executionContext) _RiskCreatePayload_risk(ctx context.Context, field g
 			return obj.Risk, nil
 		},
 		nil,
-		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRisk,
 		true,
 		true,
 	)
@@ -476,7 +476,7 @@ func (ec *executionContext) _RiskUpdatePayload_risk(ctx context.Context, field g
 			return obj.Risk, nil
 		},
 		nil,
-		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRisk,
+		ec.marshalNRisk2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRisk,
 		true,
 		true,
 	)

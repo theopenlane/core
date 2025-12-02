@@ -6,7 +6,7 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 func TestParseName(t *testing.T) {

@@ -38,7 +38,7 @@ func (ec *executionContext) _GroupSettingBulkCreatePayload_groupSettings(ctx con
 			return obj.GroupSettings, nil
 		},
 		nil,
-		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSettingᚄ,
+		ec.marshalOGroupSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupSettingᚄ,
 		true,
 		false,
 	)
@@ -120,7 +120,7 @@ func (ec *executionContext) _GroupSettingCreatePayload_groupSetting(ctx context.
 			return obj.GroupSetting, nil
 		},
 		nil,
-		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupSetting,
 		true,
 		true,
 	)
@@ -202,7 +202,7 @@ func (ec *executionContext) _GroupSettingUpdatePayload_groupSetting(ctx context.
 			return obj.GroupSetting, nil
 		},
 		nil,
-		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupSetting,
+		ec.marshalNGroupSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupSetting,
 		true,
 		true,
 	)

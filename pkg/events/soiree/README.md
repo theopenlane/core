@@ -124,7 +124,7 @@ sequenceDiagram
 
 ## ent Integration
 
-`internal/ent/hooks` wires Soiree into ent mutations via the `Eventer`. The hook:
+`ent/hooks` wires Soiree into ent mutations via the `Eventer`. The hook:
 
 1. Determines whether any listeners are registered for the entity’s topic (including dynamic registrations on the pool).
 1. Marshals the mutation payload (operation, entity ID, and ent client) into a strongly typed event.
@@ -136,7 +136,7 @@ If you add listeners directly to the pool (e.g., in tests or feature toggles), t
 
 **Define the handler**
 
-Implement a `hooks.MutationHandler` in `internal/ent/hooks`. Handlers receive a `*soiree.EventContext` and `*hooks.MutationPayload`; they can access the ent client via `payload.Client` or `soiree.ClientAs`.
+Implement a `hooks.MutationHandler` in `ent/hooks`. Handlers receive a `*soiree.EventContext` and `*hooks.MutationPayload`; they can access the ent client via `payload.Client` or `soiree.ClientAs`.
 
 **Register the listener**
 
@@ -154,7 +154,7 @@ The ent hook emits automatically once the listener is registered. If you need a 
 #### Practical example
 
 ```go
-// internal/ent/hooks/listeners_billing.go
+// ent/hooks/listeners_billing.go
 func handleOrganizationBillingUpdate(ctx *soiree.EventContext, payload *hooks.MutationPayload) error {
 	if payload.Operation != ent.OpUpdateOne.String() {
 		return nil
@@ -168,7 +168,7 @@ func handleOrganizationBillingUpdate(ctx *soiree.EventContext, payload *hooks.Mu
 	return inv.reconcile()
 }
 
-// internal/ent/hooks/eventer.go
+// ent/hooks/eventer.go
 func registerDefaultMutationListeners(e *Eventer) {
 	// existing listeners…
 	e.AddMutationListener(entgen.TypeOrganizationSetting, handleOrganizationBillingUpdate)

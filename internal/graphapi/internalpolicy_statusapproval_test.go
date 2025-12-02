@@ -8,10 +8,10 @@ import (
 	"github.com/samber/lo"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 func TestCreateInternalPolicyStatusApproval(t *testing.T) {

@@ -706,7 +706,7 @@ The system triggers draft PR creation for changes to:
 **Configuration Source Files:**
 
 - `pkg/objects/config.go`
-- `internal/ent/entconfig/config.go`
+- `ent/entconfig/config.go`
 - `pkg/entitlements/config.go`
 - `pkg/middleware/cors/cors.go`
 - Schema generator changes

@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowAssignmentBulkCreatePayload_workflowAssignm
 			return obj.WorkflowAssignments, nil
 		},
 		nil,
-		ec.marshalOWorkflowAssignment2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignmentᚄ,
+		ec.marshalOWorkflowAssignment2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowAssignmentᚄ,
 		true,
 		false,
 	)
@@ -117,7 +117,7 @@ func (ec *executionContext) _WorkflowAssignmentCreatePayload_workflowAssignment(
 			return obj.WorkflowAssignment, nil
 		},
 		nil,
-		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment,
+		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowAssignment,
 		true,
 		true,
 	)
@@ -225,7 +225,7 @@ func (ec *executionContext) _WorkflowAssignmentUpdatePayload_workflowAssignment(
 			return obj.WorkflowAssignment, nil
 		},
 		nil,
-		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowAssignment,
+		ec.marshalNWorkflowAssignment2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowAssignment,
 		true,
 		true,
 	)

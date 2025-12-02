@@ -4,11 +4,11 @@ import (
 	"errors"
 	"time"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"

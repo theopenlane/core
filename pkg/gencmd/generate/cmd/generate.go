@@ -1,3 +1,5 @@
+//go:build cligen
+
 package cmd
 
 import (
@@ -12,7 +14,7 @@ import (
 )
 
 const (
-	relativeSchemaPath = "../../internal/ent/schema"
+	relativeSchemaPath = "../../ent/schema"
 )
 
 var generateCmd = &cobra.Command{

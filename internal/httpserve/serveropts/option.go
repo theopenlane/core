@@ -30,14 +30,10 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/hush/crypto"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/objects/resolver"
-	"github.com/theopenlane/core/internal/objects/validators"
 	"github.com/theopenlane/core/pkg/entitlements"
 	authmw "github.com/theopenlane/core/pkg/middleware/auth"
 	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
@@ -47,9 +43,12 @@ import (
 	"github.com/theopenlane/core/pkg/middleware/ratelimit"
 	"github.com/theopenlane/core/pkg/middleware/redirect"
 	"github.com/theopenlane/core/pkg/middleware/secure"
+	"github.com/theopenlane/core/pkg/objects/resolver"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/objects/validators"
 	"github.com/theopenlane/core/pkg/summarizer"
-	"github.com/theopenlane/core/pkg/windmill"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/hush/crypto"
 )
 
 type ServerOption interface {
@@ -533,23 +532,6 @@ func WithSummarizer() ServerOption {
 		}
 
 		s.Config.Handler.Summarizer = client
-	})
-}
-
-// WithWindmill sets up the Windmill workflow automation client
-func WithWindmill() ServerOption {
-	return newApplyFunc(func(s *ServerOptions) {
-		client, err := windmill.NewWindmill(s.Config.Settings.EntConfig)
-		if err != nil {
-			if errors.Is(err, windmill.ErrWindmillDisabled) {
-				log.Info().Msg("Windmill is not enabled, skipping Windmill client setup")
-				return
-			}
-
-			log.Panic().Err(err).Msg("error creating Windmill client")
-		}
-
-		s.Config.Handler.Windmill = client
 	})
 }
 

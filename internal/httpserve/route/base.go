@@ -3,9 +3,9 @@ package route
 import (
 	"net/http"
 
-	"github.com/theopenlane/core/internal/entdb"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/ent/entdb"
 )
 
 // registerLivenessHandler registers the liveness handler

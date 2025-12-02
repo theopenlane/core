@@ -10,8 +10,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/ent/generated"
 )
 
 func TestQueryCustomTypeEnum(t *testing.T) {

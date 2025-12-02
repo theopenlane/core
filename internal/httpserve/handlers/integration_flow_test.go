@@ -11,9 +11,9 @@ import (
 	"net/url"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/echox/middleware/echocontext"
+	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"

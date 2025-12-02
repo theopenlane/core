@@ -35,11 +35,6 @@ env:
   # for test container settings
   RYUK_CONNECTION_TIMEOUT: "5m"
   RYUK_VERBOSE: "true"
-  ## generate env vars for caching
-  GO_GENERATE_FAST_DEBUG: "false" # set to true to debug go-generate-fast
-  GO_GENERATE_FAST_CACHE_DIR: "/tmp/.cache"
-  GO_GENERATE_FAST_DISABLE: "false" # set to true to disable cached entries
-  GO_GENERATE_FAST_RECACHE: "false" # set to true to recache all entries
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
@@ -67,16 +62,7 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     cmds:
-      - go-generate-fast ./...
-      - task: tidy
-
-  regenerate:
-    desc: a combination of the ent, graph, and gqlgen tasks which are required to fully generate the necessary graph, server, resolvers, client, etc.
-    env:
-      GO_GENERATE_FAST_RECACHE: "true"
-      GOFLAGS: "{{.GO_INLINE_FLAG}}"
-    cmds:
-      - go-generate-fast ./...
+      - task: generate:checksums
       - task: tidy
 
   generate:checksums:
@@ -94,34 +80,32 @@ tasks:
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
-      - internal/ent/schema/**/*.go
-      - internal/ent/generate/**/*.go
-      - internal/ent/mixin/**/*.go
-      - internal/ent/templates/**/*
+      - ent/schema/*.go
+      - ent/generate/*.go
+      - ent/generate/templates/**/*
+      - ent/mixin/*.go
     generates:
-      - internal/ent/generated/**/*.go
+      - ent/generated/**/*.go
+      - internal/graphapi/schema/*.graphql
+      - internal/graphapi/query/*.graphql
     method: checksum
     cmds:
-      - go generate internal/ent/generate/generate.go
+      - go generate ent/generate/generate.go
 
   generate:graphql:smart:
-    internal: true
     env:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
-      - internal/graphapi/generate/**/*.go
-      - internal/graphapi/schema/**/*.graphql
-      - internal/graphapi/query/**/*.graphql
-      - internal/ent/generated/**/*.go
+      - internal/graphapi/generate/*.go
+      - internal/graphapi/schema/*.graphql
+      - internal/graphapi/query/*.graphql
+      - ent/generated/**/*.go
     generates:
       - internal/graphapi/generated/**/*.go
       - internal/graphapi/model/gen_models.go
       - internal/graphapi/*.resolvers.go
       - internal/graphapi/testclient/graphqlclient.go
       - internal/graphapi/testclient/models.go
-      - pkg/openlaneclient/models.go
-      - pkg/openlaneclient/graphqlclient.go
-      - pkg/openlaneclient/models.go
       - internal/httpserve/handlers/csv/sample_*.csv
     method: checksum
     cmds:
@@ -133,20 +117,17 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     sources:
       - pkg/catalog/**/*.go
-      - pkg/corejobs/internal/**/*.go
       - .mockery.yml
       - internal/httpserve/**/*.go
       - pkg/openapi/*.go
     generates:
       - pkg/catalog/**/*.yaml
       - pkg/catalog/**/*.json
-      - pkg/corejobs/internal/cloudflare/mocks/mocks.go
       - internal/httpserve/specs/openlane.openapi.json
       - internal/httpserve/specs/openlane.openapi.yaml
     method: checksum
     cmds:
       - go generate pkg/catalog/generate.go
-      - go generate pkg/corejobs/internal/generate.go
       - go generate internal/httpserve/specs/generate/generate.go
 
   # Buildkite automation tasks
@@ -204,13 +185,13 @@ tasks:
   generate:ent:
     desc: generate ent models
     cmds:
-      - go-generate-fast internal/ent/generate/generate.go
+      - task: generate:ent:smart
       - task: tidy
 
   generate:gql:
     desc: generate gql graphql models and resolvers, along with the client
     cmds:
-      - go-generate-fast internal/graphapi/generate/generate.go
+      - task: generate:graphql:smart
       - task: tidy
 
   ## Go tasks
@@ -422,17 +403,17 @@ tasks:
   hush:keyset:
     desc: Generates a new Tink keyset for field encryption
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate
+      - go run -tags generate ./ent/hush/cmd/hush generate
 
   hush:quiet:
     desc: Generates a new Tink keyset (output only)
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
+      - go run -tags generate ./ent/hush/cmd/hush generate --quiet
 
   hush:export:
     desc: Generates a new Tink keyset in export format
     cmds:
-      - go run -tags generate ./internal/ent/hush/cmd/hush generate --export
+      - go run -tags generate ./ent/hush/cmd/hush generate --export
 
   # dev tasks
   run-dev:

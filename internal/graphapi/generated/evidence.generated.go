@@ -38,7 +38,7 @@ func (ec *executionContext) _EvidenceBulkCreatePayload_evidences(ctx context.Con
 			return obj.Evidences, nil
 		},
 		nil,
-		ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceᚄ,
+		ec.marshalOEvidence2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvidenceᚄ,
 		true,
 		false,
 	)
@@ -121,7 +121,7 @@ func (ec *executionContext) _EvidenceCreatePayload_evidence(ctx context.Context,
 			return obj.Evidence, nil
 		},
 		nil,
-		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
+		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvidence,
 		true,
 		true,
 	)
@@ -233,7 +233,7 @@ func (ec *executionContext) _EvidenceUpdatePayload_evidence(ctx context.Context,
 			return obj.Evidence, nil
 		},
 		nil,
-		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidence,
+		ec.marshalNEvidence2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvidence,
 		true,
 		true,
 	)

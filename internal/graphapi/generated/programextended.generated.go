@@ -77,14 +77,14 @@ func (ec *executionContext) unmarshalInputCreateControlWithSubcontrolsInput(ctx 
 		switch k {
 		case "control":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("control"))
-			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
+			data, err := ec.unmarshalOCreateControlInput2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Control = data
 		case "subcontrols":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("subcontrols"))
-			data, err := ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ(ctx, v)
+			data, err := ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -111,7 +111,7 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 		switch k {
 		case "program":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("program"))
-			data, err := ec.unmarshalNCreateProgramInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInput(ctx, v)
+			data, err := ec.unmarshalNCreateProgramInput2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramInput(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -125,21 +125,21 @@ func (ec *executionContext) unmarshalInputCreateFullProgramInput(ctx context.Con
 			it.Controls = data
 		case "risks":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("risks"))
-			data, err := ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInputᚄ(ctx, v)
+			data, err := ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateRiskInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.Risks = data
 		case "internalPolicies":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("internalPolicies"))
-			data, err := ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ(ctx, v)
+			data, err := ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
 			it.InternalPolicies = data
 		case "procedures":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("procedures"))
-			data, err := ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInputᚄ(ctx, v)
+			data, err := ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProcedureInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -214,7 +214,7 @@ func (ec *executionContext) unmarshalInputCreateProgramWithMembersInput(ctx cont
 		switch k {
 		case "program":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("program"))
-			data, err := ec.unmarshalNCreateProgramInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInput(ctx, v)
+			data, err := ec.unmarshalNCreateProgramInput2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramInput(ctx, v)
 			if err != nil {
 				return it, err
 			}

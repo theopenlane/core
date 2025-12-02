@@ -8,7 +8,6 @@ linters:
     - bodyclose
     - err113
     - gocritic
-    - gocyclo
     - gosec
     - misspell
     - mnd
@@ -24,23 +23,19 @@ linters:
       - std-error-handling
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
-      - internal/ent/generated/*
-      - internal/ent/templates/*
+      - ent/generated/*
+      - ent/templates/*
       - jsonschema/templates/*
       - pkg/objects/mocks/*
-      - pkg/corejobs/internal/cloudflare/mocks/*
-      - pkg/corejobs/internal/olclient/mocks/*
       - internal/graphapi/generate/*
       - internal/graphapi/generated/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
-      - pkg/sleuth/static/*
       - pkg/entitlements/mocks/*
       - pkg/events/soiree/examples/*
       - pkg/middleware/ratelimiter/examples/*
-      - internal/ent/hush/examples/*
+      - ent/hush/examples/*
       - pkg/objects/examples/*
 formatters:
   enable:
@@ -50,10 +45,8 @@ formatters:
     warn-unused: true
     paths:
       - internal/graphapi/model/gen_models.go
-      - pkg/openlaneclient/graphclient.go
       - pkg/testutils/*
       - pkg/entitlements/test/*
       - cmd/cli/cmd/*
       - pkg/events/soiree/examples/*
-      - pkg/sleuth/dnsx/* # this should be fixed in the future
-      - internal/ent/hush/examples/*
+      - ent/hush/examples/*

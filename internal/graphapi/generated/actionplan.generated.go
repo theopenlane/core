@@ -10,8 +10,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -457,7 +457,7 @@ func (ec *executionContext) field_Mutation_cloneBulkCSVControl_args(ctx context.
 func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAPITokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAPITokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -468,7 +468,7 @@ func (ec *executionContext) field_Mutation_createAPIToken_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateActionPlanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateActionPlanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -479,7 +479,7 @@ func (ec *executionContext) field_Mutation_createActionPlan_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createAssessmentResponse_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssessmentResponseInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentResponseInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAssessmentResponseInput)
 	if err != nil {
 		return nil, err
 	}
@@ -490,7 +490,7 @@ func (ec *executionContext) field_Mutation_createAssessmentResponse_args(ctx con
 func (ec *executionContext) field_Mutation_createAssessment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssessmentInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssessmentInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAssessmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -501,7 +501,7 @@ func (ec *executionContext) field_Mutation_createAssessment_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateAssetInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAssetInput)
 	if err != nil {
 		return nil, err
 	}
@@ -512,7 +512,7 @@ func (ec *executionContext) field_Mutation_createAsset_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAPITokenInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAPITokenInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAPITokenInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -523,7 +523,7 @@ func (ec *executionContext) field_Mutation_createBulkAPIToken_args(ctx context.C
 func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateActionPlanInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateActionPlanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateActionPlanInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -534,7 +534,7 @@ func (ec *executionContext) field_Mutation_createBulkActionPlan_args(ctx context
 func (ec *executionContext) field_Mutation_createBulkAsset_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateAssetInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateAssetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateAssetInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1183,7 +1183,7 @@ func (ec *executionContext) field_Mutation_createBulkCSVWorkflowObjectRef_args(c
 func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateContactInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateContactInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1194,7 +1194,7 @@ func (ec *executionContext) field_Mutation_createBulkContact_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createBulkControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlImplementationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlImplementationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlImplementationInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1205,7 +1205,7 @@ func (ec *executionContext) field_Mutation_createBulkControlImplementation_args(
 func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlObjectiveInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlObjectiveInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlObjectiveInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1216,7 +1216,7 @@ func (ec *executionContext) field_Mutation_createBulkControlObjective_args(ctx c
 func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1227,7 +1227,7 @@ func (ec *executionContext) field_Mutation_createBulkControl_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createBulkCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateCustomDomainInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1238,7 +1238,7 @@ func (ec *executionContext) field_Mutation_createBulkCustomDomain_args(ctx conte
 func (ec *executionContext) field_Mutation_createBulkCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateCustomTypeEnumInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateCustomTypeEnumInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1249,7 +1249,7 @@ func (ec *executionContext) field_Mutation_createBulkCustomTypeEnum_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDNSVerificationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDNSVerificationInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1260,7 +1260,7 @@ func (ec *executionContext) field_Mutation_createBulkDNSVerification_args(ctx co
 func (ec *executionContext) field_Mutation_createBulkDirectoryAccount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryAccountInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryAccountInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryAccountInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryAccountInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1271,7 +1271,7 @@ func (ec *executionContext) field_Mutation_createBulkDirectoryAccount_args(ctx c
 func (ec *executionContext) field_Mutation_createBulkDirectoryGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryGroupInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryGroupInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1282,7 +1282,7 @@ func (ec *executionContext) field_Mutation_createBulkDirectoryGroup_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkDirectoryMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryMembershipInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectoryMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1293,7 +1293,7 @@ func (ec *executionContext) field_Mutation_createBulkDirectoryMembership_args(ct
 func (ec *executionContext) field_Mutation_createBulkDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectorySyncRunInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectorySyncRunInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDirectorySyncRunInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectorySyncRunInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1304,7 +1304,7 @@ func (ec *executionContext) field_Mutation_createBulkDirectorySyncRun_args(ctx c
 func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDocumentDataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateDocumentDataInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDocumentDataInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1315,7 +1315,7 @@ func (ec *executionContext) field_Mutation_createBulkDocumentData_args(ctx conte
 func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityTypeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityTypeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEntityTypeInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1326,7 +1326,7 @@ func (ec *executionContext) field_Mutation_createBulkEntityType_args(ctx context
 func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEntityInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1337,7 +1337,7 @@ func (ec *executionContext) field_Mutation_createBulkEntity_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEventInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1348,7 +1348,7 @@ func (ec *executionContext) field_Mutation_createBulkEvent_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createBulkFindingControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateFindingControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateFindingControlInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateFindingControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateFindingControlInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1359,7 +1359,7 @@ func (ec *executionContext) field_Mutation_createBulkFindingControl_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkFinding_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateFindingInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateFindingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateFindingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1370,7 +1370,7 @@ func (ec *executionContext) field_Mutation_createBulkFinding_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1381,7 +1381,7 @@ func (ec *executionContext) field_Mutation_createBulkGroupMembership_args(ctx co
 func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1392,7 +1392,7 @@ func (ec *executionContext) field_Mutation_createBulkGroupSetting_args(ctx conte
 func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateGroupInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1403,7 +1403,7 @@ func (ec *executionContext) field_Mutation_createBulkGroup_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateHushInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateHushInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1414,7 +1414,7 @@ func (ec *executionContext) field_Mutation_createBulkHush_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInternalPolicyInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateInternalPolicyInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1425,7 +1425,7 @@ func (ec *executionContext) field_Mutation_createBulkInternalPolicy_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateInviteInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateInviteInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1436,7 +1436,7 @@ func (ec *executionContext) field_Mutation_createBulkInvite_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createBulkJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateJobTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateJobTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobTemplateInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1447,7 +1447,7 @@ func (ec *executionContext) field_Mutation_createBulkJobTemplate_args(ctx contex
 func (ec *executionContext) field_Mutation_createBulkMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappableDomainInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateMappableDomainInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1458,7 +1458,7 @@ func (ec *executionContext) field_Mutation_createBulkMappableDomain_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappedControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateMappedControlInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateMappedControlInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1469,7 +1469,7 @@ func (ec *executionContext) field_Mutation_createBulkMappedControl_args(ctx cont
 func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateNarrativeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateNarrativeInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateNarrativeInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1480,7 +1480,7 @@ func (ec *executionContext) field_Mutation_createBulkNarrative_args(ctx context.
 func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrgMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrgMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1491,7 +1491,7 @@ func (ec *executionContext) field_Mutation_createBulkOrgMembership_args(ctx cont
 func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateOrganizationSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrganizationSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1502,7 +1502,7 @@ func (ec *executionContext) field_Mutation_createBulkOrganizationSetting_args(ct
 func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProcedureInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProcedureInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1513,7 +1513,7 @@ func (ec *executionContext) field_Mutation_createBulkProcedure_args(ctx context.
 func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramMembershipInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramMembershipInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1524,7 +1524,7 @@ func (ec *executionContext) field_Mutation_createBulkProgramMembership_args(ctx 
 func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateProgramInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1535,7 +1535,7 @@ func (ec *executionContext) field_Mutation_createBulkProgram_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createBulkRemediation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateRemediationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRemediationInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateRemediationInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateRemediationInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1546,7 +1546,7 @@ func (ec *executionContext) field_Mutation_createBulkRemediation_args(ctx contex
 func (ec *executionContext) field_Mutation_createBulkReview_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateReviewInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateReviewInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateReviewInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateReviewInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1557,7 +1557,7 @@ func (ec *executionContext) field_Mutation_createBulkReview_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateRiskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateRiskInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1568,7 +1568,7 @@ func (ec *executionContext) field_Mutation_createBulkRisk_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createBulkScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScanInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateScanInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1579,7 +1579,7 @@ func (ec *executionContext) field_Mutation_createBulkScan_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createBulkScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScheduledJobInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateScheduledJobInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateScheduledJobInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1590,7 +1590,7 @@ func (ec *executionContext) field_Mutation_createBulkScheduledJob_args(ctx conte
 func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubcontrolInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubcontrolInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1601,7 +1601,7 @@ func (ec *executionContext) field_Mutation_createBulkSubcontrol_args(ctx context
 func (ec *executionContext) field_Mutation_createBulkSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubprocessorInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1612,7 +1612,7 @@ func (ec *executionContext) field_Mutation_createBulkSubprocessor_args(ctx conte
 func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateSubscriberInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubscriberInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1623,7 +1623,7 @@ func (ec *executionContext) field_Mutation_createBulkSubscriber_args(ctx context
 func (ec *executionContext) field_Mutation_createBulkTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTagDefinitionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTagDefinitionInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTagDefinitionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTagDefinitionInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1634,7 +1634,7 @@ func (ec *executionContext) field_Mutation_createBulkTagDefinition_args(ctx cont
 func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTaskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTaskInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTaskInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1645,7 +1645,7 @@ func (ec *executionContext) field_Mutation_createBulkTask_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTemplateInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTemplateInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1656,7 +1656,7 @@ func (ec *executionContext) field_Mutation_createBulkTemplate_args(ctx context.C
 func (ec *executionContext) field_Mutation_createBulkTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterComplianceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterComplianceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterComplianceInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1667,7 +1667,7 @@ func (ec *executionContext) field_Mutation_createBulkTrustCenterCompliance_args(
 func (ec *executionContext) field_Mutation_createBulkTrustCenterDoc_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterDocInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterDocInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterDocInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterDocInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1678,7 +1678,7 @@ func (ec *executionContext) field_Mutation_createBulkTrustCenterDoc_args(ctx con
 func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustCenterSubprocessorInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1689,7 +1689,7 @@ func (ec *executionContext) field_Mutation_createBulkTrustCenterSubprocessor_arg
 func (ec *executionContext) field_Mutation_createBulkTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustcenterEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustcenterEntityInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateTrustcenterEntityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustcenterEntityInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1700,7 +1700,7 @@ func (ec *executionContext) field_Mutation_createBulkTrustcenterEntity_args(ctx 
 func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateUserSettingInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateUserSettingInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1711,7 +1711,7 @@ func (ec *executionContext) field_Mutation_createBulkUserSetting_args(ctx contex
 func (ec *executionContext) field_Mutation_createBulkVulnerability_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateVulnerabilityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateVulnerabilityInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateVulnerabilityInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateVulnerabilityInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1722,7 +1722,7 @@ func (ec *executionContext) field_Mutation_createBulkVulnerability_args(ctx cont
 func (ec *executionContext) field_Mutation_createBulkWorkflowAssignmentTarget_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowAssignmentTargetInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowAssignmentTargetInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowAssignmentTargetInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1733,7 +1733,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowAssignmentTarget_ar
 func (ec *executionContext) field_Mutation_createBulkWorkflowAssignment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowAssignmentInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowAssignmentInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowAssignmentInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowAssignmentInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1744,7 +1744,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowAssignment_args(ctx
 func (ec *executionContext) field_Mutation_createBulkWorkflowDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowDefinitionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowDefinitionInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowDefinitionInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowDefinitionInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1755,7 +1755,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowDefinition_args(ctx
 func (ec *executionContext) field_Mutation_createBulkWorkflowEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowEventInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowEventInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowEventInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1766,7 +1766,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowEvent_args(ctx cont
 func (ec *executionContext) field_Mutation_createBulkWorkflowInstance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowInstanceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowInstanceInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowInstanceInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowInstanceInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1777,7 +1777,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowInstance_args(ctx c
 func (ec *executionContext) field_Mutation_createBulkWorkflowObjectRef_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowObjectRefInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowObjectRefInputᚄ)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalOCreateWorkflowObjectRefInput2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowObjectRefInputᚄ)
 	if err != nil {
 		return nil, err
 	}
@@ -1788,7 +1788,7 @@ func (ec *executionContext) field_Mutation_createBulkWorkflowObjectRef_args(ctx 
 func (ec *executionContext) field_Mutation_createContact_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateContactInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateContactInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateContactInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1799,7 +1799,7 @@ func (ec *executionContext) field_Mutation_createContact_args(ctx context.Contex
 func (ec *executionContext) field_Mutation_createControlImplementation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlImplementationInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlImplementationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1810,7 +1810,7 @@ func (ec *executionContext) field_Mutation_createControlImplementation_args(ctx 
 func (ec *executionContext) field_Mutation_createControlObjective_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlObjectiveInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlObjectiveInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1832,7 +1832,7 @@ func (ec *executionContext) field_Mutation_createControlWithSubcontrols_args(ctx
 func (ec *executionContext) field_Mutation_createControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateControlInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1854,7 +1854,7 @@ func (ec *executionContext) field_Mutation_createControlsByClone_args(ctx contex
 func (ec *executionContext) field_Mutation_createCustomDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomDomainInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateCustomDomainInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1865,7 +1865,7 @@ func (ec *executionContext) field_Mutation_createCustomDomain_args(ctx context.C
 func (ec *executionContext) field_Mutation_createCustomTypeEnum_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateCustomTypeEnumInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateCustomTypeEnumInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1876,7 +1876,7 @@ func (ec *executionContext) field_Mutation_createCustomTypeEnum_args(ctx context
 func (ec *executionContext) field_Mutation_createDNSVerification_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDNSVerificationInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDNSVerificationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1887,7 +1887,7 @@ func (ec *executionContext) field_Mutation_createDNSVerification_args(ctx contex
 func (ec *executionContext) field_Mutation_createDirectoryAccount_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryAccountInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryAccountInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1898,7 +1898,7 @@ func (ec *executionContext) field_Mutation_createDirectoryAccount_args(ctx conte
 func (ec *executionContext) field_Mutation_createDirectoryGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryGroupInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1909,7 +1909,7 @@ func (ec *executionContext) field_Mutation_createDirectoryGroup_args(ctx context
 func (ec *executionContext) field_Mutation_createDirectoryMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectoryMembershipInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectoryMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1920,7 +1920,7 @@ func (ec *executionContext) field_Mutation_createDirectoryMembership_args(ctx co
 func (ec *executionContext) field_Mutation_createDirectorySyncRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDirectorySyncRunInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDirectorySyncRunInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1931,7 +1931,7 @@ func (ec *executionContext) field_Mutation_createDirectorySyncRun_args(ctx conte
 func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateDocumentDataInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateDocumentDataInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1942,7 +1942,7 @@ func (ec *executionContext) field_Mutation_createDocumentData_args(ctx context.C
 func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityTypeInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEntityTypeInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1953,7 +1953,7 @@ func (ec *executionContext) field_Mutation_createEntityType_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEntityInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEntityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEntityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1964,7 +1964,7 @@ func (ec *executionContext) field_Mutation_createEntity_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEventInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEventInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEventInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1975,7 +1975,7 @@ func (ec *executionContext) field_Mutation_createEvent_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_createEvidence_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateEvidenceInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateEvidenceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateEvidenceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -1991,7 +1991,7 @@ func (ec *executionContext) field_Mutation_createEvidence_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createExport_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateExportInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateExportInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateExportInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2002,7 +2002,7 @@ func (ec *executionContext) field_Mutation_createExport_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createFindingControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateFindingControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateFindingControlInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateFindingControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateFindingControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2013,7 +2013,7 @@ func (ec *executionContext) field_Mutation_createFindingControl_args(ctx context
 func (ec *executionContext) field_Mutation_createFinding_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateFindingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateFindingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateFindingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateFindingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2035,7 +2035,7 @@ func (ec *executionContext) field_Mutation_createFullProgram_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createGroupByClone_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2061,7 +2061,7 @@ func (ec *executionContext) field_Mutation_createGroupByClone_args(ctx context.C
 func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupMembershipInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2072,7 +2072,7 @@ func (ec *executionContext) field_Mutation_createGroupMembership_args(ctx contex
 func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupSettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2083,7 +2083,7 @@ func (ec *executionContext) field_Mutation_createGroupSetting_args(ctx context.C
 func (ec *executionContext) field_Mutation_createGroupWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "groupInput", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2099,7 +2099,7 @@ func (ec *executionContext) field_Mutation_createGroupWithMembers_args(ctx conte
 func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateGroupInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2110,7 +2110,7 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateHushInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateHushInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateHushInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2121,7 +2121,7 @@ func (ec *executionContext) field_Mutation_createHush_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInternalPolicyInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateInternalPolicyInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2132,7 +2132,7 @@ func (ec *executionContext) field_Mutation_createInternalPolicy_args(ctx context
 func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateInviteInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateInviteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateInviteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2143,7 +2143,7 @@ func (ec *executionContext) field_Mutation_createInvite_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createJobResult_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobResultInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobResultInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobResultInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobResultInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2159,7 +2159,7 @@ func (ec *executionContext) field_Mutation_createJobResult_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createJobRunnerRegistrationToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerRegistrationTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerRegistrationTokenInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerRegistrationTokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobRunnerRegistrationTokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2170,7 +2170,7 @@ func (ec *executionContext) field_Mutation_createJobRunnerRegistrationToken_args
 func (ec *executionContext) field_Mutation_createJobRunnerToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerTokenInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerTokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobRunnerTokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2181,7 +2181,7 @@ func (ec *executionContext) field_Mutation_createJobRunnerToken_args(ctx context
 func (ec *executionContext) field_Mutation_createJobRunner_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobRunnerInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobRunnerInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2192,7 +2192,7 @@ func (ec *executionContext) field_Mutation_createJobRunner_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createJobTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateJobTemplateInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateJobTemplateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2203,7 +2203,7 @@ func (ec *executionContext) field_Mutation_createJobTemplate_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createMappableDomain_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappableDomainInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateMappableDomainInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2214,7 +2214,7 @@ func (ec *executionContext) field_Mutation_createMappableDomain_args(ctx context
 func (ec *executionContext) field_Mutation_createMappedControl_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateMappedControlInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateMappedControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateMappedControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2225,7 +2225,7 @@ func (ec *executionContext) field_Mutation_createMappedControl_args(ctx context.
 func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateNarrativeInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateNarrativeInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateNarrativeInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2236,7 +2236,7 @@ func (ec *executionContext) field_Mutation_createNarrative_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createOnboarding_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOnboardingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOnboardingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOnboardingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOnboardingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2247,7 +2247,7 @@ func (ec *executionContext) field_Mutation_createOnboarding_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrgMembershipInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrgMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2258,7 +2258,7 @@ func (ec *executionContext) field_Mutation_createOrgMembership_args(ctx context.
 func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationSettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrganizationSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2269,7 +2269,7 @@ func (ec *executionContext) field_Mutation_createOrganizationSetting_args(ctx co
 func (ec *executionContext) field_Mutation_createOrganizationWithMembers_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "organizationInput", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "organizationInput", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2290,7 +2290,7 @@ func (ec *executionContext) field_Mutation_createOrganizationWithMembers_args(ct
 func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateOrganizationInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateOrganizationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2306,7 +2306,7 @@ func (ec *executionContext) field_Mutation_createOrganization_args(ctx context.C
 func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreatePersonalAccessTokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2317,7 +2317,7 @@ func (ec *executionContext) field_Mutation_createPersonalAccessToken_args(ctx co
 func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProcedureInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProcedureInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProcedureInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2328,7 +2328,7 @@ func (ec *executionContext) field_Mutation_createProcedure_args(ctx context.Cont
 func (ec *executionContext) field_Mutation_createProgramMembership_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramMembershipInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2350,7 +2350,7 @@ func (ec *executionContext) field_Mutation_createProgramWithMembers_args(ctx con
 func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateProgramInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateProgramInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateProgramInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2361,7 +2361,7 @@ func (ec *executionContext) field_Mutation_createProgram_args(ctx context.Contex
 func (ec *executionContext) field_Mutation_createRemediation_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateRemediationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRemediationInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateRemediationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateRemediationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2372,7 +2372,7 @@ func (ec *executionContext) field_Mutation_createRemediation_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createReview_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateReviewInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateReviewInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateReviewInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateReviewInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2383,7 +2383,7 @@ func (ec *executionContext) field_Mutation_createReview_args(ctx context.Context
 func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateRiskInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateRiskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateRiskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2394,7 +2394,7 @@ func (ec *executionContext) field_Mutation_createRisk_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createScan_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScanInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateScanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2405,7 +2405,7 @@ func (ec *executionContext) field_Mutation_createScan_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createScheduledJobRun_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScheduledJobRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobRunInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScheduledJobRunInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateScheduledJobRunInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2416,7 +2416,7 @@ func (ec *executionContext) field_Mutation_createScheduledJobRun_args(ctx contex
 func (ec *executionContext) field_Mutation_createScheduledJob_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateScheduledJobInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateScheduledJobInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2427,7 +2427,7 @@ func (ec *executionContext) field_Mutation_createScheduledJob_args(ctx context.C
 func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateStandardInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateStandardInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateStandardInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2443,7 +2443,7 @@ func (ec *executionContext) field_Mutation_createStandard_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubcontrolInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubcontrolInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2454,7 +2454,7 @@ func (ec *executionContext) field_Mutation_createSubcontrol_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubprocessorInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2470,7 +2470,7 @@ func (ec *executionContext) field_Mutation_createSubprocessor_args(ctx context.C
 func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateSubscriberInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateSubscriberInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateSubscriberInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2481,7 +2481,7 @@ func (ec *executionContext) field_Mutation_createSubscriber_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTFASettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTFASettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTFASettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2492,7 +2492,7 @@ func (ec *executionContext) field_Mutation_createTFASetting_args(ctx context.Con
 func (ec *executionContext) field_Mutation_createTagDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTagDefinitionInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTagDefinitionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2503,7 +2503,7 @@ func (ec *executionContext) field_Mutation_createTagDefinition_args(ctx context.
 func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTaskInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTaskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTaskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2514,7 +2514,7 @@ func (ec *executionContext) field_Mutation_createTask_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTemplateInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTemplateInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTemplateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2530,7 +2530,7 @@ func (ec *executionContext) field_Mutation_createTemplate_args(ctx context.Conte
 func (ec *executionContext) field_Mutation_createTrustCenterCompliance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterComplianceInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterComplianceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2541,7 +2541,7 @@ func (ec *executionContext) field_Mutation_createTrustCenterCompliance_args(ctx 
 func (ec *executionContext) field_Mutation_createTrustCenterDoc_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterDocInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterDocInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2584,7 +2584,7 @@ func (ec *executionContext) field_Mutation_createTrustCenterNDA_args(ctx context
 func (ec *executionContext) field_Mutation_createTrustCenterSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2605,7 +2605,7 @@ func (ec *executionContext) field_Mutation_createTrustCenterSetting_args(ctx con
 func (ec *executionContext) field_Mutation_createTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2616,7 +2616,7 @@ func (ec *executionContext) field_Mutation_createTrustCenterSubprocessor_args(ct
 func (ec *executionContext) field_Mutation_createTrustCenterWatermarkConfig_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterWatermarkConfigInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterWatermarkConfigInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterWatermarkConfigInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterWatermarkConfigInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2632,7 +2632,7 @@ func (ec *executionContext) field_Mutation_createTrustCenterWatermarkConfig_args
 func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustCenterInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustCenterInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2643,7 +2643,7 @@ func (ec *executionContext) field_Mutation_createTrustCenter_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createTrustcenterEntity_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateTrustcenterEntityInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateTrustcenterEntityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2691,7 +2691,7 @@ func (ec *executionContext) field_Mutation_createUploadProcedure_args(ctx contex
 func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserSettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateUserSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2702,7 +2702,7 @@ func (ec *executionContext) field_Mutation_createUserSetting_args(ctx context.Co
 func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateUserInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateUserInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateUserInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2718,7 +2718,7 @@ func (ec *executionContext) field_Mutation_createUser_args(ctx context.Context, 
 func (ec *executionContext) field_Mutation_createVulnerability_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateVulnerabilityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateVulnerabilityInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateVulnerabilityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateVulnerabilityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2729,7 +2729,7 @@ func (ec *executionContext) field_Mutation_createVulnerability_args(ctx context.
 func (ec *executionContext) field_Mutation_createWorkflowAssignmentTarget_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowAssignmentTargetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowAssignmentTargetInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowAssignmentTargetInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowAssignmentTargetInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2740,7 +2740,7 @@ func (ec *executionContext) field_Mutation_createWorkflowAssignmentTarget_args(c
 func (ec *executionContext) field_Mutation_createWorkflowAssignment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowAssignmentInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowAssignmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2751,7 +2751,7 @@ func (ec *executionContext) field_Mutation_createWorkflowAssignment_args(ctx con
 func (ec *executionContext) field_Mutation_createWorkflowDefinition_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowDefinitionInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowDefinitionInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowDefinitionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2762,7 +2762,7 @@ func (ec *executionContext) field_Mutation_createWorkflowDefinition_args(ctx con
 func (ec *executionContext) field_Mutation_createWorkflowEvent_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowEventInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowEventInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowEventInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2773,7 +2773,7 @@ func (ec *executionContext) field_Mutation_createWorkflowEvent_args(ctx context.
 func (ec *executionContext) field_Mutation_createWorkflowInstance_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowInstanceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowInstanceInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowInstanceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowInstanceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -2784,7 +2784,7 @@ func (ec *executionContext) field_Mutation_createWorkflowInstance_args(ctx conte
 func (ec *executionContext) field_Mutation_createWorkflowObjectRef_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowObjectRefInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCreateWorkflowObjectRefInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNCreateWorkflowObjectRefInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCreateWorkflowObjectRefInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4125,7 +4125,7 @@ func (ec *executionContext) field_Mutation_updateAPIToken_args(ctx context.Conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAPITokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAPITokenInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAPITokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateAPITokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4141,7 +4141,7 @@ func (ec *executionContext) field_Mutation_updateActionPlan_args(ctx context.Con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateActionPlanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4157,7 +4157,7 @@ func (ec *executionContext) field_Mutation_updateAssessment_args(ctx context.Con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssessmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssessmentInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssessmentInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateAssessmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4173,7 +4173,7 @@ func (ec *executionContext) field_Mutation_updateAsset_args(ctx context.Context,
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateAssetInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateAssetInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateAssetInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4189,7 +4189,7 @@ func (ec *executionContext) field_Mutation_updateBulkActionPlan_args(ctx context
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateActionPlanInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateActionPlanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateActionPlanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4205,7 +4205,7 @@ func (ec *executionContext) field_Mutation_updateBulkContact_args(ctx context.Co
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateContactInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4221,7 +4221,7 @@ func (ec *executionContext) field_Mutation_updateBulkControl_args(ctx context.Co
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4237,7 +4237,7 @@ func (ec *executionContext) field_Mutation_updateBulkHush_args(ctx context.Conte
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateHushInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateHushInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4253,7 +4253,7 @@ func (ec *executionContext) field_Mutation_updateBulkInternalPolicy_args(ctx con
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4269,7 +4269,7 @@ func (ec *executionContext) field_Mutation_updateBulkProcedure_args(ctx context.
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProcedureInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateProcedureInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4285,7 +4285,7 @@ func (ec *executionContext) field_Mutation_updateBulkRisk_args(ctx context.Conte
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateRiskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4301,7 +4301,7 @@ func (ec *executionContext) field_Mutation_updateBulkScan_args(ctx context.Conte
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScanInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateScanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4317,7 +4317,7 @@ func (ec *executionContext) field_Mutation_updateBulkSubprocessor_args(ctx conte
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4333,7 +4333,7 @@ func (ec *executionContext) field_Mutation_updateBulkTask_args(ctx context.Conte
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTaskInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTaskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4349,7 +4349,7 @@ func (ec *executionContext) field_Mutation_updateBulkTrustCenterDoc_args(ctx con
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterDocInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterDocInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4365,7 +4365,7 @@ func (ec *executionContext) field_Mutation_updateBulkTrustCenterSubprocessor_arg
 		return nil, err
 	}
 	args["ids"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4381,7 +4381,7 @@ func (ec *executionContext) field_Mutation_updateContact_args(ctx context.Contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateContactInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateContactInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateContactInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4397,7 +4397,7 @@ func (ec *executionContext) field_Mutation_updateControlComment_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4418,7 +4418,7 @@ func (ec *executionContext) field_Mutation_updateControlImplementation_args(ctx 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlImplementationInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlImplementationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateControlImplementationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4434,7 +4434,7 @@ func (ec *executionContext) field_Mutation_updateControlObjective_args(ctx conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlObjectiveInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlObjectiveInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateControlObjectiveInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4450,7 +4450,7 @@ func (ec *executionContext) field_Mutation_updateControl_args(ctx context.Contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateControlInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4466,7 +4466,7 @@ func (ec *executionContext) field_Mutation_updateCustomDomain_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomDomainInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomDomainInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateCustomDomainInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4482,7 +4482,7 @@ func (ec *executionContext) field_Mutation_updateCustomTypeEnum_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateCustomTypeEnumInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateCustomTypeEnumInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateCustomTypeEnumInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4498,7 +4498,7 @@ func (ec *executionContext) field_Mutation_updateDNSVerification_args(ctx contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDNSVerificationInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDNSVerificationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDNSVerificationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4514,7 +4514,7 @@ func (ec *executionContext) field_Mutation_updateDirectoryAccount_args(ctx conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDirectoryAccountInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryAccountInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDirectoryAccountInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4530,7 +4530,7 @@ func (ec *executionContext) field_Mutation_updateDirectoryGroup_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDirectoryGroupInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDirectoryGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4546,7 +4546,7 @@ func (ec *executionContext) field_Mutation_updateDirectoryMembership_args(ctx co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDirectoryMembershipInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectoryMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDirectoryMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4562,7 +4562,7 @@ func (ec *executionContext) field_Mutation_updateDirectorySyncRun_args(ctx conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDirectorySyncRunInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDirectorySyncRunInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDirectorySyncRunInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4578,7 +4578,7 @@ func (ec *executionContext) field_Mutation_updateDocumentData_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateDocumentDataInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateDocumentDataInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateDocumentDataInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4594,7 +4594,7 @@ func (ec *executionContext) field_Mutation_updateEntityType_args(ctx context.Con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityTypeInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityTypeInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateEntityTypeInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4610,7 +4610,7 @@ func (ec *executionContext) field_Mutation_updateEntity_args(ctx context.Context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEntityInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEntityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateEntityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4626,7 +4626,7 @@ func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context,
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEventInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEventInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateEventInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4642,7 +4642,7 @@ func (ec *executionContext) field_Mutation_updateEvidenceComment_args(ctx contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4663,7 +4663,7 @@ func (ec *executionContext) field_Mutation_updateEvidence_args(ctx context.Conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEvidenceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateEvidenceInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateEvidenceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateEvidenceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4684,7 +4684,7 @@ func (ec *executionContext) field_Mutation_updateExport_args(ctx context.Context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateExportInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateExportInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateExportInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateExportInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4705,7 +4705,7 @@ func (ec *executionContext) field_Mutation_updateFindingControl_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateFindingControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateFindingControlInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateFindingControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateFindingControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4721,7 +4721,7 @@ func (ec *executionContext) field_Mutation_updateFinding_args(ctx context.Contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateFindingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateFindingInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateFindingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateFindingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4737,7 +4737,7 @@ func (ec *executionContext) field_Mutation_updateGroupMembership_args(ctx contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupMembershipInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateGroupMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4753,7 +4753,7 @@ func (ec *executionContext) field_Mutation_updateGroupSetting_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupSettingInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateGroupSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4769,7 +4769,7 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateGroupInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateGroupInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateGroupInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4785,7 +4785,7 @@ func (ec *executionContext) field_Mutation_updateHush_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateHushInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateHushInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateHushInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4801,7 +4801,7 @@ func (ec *executionContext) field_Mutation_updateInternalPolicyComment_args(ctx 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4822,7 +4822,7 @@ func (ec *executionContext) field_Mutation_updateInternalPolicy_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInternalPolicyInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateInternalPolicyInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4843,7 +4843,7 @@ func (ec *executionContext) field_Mutation_updateInvite_args(ctx context.Context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInviteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateInviteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateInviteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateInviteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4859,7 +4859,7 @@ func (ec *executionContext) field_Mutation_updateJobResult_args(ctx context.Cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobResultInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobResultInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobResultInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateJobResultInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4880,7 +4880,7 @@ func (ec *executionContext) field_Mutation_updateJobRunner_args(ctx context.Cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobRunnerInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobRunnerInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateJobRunnerInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4896,7 +4896,7 @@ func (ec *executionContext) field_Mutation_updateJobTemplate_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateJobTemplateInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateJobTemplateInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateJobTemplateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4912,7 +4912,7 @@ func (ec *executionContext) field_Mutation_updateMappableDomain_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappableDomainInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappableDomainInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateMappableDomainInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4928,7 +4928,7 @@ func (ec *executionContext) field_Mutation_updateMappedControl_args(ctx context.
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappedControlInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateMappedControlInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateMappedControlInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateMappedControlInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4944,7 +4944,7 @@ func (ec *executionContext) field_Mutation_updateNarrative_args(ctx context.Cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNarrativeInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNarrativeInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNarrativeInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNarrativeInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4960,7 +4960,7 @@ func (ec *executionContext) field_Mutation_updateOrgMembership_args(ctx context.
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrgMembershipInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrgMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateOrgMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4976,7 +4976,7 @@ func (ec *executionContext) field_Mutation_updateOrganizationSetting_args(ctx co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationSettingInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateOrganizationSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4992,7 +4992,7 @@ func (ec *executionContext) field_Mutation_updateOrganization_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateOrganizationInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateOrganizationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateOrganizationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5013,7 +5013,7 @@ func (ec *executionContext) field_Mutation_updatePersonalAccessToken_args(ctx co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdatePersonalAccessTokenInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdatePersonalAccessTokenInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdatePersonalAccessTokenInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5029,7 +5029,7 @@ func (ec *executionContext) field_Mutation_updateProcedureComment_args(ctx conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5050,7 +5050,7 @@ func (ec *executionContext) field_Mutation_updateProcedure_args(ctx context.Cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProcedureInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProcedureInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateProcedureInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5071,7 +5071,7 @@ func (ec *executionContext) field_Mutation_updateProgramMembership_args(ctx cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramMembershipInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramMembershipInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateProgramMembershipInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5087,7 +5087,7 @@ func (ec *executionContext) field_Mutation_updateProgram_args(ctx context.Contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateProgramInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateProgramInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateProgramInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5103,7 +5103,7 @@ func (ec *executionContext) field_Mutation_updateRemediation_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRemediationInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRemediationInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRemediationInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateRemediationInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5119,7 +5119,7 @@ func (ec *executionContext) field_Mutation_updateReview_args(ctx context.Context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateReviewInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateReviewInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateReviewInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateReviewInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5135,7 +5135,7 @@ func (ec *executionContext) field_Mutation_updateRiskComment_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5156,7 +5156,7 @@ func (ec *executionContext) field_Mutation_updateRisk_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateRiskInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateRiskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateRiskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5172,7 +5172,7 @@ func (ec *executionContext) field_Mutation_updateScan_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScanInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScanInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateScanInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5188,7 +5188,7 @@ func (ec *executionContext) field_Mutation_updateScheduledJobRun_args(ctx contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScheduledJobRunInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScheduledJobRunInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScheduledJobRunInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateScheduledJobRunInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5204,7 +5204,7 @@ func (ec *executionContext) field_Mutation_updateScheduledJob_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateScheduledJobInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateScheduledJobInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateScheduledJobInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5220,7 +5220,7 @@ func (ec *executionContext) field_Mutation_updateStandard_args(ctx context.Conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateStandardInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateStandardInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateStandardInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateStandardInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5241,7 +5241,7 @@ func (ec *executionContext) field_Mutation_updateSubcontrolComment_args(ctx cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5262,7 +5262,7 @@ func (ec *executionContext) field_Mutation_updateSubcontrol_args(ctx context.Con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubcontrolInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubcontrolInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateSubcontrolInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5278,7 +5278,7 @@ func (ec *executionContext) field_Mutation_updateSubprocessor_args(ctx context.C
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5299,7 +5299,7 @@ func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Con
 		return nil, err
 	}
 	args["email"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubscriberInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubscriberInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubscriberInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateSubscriberInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5310,7 +5310,7 @@ func (ec *executionContext) field_Mutation_updateSubscriber_args(ctx context.Con
 func (ec *executionContext) field_Mutation_updateTFASetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTFASettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTFASettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTFASettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTFASettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5326,7 +5326,7 @@ func (ec *executionContext) field_Mutation_updateTagDefinition_args(ctx context.
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTagDefinitionInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTagDefinitionInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTagDefinitionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5342,7 +5342,7 @@ func (ec *executionContext) field_Mutation_updateTaskComment_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5363,7 +5363,7 @@ func (ec *executionContext) field_Mutation_updateTask_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTaskInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTaskInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTaskInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5379,7 +5379,7 @@ func (ec *executionContext) field_Mutation_updateTemplate_args(ctx context.Conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTemplateInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTemplateInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTemplateInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTemplateInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5400,7 +5400,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterCompliance_args(ctx 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterComplianceInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterComplianceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterComplianceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5416,7 +5416,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterDoc_args(ctx context
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterDocInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterDocInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5458,7 +5458,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPost_args(ctx contex
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateNoteInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5474,7 +5474,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterPost_args(ctx contex
 func (ec *executionContext) field_Mutation_updateTrustCenterPreviewSetting_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
-	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5500,7 +5500,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterSetting_args(ctx con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5526,7 +5526,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterSubprocessor_args(ct
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5542,7 +5542,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenterWatermarkConfig_args
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterWatermarkConfigInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterWatermarkConfigInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterWatermarkConfigInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterWatermarkConfigInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5563,7 +5563,7 @@ func (ec *executionContext) field_Mutation_updateTrustCenter_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustCenterInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5579,7 +5579,7 @@ func (ec *executionContext) field_Mutation_updateTrustcenterEntity_args(ctx cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustcenterEntityInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustcenterEntityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateTrustcenterEntityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5600,7 +5600,7 @@ func (ec *executionContext) field_Mutation_updateUserSetting_args(ctx context.Co
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserSettingInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserSettingInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserSettingInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateUserSettingInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5616,7 +5616,7 @@ func (ec *executionContext) field_Mutation_updateUser_args(ctx context.Context, 
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateUserInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateUserInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateUserInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5637,7 +5637,7 @@ func (ec *executionContext) field_Mutation_updateVulnerability_args(ctx context.
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateVulnerabilityInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateVulnerabilityInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateVulnerabilityInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateVulnerabilityInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5653,7 +5653,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowAssignmentTarget_args(c
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowAssignmentTargetInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowAssignmentTargetInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowAssignmentTargetInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowAssignmentTargetInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5669,7 +5669,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowAssignment_args(ctx con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowAssignmentInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowAssignmentInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowAssignmentInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5685,7 +5685,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowDefinition_args(ctx con
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowDefinitionInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowDefinitionInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowDefinitionInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowDefinitionInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5701,7 +5701,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowEvent_args(ctx context.
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowEventInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowEventInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowEventInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowEventInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5717,7 +5717,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowInstance_args(ctx conte
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowInstanceInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowInstanceInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowInstanceInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowInstanceInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5733,7 +5733,7 @@ func (ec *executionContext) field_Mutation_updateWorkflowObjectRef_args(ctx cont
 		return nil, err
 	}
 	args["id"] = arg0
-	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowObjectRefInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateWorkflowObjectRefInput)
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateWorkflowObjectRefInput2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUpdateWorkflowObjectRefInput)
 	if err != nil {
 		return nil, err
 	}
@@ -5759,7 +5759,7 @@ func (ec *executionContext) _ActionPlanBulkCreatePayload_actionPlans(ctx context
 			return obj.ActionPlans, nil
 		},
 		nil,
-		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanᚄ,
+		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐActionPlanᚄ,
 		true,
 		false,
 	)
@@ -5931,7 +5931,7 @@ func (ec *executionContext) _ActionPlanBulkUpdatePayload_actionPlans(ctx context
 			return obj.ActionPlans, nil
 		},
 		nil,
-		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanᚄ,
+		ec.marshalOActionPlan2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐActionPlanᚄ,
 		true,
 		false,
 	)
@@ -6103,7 +6103,7 @@ func (ec *executionContext) _ActionPlanCreatePayload_actionPlan(ctx context.Cont
 			return obj.ActionPlan, nil
 		},
 		nil,
-		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlan,
+		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐActionPlan,
 		true,
 		true,
 	)
@@ -6275,7 +6275,7 @@ func (ec *executionContext) _ActionPlanUpdatePayload_actionPlan(ctx context.Cont
 			return obj.ActionPlan, nil
 		},
 		nil,
-		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlan,
+		ec.marshalNActionPlan2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐActionPlan,
 		true,
 		true,
 	)

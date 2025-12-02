@@ -38,7 +38,7 @@ func (ec *executionContext) _AssessmentResponseCreatePayload_assessmentResponse(
 			return obj.AssessmentResponse, nil
 		},
 		nil,
-		ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponse,
+		ec.marshalNAssessmentResponse2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssessmentResponse,
 		true,
 		true,
 	)

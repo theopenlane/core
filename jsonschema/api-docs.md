@@ -10,7 +10,7 @@ Config contains the configuration for the core server
 |**domain**|`string`|Domain provides a global domain value for other modules to inherit<br/>||
 |**refreshinterval**|`integer`|RefreshInterval determines how often to reload the config<br/>||
 |[**server**](#server)|`object`|Server settings for the echo server<br/>|yes|
-|[**entconfig**](#entconfig)|`object`|Config holds the configuration for the ent server<br/>||
+|[**entconfig**](#entconfig)|`object`|||
 |[**auth**](#auth)|`object`|Auth settings including oauth2 providers and token configuration<br/>|yes|
 |[**authz**](#authz)|`object`||yes|
 |[**db**](#db)|`object`||yes|
@@ -57,7 +57,6 @@ Config contains the configuration for the core server
                 "openai": {}
             }
         },
-        "windmill": {},
         "modules": {},
         "emailvalidation": {
             "allowedemailtypes": {}
@@ -406,15 +405,12 @@ Config defines configuration for the CSRF middleware wrapper.
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether Tink encryption is enabled<br/>||
-|**keyset**|`string`|Keyset is the base64-encoded Tink keyset used for encryption<br/>||
+|**enabled**|`boolean`|||
+|**keyset**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfig"></a>
 ## entconfig: object
-
-Config holds the configuration for the ent server
-
 
 **Properties**
 
@@ -422,13 +418,12 @@ Config holds the configuration for the ent server
 |----|----|-----------|--------|
 |[**entitytypes**](#entconfigentitytypes)|`string[]`|||
 |[**summarizer**](#entconfigsummarizer)|`object`|Config holds configuration for the text summarization functionality<br/>||
-|[**windmill**](#entconfigwindmill)|`object`|Windmill holds configuration for the Windmill workflow automation platform<br/>||
-|**maxpoolsize**|`integer`|MaxPoolSize is the max pond pool workers that can be used by the ent client<br/>||
-|[**modules**](#entconfigmodules)|`object`|Modules settings for features access<br/>||
-|**maxschemaimportsize**|`integer`|MaxSchemaImportSize is the maximum size allowed for schema imports in bytes<br/>||
-|[**emailvalidation**](#entconfigemailvalidation)|`object`|EmailVerificationConfig is the configuration for email verification<br/>||
-|[**billing**](#entconfigbilling)|`object`|Billing settings for feature access<br/>||
-|[**notifications**](#entconfignotifications)|`object`|Notifications settings for notifications sent to users based on events<br/>||
+|**maxpoolsize**|`integer`|||
+|[**modules**](#entconfigmodules)|`object`|||
+|**maxschemaimportsize**|`integer`|||
+|[**emailvalidation**](#entconfigemailvalidation)|`object`|||
+|[**billing**](#entconfigbilling)|`object`|||
+|[**notifications**](#entconfignotifications)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -442,7 +437,6 @@ Config holds the configuration for the ent server
             "openai": {}
         }
     },
-    "windmill": {},
     "modules": {},
     "emailvalidation": {
         "allowedemailtypes": {}
@@ -560,55 +554,29 @@ OpenAIConfig contains OpenAI specific configuration
 |**organizationid**|`string`|OrganizationID specifies the OpenAI organization ID<br/>||
 
 **Additional Properties:** not allowed  
-<a name="entconfigwindmill"></a>
-### entconfig\.windmill: object
-
-Windmill holds configuration for the Windmill workflow automation platform
-
-
-**Properties**
-
-|Name|Type|Description|Required|
-|----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled specifies whether Windmill integration is enabled<br/>||
-|**baseurl**|`string`|BaseURL is the base URL of the Windmill instance<br/>||
-|**workspace**|`string`|Workspace is the Windmill workspace to use<br/>||
-|**token**|`string`|Token is the API token for authentication with Windmill<br/>||
-|**defaulttimeout**|`string`|DefaultTimeout is the default timeout for API requests<br/>||
-|**timezone**|`string`|Timezone for scheduled jobs<br/>||
-|**onfailurescript**|`string`|OnFailureScript script to run when a scheduled job fails<br/>||
-|**onsuccessscript**|`string`|OnSuccessScript script to run when a scheduled job succeeds<br/>||
-
-**Additional Properties:** not allowed  
 <a name="entconfigmodules"></a>
 ### entconfig\.modules: object
 
-Modules settings for features access
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether to check and verify module access<br/>||
-|**usesandbox**|`boolean`|UseSandbox indicates whether to use the sandbox catalog for module access checks<br/>||
+|**enabled**|`boolean`|||
+|**usesandbox**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigemailvalidation"></a>
 ### entconfig\.emailvalidation: object
 
-EmailVerificationConfig is the configuration for email verification
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**enabled**|`boolean`|Enabled indicates whether email verification is enabled<br/>||
-|**enableautoupdatedisposable**|`boolean`|EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses<br/>||
-|**enablegravatarcheck**|`boolean`|EnableGravatarCheck indicates whether to check for Gravatar existence<br/>||
-|**enablesmtpcheck**|`boolean`|EnableSMTPCheck indicates whether to check email by smtp<br/>||
-|[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|AllowedEmailTypes defines the allowed email types for verification<br/>||
+|**enabled**|`boolean`|||
+|**enableautoupdatedisposable**|`boolean`|||
+|**enablegravatarcheck**|`boolean`|||
+|**enablesmtpcheck**|`boolean`|||
+|[**allowedemailtypes**](#entconfigemailvalidationallowedemailtypes)|`object`|||
 
 **Additional Properties:** not allowed  
 **Example**
@@ -622,29 +590,23 @@ EmailVerificationConfig is the configuration for email verification
 <a name="entconfigemailvalidationallowedemailtypes"></a>
 #### entconfig\.emailvalidation\.allowedemailtypes: object
 
-AllowedEmailTypes defines the allowed email types for verification
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**disposable**|`boolean`|Disposable indicates whether disposable email addresses are allowed<br/>||
-|**free**|`boolean`|Free indicates whether free email addresses are allowed<br/>||
-|**role**|`boolean`|Role indicates whether role-based email addresses are allowed<br/>||
+|**disposable**|`boolean`|||
+|**free**|`boolean`|||
+|**role**|`boolean`|||
 
 **Additional Properties:** not allowed  
 <a name="entconfigbilling"></a>
 ### entconfig\.billing: object
 
-Billing settings for feature access
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**requirepaymentmethod**|`boolean`|RequirePaymentMethod indicates whether to check if a payment method<br/>exists for orgs before they can access some resource<br/>||
+|**requirepaymentmethod**|`boolean`|||
 |[**bypassemaildomains**](#entconfigbillingbypassemaildomains)|`string[]`|||
 
 **Additional Properties:** not allowed  
@@ -657,14 +619,11 @@ Billing settings for feature access
 <a name="entconfignotifications"></a>
 ### entconfig\.notifications: object
 
-Notifications settings for notifications sent to users based on events
-
-
 **Properties**
 
 |Name|Type|Description|Required|
 |----|----|-----------|--------|
-|**consoleurl**|`string`|ConsoleURL for ui links used in notifications<br/>||
+|**consoleurl**|`string`|||
 
 **Additional Properties:** not allowed  
 <a name="auth"></a>

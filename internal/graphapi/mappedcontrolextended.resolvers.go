@@ -8,8 +8,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/predicate"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/predicate"
 )
 
 // FromControlRefCodes is the resolver for the fromControlRefCodes field.

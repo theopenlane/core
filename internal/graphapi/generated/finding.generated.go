@@ -38,7 +38,7 @@ func (ec *executionContext) _FindingBulkCreatePayload_findings(ctx context.Conte
 			return obj.Findings, nil
 		},
 		nil,
-		ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingᚄ,
+		ec.marshalOFinding2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFindingᚄ,
 		true,
 		false,
 	)
@@ -207,7 +207,7 @@ func (ec *executionContext) _FindingCreatePayload_finding(ctx context.Context, f
 			return obj.Finding, nil
 		},
 		nil,
-		ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFinding,
+		ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFinding,
 		true,
 		true,
 	)
@@ -405,7 +405,7 @@ func (ec *executionContext) _FindingUpdatePayload_finding(ctx context.Context, f
 			return obj.Finding, nil
 		},
 		nil,
-		ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFinding,
+		ec.marshalNFinding2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFinding,
 		true,
 		true,
 	)

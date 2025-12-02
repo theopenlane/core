@@ -6,9 +6,9 @@ import (
 	"context"
 	"sync"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/utils/rout"
 )
 

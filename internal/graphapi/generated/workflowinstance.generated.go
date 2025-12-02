@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowInstanceBulkCreatePayload_workflowInstances
 			return obj.WorkflowInstances, nil
 		},
 		nil,
-		ec.marshalOWorkflowInstance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowInstanceᚄ,
+		ec.marshalOWorkflowInstance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowInstanceᚄ,
 		true,
 		false,
 	)
@@ -105,7 +105,7 @@ func (ec *executionContext) _WorkflowInstanceCreatePayload_workflowInstance(ctx 
 			return obj.WorkflowInstance, nil
 		},
 		nil,
-		ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowInstance,
+		ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowInstance,
 		true,
 		true,
 	)
@@ -201,7 +201,7 @@ func (ec *executionContext) _WorkflowInstanceUpdatePayload_workflowInstance(ctx 
 			return obj.WorkflowInstance, nil
 		},
 		nil,
-		ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowInstance,
+		ec.marshalNWorkflowInstance2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowInstance,
 		true,
 		true,
 	)

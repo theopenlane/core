@@ -38,7 +38,7 @@ func (ec *executionContext) _RemediationBulkCreatePayload_remediations(ctx conte
 			return obj.Remediations, nil
 		},
 		nil,
-		ec.marshalORemediation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationᚄ,
+		ec.marshalORemediation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRemediationᚄ,
 		true,
 		false,
 	)
@@ -165,7 +165,7 @@ func (ec *executionContext) _RemediationCreatePayload_remediation(ctx context.Co
 			return obj.Remediation, nil
 		},
 		nil,
-		ec.marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediation,
+		ec.marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRemediation,
 		true,
 		true,
 	)
@@ -321,7 +321,7 @@ func (ec *executionContext) _RemediationUpdatePayload_remediation(ctx context.Co
 			return obj.Remediation, nil
 		},
 		nil,
-		ec.marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediation,
+		ec.marshalNRemediation2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRemediation,
 		true,
 		true,
 	)

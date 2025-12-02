@@ -10,18 +10,18 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/orgmodule"
-	"github.com/theopenlane/core/internal/ent/generated/orgprice"
-	"github.com/theopenlane/core/internal/ent/generated/orgproduct"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/orgmodule"
+	"github.com/theopenlane/ent/generated/orgprice"
+	"github.com/theopenlane/ent/generated/orgproduct"
+	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/ent/hooks"
 
-	em "github.com/theopenlane/core/internal/entitlements/entmapping"
+	em "github.com/theopenlane/ent/entitlements/entmapping"
 )
 
 // syncSubscriptionItemsWithStripe ensures OrgProduct, OrgPrice, and OrgModule

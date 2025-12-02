@@ -11,8 +11,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 
@@ -218,7 +218,7 @@ func (ec *executionContext) _AuditLogConnection_edges(ctx context.Context, field
 			return obj.Edges, nil
 		},
 		nil,
-		ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge,
+		ec.marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogEdge,
 		true,
 		false,
 	)
@@ -321,7 +321,7 @@ func (ec *executionContext) _AuditLogEdge_node(ctx context.Context, field graphq
 			return obj.Node, nil
 		},
 		nil,
-		ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog,
+		ec.marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLog,
 		true,
 		false,
 	)
@@ -414,7 +414,7 @@ func (ec *executionContext) unmarshalInputAuditLogOrder(ctx context.Context, obj
 			it.Direction = data
 		case "field":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("field"))
-			data, err := ec.unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx, v)
+			data, err := ec.unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogOrderField(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -666,11 +666,11 @@ func (ec *executionContext) _AuditLogEdge(ctx context.Context, sel ast.Selection
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNAuditLogConnection2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v generated.AuditLogConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNAuditLogConnection2githubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v generated.AuditLogConnection) graphql.Marshaler {
 	return ec._AuditLogConnection(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogConnection) graphql.Marshaler {
+func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogConnection(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogConnection) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -680,13 +680,13 @@ func (ec *executionContext) marshalNAuditLogConnection2ᚖgithubᚗcomᚋtheopen
 	return ec._AuditLogConnection(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, v any) (*generated.AuditLogOrderField, error) {
+func (ec *executionContext) unmarshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, v any) (*generated.AuditLogOrderField, error) {
 	var res = new(generated.AuditLogOrderField)
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogOrderField) graphql.Marshaler {
+func (ec *executionContext) marshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogOrderField(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogOrderField) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -696,14 +696,14 @@ func (ec *executionContext) marshalNAuditLogOrderField2ᚖgithubᚗcomᚋtheopen
 	return v
 }
 
-func (ec *executionContext) marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLog(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLog) graphql.Marshaler {
+func (ec *executionContext) marshalOAuditLog2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLog(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLog) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AuditLog(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AuditLogEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v []*generated.AuditLogEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -730,7 +730,7 @@ func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlan
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx, sel, v[i])
+			ret[i] = ec.marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogEdge(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -744,14 +744,14 @@ func (ec *executionContext) marshalOAuditLogEdge2ᚕᚖgithubᚗcomᚋtheopenlan
 	return ret
 }
 
-func (ec *executionContext) marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogEdge) graphql.Marshaler {
+func (ec *executionContext) marshalOAuditLogEdge2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogEdge(ctx context.Context, sel ast.SelectionSet, v *generated.AuditLogEdge) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._AuditLogEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) unmarshalOAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogOrder(ctx context.Context, v any) (*generated.AuditLogOrder, error) {
+func (ec *executionContext) unmarshalOAuditLogOrder2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogOrder(ctx context.Context, v any) (*generated.AuditLogOrder, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -759,7 +759,7 @@ func (ec *executionContext) unmarshalOAuditLogOrder2ᚖgithubᚗcomᚋtheopenlan
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAuditLogWhereInput(ctx context.Context, v any) (*generated.AuditLogWhereInput, error) {
+func (ec *executionContext) unmarshalOAuditLogWhereInput2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAuditLogWhereInput(ctx context.Context, v any) (*generated.AuditLogWhereInput, error) {
 	if v == nil {
 		return nil, nil
 	}

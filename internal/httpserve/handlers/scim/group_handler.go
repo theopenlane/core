@@ -14,13 +14,13 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/group"
-	"github.com/theopenlane/core/internal/ent/generated/groupmembership"
-	"github.com/theopenlane/core/internal/ent/generated/organization"
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/group"
+	"github.com/theopenlane/ent/generated/groupmembership"
+	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/ent/generated/orgmembership"
+	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/utils/contextx"
 )
 

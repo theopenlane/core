@@ -38,7 +38,7 @@ func (ec *executionContext) _DNSVerificationBulkCreatePayload_dnsVerifications(c
 			return obj.DNSVerifications, nil
 		},
 		nil,
-		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerificationᚄ,
+		ec.marshalODNSVerification2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDNSVerificationᚄ,
 		true,
 		false,
 	)
@@ -134,7 +134,7 @@ func (ec *executionContext) _DNSVerificationCreatePayload_dnsVerification(ctx co
 			return obj.DNSVerification, nil
 		},
 		nil,
-		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDNSVerification,
 		true,
 		true,
 	)
@@ -230,7 +230,7 @@ func (ec *executionContext) _DNSVerificationUpdatePayload_dnsVerification(ctx co
 			return obj.DNSVerification, nil
 		},
 		nil,
-		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDNSVerification,
+		ec.marshalNDNSVerification2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDNSVerification,
 		true,
 		true,
 	)

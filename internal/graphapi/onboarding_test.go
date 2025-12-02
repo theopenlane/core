@@ -8,9 +8,9 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/ent/generated"
 )
 
 func TestMutationCreateOnboarding(t *testing.T) {

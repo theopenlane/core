@@ -38,7 +38,7 @@ func (ec *executionContext) _SubcontrolBulkCreatePayload_subcontrols(ctx context
 			return obj.Subcontrols, nil
 		},
 		nil,
-		ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolᚄ,
+		ec.marshalOSubcontrol2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubcontrolᚄ,
 		true,
 		false,
 	)
@@ -208,7 +208,7 @@ func (ec *executionContext) _SubcontrolCreatePayload_subcontrol(ctx context.Cont
 			return obj.Subcontrol, nil
 		},
 		nil,
-		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
+		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubcontrol,
 		true,
 		true,
 	)
@@ -378,7 +378,7 @@ func (ec *executionContext) _SubcontrolUpdatePayload_subcontrol(ctx context.Cont
 			return obj.Subcontrol, nil
 		},
 		nil,
-		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrol,
+		ec.marshalNSubcontrol2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubcontrol,
 		true,
 		true,
 	)

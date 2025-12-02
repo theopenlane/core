@@ -12,9 +12,9 @@ import (
 
 	"github.com/oklog/ulid/v2"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
 	storage "github.com/theopenlane/core/pkg/objects/storage"
 	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/ulids"

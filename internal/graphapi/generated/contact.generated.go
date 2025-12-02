@@ -38,7 +38,7 @@ func (ec *executionContext) _ContactBulkCreatePayload_contacts(ctx context.Conte
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐContactᚄ,
 		true,
 		false,
 	)
@@ -132,7 +132,7 @@ func (ec *executionContext) _ContactBulkUpdatePayload_contacts(ctx context.Conte
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactᚄ,
+		ec.marshalOContact2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐContactᚄ,
 		true,
 		false,
 	)
@@ -226,7 +226,7 @@ func (ec *executionContext) _ContactCreatePayload_contact(ctx context.Context, f
 			return obj.Contact, nil
 		},
 		nil,
-		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐContact,
 		true,
 		true,
 	)
@@ -320,7 +320,7 @@ func (ec *executionContext) _ContactUpdatePayload_contact(ctx context.Context, f
 			return obj.Contact, nil
 		},
 		nil,
-		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContact,
+		ec.marshalNContact2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐContact,
 		true,
 		true,
 	)

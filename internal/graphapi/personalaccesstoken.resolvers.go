@@ -8,9 +8,9 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/core/internal/graphapi/model"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/personalaccesstoken"
 )
 
 // CreatePersonalAccessToken is the resolver for the createPersonalAccessToken field.

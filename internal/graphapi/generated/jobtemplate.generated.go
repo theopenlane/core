@@ -38,7 +38,7 @@ func (ec *executionContext) _JobTemplateBulkCreatePayload_jobTemplates(ctx conte
 			return obj.JobTemplates, nil
 		},
 		nil,
-		ec.marshalOJobTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateᚄ,
+		ec.marshalOJobTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobTemplateᚄ,
 		true,
 		false,
 	)
@@ -136,7 +136,7 @@ func (ec *executionContext) _JobTemplateCreatePayload_jobTemplate(ctx context.Co
 			return obj.JobTemplate, nil
 		},
 		nil,
-		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplate,
+		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobTemplate,
 		true,
 		true,
 	)
@@ -234,7 +234,7 @@ func (ec *executionContext) _JobTemplateUpdatePayload_jobTemplate(ctx context.Co
 			return obj.JobTemplate, nil
 		},
 		nil,
-		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplate,
+		ec.marshalNJobTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobTemplate,
 		true,
 		true,
 	)

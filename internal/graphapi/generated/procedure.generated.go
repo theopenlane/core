@@ -38,7 +38,7 @@ func (ec *executionContext) _ProcedureBulkCreatePayload_procedures(ctx context.C
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProcedureᚄ,
 		true,
 		false,
 	)
@@ -192,7 +192,7 @@ func (ec *executionContext) _ProcedureBulkUpdatePayload_procedures(ctx context.C
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureᚄ,
+		ec.marshalOProcedure2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProcedureᚄ,
 		true,
 		false,
 	)
@@ -346,7 +346,7 @@ func (ec *executionContext) _ProcedureCreatePayload_procedure(ctx context.Contex
 			return obj.Procedure, nil
 		},
 		nil,
-		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProcedure,
 		true,
 		true,
 	)
@@ -500,7 +500,7 @@ func (ec *executionContext) _ProcedureUpdatePayload_procedure(ctx context.Contex
 			return obj.Procedure, nil
 		},
 		nil,
-		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedure,
+		ec.marshalNProcedure2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProcedure,
 		true,
 		true,
 	)

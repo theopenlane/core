@@ -19,8 +19,8 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/privacy"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/pkg/enums"

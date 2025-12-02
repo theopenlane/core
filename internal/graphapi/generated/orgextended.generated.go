@@ -38,7 +38,7 @@ func (ec *executionContext) _OrganizationTransferOwnershipPayload_organization(c
 			return obj.Organization, nil
 		},
 		nil,
-		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization,
+		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganization,
 		true,
 		true,
 	)

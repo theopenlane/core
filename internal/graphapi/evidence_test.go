@@ -12,10 +12,10 @@ import (
 
 	"github.com/theopenlane/utils/ulids"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/ent/generated"
 )
 
 func TestQueryEvidence(t *testing.T) {

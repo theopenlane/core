@@ -8,7 +8,7 @@ import (
 	"github.com/rs/zerolog/log"
 	echo "github.com/theopenlane/echox"
 
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 const (

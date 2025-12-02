@@ -9,7 +9,7 @@ import (
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	ent "github.com/theopenlane/core/internal/ent/generated"
+	ent "github.com/theopenlane/ent/generated"
 )
 
 func (suite *HandlerTestSuite) TestUserInfoHandler() {

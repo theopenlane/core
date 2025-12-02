@@ -38,7 +38,7 @@ func (ec *executionContext) _StandardBulkCreatePayload_standards(ctx context.Con
 			return obj.Standards, nil
 		},
 		nil,
-		ec.marshalOStandard2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardᚄ,
+		ec.marshalOStandard2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐStandardᚄ,
 		true,
 		false,
 	)
@@ -129,7 +129,7 @@ func (ec *executionContext) _StandardCreatePayload_standard(ctx context.Context,
 			return obj.Standard, nil
 		},
 		nil,
-		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
+		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐStandard,
 		true,
 		true,
 	)
@@ -249,7 +249,7 @@ func (ec *executionContext) _StandardUpdatePayload_standard(ctx context.Context,
 			return obj.Standard, nil
 		},
 		nil,
-		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandard,
+		ec.marshalNStandard2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐStandard,
 		true,
 		true,
 	)

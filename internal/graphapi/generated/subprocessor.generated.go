@@ -38,7 +38,7 @@ func (ec *executionContext) _SubprocessorBulkCreatePayload_subprocessors(ctx con
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ,
+		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubprocessorᚄ,
 		true,
 		false,
 	)
@@ -132,7 +132,7 @@ func (ec *executionContext) _SubprocessorBulkUpdatePayload_subprocessors(ctx con
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorᚄ,
+		ec.marshalOSubprocessor2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubprocessorᚄ,
 		true,
 		false,
 	)
@@ -226,7 +226,7 @@ func (ec *executionContext) _SubprocessorCreatePayload_subprocessor(ctx context.
 			return obj.Subprocessor, nil
 		},
 		nil,
-		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
+		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubprocessor,
 		true,
 		true,
 	)
@@ -320,7 +320,7 @@ func (ec *executionContext) _SubprocessorUpdatePayload_subprocessor(ctx context.
 			return obj.Subprocessor, nil
 		},
 		nil,
-		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessor,
+		ec.marshalNSubprocessor2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubprocessor,
 		true,
 		true,
 	)

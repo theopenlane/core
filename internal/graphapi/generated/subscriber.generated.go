@@ -38,7 +38,7 @@ func (ec *executionContext) _SubscriberBulkCreatePayload_subscribers(ctx context
 			return obj.Subscribers, nil
 		},
 		nil,
-		ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberᚄ,
+		ec.marshalOSubscriber2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubscriberᚄ,
 		true,
 		false,
 	)
@@ -101,7 +101,7 @@ func (ec *executionContext) _SubscriberCreatePayload_subscriber(ctx context.Cont
 			return obj.Subscriber, nil
 		},
 		nil,
-		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubscriber,
 		true,
 		true,
 	)
@@ -193,7 +193,7 @@ func (ec *executionContext) _SubscriberUpdatePayload_subscriber(ctx context.Cont
 			return obj.Subscriber, nil
 		},
 		nil,
-		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriber,
+		ec.marshalNSubscriber2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubscriber,
 		true,
 		true,
 	)

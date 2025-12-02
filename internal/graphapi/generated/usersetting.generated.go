@@ -38,7 +38,7 @@ func (ec *executionContext) _UserSettingBulkCreatePayload_userSettings(ctx conte
 			return obj.UserSettings, nil
 		},
 		nil,
-		ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSettingᚄ,
+		ec.marshalOUserSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUserSettingᚄ,
 		true,
 		false,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _UserSettingCreatePayload_userSetting(ctx context.Co
 			return obj.UserSetting, nil
 		},
 		nil,
-		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUserSetting,
 		true,
 		true,
 	)
@@ -193,7 +193,7 @@ func (ec *executionContext) _UserSettingUpdatePayload_userSetting(ctx context.Co
 			return obj.UserSetting, nil
 		},
 		nil,
-		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserSetting,
+		ec.marshalNUserSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUserSetting,
 		true,
 		true,
 	)

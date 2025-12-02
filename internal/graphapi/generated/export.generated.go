@@ -38,7 +38,7 @@ func (ec *executionContext) _ExportBulkCreatePayload_exports(ctx context.Context
 			return obj.Exports, nil
 		},
 		nil,
-		ec.marshalOExport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐExportᚄ,
+		ec.marshalOExport2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐExportᚄ,
 		true,
 		false,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _ExportCreatePayload_export(ctx context.Context, fie
 			return obj.Export, nil
 		},
 		nil,
-		ec.marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐExport,
+		ec.marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐExport,
 		true,
 		true,
 	)
@@ -222,7 +222,7 @@ func (ec *executionContext) _ExportUpdatePayload_export(ctx context.Context, fie
 			return obj.Export, nil
 		},
 		nil,
-		ec.marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐExport,
+		ec.marshalNExport2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐExport,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _FindingControlBulkCreatePayload_findingControls(ctx
 			return obj.FindingControls, nil
 		},
 		nil,
-		ec.marshalOFindingControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControlᚄ,
+		ec.marshalOFindingControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFindingControlᚄ,
 		true,
 		false,
 	)
@@ -103,7 +103,7 @@ func (ec *executionContext) _FindingControlCreatePayload_findingControl(ctx cont
 			return obj.FindingControl, nil
 		},
 		nil,
-		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl,
+		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFindingControl,
 		true,
 		true,
 	)
@@ -197,7 +197,7 @@ func (ec *executionContext) _FindingControlUpdatePayload_findingControl(ctx cont
 			return obj.FindingControl, nil
 		},
 		nil,
-		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingControl,
+		ec.marshalNFindingControl2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFindingControl,
 		true,
 		true,
 	)

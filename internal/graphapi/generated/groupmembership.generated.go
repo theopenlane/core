@@ -38,7 +38,7 @@ func (ec *executionContext) _GroupMembershipBulkCreatePayload_groupMemberships(c
 			return obj.GroupMemberships, nil
 		},
 		nil,
-		ec.marshalOGroupMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembershipᚄ,
+		ec.marshalOGroupMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupMembershipᚄ,
 		true,
 		false,
 	)
@@ -120,7 +120,7 @@ func (ec *executionContext) _GroupMembershipCreatePayload_groupMembership(ctx co
 			return obj.GroupMembership, nil
 		},
 		nil,
-		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
+		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupMembership,
 		true,
 		true,
 	)
@@ -202,7 +202,7 @@ func (ec *executionContext) _GroupMembershipUpdatePayload_groupMembership(ctx co
 			return obj.GroupMembership, nil
 		},
 		nil,
-		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupMembership,
+		ec.marshalNGroupMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupMembership,
 		true,
 		true,
 	)

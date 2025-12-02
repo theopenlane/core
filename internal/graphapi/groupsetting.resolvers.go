@@ -9,10 +9,10 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/internal/ent/generated"
-	"github.com/theopenlane/core/internal/ent/generated/groupsetting"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/ent/generated/groupsetting"
 	"github.com/theopenlane/utils/rout"
 )
 

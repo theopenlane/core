@@ -17,7 +17,6 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
 	"github.com/theopenlane/core/internal/integrations"
 	"github.com/theopenlane/core/internal/integrations/config"
 	"github.com/theopenlane/core/internal/integrations/types"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/core/internal/keystore"
 	"github.com/theopenlane/core/pkg/logx"
 	openapi "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated/privacy"
 )
 
 var (

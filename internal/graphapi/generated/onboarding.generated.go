@@ -37,7 +37,7 @@ func (ec *executionContext) _OnboardingCreatePayload_onboarding(ctx context.Cont
 			return obj.Onboarding, nil
 		},
 		nil,
-		ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOnboarding,
+		ec.marshalNOnboarding2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOnboarding,
 		true,
 		true,
 	)

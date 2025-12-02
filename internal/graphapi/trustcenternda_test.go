@@ -7,11 +7,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/brianvoe/gofakeit/v7"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/internal/httpserve/authmanager"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/core/pkg/olauth"
+	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/ulids"
 	"gotest.tools/v3/assert"
@@ -39,7 +39,7 @@ func TestMutationSubmitTrustCenterNDADocAccess(t *testing.T) {
 	assert.Assert(t, trustCenterNDA != nil)
 
 	// Create anonymous trust center context helper
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,
@@ -98,7 +98,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 
 	// Create anonymous trust center context helper
 	createAnonymousTrustCenterContext := func(trustCenterID, organizationID string) context.Context {
-		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+		anonUserID := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 		anonUser := &auth.AnonymousTrustCenterUser{
 			SubjectID:          anonUserID,
@@ -133,7 +133,7 @@ func TestMutationSendTrustCenterNDAEmail(t *testing.T) {
 
 		// Create a user who has already signed the NDA
 		testEmail := gofakeit.Email()
-		anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+		anonUserID := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
 		anonUser := &auth.AnonymousTrustCenterUser{
 			SubjectID:          anonUserID,
 			SubjectName:        "Anonymous User",
@@ -509,8 +509,8 @@ func TestSubmitTrustCenterNDAResponse(t *testing.T) {
 	assert.NilError(t, err)
 	assert.Assert(t, trustCenterNDA != nil)
 
-	anonUserID := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
-	anonUserID2 := fmt.Sprintf("%s%s", authmanager.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
+	anonUserID2 := fmt.Sprintf("%s%s", olauth.AnonTrustcenterJWTPrefix, ulids.New().String())
 
 	anonUser := &auth.AnonymousTrustCenterUser{
 		SubjectID:          anonUserID,

@@ -11,9 +11,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/ent/generated"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 )
@@ -93180,7 +93180,7 @@ input NarrativeWhereInput {
 An object with an ID.
 Follows the [Relay Global Object Identification Specification](https://relay.dev/graphql/objectidentification.htm)
 """
-interface Node @goModel(model: "github.com/theopenlane/core/internal/ent/generated.Noder") {
+interface Node @goModel(model: "github.com/theopenlane/ent/generated.Noder") {
   """
   The id of the object.
   """
@@ -148460,7 +148460,7 @@ extend type Mutation{
         logoFile: Upload
     ): TrustcenterEntityCreatePayload!
     """
-    Create multiple new trustcenterEntitys
+    Create multiple new trustcenterEntities
     """
     createBulkTrustcenterEntity(
         """
@@ -148469,7 +148469,7 @@ extend type Mutation{
         input: [CreateTrustcenterEntityInput!]
     ): TrustcenterEntityBulkCreatePayload!
     """
-    Create multiple new trustcenterEntitys via file upload
+    Create multiple new trustcenterEntities via file upload
     """
     createBulkCSVTrustcenterEntity(
         """
@@ -148540,7 +148540,7 @@ Return response for createBulkTrustcenterEntity mutation
 """
 type TrustcenterEntityBulkCreatePayload {
     """
-    Created trustcenterEntitys
+    Created trustcenterEntities
     """
     trustcenterEntities: [TrustcenterEntity!]
 }`, BuiltIn: false},

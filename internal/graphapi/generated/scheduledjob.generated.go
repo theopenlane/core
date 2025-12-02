@@ -38,7 +38,7 @@ func (ec *executionContext) _ScheduledJobBulkCreatePayload_scheduledJobs(ctx con
 			return obj.ScheduledJobs, nil
 		},
 		nil,
-		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJobᚄ,
+		ec.marshalOScheduledJob2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScheduledJobᚄ,
 		true,
 		false,
 	)
@@ -132,7 +132,7 @@ func (ec *executionContext) _ScheduledJobCreatePayload_scheduledJob(ctx context.
 			return obj.ScheduledJob, nil
 		},
 		nil,
-		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScheduledJob,
 		true,
 		true,
 	)
@@ -226,7 +226,7 @@ func (ec *executionContext) _ScheduledJobUpdatePayload_scheduledJob(ctx context.
 			return obj.ScheduledJob, nil
 		},
 		nil,
-		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScheduledJob,
+		ec.marshalNScheduledJob2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScheduledJob,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterDocBulkCreatePayload_trustCenterDocs(ctx
 			return obj.TrustCenterDocs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ,
+		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterDocᚄ,
 		true,
 		false,
 	)
@@ -136,7 +136,7 @@ func (ec *executionContext) _TrustCenterDocBulkUpdatePayload_trustCenterDocs(ctx
 			return obj.TrustCenterDocs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDocᚄ,
+		ec.marshalOTrustCenterDoc2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterDocᚄ,
 		true,
 		false,
 	)
@@ -234,7 +234,7 @@ func (ec *executionContext) _TrustCenterDocCreatePayload_trustCenterDoc(ctx cont
 			return obj.TrustCenterDoc, nil
 		},
 		nil,
-		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc,
+		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterDoc,
 		true,
 		true,
 	)
@@ -332,7 +332,7 @@ func (ec *executionContext) _TrustCenterDocUpdatePayload_trustCenterDoc(ctx cont
 			return obj.TrustCenterDoc, nil
 		},
 		nil,
-		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterDoc,
+		ec.marshalNTrustCenterDoc2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterDoc,
 		true,
 		true,
 	)

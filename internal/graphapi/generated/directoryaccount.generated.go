@@ -38,7 +38,7 @@ func (ec *executionContext) _DirectoryAccountBulkCreatePayload_directoryAccounts
 			return obj.DirectoryAccounts, nil
 		},
 		nil,
-		ec.marshalODirectoryAccount2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccountᚄ,
+		ec.marshalODirectoryAccount2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryAccountᚄ,
 		true,
 		false,
 	)
@@ -139,7 +139,7 @@ func (ec *executionContext) _DirectoryAccountCreatePayload_directoryAccount(ctx 
 			return obj.DirectoryAccount, nil
 		},
 		nil,
-		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount,
+		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryAccount,
 		true,
 		true,
 	)
@@ -269,7 +269,7 @@ func (ec *executionContext) _DirectoryAccountUpdatePayload_directoryAccount(ctx 
 			return obj.DirectoryAccount, nil
 		},
 		nil,
-		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryAccount,
+		ec.marshalNDirectoryAccount2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryAccount,
 		true,
 		true,
 	)

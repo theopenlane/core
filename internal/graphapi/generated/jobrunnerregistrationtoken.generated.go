@@ -38,7 +38,7 @@ func (ec *executionContext) _JobRunnerRegistrationTokenBulkCreatePayload_jobRunn
 			return obj.JobRunnerRegistrationTokens, nil
 		},
 		nil,
-		ec.marshalOJobRunnerRegistrationToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationTokenᚄ,
+		ec.marshalOJobRunnerRegistrationToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunnerRegistrationTokenᚄ,
 		true,
 		false,
 	)
@@ -95,7 +95,7 @@ func (ec *executionContext) _JobRunnerRegistrationTokenCreatePayload_jobRunnerRe
 			return obj.JobRunnerRegistrationToken, nil
 		},
 		nil,
-		ec.marshalNJobRunnerRegistrationToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerRegistrationToken,
+		ec.marshalNJobRunnerRegistrationToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunnerRegistrationToken,
 		true,
 		true,
 	)

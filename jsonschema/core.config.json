@@ -337,12 +337,10 @@
     "crypto.Config": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates whether Tink encryption is enabled"
+          "type": "boolean"
         },
         "keyset": {
-          "type": "string",
-          "description": "Keyset is the base64-encoded Tink keyset used for encryption"
+          "type": "string"
         }
       },
       "additionalProperties": false,
@@ -456,125 +454,65 @@
     "entconfig.Billing": {
       "properties": {
         "requirepaymentmethod": {
-          "type": "boolean",
-          "description": "RequirePaymentMethod indicates whether to check if a payment method\nexists for orgs before they can access some resource"
+          "type": "boolean"
         },
         "bypassemaildomains": {
-          "$ref": "#/$defs/[]string",
-          "description": "BypassEmailDomains is a list of domains that should be allowed to bypass\nthe checks if RequirePaymentMethod above is enabled"
+          "$ref": "#/$defs/[]string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Billing settings for feature access"
+      "type": "object"
     },
     "entconfig.Config": {
       "properties": {
         "entitytypes": {
-          "$ref": "#/$defs/[]string",
-          "description": "EntityTypes is the list of entity types to create by default for the organization"
+          "$ref": "#/$defs/[]string"
         },
         "summarizer": {
-          "$ref": "#/$defs/summarizer.Config",
-          "description": "Summarizer contains configuration for text summarization"
-        },
-        "windmill": {
-          "$ref": "#/$defs/entconfig.Windmill",
-          "description": "Windmill contains configuration for Windmill workflow automation"
+          "$ref": "#/$defs/summarizer.Config"
         },
         "maxpoolsize": {
-          "type": "integer",
-          "description": "MaxPoolSize is the max pond pool workers that can be used by the ent client"
+          "type": "integer"
         },
         "modules": {
-          "$ref": "#/$defs/entconfig.Modules",
-          "description": "Modules contains the configuration for the module system"
+          "$ref": "#/$defs/entconfig.Modules"
         },
         "maxschemaimportsize": {
-          "type": "integer",
-          "description": "MaxSchemaImportSize is the maximum size allowed for schema imports in bytes"
+          "type": "integer"
         },
         "emailvalidation": {
-          "$ref": "#/$defs/validator.EmailVerificationConfig",
-          "description": "EmailValidation contains configuration for email validation"
+          "$ref": "#/$defs/validator.EmailVerificationConfig"
         },
         "billing": {
-          "$ref": "#/$defs/entconfig.Billing",
-          "description": "Billing contains configuration for billing related features"
+          "$ref": "#/$defs/entconfig.Billing"
         },
         "notifications": {
-          "$ref": "#/$defs/entconfig.Notifications",
-          "description": "Notifications contains configuration for notifications sent to users based on events"
+          "$ref": "#/$defs/entconfig.Notifications"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Config holds the configuration for the ent server"
+      "type": "object"
     },
     "entconfig.Modules": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates whether to check and verify module access"
+          "type": "boolean"
         },
         "usesandbox": {
-          "type": "boolean",
-          "description": "UseSandbox indicates whether to use the sandbox catalog for module access checks"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Modules settings for features access"
+      "type": "object"
     },
     "entconfig.Notifications": {
       "properties": {
         "consoleurl": {
-          "type": "string",
-          "description": "ConsoleURL for ui links used in notifications"
+          "type": "string"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "Notifications settings for notifications sent to users based on events"
-    },
-    "entconfig.Windmill": {
-      "properties": {
-        "enabled": {
-          "type": "boolean",
-          "description": "Enabled specifies whether Windmill integration is enabled"
-        },
-        "baseurl": {
-          "type": "string",
-          "description": "BaseURL is the base URL of the Windmill instance"
-        },
-        "workspace": {
-          "type": "string",
-          "description": "Workspace is the Windmill workspace to use"
-        },
-        "token": {
-          "type": "string",
-          "description": "Token is the API token for authentication with Windmill"
-        },
-        "defaulttimeout": {
-          "type": "string",
-          "description": "DefaultTimeout is the default timeout for API requests"
-        },
-        "timezone": {
-          "type": "string",
-          "description": "Timezone for scheduled jobs"
-        },
-        "onfailurescript": {
-          "type": "string",
-          "description": "OnFailureScript script to run when a scheduled job fails"
-        },
-        "onsuccessscript": {
-          "type": "string",
-          "description": "OnSuccessScript script to run when a scheduled job succeeds"
-        }
-      },
-      "additionalProperties": false,
-      "type": "object",
-      "description": "Windmill holds configuration for the Windmill workflow automation platform"
+      "type": "object"
     },
     "entitlements.Config": {
       "properties": {
@@ -1638,48 +1576,38 @@
     "validator.AllowedEmailTypes": {
       "properties": {
         "disposable": {
-          "type": "boolean",
-          "description": "Disposable indicates whether disposable email addresses are allowed"
+          "type": "boolean"
         },
         "free": {
-          "type": "boolean",
-          "description": "Free indicates whether free email addresses are allowed"
+          "type": "boolean"
         },
         "role": {
-          "type": "boolean",
-          "description": "Role indicates whether role-based email addresses are allowed"
+          "type": "boolean"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "AllowedEmailTypes defines the allowed email types for verification"
+      "type": "object"
     },
     "validator.EmailVerificationConfig": {
       "properties": {
         "enabled": {
-          "type": "boolean",
-          "description": "Enabled indicates whether email verification is enabled"
+          "type": "boolean"
         },
         "enableautoupdatedisposable": {
-          "type": "boolean",
-          "description": "EnableAutoUpdateDisposable indicates whether to automatically update disposable email addresses"
+          "type": "boolean"
         },
         "enablegravatarcheck": {
-          "type": "boolean",
-          "description": "EnableGravatarCheck indicates whether to check for Gravatar existence"
+          "type": "boolean"
         },
         "enablesmtpcheck": {
-          "type": "boolean",
-          "description": "EnableSMTPCheck indicates whether to check email by smtp"
+          "type": "boolean"
         },
         "allowedemailtypes": {
-          "$ref": "#/$defs/validator.AllowedEmailTypes",
-          "description": "AllowedEmailTypes defines the allowed email types for verification"
+          "$ref": "#/$defs/validator.AllowedEmailTypes"
         }
       },
       "additionalProperties": false,
-      "type": "object",
-      "description": "EmailVerificationConfig is the configuration for email verification"
+      "type": "object"
     },
     "webauthn.ProviderConfig": {
       "properties": {

@@ -17,16 +17,16 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/ent/generated/orgmembership"
-	"github.com/theopenlane/core/internal/ent/generated/privacy"
-	"github.com/theopenlane/core/internal/ent/privacy/token"
-	entval "github.com/theopenlane/core/internal/ent/validator"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/metrics"
 	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/core/pkg/models"
 	apimodels "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/ent/generated/orgmembership"
+	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/ent/privacy/token"
+	entval "github.com/theopenlane/ent/validator"
 	"github.com/theopenlane/utils/rout"
 )
 

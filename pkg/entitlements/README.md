@@ -48,7 +48,7 @@ h := &handlers.Handler{
 The webhook receiver in
 [`internal/httpserve/handlers/webhook.go`](../../internal/httpserve/handlers/webhook.go)
 uses this client to update subscriptions and feature tuples when events arrive.
-Ent hooks in [`internal/ent/hooks/organization.go`](../../internal/ent/hooks/organization.go)
+Ent hooks in [`ent/hooks/organization.go`](../../ent/hooks/organization.go)
 create default feature tuples for new organizations.
 
 ## Examples

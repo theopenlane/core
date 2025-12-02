@@ -38,7 +38,7 @@ func (ec *executionContext) _InternalPolicyBulkCreatePayload_internalPolicies(ct
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInternalPolicyᚄ,
 		true,
 		false,
 	)
@@ -198,7 +198,7 @@ func (ec *executionContext) _InternalPolicyBulkUpdatePayload_internalPolicies(ct
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyᚄ,
+		ec.marshalOInternalPolicy2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInternalPolicyᚄ,
 		true,
 		false,
 	)
@@ -358,7 +358,7 @@ func (ec *executionContext) _InternalPolicyCreatePayload_internalPolicy(ctx cont
 			return obj.InternalPolicy, nil
 		},
 		nil,
-		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInternalPolicy,
 		true,
 		true,
 	)
@@ -518,7 +518,7 @@ func (ec *executionContext) _InternalPolicyUpdatePayload_internalPolicy(ctx cont
 			return obj.InternalPolicy, nil
 		},
 		nil,
-		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicy,
+		ec.marshalNInternalPolicy2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInternalPolicy,
 		true,
 		true,
 	)

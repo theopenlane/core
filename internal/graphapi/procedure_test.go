@@ -12,10 +12,10 @@ import (
 
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/ent/generated"
 )
 
 func TestQueryProcedure(t *testing.T) {

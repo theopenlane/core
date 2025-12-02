@@ -38,7 +38,7 @@ func (ec *executionContext) _ProgramBulkCreatePayload_programs(ctx context.Conte
 			return obj.Programs, nil
 		},
 		nil,
-		ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramᚄ,
+		ec.marshalOProgram2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgramᚄ,
 		true,
 		false,
 	)
@@ -186,7 +186,7 @@ func (ec *executionContext) _ProgramCreatePayload_program(ctx context.Context, f
 			return obj.Program, nil
 		},
 		nil,
-		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
+		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgram,
 		true,
 		true,
 	)
@@ -334,7 +334,7 @@ func (ec *executionContext) _ProgramUpdatePayload_program(ctx context.Context, f
 			return obj.Program, nil
 		},
 		nil,
-		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgram,
+		ec.marshalNProgram2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgram,
 		true,
 		true,
 	)

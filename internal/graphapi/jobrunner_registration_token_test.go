@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/ent/generated"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

@@ -38,7 +38,7 @@ func (ec *executionContext) _GroupBulkCreatePayload_groups(ctx context.Context, 
 			return obj.Groups, nil
 		},
 		nil,
-		ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupᚄ,
+		ec.marshalOGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupᚄ,
 		true,
 		false,
 	)
@@ -210,7 +210,7 @@ func (ec *executionContext) _GroupCreatePayload_group(ctx context.Context, field
 			return obj.Group, nil
 		},
 		nil,
-		ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup,
+		ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroup,
 		true,
 		true,
 	)
@@ -382,7 +382,7 @@ func (ec *executionContext) _GroupUpdatePayload_group(ctx context.Context, field
 			return obj.Group, nil
 		},
 		nil,
-		ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroup,
+		ec.marshalNGroup2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroup,
 		true,
 		true,
 	)

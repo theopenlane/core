@@ -38,7 +38,7 @@ func (ec *executionContext) _ControlObjectiveBulkCreatePayload_controlObjectives
 			return obj.ControlObjectives, nil
 		},
 		nil,
-		ec.marshalOControlObjective2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveᚄ,
+		ec.marshalOControlObjective2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlObjectiveᚄ,
 		true,
 		false,
 	)
@@ -162,7 +162,7 @@ func (ec *executionContext) _ControlObjectiveCreatePayload_controlObjective(ctx 
 			return obj.ControlObjective, nil
 		},
 		nil,
-		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjective,
+		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlObjective,
 		true,
 		true,
 	)
@@ -286,7 +286,7 @@ func (ec *executionContext) _ControlObjectiveUpdatePayload_controlObjective(ctx 
 			return obj.ControlObjective, nil
 		},
 		nil,
-		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjective,
+		ec.marshalNControlObjective2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlObjective,
 		true,
 		true,
 	)

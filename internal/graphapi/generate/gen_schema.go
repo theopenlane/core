@@ -9,8 +9,8 @@ import (
 
 	"github.com/vektah/gqlparser/v2/formatter"
 
-	"github.com/theopenlane/core/internal/genhelpers"
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
+	"github.com/theopenlane/core/pkg/genhelpers"
 )
 
 // read in schema from internal package and save it to the schema file

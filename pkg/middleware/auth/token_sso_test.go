@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	generated "github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/pkg/models"
+	generated "github.com/theopenlane/ent/generated"
 )
 
 func TestAPITokenSSOAuthorization(t *testing.T) {
