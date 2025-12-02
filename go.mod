@@ -4,6 +4,8 @@ go 1.25.4
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
+replace github.com/theopenlane/gqlgen-plugins => ../gqlgen-plugins
+
 tool (
 	github.com/dave/jennifer
 	github.com/invopop/jsonschema

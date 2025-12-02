@@ -7,9 +7,9 @@ import (
 
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
+	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/shared/models"
-	"github.com/theopenlane/ent/generated/predicate"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

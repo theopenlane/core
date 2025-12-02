@@ -906,9 +906,6 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *TrustCenter) { n.Edges.TrustCenterSubprocessors = []*TrustCenterSubprocessor{} },
 			func(n *TrustCenter, e *TrustCenterSubprocessor) {
 				n.Edges.TrustCenterSubprocessors = append(n.Edges.TrustCenterSubprocessors, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -916,12 +913,7 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := _q.withTrustCenterDocs; query != nil {
 		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
 			func(n *TrustCenter) { n.Edges.TrustCenterDocs = []*TrustCenterDoc{} },
-			func(n *TrustCenter, e *TrustCenterDoc) {
-				n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *TrustCenterDoc) { n.Edges.TrustCenterDocs = append(n.Edges.TrustCenterDocs, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -930,9 +922,6 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 			func(n *TrustCenter) { n.Edges.TrustCenterCompliances = []*TrustCenterCompliance{} },
 			func(n *TrustCenter, e *TrustCenterCompliance) {
 				n.Edges.TrustCenterCompliances = append(n.Edges.TrustCenterCompliances, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -940,24 +929,14 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := _q.withTemplates; query != nil {
 		if err := _q.loadTemplates(ctx, query, nodes,
 			func(n *TrustCenter) { n.Edges.Templates = []*Template{} },
-			func(n *TrustCenter, e *Template) {
-				n.Edges.Templates = append(n.Edges.Templates, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *Template) { n.Edges.Templates = append(n.Edges.Templates, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withPosts; query != nil {
 		if err := _q.loadPosts(ctx, query, nodes,
 			func(n *TrustCenter) { n.Edges.Posts = []*Note{} },
-			func(n *TrustCenter, e *Note) {
-				n.Edges.Posts = append(n.Edges.Posts, e)
-				if !e.Edges.loadedTypes[8] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *Note) { n.Edges.Posts = append(n.Edges.Posts, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -973,60 +952,35 @@ func (_q *TrustCenterQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	for name, query := range _q.withNamedTrustCenterSubprocessors {
 		if err := _q.loadTrustCenterSubprocessors(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterSubprocessors(name) },
-			func(n *TrustCenter, e *TrustCenterSubprocessor) {
-				n.appendNamedTrustCenterSubprocessors(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *TrustCenterSubprocessor) { n.appendNamedTrustCenterSubprocessors(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedTrustCenterDocs {
 		if err := _q.loadTrustCenterDocs(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterDocs(name) },
-			func(n *TrustCenter, e *TrustCenterDoc) {
-				n.appendNamedTrustCenterDocs(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *TrustCenterDoc) { n.appendNamedTrustCenterDocs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedTrustCenterCompliances {
 		if err := _q.loadTrustCenterCompliances(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTrustCenterCompliances(name) },
-			func(n *TrustCenter, e *TrustCenterCompliance) {
-				n.appendNamedTrustCenterCompliances(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *TrustCenterCompliance) { n.appendNamedTrustCenterCompliances(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedTemplates {
 		if err := _q.loadTemplates(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedTemplates(name) },
-			func(n *TrustCenter, e *Template) {
-				n.appendNamedTemplates(name, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *Template) { n.appendNamedTemplates(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedPosts {
 		if err := _q.loadPosts(ctx, query, nodes,
 			func(n *TrustCenter) { n.appendNamedPosts(name) },
-			func(n *TrustCenter, e *Note) {
-				n.appendNamedPosts(name, e)
-				if !e.Edges.loadedTypes[8] {
-					e.Edges.TrustCenter = n
-				}
-			}); err != nil {
+			func(n *TrustCenter, e *Note) { n.appendNamedPosts(name, e) }); err != nil {
 			return nil, err
 		}
 	}

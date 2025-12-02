@@ -505,9 +505,6 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlAll(ctx context.Context, hooks ...
 			func(n *TrustCenterWatermarkConfig) { n.Edges.TrustCenter = []*TrustCenter{} },
 			func(n *TrustCenterWatermarkConfig, e *TrustCenter) {
 				n.Edges.TrustCenter = append(n.Edges.TrustCenter, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.WatermarkConfig = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -521,12 +518,7 @@ func (_q *TrustCenterWatermarkConfigQuery) sqlAll(ctx context.Context, hooks ...
 	for name, query := range _q.withNamedTrustCenter {
 		if err := _q.loadTrustCenter(ctx, query, nodes,
 			func(n *TrustCenterWatermarkConfig) { n.appendNamedTrustCenter(name) },
-			func(n *TrustCenterWatermarkConfig, e *TrustCenter) {
-				n.appendNamedTrustCenter(name, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.WatermarkConfig = n
-				}
-			}); err != nil {
+			func(n *TrustCenterWatermarkConfig, e *TrustCenter) { n.appendNamedTrustCenter(name, e) }); err != nil {
 			return nil, err
 		}
 	}

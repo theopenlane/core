@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/notification"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // Notification is the model entity for the Notification schema.

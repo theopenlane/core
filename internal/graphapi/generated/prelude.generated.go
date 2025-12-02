@@ -13,9 +13,8 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/entx/history"
-	"github.com/vektah/gqlparser/v2/ast"
-
 	"github.com/theopenlane/shared/models"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -2662,22 +2661,6 @@ func (ec *executionContext) marshalOString2ᚕstringᚄ(ctx context.Context, sel
 	return ret
 }
 
-func (ec *executionContext) unmarshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCron(ctx context.Context, v any) (*models.Cron, error) {
-	if v == nil {
-		return nil, nil
-	}
-	var res = new(models.Cron)
-	err := res.UnmarshalGQL(v)
-	return res, graphql.ErrorOnPath(ctx, err)
-}
-
-func (ec *executionContext) marshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCron(ctx context.Context, sel ast.SelectionSet, v *models.Cron) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return v
-}
-
 func (ec *executionContext) unmarshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, v any) (*history.OpType, error) {
 	if v == nil {
 		return nil, nil
@@ -2688,6 +2671,22 @@ func (ec *executionContext) unmarshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋent
 }
 
 func (ec *executionContext) marshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋentxᚋhistoryᚐOpType(ctx context.Context, sel ast.SelectionSet, v *history.OpType) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
+func (ec *executionContext) unmarshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCron(ctx context.Context, v any) (*models.Cron, error) {
+	if v == nil {
+		return nil, nil
+	}
+	var res = new(models.Cron)
+	err := res.UnmarshalGQL(v)
+	return res, graphql.ErrorOnPath(ctx, err)
+}
+
+func (ec *executionContext) marshalOString2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCron(ctx context.Context, sel ast.SelectionSet, v *models.Cron) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}

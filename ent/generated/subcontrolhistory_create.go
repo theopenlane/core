@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/subcontrolhistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // SubcontrolHistoryCreate is the builder for creating a SubcontrolHistory entity.

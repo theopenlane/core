@@ -702,9 +702,6 @@ func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHo
 			func(n *DirectoryMembership) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *DirectoryMembership, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[8] {
-					e.Edges.DirectoryMembership = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -719,12 +716,7 @@ func (_q *DirectoryMembershipQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *DirectoryMembership) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *DirectoryMembership, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[8] {
-					e.Edges.DirectoryMembership = n
-				}
-			}); err != nil {
+			func(n *DirectoryMembership, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}

@@ -10,14 +10,14 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/customtypeenum"
 	"github.com/theopenlane/ent/generated/entity"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/subcontrol"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // Subcontrol is the model entity for the Subcontrol schema.

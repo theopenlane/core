@@ -1373,9 +1373,6 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 			func(n *Finding) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *Finding, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.Finding = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1383,12 +1380,7 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	if query := _q.withControlMappings; query != nil {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Finding) { n.Edges.ControlMappings = []*FindingControl{} },
-			func(n *Finding, e *FindingControl) {
-				n.Edges.ControlMappings = append(n.Edges.ControlMappings, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Finding = n
-				}
-			}); err != nil {
+			func(n *Finding, e *FindingControl) { n.Edges.ControlMappings = append(n.Edges.ControlMappings, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1521,24 +1513,14 @@ func (_q *FindingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Find
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *Finding, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[5] {
-					e.Edges.Finding = n
-				}
-			}); err != nil {
+			func(n *Finding, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedControlMappings {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Finding) { n.appendNamedControlMappings(name) },
-			func(n *Finding, e *FindingControl) {
-				n.appendNamedControlMappings(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Finding = n
-				}
-			}); err != nil {
+			func(n *Finding, e *FindingControl) { n.appendNamedControlMappings(name, e) }); err != nil {
 			return nil, err
 		}
 	}

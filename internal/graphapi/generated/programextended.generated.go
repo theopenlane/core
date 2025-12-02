@@ -44,7 +44,7 @@ func (ec *executionContext) unmarshalInputAddProgramMembershipInput(ctx context.
 		switch k {
 		case "role":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalOProgramMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐRole(ctx, v)
+			data, err := ec.unmarshalOProgramMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -181,7 +181,7 @@ func (ec *executionContext) unmarshalInputCreateMemberWithProgramInput(ctx conte
 		switch k {
 		case "role":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalOProgramMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐRole(ctx, v)
+			data, err := ec.unmarshalOProgramMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}

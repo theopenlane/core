@@ -407,12 +407,7 @@ func (_q *GroupSettingQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]
 	}
 	if query := _q.withGroup; query != nil {
 		if err := _q.loadGroup(ctx, query, nodes, nil,
-			func(n *GroupSetting, e *Group) {
-				n.Edges.Group = e
-				if !e.Edges.loadedTypes[30] {
-					e.Edges.Setting = n
-				}
-			}); err != nil {
+			func(n *GroupSetting, e *Group) { n.Edges.Group = e }); err != nil {
 			return nil, err
 		}
 	}

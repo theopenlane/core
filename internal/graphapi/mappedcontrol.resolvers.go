@@ -12,10 +12,10 @@ import (
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/mappedcontrol"
 	"github.com/theopenlane/ent/generated/predicate"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateMappedControl is the resolver for the createMappedControl field.

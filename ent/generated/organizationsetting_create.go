@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/organizationsetting"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // OrganizationSettingCreate is the builder for creating a OrganizationSetting entity.

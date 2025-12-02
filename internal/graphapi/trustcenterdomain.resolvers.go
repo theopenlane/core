@@ -10,10 +10,10 @@ import (
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/mappabledomain"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateTrustCenterDomain is the resolver for the createTrustCenterDomain field.

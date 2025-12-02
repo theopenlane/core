@@ -11,10 +11,10 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
+	"github.com/theopenlane/shared/enums"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/enums"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -70,7 +70,7 @@ func (ec *executionContext) _GroupPermission_permissions(ctx context.Context, fi
 			return obj.Permissions, nil
 		},
 		nil,
-		ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission,
+		ec.marshalNPermission2githubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐPermission,
 		true,
 		true,
 	)
@@ -369,7 +369,7 @@ func (ec *executionContext) unmarshalInputGroupMembersInput(ctx context.Context,
 		switch k {
 		case "role":
 			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("role"))
-			data, err := ec.unmarshalOGroupMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐRole(ctx, v)
+			data, err := ec.unmarshalOGroupMembershipRole2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐRole(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -953,13 +953,13 @@ func (ec *executionContext) unmarshalNGroupPermissionWhereInput2ᚖgithubᚗcom�
 	return &res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) unmarshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission(ctx context.Context, v any) (enums.Permission, error) {
+func (ec *executionContext) unmarshalNPermission2githubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐPermission(ctx context.Context, v any) (enums.Permission, error) {
 	var res enums.Permission
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNPermission2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋenumsᚐPermission(ctx context.Context, sel ast.SelectionSet, v enums.Permission) graphql.Marshaler {
+func (ec *executionContext) marshalNPermission2githubᚗcomᚋtheopenlaneᚋsharedᚋenumsᚐPermission(ctx context.Context, sel ast.SelectionSet, v enums.Permission) graphql.Marshaler {
 	return v
 }
 

@@ -651,9 +651,6 @@ func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *DirectoryGroup) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *DirectoryGroup, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[7] {
-					e.Edges.DirectoryGroup = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -661,12 +658,7 @@ func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withMembers; query != nil {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *DirectoryGroup) { n.Edges.Members = []*DirectoryMembership{} },
-			func(n *DirectoryGroup, e *DirectoryMembership) {
-				n.Edges.Members = append(n.Edges.Members, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.DirectoryGroup = n
-				}
-			}); err != nil {
+			func(n *DirectoryGroup, e *DirectoryMembership) { n.Edges.Members = append(n.Edges.Members, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -680,24 +672,14 @@ func (_q *DirectoryGroupQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *DirectoryGroup) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *DirectoryGroup, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[7] {
-					e.Edges.DirectoryGroup = n
-				}
-			}); err != nil {
+			func(n *DirectoryGroup, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedMembers {
 		if err := _q.loadMembers(ctx, query, nodes,
 			func(n *DirectoryGroup) { n.appendNamedMembers(name) },
-			func(n *DirectoryGroup, e *DirectoryMembership) {
-				n.appendNamedMembers(name, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.DirectoryGroup = n
-				}
-			}); err != nil {
+			func(n *DirectoryGroup, e *DirectoryMembership) { n.appendNamedMembers(name, e) }); err != nil {
 			return nil, err
 		}
 	}

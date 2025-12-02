@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/jobtemplate"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scheduledjob"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // JobTemplateCreate is the builder for creating a JobTemplate entity.

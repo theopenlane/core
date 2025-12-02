@@ -10,9 +10,8 @@ import (
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
-	"github.com/theopenlane/utils/rout"
-
 	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/utils/rout"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.

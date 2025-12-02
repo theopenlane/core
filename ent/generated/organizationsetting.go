@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/organizationsetting"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // OrganizationSetting is the model entity for the OrganizationSetting schema.

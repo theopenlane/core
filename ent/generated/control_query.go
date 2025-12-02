@@ -1577,12 +1577,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Control) { n.Edges.Comments = []*Note{} },
-			func(n *Control, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1676,12 +1671,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if query := _q.withSubcontrols; query != nil {
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Control) { n.Edges.Subcontrols = []*Subcontrol{} },
-			func(n *Control, e *Subcontrol) {
-				n.Edges.Subcontrols = append(n.Edges.Subcontrols, e)
-				if !e.Edges.loadedTypes[14] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *Subcontrol) { n.Edges.Subcontrols = append(n.Edges.Subcontrols, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1711,9 +1701,6 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 			func(n *Control) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *Control, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Control = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1721,12 +1708,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	if query := _q.withControlMappings; query != nil {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Control) { n.Edges.ControlMappings = []*FindingControl{} },
-			func(n *Control, e *FindingControl) {
-				n.Edges.ControlMappings = append(n.Edges.ControlMappings, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *FindingControl) { n.Edges.ControlMappings = append(n.Edges.ControlMappings, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1789,12 +1771,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Control) { n.appendNamedComments(name) },
-			func(n *Control, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1850,12 +1827,7 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	for name, query := range _q.withNamedSubcontrols {
 		if err := _q.loadSubcontrols(ctx, query, nodes,
 			func(n *Control) { n.appendNamedSubcontrols(name) },
-			func(n *Control, e *Subcontrol) {
-				n.appendNamedSubcontrols(name, e)
-				if !e.Edges.loadedTypes[14] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *Subcontrol) { n.appendNamedSubcontrols(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1883,24 +1855,14 @@ func (_q *ControlQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Cont
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *Control) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *Control, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedControlMappings {
 		if err := _q.loadControlMappings(ctx, query, nodes,
 			func(n *Control) { n.appendNamedControlMappings(name) },
-			func(n *Control, e *FindingControl) {
-				n.appendNamedControlMappings(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Control = n
-				}
-			}); err != nil {
+			func(n *Control, e *FindingControl) { n.appendNamedControlMappings(name, e) }); err != nil {
 			return nil, err
 		}
 	}

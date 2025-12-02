@@ -653,9 +653,6 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 			func(n *Assessment) { n.Edges.AssessmentResponses = []*AssessmentResponse{} },
 			func(n *Assessment, e *AssessmentResponse) {
 				n.Edges.AssessmentResponses = append(n.Edges.AssessmentResponses, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Assessment = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -684,12 +681,7 @@ func (_q *AssessmentQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*A
 	for name, query := range _q.withNamedAssessmentResponses {
 		if err := _q.loadAssessmentResponses(ctx, query, nodes,
 			func(n *Assessment) { n.appendNamedAssessmentResponses(name) },
-			func(n *Assessment, e *AssessmentResponse) {
-				n.appendNamedAssessmentResponses(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.Assessment = n
-				}
-			}); err != nil {
+			func(n *Assessment, e *AssessmentResponse) { n.appendNamedAssessmentResponses(name, e) }); err != nil {
 			return nil, err
 		}
 	}

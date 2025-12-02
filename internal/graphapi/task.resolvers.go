@@ -11,10 +11,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/task"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateTask is the resolver for the createTask field.

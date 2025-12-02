@@ -9,7 +9,6 @@ import (
 	"context"
 
 	"github.com/theopenlane/ent/generated"
-
 	"github.com/theopenlane/shared/models"
 )
 

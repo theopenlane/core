@@ -12,9 +12,8 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/ent/generated"
-	"github.com/vektah/gqlparser/v2/ast"
-
 	"github.com/theopenlane/shared/models"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -161,7 +160,7 @@ func (ec *executionContext) _AuditLog_changes(ctx context.Context, field graphql
 			return ec.resolvers.AuditLog().Changes(ctx, obj)
 		},
 		nil,
-		ec.marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ,
+		ec.marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChangeᚄ,
 		true,
 		false,
 	)

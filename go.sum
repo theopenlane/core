@@ -583,8 +583,6 @@ github.com/theopenlane/emailtemplates v0.3.0 h1:vuU5AlSzG3hog7QoBSKuKKfIixOe9yxb
 github.com/theopenlane/emailtemplates v0.3.0/go.mod h1:nLNXcp1fj53qUA5akgJpl/3ovERORr4sSZoa6lA5Vso=
 github.com/theopenlane/entx v0.17.1 h1:EnbEYvUDqw97TnoueWcobNqIDQ2B2rLMW5POqcx3RAk=
 github.com/theopenlane/entx v0.17.1/go.mod h1:T5Q+oXST1CNP8rRrQf6XH79vpXuoOzMxkASdtTzrbm8=
-github.com/theopenlane/gqlgen-plugins v0.12.2-0.20251202084142-b0b30b6ad859 h1:9ZT+FPW8UH4dghB/4eO17A4yYNDqthbvkxUW5vnmEtY=
-github.com/theopenlane/gqlgen-plugins v0.12.2-0.20251202084142-b0b30b6ad859/go.mod h1:IDOi4mUaMJPg9lRwyiKH+xsQN+GNo+VnU/IZERsQYPk=
 github.com/theopenlane/httpsling v0.3.0 h1:Bad0dGdqCqAB8UVDyVo+YCevzRvGHhmkK22F7T3pXtY=
 github.com/theopenlane/httpsling v0.3.0/go.mod h1:iJc3XRLYTFIpfCnPpLZVMBP0xsWIPAb7ozARtQoclAE=
 github.com/theopenlane/iam v0.22.5 h1:cJHltCITeoYB571ThuMOFoOZLd9MNT5n3Rj+JrjMYl8=

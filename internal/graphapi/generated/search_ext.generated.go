@@ -11,9 +11,8 @@ import (
 	"sync/atomic"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/vektah/gqlparser/v2/ast"
-
 	"github.com/theopenlane/shared/models"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -127,7 +126,7 @@ func (ec *executionContext) _SearchContext_snippets(ctx context.Context, field g
 			return obj.Snippets, nil
 		},
 		nil,
-		ec.marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchSnippetᚄ,
+		ec.marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchSnippetᚄ,
 		true,
 		false,
 	)
@@ -321,7 +320,7 @@ func (ec *executionContext) _SearchSnippet(ctx context.Context, sel ast.Selectio
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContext(ctx context.Context, sel ast.SelectionSet, v *models.SearchContext) graphql.Marshaler {
+func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchContext(ctx context.Context, sel ast.SelectionSet, v *models.SearchContext) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -331,7 +330,7 @@ func (ec *executionContext) marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._SearchContext(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchSnippet(ctx context.Context, sel ast.SelectionSet, v *models.SearchSnippet) graphql.Marshaler {
+func (ec *executionContext) marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchSnippet(ctx context.Context, sel ast.SelectionSet, v *models.SearchSnippet) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -341,7 +340,7 @@ func (ec *executionContext) marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlane�
 	return ec._SearchSnippet(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContextᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.SearchContext) graphql.Marshaler {
+func (ec *executionContext) marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchContextᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.SearchContext) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -368,7 +367,7 @@ func (ec *executionContext) marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenla
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchContext(ctx, sel, v[i])
+			ret[i] = ec.marshalNSearchContext2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchContext(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)
@@ -388,7 +387,7 @@ func (ec *executionContext) marshalOSearchContext2ᚕᚖgithubᚗcomᚋtheopenla
 	return ret
 }
 
-func (ec *executionContext) marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchSnippetᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.SearchSnippet) graphql.Marshaler {
+func (ec *executionContext) marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchSnippetᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.SearchSnippet) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -415,7 +414,7 @@ func (ec *executionContext) marshalOSearchSnippet2ᚕᚖgithubᚗcomᚋtheopenla
 			if !isLen1 {
 				defer wg.Done()
 			}
-			ret[i] = ec.marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSearchSnippet(ctx, sel, v[i])
+			ret[i] = ec.marshalNSearchSnippet2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSearchSnippet(ctx, sel, v[i])
 		}
 		if isLen1 {
 			f(i)

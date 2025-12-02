@@ -10,10 +10,10 @@ import (
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/logx"
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/shared/logx"
 )
 
 // TaskCreated is the resolver for the taskCreated field.

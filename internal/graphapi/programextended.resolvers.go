@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/ent/generated/program"
 	"github.com/theopenlane/ent/generated/programmembership"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateProgramWithMembers is the resolver for the createProgramWithMembers field.

@@ -12,12 +12,12 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/organizationsetting"
 	"github.com/theopenlane/ent/generated/predicate"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

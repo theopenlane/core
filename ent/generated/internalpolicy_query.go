@@ -1222,12 +1222,7 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *InternalPolicy) { n.Edges.Comments = []*Note{} },
-			func(n *InternalPolicy, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[6] {
-					e.Edges.InternalPolicy = n
-				}
-			}); err != nil {
+			func(n *InternalPolicy, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1236,9 +1231,6 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 			func(n *InternalPolicy) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *InternalPolicy, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.InternalPolicy = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1323,24 +1315,14 @@ func (_q *InternalPolicyQuery) sqlAll(ctx context.Context, hooks ...queryHook) (
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedComments(name) },
-			func(n *InternalPolicy, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[6] {
-					e.Edges.InternalPolicy = n
-				}
-			}); err != nil {
+			func(n *InternalPolicy, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *InternalPolicy) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *InternalPolicy, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.InternalPolicy = n
-				}
-			}); err != nil {
+			func(n *InternalPolicy, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}

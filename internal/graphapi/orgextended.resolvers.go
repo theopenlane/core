@@ -16,10 +16,10 @@ import (
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/iam/auth"
-
-	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/shared/logx"
+
+	"github.com/theopenlane/core/internal/graphapi/model"
 )
 
 // CreateOrganizationWithMembers is the resolver for the createOrganizationWithMembers field.

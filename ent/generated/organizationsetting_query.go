@@ -456,12 +456,7 @@ func (_q *OrganizationSettingQuery) sqlAll(ctx context.Context, hooks ...queryHo
 	}
 	if query := _q.withOrganization; query != nil {
 		if err := _q.loadOrganization(ctx, query, nodes, nil,
-			func(n *OrganizationSetting, e *Organization) {
-				n.Edges.Organization = e
-				if !e.Edges.loadedTypes[19] {
-					e.Edges.Setting = n
-				}
-			}); err != nil {
+			func(n *OrganizationSetting, e *Organization) { n.Edges.Organization = e }); err != nil {
 			return nil, err
 		}
 	}

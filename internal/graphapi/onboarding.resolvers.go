@@ -10,9 +10,9 @@ import (
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/logx"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateOnboarding is the resolver for the createOnboarding field.

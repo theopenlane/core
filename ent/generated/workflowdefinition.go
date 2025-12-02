@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/workflowdefinition"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // WorkflowDefinition is the model entity for the WorkflowDefinition schema.

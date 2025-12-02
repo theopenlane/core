@@ -651,9 +651,6 @@ func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			func(n *DirectoryAccount) { n.Edges.WorkflowObjectRefs = []*WorkflowObjectRef{} },
 			func(n *DirectoryAccount, e *WorkflowObjectRef) {
 				n.Edges.WorkflowObjectRefs = append(n.Edges.WorkflowObjectRefs, e)
-				if !e.Edges.loadedTypes[6] {
-					e.Edges.DirectoryAccount = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -663,9 +660,6 @@ func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 			func(n *DirectoryAccount) { n.Edges.Memberships = []*DirectoryMembership{} },
 			func(n *DirectoryAccount, e *DirectoryMembership) {
 				n.Edges.Memberships = append(n.Edges.Memberships, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.DirectoryAccount = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -680,24 +674,14 @@ func (_q *DirectoryAccountQuery) sqlAll(ctx context.Context, hooks ...queryHook)
 	for name, query := range _q.withNamedWorkflowObjectRefs {
 		if err := _q.loadWorkflowObjectRefs(ctx, query, nodes,
 			func(n *DirectoryAccount) { n.appendNamedWorkflowObjectRefs(name) },
-			func(n *DirectoryAccount, e *WorkflowObjectRef) {
-				n.appendNamedWorkflowObjectRefs(name, e)
-				if !e.Edges.loadedTypes[6] {
-					e.Edges.DirectoryAccount = n
-				}
-			}); err != nil {
+			func(n *DirectoryAccount, e *WorkflowObjectRef) { n.appendNamedWorkflowObjectRefs(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedMemberships {
 		if err := _q.loadMemberships(ctx, query, nodes,
 			func(n *DirectoryAccount) { n.appendNamedMemberships(name) },
-			func(n *DirectoryAccount, e *DirectoryMembership) {
-				n.appendNamedMemberships(name, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.DirectoryAccount = n
-				}
-			}); err != nil {
+			func(n *DirectoryAccount, e *DirectoryMembership) { n.appendNamedMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}

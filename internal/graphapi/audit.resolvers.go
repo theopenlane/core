@@ -11,9 +11,9 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/shared/models"
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/shared/models"
 )
 
 // Changes is the resolver for the changes field.

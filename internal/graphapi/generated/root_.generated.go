@@ -12,11 +12,11 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/introspection"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/enums"
 )
 
 // NewExecutableSchema creates an ExecutableSchema from the ResolverRoot interface.

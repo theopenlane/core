@@ -116,7 +116,6 @@ func main() {
 			gen.FeatureSchemaConfig,
 			gen.FeatureIntercept,
 			gen.FeatureModifier,
-			gen.FeatureBidiEdgeRefs,
 			// this is disabled because it is not compatible with the entcache driver
 			// gen.FeatureExecQuery,
 		},

@@ -463,24 +463,14 @@ func (_q *JobTemplateQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*
 	if query := _q.withScheduledJobs; query != nil {
 		if err := _q.loadScheduledJobs(ctx, query, nodes,
 			func(n *JobTemplate) { n.Edges.ScheduledJobs = []*ScheduledJob{} },
-			func(n *JobTemplate, e *ScheduledJob) {
-				n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.JobTemplate = n
-				}
-			}); err != nil {
+			func(n *JobTemplate, e *ScheduledJob) { n.Edges.ScheduledJobs = append(n.Edges.ScheduledJobs, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedScheduledJobs {
 		if err := _q.loadScheduledJobs(ctx, query, nodes,
 			func(n *JobTemplate) { n.appendNamedScheduledJobs(name) },
-			func(n *JobTemplate, e *ScheduledJob) {
-				n.appendNamedScheduledJobs(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.JobTemplate = n
-				}
-			}); err != nil {
+			func(n *JobTemplate, e *ScheduledJob) { n.appendNamedScheduledJobs(name, e) }); err != nil {
 			return nil, err
 		}
 	}

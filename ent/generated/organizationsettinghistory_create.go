@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/organizationsettinghistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // OrganizationSettingHistoryCreate is the builder for creating a OrganizationSettingHistory entity.

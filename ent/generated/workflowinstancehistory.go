@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/workflowinstancehistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // WorkflowInstanceHistory is the model entity for the WorkflowInstanceHistory schema.

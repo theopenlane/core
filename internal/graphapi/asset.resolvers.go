@@ -11,10 +11,10 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/asset"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/shared/logx"
 )
 
 // CreateAsset is the resolver for the createAsset field.

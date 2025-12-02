@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/ent/generated"
-
 	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/shared/models"
 )

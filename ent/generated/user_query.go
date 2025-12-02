@@ -1316,9 +1316,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.PersonalAccessTokens = []*PersonalAccessToken{} },
 			func(n *User, e *PersonalAccessToken) {
 				n.Edges.PersonalAccessTokens = append(n.Edges.PersonalAccessTokens, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1326,23 +1323,13 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	if query := _q.withTfaSettings; query != nil {
 		if err := _q.loadTfaSettings(ctx, query, nodes,
 			func(n *User) { n.Edges.TfaSettings = []*TFASetting{} },
-			func(n *User, e *TFASetting) {
-				n.Edges.TfaSettings = append(n.Edges.TfaSettings, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *TFASetting) { n.Edges.TfaSettings = append(n.Edges.TfaSettings, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withSetting; query != nil {
 		if err := _q.loadSetting(ctx, query, nodes, nil,
-			func(n *User, e *UserSetting) {
-				n.Edges.Setting = e
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *UserSetting) { n.Edges.Setting = e }); err != nil {
 			return nil, err
 		}
 	}
@@ -1351,9 +1338,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.EmailVerificationTokens = []*EmailVerificationToken{} },
 			func(n *User, e *EmailVerificationToken) {
 				n.Edges.EmailVerificationTokens = append(n.Edges.EmailVerificationTokens, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1363,9 +1347,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.FileDownloadTokens = []*FileDownloadToken{} },
 			func(n *User, e *FileDownloadToken) {
 				n.Edges.FileDownloadTokens = append(n.Edges.FileDownloadTokens, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1375,9 +1356,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.PasswordResetTokens = []*PasswordResetToken{} },
 			func(n *User, e *PasswordResetToken) {
 				n.Edges.PasswordResetTokens = append(n.Edges.PasswordResetTokens, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1399,12 +1377,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	if query := _q.withWebauthns; query != nil {
 		if err := _q.loadWebauthns(ctx, query, nodes,
 			func(n *User) { n.Edges.Webauthns = []*Webauthn{} },
-			func(n *User, e *Webauthn) {
-				n.Edges.Webauthns = append(n.Edges.Webauthns, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *Webauthn) { n.Edges.Webauthns = append(n.Edges.Webauthns, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1438,24 +1411,14 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	if query := _q.withAssignerTasks; query != nil {
 		if err := _q.loadAssignerTasks(ctx, query, nodes,
 			func(n *User) { n.Edges.AssignerTasks = []*Task{} },
-			func(n *User, e *Task) {
-				n.Edges.AssignerTasks = append(n.Edges.AssignerTasks, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Assigner = n
-				}
-			}); err != nil {
+			func(n *User, e *Task) { n.Edges.AssignerTasks = append(n.Edges.AssignerTasks, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withAssigneeTasks; query != nil {
 		if err := _q.loadAssigneeTasks(ctx, query, nodes,
 			func(n *User) { n.Edges.AssigneeTasks = []*Task{} },
-			func(n *User, e *Task) {
-				n.Edges.AssigneeTasks = append(n.Edges.AssigneeTasks, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Assignee = n
-				}
-			}); err != nil {
+			func(n *User, e *Task) { n.Edges.AssigneeTasks = append(n.Edges.AssigneeTasks, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1469,12 +1432,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	if query := _q.withProgramsOwned; query != nil {
 		if err := _q.loadProgramsOwned(ctx, query, nodes,
 			func(n *User) { n.Edges.ProgramsOwned = []*Program{} },
-			func(n *User, e *Program) {
-				n.Edges.ProgramsOwned = append(n.Edges.ProgramsOwned, e)
-				if !e.Edges.loadedTypes[18] {
-					e.Edges.ProgramOwner = n
-				}
-			}); err != nil {
+			func(n *User, e *Program) { n.Edges.ProgramsOwned = append(n.Edges.ProgramsOwned, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1483,9 +1441,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.ImpersonationEvents = []*ImpersonationEvent{} },
 			func(n *User, e *ImpersonationEvent) {
 				n.Edges.ImpersonationEvents = append(n.Edges.ImpersonationEvents, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.User = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1495,9 +1450,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.TargetedImpersonations = []*ImpersonationEvent{} },
 			func(n *User, e *ImpersonationEvent) {
 				n.Edges.TargetedImpersonations = append(n.Edges.TargetedImpersonations, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.TargetUser = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1505,36 +1457,21 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	if query := _q.withNotifications; query != nil {
 		if err := _q.loadNotifications(ctx, query, nodes,
 			func(n *User) { n.Edges.Notifications = []*Notification{} },
-			func(n *User, e *Notification) {
-				n.Edges.Notifications = append(n.Edges.Notifications, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *Notification) { n.Edges.Notifications = append(n.Edges.Notifications, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withGroupMemberships; query != nil {
 		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.GroupMemberships = []*GroupMembership{} },
-			func(n *User, e *GroupMembership) {
-				n.Edges.GroupMemberships = append(n.Edges.GroupMemberships, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *GroupMembership) { n.Edges.GroupMemberships = append(n.Edges.GroupMemberships, e) }); err != nil {
 			return nil, err
 		}
 	}
 	if query := _q.withOrgMemberships; query != nil {
 		if err := _q.loadOrgMemberships(ctx, query, nodes,
 			func(n *User) { n.Edges.OrgMemberships = []*OrgMembership{} },
-			func(n *User, e *OrgMembership) {
-				n.Edges.OrgMemberships = append(n.Edges.OrgMemberships, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *OrgMembership) { n.Edges.OrgMemberships = append(n.Edges.OrgMemberships, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1543,9 +1480,6 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 			func(n *User) { n.Edges.ProgramMemberships = []*ProgramMembership{} },
 			func(n *User, e *ProgramMembership) {
 				n.Edges.ProgramMemberships = append(n.Edges.ProgramMemberships, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
 			}); err != nil {
 			return nil, err
 		}
@@ -1553,60 +1487,35 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	for name, query := range _q.withNamedPersonalAccessTokens {
 		if err := _q.loadPersonalAccessTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedPersonalAccessTokens(name) },
-			func(n *User, e *PersonalAccessToken) {
-				n.appendNamedPersonalAccessTokens(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *PersonalAccessToken) { n.appendNamedPersonalAccessTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedTfaSettings {
 		if err := _q.loadTfaSettings(ctx, query, nodes,
 			func(n *User) { n.appendNamedTfaSettings(name) },
-			func(n *User, e *TFASetting) {
-				n.appendNamedTfaSettings(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *TFASetting) { n.appendNamedTfaSettings(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedEmailVerificationTokens {
 		if err := _q.loadEmailVerificationTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedEmailVerificationTokens(name) },
-			func(n *User, e *EmailVerificationToken) {
-				n.appendNamedEmailVerificationTokens(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *EmailVerificationToken) { n.appendNamedEmailVerificationTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedFileDownloadTokens {
 		if err := _q.loadFileDownloadTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedFileDownloadTokens(name) },
-			func(n *User, e *FileDownloadToken) {
-				n.appendNamedFileDownloadTokens(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *FileDownloadToken) { n.appendNamedFileDownloadTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedPasswordResetTokens {
 		if err := _q.loadPasswordResetTokens(ctx, query, nodes,
 			func(n *User) { n.appendNamedPasswordResetTokens(name) },
-			func(n *User, e *PasswordResetToken) {
-				n.appendNamedPasswordResetTokens(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *PasswordResetToken) { n.appendNamedPasswordResetTokens(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1627,12 +1536,7 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	for name, query := range _q.withNamedWebauthns {
 		if err := _q.loadWebauthns(ctx, query, nodes,
 			func(n *User) { n.appendNamedWebauthns(name) },
-			func(n *User, e *Webauthn) {
-				n.appendNamedWebauthns(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.Owner = n
-				}
-			}); err != nil {
+			func(n *User, e *Webauthn) { n.appendNamedWebauthns(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1660,24 +1564,14 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	for name, query := range _q.withNamedAssignerTasks {
 		if err := _q.loadAssignerTasks(ctx, query, nodes,
 			func(n *User) { n.appendNamedAssignerTasks(name) },
-			func(n *User, e *Task) {
-				n.appendNamedAssignerTasks(name, e)
-				if !e.Edges.loadedTypes[2] {
-					e.Edges.Assigner = n
-				}
-			}); err != nil {
+			func(n *User, e *Task) { n.appendNamedAssignerTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedAssigneeTasks {
 		if err := _q.loadAssigneeTasks(ctx, query, nodes,
 			func(n *User) { n.appendNamedAssigneeTasks(name) },
-			func(n *User, e *Task) {
-				n.appendNamedAssigneeTasks(name, e)
-				if !e.Edges.loadedTypes[3] {
-					e.Edges.Assignee = n
-				}
-			}); err != nil {
+			func(n *User, e *Task) { n.appendNamedAssigneeTasks(name, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1691,84 +1585,49 @@ func (_q *UserQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*User, e
 	for name, query := range _q.withNamedProgramsOwned {
 		if err := _q.loadProgramsOwned(ctx, query, nodes,
 			func(n *User) { n.appendNamedProgramsOwned(name) },
-			func(n *User, e *Program) {
-				n.appendNamedProgramsOwned(name, e)
-				if !e.Edges.loadedTypes[18] {
-					e.Edges.ProgramOwner = n
-				}
-			}); err != nil {
+			func(n *User, e *Program) { n.appendNamedProgramsOwned(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedImpersonationEvents {
 		if err := _q.loadImpersonationEvents(ctx, query, nodes,
 			func(n *User) { n.appendNamedImpersonationEvents(name) },
-			func(n *User, e *ImpersonationEvent) {
-				n.appendNamedImpersonationEvents(name, e)
-				if !e.Edges.loadedTypes[0] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *ImpersonationEvent) { n.appendNamedImpersonationEvents(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedTargetedImpersonations {
 		if err := _q.loadTargetedImpersonations(ctx, query, nodes,
 			func(n *User) { n.appendNamedTargetedImpersonations(name) },
-			func(n *User, e *ImpersonationEvent) {
-				n.appendNamedTargetedImpersonations(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.TargetUser = n
-				}
-			}); err != nil {
+			func(n *User, e *ImpersonationEvent) { n.appendNamedTargetedImpersonations(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedNotifications {
 		if err := _q.loadNotifications(ctx, query, nodes,
 			func(n *User) { n.appendNamedNotifications(name) },
-			func(n *User, e *Notification) {
-				n.appendNamedNotifications(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *Notification) { n.appendNamedNotifications(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedGroupMemberships {
 		if err := _q.loadGroupMemberships(ctx, query, nodes,
 			func(n *User) { n.appendNamedGroupMemberships(name) },
-			func(n *User, e *GroupMembership) {
-				n.appendNamedGroupMemberships(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *GroupMembership) { n.appendNamedGroupMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedOrgMemberships {
 		if err := _q.loadOrgMemberships(ctx, query, nodes,
 			func(n *User) { n.appendNamedOrgMemberships(name) },
-			func(n *User, e *OrgMembership) {
-				n.appendNamedOrgMemberships(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *OrgMembership) { n.appendNamedOrgMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}
 	for name, query := range _q.withNamedProgramMemberships {
 		if err := _q.loadProgramMemberships(ctx, query, nodes,
 			func(n *User) { n.appendNamedProgramMemberships(name) },
-			func(n *User, e *ProgramMembership) {
-				n.appendNamedProgramMemberships(name, e)
-				if !e.Edges.loadedTypes[1] {
-					e.Edges.User = n
-				}
-			}); err != nil {
+			func(n *User, e *ProgramMembership) { n.appendNamedProgramMemberships(name, e) }); err != nil {
 			return nil, err
 		}
 	}

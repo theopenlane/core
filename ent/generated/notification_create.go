@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/shared/enums"
-	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/notification"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // NotificationCreate is the builder for creating a Notification entity.

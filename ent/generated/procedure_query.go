@@ -1075,12 +1075,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	if query := _q.withComments; query != nil {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Procedure) { n.Edges.Comments = []*Note{} },
-			func(n *Procedure, e *Note) {
-				n.Edges.Comments = append(n.Edges.Comments, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.Procedure = n
-				}
-			}); err != nil {
+			func(n *Procedure, e *Note) { n.Edges.Comments = append(n.Edges.Comments, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -1156,12 +1151,7 @@ func (_q *ProcedureQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Pr
 	for name, query := range _q.withNamedComments {
 		if err := _q.loadComments(ctx, query, nodes,
 			func(n *Procedure) { n.appendNamedComments(name) },
-			func(n *Procedure, e *Note) {
-				n.appendNamedComments(name, e)
-				if !e.Edges.loadedTypes[4] {
-					e.Edges.Procedure = n
-				}
-			}); err != nil {
+			func(n *Procedure, e *Note) { n.appendNamedComments(name, e) }); err != nil {
 			return nil, err
 		}
 	}

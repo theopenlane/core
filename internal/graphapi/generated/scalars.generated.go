@@ -6,9 +6,8 @@ import (
 	"context"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/vektah/gqlparser/v2/ast"
-
 	"github.com/theopenlane/shared/models"
+	"github.com/vektah/gqlparser/v2/ast"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -41,13 +40,13 @@ import (
 
 // region    ***************************** type.gotpl *****************************
 
-func (ec *executionContext) unmarshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAAGUID(ctx context.Context, v any) (*models.AAGUID, error) {
+func (ec *executionContext) unmarshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAAGUID(ctx context.Context, v any) (*models.AAGUID, error) {
 	var res = new(models.AAGUID)
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAAGUID(ctx context.Context, sel ast.SelectionSet, v *models.AAGUID) graphql.Marshaler {
+func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAAGUID(ctx context.Context, sel ast.SelectionSet, v *models.AAGUID) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -57,33 +56,33 @@ func (ec *executionContext) marshalNAAGUID2ᚖgithubᚗcomᚋtheopenlaneᚋcore�
 	return v
 }
 
-func (ec *executionContext) unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, v any) (models.AssessmentMethod, error) {
+func (ec *executionContext) unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethod(ctx context.Context, v any) (models.AssessmentMethod, error) {
 	var res models.AssessmentMethod
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx context.Context, sel ast.SelectionSet, v models.AssessmentMethod) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethod(ctx context.Context, sel ast.SelectionSet, v models.AssessmentMethod) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx context.Context, v any) (models.AssessmentObjective, error) {
+func (ec *executionContext) unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjective(ctx context.Context, v any) (models.AssessmentObjective, error) {
 	var res models.AssessmentObjective
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx context.Context, sel ast.SelectionSet, v models.AssessmentObjective) graphql.Marshaler {
+func (ec *executionContext) marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjective(ctx context.Context, sel ast.SelectionSet, v models.AssessmentObjective) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx context.Context, v any) (*models.Change, error) {
+func (ec *executionContext) unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChange(ctx context.Context, v any) (*models.Change, error) {
 	var res = new(models.Change)
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx context.Context, sel ast.SelectionSet, v *models.Change) graphql.Marshaler {
+func (ec *executionContext) marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChange(ctx context.Context, sel ast.SelectionSet, v *models.Change) graphql.Marshaler {
 	if v == nil {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
 			graphql.AddErrorf(ctx, "the requested element is null which the schema does not allow")
@@ -109,43 +108,43 @@ func (ec *executionContext) marshalNChannel2string(ctx context.Context, sel ast.
 	return res
 }
 
-func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
+func (ec *executionContext) unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx context.Context, v any) (models.DateTime, error) {
 	var res models.DateTime
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
+func (ec *executionContext) marshalNDateTime2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v models.DateTime) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
+func (ec *executionContext) unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidence(ctx context.Context, v any) (models.ExampleEvidence, error) {
 	var res models.ExampleEvidence
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx context.Context, sel ast.SelectionSet, v models.ExampleEvidence) graphql.Marshaler {
+func (ec *executionContext) marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidence(ctx context.Context, sel ast.SelectionSet, v models.ExampleEvidence) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx context.Context, v any) (models.ImplementationGuidance, error) {
+func (ec *executionContext) unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidance(ctx context.Context, v any) (models.ImplementationGuidance, error) {
 	var res models.ImplementationGuidance
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx context.Context, sel ast.SelectionSet, v models.ImplementationGuidance) graphql.Marshaler {
+func (ec *executionContext) marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidance(ctx context.Context, sel ast.SelectionSet, v models.ImplementationGuidance) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
+func (ec *executionContext) unmarshalNReference2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReference(ctx context.Context, v any) (models.Reference, error) {
 	var res models.Reference
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx context.Context, sel ast.SelectionSet, v models.Reference) graphql.Marshaler {
+func (ec *executionContext) marshalNReference2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReference(ctx context.Context, sel ast.SelectionSet, v models.Reference) graphql.Marshaler {
 	return v
 }
 
@@ -187,17 +186,17 @@ func (ec *executionContext) marshalNUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return res
 }
 
-func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
+func (ec *executionContext) unmarshalOAddress2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAddress(ctx context.Context, v any) (models.Address, error) {
 	var res models.Address
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAddress2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v models.Address) graphql.Marshaler {
+func (ec *executionContext) marshalOAddress2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v models.Address) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, v any) (*models.Address, error) {
+func (ec *executionContext) unmarshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAddress(ctx context.Context, v any) (*models.Address, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -206,14 +205,14 @@ func (ec *executionContext) unmarshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋco
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v *models.Address) graphql.Marshaler {
+func (ec *executionContext) marshalOAddress2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAddress(ctx context.Context, sel ast.SelectionSet, v *models.Address) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, v any) ([]models.AssessmentMethod, error) {
+func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, v any) ([]models.AssessmentMethod, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -223,7 +222,7 @@ func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopen
 	res := make([]models.AssessmentMethod, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethod(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -231,13 +230,13 @@ func (ec *executionContext) unmarshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopen
 	return res, nil
 }
 
-func (ec *executionContext) marshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentMethod) graphql.Marshaler {
+func (ec *executionContext) marshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethodᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentMethod) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentMethod(ctx, sel, v[i])
+		ret[i] = ec.marshalNAssessmentMethod2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentMethod(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -249,7 +248,7 @@ func (ec *executionContext) marshalOAssessmentMethod2ᚕgithubᚗcomᚋtheopenla
 	return ret
 }
 
-func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, v any) ([]models.AssessmentObjective, error) {
+func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, v any) ([]models.AssessmentObjective, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -259,7 +258,7 @@ func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheo
 	res := make([]models.AssessmentObjective, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjective(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -267,13 +266,13 @@ func (ec *executionContext) unmarshalOAssessmentObjective2ᚕgithubᚗcomᚋtheo
 	return res, nil
 }
 
-func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentObjective) graphql.Marshaler {
+func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjectiveᚄ(ctx context.Context, sel ast.SelectionSet, v []models.AssessmentObjective) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐAssessmentObjective(ctx, sel, v[i])
+		ret[i] = ec.marshalNAssessmentObjective2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐAssessmentObjective(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -285,7 +284,7 @@ func (ec *executionContext) marshalOAssessmentObjective2ᚕgithubᚗcomᚋtheope
 	return ret
 }
 
-func (ec *executionContext) unmarshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx context.Context, v any) ([]*models.Change, error) {
+func (ec *executionContext) unmarshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChangeᚄ(ctx context.Context, v any) ([]*models.Change, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -295,7 +294,7 @@ func (ec *executionContext) unmarshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋ
 	res := make([]*models.Change, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChange(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -303,13 +302,13 @@ func (ec *executionContext) unmarshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Change) graphql.Marshaler {
+func (ec *executionContext) marshalOChange2ᚕᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChangeᚄ(ctx context.Context, sel ast.SelectionSet, v []*models.Change) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐChange(ctx, sel, v[i])
+		ret[i] = ec.marshalNChange2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐChange(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -357,17 +356,17 @@ func (ec *executionContext) marshalOChannel2ᚕstringᚄ(ctx context.Context, se
 	return ret
 }
 
-func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
+func (ec *executionContext) unmarshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCredentialSet(ctx context.Context, v any) (models.CredentialSet, error) {
 	var res models.CredentialSet
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
+func (ec *executionContext) marshalOCredentialSet2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v models.CredentialSet) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, v any) (*models.CredentialSet, error) {
+func (ec *executionContext) unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCredentialSet(ctx context.Context, v any) (*models.CredentialSet, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -376,14 +375,14 @@ func (ec *executionContext) unmarshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlan
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v *models.CredentialSet) graphql.Marshaler {
+func (ec *executionContext) marshalOCredentialSet2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐCredentialSet(ctx context.Context, sel ast.SelectionSet, v *models.CredentialSet) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
+func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTimeᚄ(ctx context.Context, v any) ([]models.DateTime, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -393,7 +392,7 @@ func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋc
 	res := make([]models.DateTime, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNDateTime2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -401,13 +400,13 @@ func (ec *executionContext) unmarshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋc
 	return res, nil
 }
 
-func (ec *executionContext) marshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []models.DateTime) graphql.Marshaler {
+func (ec *executionContext) marshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTimeᚄ(ctx context.Context, sel ast.SelectionSet, v []models.DateTime) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNDateTime2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx, sel, v[i])
+		ret[i] = ec.marshalNDateTime2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -419,7 +418,7 @@ func (ec *executionContext) marshalODateTime2ᚕgithubᚗcomᚋtheopenlaneᚋcor
 	return ret
 }
 
-func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
+func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx context.Context, v any) (*models.DateTime, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -428,14 +427,14 @@ func (ec *executionContext) unmarshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋc
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
+func (ec *executionContext) marshalODateTime2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐDateTime(ctx context.Context, sel ast.SelectionSet, v *models.DateTime) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
+func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, v any) ([]models.ExampleEvidence, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -445,7 +444,7 @@ func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenl
 	res := make([]models.ExampleEvidence, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidence(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -453,13 +452,13 @@ func (ec *executionContext) unmarshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenl
 	return res, nil
 }
 
-func (ec *executionContext) marshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ExampleEvidence) graphql.Marshaler {
+func (ec *executionContext) marshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ExampleEvidence) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐExampleEvidence(ctx, sel, v[i])
+		ret[i] = ec.marshalNExampleEvidence2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐExampleEvidence(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -471,7 +470,7 @@ func (ec *executionContext) marshalOExampleEvidence2ᚕgithubᚗcomᚋtheopenlan
 	return ret
 }
 
-func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, v any) ([]models.ImplementationGuidance, error) {
+func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, v any) ([]models.ImplementationGuidance, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -481,7 +480,7 @@ func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋt
 	res := make([]models.ImplementationGuidance, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidance(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -489,13 +488,13 @@ func (ec *executionContext) unmarshalOImplementationGuidance2ᚕgithubᚗcomᚋt
 	return res, nil
 }
 
-func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ImplementationGuidance) graphql.Marshaler {
+func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidanceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.ImplementationGuidance) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐImplementationGuidance(ctx, sel, v[i])
+		ret[i] = ec.marshalNImplementationGuidance2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐImplementationGuidance(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -507,7 +506,7 @@ func (ec *executionContext) marshalOImplementationGuidance2ᚕgithubᚗcomᚋthe
 	return ret
 }
 
-func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
+func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐJobConfiguration(ctx context.Context, v any) (models.JobConfiguration, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -516,14 +515,14 @@ func (ec *executionContext) unmarshalOJobConfiguration2githubᚗcomᚋtheopenlan
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
+func (ec *executionContext) marshalOJobConfiguration2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐJobConfiguration(ctx context.Context, sel ast.SelectionSet, v models.JobConfiguration) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
+func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReferenceᚄ(ctx context.Context, v any) ([]models.Reference, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -533,7 +532,7 @@ func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋ
 	res := make([]models.Reference, len(vSlice))
 	for i := range vSlice {
 		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
-		res[i], err = ec.unmarshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx, vSlice[i])
+		res[i], err = ec.unmarshalNReference2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReference(ctx, vSlice[i])
 		if err != nil {
 			return nil, err
 		}
@@ -541,13 +540,13 @@ func (ec *executionContext) unmarshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋ
 	return res, nil
 }
 
-func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReferenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Reference) graphql.Marshaler {
+func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReferenceᚄ(ctx context.Context, sel ast.SelectionSet, v []models.Reference) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	ret := make(graphql.Array, len(v))
 	for i := range v {
-		ret[i] = ec.marshalNReference2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐReference(ctx, sel, v[i])
+		ret[i] = ec.marshalNReference2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐReference(ctx, sel, v[i])
 	}
 
 	for _, e := range ret {
@@ -559,7 +558,7 @@ func (ec *executionContext) marshalOReference2ᚕgithubᚗcomᚋtheopenlaneᚋco
 	return ret
 }
 
-func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, v any) (models.SSOAuthorizationMap, error) {
+func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, v any) (models.SSOAuthorizationMap, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -568,7 +567,7 @@ func (ec *executionContext) unmarshalOSSOAuthorizationMap2githubᚗcomᚋtheopen
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, sel ast.SelectionSet, v models.SSOAuthorizationMap) graphql.Marshaler {
+func (ec *executionContext) marshalOSSOAuthorizationMap2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐSSOAuthorizationMap(ctx context.Context, sel ast.SelectionSet, v models.SSOAuthorizationMap) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
@@ -629,7 +628,7 @@ func (ec *executionContext) marshalOUpload2ᚖgithubᚗcomᚋ99designsᚋgqlgen�
 	return res
 }
 
-func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐVersionBump(ctx context.Context, v any) (*models.VersionBump, error) {
+func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐVersionBump(ctx context.Context, v any) (*models.VersionBump, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -638,24 +637,24 @@ func (ec *executionContext) unmarshalOVersionBump2ᚖgithubᚗcomᚋtheopenlane�
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐVersionBump(ctx context.Context, sel ast.SelectionSet, v *models.VersionBump) graphql.Marshaler {
+func (ec *executionContext) marshalOVersionBump2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐVersionBump(ctx context.Context, sel ast.SelectionSet, v *models.VersionBump) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (models.WorkflowDefinitionDocument, error) {
+func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (models.WorkflowDefinitionDocument, error) {
 	var res models.WorkflowDefinitionDocument
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v models.WorkflowDefinitionDocument) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowDefinitionDocument2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v models.WorkflowDefinitionDocument) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (*models.WorkflowDefinitionDocument, error) {
+func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, v any) (*models.WorkflowDefinitionDocument, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -664,24 +663,24 @@ func (ec *executionContext) unmarshalOWorkflowDefinitionDocument2ᚖgithubᚗcom
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowDefinitionDocument) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowDefinitionDocument2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowDefinitionDocument(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowDefinitionDocument) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (models.WorkflowEventPayload, error) {
+func (ec *executionContext) unmarshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (models.WorkflowEventPayload, error) {
 	var res models.WorkflowEventPayload
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v models.WorkflowEventPayload) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowEventPayload2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v models.WorkflowEventPayload) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (*models.WorkflowEventPayload, error) {
+func (ec *executionContext) unmarshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowEventPayload(ctx context.Context, v any) (*models.WorkflowEventPayload, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -690,24 +689,24 @@ func (ec *executionContext) unmarshalOWorkflowEventPayload2ᚖgithubᚗcomᚋthe
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowEventPayload) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowEventPayload2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowEventPayload(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowEventPayload) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (models.WorkflowInstanceContext, error) {
+func (ec *executionContext) unmarshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (models.WorkflowInstanceContext, error) {
 	var res models.WorkflowInstanceContext
 	err := res.UnmarshalGQL(v)
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowInstanceContext2githubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v models.WorkflowInstanceContext) graphql.Marshaler {
 	return v
 }
 
-func (ec *executionContext) unmarshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (*models.WorkflowInstanceContext, error) {
+func (ec *executionContext) unmarshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, v any) (*models.WorkflowInstanceContext, error) {
 	if v == nil {
 		return nil, nil
 	}
@@ -716,7 +715,7 @@ func (ec *executionContext) unmarshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋ
 	return res, graphql.ErrorOnPath(ctx, err)
 }
 
-func (ec *executionContext) marshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋpkgᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowInstanceContext) graphql.Marshaler {
+func (ec *executionContext) marshalOWorkflowInstanceContext2ᚖgithubᚗcomᚋtheopenlaneᚋsharedᚋmodelsᚐWorkflowInstanceContext(ctx context.Context, sel ast.SelectionSet, v *models.WorkflowInstanceContext) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
