@@ -73,8 +73,8 @@ module while `features.Base()` marks core or internal schemas that bypass module
 Multiple modules can be listed to allow access if *any* are enabled,
 e.g. `features.Requires("compliance-module", "trust-center")`.
 Policies and interceptors can inspect these annotations to enforce access.
-Running `go generate ./internal/ent/generate` produces a `features_gen.go`
-file inside `internal/ent/generated` mapping schemas to required modules. This
+Running `go generate ./ent/generate` produces a `features_gen.go`
+file inside `ent/generated` mapping schemas to required modules. This
 mapping can be imported by privacy rules or interceptors to apply checks based
 on the annotations.
 

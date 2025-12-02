@@ -44,12 +44,12 @@ const (
 // any external packages must use the jsonschema description tags to add comments
 var includedPackages = []string{
 	"./config",
-	"./internal/ent",
-	"./internal/entdb",
+	"./ent",
+	"./ent/entdb",
 	"./internal/httpserve/handlers",
 	"./pkg/middleware",
 	"./pkg/objects",
-	"./internal/ent/entconfig",
+	"./ent/entconfig",
 	"./pkg/entitlements",
 	"./pkg/summarizer",
 }

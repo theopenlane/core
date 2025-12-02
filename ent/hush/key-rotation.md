@@ -43,7 +43,7 @@ When you call `Decrypt()`:
 ### 1. Generate Initial Keyset
 ```bash
 # Generate your first keyset
-go run internal/ent/hush/cmd/hush/main.go generate
+go run ent/hush/cmd/hush/main.go generate
 
 # Set it in your environment
 export OPENLANE_TINK_KEYSET='<generated-keyset>'
@@ -52,10 +52,10 @@ export OPENLANE_TINK_KEYSET='<generated-keyset>'
 ### 2. Rotate Keys (Add New Primary)
 ```bash
 # Current keyset info
-go run internal/ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
+go run ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
 
 # Rotate: adds new primary key, keeps old keys for decryption
-NEW_KEYSET=$(go run internal/ent/hush/cmd/hush/main.go rotate "$OPENLANE_TINK_KEYSET" | grep -A1 "New keyset:" | tail -1)
+NEW_KEYSET=$(go run ent/hush/cmd/hush/main.go rotate "$OPENLANE_TINK_KEYSET" | grep -A1 "New keyset:" | tail -1)
 
 # Update environment variable
 export OPENLANE_TINK_KEYSET="$NEW_KEYSET"
@@ -69,7 +69,7 @@ export OPENLANE_TINK_KEYSET="$NEW_KEYSET"
 # (your application tests should verify this)
 
 # Check keyset info
-go run internal/ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
+go run ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
 ```
 
 ## Advanced Key Management
@@ -77,21 +77,21 @@ go run internal/ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
 ### Add Keys Without Changing Primary
 ```bash
 # Useful for preparing for rotation
-go run internal/ent/hush/cmd/hush/main.go add "$OPENLANE_TINK_KEYSET"
+go run ent/hush/cmd/hush/main.go add "$OPENLANE_TINK_KEYSET"
 ```
 
 ### Disable Old Keys
 ```bash
 # Keep only the 2 most recent keys active
 # (Older keys remain for decryption but won't be used for new encryption)
-go run internal/ent/hush/cmd/hush/main.go disable "$OPENLANE_TINK_KEYSET" 2
+go run ent/hush/cmd/hush/main.go disable "$OPENLANE_TINK_KEYSET" 2
 ```
 
 ### Key Information
 
 ```bash
 # View detailed keyset information
-go run internal/ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
+go run ent/hush/cmd/hush/main.go info "$OPENLANE_TINK_KEYSET"
 ```
 
 Example output:

@@ -115,7 +115,7 @@ sequenceDiagram
 
 ```bash
 # Generate a new Tink keyset for encryption
-go run -tags generate ./internal/ent/hush/cmd/hush generate
+go run -tags generate ./ent/hush/cmd/hush generate
 
 # Example output:
 # OPENLANE_TINK_KEYSET=CNnD/p0JEmQKWAowdHlwZS5nb29nbGVhcGlzLmNvbS9nb29nbGUuY3J5cHRvLnRpbmsuQWVzR2NtS2V5EiIaID+JaHu+6zMW3YgphNkpL5lVJMVeZdAjJclgAHyShxUOGAEQARjZw/6dCSAB
@@ -293,7 +293,7 @@ Base64 encoding ensures encrypted data is stored safely as text in any database.
 
 ```bash
 # Generate a new keyset
-go run -tags generate ./internal/ent/hush/cmd/hush generate
+go run -tags generate ./ent/hush/cmd/hush generate
 
 # Output includes the base64-encoded keyset
 OPENLANE_TINK_KEYSET=<base64-encoded-keyset>
@@ -344,7 +344,7 @@ Tink's envelope encryption enables key rotation without re-encrypting existing d
 
 1. **Generate New Keyset**
    ```bash
-   go run -tags generate ./internal/ent/hush/cmd/hush generate
+   go run -tags generate ./ent/hush/cmd/hush generate
    ```
 
 2. **Add to Existing Keyset**
@@ -395,16 +395,16 @@ Test keysets with the hush CLI:
 
 ```bash
 # Generate a new keyset
-go run -tags generate ./internal/ent/hush/cmd/hush generate
+go run -tags generate ./ent/hush/cmd/hush generate
 
 # Generate quietly (script-friendly)
-go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet
+go run -tags generate ./ent/hush/cmd/hush generate --quiet
 
 # Generate in export format
-go run -tags generate ./internal/ent/hush/cmd/hush generate --export
+go run -tags generate ./ent/hush/cmd/hush generate --export
 
 # Show keyset information
-go run -tags generate ./internal/ent/hush/cmd/hush info <keyset>
+go run -tags generate ./ent/hush/cmd/hush info <keyset>
 ```
 
 ## Migration
@@ -712,7 +712,7 @@ func (DatabaseConfig) Mixin() []ent.Mixin {
 
 ```bash
 # Test encryption works with new keyset
-KEYSET=$(go run -tags generate ./internal/ent/hush/cmd/hush generate --quiet)
+KEYSET=$(go run -tags generate ./ent/hush/cmd/hush generate --quiet)
 echo "Generated keyset: $KEYSET"
 
 # Verify keyset is valid

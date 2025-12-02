@@ -37,4 +37,4 @@ tasks:
     desc: generate a new ent schema from template
     silent: true
     cmds:
-      - go run -mod=readonly entgo.io/ent/cmd/ent new --template ../internal/ent/base/entinit.tmpl --target ../internal/ent/schema {{.CLI_ARGS}}
+      - go run -mod=readonly entgo.io/ent/cmd/ent new --template ../ent/base/entinit.tmpl --target ../ent/schema {{.CLI_ARGS}}

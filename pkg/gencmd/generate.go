@@ -126,7 +126,7 @@ func loadSchemaNames() {
 	}
 
 	// Schema path is always relative to project root
-	schemaPath := "../../internal/ent/schema"
+	schemaPath := "../../ent/schema"
 
 	graph, err := entc.LoadGraph(schemaPath, &gen.Config{})
 	if err == nil && graph != nil {

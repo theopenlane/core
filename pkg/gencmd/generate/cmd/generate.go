@@ -14,7 +14,7 @@ import (
 )
 
 const (
-	relativeSchemaPath = "../../internal/ent/schema"
+	relativeSchemaPath = "../../ent/schema"
 )
 
 var generateCmd = &cobra.Command{
