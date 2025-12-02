@@ -226,8 +226,9 @@ func TestMutationCreateJobTemplate(t *testing.T) {
 				Title:    "Test Job Template",
 				Platform: enums.JobPlatformTypeGo,
 			},
-			client: suite.client.api,
-			ctx:    testUser1.UserCtx,
+			client:      suite.client.api,
+			ctx:         testUser1.UserCtx,
+			expectedErr: "invalid input provided",
 		},
 		{
 			name: "invalid cron",
