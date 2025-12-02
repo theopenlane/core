@@ -45,7 +45,6 @@ func (ScheduledJob) Fields() []ent.Field {
 		field.Bool("active").
 			Default(true).
 			Comment("whether the scheduled job is active"),
-		// TODO: when a job gets set to inactive, it should pause the job in windmill
 		field.JSON("configuration", models.JobConfiguration{}).
 			Optional().
 			Annotations(

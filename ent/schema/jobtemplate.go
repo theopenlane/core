@@ -64,8 +64,8 @@ func (JobTemplate) Fields() []ent.Field {
 				entgql.OrderField("PLATFORM"),
 			).
 			Comment("the platform to use to execute this job, e.g. golang, typescript, python, etc."),
-		field.String("windmill_path").
-			Annotations(
+		field.String("windmill_path"). //TODO: remove windmill references
+						Annotations(
 				entgql.Skip(
 					entgql.SkipAll, // hidden from the graphql api, this is an internal field used to track the windmill path
 				),

@@ -10,7 +10,7 @@ import (
 	"github.com/Yamashou/gqlgenc/generator"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/pkg/genhelpers"
 )
 
 const (

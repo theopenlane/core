@@ -11,7 +11,6 @@ import (
 
 // cronerParser is a cron parser that supports six fields (second, minute, hour, day of month, month, day of week).
 // It is used to parse cron expressions for scheduled jobs.
-// https://www.windmill.dev/docs/core_concepts/scheduling
 // this is slightly different from the standard linux cron syntax which has five fields
 // (minute, hour, day of month, month, day of week).
 var cronerParser = cron.NewParser(
