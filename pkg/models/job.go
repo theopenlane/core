@@ -63,9 +63,7 @@ func (job *JobConfiguration) UnmarshalGQL(v interface{}) error {
 // - it must not be localhost
 // - it must not be a loopback address to our machine
 func ValidateDownloadURLnloadURL() func(s string) error {
-	return func(s string) error {
-		return validateURL(s)
-	}
+	return validateURL
 }
 
 func validateURL(s string) error {
