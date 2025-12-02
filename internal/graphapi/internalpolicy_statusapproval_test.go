@@ -9,9 +9,9 @@ import (
 	"gotest.tools/v3/assert"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestCreateInternalPolicyStatusApproval(t *testing.T) {

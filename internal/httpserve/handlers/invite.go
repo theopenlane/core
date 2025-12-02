@@ -14,13 +14,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/token"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/middleware/transaction"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // Invite holds the Token, InviteToken references, and the additional user input to complete acceptance of the invitation

@@ -4,11 +4,11 @@ import (
 	"database/sql"
 	"slices"
 
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

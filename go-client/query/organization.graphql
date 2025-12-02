@@ -1,0 +1,128 @@
+mutation CreateOrganization($input: CreateOrganizationInput!, $avatarFile: Upload) {
+  createOrganization(input: $input, avatarFile: $avatarFile) {
+    organization {
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      dedicatedDb
+      description
+      displayName
+      id
+      name
+      personalOrg
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteOrganization($deleteOrganizationId: ID!) {
+  deleteOrganization(id: $deleteOrganizationId) {
+    deletedID
+  }
+}
+
+query GetAllOrganizations {
+  organizations {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        dedicatedDb
+        description
+        displayName
+        id
+        name
+        personalOrg
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetOrganizationByID($organizationId: ID!) {
+  organization(id: $organizationId) {
+    avatarLocalFileID
+    avatarRemoteURL
+    avatarUpdatedAt
+    createdAt
+    createdBy
+    dedicatedDb
+    description
+    displayName
+    id
+    name
+    personalOrg
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetOrganizations($first: Int, $last: Int, $where: OrganizationWhereInput) {
+  organizations(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        dedicatedDb
+        description
+        displayName
+        id
+        name
+        personalOrg
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateOrganization($updateOrganizationId: ID!, $input: UpdateOrganizationInput!, $avatarFile: Upload) {
+  updateOrganization(
+    id: $updateOrganizationId
+    input: $input
+    avatarFile: $avatarFile
+  ) {
+    organization {
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      dedicatedDb
+      description
+      displayName
+      id
+      name
+      personalOrg
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

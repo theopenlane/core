@@ -8,10 +8,10 @@ import (
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // Event holds the schema definition for the Event entity

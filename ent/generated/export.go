@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/export"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Export is the model entity for the Export schema.

@@ -9,10 +9,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 type skipCreateUserPermissions func(context.Context, ent.Mutation) bool

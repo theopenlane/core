@@ -4,8 +4,8 @@ import (
 	"context"
 	"testing"
 
-	"github.com/theopenlane/core/pkg/entitlements"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 func TestNew_MissingDeps(t *testing.T) {

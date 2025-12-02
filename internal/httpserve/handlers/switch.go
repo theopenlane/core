@@ -8,12 +8,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/middleware/transaction"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // SwitchHandler is responsible for handling requests to the `/switch` endpoint, and changing the user's logged in organization context

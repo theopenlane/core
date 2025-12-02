@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/findingcontrolhistory"
 	"github.com/theopenlane/ent/generated/predicate"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

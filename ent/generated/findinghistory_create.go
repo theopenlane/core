@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/findinghistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 )
 
 // FindingHistoryCreate is the builder for creating a FindingHistory entity.

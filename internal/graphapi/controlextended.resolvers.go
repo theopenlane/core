@@ -20,8 +20,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
 )
 
 // CreateControlsByClone is the resolver for the createControlsByClone field.

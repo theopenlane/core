@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/userhistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // UserHistoryCreate is the builder for creating a UserHistory entity.

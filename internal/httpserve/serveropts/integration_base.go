@@ -3,8 +3,9 @@ package serveropts
 import (
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/keymaker"
+	"github.com/theopenlane/shared/integrations/registry"
+	"github.com/theopenlane/shared/keymaker"
+
 	"github.com/theopenlane/core/internal/keystore"
 	ent "github.com/theopenlane/ent/generated"
 )

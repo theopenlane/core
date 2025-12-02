@@ -1,0 +1,175 @@
+mutation CreateBulkCSVJobTemplate($input: Upload!) {
+  createBulkCSVJobTemplate(input: $input) {
+    jobTemplates {
+      configuration
+      createdAt
+      createdBy
+      cron
+      description
+      displayID
+      downloadURL
+      id
+      ownerID
+      platform
+      systemOwned
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkJobTemplate($input: [CreateJobTemplateInput!]) {
+  createBulkJobTemplate(input: $input) {
+    jobTemplates {
+      configuration
+      createdAt
+      createdBy
+      cron
+      description
+      displayID
+      downloadURL
+      id
+      ownerID
+      platform
+      systemOwned
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateJobTemplate($input: CreateJobTemplateInput!) {
+  createJobTemplate(input: $input) {
+    jobTemplate {
+      configuration
+      createdAt
+      createdBy
+      cron
+      description
+      displayID
+      downloadURL
+      id
+      ownerID
+      platform
+      systemOwned
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteJobTemplate($deleteJobTemplateId: ID!) {
+  deleteJobTemplate(id: $deleteJobTemplateId) {
+    deletedID
+  }
+}
+
+query GetAllJobTemplates {
+  jobTemplates {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        configuration
+        createdAt
+        createdBy
+        cron
+        description
+        displayID
+        downloadURL
+        id
+        ownerID
+        platform
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetJobTemplateByID($jobTemplateId: ID!) {
+  jobTemplate(id: $jobTemplateId) {
+    configuration
+    createdAt
+    createdBy
+    cron
+    description
+    displayID
+    downloadURL
+    id
+    ownerID
+    platform
+    systemOwned
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetJobTemplates($first: Int, $last: Int, $where: JobTemplateWhereInput) {
+  jobTemplates(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        configuration
+        createdAt
+        createdBy
+        cron
+        description
+        displayID
+        downloadURL
+        id
+        ownerID
+        platform
+        systemOwned
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateJobTemplate($updateJobTemplateId: ID!, $input: UpdateJobTemplateInput!) {
+  updateJobTemplate(id: $updateJobTemplateId, input: $input) {
+    jobTemplate {
+      configuration
+      createdAt
+      createdBy
+      cron
+      description
+      displayID
+      downloadURL
+      id
+      ownerID
+      platform
+      systemOwned
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

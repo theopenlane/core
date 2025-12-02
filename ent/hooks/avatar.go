@@ -3,7 +3,7 @@ package hooks
 import (
 	"context"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 // AvatarMutation is an interface for setting the local file ID for an avatar

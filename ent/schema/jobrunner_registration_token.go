@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/privacy/policy"
@@ -17,6 +16,7 @@ import (
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/utils/keygen"
 )
 

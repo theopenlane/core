@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/utils/cli/tables"
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 // stripeClient defines the methods used by this CLI. It matches entitlements.StripeClient so tests can substitute a fake implementation

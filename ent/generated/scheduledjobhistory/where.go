@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 )
 
 // ID filters vertices based on their ID field.

@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/customdomain"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/trustcenter"
 	"github.com/theopenlane/ent/generated/trustcentersetting"
 	"github.com/theopenlane/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/shared/enums"
 )
 
 // TrustCenter is the model entity for the TrustCenter schema.

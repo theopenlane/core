@@ -16,12 +16,12 @@ import (
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
 	"github.com/theopenlane/core/internal/httpserve/serveropts"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/olauth"
 	"github.com/theopenlane/ent/entdb"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
+	pkgobjects "github.com/theopenlane/shared/objects"
+	"github.com/theopenlane/shared/olauth"
+	"github.com/theopenlane/shared/soiree"
 )
 
 var serveCmd = &cobra.Command{

@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/ent/generated/event"
@@ -35,6 +34,7 @@ import (
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/usersetting"
 	"github.com/theopenlane/ent/generated/webauthn"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

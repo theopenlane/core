@@ -12,10 +12,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/rout"
 )

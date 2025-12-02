@@ -15,7 +15,7 @@ import (
 
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 const defaultTagSubmatchCount = 2

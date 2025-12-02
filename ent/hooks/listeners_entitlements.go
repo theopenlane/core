@@ -9,16 +9,16 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 	sync "github.com/theopenlane/ent/entitlements/reconciler"
 	entgen "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
+	"github.com/theopenlane/shared/soiree"
 	"github.com/theopenlane/utils/contextx"
 )
 

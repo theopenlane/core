@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/hushhistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 )
 
 // HushHistoryCreate is the builder for creating a HushHistory entity.

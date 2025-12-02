@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/finding"
 	"github.com/theopenlane/ent/generated/findingcontrol"
 	"github.com/theopenlane/ent/generated/standard"
+	"github.com/theopenlane/shared/models"
 )
 
 // FindingControl is the model entity for the FindingControl schema.

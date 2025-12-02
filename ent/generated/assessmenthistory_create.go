@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/assessmenthistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // AssessmentHistoryCreate is the builder for creating a AssessmentHistory entity.

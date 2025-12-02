@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/workflowassignmenttargethistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // WorkflowAssignmentTargetHistory is the model entity for the WorkflowAssignmentTargetHistory schema.

@@ -4,9 +4,9 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/riverboat/pkg/jobs"
+	"github.com/theopenlane/shared/logx"
 )
 
 // sendVerificationEmail sends an email to a user to verify their email address

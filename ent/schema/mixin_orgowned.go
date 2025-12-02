@@ -12,7 +12,6 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/intercept"
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 const (

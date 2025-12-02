@@ -84,7 +84,7 @@ func generateEnum(name string, values []string) error {
 
 	outputFile := strcase.SnakeCase(strings.ToLower(name)) + ".go"
 
-	file, err := os.Create("../../pkg/enums/" + outputFile)
+	file, err := os.Create("../../shared/enums/" + outputFile)
 	if err != nil {
 		return err
 	}

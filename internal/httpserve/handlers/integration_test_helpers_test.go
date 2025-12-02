@@ -6,10 +6,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/shared/integrations/config"
+	"github.com/theopenlane/shared/integrations/providers"
+	"github.com/theopenlane/shared/integrations/registry"
+	"github.com/theopenlane/shared/integrations/types"
 )
 
 func (suite *HandlerTestSuite) withIntegrationRegistry(t *testing.T, specs map[types.ProviderType]config.ProviderSpec) func() {

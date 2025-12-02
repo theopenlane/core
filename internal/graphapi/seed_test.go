@@ -9,13 +9,15 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"gotest.tools/v3/assert"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/models"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 	ent "github.com/theopenlane/ent/generated"
 	openlaneclient "github.com/theopenlane/go-client"
+
+	"github.com/theopenlane/shared/enums"
+	authmw "github.com/theopenlane/shared/middleware/auth"
+	"github.com/theopenlane/shared/models"
+
+	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/testutils"
 )
 
 var (
@@ -129,7 +131,7 @@ func (suite *GraphTestSuite) setupPatClient(user testUserDetails, t *testing.T) 
 		BearerToken: pat.Token,
 	}
 
-	apiClientPat, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
+	apiClientPat, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore,
 		openlaneclient.WithCredentials(authHeaderPAT),
 		openlaneclient.WithInterceptors(
 			openlaneclient.WithOrganizationHeader(user.OrganizationID),
@@ -147,7 +149,7 @@ func (suite *GraphTestSuite) setupAPITokenClient(ctx context.Context, t *testing
 		BearerToken: apiToken.Token,
 	}
 
-	apiClientToken, err := coreutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
+	apiClientToken, err := testutils.TestClientWithAuth(suite.client.db, suite.client.objectStore, openlaneclient.WithCredentials(authHeaderAPIToken))
 	requireNoError(err)
 
 	return apiClientToken

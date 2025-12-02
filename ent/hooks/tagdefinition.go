@@ -14,10 +14,10 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/stoewer/go-strcase"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/tagdefinition"
+	"github.com/theopenlane/shared/logx"
 )
 
 var (

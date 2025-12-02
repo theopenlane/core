@@ -7,7 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 
-	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/shared/metrics"
 )
 
 const complexityExtension = "ComplexityLimit"

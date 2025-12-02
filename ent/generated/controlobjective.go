@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/controlobjective"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ControlObjective is the model entity for the ControlObjective schema.

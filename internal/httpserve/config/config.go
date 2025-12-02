@@ -13,7 +13,7 @@ import (
 
 	"github.com/theopenlane/core/config"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/objects/objstore"
+	"github.com/theopenlane/shared/objects/objstore"
 )
 
 var (

@@ -21,11 +21,11 @@ import (
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/gqlerrors"
-	"github.com/theopenlane/core/pkg/objects/objstore"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/gqlerrors"
+	"github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/soiree"
 )
 
 // This file will not be regenerated automatically.

@@ -10,13 +10,13 @@ import (
 	"github.com/oklog/ulid/v2"
 	"github.com/samber/lo"
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/ent/generated/standard"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/utils/rout"
 )
 

@@ -17,9 +17,9 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	models "github.com/theopenlane/core/pkg/openapi"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestVerifySubscribeHandler() {

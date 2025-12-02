@@ -10,10 +10,10 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/models"
 )
 
 const (

@@ -1,0 +1,160 @@
+
+mutation CreateBulkCSVTrustCenterSubprocessor($input: Upload!) {
+  createBulkCSVTrustCenterSubprocessor(input: $input) {
+    trustCenterSubprocessors {
+      category
+      countries
+      createdAt
+      createdBy
+      id
+      subprocessorID
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkTrustCenterSubprocessor($input: [CreateTrustCenterSubprocessorInput!]) {
+  createBulkTrustCenterSubprocessor(input: $input) {
+    trustCenterSubprocessors {
+      category
+      countries
+      createdAt
+      createdBy
+      id
+      subprocessorID
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateTrustCenterSubprocessor($input: CreateTrustCenterSubprocessorInput!) {
+  createTrustCenterSubprocessor(input: $input) {
+    trustCenterSubprocessor {
+      category
+      countries
+      createdAt
+      createdBy
+      id
+      subprocessorID
+      trustCenterID
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteTrustCenterSubprocessor($deleteTrustCenterSubprocessorId: ID!) {
+  deleteTrustCenterSubprocessor(id: $deleteTrustCenterSubprocessorId) {
+    deletedID
+  }
+}
+
+query GetAllTrustCenterSubprocessors {
+  trustCenterSubprocessors {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        category
+        countries
+        createdAt
+        createdBy
+        id
+        trustCenterID
+        updatedAt
+        updatedBy
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
+      }
+    }
+  }
+}
+query GetTrustCenterSubprocessorByID($trustCenterSubprocessorId: ID!) {
+  trustCenterSubprocessor(id: $trustCenterSubprocessorId) {
+    category
+    countries
+    createdAt
+    createdBy
+    id
+    trustCenterID
+    updatedAt
+    updatedBy
+    subprocessor {
+      name
+      description
+      logoFile {
+        presignedURL
+      }
+      logoRemoteURL
+    }
+  }
+}
+
+query GetTrustCenterSubprocessors($first: Int, $last: Int, $where: TrustCenterSubprocessorWhereInput) {
+  trustCenterSubprocessors(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        category
+        countries
+        createdAt
+        createdBy
+        id
+        trustCenterID
+        updatedAt
+        updatedBy
+        subprocessor {
+          name
+          description
+          logoFile {
+            presignedURL
+          }
+          logoRemoteURL
+        }
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterSubprocessor($updateTrustCenterSubprocessorId: ID!, $input: UpdateTrustCenterSubprocessorInput!) {
+  updateTrustCenterSubprocessor(id: $updateTrustCenterSubprocessorId, input: $input) {
+    trustCenterSubprocessor {
+      category
+      countries
+      createdAt
+      createdBy
+      id
+      trustCenterID
+      updatedAt
+      updatedBy
+      subprocessor {
+        name
+        description
+        logoFile {
+          presignedURL
+        }
+        logoRemoteURL
+      }
+    }
+  }
+}

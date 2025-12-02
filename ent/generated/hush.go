@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/hush"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/models"
 )
 
 // Hush is the model entity for the Hush schema.

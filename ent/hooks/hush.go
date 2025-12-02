@@ -6,6 +6,7 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/theopenlane/ent/encrypt"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 )
@@ -21,7 +22,7 @@ func HookHush() ent.Hook {
 				}
 
 				// Encrypt the secret value using Tink
-				encodedValue, err := Encrypt([]byte(v))
+				encodedValue, err := encrypt.Encrypt([]byte(v))
 				if err != nil {
 					return nil, fmt.Errorf("failed to encrypt secret value: %w", err)
 				}
@@ -53,7 +54,7 @@ func DecryptHush(u *generated.Hush) error {
 	}
 
 	// Decrypt using Tink
-	decrypted, err := Decrypt(u.SecretValue)
+	decrypted, err := encrypt.Decrypt(u.SecretValue)
 	if err != nil {
 		return fmt.Errorf("failed to decrypt secret value: %w", err)
 	}

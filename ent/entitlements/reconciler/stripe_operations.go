@@ -9,11 +9,11 @@ import (
 	"github.com/rs/zerolog/log"
 	"github.com/stripe/stripe-go/v83"
 
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/catalog"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 const (

@@ -22,27 +22,30 @@ import (
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
+	openlaneclient "github.com/theopenlane/go-client"
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/totp"
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/objects"
-	mock_shared "github.com/theopenlane/core/pkg/objects/mocks"
-	"github.com/theopenlane/core/pkg/objects/objstore"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/objects/validators"
-	"github.com/theopenlane/core/pkg/summarizer"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
+	coreutils "github.com/theopenlane/core/internal/testutils"
+
 	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/ent/entdb"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/validator"
-	openlaneclient "github.com/theopenlane/go-client"
+
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/entitlements/mocks"
+	"github.com/theopenlane/shared/objects"
+	mock_shared "github.com/theopenlane/shared/objects/mocks"
+	"github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/objects/storage"
+	"github.com/theopenlane/shared/objects/validators"
+	"github.com/theopenlane/shared/soiree"
+	"github.com/theopenlane/shared/summarizer"
+	sharedutils "github.com/theopenlane/shared/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/ent/generated/runtime"
@@ -146,11 +149,11 @@ func (suite *GraphTestSuite) SetupSuite(t *testing.T) {
 		}),
 	}
 
-	tm, err := coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
+	tm, err := sharedutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	requireNoError(err)
 
-	sm := coreutils.CreateSessionManager()
-	rc := coreutils.NewRedisClient()
+	sm := sharedutils.CreateSessionManager()
+	rc := sharedutils.NewRedisClient()
 
 	sessionConfig := sessions.NewSessionConfig(
 		sm,

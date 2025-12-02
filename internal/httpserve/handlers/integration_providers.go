@@ -6,10 +6,11 @@ import (
 
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/shared/integrations/types"
+	"github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
+
+	"github.com/theopenlane/core/internal/keystore"
 )
 
 // ListIntegrationProviders returns declarative metadata about available third-party providers
@@ -29,7 +30,7 @@ func (h *Handler) ListIntegrationProviders(ctx echo.Context, _ *OpenAPIContext) 
 				Name:                   defaultProviderName(providerType, spec.Name),
 				DisplayName:            meta.DisplayName,
 				Category:               meta.Category,
-				AuthType:               keystore.AuthType(meta.Auth),
+				AuthType:               types.AuthKind(meta.Auth),
 				Active:                 spec.Active,
 				LogoURL:                meta.LogoURL,
 				DocsURL:                meta.DocsURL,

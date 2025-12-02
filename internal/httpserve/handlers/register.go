@@ -14,9 +14,9 @@ import (
 	"github.com/theopenlane/ent/privacy/token"
 	entval "github.com/theopenlane/ent/validator"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 const (

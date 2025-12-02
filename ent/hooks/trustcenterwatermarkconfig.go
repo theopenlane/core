@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/jobspec"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/shared/jobspec"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/objects"
 )
 
 func HookTrustCenterWatermarkConfig() ent.Hook {

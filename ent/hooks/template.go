@@ -6,14 +6,14 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/template"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/objects"
 )
 
 // HookTemplate runs on template create and update mutations

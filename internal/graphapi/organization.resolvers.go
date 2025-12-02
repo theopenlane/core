@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/logx"
 )
 
 // CreateOrganization is the resolver for the createOrganization field.

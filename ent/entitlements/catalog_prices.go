@@ -3,9 +3,9 @@ package entitlements
 import (
 	"sort"
 
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/shared/catalog"
+	"github.com/theopenlane/shared/catalog/gencatalog"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 // TrialMonthlyPriceIDs returns Stripe price IDs for monthly prices of modules included with trial subscriptions

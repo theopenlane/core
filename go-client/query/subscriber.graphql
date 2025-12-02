@@ -1,0 +1,137 @@
+mutation CreateBulkCSVSubscriber($input: Upload!) {
+  createBulkCSVSubscriber(input: $input) {
+    subscribers {
+      active
+      email
+      id
+      verifiedEmail
+      unsubscribed
+    }
+  }
+}
+
+mutation CreateBulkSubscriber($input: [CreateSubscriberInput!]) {
+  createBulkSubscriber(input: $input) {
+    subscribers {
+      active
+      email
+      id
+      verifiedEmail
+      unsubscribed
+    }
+  }
+}
+
+mutation CreateSubscriber($input: CreateSubscriberInput!) {
+  createSubscriber(input: $input) {
+    subscriber {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      updatedAt
+      updatedBy
+      verifiedEmail
+      unsubscribed
+    }
+  }
+}
+
+mutation DeleteSubscriber($deleteSubscriberEmail: String!, $subscriberOrganization: ID) {
+  deleteSubscriber(
+    email: $deleteSubscriberEmail
+    ownerID: $subscriberOrganization
+  ) {
+    email
+  }
+}
+
+query GetAllSubscribers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $orderBy: [SubscriberOrder!]) {
+  subscribers(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        email
+        id
+        ownerID
+        verifiedEmail
+        unsubscribed
+        sendAttempts
+      }
+    }
+  }
+}
+
+query GetSubscriberByEmail($email: String!) {
+  subscriber(email: $email) {
+    active
+    email
+    id
+    ownerID
+    verifiedEmail
+    unsubscribed
+    sendAttempts
+  }
+}
+
+query GetSubscribers($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: SubscriberWhereInput, $orderBy: [SubscriberOrder!]) {
+  subscribers(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+  ) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        email
+        id
+        ownerID
+        verifiedEmail
+        unsubscribed
+        sendAttempts
+      }
+    }
+  }
+}
+
+mutation UpdateSubscriber($email: String!, $input: UpdateSubscriberInput!) {
+  updateSubscriber(email: $email, input: $input) {
+    subscriber {
+      active
+      createdAt
+      createdBy
+      email
+      id
+      phoneNumber
+      updatedAt
+      updatedBy
+      verifiedEmail
+      verifiedPhone
+      unsubscribed
+    }
+  }
+}

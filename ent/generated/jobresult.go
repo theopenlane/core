@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/jobresult"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scheduledjob"
+	"github.com/theopenlane/shared/enums"
 )
 
 // JobResult is the model entity for the JobResult schema.

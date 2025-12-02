@@ -5,8 +5,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/soiree"
 )
 
 func TestNeedsTaskDBQuery(t *testing.T) {

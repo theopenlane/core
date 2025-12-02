@@ -5,8 +5,8 @@ package generated
 import (
 	"time"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // CreateAPITokenInput represents a mutation input for creating apitokens.

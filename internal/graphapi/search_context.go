@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/models"
 )
 
 const (

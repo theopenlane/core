@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/organization"
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/ent/generated/standard"
 	"github.com/theopenlane/ent/generated/trustcentercompliance"
 	"github.com/theopenlane/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

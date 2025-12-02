@@ -6,10 +6,10 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/objects"
 )
 
 // HookEvidenceFiles runs on evidence mutations to check for uploaded files

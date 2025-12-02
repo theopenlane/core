@@ -1,0 +1,76 @@
+
+
+query GetAllOrgSubscriptions {
+  orgSubscriptions {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        daysUntilDue
+        expiresAt
+        id
+        ownerID
+        stripeSubscriptionID
+        stripeSubscriptionStatus
+        tags
+        trialExpiresAt
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetOrgSubscriptionByID($orgSubscriptionId: ID!) {
+  orgSubscription(id: $orgSubscriptionId) {
+    active
+    createdAt
+    createdBy
+    daysUntilDue
+    expiresAt
+    id
+    ownerID
+    stripeSubscriptionID
+    stripeSubscriptionStatus
+    tags
+    trialExpiresAt
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetOrgSubscriptions($first: Int, $last: Int, $where: OrgSubscriptionWhereInput) {
+  orgSubscriptions(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        active
+        createdAt
+        createdBy
+        daysUntilDue
+        expiresAt
+        id
+        ownerID
+        stripeSubscriptionID
+        stripeSubscriptionStatus
+        tags
+        trialExpiresAt
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/models"
 )
 
 // InterceptorControlFieldSort sorts the custom model slice fields

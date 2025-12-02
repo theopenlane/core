@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // Webauthn holds the schema definition for the Webauthn entity

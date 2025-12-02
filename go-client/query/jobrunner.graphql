@@ -1,0 +1,114 @@
+mutation CreateJobRunner($input: CreateJobRunnerInput!) {
+  createJobRunner(input: $input) {
+    jobRunner {
+      createdAt
+      createdBy
+      displayID
+      id
+      ipAddress
+      name
+      ownerID
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteJobRunner($deleteJobRunnerId: ID!) {
+  deleteJobRunner(id: $deleteJobRunnerId) {
+    deletedID
+  }
+}
+
+query GetAllJobRunners {
+  jobRunners {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        id
+        ipAddress
+        name
+        ownerID
+        status
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetJobRunnerByID($jobRunnerId: ID!) {
+  jobRunner(id: $jobRunnerId) {
+    createdAt
+    createdBy
+    displayID
+    id
+    ipAddress
+    name
+    ownerID
+    status
+    systemOwned
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetJobRunners($first: Int, $last: Int, $where: JobRunnerWhereInput) {
+  jobRunners(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        displayID
+        id
+        ipAddress
+        name
+        ownerID
+        status
+        systemOwned
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateJobRunner($updateJobRunnerId: ID!, $input: UpdateJobRunnerInput!) {
+  updateJobRunner(id: $updateJobRunnerId, input: $input) {
+    jobRunner {
+      createdAt
+      createdBy
+      displayID
+      id
+      ipAddress
+      name
+      ownerID
+      status
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

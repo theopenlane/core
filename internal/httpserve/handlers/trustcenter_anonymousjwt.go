@@ -8,12 +8,12 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/customdomain"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/trustcenter"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (h *Handler) CreateTrustCenterAnonymousJWT(ctx echo.Context, openapi *OpenAPIContext) error {

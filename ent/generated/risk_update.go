@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/ent/generated/asset"
 	"github.com/theopenlane/ent/generated/control"
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/ent/generated/scan"
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/generated/task"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

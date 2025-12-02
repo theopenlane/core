@@ -15,9 +15,6 @@ import (
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/invite"
@@ -25,6 +22,9 @@ import (
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/gqlerrors"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookInvite runs on invite create mutations

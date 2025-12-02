@@ -17,12 +17,12 @@ import (
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/ent/privacy/rule"
 
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/catalog"
+	"github.com/theopenlane/shared/catalog/gencatalog"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/utils/contextx"
 )
 

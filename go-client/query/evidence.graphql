@@ -1,0 +1,228 @@
+mutation CreateEvidence($input: CreateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  createEvidence(input: $input, evidenceFiles: $evidenceFiles) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation DeleteEvidence($deleteEvidenceId: ID!) {
+  deleteEvidence(id: $deleteEvidenceId) {
+    deletedID
+  }
+}
+
+query GetAllEvidences {
+  evidences {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+      }
+    }
+  }
+}
+query GetEvidenceByID($evidenceId: ID!) {
+  evidence(id: $evidenceId) {
+    collectionProcedure
+    createdAt
+    createdBy
+    creationDate
+    description
+    displayID
+    id
+    isAutomated
+    name
+    ownerID
+    renewalDate
+    source
+    status
+    tags
+    updatedAt
+    updatedBy
+    url
+    files {
+      totalCount
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
+    controls {
+      edges {
+        node {
+          id
+          refCode
+        }
+      }
+    }
+  }
+}
+
+query GetEvidences($first: Int, $last: Int, $where: EvidenceWhereInput) {
+  evidences(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        collectionProcedure
+        createdAt
+        createdBy
+        creationDate
+        description
+        displayID
+        id
+        isAutomated
+        name
+        ownerID
+        renewalDate
+        source
+        status
+        tags
+        updatedAt
+        updatedBy
+        url
+        files {
+          totalCount
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+        controls {
+          edges {
+            node {
+              id
+              refCode
+            }
+          }
+        }
+      }
+    }
+  }
+}
+mutation UpdateEvidence($updateEvidenceId: ID!, $input: UpdateEvidenceInput!, $evidenceFiles: [Upload!]) {
+  updateEvidence(
+    id: $updateEvidenceId
+    input: $input
+    evidenceFiles: $evidenceFiles
+  ) {
+    evidence {
+      collectionProcedure
+      createdAt
+      createdBy
+      creationDate
+      description
+      displayID
+      id
+      isAutomated
+      name
+      ownerID
+      renewalDate
+      source
+      status
+      tags
+      updatedAt
+      updatedBy
+      url
+      files {
+        totalCount
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+      controls {
+        edges {
+          node {
+            id
+            refCode
+          }
+        }
+      }
+    }
+  }
+}

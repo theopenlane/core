@@ -7,8 +7,8 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 // OrgOwnedTuplesHookWithAdmin is a hook that adds organization owned tuples for the object being created

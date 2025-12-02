@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scan"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Scan is the model entity for the Scan schema.

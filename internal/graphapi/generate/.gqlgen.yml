@@ -92,58 +92,58 @@ models:
       - github.com/99designs/gqlgen/graphql.Any
   Address:
     model:
-      - github.com/theopenlane/core/pkg/models.Address
+      - github.com/theopenlane/shared/models.Address
   Price:
     model:
-      - github.com/theopenlane/core/pkg/models.Price
+      - github.com/theopenlane/shared/models.Price
   AssessmentObjective:
     model:
-      - github.com/theopenlane/core/pkg/models.AssessmentObjective
+      - github.com/theopenlane/shared/models.AssessmentObjective
   AssessmentMethod:
     model:
-      - github.com/theopenlane/core/pkg/models.AssessmentMethod
+      - github.com/theopenlane/shared/models.AssessmentMethod
   Reference:
     model:
-      - github.com/theopenlane/core/pkg/models.Reference
+      - github.com/theopenlane/shared/models.Reference
   ImplementationGuidance:
     model:
-      - github.com/theopenlane/core/pkg/models.ImplementationGuidance
+      - github.com/theopenlane/shared/models.ImplementationGuidance
   ExampleEvidence:
     model:
-      - github.com/theopenlane/core/pkg/models.ExampleEvidence
+      - github.com/theopenlane/shared/models.ExampleEvidence
   VersionBump:
     model:
-      - github.com/theopenlane/core/pkg/models.VersionBump
+      - github.com/theopenlane/shared/models.VersionBump
   DateTime:
-    model: github.com/theopenlane/core/pkg/models.DateTime
+    model: github.com/theopenlane/shared/models.DateTime
   AAGUID:
-    model: github.com/theopenlane/core/pkg/models.AAGUID
+    model: github.com/theopenlane/shared/models.AAGUID
   JobConfiguration:
-    model: github.com/theopenlane/core/pkg/models.JobConfiguration
+    model: github.com/theopenlane/shared/models.JobConfiguration
   JobCadence:
-    model: github.com/theopenlane/core/pkg/models.JobCadence
+    model: github.com/theopenlane/shared/models.JobCadence
   Change:
-    model: github.com/theopenlane/core/pkg/models.Change
+    model: github.com/theopenlane/shared/models.Change
   AuditLogOrderField:
-    model: github.com/theopenlane/core/pkg/models.AuditLogOrderField
+    model: github.com/theopenlane/shared/models.AuditLogOrderField
   CredentialSet:
     model:
-      - github.com/theopenlane/core/pkg/models.CredentialSet
+      - github.com/theopenlane/shared/models.CredentialSet
   SearchContext:
     model:
-      - github.com/theopenlane/core/pkg/models.SearchContext
+      - github.com/theopenlane/shared/models.SearchContext
   SearchSnippet:
     model:
-      - github.com/theopenlane/core/pkg/models.SearchSnippet
+      - github.com/theopenlane/shared/models.SearchSnippet
   WorkflowDefinitionDocument:
     model:
-      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionDocument
+      - github.com/theopenlane/shared/models.WorkflowDefinitionDocument
   WorkflowDefinitionSchema:
     model:
-      - github.com/theopenlane/core/pkg/models.WorkflowDefinitionSchema
+      - github.com/theopenlane/shared/models.WorkflowDefinitionSchema
   WorkflowInstanceContext:
     model:
-      - github.com/theopenlane/core/pkg/models.WorkflowInstanceContext
+      - github.com/theopenlane/shared/models.WorkflowInstanceContext
   WorkflowEventPayload:
     model:
-      - github.com/theopenlane/core/pkg/models.WorkflowEventPayload
+      - github.com/theopenlane/shared/models.WorkflowEventPayload

@@ -8,10 +8,10 @@ import (
 	"entgo.io/ent/schema/index"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"

@@ -10,9 +10,9 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/models"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/httpsling"
+	"github.com/theopenlane/shared/models"
+	apimodels "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestAccountFeaturesHandler() {

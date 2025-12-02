@@ -30,27 +30,29 @@ import (
 	"github.com/theopenlane/utils/testutils"
 	"github.com/theopenlane/utils/ulids"
 
+	"github.com/theopenlane/ent/entconfig"
+	"github.com/theopenlane/ent/entdb"
+	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/entitlements/mocks"
+	"github.com/theopenlane/shared/integrations/config"
+	"github.com/theopenlane/shared/integrations/providers"
+	"github.com/theopenlane/shared/integrations/registry"
+	"github.com/theopenlane/shared/integrations/types"
+	"github.com/theopenlane/shared/keymaker"
+	authmiddleware "github.com/theopenlane/shared/middleware/auth"
+	"github.com/theopenlane/shared/middleware/transaction"
+	"github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/olauth"
+	"github.com/theopenlane/shared/soiree"
+	sharedutils "github.com/theopenlane/shared/testutils"
+
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
 	"github.com/theopenlane/core/internal/httpserve/route"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/providers"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
 	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	authmiddleware "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/objects/objstore"
-	"github.com/theopenlane/core/pkg/olauth"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
-	"github.com/theopenlane/ent/entconfig"
-	"github.com/theopenlane/ent/entdb"
-	ent "github.com/theopenlane/ent/generated"
+	coreutils "github.com/theopenlane/core/internal/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/ent/generated/runtime"
@@ -149,14 +151,14 @@ func (suite *HandlerTestSuite) SetupSuite() {
 	var err error
 
 	// shared token manager to avoid RSA key generation
-	suite.sharedTokenManager, err = coreutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
+	suite.sharedTokenManager, err = sharedutils.CreateTokenManager(-15 * time.Minute) //nolint:mnd
 	require.NoError(suite.T(), err)
 
 	// shared redis client to avoid miniredis server startup
-	suite.sharedRedisClient = coreutils.NewRedisClient()
+	suite.sharedRedisClient = sharedutils.NewRedisClient()
 
 	// shared session manager to avoid random key generation
-	suite.sharedSessionManager = coreutils.CreateSessionManager()
+	suite.sharedSessionManager = sharedutils.CreateSessionManager()
 
 	// shared FGA client to avoid repeated container connections
 	suite.sharedFGAClient, err = suite.ofgaTF.NewFgaClient(context.Background())

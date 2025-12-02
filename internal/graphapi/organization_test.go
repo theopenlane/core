@@ -17,13 +17,13 @@ import (
 
 	"github.com/theopenlane/core/internal/graphapi"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/generated"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 func TestQueryOrganization(t *testing.T) {

@@ -15,10 +15,10 @@ import (
 
 	"github.com/theopenlane/utils/passwd"
 
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/token"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // ResetPassword allows the user (after requesting a password reset) to

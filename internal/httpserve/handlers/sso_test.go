@@ -23,13 +23,13 @@ import (
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
 	"github.com/samber/lo"
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/usersetting"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/enums"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/ulids"
 )
 

@@ -6,11 +6,11 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
-	"github.com/theopenlane/core/pkg/gqlerrors"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/shared/gqlerrors"
 	"github.com/vektah/gqlparser/v2/gqlerror"
 )
 

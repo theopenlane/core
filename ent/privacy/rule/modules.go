@@ -11,14 +11,14 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
+	"github.com/theopenlane/shared/permissioncache"
 )
 
 // HasFeature reports whether the current organization has the given feature enabled

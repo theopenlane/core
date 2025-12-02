@@ -16,7 +16,7 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 )
 
 // NewExecutableSchema creates an ExecutableSchema from the ResolverRoot interface.
@@ -54633,7 +54633,7 @@ type ActionPlanConnection {
 """
 ActionPlanDocumentStatus is enum for the field status
 """
-enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ActionPlanDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -54656,7 +54656,7 @@ type ActionPlanEdge {
 """
 ActionPlanFrequency is enum for the field review_frequency
 """
-enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ActionPlanFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -54837,7 +54837,7 @@ type ActionPlanHistoryConnection {
 """
 ActionPlanHistoryDocumentStatus is enum for the field status
 """
-enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ActionPlanHistoryDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -54860,7 +54860,7 @@ type ActionPlanHistoryEdge {
 """
 ActionPlanHistoryFrequency is enum for the field review_frequency
 """
-enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ActionPlanHistoryFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -54907,7 +54907,7 @@ enum ActionPlanHistoryOrderField {
 """
 ActionPlanHistoryPriority is enum for the field priority
 """
-enum ActionPlanHistoryPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+enum ActionPlanHistoryPriority @goModel(model: "github.com/theopenlane/shared/enums.Priority") {
   LOW
   MEDIUM
   HIGH
@@ -55457,7 +55457,7 @@ enum ActionPlanOrderField {
 """
 ActionPlanPriority is enum for the field priority
 """
-enum ActionPlanPriority @goModel(model: "github.com/theopenlane/core/pkg/enums.Priority") {
+enum ActionPlanPriority @goModel(model: "github.com/theopenlane/shared/enums.Priority") {
   LOW
   MEDIUM
   HIGH
@@ -56174,7 +56174,7 @@ type Assessment implements Node {
 """
 AssessmentAssessmentType is enum for the field assessment_type
 """
-enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
+enum AssessmentAssessmentType @goModel(model: "github.com/theopenlane/shared/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -56250,7 +56250,7 @@ type AssessmentHistory implements Node {
 """
 AssessmentHistoryAssessmentType is enum for the field assessment_type
 """
-enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentType") {
+enum AssessmentHistoryAssessmentType @goModel(model: "github.com/theopenlane/shared/enums.AssessmentType") {
   INTERNAL
   EXTERNAL
 }
@@ -56584,7 +56584,7 @@ type AssessmentResponse implements Node {
 """
 AssessmentResponseAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
+enum AssessmentResponseAssessmentResponseStatus @goModel(model: "github.com/theopenlane/shared/enums.AssessmentResponseStatus") {
   NOT_STARTED
   SENT
   COMPLETED
@@ -56673,7 +56673,7 @@ type AssessmentResponseHistory implements Node {
 """
 AssessmentResponseHistoryAssessmentResponseStatus is enum for the field status
 """
-enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.AssessmentResponseStatus") {
+enum AssessmentResponseHistoryAssessmentResponseStatus @goModel(model: "github.com/theopenlane/shared/enums.AssessmentResponseStatus") {
   NOT_STARTED
   SENT
   COMPLETED
@@ -57651,7 +57651,7 @@ type Asset implements Node {
 """
 AssetAssetType is enum for the field asset_type
 """
-enum AssetAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+enum AssetAssetType @goModel(model: "github.com/theopenlane/shared/enums.AssetType") {
   TECHNOLOGY
   DOMAIN
   DEVICE
@@ -57745,7 +57745,7 @@ type AssetHistory implements Node {
 """
 AssetHistoryAssetType is enum for the field asset_type
 """
-enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/core/pkg/enums.AssetType") {
+enum AssetHistoryAssetType @goModel(model: "github.com/theopenlane/shared/enums.AssetType") {
   TECHNOLOGY
   DOMAIN
   DEVICE
@@ -58598,7 +58598,7 @@ enum ContactHistoryOrderField {
 """
 ContactHistoryUserStatus is enum for the field status
 """
-enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum ContactHistoryUserStatus @goModel(model: "github.com/theopenlane/shared/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -58884,7 +58884,7 @@ enum ContactOrderField {
 """
 ContactUserStatus is enum for the field status
 """
-enum ContactUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum ContactUserStatus @goModel(model: "github.com/theopenlane/shared/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -59915,7 +59915,7 @@ type ControlConnection {
 """
 ControlControlSource is enum for the field source
 """
-enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -59924,7 +59924,7 @@ enum ControlControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlStatus is enum for the field status
 """
-enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum ControlControlStatus @goModel(model: "github.com/theopenlane/shared/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -59936,7 +59936,7 @@ enum ControlControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ControlControlType is enum for the field control_type
 """
-enum ControlControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum ControlControlType @goModel(model: "github.com/theopenlane/shared/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -60117,7 +60117,7 @@ type ControlHistoryConnection {
 """
 ControlHistoryControlSource is enum for the field source
 """
-enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -60126,7 +60126,7 @@ enum ControlHistoryControlSource @goModel(model: "github.com/theopenlane/core/pk
 """
 ControlHistoryControlStatus is enum for the field status
 """
-enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/shared/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -60138,7 +60138,7 @@ enum ControlHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pk
 """
 ControlHistoryControlType is enum for the field control_type
 """
-enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum ControlHistoryControlType @goModel(model: "github.com/theopenlane/shared/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -60958,7 +60958,7 @@ type ControlImplementationConnection {
 """
 ControlImplementationDocumentStatus is enum for the field status
 """
-enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ControlImplementationDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -61048,7 +61048,7 @@ type ControlImplementationHistoryConnection {
 """
 ControlImplementationHistoryDocumentStatus is enum for the field status
 """
-enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ControlImplementationHistoryDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -62062,7 +62062,7 @@ type ControlObjectiveConnection {
 """
 ControlObjectiveControlSource is enum for the field source
 """
-enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlObjectiveControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -62167,7 +62167,7 @@ type ControlObjectiveHistoryConnection {
 """
 ControlObjectiveHistoryControlSource is enum for the field source
 """
-enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum ControlObjectiveHistoryControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -62189,7 +62189,7 @@ type ControlObjectiveHistoryEdge {
 """
 ControlObjectiveHistoryObjectiveStatus is enum for the field status
 """
-enum ControlObjectiveHistoryObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+enum ControlObjectiveHistoryObjectiveStatus @goModel(model: "github.com/theopenlane/shared/enums.ObjectiveStatus") {
   ACTIVE
   ARCHIVED
   DRAFT
@@ -62554,7 +62554,7 @@ input ControlObjectiveHistoryWhereInput {
 """
 ControlObjectiveObjectiveStatus is enum for the field status
 """
-enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ObjectiveStatus") {
+enum ControlObjectiveObjectiveStatus @goModel(model: "github.com/theopenlane/shared/enums.ObjectiveStatus") {
   ACTIVE
   ARCHIVED
   DRAFT
@@ -68985,7 +68985,7 @@ type DNSVerificationConnection {
 """
 DNSVerificationDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+enum DNSVerificationDNSVerificationStatus @goModel(model: "github.com/theopenlane/shared/enums.DNSVerificationStatus") {
   active
   pending
   active_redeploying
@@ -69090,7 +69090,7 @@ type DNSVerificationHistoryConnection {
 """
 DNSVerificationHistoryDNSVerificationStatus is enum for the field dns_verification_status
 """
-enum DNSVerificationHistoryDNSVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DNSVerificationStatus") {
+enum DNSVerificationHistoryDNSVerificationStatus @goModel(model: "github.com/theopenlane/shared/enums.DNSVerificationStatus") {
   active
   pending
   active_redeploying
@@ -69153,7 +69153,7 @@ enum DNSVerificationHistoryOrderField {
 """
 DNSVerificationHistorySSLVerificationStatus is enum for the field acme_challenge_status
 """
-enum DNSVerificationHistorySSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+enum DNSVerificationHistorySSLVerificationStatus @goModel(model: "github.com/theopenlane/shared/enums.SSLVerificationStatus") {
   initializing
   pending_validation
   deleted
@@ -69471,7 +69471,7 @@ enum DNSVerificationOrderField {
 """
 DNSVerificationSSLVerificationStatus is enum for the field acme_challenge_status
 """
-enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.SSLVerificationStatus") {
+enum DNSVerificationSSLVerificationStatus @goModel(model: "github.com/theopenlane/shared/enums.SSLVerificationStatus") {
   initializing
   pending_validation
   deleted
@@ -69965,7 +69965,7 @@ type DirectoryAccountConnection {
 """
 DirectoryAccountDirectoryAccountMFAState is enum for the field mfa_state
 """
-enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountMFAState") {
   UNKNOWN
   DISABLED
   ENABLED
@@ -69974,7 +69974,7 @@ enum DirectoryAccountDirectoryAccountMFAState @goModel(model: "github.com/theope
 """
 DirectoryAccountDirectoryAccountStatus is enum for the field status
 """
-enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountStatus") {
   ACTIVE
   INACTIVE
   SUSPENDED
@@ -69983,7 +69983,7 @@ enum DirectoryAccountDirectoryAccountStatus @goModel(model: "github.com/theopenl
 """
 DirectoryAccountDirectoryAccountType is enum for the field account_type
 """
-enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+enum DirectoryAccountDirectoryAccountType @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountType") {
   USER
   SERVICE
   SHARED
@@ -70128,7 +70128,7 @@ type DirectoryAccountHistoryConnection {
 """
 DirectoryAccountHistoryDirectoryAccountMFAState is enum for the field mfa_state
 """
-enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountMFAState") {
+enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountMFAState") {
   UNKNOWN
   DISABLED
   ENABLED
@@ -70137,7 +70137,7 @@ enum DirectoryAccountHistoryDirectoryAccountMFAState @goModel(model: "github.com
 """
 DirectoryAccountHistoryDirectoryAccountStatus is enum for the field status
 """
-enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountStatus") {
+enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountStatus") {
   ACTIVE
   INACTIVE
   SUSPENDED
@@ -70146,7 +70146,7 @@ enum DirectoryAccountHistoryDirectoryAccountStatus @goModel(model: "github.com/t
 """
 DirectoryAccountHistoryDirectoryAccountType is enum for the field account_type
 """
-enum DirectoryAccountHistoryDirectoryAccountType @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryAccountType") {
+enum DirectoryAccountHistoryDirectoryAccountType @goModel(model: "github.com/theopenlane/shared/enums.DirectoryAccountType") {
   USER
   SERVICE
   SHARED
@@ -71305,7 +71305,7 @@ type DirectoryGroupConnection {
 """
 DirectoryGroupDirectoryGroupClassification is enum for the field classification
 """
-enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theopenlane/shared/enums.DirectoryGroupClassification") {
   SECURITY
   DISTRIBUTION
   TEAM
@@ -71314,7 +71314,7 @@ enum DirectoryGroupDirectoryGroupClassification @goModel(model: "github.com/theo
 """
 DirectoryGroupDirectoryGroupStatus is enum for the field status
 """
-enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+enum DirectoryGroupDirectoryGroupStatus @goModel(model: "github.com/theopenlane/shared/enums.DirectoryGroupStatus") {
   ACTIVE
   INACTIVE
   DELETED
@@ -71434,7 +71434,7 @@ type DirectoryGroupHistoryConnection {
 """
 DirectoryGroupHistoryDirectoryGroupClassification is enum for the field classification
 """
-enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupClassification") {
+enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.com/theopenlane/shared/enums.DirectoryGroupClassification") {
   SECURITY
   DISTRIBUTION
   TEAM
@@ -71443,7 +71443,7 @@ enum DirectoryGroupHistoryDirectoryGroupClassification @goModel(model: "github.c
 """
 DirectoryGroupHistoryDirectoryGroupStatus is enum for the field status
 """
-enum DirectoryGroupHistoryDirectoryGroupStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryGroupStatus") {
+enum DirectoryGroupHistoryDirectoryGroupStatus @goModel(model: "github.com/theopenlane/shared/enums.DirectoryGroupStatus") {
   ACTIVE
   INACTIVE
   DELETED
@@ -72296,7 +72296,7 @@ type DirectoryMembershipConnection {
 """
 DirectoryMembershipDirectoryMembershipRole is enum for the field role
 """
-enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+enum DirectoryMembershipDirectoryMembershipRole @goModel(model: "github.com/theopenlane/shared/enums.DirectoryMembershipRole") {
   MEMBER
   MANAGER
   OWNER
@@ -72396,7 +72396,7 @@ type DirectoryMembershipHistoryConnection {
 """
 DirectoryMembershipHistoryDirectoryMembershipRole is enum for the field role
 """
-enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectoryMembershipRole") {
+enum DirectoryMembershipHistoryDirectoryMembershipRole @goModel(model: "github.com/theopenlane/shared/enums.DirectoryMembershipRole") {
   MEMBER
   MANAGER
   OWNER
@@ -73118,7 +73118,7 @@ type DirectorySyncRunConnection {
 """
 DirectorySyncRunDirectorySyncRunStatus is enum for the field status
 """
-enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DirectorySyncRunStatus") {
+enum DirectorySyncRunDirectorySyncRunStatus @goModel(model: "github.com/theopenlane/shared/enums.DirectorySyncRunStatus") {
   PENDING
   RUNNING
   COMPLETED
@@ -76514,7 +76514,7 @@ type EvidenceEdge {
 """
 EvidenceEvidenceStatus is enum for the field status
 """
-enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+enum EvidenceEvidenceStatus @goModel(model: "github.com/theopenlane/shared/enums.EvidenceStatus") {
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -76614,7 +76614,7 @@ type EvidenceHistoryEdge {
 """
 EvidenceHistoryEvidenceStatus is enum for the field status
 """
-enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.EvidenceStatus") {
+enum EvidenceHistoryEvidenceStatus @goModel(model: "github.com/theopenlane/shared/enums.EvidenceStatus") {
   SUBMITTED
   READY_FOR_AUDITOR
   AUDITOR_APPROVED
@@ -77388,13 +77388,13 @@ type ExportEdge {
 """
 ExportExportFormat is enum for the field format
 """
-enum ExportExportFormat @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportFormat") {
+enum ExportExportFormat @goModel(model: "github.com/theopenlane/shared/enums.ExportFormat") {
   CSV
 }
 """
 ExportExportStatus is enum for the field status
 """
-enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportStatus") {
+enum ExportExportStatus @goModel(model: "github.com/theopenlane/shared/enums.ExportStatus") {
   PENDING
   FAILED
   READY
@@ -77403,7 +77403,7 @@ enum ExportExportStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.E
 """
 ExportExportType is enum for the field export_type
 """
-enum ExportExportType @goModel(model: "github.com/theopenlane/core/pkg/enums.ExportType") {
+enum ExportExportType @goModel(model: "github.com/theopenlane/shared/enums.ExportType") {
   CONTROL
   DIRECTORY_MEMBERSHIP
   EVIDENCE
@@ -83754,7 +83754,7 @@ enum GroupMembershipHistoryOrderField {
 """
 GroupMembershipHistoryRole is enum for the field role
 """
-enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum GroupMembershipHistoryRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -83941,7 +83941,7 @@ enum GroupMembershipOrderField {
 """
 GroupMembershipRole is enum for the field role
 """
-enum GroupMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum GroupMembershipRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -84179,7 +84179,7 @@ type GroupSettingHistoryEdge {
 """
 GroupSettingHistoryJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enums.JoinPolicy") {
+enum GroupSettingHistoryJoinPolicy @goModel(model: "github.com/theopenlane/shared/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -84217,7 +84217,7 @@ enum GroupSettingHistoryOrderField {
 """
 GroupSettingHistoryVisibility is enum for the field visibility
 """
-enum GroupSettingHistoryVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.Visibility") {
+enum GroupSettingHistoryVisibility @goModel(model: "github.com/theopenlane/shared/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -84390,7 +84390,7 @@ input GroupSettingHistoryWhereInput {
 """
 GroupSettingJoinPolicy is enum for the field join_policy
 """
-enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/core/pkg/enums.JoinPolicy") {
+enum GroupSettingJoinPolicy @goModel(model: "github.com/theopenlane/shared/enums.JoinPolicy") {
   OPEN
   INVITE_ONLY
   APPLICATION_ONLY
@@ -84419,7 +84419,7 @@ enum GroupSettingOrderField {
 """
 GroupSettingVisibility is enum for the field visibility
 """
-enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.Visibility") {
+enum GroupSettingVisibility @goModel(model: "github.com/theopenlane/shared/enums.Visibility") {
   PUBLIC
   PRIVATE
 }
@@ -87443,7 +87443,7 @@ type InternalPolicyConnection {
 """
 InternalPolicyDocumentStatus is enum for the field status
 """
-enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum InternalPolicyDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -87466,7 +87466,7 @@ type InternalPolicyEdge {
 """
 InternalPolicyFrequency is enum for the field review_frequency
 """
-enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum InternalPolicyFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -87607,7 +87607,7 @@ type InternalPolicyHistoryConnection {
 """
 InternalPolicyHistoryDocumentStatus is enum for the field status
 """
-enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum InternalPolicyHistoryDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -87630,7 +87630,7 @@ type InternalPolicyHistoryEdge {
 """
 InternalPolicyHistoryFrequency is enum for the field review_frequency
 """
-enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum InternalPolicyHistoryFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -88707,7 +88707,7 @@ type InviteEdge {
 """
 InviteInviteStatus is enum for the field status
 """
-enum InviteInviteStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.InviteStatus") {
+enum InviteInviteStatus @goModel(model: "github.com/theopenlane/shared/enums.InviteStatus") {
   INVITATION_SENT
   APPROVAL_REQUIRED
   INVITATION_ACCEPTED
@@ -88739,7 +88739,7 @@ enum InviteOrderField {
 """
 InviteRole is enum for the field role
 """
-enum InviteRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum InviteRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -89016,7 +89016,7 @@ type JobResultEdge {
 """
 JobResultJobExecutionStatus is enum for the field status
 """
-enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobExecutionStatus") {
+enum JobResultJobExecutionStatus @goModel(model: "github.com/theopenlane/shared/enums.JobExecutionStatus") {
   CANCELED
   SUCCESS
   PENDING
@@ -89373,7 +89373,7 @@ type JobRunnerEdge {
 """
 JobRunnerJobRunnerStatus is enum for the field status
 """
-enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.JobRunnerStatus") {
+enum JobRunnerJobRunnerStatus @goModel(model: "github.com/theopenlane/shared/enums.JobRunnerStatus") {
   ONLINE
   OFFLINE
 }
@@ -90403,7 +90403,7 @@ type JobTemplateHistoryEdge {
 """
 JobTemplateHistoryJobPlatformType is enum for the field platform
 """
-enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+enum JobTemplateHistoryJobPlatformType @goModel(model: "github.com/theopenlane/shared/enums.JobPlatformType") {
   GO
   TS
 }
@@ -90679,7 +90679,7 @@ input JobTemplateHistoryWhereInput {
 """
 JobTemplateJobPlatformType is enum for the field platform
 """
-enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/core/pkg/enums.JobPlatformType") {
+enum JobTemplateJobPlatformType @goModel(model: "github.com/theopenlane/shared/enums.JobPlatformType") {
   GO
   TS
 }
@@ -91716,7 +91716,7 @@ type MappedControlHistoryEdge {
 """
 MappedControlHistoryMappingSource is enum for the field source
 """
-enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/shared/enums.MappingSource") {
   MANUAL
   SUGGESTED
   IMPORTED
@@ -91724,7 +91724,7 @@ enum MappedControlHistoryMappingSource @goModel(model: "github.com/theopenlane/c
 """
 MappedControlHistoryMappingType is enum for the field mapping_type
 """
-enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+enum MappedControlHistoryMappingType @goModel(model: "github.com/theopenlane/shared/enums.MappingType") {
   EQUAL
   SUPERSET
   SUBSET
@@ -91993,7 +91993,7 @@ input MappedControlHistoryWhereInput {
 """
 MappedControlMappingSource is enum for the field source
 """
-enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingSource") {
+enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/shared/enums.MappingSource") {
   MANUAL
   SUGGESTED
   IMPORTED
@@ -92001,7 +92001,7 @@ enum MappedControlMappingSource @goModel(model: "github.com/theopenlane/core/pkg
 """
 MappedControlMappingType is enum for the field mapping_type
 """
-enum MappedControlMappingType @goModel(model: "github.com/theopenlane/core/pkg/enums.MappingType") {
+enum MappedControlMappingType @goModel(model: "github.com/theopenlane/shared/enums.MappingType") {
   EQUAL
   SUPERSET
   SUBSET
@@ -93786,7 +93786,7 @@ type Notification implements Node {
 """
 NotificationNotificationType is enum for the field notification_type
 """
-enum NotificationNotificationType @goModel(model: "github.com/theopenlane/core/pkg/enums.NotificationType") {
+enum NotificationNotificationType @goModel(model: "github.com/theopenlane/shared/enums.NotificationType") {
   ORGANIZATION
   USER
 }
@@ -94038,7 +94038,7 @@ enum OrgMembershipHistoryOrderField {
 """
 OrgMembershipHistoryRole is enum for the field role
 """
-enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum OrgMembershipHistoryRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -94226,7 +94226,7 @@ enum OrgMembershipOrderField {
 """
 OrgMembershipRole is enum for the field role
 """
-enum OrgMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum OrgMembershipRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
   OWNER
@@ -98289,7 +98289,7 @@ enum OrganizationSettingHistoryOrderField {
 """
 OrganizationSettingHistoryRegion is enum for the field geo_location
 """
-enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/core/pkg/enums.Region") {
+enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/shared/enums.Region") {
   AMER
   EMEA
   APAC
@@ -98297,7 +98297,7 @@ enum OrganizationSettingHistoryRegion @goModel(model: "github.com/theopenlane/co
 """
 OrganizationSettingHistorySSOProvider is enum for the field identity_provider
 """
-enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+enum OrganizationSettingHistorySSOProvider @goModel(model: "github.com/theopenlane/shared/enums.SSOProvider") {
   OKTA
   ONE_LOGIN
   GOOGLE_WORKSPACE
@@ -98749,7 +98749,7 @@ enum OrganizationSettingOrderField {
 """
 OrganizationSettingRegion is enum for the field geo_location
 """
-enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/enums.Region") {
+enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/shared/enums.Region") {
   AMER
   EMEA
   APAC
@@ -98757,7 +98757,7 @@ enum OrganizationSettingRegion @goModel(model: "github.com/theopenlane/core/pkg/
 """
 OrganizationSettingSSOProvider is enum for the field identity_provider
 """
-enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.SSOProvider") {
+enum OrganizationSettingSSOProvider @goModel(model: "github.com/theopenlane/shared/enums.SSOProvider") {
   OKTA
   ONE_LOGIN
   GOOGLE_WORKSPACE
@@ -100599,7 +100599,7 @@ type ProcedureConnection {
 """
 ProcedureDocumentStatus is enum for the field status
 """
-enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ProcedureDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -100622,7 +100622,7 @@ type ProcedureEdge {
 """
 ProcedureFrequency is enum for the field review_frequency
 """
-enum ProcedureFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ProcedureFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -100763,7 +100763,7 @@ type ProcedureHistoryConnection {
 """
 ProcedureHistoryDocumentStatus is enum for the field status
 """
-enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentStatus") {
+enum ProcedureHistoryDocumentStatus @goModel(model: "github.com/theopenlane/shared/enums.DocumentStatus") {
   PUBLISHED
   DRAFT
   NEEDS_APPROVAL
@@ -100786,7 +100786,7 @@ type ProcedureHistoryEdge {
 """
 ProcedureHistoryFrequency is enum for the field review_frequency
 """
-enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/core/pkg/enums.Frequency") {
+enum ProcedureHistoryFrequency @goModel(model: "github.com/theopenlane/shared/enums.Frequency") {
   YEARLY
   QUARTERLY
   BIANNUALLY
@@ -102513,7 +102513,7 @@ enum ProgramHistoryOrderField {
 """
 ProgramHistoryProgramStatus is enum for the field status
 """
-enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
+enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/shared/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
   ACTION_REQUIRED
@@ -102524,7 +102524,7 @@ enum ProgramHistoryProgramStatus @goModel(model: "github.com/theopenlane/core/pk
 """
 ProgramHistoryProgramType is enum for the field program_type
 """
-enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+enum ProgramHistoryProgramType @goModel(model: "github.com/theopenlane/shared/enums.ProgramType") {
   FRAMEWORK
   GAP_ANALYSIS
   RISK_ASSESSMENT
@@ -103017,7 +103017,7 @@ enum ProgramMembershipHistoryOrderField {
 """
 ProgramMembershipHistoryRole is enum for the field role
 """
-enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum ProgramMembershipHistoryRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -103204,7 +103204,7 @@ enum ProgramMembershipOrderField {
 """
 ProgramMembershipRole is enum for the field role
 """
-enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum ProgramMembershipRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
 }
@@ -103328,7 +103328,7 @@ enum ProgramOrderField {
 """
 ProgramProgramStatus is enum for the field status
 """
-enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramStatus") {
+enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/shared/enums.ProgramStatus") {
   NOT_STARTED
   IN_PROGRESS
   ACTION_REQUIRED
@@ -103339,7 +103339,7 @@ enum ProgramProgramStatus @goModel(model: "github.com/theopenlane/core/pkg/enums
 """
 ProgramProgramType is enum for the field program_type
 """
-enum ProgramProgramType @goModel(model: "github.com/theopenlane/core/pkg/enums.ProgramType") {
+enum ProgramProgramType @goModel(model: "github.com/theopenlane/shared/enums.ProgramType") {
   FRAMEWORK
   GAP_ANALYSIS
   RISK_ASSESSMENT
@@ -112695,7 +112695,7 @@ enum RiskHistoryOrderField {
 """
 RiskHistoryRiskImpact is enum for the field impact
 """
-enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/shared/enums.RiskImpact") {
   LOW
   MODERATE
   HIGH
@@ -112704,7 +112704,7 @@ enum RiskHistoryRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enum
 """
 RiskHistoryRiskLikelihood is enum for the field likelihood
 """
-enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/shared/enums.RiskLikelihood") {
   UNLIKELY
   LIKELY
   HIGHLY_LIKELY
@@ -112712,7 +112712,7 @@ enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/
 """
 RiskHistoryRiskStatus is enum for the field status
 """
-enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/shared/enums.RiskStatus") {
   OPEN
   IN_PROGRESS
   ONGOING
@@ -113158,7 +113158,7 @@ enum RiskOrderField {
 """
 RiskRiskImpact is enum for the field impact
 """
-enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskImpact") {
+enum RiskRiskImpact @goModel(model: "github.com/theopenlane/shared/enums.RiskImpact") {
   LOW
   MODERATE
   HIGH
@@ -113167,7 +113167,7 @@ enum RiskRiskImpact @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskI
 """
 RiskRiskLikelihood is enum for the field likelihood
 """
-enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskLikelihood") {
+enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/shared/enums.RiskLikelihood") {
   UNLIKELY
   LIKELY
   HIGHLY_LIKELY
@@ -113175,7 +113175,7 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 """
 RiskRiskStatus is enum for the field status
 """
-enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+enum RiskRiskStatus @goModel(model: "github.com/theopenlane/shared/enums.RiskStatus") {
   OPEN
   IN_PROGRESS
   ONGOING
@@ -113964,7 +113964,7 @@ enum ScanHistoryOrderField {
 """
 ScanHistoryScanStatus is enum for the field status
 """
-enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/shared/enums.ScanStatus") {
   PENDING
   PROCESSING
   COMPLETED
@@ -113973,7 +113973,7 @@ enum ScanHistoryScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enum
 """
 ScanHistoryScanType is enum for the field scan_type
 """
-enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+enum ScanHistoryScanType @goModel(model: "github.com/theopenlane/shared/enums.ScanType") {
   DOMAIN
   VULNERABILITY
   VENDOR
@@ -114172,7 +114172,7 @@ enum ScanOrderField {
 """
 ScanScanStatus is enum for the field status
 """
-enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanStatus") {
+enum ScanScanStatus @goModel(model: "github.com/theopenlane/shared/enums.ScanStatus") {
   PENDING
   PROCESSING
   COMPLETED
@@ -114181,7 +114181,7 @@ enum ScanScanStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanS
 """
 ScanScanType is enum for the field scan_type
 """
-enum ScanScanType @goModel(model: "github.com/theopenlane/core/pkg/enums.ScanType") {
+enum ScanScanType @goModel(model: "github.com/theopenlane/shared/enums.ScanType") {
   DOMAIN
   VULNERABILITY
   VENDOR
@@ -114878,7 +114878,7 @@ enum ScheduledJobRunOrderField {
 """
 ScheduledJobRunScheduledJobRunStatus is enum for the field status
 """
-enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ScheduledJobRunStatus") {
+enum ScheduledJobRunScheduledJobRunStatus @goModel(model: "github.com/theopenlane/shared/enums.ScheduledJobRunStatus") {
   PENDING
   ACQUIRED
 }
@@ -115618,7 +115618,7 @@ enum StandardHistoryOrderField {
 """
 StandardHistoryStandardStatus is enum for the field status
 """
-enum StandardHistoryStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+enum StandardHistoryStandardStatus @goModel(model: "github.com/theopenlane/shared/enums.StandardStatus") {
   ACTIVE
   DRAFT
   ARCHIVED
@@ -116053,7 +116053,7 @@ enum StandardOrderField {
 """
 StandardStandardStatus is enum for the field status
 """
-enum StandardStandardStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.StandardStatus") {
+enum StandardStandardStatus @goModel(model: "github.com/theopenlane/shared/enums.StandardStatus") {
   ACTIVE
   DRAFT
   ARCHIVED
@@ -116962,7 +116962,7 @@ type SubcontrolConnection {
 """
 SubcontrolControlSource is enum for the field source
 """
-enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -116971,7 +116971,7 @@ enum SubcontrolControlSource @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlStatus is enum for the field status
 """
-enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/shared/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -116983,7 +116983,7 @@ enum SubcontrolControlStatus @goModel(model: "github.com/theopenlane/core/pkg/en
 """
 SubcontrolControlType is enum for the field control_type
 """
-enum SubcontrolControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum SubcontrolControlType @goModel(model: "github.com/theopenlane/shared/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -117164,7 +117164,7 @@ type SubcontrolHistoryConnection {
 """
 SubcontrolHistoryControlSource is enum for the field source
 """
-enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlSource") {
+enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/shared/enums.ControlSource") {
   FRAMEWORK
   TEMPLATE
   USER_DEFINED
@@ -117173,7 +117173,7 @@ enum SubcontrolHistoryControlSource @goModel(model: "github.com/theopenlane/core
 """
 SubcontrolHistoryControlStatus is enum for the field status
 """
-enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlStatus") {
+enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/shared/enums.ControlStatus") {
   PREPARING
   NEEDS_APPROVAL
   CHANGES_REQUESTED
@@ -117185,7 +117185,7 @@ enum SubcontrolHistoryControlStatus @goModel(model: "github.com/theopenlane/core
 """
 SubcontrolHistoryControlType is enum for the field control_type
 """
-enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/core/pkg/enums.ControlType") {
+enum SubcontrolHistoryControlType @goModel(model: "github.com/theopenlane/shared/enums.ControlType") {
   PREVENTATIVE
   DETECTIVE
   CORRECTIVE
@@ -120487,7 +120487,7 @@ enum TaskHistoryOrderField {
 """
 TaskHistoryTaskStatus is enum for the field status
 """
-enum TaskHistoryTaskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TaskStatus") {
+enum TaskHistoryTaskStatus @goModel(model: "github.com/theopenlane/shared/enums.TaskStatus") {
   OPEN
   IN_PROGRESS
   IN_REVIEW
@@ -120856,7 +120856,7 @@ enum TaskOrderField {
 """
 TaskTaskStatus is enum for the field status
 """
-enum TaskTaskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TaskStatus") {
+enum TaskTaskStatus @goModel(model: "github.com/theopenlane/shared/enums.TaskStatus") {
   OPEN
   IN_PROGRESS
   IN_REVIEW
@@ -121416,7 +121416,7 @@ type TemplateConnection {
 """
 TemplateDocumentType is enum for the field template_type
 """
-enum TemplateDocumentType @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentType") {
+enum TemplateDocumentType @goModel(model: "github.com/theopenlane/shared/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -121511,7 +121511,7 @@ type TemplateHistoryConnection {
 """
 TemplateHistoryDocumentType is enum for the field template_type
 """
-enum TemplateHistoryDocumentType @goModel(model: "github.com/theopenlane/core/pkg/enums.DocumentType") {
+enum TemplateHistoryDocumentType @goModel(model: "github.com/theopenlane/shared/enums.DocumentType") {
   ROOTTEMPLATE
   DOCUMENT
 }
@@ -121563,7 +121563,7 @@ enum TemplateHistoryOrderField {
 """
 TemplateHistoryTemplateKind is enum for the field kind
 """
-enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+enum TemplateHistoryTemplateKind @goModel(model: "github.com/theopenlane/shared/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
 }
@@ -121842,7 +121842,7 @@ enum TemplateOrderField {
 """
 TemplateTemplateKind is enum for the field kind
 """
-enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/core/pkg/enums.TemplateKind") {
+enum TemplateTemplateKind @goModel(model: "github.com/theopenlane/shared/enums.TemplateKind") {
   QUESTIONNAIRE
   TRUSTCENTER_NDA
 }
@@ -122969,7 +122969,7 @@ enum TrustCenterDocHistoryOrderField {
 """
 TrustCenterDocHistoryTrustCenterDocumentVisibility is enum for the field visibility
 """
-enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterDocumentVisibility") {
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
@@ -122977,7 +122977,7 @@ enum TrustCenterDocHistoryTrustCenterDocumentVisibility @goModel(model: "github.
 """
 TrustCenterDocHistoryWatermarkStatus is enum for the field watermark_status
 """
-enum TrustCenterDocHistoryWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+enum TrustCenterDocHistoryWatermarkStatus @goModel(model: "github.com/theopenlane/shared/enums.WatermarkStatus") {
   PENDING
   IN_PROGRESS
   SUCCESS
@@ -123254,7 +123254,7 @@ enum TrustCenterDocOrderField {
 """
 TrustCenterDocTrustCenterDocumentVisibility is enum for the field visibility
 """
-enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterDocumentVisibility") {
+enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterDocumentVisibility") {
   PUBLICLY_VISIBLE
   PROTECTED
   NOT_VISIBLE
@@ -123262,7 +123262,7 @@ enum TrustCenterDocTrustCenterDocumentVisibility @goModel(model: "github.com/the
 """
 TrustCenterDocWatermarkStatus is enum for the field watermark_status
 """
-enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WatermarkStatus") {
+enum TrustCenterDocWatermarkStatus @goModel(model: "github.com/theopenlane/shared/enums.WatermarkStatus") {
   PENDING
   IN_PROGRESS
   SUCCESS
@@ -123617,7 +123617,7 @@ enum TrustCenterHistoryOrderField {
 """
 TrustCenterHistoryTrustCenterPreviewStatus is enum for the field preview_status
 """
-enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+enum TrustCenterHistoryTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterPreviewStatus") {
   PROVISIONING
   READY
   FAILED
@@ -124151,14 +124151,14 @@ enum TrustCenterSettingHistoryOrderField {
 """
 TrustCenterSettingHistoryTrustCenterEnvironment is enum for the field environment
 """
-enum TrustCenterSettingHistoryTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+enum TrustCenterSettingHistoryTrustCenterEnvironment @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterEnvironment") {
   LIVE
   PREVIEW
 }
 """
 TrustCenterSettingHistoryTrustCenterThemeMode is enum for the field theme_mode
 """
-enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+enum TrustCenterSettingHistoryTrustCenterThemeMode @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterThemeMode") {
   EASY
   ADVANCED
 }
@@ -124575,14 +124575,14 @@ enum TrustCenterSettingOrderField {
 """
 TrustCenterSettingTrustCenterEnvironment is enum for the field environment
 """
-enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterEnvironment") {
+enum TrustCenterSettingTrustCenterEnvironment @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterEnvironment") {
   LIVE
   PREVIEW
 }
 """
 TrustCenterSettingTrustCenterThemeMode is enum for the field theme_mode
 """
-enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterThemeMode") {
+enum TrustCenterSettingTrustCenterThemeMode @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterThemeMode") {
   EASY
   ADVANCED
 }
@@ -125432,7 +125432,7 @@ input TrustCenterSubprocessorWhereInput {
 """
 TrustCenterTrustCenterPreviewStatus is enum for the field preview_status
 """
-enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.TrustCenterPreviewStatus") {
+enum TrustCenterTrustCenterPreviewStatus @goModel(model: "github.com/theopenlane/shared/enums.TrustCenterPreviewStatus") {
   PROVISIONING
   READY
   FAILED
@@ -125525,7 +125525,7 @@ type TrustCenterWatermarkConfigEdge {
 """
 TrustCenterWatermarkConfigFont is enum for the field font
 """
-enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+enum TrustCenterWatermarkConfigFont @goModel(model: "github.com/theopenlane/shared/enums.Font") {
   COURIER
   COURIER_BOLD
   COURIER_BOLDOBLIQUE
@@ -125623,7 +125623,7 @@ type TrustCenterWatermarkConfigHistoryEdge {
 """
 TrustCenterWatermarkConfigHistoryFont is enum for the field font
 """
-enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/core/pkg/enums.Font") {
+enum TrustCenterWatermarkConfigHistoryFont @goModel(model: "github.com/theopenlane/shared/enums.Font") {
   COURIER
   COURIER_BOLD
   COURIER_BOLDOBLIQUE
@@ -132951,7 +132951,7 @@ type User implements Node {
 """
 UserAuthProvider is enum for the field last_login_provider
 """
-enum UserAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
+enum UserAuthProvider @goModel(model: "github.com/theopenlane/shared/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -133068,7 +133068,7 @@ type UserHistory implements Node {
 """
 UserHistoryAuthProvider is enum for the field last_login_provider
 """
-enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/core/pkg/enums.AuthProvider") {
+enum UserHistoryAuthProvider @goModel(model: "github.com/theopenlane/shared/enums.AuthProvider") {
   CREDENTIALS
   GOOGLE
   GITHUB
@@ -133140,7 +133140,7 @@ enum UserHistoryOrderField {
 """
 UserHistoryRole is enum for the field role
 """
-enum UserHistoryRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum UserHistoryRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -133559,7 +133559,7 @@ enum UserOrderField {
 """
 UserRole is enum for the field role
 """
-enum UserRole @goModel(model: "github.com/theopenlane/core/pkg/enums.Role") {
+enum UserRole @goModel(model: "github.com/theopenlane/shared/enums.Role") {
   ADMIN
   MEMBER
   USER
@@ -133744,7 +133744,7 @@ enum UserSettingHistoryOrderField {
 """
 UserSettingHistoryUserStatus is enum for the field status
 """
-enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum UserSettingHistoryUserStatus @goModel(model: "github.com/theopenlane/shared/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -133962,7 +133962,7 @@ enum UserSettingOrderField {
 """
 UserSettingUserStatus is enum for the field status
 """
-enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.UserStatus") {
+enum UserSettingUserStatus @goModel(model: "github.com/theopenlane/shared/enums.UserStatus") {
   ACTIVE
   INACTIVE
   DEACTIVATED
@@ -137439,7 +137439,7 @@ input WorkflowAssignmentHistoryWhereInput {
 """
 WorkflowAssignmentHistoryWorkflowAssignmentStatus is enum for the field status
 """
-enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+enum WorkflowAssignmentHistoryWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/shared/enums.WorkflowAssignmentStatus") {
   PENDING
   APPROVED
   REJECTED
@@ -137881,7 +137881,7 @@ input WorkflowAssignmentTargetHistoryWhereInput {
 """
 WorkflowAssignmentTargetHistoryWorkflowTargetType is enum for the field target_type
 """
-enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+enum WorkflowAssignmentTargetHistoryWorkflowTargetType @goModel(model: "github.com/theopenlane/shared/enums.WorkflowTargetType") {
   USER
   GROUP
   ROLE
@@ -138125,7 +138125,7 @@ input WorkflowAssignmentTargetWhereInput {
 """
 WorkflowAssignmentTargetWorkflowTargetType is enum for the field target_type
 """
-enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowTargetType") {
+enum WorkflowAssignmentTargetWorkflowTargetType @goModel(model: "github.com/theopenlane/shared/enums.WorkflowTargetType") {
   USER
   GROUP
   ROLE
@@ -138422,7 +138422,7 @@ input WorkflowAssignmentWhereInput {
 """
 WorkflowAssignmentWorkflowAssignmentStatus is enum for the field status
 """
-enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowAssignmentStatus") {
+enum WorkflowAssignmentWorkflowAssignmentStatus @goModel(model: "github.com/theopenlane/shared/enums.WorkflowAssignmentStatus") {
   PENDING
   APPROVED
   REJECTED
@@ -139063,7 +139063,7 @@ input WorkflowDefinitionHistoryWhereInput {
 """
 WorkflowDefinitionHistoryWorkflowKind is enum for the field workflow_kind
 """
-enum WorkflowDefinitionHistoryWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+enum WorkflowDefinitionHistoryWorkflowKind @goModel(model: "github.com/theopenlane/shared/enums.WorkflowKind") {
   APPROVAL
   LIFECYCLE
   NOTIFICATION
@@ -139374,7 +139374,7 @@ input WorkflowDefinitionWhereInput {
 """
 WorkflowDefinitionWorkflowKind is enum for the field workflow_kind
 """
-enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowKind") {
+enum WorkflowDefinitionWorkflowKind @goModel(model: "github.com/theopenlane/shared/enums.WorkflowKind") {
   APPROVAL
   LIFECYCLE
   NOTIFICATION
@@ -139715,7 +139715,7 @@ input WorkflowEventHistoryWhereInput {
 """
 WorkflowEventHistoryWorkflowEventType is enum for the field event_type
 """
-enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+enum WorkflowEventHistoryWorkflowEventType @goModel(model: "github.com/theopenlane/shared/enums.WorkflowEventType") {
   ACTION
   TRIGGER
   DECISION
@@ -139894,7 +139894,7 @@ input WorkflowEventWhereInput {
 """
 WorkflowEventWorkflowEventType is enum for the field event_type
 """
-enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowEventType") {
+enum WorkflowEventWorkflowEventType @goModel(model: "github.com/theopenlane/shared/enums.WorkflowEventType") {
   ACTION
   TRIGGER
   DECISION
@@ -140360,7 +140360,7 @@ input WorkflowInstanceHistoryWhereInput {
 """
 WorkflowInstanceHistoryWorkflowInstanceState is enum for the field state
 """
-enum WorkflowInstanceHistoryWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+enum WorkflowInstanceHistoryWorkflowInstanceState @goModel(model: "github.com/theopenlane/shared/enums.WorkflowInstanceState") {
   RUNNING
   COMPLETED
   FAILED
@@ -140568,7 +140568,7 @@ input WorkflowInstanceWhereInput {
 """
 WorkflowInstanceWorkflowInstanceState is enum for the field state
 """
-enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/core/pkg/enums.WorkflowInstanceState") {
+enum WorkflowInstanceWorkflowInstanceState @goModel(model: "github.com/theopenlane/shared/enums.WorkflowInstanceState") {
   RUNNING
   COMPLETED
   FAILED
@@ -142399,7 +142399,7 @@ extend type Mutation{
 """
 Permission is enum for the permissions types
 """
-enum Permission @goModel(model: "github.com/theopenlane/core/pkg/enums.Permission") {
+enum Permission @goModel(model: "github.com/theopenlane/shared/enums.Permission") {
   EDITOR
   VIEWER
   CREATOR

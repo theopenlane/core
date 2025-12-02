@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/workflowassignmenthistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // WorkflowAssignmentHistoryCreate is the builder for creating a WorkflowAssignmentHistory entity.

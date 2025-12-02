@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 )
 
 // Changes is the resolver for the changes field.

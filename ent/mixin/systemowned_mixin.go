@@ -13,14 +13,14 @@ import (
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/utils"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/logx"
 )
 
 const (

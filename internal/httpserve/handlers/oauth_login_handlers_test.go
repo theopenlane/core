@@ -10,10 +10,10 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/middleware/transaction"
 )
 
 func (suite *HandlerTestSuite) TestHandlerCheckAndCreateUser() {

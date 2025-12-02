@@ -1,0 +1,79 @@
+model:
+  package: genclient
+  filename: genclient/models.go
+client:
+  package: genclient
+  filename: genclient/graphclient.go
+models:
+  Int:
+    model: github.com/99designs/gqlgen/graphql.Int64
+  ID:
+    model:
+      - github.com/99designs/gqlgen/graphql.String
+  JSON:
+    model:
+      - github.com/theopenlane/entx.RawMessage
+  Address:
+    model:
+      - github.com/theopenlane/shared/models.Address
+  Price:
+    model:
+      - github.com/theopenlane/shared/models.Price
+  AssessmentObjective:
+    model:
+      - github.com/theopenlane/shared/models.AssessmentObjective
+  AssessmentMethod:
+    model:
+      - github.com/theopenlane/shared/models.AssessmentMethod
+  Reference:
+    model:
+      - github.com/theopenlane/shared/models.Reference
+  ImplementationGuidance:
+    model:
+      - github.com/theopenlane/shared/models.ImplementationGuidance
+  ExampleEvidence:
+    model:
+      - github.com/theopenlane/shared/models.ExampleEvidence
+  VersionBump:
+    model:
+      - github.com/theopenlane/shared/models.VersionBump
+  DateTime:
+    model: github.com/theopenlane/shared/models.DateTime
+  AAGUID:
+    model: github.com/theopenlane/shared/models.AAGUID
+  JobConfiguration:
+    model: github.com/theopenlane/shared/models.JobConfiguration
+  JobCadence:
+    model: github.com/theopenlane/shared/models.JobCadence
+  Change:
+    model: github.com/theopenlane/shared/models.Change
+  AuditLogOrderField:
+    model: github.com/theopenlane/shared/models.AuditLogOrderField
+  CredentialSet:
+    model:
+      - github.com/theopenlane/shared/models.CredentialSet
+  SearchContext:
+    model:
+      - github.com/theopenlane/shared/models.SearchContext
+  SearchSnippet:
+    model:
+      - github.com/theopenlane/shared/models.SearchSnippet
+  WorkflowDefinitionDocument:
+    model:
+      - github.com/theopenlane/shared/models.WorkflowDefinitionDocument
+  WorkflowDefinitionSchema:
+    model:
+      - github.com/theopenlane/shared/models.WorkflowDefinitionSchema
+  WorkflowInstanceContext:
+    model:
+      - github.com/theopenlane/shared/models.WorkflowInstanceContext
+  WorkflowEventPayload:
+    model:
+      - github.com/theopenlane/shared/models.WorkflowEventPayload
+schema: ["../schema/schema.graphql"]
+query: ["../query/*.graphql"]
+generate:
+  clientV2: true
+  clientInterfaceName: "OpenlaneGraphClient"
+  query: false
+  mutation: false

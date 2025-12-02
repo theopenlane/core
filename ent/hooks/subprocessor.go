@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 // HookSubprocessor runs on subprocessor mutations to check for uploaded logo file

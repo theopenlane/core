@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/asset"
 	"github.com/theopenlane/ent/generated/entity"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scan"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ScanCreate is the builder for creating a Scan entity.

@@ -14,9 +14,9 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestQueryContact(t *testing.T) {

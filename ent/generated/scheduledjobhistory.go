@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/scheduledjobhistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 )
 
 // ScheduledJobHistory is the model entity for the ScheduledJobHistory schema.

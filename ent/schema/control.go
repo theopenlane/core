@@ -9,18 +9,18 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/shared/models"
 
-	"github.com/theopenlane/core/pkg/directives"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/directives"
 )
 
 // Control defines the control schema.

@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/mappedcontrolhistory"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // MappedControlHistoryCreate is the builder for creating a MappedControlHistory entity.

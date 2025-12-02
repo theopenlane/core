@@ -10,13 +10,13 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // ControlMixin implements the control pattern fields for different schemas.

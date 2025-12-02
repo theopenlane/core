@@ -10,11 +10,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/totp"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/usersetting"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookEnableTFA is a hook that generates the tfa secrets if the totp setting is set to allowed

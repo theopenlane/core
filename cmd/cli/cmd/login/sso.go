@@ -19,8 +19,8 @@ import (
 	"github.com/theopenlane/iam/sessions"
 
 	corecmd "github.com/theopenlane/core/cmd/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // ssoConfig configures the local SSO login server

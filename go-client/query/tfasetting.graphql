@@ -1,0 +1,80 @@
+mutation CreateTFASetting($input: CreateTFASettingInput!) {
+  createTFASetting(input: $input) {
+    tfaSetting {
+      totpAllowed
+      verified
+    }
+    qrCode
+    tfaSecret
+  }
+}
+
+query GetAllTFASettings {
+  tfaSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        totpAllowed
+        updatedAt
+        updatedBy
+        verified
+      }
+    }
+  }
+}
+
+query GetTFASettingByID($tFASettingId: ID!) {
+  tfaSetting(id: $tFASettingId) {
+    createdAt
+    createdBy
+    id
+    totpAllowed
+    updatedAt
+    updatedBy
+    verified
+  }
+}
+
+query GetTFASettings($first: Int, $last: Int, $where: TFASettingWhereInput) {
+  tfaSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        totpAllowed
+        updatedAt
+        updatedBy
+        verified
+      }
+    }
+  }
+}
+
+mutation UpdateTFASetting($input: UpdateTFASettingInput!) {
+  updateTFASetting(input: $input) {
+    tfaSetting {
+      totpAllowed
+      verified
+    }
+    qrCode
+    tfaSecret
+    recoveryCodes
+  }
+}

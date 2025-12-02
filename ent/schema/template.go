@@ -13,12 +13,12 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Template holds the schema definition for the Template entity

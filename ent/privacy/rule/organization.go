@@ -10,11 +10,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/permissioncache"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/permissioncache"
 )
 
 // genericMutation is an interface for getting a mutation ID and type

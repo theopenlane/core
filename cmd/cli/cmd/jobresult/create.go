@@ -11,9 +11,9 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	openlaneclient "github.com/theopenlane/go-client/genclient"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 var createCmd = &cobra.Command{

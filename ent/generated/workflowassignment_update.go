@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/predicate"
@@ -20,6 +19,7 @@ import (
 	"github.com/theopenlane/ent/generated/workflowassignment"
 	"github.com/theopenlane/ent/generated/workflowassignmenttarget"
 	"github.com/theopenlane/ent/generated/workflowinstance"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

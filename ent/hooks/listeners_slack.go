@@ -7,9 +7,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/slacktemplates"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/slacktemplates"
+	"github.com/theopenlane/shared/soiree"
 	"github.com/theopenlane/utils/slack"
 )
 

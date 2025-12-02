@@ -20,11 +20,11 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
-	"github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
+	apimodels "github.com/theopenlane/shared/openapi"
+	"github.com/theopenlane/shared/testutils"
 )
 
 func (suite *HandlerTestSuite) TestRefreshHandler() {

@@ -4,11 +4,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/enums"
 )
 
 func (suite *HookTestSuite) TestValidateIdentityProviderConfig() {

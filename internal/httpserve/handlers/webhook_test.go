@@ -17,10 +17,10 @@ import (
 	"github.com/stripe/stripe-go/v83/webhook"
 	echo "github.com/theopenlane/echox"
 
-	models "github.com/theopenlane/core/pkg/openapi"
 	entEvent "github.com/theopenlane/ent/generated/event"
 	"github.com/theopenlane/ent/generated/orgsubscription"
 	"github.com/theopenlane/ent/generated/privacy"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 type webhookBinder struct {

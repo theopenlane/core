@@ -7,8 +7,8 @@ import (
 
 	"github.com/samber/lo"
 
-	"github.com/theopenlane/core/internal/integrations/helpers"
-	"github.com/theopenlane/core/internal/integrations/types"
+	"github.com/theopenlane/shared/integrations/helpers"
+	"github.com/theopenlane/shared/integrations/types"
 )
 
 // ClientPoolManager manages client pools constructed from provider-published descriptors

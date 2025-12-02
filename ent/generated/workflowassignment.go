@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/workflowassignment"
 	"github.com/theopenlane/ent/generated/workflowinstance"
+	"github.com/theopenlane/shared/enums"
 )
 
 // WorkflowAssignment is the model entity for the WorkflowAssignment schema.

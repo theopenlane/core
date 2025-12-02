@@ -13,7 +13,7 @@ import (
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
 	"github.com/theopenlane/core/internal/graphsubscriptions"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/logx"
 )
 
 // TaskCreated is the resolver for the taskCreated field.

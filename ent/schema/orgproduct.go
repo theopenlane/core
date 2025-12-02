@@ -7,10 +7,10 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/models"
 )
 
 // OrgProduct represents a module product linked to a subscription.

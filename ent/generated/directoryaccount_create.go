@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/directoryaccount"
 	"github.com/theopenlane/ent/generated/directorygroup"
 	"github.com/theopenlane/ent/generated/directorymembership"
@@ -18,6 +17,7 @@ import (
 	"github.com/theopenlane/ent/generated/integration"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/workflowobjectref"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DirectoryAccountCreate is the builder for creating a DirectoryAccount entity.

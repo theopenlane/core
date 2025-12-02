@@ -10,17 +10,17 @@ import (
 	"github.com/stretchr/testify/require"
 
 	handlerpkg "github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/objects/objstore"
-	"github.com/theopenlane/core/pkg/objects/resolver"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
-	"github.com/theopenlane/core/pkg/objects/upload"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/filedownloadtoken"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/shared/objects"
+	"github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/objects/resolver"
+	"github.com/theopenlane/shared/objects/storage"
+	storagetypes "github.com/theopenlane/shared/objects/storage/types"
+	"github.com/theopenlane/shared/objects/upload"
 )
 
 const testTokenIssuer = "http://localhost:17608"

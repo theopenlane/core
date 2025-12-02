@@ -5,8 +5,8 @@ import (
 	"testing"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 )

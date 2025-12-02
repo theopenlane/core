@@ -12,11 +12,11 @@ import (
 
 	"github.com/theopenlane/utils/keygen"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/models"
 )
 
 // APIToken holds the schema definition for the APIToken entity.

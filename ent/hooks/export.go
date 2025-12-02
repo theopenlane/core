@@ -5,11 +5,11 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/jobspec"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/jobspec"
+	"github.com/theopenlane/shared/objects"
 )
 
 var (
@@ -74,7 +74,7 @@ func handleExportCreate(ctx context.Context, m *generated.ExportMutation, next e
 }
 
 func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next ent.Mutator) (generated.Value, error) {
-	fileIDs := pkgobjects.GetFileIDsFromContext(ctx)
+	fileIDs := objects.GetFileIDsFromContext(ctx)
 	if len(fileIDs) > 0 {
 		var err error
 
@@ -93,15 +93,15 @@ func handleExportUpdate(ctx context.Context, m *generated.ExportMutation, next e
 func checkExportFiles(ctx context.Context, m *generated.ExportMutation) (context.Context, error) {
 	key := "exportFiles"
 
-	files, _ := pkgobjects.FilesFromContextWithKey(ctx, key)
+	files, _ := objects.FilesFromContextWithKey(ctx, key)
 	if len(files) == 0 {
 		return ctx, nil
 	}
 
-	adapter := pkgobjects.NewGenericMutationAdapter(m,
+	adapter := objects.NewGenericMutationAdapter(m,
 		func(mut *generated.ExportMutation) (string, bool) { return mut.ID() },
 		func(mut *generated.ExportMutation) string { return mut.Type() },
 	)
 
-	return pkgobjects.ProcessFilesForMutation(ctx, adapter, key)
+	return objects.ProcessFilesForMutation(ctx, adapter, key)
 }

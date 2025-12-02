@@ -7,9 +7,9 @@ import (
 
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/intercept"
+	"github.com/theopenlane/shared/logx"
 )
 
 // InterceptorBillingPortalURLs is an ent interceptor to fetch data from an external source (in this case stripe) and populate the URLs in the graph return response

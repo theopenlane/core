@@ -19,13 +19,13 @@ import (
 	"github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	models "github.com/theopenlane/core/pkg/openapi"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/token"
 	entval "github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/metrics"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // OauthProviderConfig represents the configuration for OAuth providers such as Github and Google

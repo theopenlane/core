@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/assessment"
 	"github.com/theopenlane/ent/generated/assessmentresponse"
 	"github.com/theopenlane/ent/generated/documentdata"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // AssessmentResponse is the model entity for the AssessmentResponse schema.

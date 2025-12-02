@@ -1,0 +1,252 @@
+mutation CreateBulkCSVOrganizationSetting($input: Upload!) {
+  createBulkCSVOrganizationSetting(input: $input) {
+    organizationSettings {
+      allowedEmailDomains
+      allowMatchingDomainsAutojoin
+      billingAddress
+      billingContact
+      billingEmail
+      billingNotificationsEnabled
+      billingPhone
+      complianceWebhookToken
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      identityProvider
+      identityProviderClientID
+      identityProviderClientSecret
+      identityProviderEntityID
+      identityProviderLoginEnforced
+      identityProviderMetadataEndpoint
+      identityProviderAuthTested
+      oidcDiscoveryEndpoint
+      organizationID
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkOrganizationSetting($input: [CreateOrganizationSettingInput!]) {
+  createBulkOrganizationSetting(input: $input) {
+    organizationSettings {
+      allowedEmailDomains
+      allowMatchingDomainsAutojoin
+      billingAddress
+      billingContact
+      billingEmail
+      billingNotificationsEnabled
+      billingPhone
+      complianceWebhookToken
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      identityProvider
+      identityProviderClientID
+      identityProviderClientSecret
+      identityProviderEntityID
+      identityProviderLoginEnforced
+      identityProviderMetadataEndpoint
+      identityProviderAuthTested
+      oidcDiscoveryEndpoint
+      organizationID
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateOrganizationSetting($input: CreateOrganizationSettingInput!) {
+  createOrganizationSetting(input: $input) {
+    organizationSetting {
+      allowedEmailDomains
+      allowMatchingDomainsAutojoin
+      billingAddress
+      billingContact
+      billingEmail
+      billingNotificationsEnabled
+      billingPhone
+      complianceWebhookToken
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      identityProvider
+      identityProviderClientID
+      identityProviderClientSecret
+      identityProviderEntityID
+      identityProviderLoginEnforced
+      identityProviderMetadataEndpoint
+      identityProviderAuthTested
+      oidcDiscoveryEndpoint
+      organizationID
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteOrganizationSetting($deleteOrganizationSettingId: ID!) {
+  deleteOrganizationSetting(id: $deleteOrganizationSettingId) {
+    deletedID
+  }
+}
+
+query GetAllOrganizationSettings {
+  organizationSettings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        allowedEmailDomains
+        allowMatchingDomainsAutojoin
+        billingAddress
+        billingContact
+        billingEmail
+        billingNotificationsEnabled
+        billingPhone
+        complianceWebhookToken
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        identityProvider
+        identityProviderClientID
+        identityProviderClientSecret
+        identityProviderEntityID
+        identityProviderLoginEnforced
+        identityProviderMetadataEndpoint
+        identityProviderAuthTested
+        oidcDiscoveryEndpoint
+        organizationID
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetOrganizationSettingByID($organizationSettingId: ID!) {
+  organizationSetting(id: $organizationSettingId) {
+    allowedEmailDomains
+    allowMatchingDomainsAutojoin
+    billingAddress
+    billingContact
+    billingEmail
+    billingNotificationsEnabled
+    billingPhone
+    complianceWebhookToken
+    createdAt
+    createdBy
+    domains
+    geoLocation
+    id
+    identityProvider
+    identityProviderAuthTested
+    identityProviderClientID
+    identityProviderClientSecret
+    identityProviderEntityID
+    identityProviderLoginEnforced
+    identityProviderMetadataEndpoint
+    oidcDiscoveryEndpoint
+    organizationID
+    tags
+    taxIdentifier
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetOrganizationSettings($first: Int, $last: Int, $where: OrganizationSettingWhereInput) {
+  organizationSettings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        allowedEmailDomains
+        allowMatchingDomainsAutojoin
+        billingAddress
+        billingContact
+        billingEmail
+        billingNotificationsEnabled
+        billingPhone
+        complianceWebhookToken
+        createdAt
+        createdBy
+        domains
+        geoLocation
+        id
+        identityProvider
+        identityProviderAuthTested
+        identityProviderClientID
+        identityProviderClientSecret
+        identityProviderEntityID
+        identityProviderLoginEnforced
+        identityProviderMetadataEndpoint
+        oidcDiscoveryEndpoint
+        organizationID
+        tags
+        taxIdentifier
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateOrganizationSetting($updateOrganizationSettingId: ID!, $input: UpdateOrganizationSettingInput!) {
+  updateOrganizationSetting(id: $updateOrganizationSettingId, input: $input) {
+    organizationSetting {
+      allowedEmailDomains
+      allowMatchingDomainsAutojoin
+      billingAddress
+      billingContact
+      billingEmail
+      billingNotificationsEnabled
+      billingPhone
+      complianceWebhookToken
+      createdAt
+      createdBy
+      domains
+      geoLocation
+      id
+      identityProvider
+      identityProviderClientID
+      identityProviderClientSecret
+      identityProviderEntityID
+      identityProviderLoginEnforced
+      identityProviderMetadataEndpoint
+      identityProviderAuthTested
+      oidcDiscoveryEndpoint
+      organizationID
+      tags
+      taxIdentifier
+      updatedAt
+      updatedBy
+    }
+  }
+}

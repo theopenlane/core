@@ -7,15 +7,15 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // Standard defines the standard schema.

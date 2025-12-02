@@ -20,11 +20,6 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/gqlerrors"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/generated"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/evidence"
@@ -35,6 +30,11 @@ import (
 	"github.com/theopenlane/ent/generated/programmembership"
 	"github.com/theopenlane/ent/generated/subprocessor"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/gqlerrors"
+	"github.com/theopenlane/shared/models"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 type OrganizationBuilder struct {

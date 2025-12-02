@@ -8,10 +8,10 @@ import (
 	"github.com/brianvoe/gofakeit/v7"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/models"
 )
 
 func (suite *HookTestSuite) TestSetNewRevision() {

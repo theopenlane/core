@@ -4,11 +4,11 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/privacy/utils"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/logx"
 )
 
 // MutationWithEmail is an interface that mutations that require email validation must implement

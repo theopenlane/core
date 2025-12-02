@@ -59,13 +59,13 @@ func (MySchema) Fields() []ent.Field {
 The underlying crypto package provides direct encryption functions:
 
 ```go
-import "github.com/theopenlane/core/internal/crypto"
+import "github.com/theopenlane/ent/encrypt"
 
 // Encrypt data
-encrypted, err := crypto.Encrypt(ctx, "plaintext")
+encrypted, err := encrypt.Encrypt(ctx, "plaintext")
 
 // Decrypt data
-decrypted, err := crypto.Decrypt(ctx, encrypted)
+decrypted, err := encrypt.Decrypt(ctx, encrypted)
 ```
 
 ## Migration

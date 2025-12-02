@@ -5,11 +5,11 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/mappedcontrol"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/enums"
 )
 
 // HookMappedControl runs on mapped control create and update mutations to restrict certain fields to system admins only

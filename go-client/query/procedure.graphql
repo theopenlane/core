@@ -1,0 +1,308 @@
+
+mutation CreateBulkCSVProcedure($input: Upload!) {
+  createBulkCSVProcedure(input: $input) {
+    procedures {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkProcedure($input: [CreateProcedureInput!]) {
+  createBulkProcedure(input: $input) {
+    procedures {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateProcedure($input: CreateProcedureInput!) {
+  createProcedure(input: $input) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateUploadProcedure($procedureFile: Upload!, $ownerID: ID) {
+  createUploadProcedure(procedureFile: $procedureFile, ownerID: $ownerID) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteProcedure($deleteProcedureId: ID!) {
+  deleteProcedure(id: $deleteProcedureId) {
+    deletedID
+  }
+}
+
+query GetAllProcedures {
+  procedures {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        id
+        improvementSuggestions
+        name
+        ownerID
+        procedureType
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetProcedureByID($procedureId: ID!) {
+  procedure(id: $procedureId) {
+    approvalRequired
+    approverID
+    controlSuggestions
+    createdAt
+    createdBy
+    delegateID
+    details
+    dismissedControlSuggestions
+    dismissedImprovementSuggestions
+    dismissedTagSuggestions
+    displayID
+    id
+    improvementSuggestions
+    name
+    ownerID
+    procedureType
+    reviewDue
+    reviewFrequency
+    revision
+    status
+    summary
+    tagSuggestions
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetProcedures($first: Int, $last: Int, $where: ProcedureWhereInput) {
+  procedures(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        id
+        improvementSuggestions
+        name
+        ownerID
+        procedureType
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateProcedure($updateProcedureId: ID!, $input: UpdateProcedureInput!) {
+  updateProcedure(id: $updateProcedureId, input: $input) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+mutation UpdateProcedureWithFile($updateProcedureId: ID!, $procedureFile: Upload!, $input: UpdateProcedureInput!) {
+  updateProcedure(id: $updateProcedureId, procedureFile: $procedureFile, input: $input) {
+    procedure {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      procedureType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+

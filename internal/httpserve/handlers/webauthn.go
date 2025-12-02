@@ -16,13 +16,13 @@ import (
 	provider "github.com/theopenlane/iam/providers/webauthn"
 	"github.com/theopenlane/iam/sessions"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	models "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 	"github.com/theopenlane/ent/privacy/token"
 	entval "github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/metrics"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 const (

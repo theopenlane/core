@@ -19,7 +19,7 @@ import (
 	"github.com/theopenlane/utils/envparse"
 
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
+	"github.com/theopenlane/shared/middleware/ratelimit"
 )
 
 // const values used for the schema generator

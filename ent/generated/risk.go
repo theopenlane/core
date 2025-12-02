@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/customtypeenum"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/risk"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Risk is the model entity for the Risk schema.

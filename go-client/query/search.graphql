@@ -1,0 +1,570 @@
+query GlobalSearch($query: String!) {
+  search(query: $query) {
+    totalCount
+    actionPlans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          id
+          name
+          tags
+        }
+      }
+    }
+    assessments {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          jsonconfig
+          name
+          tags
+        }
+      }
+    }
+    assessmentResponses {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          id
+        }
+      }
+    }
+    assets {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
+    contacts {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          fullName
+          id
+          tags
+        }
+      }
+    }
+    controls {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          aliases
+          category
+          description
+          displayID
+          id
+          mappedCategories
+          refCode
+          subcategory
+          tags
+          title
+        }
+      }
+    }
+    controlObjectives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          category
+          displayID
+          id
+          name
+          subcategory
+          tags
+        }
+      }
+    }
+    customTypeEnums {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          objectType
+        }
+      }
+    }
+    entities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayName
+          id
+          name
+          tags
+        }
+      }
+    }
+    evidences {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    findings {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          externalID
+          externalOwnerID
+          id
+          severity
+          tags
+        }
+      }
+    }
+    groups {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          displayName
+          id
+          name
+          tags
+        }
+      }
+    }
+    internalPolicies {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    invites {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          recipient
+        }
+      }
+    }
+    jobRunners {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    jobTemplates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          tags
+          title
+        }
+      }
+    }
+    narratives {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    organizations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayName
+          id
+          name
+          tags
+        }
+      }
+    }
+    procedures {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          details
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    programs {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          description
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    remediations {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          externalID
+          externalOwnerID
+          id
+          tags
+          title
+        }
+      }
+    }
+    reviews {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          externalID
+          externalOwnerID
+          id
+          tags
+          title
+        }
+      }
+    }
+    risks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          name
+          tags
+        }
+      }
+    }
+    scans {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          tags
+          target
+        }
+      }
+    }
+    standards {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          domains
+          framework
+          governingBody
+          id
+          name
+          shortName
+          tags
+        }
+      }
+    }
+    subcontrols {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          aliases
+          category
+          description
+          displayID
+          id
+          mappedCategories
+          refCode
+          subcategory
+          tags
+          title
+        }
+      }
+    }
+    subprocessors {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+          tags
+        }
+      }
+    }
+    subscribers {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          email
+          id
+          tags
+        }
+      }
+    }
+    tagDefinitions {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          name
+        }
+      }
+    }
+    tasks {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          displayID
+          id
+          tags
+          title
+        }
+      }
+    }
+    templates {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          id
+          jsonconfig
+          name
+          tags
+        }
+      }
+    }
+    vulnerabilities {
+      totalCount
+      pageInfo {
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
+      }
+      edges {
+        node {
+          cveID
+          displayID
+          externalID
+          externalOwnerID
+          id
+          severity
+          tags
+        }
+      }
+    }
+  }
+}

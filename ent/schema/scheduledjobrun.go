@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/entx/history"

@@ -1,0 +1,155 @@
+mutation CreateControlsByClone($input: CloneControlInput!) {
+  createControlsByClone(input: $input) {
+    controls {
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      referenceFrameworkRevision
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+      subcontrols {
+        edges {
+          node {
+            id
+            refCode
+            title
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation CloneBulkCSVControl($input: Upload!) {
+  cloneBulkCSVControl(input: $input) {
+    controls {
+      assessmentMethods
+      assessmentObjectives
+      category
+      categoryID
+      controlQuestions
+      controlType
+      createdAt
+      createdBy
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      references
+      referenceFramework
+      referenceFrameworkRevision
+      referenceID
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+      subcontrols {
+        edges {
+          node {
+            id
+            refCode
+            title
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation CreateControlsByCloneReturnID($input: CloneControlInput!) {
+  createControlsByClone(input: $input) {
+    controls {
+      id
+    }
+  }
+}
+
+query GetControlCategories {
+  controlCategories
+}
+
+query GetControlCategoriesWithFramework($where: ControlWhereInput) {
+  controlCategoriesByFramework(where: $where) {
+    node {
+      name
+      referenceFramework
+    }
+  }
+}
+
+query GetControlsGroupByCategory($first: Int, $last: Int, $after: Cursor, $before: Cursor, $where: ControlWhereInput, $orderBy: [ControlOrder!], $category: String) {
+  controlsGroupByCategory(
+    first: $first
+    last: $last
+    after: $after
+    before: $before
+    where: $where
+    orderBy: $orderBy
+    category: $category
+  ) {
+    edges {
+      node {
+        category
+        controls {
+          edges {
+            node {
+              id
+              refCode
+              referenceFramework
+              ownerID
+            }
+          }
+          totalCount
+          pageInfo {
+            endCursor
+            hasNextPage
+            hasPreviousPage
+            startCursor
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetControlSubcategories {
+  controlSubcategories
+}
+
+query GetControlSubcategoriesWithFramework($where: ControlWhereInput) {
+  controlSubcategoriesByFramework(where: $where) {
+    node {
+      name
+      referenceFramework
+    }
+  }
+}

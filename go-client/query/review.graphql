@@ -1,0 +1,237 @@
+
+mutation CreateBulkCSVReview($input: Upload!) {
+  createBulkCSVReview(input: $input) {
+    reviews {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkReview($input: [CreateReviewInput!]) {
+  createBulkReview(input: $input) {
+    reviews {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateReview($input: CreateReviewInput!) {
+  createReview(input: $input) {
+    review {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteReview($deleteReviewId: ID!) {
+  deleteReview(id: $deleteReviewId) {
+    deletedID
+  }
+}
+
+query GetAllReviews {
+  reviews {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approved
+        approvedAt
+        category
+        classification
+        createdAt
+        createdBy
+        details
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        metadata
+        rawPayload
+        reportedAt
+        reporter
+        reviewedAt
+        reviewerID
+        source
+        state
+        summary
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetReviewByID($reviewId: ID!) {
+  review(id: $reviewId) {
+    approved
+    approvedAt
+    category
+    classification
+    createdAt
+    createdBy
+    details
+    externalID
+    externalOwnerID
+    externalURI
+    id
+    metadata
+    rawPayload
+    reportedAt
+    reporter
+    reviewedAt
+    reviewerID
+    source
+    state
+    summary
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetReviews($first: Int, $last: Int, $where: ReviewWhereInput) {
+  reviews(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approved
+        approvedAt
+        category
+        classification
+        createdAt
+        createdBy
+        details
+        externalID
+        externalOwnerID
+        externalURI
+        id
+        metadata
+        rawPayload
+        reportedAt
+        reporter
+        reviewedAt
+        reviewerID
+        source
+        state
+        summary
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateReview($updateReviewId: ID!, $input: UpdateReviewInput!) {
+  updateReview(id: $updateReviewId, input: $input) {
+    review {
+      approved
+      approvedAt
+      category
+      classification
+      createdAt
+      createdBy
+      details
+      externalID
+      externalOwnerID
+      externalURI
+      id
+      metadata
+      rawPayload
+      reportedAt
+      reporter
+      reviewedAt
+      reviewerID
+      source
+      state
+      summary
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

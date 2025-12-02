@@ -22,9 +22,9 @@ import (
 	"github.com/theopenlane/riverboat/pkg/jobs"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestGetQuestionnaire() {

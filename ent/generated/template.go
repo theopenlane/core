@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/template"
 	"github.com/theopenlane/ent/generated/trustcenter"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Template is the model entity for the Template schema.

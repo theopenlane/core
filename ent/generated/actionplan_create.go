@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/customtypeenum"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/ent/generated/risk"
 	"github.com/theopenlane/ent/generated/task"
 	"github.com/theopenlane/ent/generated/vulnerability"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ActionPlanCreate is the builder for creating a ActionPlan entity.

@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/httpsling"
+	apimodels "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestProductCatalogHandler() {

@@ -3,8 +3,8 @@ package validator_test
 import (
 	"testing"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestValidateFilter(t *testing.T) {

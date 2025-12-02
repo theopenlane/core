@@ -11,8 +11,8 @@ import (
 	"entgo.io/contrib/entgql"
 	"github.com/theopenlane/ent/generated"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // Return response for createBulkAPIToken mutation

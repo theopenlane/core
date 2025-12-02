@@ -10,7 +10,7 @@ import (
 	"github.com/stripe/stripe-go/v83"
 	"github.com/urfave/cli/v3"
 
-	"github.com/theopenlane/core/pkg/entitlements"
+	"github.com/theopenlane/shared/entitlements"
 	"github.com/theopenlane/utils/cli/tables"
 )
 

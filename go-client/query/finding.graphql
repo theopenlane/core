@@ -1,0 +1,370 @@
+
+mutation CreateBulkCSVFinding($input: Upload!) {
+  createBulkCSVFinding(input: $input) {
+    findings {
+      assessmentID
+      blocksProduction
+      categories
+      category
+      createdAt
+      createdBy
+      description
+      displayName
+      eventTime
+      exploitability
+      externalID
+      externalOwnerID
+      externalURI
+      findingClass
+      id
+      impact
+      metadata
+      numericSeverity
+      open
+      priority
+      production
+      public
+      rawPayload
+      recommendation
+      recommendedActions
+      references
+      remediationSLA
+      reportedAt
+      resourceName
+      score
+      severity
+      source
+      sourceUpdatedAt
+      state
+      status
+      stepsToReproduce
+      tags
+      targetDetails
+      targets
+      updatedAt
+      updatedBy
+      validated
+      vector
+    }
+  }
+}
+
+mutation CreateBulkFinding($input: [CreateFindingInput!]) {
+  createBulkFinding(input: $input) {
+    findings {
+      assessmentID
+      blocksProduction
+      categories
+      category
+      createdAt
+      createdBy
+      description
+      displayName
+      eventTime
+      exploitability
+      externalID
+      externalOwnerID
+      externalURI
+      findingClass
+      id
+      impact
+      metadata
+      numericSeverity
+      open
+      priority
+      production
+      public
+      rawPayload
+      recommendation
+      recommendedActions
+      references
+      remediationSLA
+      reportedAt
+      resourceName
+      score
+      severity
+      source
+      sourceUpdatedAt
+      state
+      status
+      stepsToReproduce
+      tags
+      targetDetails
+      targets
+      updatedAt
+      updatedBy
+      validated
+      vector
+    }
+  }
+}
+
+mutation CreateFinding($input: CreateFindingInput!) {
+  createFinding(input: $input) {
+    finding {
+      assessmentID
+      blocksProduction
+      categories
+      category
+      createdAt
+      createdBy
+      description
+      displayName
+      eventTime
+      exploitability
+      externalID
+      externalOwnerID
+      externalURI
+      findingClass
+      id
+      impact
+      metadata
+      numericSeverity
+      open
+      priority
+      production
+      public
+      rawPayload
+      recommendation
+      recommendedActions
+      references
+      remediationSLA
+      reportedAt
+      resourceName
+      score
+      severity
+      source
+      sourceUpdatedAt
+      state
+      status
+      stepsToReproduce
+      tags
+      targetDetails
+      targets
+      updatedAt
+      updatedBy
+      validated
+      vector
+    }
+  }
+}
+
+mutation DeleteFinding($deleteFindingId: ID!) {
+  deleteFinding(id: $deleteFindingId) {
+    deletedID
+  }
+}
+
+query GetAllFindings {
+  findings {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        blocksProduction
+        categories
+        category
+        createdAt
+        createdBy
+        description
+        displayName
+        eventTime
+        exploitability
+        externalID
+        externalOwnerID
+        externalURI
+        findingClass
+        id
+        impact
+        metadata
+        numericSeverity
+        open
+        priority
+        production
+        public
+        rawPayload
+        recommendation
+        recommendedActions
+        references
+        remediationSLA
+        reportedAt
+        resourceName
+        score
+        severity
+        source
+        sourceUpdatedAt
+        state
+        status
+        stepsToReproduce
+        tags
+        targetDetails
+        targets
+        updatedAt
+        updatedBy
+        validated
+        vector
+      }
+    }
+  }
+}
+query GetFindingByID($findingId: ID!) {
+  finding(id: $findingId) {
+    assessmentID
+    blocksProduction
+    categories
+    category
+    createdAt
+    createdBy
+    description
+    displayName
+    eventTime
+    exploitability
+    externalID
+    externalOwnerID
+    externalURI
+    findingClass
+    id
+    impact
+    metadata
+    numericSeverity
+    open
+    priority
+    production
+    public
+    rawPayload
+    recommendation
+    recommendedActions
+    references
+    remediationSLA
+    reportedAt
+    resourceName
+    score
+    severity
+    source
+    sourceUpdatedAt
+    state
+    status
+    stepsToReproduce
+    tags
+    targetDetails
+    targets
+    updatedAt
+    updatedBy
+    validated
+    vector
+  }
+}
+
+query GetFindings($first: Int, $last: Int, $where: FindingWhereInput) {
+  findings(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assessmentID
+        blocksProduction
+        categories
+        category
+        createdAt
+        createdBy
+        description
+        displayName
+        eventTime
+        exploitability
+        externalID
+        externalOwnerID
+        externalURI
+        findingClass
+        id
+        impact
+        metadata
+        numericSeverity
+        open
+        priority
+        production
+        public
+        rawPayload
+        recommendation
+        recommendedActions
+        references
+        remediationSLA
+        reportedAt
+        resourceName
+        score
+        severity
+        source
+        sourceUpdatedAt
+        state
+        status
+        stepsToReproduce
+        tags
+        targetDetails
+        targets
+        updatedAt
+        updatedBy
+        validated
+        vector
+      }
+    }
+  }
+}
+mutation UpdateFinding($updateFindingId: ID!, $input: UpdateFindingInput!) {
+  updateFinding(id: $updateFindingId, input: $input) {
+    finding {
+      assessmentID
+      blocksProduction
+      categories
+      category
+      createdAt
+      createdBy
+      description
+      displayName
+      eventTime
+      exploitability
+      externalID
+      externalOwnerID
+      externalURI
+      findingClass
+      id
+      impact
+      metadata
+      numericSeverity
+      open
+      priority
+      production
+      public
+      rawPayload
+      recommendation
+      recommendedActions
+      references
+      remediationSLA
+      reportedAt
+      resourceName
+      score
+      severity
+      source
+      sourceUpdatedAt
+      state
+      status
+      stepsToReproduce
+      tags
+      targetDetails
+      targets
+      updatedAt
+      updatedBy
+      validated
+      vector
+    }
+  }
+}

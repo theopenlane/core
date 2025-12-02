@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/customdomain"
 	"github.com/theopenlane/ent/generated/dnsverification"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DNSVerificationCreate is the builder for creating a DNSVerification entity.

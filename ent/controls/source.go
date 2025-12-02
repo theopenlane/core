@@ -3,10 +3,10 @@ package controls
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
 )
 
 // CheckSourceAllowed checks if the source is allowed to be modified

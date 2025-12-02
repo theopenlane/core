@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/jobrunner"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scheduledjob"
 	"github.com/theopenlane/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ScheduledJobRunCreate is the builder for creating a ScheduledJobRun entity.

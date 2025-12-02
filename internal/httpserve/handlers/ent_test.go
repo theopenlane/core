@@ -8,8 +8,8 @@ import (
 	"github.com/samber/lo"
 	"github.com/stretchr/testify/assert"
 
-	"github.com/theopenlane/core/pkg/enums"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestCreateUserInput(t *testing.T) {

@@ -1,0 +1,92 @@
+mutation CreateJobRunnerRegistrationToken($input: CreateJobRunnerRegistrationTokenInput!) {
+  createJobRunnerRegistrationToken(input: $input) {
+    jobRunnerRegistrationToken {
+      createdAt
+      createdBy
+      expiresAt
+      id
+      jobRunnerID
+      lastUsedAt
+      ownerID
+      tags
+      token
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteJobRunnerRegistrationToken($deleteJobRunnerRegistrationTokenId: ID!) {
+  deleteJobRunnerRegistrationToken(id: $deleteJobRunnerRegistrationTokenId) {
+    deletedID
+  }
+}
+
+query GetAllJobRunnerRegistrationTokens {
+  jobRunnerRegistrationTokens {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expiresAt
+        id
+        jobRunnerID
+        lastUsedAt
+        ownerID
+        tags
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetJobRunnerRegistrationTokenByID($jobRunnerRegistrationTokenId: ID!) {
+  jobRunnerRegistrationToken(id: $jobRunnerRegistrationTokenId) {
+    createdAt
+    createdBy
+    expiresAt
+    id
+    jobRunnerID
+    lastUsedAt
+    ownerID
+    tags
+    token
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetJobRunnerRegistrationTokens($first: Int, $last: Int, $where: JobRunnerRegistrationTokenWhereInput) {
+  jobRunnerRegistrationTokens(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        expiresAt
+        id
+        jobRunnerID
+        lastUsedAt
+        ownerID
+        tags
+        token
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

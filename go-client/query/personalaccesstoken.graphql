@@ -1,0 +1,186 @@
+mutation CreatePersonalAccessToken($input: CreatePersonalAccessTokenInput!) {
+  createPersonalAccessToken(input: $input) {
+    personalAccessToken {
+      createdAt
+      createdBy
+      description
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      name
+      revokedAt
+      revokedBy
+      revokedReason
+      ssoAuthorizations
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
+      organizations {
+        edges {
+          node {
+            id
+            name
+            displayName
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation DeletePersonalAccessToken($deletePersonalAccessTokenId: ID!) {
+  deletePersonalAccessToken(id: $deletePersonalAccessTokenId) {
+    deletedID
+  }
+}
+
+query GetAllPersonalAccessTokens {
+  personalAccessTokens {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        name
+        revokedAt
+        revokedBy
+        revokedReason
+        ssoAuthorizations
+        scopes
+        tags
+        token
+        updatedAt
+        updatedBy
+        organizations {
+          edges {
+            node {
+              id
+              name
+              displayName
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetPersonalAccessTokenByID($personalAccessTokenId: ID!) {
+  personalAccessToken(id: $personalAccessTokenId) {
+    createdAt
+    createdBy
+    description
+    expiresAt
+    id
+    isActive
+    lastUsedAt
+    name
+    revokedAt
+    revokedBy
+    revokedReason
+    ssoAuthorizations
+    scopes
+    tags
+    token
+    updatedAt
+    updatedBy
+    organizations {
+      edges {
+        node {
+          id
+          name
+          displayName
+        }
+      }
+    }
+  }
+}
+
+query GetPersonalAccessTokens($first: Int, $last: Int, $where: PersonalAccessTokenWhereInput) {
+  personalAccessTokens(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        expiresAt
+        id
+        isActive
+        lastUsedAt
+        name
+        revokedAt
+        revokedBy
+        revokedReason
+        ssoAuthorizations
+        scopes
+        tags
+        token
+        updatedAt
+        updatedBy
+        organizations {
+          edges {
+            node {
+              id
+              name
+              displayName
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation UpdatePersonalAccessToken($updatePersonalAccessTokenId: ID!, $input: UpdatePersonalAccessTokenInput!) {
+  updatePersonalAccessToken(id: $updatePersonalAccessTokenId, input: $input) {
+    personalAccessToken {
+      createdAt
+      createdBy
+      description
+      expiresAt
+      id
+      isActive
+      lastUsedAt
+      name
+      revokedAt
+      revokedBy
+      revokedReason
+      ssoAuthorizations
+      scopes
+      tags
+      token
+      updatedAt
+      updatedBy
+      organizations {
+        edges {
+          node {
+            id
+            name
+            displayName
+          }
+        }
+      }
+    }
+  }
+}

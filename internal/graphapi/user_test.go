@@ -13,9 +13,9 @@ import (
 	auth "github.com/theopenlane/iam/auth"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 func TestQueryUser(t *testing.T) {

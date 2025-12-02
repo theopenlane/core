@@ -1,0 +1,27 @@
+default_stages: [pre-commit]
+fail_fast: true
+default_language_version:
+  golang: system
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: detect-private-key
+  - repo: https://github.com/google/yamlfmt
+    rev: v0.20.0
+    hooks:
+      - id: yamlfmt
+  - repo: https://github.com/adhtruong/mirrors-typos
+    rev: v1.39.2
+    hooks:
+      - id: typos
+  - repo: local
+    hooks:
+      - id: format-graphql
+        name: Format GraphQL
+        description: This hook formats GraphQL schemas
+        entry: npx format-graphql@1.5.0 --write=true
+        language: node
+        files: 'query/.*\.graphql$'

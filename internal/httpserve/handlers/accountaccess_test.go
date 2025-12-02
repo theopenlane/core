@@ -10,8 +10,8 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/httpsling"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestAccountAccessHandler() {

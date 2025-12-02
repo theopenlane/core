@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/logx"
 )
 
 // Search is the resolver for the search field.

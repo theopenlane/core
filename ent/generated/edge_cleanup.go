@@ -6,7 +6,6 @@ import (
 	"context"
 
 	"entgo.io/ent/privacy"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/ent/generated/apitoken"
 	"github.com/theopenlane/ent/generated/assessment"
@@ -91,6 +90,7 @@ import (
 	"github.com/theopenlane/ent/generated/workflowinstance"
 	"github.com/theopenlane/ent/generated/workflowobjectref"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/contextx"
 )
 

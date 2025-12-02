@@ -12,7 +12,6 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/customdomain"
 	"github.com/theopenlane/ent/generated/note"
 	"github.com/theopenlane/ent/generated/organization"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/ent/generated/trustcentersetting"
 	"github.com/theopenlane/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/ent/generated/trustcenterwatermarkconfig"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

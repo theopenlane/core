@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/trustcentersetting"
+	"github.com/theopenlane/shared/enums"
 )
 
 // TrustCenterSetting is the model entity for the TrustCenterSetting schema.

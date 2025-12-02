@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/jobrunner"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/scheduledjob"
 	"github.com/theopenlane/ent/generated/scheduledjobrun"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ScheduledJobRun is the model entity for the ScheduledJobRun schema.

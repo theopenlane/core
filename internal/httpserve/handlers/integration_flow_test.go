@@ -4,18 +4,19 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/require"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"testing"
 
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
+
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/httpsling"
 	"github.com/theopenlane/iam/auth"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

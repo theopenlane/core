@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/logx"
 )
 
 // CreateDNSVerification is the resolver for the createDNSVerification field.

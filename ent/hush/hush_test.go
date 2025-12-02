@@ -8,7 +8,7 @@ import (
 	"entgo.io/ent/schema/field"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"github.com/theopenlane/ent/hooks"
+	hooks "github.com/theopenlane/ent/encrypt"
 	"github.com/theopenlane/ent/hush/crypto"
 )
 

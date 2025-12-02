@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/workflowevent"
 	"github.com/theopenlane/ent/generated/workflowinstance"

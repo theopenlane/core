@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/actionplan"
 	"github.com/theopenlane/ent/generated/asset"
 	"github.com/theopenlane/ent/generated/control"
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/generated/task"
 	"github.com/theopenlane/ent/generated/vulnerability"
+	"github.com/theopenlane/shared/models"
 )
 
 // RemediationCreate is the builder for creating a Remediation entity.

@@ -19,15 +19,15 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
-	objects "github.com/theopenlane/core/pkg/objects/objstore"
-	"github.com/theopenlane/core/pkg/objects/store"
-	"github.com/theopenlane/core/pkg/objects/upload"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/gqlerrors"
+	"github.com/theopenlane/shared/logx"
+	pkgobjects "github.com/theopenlane/shared/objects"
+	objects "github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/objects/store"
+	"github.com/theopenlane/shared/objects/upload"
+	"github.com/theopenlane/shared/soiree"
 )
 
 const (

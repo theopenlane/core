@@ -16,8 +16,8 @@ import (
 	"github.com/theopenlane/utils/rout"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
 )
 
 // Permissions is the resolver for the permissions field.

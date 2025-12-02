@@ -12,11 +12,11 @@ import (
 	"github.com/theopenlane/entx/history"
 	"github.com/theopenlane/utils/keygen"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/models"
 )
 
 // PersonalAccessToken holds the schema definition for the PersonalAccessToken entity.

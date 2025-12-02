@@ -8,13 +8,13 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/organizationsetting"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookOrganizationCreatePolicy is used on organization and organization setting creation mutations

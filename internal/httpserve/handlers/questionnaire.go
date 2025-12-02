@@ -7,13 +7,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/assessment"
 	"github.com/theopenlane/ent/generated/assessmentresponse"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // GetQuestionnaire retrieves questionnaire template configuration for authenticated anonymous users

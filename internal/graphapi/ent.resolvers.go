@@ -13,7 +13,7 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 
 	gqlgenerated "github.com/theopenlane/core/internal/graphapi/generated"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 )
 
 // Channels is the resolver for the channels field.

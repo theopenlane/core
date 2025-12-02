@@ -12,8 +12,7 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/entdb"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
@@ -26,6 +25,7 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
+	"github.com/theopenlane/shared/logx"
 	"github.com/urfave/cli/v3"
 )
 

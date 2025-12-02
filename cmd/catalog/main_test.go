@@ -19,9 +19,9 @@ import (
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v83"
 
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/entitlements/mocks"
+	"github.com/theopenlane/shared/catalog"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/entitlements/mocks"
 )
 
 // helper to create a stripe client returning provided products

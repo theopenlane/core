@@ -11,13 +11,13 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/rs/zerolog/log"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/utils"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/shared/logx"
 )
 
 // MutationMember is an interface that can be implemented by a member mutation to get IDs

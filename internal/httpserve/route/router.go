@@ -13,9 +13,9 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/common"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/middleware/impersonation"
-	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
+	"github.com/theopenlane/shared/middleware/impersonation"
+	"github.com/theopenlane/shared/middleware/mime"
+	"github.com/theopenlane/shared/middleware/transaction"
 	"github.com/theopenlane/utils/contextx"
 )
 

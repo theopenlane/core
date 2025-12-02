@@ -6,8 +6,8 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/logx"
 )
 
 // AllowMutationIfSystemAdmin determines whether a mutation operation should be allowed based on whether the user is a system admin

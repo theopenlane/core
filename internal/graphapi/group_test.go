@@ -14,8 +14,8 @@ import (
 	"github.com/theopenlane/utils/ulids"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestQueryGroup(t *testing.T) {

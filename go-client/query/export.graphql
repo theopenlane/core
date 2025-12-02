@@ -1,0 +1,127 @@
+mutation CreateExport($input: CreateExportInput!) {
+  createExport(input: $input) {
+    export {
+      createdAt
+      createdBy
+      errorMessage
+      exportType
+      fields
+      filters
+      format
+      id
+      ownerID
+      requestorID
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteBulkExport($ids: [ID!]!) {
+  deleteBulkExport(ids: $ids) {
+    deletedIDs
+  }
+}
+
+mutation DeleteExport($deleteExportId: ID!) {
+  deleteExport(id: $deleteExportId) {
+    deletedID
+  }
+}
+
+query GetAllExports {
+  exports {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        errorMessage
+        exportType
+        fields
+        filters
+        format
+        id
+        ownerID
+        requestorID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetExportByID($exportId: ID!) {
+  export(id: $exportId) {
+    createdAt
+    createdBy
+    errorMessage
+    exportType
+    fields
+    filters
+    format
+    id
+    ownerID
+    requestorID
+    status
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetExports($first: Int, $last: Int, $where: ExportWhereInput) {
+  exports(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        errorMessage
+        exportType
+        fields
+        filters
+        format
+        id
+        ownerID
+        requestorID
+        status
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateExport($id: ID!, $input: UpdateExportInput!, $exportFiles: [Upload!]) {
+  updateExport(id: $id, input: $input, exportFiles: $exportFiles) {
+    export {
+      createdAt
+      createdBy
+      errorMessage
+      exportType
+      fields
+      filters
+      format
+      id
+      ownerID
+      requestorID
+      status
+      updatedAt
+      updatedBy
+    }
+  }
+}

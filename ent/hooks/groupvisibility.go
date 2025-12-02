@@ -7,11 +7,11 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupsetting"
 	"github.com/theopenlane/ent/generated/hook"
+	"github.com/theopenlane/shared/enums"
 )
 
 // HookGroupSettingVisibility is a hook that updates the conditional tuples for group settings

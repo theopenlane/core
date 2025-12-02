@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/webauthn"
+	"github.com/theopenlane/shared/models"
 )
 
 // Webauthn is the model entity for the Webauthn schema.

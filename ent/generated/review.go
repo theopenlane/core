@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/review"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/models"
 )
 
 // Review is the model entity for the Review schema.

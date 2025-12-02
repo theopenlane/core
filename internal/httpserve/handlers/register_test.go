@@ -23,11 +23,11 @@ import (
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/usersetting"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/enums"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestRegisterHandler() {

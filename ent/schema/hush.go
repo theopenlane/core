@@ -7,10 +7,10 @@ import (
 
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hush"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // Hush maps configured integrations (github, slack, etc.) to organizations

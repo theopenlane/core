@@ -7,11 +7,11 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/template"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookQuestionnaireAssessment is a hook that checks if the templatate associated with the assessment is a questionnaire

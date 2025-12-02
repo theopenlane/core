@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/iam/fgax"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 func TestQueryTrustCenterDocByID(t *testing.T) {

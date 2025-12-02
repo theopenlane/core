@@ -10,7 +10,7 @@ import (
 	"golang.org/x/oauth2"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 var command = &cobra.Command{

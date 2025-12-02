@@ -7,13 +7,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupmembership"
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/logx"
 )
 
 // ManagedContextKey is the context key name for managed group updates

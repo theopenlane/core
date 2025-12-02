@@ -9,11 +9,11 @@ import (
 	"entgo.io/ent/schema/field"
 
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"

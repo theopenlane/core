@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/customtypeenum"
 	"github.com/theopenlane/ent/generated/file"
@@ -24,6 +23,7 @@ import (
 	"github.com/theopenlane/ent/generated/risk"
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/generated/task"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ProcedureCreate is the builder for creating a Procedure entity.

@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/iam/fgax"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookTrustCenterComplianceAuthz runs on trust center compliance mutations to setup or remove relationship tuples

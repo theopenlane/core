@@ -10,13 +10,13 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/assessment"
 	"github.com/theopenlane/ent/generated/documentdata"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/template"
 	"github.com/theopenlane/ent/generated/trustcenter"
+	"github.com/theopenlane/shared/enums"
 )
 
 // TemplateCreate is the builder for creating a Template entity.

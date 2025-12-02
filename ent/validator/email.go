@@ -5,7 +5,7 @@ import (
 
 	emailverifier "github.com/AfterShip/email-verifier"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/shared/metrics"
 )
 
 // EmailVerificationConfig is the configuration for email verification

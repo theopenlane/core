@@ -10,13 +10,13 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/logx"
 )
 
 func HookOrgMembers() ent.Hook {

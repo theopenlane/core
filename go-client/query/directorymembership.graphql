@@ -1,0 +1,195 @@
+
+mutation CreateBulkCSVDirectoryMembership($input: Upload!) {
+  createBulkCSVDirectoryMembership(input: $input) {
+    directoryMemberships {
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directorySyncRunID
+      displayID
+      firstSeenAt
+      id
+      integrationID
+      lastConfirmedRunID
+      lastSeenAt
+      metadata
+      observedAt
+      ownerID
+      role
+      source
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkDirectoryMembership($input: [CreateDirectoryMembershipInput!]) {
+  createBulkDirectoryMembership(input: $input) {
+    directoryMemberships {
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directorySyncRunID
+      displayID
+      firstSeenAt
+      id
+      integrationID
+      lastConfirmedRunID
+      lastSeenAt
+      metadata
+      observedAt
+      ownerID
+      role
+      source
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateDirectoryMembership($input: CreateDirectoryMembershipInput!) {
+  createDirectoryMembership(input: $input) {
+    directoryMembership {
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directorySyncRunID
+      displayID
+      firstSeenAt
+      id
+      integrationID
+      lastConfirmedRunID
+      lastSeenAt
+      metadata
+      observedAt
+      ownerID
+      role
+      source
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteDirectoryMembership($deleteDirectoryMembershipId: ID!) {
+  deleteDirectoryMembership(id: $deleteDirectoryMembershipId) {
+    deletedID
+  }
+}
+
+query GetAllDirectoryMemberships {
+  directoryMemberships {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directorySyncRunID
+        displayID
+        firstSeenAt
+        id
+        integrationID
+        lastConfirmedRunID
+        lastSeenAt
+        metadata
+        observedAt
+        ownerID
+        role
+        source
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetDirectoryMembershipByID($directoryMembershipId: ID!) {
+  directoryMembership(id: $directoryMembershipId) {
+    createdAt
+    createdBy
+    directoryAccountID
+    directoryGroupID
+    directorySyncRunID
+    displayID
+    firstSeenAt
+    id
+    integrationID
+    lastConfirmedRunID
+    lastSeenAt
+    metadata
+    observedAt
+    ownerID
+    role
+    source
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetDirectoryMemberships($first: Int, $last: Int, $where: DirectoryMembershipWhereInput) {
+  directoryMemberships(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        directoryAccountID
+        directoryGroupID
+        directorySyncRunID
+        displayID
+        firstSeenAt
+        id
+        integrationID
+        lastConfirmedRunID
+        lastSeenAt
+        metadata
+        observedAt
+        ownerID
+        role
+        source
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateDirectoryMembership($updateDirectoryMembershipId: ID!, $input: UpdateDirectoryMembershipInput!) {
+  updateDirectoryMembership(id: $updateDirectoryMembershipId, input: $input) {
+    directoryMembership {
+      createdAt
+      createdBy
+      directoryAccountID
+      directoryGroupID
+      directorySyncRunID
+      displayID
+      firstSeenAt
+      id
+      integrationID
+      lastConfirmedRunID
+      lastSeenAt
+      metadata
+      observedAt
+      ownerID
+      role
+      source
+      updatedAt
+      updatedBy
+    }
+  }
+}

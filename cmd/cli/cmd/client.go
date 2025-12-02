@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/utils/keyring"
 
-	models "github.com/theopenlane/core/pkg/openapi"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 const (

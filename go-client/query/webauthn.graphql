@@ -1,0 +1,29 @@
+mutation DeleteWebauthn($deleteWebauthnId: ID!) {
+  deleteWebauthn(id: $deleteWebauthnId) {
+    deletedID
+  }
+}
+
+query GetAllWebauthns {
+  webauthns {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        backupEligible
+        backupState
+        createdAt
+        createdBy
+        id
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}

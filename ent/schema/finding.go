@@ -13,10 +13,10 @@ import (
 	"github.com/theopenlane/entx/accessmap"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // Finding defines the finding schema.

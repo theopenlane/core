@@ -1,0 +1,72 @@
+version: "3"
+
+
+tasks:
+  default:
+    silent: true
+    cmds:
+      - task --list
+
+  generate:
+    desc: Generate the GraphQL client and schema
+    deps:
+      - fetch-schema
+    cmds:
+      - task generate:client
+
+  generate:client:
+    sources:
+      - query/**/*.graphql
+    generates:
+      - go-client/models.go
+      - go-client/graphqlclient.go
+      - go-client/models.go
+    method: checksum
+    cmds:
+      - go generate generate/generate.go
+
+  fetch-schema:
+    cmds:
+      - rover graph fetch Openlane-0dedz@current > schema/schema.graphql
+
+  go:fmt:
+    desc: format all go code
+    cmds:
+      - go fmt ./...
+
+  go:lint:
+    desc: runs golangci-lint, the most annoying opinionated linter ever
+    cmds:
+      - golangci-lint run . --config=.golangci.yaml --verbose --fix
+
+  go:lint:ci:
+    desc: runs golangci-lint, the most annoying opinionated linter ever
+    cmds:
+      - golangci-lint run . --config=.golangci.yaml --verbose
+
+  go:test:
+    desc: runs and outputs results of created go tests
+    cmds:
+      - go test -v ./...
+
+  go:tidy:
+    desc: runs go mod tidy on the backend
+    aliases: [tidy]
+    cmds:
+      - go mod tidy
+
+  go:all:
+    aliases: [go]
+    desc: runs all go test and lint related tasks
+    cmds:
+      - task: go:tidy
+      - task: go:fmt
+      - task: go:lint
+      - task: go:test
+
+  precommit-full:
+    desc: Lint the project against all files
+    cmds:
+      - pre-commit install && pre-commit install-hooks
+      - pre-commit autoupdate
+      - pre-commit run --show-diff-on-failure --color=always --all-files

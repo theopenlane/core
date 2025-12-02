@@ -3,8 +3,8 @@ package graphapi
 import (
 	"context"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/logx"
 	"github.com/theopenlane/utils/rout"
 )
 

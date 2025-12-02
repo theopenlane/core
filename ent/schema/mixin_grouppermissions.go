@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupmembership"
@@ -26,6 +25,7 @@ import (
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/shared/logx"
 )
 
 // GroupPermissionsMixin is a mixin for group permissions on an entity

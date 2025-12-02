@@ -1,0 +1,316 @@
+mutation CreateBulkCSVInternalPolicy($input: Upload!) {
+  createBulkCSVInternalPolicy(input: $input) {
+    internalPolicies {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkInternalPolicy($input: [CreateInternalPolicyInput!]) {
+  createBulkInternalPolicy(input: $input) {
+    internalPolicies {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateInternalPolicy($input: CreateInternalPolicyInput!) {
+  createInternalPolicy(input: $input) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateUploadInternalPolicy($internalPolicyFile: Upload!, $ownerID: ID) {
+  createUploadInternalPolicy(
+    internalPolicyFile: $internalPolicyFile
+    ownerID: $ownerID
+  ) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteInternalPolicy($deleteInternalPolicyId: ID!) {
+  deleteInternalPolicy(id: $deleteInternalPolicyId) {
+    deletedID
+  }
+}
+
+query GetAllInternalPolicies {
+  internalPolicies {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        id
+        improvementSuggestions
+        name
+        ownerID
+        policyType
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetInternalPolicies($first: Int, $last: Int, $where: InternalPolicyWhereInput) {
+  internalPolicies(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        approvalRequired
+        approverID
+        controlSuggestions
+        createdAt
+        createdBy
+        delegateID
+        details
+        dismissedControlSuggestions
+        dismissedImprovementSuggestions
+        dismissedTagSuggestions
+        displayID
+        id
+        improvementSuggestions
+        name
+        ownerID
+        policyType
+        reviewDue
+        reviewFrequency
+        revision
+        status
+        summary
+        tagSuggestions
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetInternalPolicyByID($internalPolicyId: ID!) {
+  internalPolicy(id: $internalPolicyId) {
+    approvalRequired
+    approverID
+    controlSuggestions
+    createdAt
+    createdBy
+    delegateID
+    details
+    dismissedControlSuggestions
+    dismissedImprovementSuggestions
+    dismissedTagSuggestions
+    displayID
+    id
+    improvementSuggestions
+    name
+    ownerID
+    policyType
+    reviewDue
+    reviewFrequency
+    revision
+    status
+    summary
+    tagSuggestions
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+mutation UpdateInternalPolicy($updateInternalPolicyId: ID!, $input: UpdateInternalPolicyInput!) {
+  updateInternalPolicy(id: $updateInternalPolicyId, input: $input) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation UpdateInternalPolicyWithFile($updateInternalPolicyId: ID!, $internalPolicyFile: Upload!, $input: UpdateInternalPolicyInput!) {
+  updateInternalPolicy(
+    id: $updateInternalPolicyId
+    internalPolicyFile: $internalPolicyFile
+    input: $input
+  ) {
+    internalPolicy {
+      approvalRequired
+      approverID
+      controlSuggestions
+      createdAt
+      createdBy
+      delegateID
+      details
+      dismissedControlSuggestions
+      dismissedImprovementSuggestions
+      dismissedTagSuggestions
+      displayID
+      id
+      improvementSuggestions
+      name
+      ownerID
+      policyType
+      reviewDue
+      reviewFrequency
+      revision
+      status
+      summary
+      tagSuggestions
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

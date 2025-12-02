@@ -6,8 +6,6 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/jobspec"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/customdomain"
 	"github.com/theopenlane/ent/generated/dnsverification"
@@ -15,6 +13,8 @@ import (
 	"github.com/theopenlane/ent/generated/mappabledomain"
 	"github.com/theopenlane/ent/generated/trustcenter"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/jobspec"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookCustomDomain runs on create mutations

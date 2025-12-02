@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/standard"
 	"github.com/theopenlane/ent/generated/trustcenter"
 	"github.com/theopenlane/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/shared/enums"
 )
 
 // TrustCenterDoc is the model entity for the TrustCenterDoc schema.

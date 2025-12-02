@@ -1,8 +1,8 @@
 package entconfig
 
 import (
-	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/summarizer"
 )
 
 // Config holds the configuration for the ent server

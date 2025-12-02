@@ -7,10 +7,10 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/olauth"
+	"github.com/theopenlane/shared/olauth"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/logx"
 )
 
 // updateUserAuthSession updates the user session with the new org ID

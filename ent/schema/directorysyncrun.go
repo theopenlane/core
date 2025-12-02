@@ -10,10 +10,10 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DirectorySyncRun captures the execution metadata for a directory ingestion job

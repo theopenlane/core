@@ -5,8 +5,8 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/logx"
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
+	"github.com/theopenlane/shared/logx"
+	pkgobjects "github.com/theopenlane/shared/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/entitytype"
 	"github.com/theopenlane/ent/generated/hook"

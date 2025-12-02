@@ -10,11 +10,11 @@ import (
 	"strings"
 
 	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/usersetting"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/utils/ulids"
 )
 

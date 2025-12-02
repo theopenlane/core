@@ -10,7 +10,7 @@ import (
 	"github.com/theopenlane/iam/entfga"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"

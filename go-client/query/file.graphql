@@ -1,0 +1,98 @@
+mutation DeleteFile($deleteFileId: ID!) {
+  deleteFile(id: $deleteFileId) {
+    deletedID
+  }
+}
+
+query GetAllFiles {
+  files {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        categoryType
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
+        storeKey
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}
+query GetFileByID($fileId: ID!) {
+  file(id: $fileId) {
+    categoryType
+    createdAt
+    createdBy
+    detectedContentType
+    detectedMimeType
+    id
+    md5Hash
+    persistedFileSize
+    providedFileExtension
+    providedFileName
+    providedFileSize
+    storagePath
+    storageScheme
+    storageVolume
+    storeKey
+    tags
+    updatedAt
+    updatedBy
+    uri
+  }
+}
+
+query GetFiles($first: Int, $last: Int, $where: FileWhereInput) {
+  files(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        categoryType
+        createdAt
+        createdBy
+        detectedContentType
+        detectedMimeType
+        id
+        md5Hash
+        persistedFileSize
+        providedFileExtension
+        providedFileName
+        providedFileSize
+        storagePath
+        storageScheme
+        storageVolume
+        storeKey
+        tags
+        updatedAt
+        updatedBy
+        uri
+      }
+    }
+  }
+}

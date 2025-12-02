@@ -7,10 +7,10 @@ import (
 	"entgo.io/ent/dialect/sql"
 
 	"github.com/99designs/gqlgen/graphql"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated/intercept"
 	"github.com/theopenlane/ent/generated/trustcenter"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/logx"
 	"github.com/vektah/gqlparser/v2/ast"
 )
 

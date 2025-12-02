@@ -6,10 +6,10 @@ import (
 	"entgo.io/ent"
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/middleware/transaction"
 )
 
 // isDeleteOp checks if the mutation is a deletion operation.

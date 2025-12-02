@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
 	entgen "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/notifications"
+	"github.com/theopenlane/shared/soiree"
 )
 
 var errMutationPayloadUnavailable = errors.New("soiree: mutation payload unavailable for topic")

@@ -10,7 +10,7 @@ import (
 
 	"github.com/theopenlane/ent/generated"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 )
 
 // RevisionBump is the resolver for the RevisionBump field.

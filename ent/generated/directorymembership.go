@@ -10,13 +10,13 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/directoryaccount"
 	"github.com/theopenlane/ent/generated/directorygroup"
 	"github.com/theopenlane/ent/generated/directorymembership"
 	"github.com/theopenlane/ent/generated/directorysyncrun"
 	"github.com/theopenlane/ent/generated/integration"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DirectoryMembership is the model entity for the DirectoryMembership schema.

@@ -16,14 +16,14 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/middleware/transaction"
 )
 
 // UserHandler implements scim.ResourceHandler for User resources.

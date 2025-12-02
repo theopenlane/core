@@ -9,8 +9,8 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 func TestStripOperation(t *testing.T) {

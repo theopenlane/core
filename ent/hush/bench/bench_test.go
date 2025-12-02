@@ -19,9 +19,6 @@ import (
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 	"github.com/theopenlane/utils/testutils"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/ent/entdb"
 	"github.com/theopenlane/ent/generated"
@@ -30,6 +27,9 @@ import (
 	"github.com/theopenlane/ent/hooks"
 	hushpkg "github.com/theopenlane/ent/hush"
 	"github.com/theopenlane/ent/schema"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/soiree"
+	coreutils "github.com/theopenlane/shared/testutils"
 
 	// import generated runtime which is required to prevent cyclical dependencies
 	_ "github.com/theopenlane/ent/generated/runtime"

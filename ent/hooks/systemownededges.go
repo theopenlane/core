@@ -4,12 +4,12 @@ import (
 	"context"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 type controlEdgeMutation interface {

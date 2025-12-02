@@ -7,8 +7,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 	"github.com/stripe/stripe-go/v83"
-	"github.com/theopenlane/core/pkg/models"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/models"
 )
 
 // priceBuilder defines the methods needed to set OrgPrice fields on ent builders

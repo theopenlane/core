@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 // HookNoteFiles runs on note mutations to check for uploaded files

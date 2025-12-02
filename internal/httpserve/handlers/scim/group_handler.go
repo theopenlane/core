@@ -13,8 +13,8 @@ import (
 	"github.com/samber/lo"
 
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/middleware/transaction"
 
-	"github.com/theopenlane/core/pkg/middleware/transaction"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupmembership"

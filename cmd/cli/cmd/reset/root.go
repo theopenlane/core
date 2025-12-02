@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 var command = &cobra.Command{

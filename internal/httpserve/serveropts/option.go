@@ -31,24 +31,25 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/graphapi"
+	"github.com/theopenlane/core/internal/httpserve/checks"
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/server"
-	"github.com/theopenlane/core/internal/integrations/registry"
-	"github.com/theopenlane/core/pkg/entitlements"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
-	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/csrf"
-	"github.com/theopenlane/core/pkg/middleware/impersonation"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
-	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects/resolver"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	"github.com/theopenlane/core/pkg/objects/validators"
-	"github.com/theopenlane/core/pkg/summarizer"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hush/crypto"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/integrations/registry"
+	authmw "github.com/theopenlane/shared/middleware/auth"
+	"github.com/theopenlane/shared/middleware/cachecontrol"
+	"github.com/theopenlane/shared/middleware/cors"
+	"github.com/theopenlane/shared/middleware/csrf"
+	"github.com/theopenlane/shared/middleware/impersonation"
+	"github.com/theopenlane/shared/middleware/ratelimit"
+	"github.com/theopenlane/shared/middleware/redirect"
+	"github.com/theopenlane/shared/middleware/secure"
+	"github.com/theopenlane/shared/objects/resolver"
+	"github.com/theopenlane/shared/objects/storage"
+	"github.com/theopenlane/shared/objects/validators"
+	"github.com/theopenlane/shared/summarizer"
 )
 
 type ServerOption interface {
@@ -491,7 +492,7 @@ func WithObjectStorage() ServerOption {
 		}
 
 		// expose readiness check so storage availability can be monitored continuously
-		s.Config.Handler.AddReadinessCheck("object_storage", validators.StorageAvailabilityCheck(func() storage.ProviderConfig {
+		s.Config.Handler.AddReadinessCheck("object_storage", checks.StorageAvailabilityCheck(func() storage.ProviderConfig {
 			return s.Config.Settings.ObjectStorage
 		}))
 

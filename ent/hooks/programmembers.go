@@ -5,11 +5,11 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookProgramMembers is a hook that ensures that the user is a member of the organization

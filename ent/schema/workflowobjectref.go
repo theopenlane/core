@@ -10,8 +10,8 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/accessmap"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // WorkflowObjectRef is a through table linking workflow instances to workflow-addressable objects.

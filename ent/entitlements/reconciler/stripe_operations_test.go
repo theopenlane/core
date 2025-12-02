@@ -6,7 +6,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stripe/stripe-go/v83"
 
-	"github.com/theopenlane/core/pkg/catalog"
+	"github.com/theopenlane/shared/catalog"
 )
 
 func TestShouldUpdateCancelBehavior(t *testing.T) {

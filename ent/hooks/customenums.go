@@ -14,12 +14,12 @@ import (
 	"github.com/samber/lo"
 	"github.com/stoewer/go-strcase"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/customtypeenum"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 var (

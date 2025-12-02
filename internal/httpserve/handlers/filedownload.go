@@ -11,15 +11,15 @@ import (
 	"github.com/oklog/ulid/v2"
 	echo "github.com/theopenlane/echox"
 
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects/storage"
-	dbprovider "github.com/theopenlane/core/pkg/objects/storage/providers/database"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
-	models "github.com/theopenlane/core/pkg/openapi"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/objects/storage"
+	dbprovider "github.com/theopenlane/shared/objects/storage/providers/database"
+	storagetypes "github.com/theopenlane/shared/objects/storage/types"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/ulids"
 )
 

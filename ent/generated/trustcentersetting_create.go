@@ -9,9 +9,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/trustcentersetting"
+	"github.com/theopenlane/shared/enums"
 )
 
 // TrustCenterSettingCreate is the builder for creating a TrustCenterSetting entity.

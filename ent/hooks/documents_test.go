@@ -8,8 +8,8 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
 )
 
 func TestFilenameToTitle(t *testing.T) {

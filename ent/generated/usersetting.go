@@ -10,10 +10,10 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/usersetting"
+	"github.com/theopenlane/shared/enums"
 )
 
 // UserSetting is the model entity for the UserSetting schema.

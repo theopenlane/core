@@ -9,7 +9,6 @@ import (
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/hooks"
@@ -19,6 +18,7 @@ import (
 	"github.com/theopenlane/ent/validator"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
+	"github.com/theopenlane/shared/models"
 )
 
 // Subprocessor holds the schema definition for the Subprocessor entity

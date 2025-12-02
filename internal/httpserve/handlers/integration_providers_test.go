@@ -11,9 +11,9 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/types"
-	models "github.com/theopenlane/core/pkg/openapi"
+	"github.com/theopenlane/shared/integrations/config"
+	"github.com/theopenlane/shared/integrations/types"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestListIntegrationProvidersIncludesSchemas() {

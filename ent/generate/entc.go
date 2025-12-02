@@ -15,13 +15,6 @@ import (
 	_ "github.com/jackc/pgx/v5"
 	"gocloud.dev/secrets"
 
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/enums/exportenums"
-	"github.com/theopenlane/core/pkg/events/soiree"
-	"github.com/theopenlane/core/pkg/genhelpers"
-	"github.com/theopenlane/core/pkg/objects/objstore"
-	"github.com/theopenlane/core/pkg/summarizer"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/ent/entitlements/genfeatures"
@@ -35,6 +28,13 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/iam/totp"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/enums/exportenums"
+	"github.com/theopenlane/shared/genhelpers"
+	"github.com/theopenlane/shared/objects/objstore"
+	"github.com/theopenlane/shared/soiree"
+	"github.com/theopenlane/shared/summarizer"
 )
 
 const (

@@ -17,10 +17,6 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	models "github.com/theopenlane/core/pkg/openapi"
 	em "github.com/theopenlane/ent/entitlements/entmapping"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/apitoken"
@@ -29,6 +25,10 @@ import (
 	"github.com/theopenlane/ent/generated/orgsubscription"
 	"github.com/theopenlane/ent/generated/personalaccesstoken"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/middleware/transaction"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 const (

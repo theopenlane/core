@@ -28,17 +28,17 @@ import (
 	"github.com/theopenlane/utils/cache"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/middleware/cachecontrol"
-	"github.com/theopenlane/core/pkg/middleware/cors"
-	"github.com/theopenlane/core/pkg/middleware/csrf"
-	"github.com/theopenlane/core/pkg/middleware/mime"
-	"github.com/theopenlane/core/pkg/middleware/ratelimit"
-	"github.com/theopenlane/core/pkg/middleware/redirect"
-	"github.com/theopenlane/core/pkg/middleware/secure"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/ent/hush/crypto"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/middleware/cachecontrol"
+	"github.com/theopenlane/shared/middleware/cors"
+	"github.com/theopenlane/shared/middleware/csrf"
+	"github.com/theopenlane/shared/middleware/mime"
+	"github.com/theopenlane/shared/middleware/ratelimit"
+	"github.com/theopenlane/shared/middleware/redirect"
+	"github.com/theopenlane/shared/middleware/secure"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 const (

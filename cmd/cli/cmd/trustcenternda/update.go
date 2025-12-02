@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	"github.com/theopenlane/core/pkg/objects/storage"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 var updateCmd = &cobra.Command{

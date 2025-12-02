@@ -5,10 +5,10 @@ import (
 	"encoding/json"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupmembership"
+	"github.com/theopenlane/shared/enums"
 )
 
 // EntObject is a struct that contains the id, displayID, and name of an object

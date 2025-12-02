@@ -5,13 +5,13 @@ import (
 	"fmt"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/orgmodule"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
 )
 
 // HookOrgModule adds the feature tuples to fga as needed

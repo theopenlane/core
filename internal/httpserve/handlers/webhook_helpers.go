@@ -10,16 +10,16 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/utils/contextx"
 
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/models"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/orgmodule"
 	"github.com/theopenlane/ent/generated/orgprice"
 	"github.com/theopenlane/ent/generated/orgproduct"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/hooks"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/middleware/transaction"
+	"github.com/theopenlane/shared/models"
 
 	em "github.com/theopenlane/ent/entitlements/entmapping"
 )

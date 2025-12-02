@@ -10,8 +10,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/ent/generated/workflowinstancehistory"
 	"github.com/theopenlane/entx/history"
 )

@@ -1,0 +1,205 @@
+mutation CreateBulkCSVTemplate($input: Upload!) {
+  createBulkCSVTemplate(input: $input) {
+    templates {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
+    }
+  }
+}
+
+mutation CreateBulkTemplate($input: [CreateTemplateInput!]) {
+  createBulkTemplate(input: $input) {
+    templates {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
+    }
+  }
+}
+
+mutation CreateTemplate($input: CreateTemplateInput!, $templateFiles: [Upload!]) {
+  createTemplate(input: $input, templateFiles: $templateFiles) {
+    template {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation DeleteTemplate($deleteTemplateId: ID!) {
+  deleteTemplate(id: $deleteTemplateId) {
+    deletedID
+  }
+}
+
+query GetAllTemplates {
+  templates {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        ownerID
+        tags
+        templateType
+        uischema
+        updatedAt
+        updatedBy
+        kind
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+query GetTemplateByID($templateId: ID!) {
+  template(id: $templateId) {
+    createdAt
+    createdBy
+    description
+    id
+    jsonconfig
+    name
+    ownerID
+    tags
+    templateType
+    uischema
+    updatedAt
+    updatedBy
+    kind
+    files {
+      edges {
+        node {
+          id
+          presignedURL
+        }
+      }
+    }
+  }
+}
+
+query GetTemplates($first: Int, $last: Int, $where: TemplateWhereInput) {
+  templates(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        description
+        id
+        jsonconfig
+        name
+        ownerID
+        tags
+        templateType
+        uischema
+        updatedAt
+        updatedBy
+        kind
+        files {
+          edges {
+            node {
+              id
+              presignedURL
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+mutation UpdateTemplate($updateTemplateId: ID!, $input: UpdateTemplateInput!, $templateFiles: [Upload!]) {
+  updateTemplate(
+    id: $updateTemplateId
+    input: $input
+    templateFiles: $templateFiles
+  ) {
+    template {
+      createdAt
+      createdBy
+      description
+      id
+      jsonconfig
+      name
+      ownerID
+      tags
+      templateType
+      uischema
+      updatedAt
+      updatedBy
+      kind
+      files {
+        edges {
+          node {
+            id
+            presignedURL
+          }
+        }
+      }
+    }
+  }
+}

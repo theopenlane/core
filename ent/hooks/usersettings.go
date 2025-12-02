@@ -15,8 +15,7 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/organization"
@@ -28,6 +27,7 @@ import (
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookUserSetting runs on user settings mutations and validates input on update

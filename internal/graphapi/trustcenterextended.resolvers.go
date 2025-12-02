@@ -12,7 +12,7 @@ import (
 	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/logx"
 )
 
 // CreateTrustCenterSetting is the resolver for the createTrustCenterSetting field.

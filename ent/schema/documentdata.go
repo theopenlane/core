@@ -8,10 +8,10 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/policy"
+	"github.com/theopenlane/shared/models"
 )
 
 // DocumentData holds the schema definition for the DocumentData entity

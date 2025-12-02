@@ -1,0 +1,139 @@
+mutation CreateTrustCenterWatermarkConfig($input: CreateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
+  createTrustCenterWatermarkConfig(input: $input, logoFile: $logoFile) {
+    trustCenterWatermarkConfig {
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+      trustCenterID
+      file {
+        id
+        presignedURL
+      }
+      logoID
+      text
+      fontSize
+      opacity
+      rotation
+      color
+      font
+    }
+  }
+}
+
+mutation DeleteTrustCenterWatermarkConfig($deleteTrustCenterWatermarkConfigId: ID!) {
+  deleteTrustCenterWatermarkConfig(id: $deleteTrustCenterWatermarkConfigId) {
+    deletedID
+  }
+}
+
+query GetAllTrustCenterWatermarkConfigs {
+  trustCenterWatermarkConfigs {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        updatedAt
+        updatedBy
+        trustCenterID
+        file {
+          id
+          presignedURL
+        }
+        logoID
+        text
+        fontSize
+        opacity
+        rotation
+        color
+        font
+      }
+    }
+  }
+}
+query GetTrustCenterWatermarkConfigByID($trustCenterWatermarkConfigId: ID!) {
+  trustCenterWatermarkConfig(id: $trustCenterWatermarkConfigId) {
+    createdAt
+    createdBy
+    id
+    updatedAt
+    updatedBy
+    trustCenterID
+    file {
+      id
+      presignedURL
+    }
+    logoID
+    text
+    fontSize
+    opacity
+    rotation
+    color
+    font
+  }
+}
+
+query GetTrustCenterWatermarkConfigs($first: Int, $last: Int, $where: TrustCenterWatermarkConfigWhereInput) {
+  trustCenterWatermarkConfigs(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        createdAt
+        createdBy
+        id
+        updatedAt
+        updatedBy
+        trustCenterID
+        file {
+          id
+          presignedURL
+        }
+        logoID
+        text
+        fontSize
+        opacity
+        rotation
+        color
+        font
+      }
+    }
+  }
+}
+mutation UpdateTrustCenterWatermarkConfig($updateTrustCenterWatermarkConfigId: ID!, $input: UpdateTrustCenterWatermarkConfigInput!, $logoFile: Upload) {
+  updateTrustCenterWatermarkConfig(id: $updateTrustCenterWatermarkConfigId, input: $input, logoFile: $logoFile) {
+    trustCenterWatermarkConfig {
+      createdAt
+      createdBy
+      id
+      updatedAt
+      updatedBy
+      trustCenterID
+      file {
+        id
+        presignedURL
+      }
+      logoID
+      text
+      fontSize
+      opacity
+      rotation
+      color
+      font
+    }
+  }
+}

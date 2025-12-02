@@ -5,8 +5,7 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/ent/hooks"
-	"github.com/theopenlane/ent/interceptors"
+	hooks "github.com/theopenlane/ent/encrypt"
 )
 
 // AutoEncryptionHook automatically creates encryption hooks for all fields
@@ -206,5 +205,5 @@ func createMultiFieldEncryptionHook(fieldNames []string) ent.Hook {
 // createMultiFieldDecryptionInterceptor creates an interceptor that decrypts multiple fields
 func createMultiFieldDecryptionInterceptor(fieldNames []string) ent.Interceptor {
 	// Import the interceptors package to use the actual decryption functions
-	return interceptors.InterceptorEncryption(fieldNames...)
+	return interceptorEncryption(fieldNames...)
 }

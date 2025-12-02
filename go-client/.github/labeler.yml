@@ -1,0 +1,16 @@
+# Add 'bug' label to any PR where the head branch name starts with `bug` or has a `bug` section in the name
+bug:
+  - head-branch: ["^bug", "bug"]
+# Add 'enhancement' label to any PR where the head branch name starts with `enhancement` or has a `enhancement` section in the name
+enhancement:
+  - head-branch: ["^enhancement", "enhancement", "^feature", "feature", "^enhance", "enhance", "^feat", "feat"]
+# Add 'breaking-change' label to any PR where the head branch name starts with `breaking-change` or has a `breaking-change` section in the name
+breaking-change:
+  - head-branch: ["^breaking-change", "breaking-change"]
+# Add 'dependencies' label to any PR where the head branch name starts with `dependencies` or has a `dependencies` section in the name
+dependencies:
+  - head-branch: ["^dependencies", "dependencies", "^deps", "deps", "renovate", "dependabot"]
+ci:
+  - changed-files:
+      - any-glob-to-any-file: .github/**
+      - any-glob-to-any-file: .buildkite/**

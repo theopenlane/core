@@ -11,8 +11,8 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/gqlerrors"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/gqlerrors"
 )
 
 func TestQuerySubscriber(t *testing.T) {

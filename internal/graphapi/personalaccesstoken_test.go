@@ -10,12 +10,13 @@ import (
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 
-	"github.com/theopenlane/core/internal/graphapi/testclient"
+	openlaneclient "github.com/theopenlane/go-client"
+
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 
-	"github.com/theopenlane/core/pkg/testutils"
-	openlaneclient "github.com/theopenlane/go-client"
+	"github.com/theopenlane/core/internal/graphapi/testclient"
+	"github.com/theopenlane/core/internal/testutils"
 )
 
 func TestQueryPersonalAccessToken(t *testing.T) {

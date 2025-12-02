@@ -10,11 +10,11 @@ import (
 	"github.com/theopenlane/iam/tokens"
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/core/pkg/gqlerrors"
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/subscriber"
+	"github.com/theopenlane/shared/gqlerrors"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookSubscriberCreate runs on subscriber create mutations

@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
+	"github.com/theopenlane/shared/enums"
 )
 
 // HookNotification runs on notification mutations to validate channels

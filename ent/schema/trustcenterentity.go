@@ -9,12 +9,12 @@ import (
 
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/models"
 )
 
 // TrustcenterEntity holds the schema definition for the TrustcenterEntity entity

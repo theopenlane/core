@@ -13,11 +13,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/mixin"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/models"
 )
 
 // TagDefinition holds the schema definition for the TagDefinition entity

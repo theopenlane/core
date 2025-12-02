@@ -13,9 +13,9 @@ import (
 
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/pkg/metrics"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/metrics"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 var (

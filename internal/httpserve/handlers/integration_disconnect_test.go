@@ -14,10 +14,10 @@ import (
 
 	"github.com/theopenlane/echox/middleware/echocontext"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	credentialmodels "github.com/theopenlane/core/pkg/models"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/integration"
+	"github.com/theopenlane/shared/integrations/types"
+	credentialmodels "github.com/theopenlane/shared/models"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestDisconnectIntegrationSuccess() {

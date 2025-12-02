@@ -16,7 +16,6 @@ import (
 	"github.com/theopenlane/entx"
 	emixin "github.com/theopenlane/entx/mixin"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"
 	"github.com/theopenlane/ent/mixin"
@@ -25,6 +24,7 @@ import (
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/ent/validator"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/shared/enums"
 )
 
 const (

@@ -1,0 +1,167 @@
+
+mutation CreateBulkCSVAsset($input: Upload!) {
+  createBulkCSVAsset(input: $input) {
+    assets {
+      assetType
+      categories
+      cpe
+      createdAt
+      createdBy
+      description
+      id
+      identifier
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      website
+    }
+  }
+}
+
+mutation CreateBulkAsset($input: [CreateAssetInput!]) {
+  createBulkAsset(input: $input) {
+    assets {
+      assetType
+      categories
+      cpe
+      createdAt
+      createdBy
+      description
+      id
+      identifier
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      website
+    }
+  }
+}
+
+mutation CreateAsset($input: CreateAssetInput!) {
+  createAsset(input: $input) {
+    asset {
+      assetType
+      categories
+      cpe
+      createdAt
+      createdBy
+      description
+      id
+      identifier
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      website
+    }
+  }
+}
+
+mutation DeleteAsset($deleteAssetId: ID!) {
+  deleteAsset(id: $deleteAssetId) {
+    deletedID
+  }
+}
+
+query GetAllAssets {
+  assets {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assetType
+        categories
+        cpe
+        createdAt
+        createdBy
+        description
+        id
+        identifier
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        website
+      }
+    }
+  }
+}
+query GetAssetByID($assetId: ID!) {
+  asset(id: $assetId) {
+    assetType
+    categories
+    cpe
+    createdAt
+    createdBy
+    description
+    id
+    identifier
+    name
+    ownerID
+    tags
+    updatedAt
+    updatedBy
+    website
+  }
+}
+
+query GetAssets($first: Int, $last: Int, $where: AssetWhereInput) {
+  assets(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        assetType
+        categories
+        cpe
+        createdAt
+        createdBy
+        description
+        id
+        identifier
+        name
+        ownerID
+        tags
+        updatedAt
+        updatedBy
+        website
+      }
+    }
+  }
+}
+mutation UpdateAsset($updateAssetId: ID!, $input: UpdateAssetInput!) {
+  updateAsset(id: $updateAssetId, input: $input) {
+    asset {
+      assetType
+      categories
+      cpe
+      createdAt
+      createdBy
+      description
+      id
+      identifier
+      name
+      ownerID
+      tags
+      updatedAt
+      updatedBy
+      website
+    }
+  }
+}

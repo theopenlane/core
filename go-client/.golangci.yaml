@@ -1,0 +1,35 @@
+version: "2"
+run:
+  modules-download-mode: readonly
+  tests: false
+  allow-parallel-runners: true
+linters:
+  enable:
+    - bodyclose
+    - err113
+    - gocritic
+    - gocyclo
+    - gosec
+    - misspell
+    - mnd
+    - noctx
+    - revive
+  exclusions:
+    generated: lax
+    warn-unused: true
+    presets:
+      - common-false-positives
+      - legacy
+      - std-error-handling
+    paths:
+      - .github
+      - generated/*.go
+formatters:
+  enable:
+    - gofmt
+  exclusions:
+    generated: lax
+    warn-unused: true
+    paths:
+      - .github
+      - generated/*.go

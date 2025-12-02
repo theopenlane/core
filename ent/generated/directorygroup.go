@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/directorygroup"
 	"github.com/theopenlane/ent/generated/directorysyncrun"
 	"github.com/theopenlane/ent/generated/integration"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DirectoryGroup is the model entity for the DirectoryGroup schema.

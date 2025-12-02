@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/apitoken"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/models"
 )
 
 // APITokenCreate is the builder for creating a APIToken entity.

@@ -1,0 +1,167 @@
+
+mutation CreateBulkCSVContact($input: Upload!) {
+  createBulkCSVContact(input: $input) {
+    contacts {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkContact($input: [CreateContactInput!]) {
+  createBulkContact(input: $input) {
+    contacts {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateContact($input: CreateContactInput!) {
+  createContact(input: $input) {
+    contact {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteContact($deleteContactId: ID!) {
+  deleteContact(id: $deleteContactId) {
+    deletedID
+  }
+}
+
+query GetAllContacts {
+  contacts {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        id
+        ownerID
+        phoneNumber
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+query GetContactByID($contactId: ID!) {
+  contact(id: $contactId) {
+    address
+    company
+    createdAt
+    createdBy
+    email
+    fullName
+    id
+    ownerID
+    phoneNumber
+    status
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetContacts($first: Int, $last: Int, $where: ContactWhereInput) {
+  contacts(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        address
+        company
+        createdAt
+        createdBy
+        email
+        fullName
+        id
+        ownerID
+        phoneNumber
+        status
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+mutation UpdateContact($updateContactId: ID!, $input: UpdateContactInput!) {
+  updateContact(id: $updateContactId, input: $input) {
+    contact {
+      address
+      company
+      createdAt
+      createdBy
+      email
+      fullName
+      id
+      ownerID
+      phoneNumber
+      status
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

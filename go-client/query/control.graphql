@@ -1,0 +1,294 @@
+mutation CreateBulkControl($input: [CreateControlInput!]) {
+  createBulkControl(input: $input) {
+    controls {
+      aliases
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlOwnerID
+      controlQuestions
+      controlType
+      controlKindName
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateBulkCSVControl($input: Upload!) {
+  createBulkCSVControl(input: $input) {
+    controls {
+      aliases
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlOwnerID
+      controlQuestions
+      controlType
+      controlKindName
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation CreateControl($input: CreateControlInput!) {
+  createControl(input: $input) {
+    control {
+      aliases
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlOwnerID
+      controlQuestions
+      controlType
+      controlKindName
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteControl($deleteControlId: ID!) {
+  deleteControl(id: $deleteControlId) {
+    deletedID
+  }
+}
+
+query GetAllControls {
+  controls {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlOwnerID
+        controlQuestions
+        controlType
+        controlKindName
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        id
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        referenceFramework
+        referenceID
+        references
+        source
+        standardID
+        status
+        subcategory
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetControlByID($controlId: ID!) {
+  control(id: $controlId) {
+    aliases
+    assessmentMethods
+    assessmentObjectives
+    auditorReferenceID
+    category
+    categoryID
+    controlOwnerID
+    controlQuestions
+    controlType
+    controlKindName
+    createdAt
+    createdBy
+    delegateID
+    description
+    displayID
+    exampleEvidence
+    id
+    implementationGuidance
+    mappedCategories
+    ownerID
+    refCode
+    referenceFramework
+    referenceID
+    references
+    source
+    standardID
+    status
+    subcategory
+    tags
+    title
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetControls($first: Int, $last: Int, $where: ControlWhereInput) {
+  controls(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        aliases
+        assessmentMethods
+        assessmentObjectives
+        auditorReferenceID
+        category
+        categoryID
+        controlOwnerID
+        controlQuestions
+        controlType
+        controlKindName
+        createdAt
+        createdBy
+        delegateID
+        description
+        displayID
+        exampleEvidence
+        id
+        implementationGuidance
+        mappedCategories
+        ownerID
+        refCode
+        referenceFramework
+        referenceID
+        references
+        source
+        standardID
+        status
+        subcategory
+        tags
+        title
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateControl($updateControlId: ID!, $input: UpdateControlInput!) {
+  updateControl(id: $updateControlId, input: $input) {
+    control {
+      aliases
+      assessmentMethods
+      assessmentObjectives
+      auditorReferenceID
+      category
+      categoryID
+      controlOwnerID
+      controlQuestions
+      controlType
+      controlKindName
+      createdAt
+      createdBy
+      delegateID
+      description
+      displayID
+      exampleEvidence
+      id
+      implementationGuidance
+      mappedCategories
+      ownerID
+      refCode
+      referenceFramework
+      referenceID
+      references
+      source
+      standardID
+      status
+      subcategory
+      tags
+      title
+      updatedAt
+      updatedBy
+    }
+  }
+}

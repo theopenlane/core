@@ -10,9 +10,9 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/groupsetting"
+	"github.com/theopenlane/shared/enums"
 )
 
 // GroupSettingCreate is the builder for creating a GroupSetting entity.

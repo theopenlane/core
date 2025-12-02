@@ -1,10 +1,10 @@
 package handlers
 
 import (
-	"github.com/theopenlane/core/pkg/catalog"
-	"github.com/theopenlane/core/pkg/catalog/gencatalog"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
+	"github.com/theopenlane/shared/catalog"
+	"github.com/theopenlane/shared/catalog/gencatalog"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

@@ -12,10 +12,10 @@ import (
 
 	"github.com/theopenlane/entx"
 
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/shared/enums"
 )
 
 // DocumentMixin implements the document pattern with approver for schemas.

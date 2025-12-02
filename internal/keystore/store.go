@@ -11,15 +11,15 @@ import (
 
 	"github.com/zitadel/oidc/v3/pkg/oidc"
 
-	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/models"
 	ent "github.com/theopenlane/ent/generated"
 	hushschema "github.com/theopenlane/ent/generated/hush"
 	integration "github.com/theopenlane/ent/generated/integration"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/integrations"
+	"github.com/theopenlane/shared/integrations/types"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/models"
 	"github.com/theopenlane/utils/contextx"
 )
 

@@ -7,7 +7,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/99designs/gqlgen/graphql/handler"
 
-	"github.com/theopenlane/core/pkg/metrics"
+	"github.com/theopenlane/shared/metrics"
 )
 
 // WithMetrics adds Prometheus instrumentation around GraphQL operations.

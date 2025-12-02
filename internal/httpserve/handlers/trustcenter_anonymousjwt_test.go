@@ -12,9 +12,9 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 	"github.com/theopenlane/utils/contextx"
 
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/iam/auth"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestCreateTrustCenterAnonymousJWT() {

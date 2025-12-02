@@ -9,11 +9,11 @@ import (
 	"github.com/stoewer/go-strcase"
 	"github.com/theopenlane/iam/fgax"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookDeletePermissions is an ent hook that deletes all relationship tuples associated with an object

@@ -11,12 +11,12 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/jobresult"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/ent/generated/scheduledjob"
+	"github.com/theopenlane/shared/enums"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

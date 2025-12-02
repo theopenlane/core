@@ -5,10 +5,10 @@ import (
 
 	"entgo.io/ent"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/privacy/utils"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 // HookJobResultFiles runs on jobresult mutations to check for uploaded files

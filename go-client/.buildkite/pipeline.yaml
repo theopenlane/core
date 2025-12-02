@@ -1,0 +1,94 @@
+env:
+  GOCACHE: $HOME/.cache/go-build
+  GOMODCACHE: $HOME/.cache/go/pkg/mod
+  GOLANGCI_LINT_CACHE: $HOME/.cache/golangci-lint
+
+steps:
+  - label: ":graphql: generate"
+    key: "generate"
+    agents:
+      queue: $LARGE_RUNNER_QUEUE
+      size: $RUNNER_LARGE
+      location: "NYC"
+    cancel_on_build_failing: true
+    if_changed:
+      - go.{mod,sum}
+      - query/**.graphql
+      - schema/**.graphql
+      - generate/**
+      - "**.go"
+    plugins:
+      - cluster-secrets#v1.0.0:
+          variables:
+            APOLLO_KEY: APOLLO_KEY
+            GITHUB_TOKEN: GITHUB_TOKEN
+      - docker#v5.13.0:
+          image: "ghcr.io/theopenlane/build-image:latest"
+          always_pull: true
+          propagate-environment: true
+          environment:
+            - "APOLLO_KEY"
+            - "GITHUB_TOKEN"
+    command: |
+      #!/bin/sh
+      echo "--- running go generate"
+      task generate
+
+      echo "--- configuring git user"
+      git config user.name "theopenlane-bender"
+      git config user.email "theopenlane-bender@users.noreply.github.com"
+
+      echo "--- checking for changes"
+      if git diff --quiet; then
+        echo "No changes from go generate; nothing to commit."
+        exit 0
+      fi
+
+      echo "--- committing changes"
+      git status
+      git checkout "${BUILDKITE_BRANCH}"
+      git add -u
+
+      # commit changes
+      git commit -m "chore: run go generate"
+
+      echo "--- pushing to origin ${BUILDKITE_BRANCH}"
+      git push "https://x-access-token:$${GITHUB_TOKEN}@github.com/theopenlane/go-client.git" "HEAD:${BUILDKITE_BRANCH}"
+
+  - label: ":golangci-lint: lint :lint-roller:"
+    if_changed:
+      - "**.go"
+      - .golangci.yaml
+    agents:
+      queue: $LARGE_RUNNER_QUEUE
+      size: $RUNNER_LARGE
+    cancel_on_build_failing: true
+    key: "lint"
+    plugins:
+      - cluster-secrets#v1.0.0:
+          variables:
+            GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
+      - docker#v5.13.0:
+          image: "ghcr.io/theopenlane/build-image:latest"
+          command: ["task", "go:lint:ci"]
+          always_pull: true
+          propagate-environment: true
+          volumes:
+            - $GOCACHE:$GOCACHE
+            - $GOMODCACHE:$GOMODCACHE
+            - $GOLANGCI_LINT_CACHE:$GOLANGCI_LINT_CACHE
+          environment:
+            - "GOTOOLCHAIN=auto"
+  - label: ":golang: go test"
+    key: "go_test"
+    if_changed:
+      - "**.go"
+      - "go.mod"
+    plugins:
+      - cluster-secrets#v1.0.0:
+          variables:
+            GITHUB_SSH_PRIVATE_KEY: GITHUB_SSH_PRIVATE_KEY
+      - docker#v5.13.0:
+          image: "ghcr.io/theopenlane/build-image:latest"
+          always-pull: true
+          command: ["task", "go:test"]

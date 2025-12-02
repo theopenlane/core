@@ -7,8 +7,8 @@ import (
 	"entgo.io/ent"
 	"github.com/stretchr/testify/require"
 
-	"github.com/theopenlane/core/pkg/events/soiree"
 	entgen "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/soiree"
 )
 
 func TestEmitEventOnHonoursEmitterRegistrations(t *testing.T) {

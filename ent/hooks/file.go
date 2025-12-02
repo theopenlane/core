@@ -5,8 +5,8 @@ import (
 	"errors"
 
 	"entgo.io/ent"
-	"github.com/theopenlane/core/pkg/logx"
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
+	"github.com/theopenlane/shared/logx"
+	storagetypes "github.com/theopenlane/shared/objects/storage/types"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/file"
 	"github.com/theopenlane/ent/generated/hook"

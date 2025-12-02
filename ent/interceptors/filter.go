@@ -13,11 +13,11 @@ import (
 
 	"github.com/stoewer/go-strcase"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated/intercept"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/utils"
+	"github.com/theopenlane/shared/logx"
 )
 
 // FilterListQuery filters any list query to only include the objects that the user has access to

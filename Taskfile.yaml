@@ -12,14 +12,14 @@ includes:
     taskfile: ./fga/Taskfile.yaml
     dir: ./fga
   db:
-    taskfile: ./db/Taskfile.yaml
-    dir: ./db
+    taskfile: ./ent/db/Taskfile.yaml
+    dir: ./ent/db
     aliases: [atlas]
   config:
     taskfile: ./jsonschema/Taskfile.yaml
   catalog:
-    taskfile: ./pkg/catalog/Taskfile.yaml
-    dir: ./pkg/catalog
+    taskfile: ./shared/catalog/Taskfile.yaml
+    dir: ./shared/catalog
   bats:
     taskfile: ./.buildkite/tests/Taskfile.yaml
 
@@ -359,10 +359,15 @@ tasks:
       - go fmt ./...
 
   go:tidy:
-    desc: Runs go mod tidy on the backend
-    aliases: [tidy]
+    desc: Runs go mod tidy on the backend, ignore errors
     cmds:
-      - go mod tidy
+      - go mod tidy -e
+
+  go:sync:
+    desc: Runs go work sync on the backend
+    aliases: [sync, tidy]
+    cmds:
+      - go work sync
 
   go:build:
     desc: Runs go build for the core server
@@ -395,7 +400,7 @@ tasks:
       GOFLAGS: "{{.GO_INLINE_FLAG}}"
     desc: Runs all go test and lint related tasks
     cmds:
-      - task: go:tidy
+      - task: go:sync
       - task: go:fmt
       - task: go:lint
       - task: go:test

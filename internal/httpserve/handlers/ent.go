@@ -6,12 +6,6 @@ import (
 	"time"
 
 	gowebauthn "github.com/go-webauthn/webauthn/webauthn"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	"github.com/theopenlane/core/pkg/middleware/transaction"
-	"github.com/theopenlane/core/pkg/models"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/emailverificationtoken"
 	"github.com/theopenlane/ent/generated/event"
@@ -25,6 +19,12 @@ import (
 	"github.com/theopenlane/ent/generated/user"
 	"github.com/theopenlane/ent/generated/usersetting"
 	"github.com/theopenlane/ent/generated/webauthn"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/metrics"
+	"github.com/theopenlane/shared/middleware/transaction"
+	"github.com/theopenlane/shared/models"
+	apimodels "github.com/theopenlane/shared/openapi"
 )
 
 // updateUserLastSeen updates the last seen timestamp of the user and login method used

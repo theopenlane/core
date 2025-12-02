@@ -11,9 +11,6 @@ import (
 	"github.com/rs/zerolog"
 	"github.com/stretchr/testify/require"
 	"github.com/stretchr/testify/suite"
-	"github.com/theopenlane/core/pkg/entitlements"
-	authmw "github.com/theopenlane/core/pkg/middleware/auth"
-	coreutils "github.com/theopenlane/core/pkg/testutils"
 	"github.com/theopenlane/emailtemplates"
 	"github.com/theopenlane/ent/entconfig"
 	"github.com/theopenlane/ent/entdb"
@@ -25,6 +22,9 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	fgatest "github.com/theopenlane/iam/fgax/testutils"
 	"github.com/theopenlane/iam/sessions"
+	"github.com/theopenlane/shared/entitlements"
+	authmw "github.com/theopenlane/shared/middleware/auth"
+	coreutils "github.com/theopenlane/shared/testutils"
 	"github.com/theopenlane/utils/testutils"
 )
 

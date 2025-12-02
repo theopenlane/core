@@ -8,7 +8,7 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"

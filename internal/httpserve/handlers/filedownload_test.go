@@ -10,10 +10,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	storagetypes "github.com/theopenlane/core/pkg/objects/storage/types"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
+	storagetypes "github.com/theopenlane/shared/objects/storage/types"
 	"github.com/theopenlane/utils/ulids"
 )
 

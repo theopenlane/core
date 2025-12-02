@@ -9,10 +9,10 @@ import (
 	"github.com/gertd/go-pluralize"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/rule"
+	"github.com/theopenlane/shared/models"
 )
 
 // TFASetting holds the schema definition for the TFASetting entity

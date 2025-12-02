@@ -6,11 +6,11 @@ import (
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/pkg/genhelpers"
 	"github.com/theopenlane/ent/schema"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
 	"github.com/theopenlane/gqlgen-plugins/searchgen"
+	"github.com/theopenlane/shared/genhelpers"
 )
 
 const (

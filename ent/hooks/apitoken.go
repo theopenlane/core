@@ -10,9 +10,9 @@ import (
 
 	"github.com/theopenlane/iam/auth"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
+	"github.com/theopenlane/shared/logx"
 )
 
 func validateExpirationTime(m mutationWithExpirationTime) error {

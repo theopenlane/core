@@ -19,7 +19,7 @@ import (
 
 	"github.com/theopenlane/utils/testutils"
 
-	migratedb "github.com/theopenlane/core/db"
+	migratedb "github.com/theopenlane/ent/db"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/interceptors"

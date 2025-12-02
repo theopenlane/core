@@ -9,9 +9,9 @@ import (
 
 	"github.com/99designs/gqlgen/graphql"
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 func TestQueryFile(t *testing.T) {

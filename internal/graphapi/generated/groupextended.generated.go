@@ -14,7 +14,7 @@ import (
 	"github.com/vektah/gqlparser/v2/ast"
 
 	"github.com/theopenlane/core/internal/graphapi/model"
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 )
 
 // region    ************************** generated!.gotpl **************************

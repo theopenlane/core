@@ -15,10 +15,10 @@ import (
 	is "gotest.tools/v3/assert/cmp"
 
 	"github.com/theopenlane/core/internal/graphapi/testclient"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
-	"github.com/theopenlane/core/pkg/objects/storage"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
+	"github.com/theopenlane/shared/objects/storage"
 )
 
 func TestQueryTask(t *testing.T) {

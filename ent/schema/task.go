@@ -11,14 +11,14 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/directives"
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/validator"
 	"github.com/theopenlane/entx/accessmap"
+	"github.com/theopenlane/shared/directives"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/models"
 )
 
 // Task holds the schema definition for the Task entity

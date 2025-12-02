@@ -9,10 +9,10 @@ import (
 	"github.com/theopenlane/iam/auth"
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

@@ -17,10 +17,10 @@ import (
 
 	"github.com/theopenlane/riverboat/pkg/jobs"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/core/pkg/olauth"
+	"github.com/theopenlane/shared/enums"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/objects"
+	"github.com/theopenlane/shared/olauth"
 	"github.com/theopenlane/ent/entitlements/reconciler"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"

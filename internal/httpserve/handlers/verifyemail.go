@@ -11,10 +11,10 @@ import (
 
 	"github.com/theopenlane/iam/tokens"
 
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/token"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 // VerifyEmail is the handler for the email verification endpoint

@@ -9,11 +9,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/entfga"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/entx/accessmap"
 
-	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/hooks"

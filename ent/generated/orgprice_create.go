@@ -10,12 +10,12 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/orgmodule"
 	"github.com/theopenlane/ent/generated/orgprice"
 	"github.com/theopenlane/ent/generated/orgproduct"
 	"github.com/theopenlane/ent/generated/orgsubscription"
+	"github.com/theopenlane/shared/models"
 )
 
 // OrgPriceCreate is the builder for creating a OrgPrice entity.

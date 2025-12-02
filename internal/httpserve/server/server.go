@@ -13,9 +13,9 @@ import (
 
 	"github.com/theopenlane/core/internal/httpserve/config"
 	"github.com/theopenlane/core/internal/httpserve/route"
-	"github.com/theopenlane/core/pkg/logx"
-	"github.com/theopenlane/core/pkg/metrics"
-	echodebug "github.com/theopenlane/core/pkg/middleware/debug"
+	"github.com/theopenlane/shared/logx"
+	"github.com/theopenlane/shared/metrics"
+	echodebug "github.com/theopenlane/shared/middleware/debug"
 )
 
 // Server is a struct that holds the configuration for the server

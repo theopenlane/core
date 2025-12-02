@@ -8,10 +8,10 @@ import (
 
 	"github.com/stripe/stripe-go/v83"
 
-	"github.com/theopenlane/core/pkg/entitlements"
-	"github.com/theopenlane/core/pkg/models"
 	catalog "github.com/theopenlane/ent/entitlements"
 	ent "github.com/theopenlane/ent/generated"
+	"github.com/theopenlane/shared/entitlements"
+	"github.com/theopenlane/shared/models"
 )
 
 // StripePriceToOrgPrice converts a stripe.Price to an OrgPrice

@@ -11,11 +11,11 @@ import (
 	"github.com/urfave/cli/v3"
 
 	"github.com/theopenlane/core/config"
-	"github.com/theopenlane/core/pkg/entitlements"
 	"github.com/theopenlane/ent/entdb"
 	"github.com/theopenlane/ent/entitlements/reconciler"
 	"github.com/theopenlane/ent/generated"
 	_ "github.com/theopenlane/ent/generated/runtime"
+	"github.com/theopenlane/shared/entitlements"
 )
 
 // main is the entry point for the reconcile CLI application

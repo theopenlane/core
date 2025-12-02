@@ -10,7 +10,6 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/controlimplementation"
 	"github.com/theopenlane/ent/generated/controlobjective"
@@ -27,6 +26,7 @@ import (
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/generated/task"
 	"github.com/theopenlane/ent/generated/workflowobjectref"
+	"github.com/theopenlane/shared/enums"
 )
 
 // InternalPolicyCreate is the builder for creating a InternalPolicy entity.

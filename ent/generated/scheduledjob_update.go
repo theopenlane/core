@@ -12,13 +12,13 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/dialect/sql/sqljson"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/jobrunner"
 	"github.com/theopenlane/ent/generated/jobtemplate"
 	"github.com/theopenlane/ent/generated/predicate"
 	"github.com/theopenlane/ent/generated/scheduledjob"
 	"github.com/theopenlane/ent/generated/subcontrol"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/ent/generated/internal"
 )

@@ -15,11 +15,11 @@ import (
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/entx/history"
 
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/ent/hooks"
 	"github.com/theopenlane/ent/privacy/policy"
 	"github.com/theopenlane/ent/privacy/rule"
 	"github.com/theopenlane/ent/privacy/token"
+	"github.com/theopenlane/shared/models"
 )
 
 // Subscriber holds the schema definition for the Subscriber entity

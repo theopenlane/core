@@ -14,7 +14,7 @@ import (
 	"github.com/theopenlane/ent/generated"
 	"github.com/vektah/gqlparser/v2/ast"
 
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/models"
 )
 
 // region    ************************** generated!.gotpl **************************

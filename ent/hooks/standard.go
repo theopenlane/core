@@ -11,12 +11,12 @@ import (
 	"github.com/theopenlane/iam/fgax"
 	"github.com/theopenlane/utils/contextx"
 
-	pkgobjects "github.com/theopenlane/core/pkg/objects"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/generated/standard"
+	pkgobjects "github.com/theopenlane/shared/objects"
 )
 
 var (

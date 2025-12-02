@@ -3,12 +3,12 @@ package handlers
 import (
 	"time"
 
-	"github.com/theopenlane/core/pkg/logx"
-	models "github.com/theopenlane/core/pkg/openapi"
 	echo "github.com/theopenlane/echox"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/privacy/token"
 	"github.com/theopenlane/iam/auth"
+	"github.com/theopenlane/shared/logx"
+	models "github.com/theopenlane/shared/openapi"
 	"github.com/theopenlane/utils/rout"
 )
 

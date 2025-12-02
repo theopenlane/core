@@ -9,11 +9,11 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/orgmembership"
 	"github.com/theopenlane/ent/generated/program"
 	"github.com/theopenlane/ent/generated/programmembership"
 	"github.com/theopenlane/ent/generated/user"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ProgramMembership is the model entity for the ProgramMembership schema.

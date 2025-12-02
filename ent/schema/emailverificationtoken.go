@@ -10,8 +10,8 @@ import (
 	"entgo.io/ent/schema/field"
 	"entgo.io/ent/schema/index"
 	"github.com/gertd/go-pluralize"
-	"github.com/theopenlane/core/pkg/models"
 	"github.com/theopenlane/entx"
+	"github.com/theopenlane/shared/models"
 
 	"github.com/theopenlane/entx/history"
 	emixin "github.com/theopenlane/entx/mixin"

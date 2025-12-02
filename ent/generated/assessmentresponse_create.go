@@ -10,11 +10,11 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/assessment"
 	"github.com/theopenlane/ent/generated/assessmentresponse"
 	"github.com/theopenlane/ent/generated/documentdata"
 	"github.com/theopenlane/ent/generated/organization"
+	"github.com/theopenlane/shared/enums"
 )
 
 // AssessmentResponseCreate is the builder for creating a AssessmentResponse entity.

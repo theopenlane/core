@@ -21,14 +21,14 @@ import (
 	"github.com/theopenlane/echox/middleware/echocontext"
 
 	"github.com/theopenlane/core/internal/httpserve/handlers"
-	"github.com/theopenlane/core/pkg/enums"
-	models "github.com/theopenlane/core/pkg/models"
-	apimodels "github.com/theopenlane/core/pkg/openapi"
 	sso "github.com/theopenlane/core/pkg/ssoutils"
 	"github.com/theopenlane/ent/generated"
 	ent "github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/orgsubscription"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/enums"
+	models "github.com/theopenlane/shared/models"
+	apimodels "github.com/theopenlane/shared/openapi"
 )
 
 func (suite *HandlerTestSuite) TestLoginHandler() {

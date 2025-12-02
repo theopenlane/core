@@ -6,8 +6,8 @@ import (
 	"sync/atomic"
 	"testing"
 
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/pkg/models"
+	"github.com/theopenlane/shared/integrations/types"
+	"github.com/theopenlane/shared/models"
 )
 
 type pooledClient struct {

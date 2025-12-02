@@ -11,13 +11,13 @@ import (
 	"github.com/theopenlane/utils/contextx"
 	"github.com/theopenlane/utils/gravatar"
 
-	"github.com/theopenlane/core/pkg/enums"
-	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/shared/enums"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/privacy"
 	"github.com/theopenlane/ent/validator"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookGroup runs on group mutations to set default values that are not provided

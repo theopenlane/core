@@ -17,14 +17,15 @@ import (
 	"github.com/theopenlane/iam/sessions"
 	"github.com/theopenlane/utils/rout"
 
-	"github.com/theopenlane/core/internal/integrations"
-	"github.com/theopenlane/core/internal/integrations/config"
-	"github.com/theopenlane/core/internal/integrations/types"
-	"github.com/theopenlane/core/internal/keymaker"
-	"github.com/theopenlane/core/internal/keystore"
-	"github.com/theopenlane/core/pkg/logx"
-	openapi "github.com/theopenlane/core/pkg/openapi"
 	"github.com/theopenlane/ent/generated/privacy"
+	"github.com/theopenlane/shared/integrations"
+	"github.com/theopenlane/shared/integrations/config"
+	"github.com/theopenlane/shared/integrations/types"
+	"github.com/theopenlane/shared/keymaker"
+	"github.com/theopenlane/shared/logx"
+	openapi "github.com/theopenlane/shared/openapi"
+
+	"github.com/theopenlane/core/internal/keystore"
 )
 
 var (

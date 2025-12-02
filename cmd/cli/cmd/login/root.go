@@ -12,8 +12,8 @@ import (
 	"golang.org/x/term"
 
 	"github.com/theopenlane/core/cmd/cli/cmd"
-	models "github.com/theopenlane/core/pkg/openapi"
 	goclient "github.com/theopenlane/go-client"
+	models "github.com/theopenlane/shared/openapi"
 )
 
 var command = &cobra.Command{

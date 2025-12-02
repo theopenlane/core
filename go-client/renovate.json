@@ -1,0 +1,23 @@
+{
+    "extends": [
+        "config:recommended"
+    ],
+    "postUpdateOptions": [
+        "gomodTidy"
+    ],
+    "labels": [
+        "dependencies"
+    ],
+    "packageRules": [
+        {
+            "groupName": "all patch dependencies",
+            "groupSlug": "all-patch",
+            "matchPackageNames": [
+                "*"
+            ],
+            "matchUpdateTypes": [
+                "patch"
+            ]
+        }
+    ]
+}

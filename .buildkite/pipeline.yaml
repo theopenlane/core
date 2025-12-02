@@ -32,7 +32,7 @@ steps:
           - go.{mod,sum}
           - ent/**
           - internal/graphapi/**
-          - pkg/enums/**
+          - shared/enums/**
         plugins:
           - docker#v5.13.0:
               image: "ghcr.io/theopenlane/build-image:latest"

@@ -5,9 +5,9 @@ import (
 
 	"entgo.io/ent"
 
-	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
+	"github.com/theopenlane/shared/logx"
 )
 
 // HookWebauthnDelete runs on passkey delete mutations to ensure

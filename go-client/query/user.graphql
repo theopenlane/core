@@ -1,0 +1,187 @@
+mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    user {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}
+
+mutation DeleteUser($deleteUserId: ID!) {
+  deleteUser(id: $deleteUserId) {
+    deletedID
+  }
+}
+
+query GetAllUsers {
+  users {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        role
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+query GetSelf {
+  self {
+    authProvider
+    displayID
+    displayName
+    email
+    firstName
+    id
+    lastName
+    lastSeen
+    sub
+    tags
+    setting {
+      defaultOrg {
+        id
+        name
+        personalOrg
+      }
+      emailConfirmed
+      locked
+      silencedAt
+      status
+      suspendedAt
+      tags
+    }
+    tfaSettings {
+      edges {
+        node {
+          totpAllowed
+          verified
+        }
+      }
+    }
+  }
+}
+
+query GetUserByID($userId: ID!) {
+  user(id: $userId) {
+    authProvider
+    avatarLocalFileID
+    avatarRemoteURL
+    avatarUpdatedAt
+    createdAt
+    createdBy
+    displayID
+    displayName
+    email
+    firstName
+    id
+    lastLoginProvider
+    lastName
+    lastSeen
+    role
+    sub
+    tags
+    updatedAt
+    updatedBy
+  }
+}
+
+query GetUsers($first: Int, $last: Int, $where: UserWhereInput) {
+  users(first: $first, last: $last, where: $where) {
+    totalCount
+    pageInfo {
+      startCursor
+      endCursor
+      hasPreviousPage
+      hasNextPage
+    }
+    edges {
+      node {
+        authProvider
+        avatarLocalFileID
+        avatarRemoteURL
+        avatarUpdatedAt
+        createdAt
+        createdBy
+        displayID
+        displayName
+        email
+        firstName
+        id
+        lastLoginProvider
+        lastName
+        lastSeen
+        role
+        sub
+        tags
+        updatedAt
+        updatedBy
+      }
+    }
+  }
+}
+
+mutation UpdateUser($updateUserId: ID!, $input: UpdateUserInput!, $avatarFile: Upload) {
+  updateUser(id: $updateUserId, input: $input, avatarFile: $avatarFile) {
+    user {
+      authProvider
+      avatarLocalFileID
+      avatarRemoteURL
+      avatarUpdatedAt
+      createdAt
+      createdBy
+      displayID
+      displayName
+      email
+      firstName
+      id
+      lastLoginProvider
+      lastName
+      lastSeen
+      role
+      sub
+      tags
+      updatedAt
+      updatedBy
+    }
+  }
+}

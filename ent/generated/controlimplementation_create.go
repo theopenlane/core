@@ -9,13 +9,13 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/ent/generated/control"
 	"github.com/theopenlane/ent/generated/controlimplementation"
 	"github.com/theopenlane/ent/generated/group"
 	"github.com/theopenlane/ent/generated/organization"
 	"github.com/theopenlane/ent/generated/subcontrol"
 	"github.com/theopenlane/ent/generated/task"
+	"github.com/theopenlane/shared/enums"
 )
 
 // ControlImplementationCreate is the builder for creating a ControlImplementation entity.
