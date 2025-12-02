@@ -38,7 +38,7 @@ func (ec *executionContext) _UserBulkCreatePayload_users(ctx context.Context, fi
 			return obj.Users, nil
 		},
 		nil,
-		ec.marshalOUser2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUserᚄ,
+		ec.marshalOUser2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUserᚄ,
 		true,
 		false,
 	)
@@ -151,7 +151,7 @@ func (ec *executionContext) _UserCreatePayload_user(ctx context.Context, field g
 			return obj.User, nil
 		},
 		nil,
-		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
+		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUser,
 		true,
 		true,
 	)
@@ -293,7 +293,7 @@ func (ec *executionContext) _UserUpdatePayload_user(ctx context.Context, field g
 			return obj.User, nil
 		},
 		nil,
-		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUser,
+		ec.marshalNUser2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐUser,
 		true,
 		true,
 	)

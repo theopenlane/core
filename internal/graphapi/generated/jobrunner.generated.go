@@ -38,7 +38,7 @@ func (ec *executionContext) _JobRunnerCreatePayload_jobRunner(ctx context.Contex
 			return obj.JobRunner, nil
 		},
 		nil,
-		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner,
+		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunner,
 		true,
 		true,
 	)
@@ -136,7 +136,7 @@ func (ec *executionContext) _JobRunnerUpdatePayload_jobRunner(ctx context.Contex
 			return obj.JobRunner, nil
 		},
 		nil,
-		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunner,
+		ec.marshalNJobRunner2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunner,
 		true,
 		true,
 	)

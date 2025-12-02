@@ -38,7 +38,7 @@ func (ec *executionContext) _EntityTypeBulkCreatePayload_entityTypes(ctx context
 			return obj.EntityTypes, nil
 		},
 		nil,
-		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityTypeᚄ,
+		ec.marshalOEntityType2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEntityTypeᚄ,
 		true,
 		false,
 	)
@@ -124,7 +124,7 @@ func (ec *executionContext) _EntityTypeCreatePayload_entityType(ctx context.Cont
 			return obj.EntityType, nil
 		},
 		nil,
-		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
+		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEntityType,
 		true,
 		true,
 	)
@@ -210,7 +210,7 @@ func (ec *executionContext) _EntityTypeUpdatePayload_entityType(ctx context.Cont
 			return obj.EntityType, nil
 		},
 		nil,
-		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityType,
+		ec.marshalNEntityType2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEntityType,
 		true,
 		true,
 	)

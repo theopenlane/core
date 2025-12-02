@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowObjectRefBulkCreatePayload_workflowObjectRe
 			return obj.WorkflowObjectRefs, nil
 		},
 		nil,
-		ec.marshalOWorkflowObjectRef2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRefᚄ,
+		ec.marshalOWorkflowObjectRef2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowObjectRefᚄ,
 		true,
 		false,
 	)
@@ -117,7 +117,7 @@ func (ec *executionContext) _WorkflowObjectRefCreatePayload_workflowObjectRef(ct
 			return obj.WorkflowObjectRef, nil
 		},
 		nil,
-		ec.marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef,
+		ec.marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowObjectRef,
 		true,
 		true,
 	)
@@ -225,7 +225,7 @@ func (ec *executionContext) _WorkflowObjectRefUpdatePayload_workflowObjectRef(ct
 			return obj.WorkflowObjectRef, nil
 		},
 		nil,
-		ec.marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowObjectRef,
+		ec.marshalNWorkflowObjectRef2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowObjectRef,
 		true,
 		true,
 	)

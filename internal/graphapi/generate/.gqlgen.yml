@@ -59,7 +59,6 @@ go_build_tags:
 # gqlgen will search for any type names in the schema in these go packages
 # if they match it will use them, otherwise it will generate them.
 autobind:
-  - "github.com/theopenlane/core/internal/graphapi"
   - "github.com/theopenlane/ent/generated"
 # This section declares type mapping between the GraphQL and go type systems
 #
@@ -80,14 +79,12 @@ models:
       - github.com/99designs/gqlgen/graphql.Uint
       - github.com/99designs/gqlgen/graphql.Uint64
       - github.com/99designs/gqlgen/graphql.Uint32
-      - github.com/theopenlane/core/internal/ent/customtypes.Uint8
   Node:
     model:
-      - github.com/theopenlane/core/internal/ent/generated.Noder
+      - github.com/theopenlane/ent/generated.Noder
   JSON:
     model:
       - github.com/theopenlane/entx.RawMessage
-      - github.com/theopenlane/core/internal/ent/customtypes.JSONObject
   Any:
     model:
       - github.com/99designs/gqlgen/graphql.Any

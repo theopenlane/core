@@ -38,7 +38,7 @@ env:
   COMPOSE_PROJECT_NAME: openlane
   # CLI demo environment variables
   ADMIN_USER_EMAIL: "admin@admin.theopenlane.io"
-  GO_INLINE_FLAG: "-gcflags=all=-l -tags=corejobs,windmill,entgenerated"
+  GO_INLINE_FLAG: "-gcflags=all=-l -tags=corejobs"
 
 # load the .env file for windmill
 dotenv: ['docker/configs/windmill/.env']

@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowEventBulkCreatePayload_workflowEvents(ctx c
 			return obj.WorkflowEvents, nil
 		},
 		nil,
-		ec.marshalOWorkflowEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowEventᚄ,
+		ec.marshalOWorkflowEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowEventᚄ,
 		true,
 		false,
 	)
@@ -95,7 +95,7 @@ func (ec *executionContext) _WorkflowEventCreatePayload_workflowEvent(ctx contex
 			return obj.WorkflowEvent, nil
 		},
 		nil,
-		ec.marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowEvent,
+		ec.marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowEvent,
 		true,
 		true,
 	)
@@ -181,7 +181,7 @@ func (ec *executionContext) _WorkflowEventUpdatePayload_workflowEvent(ctx contex
 			return obj.WorkflowEvent, nil
 		},
 		nil,
-		ec.marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowEvent,
+		ec.marshalNWorkflowEvent2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowEvent,
 		true,
 		true,
 	)

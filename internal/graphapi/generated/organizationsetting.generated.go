@@ -38,7 +38,7 @@ func (ec *executionContext) _OrganizationSettingBulkCreatePayload_organizationSe
 			return obj.OrganizationSettings, nil
 		},
 		nil,
-		ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSettingᚄ,
+		ec.marshalOOrganizationSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganizationSettingᚄ,
 		true,
 		false,
 	)
@@ -164,7 +164,7 @@ func (ec *executionContext) _OrganizationSettingCreatePayload_organizationSettin
 			return obj.OrganizationSetting, nil
 		},
 		nil,
-		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
+		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganizationSetting,
 		true,
 		true,
 	)
@@ -290,7 +290,7 @@ func (ec *executionContext) _OrganizationSettingUpdatePayload_organizationSettin
 			return obj.OrganizationSetting, nil
 		},
 		nil,
-		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationSetting,
+		ec.marshalNOrganizationSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganizationSetting,
 		true,
 		true,
 	)

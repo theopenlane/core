@@ -38,7 +38,7 @@ func (ec *executionContext) _OrganizationBulkCreatePayload_organizations(ctx con
 			return obj.Organizations, nil
 		},
 		nil,
-		ec.marshalOOrganization2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationᚄ,
+		ec.marshalOOrganization2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganizationᚄ,
 		true,
 		false,
 	)
@@ -271,7 +271,7 @@ func (ec *executionContext) _OrganizationCreatePayload_organization(ctx context.
 			return obj.Organization, nil
 		},
 		nil,
-		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization,
+		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganization,
 		true,
 		true,
 	)
@@ -533,7 +533,7 @@ func (ec *executionContext) _OrganizationUpdatePayload_organization(ctx context.
 			return obj.Organization, nil
 		},
 		nil,
-		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganization,
+		ec.marshalNOrganization2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganization,
 		true,
 		true,
 	)

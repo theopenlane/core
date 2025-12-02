@@ -38,7 +38,7 @@ func (ec *executionContext) _ProgramMembershipBulkCreatePayload_programMembershi
 			return obj.ProgramMemberships, nil
 		},
 		nil,
-		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembershipᚄ,
+		ec.marshalOProgramMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgramMembershipᚄ,
 		true,
 		false,
 	)
@@ -118,7 +118,7 @@ func (ec *executionContext) _ProgramMembershipCreatePayload_programMembership(ct
 			return obj.ProgramMembership, nil
 		},
 		nil,
-		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgramMembership,
 		true,
 		true,
 	)
@@ -198,7 +198,7 @@ func (ec *executionContext) _ProgramMembershipUpdatePayload_programMembership(ct
 			return obj.ProgramMembership, nil
 		},
 		nil,
-		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramMembership,
+		ec.marshalNProgramMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgramMembership,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _TagDefinitionBulkCreatePayload_tagDefinitions(ctx c
 			return obj.TagDefinitions, nil
 		},
 		nil,
-		ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionᚄ,
+		ec.marshalOTagDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTagDefinitionᚄ,
 		true,
 		false,
 	)
@@ -99,7 +99,7 @@ func (ec *executionContext) _TagDefinitionCreatePayload_tagDefinition(ctx contex
 			return obj.TagDefinition, nil
 		},
 		nil,
-		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition,
+		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTagDefinition,
 		true,
 		true,
 	)
@@ -189,7 +189,7 @@ func (ec *executionContext) _TagDefinitionUpdatePayload_tagDefinition(ctx contex
 			return obj.TagDefinition, nil
 		},
 		nil,
-		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinition,
+		ec.marshalNTagDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTagDefinition,
 		true,
 		true,
 	)

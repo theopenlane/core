@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterCreatePayload_trustCenter(ctx context.Co
 			return obj.TrustCenter, nil
 		},
 		nil,
-		ec.marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenter,
+		ec.marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenter,
 		true,
 		true,
 	)
@@ -148,7 +148,7 @@ func (ec *executionContext) _TrustCenterUpdatePayload_trustCenter(ctx context.Co
 			return obj.TrustCenter, nil
 		},
 		nil,
-		ec.marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenter,
+		ec.marshalNTrustCenter2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenter,
 		true,
 		true,
 	)

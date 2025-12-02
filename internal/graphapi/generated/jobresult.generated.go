@@ -38,7 +38,7 @@ func (ec *executionContext) _JobResultCreatePayload_jobResult(ctx context.Contex
 			return obj.JobResult, nil
 		},
 		nil,
-		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobResult,
+		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobResult,
 		true,
 		true,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _JobResultUpdatePayload_jobResult(ctx context.Contex
 			return obj.JobResult, nil
 		},
 		nil,
-		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobResult,
+		ec.marshalNJobResult2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobResult,
 		true,
 		true,
 	)

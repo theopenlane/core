@@ -6,7 +6,7 @@ import (
 	"github.com/99designs/gqlgen/api"
 	"github.com/99designs/gqlgen/codegen/config"
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/genhelpers"
+	"github.com/theopenlane/core/pkg/genhelpers"
 	"github.com/theopenlane/ent/schema"
 	"github.com/theopenlane/gqlgen-plugins/bulkgen"
 	"github.com/theopenlane/gqlgen-plugins/resolvergen"
@@ -34,6 +34,7 @@ func main() {
 	modelImport := "github.com/theopenlane/core/internal/graphapi/model"
 	entPackage := "github.com/theopenlane/ent/generated"
 	rulePackage := "github.com/theopenlane/ent/privacy/rule"
+	relativeSchemaPath := "./ent/schema"
 
 	if err := api.Generate(cfg,
 		api.ReplacePlugin(resolvergen.NewWithOptions(
@@ -50,6 +51,7 @@ func main() {
 			searchgen.WithModelPackage(modelImport),
 			searchgen.WithRulePackage(rulePackage),
 			searchgen.WithIncludeAdminSearch(false),
+			searchgen.WithSchemaPath(relativeSchemaPath),
 		)), // add the search plugin
 	); err != nil {
 		log.Fatal().Err(err).Msg("failed to generate gqlgen server")

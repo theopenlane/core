@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigBulkCreatePayload_trustCe
 			return obj.TrustCenterWatermarkConfigs, nil
 		},
 		nil,
-		ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ,
+		ec.marshalOTrustCenterWatermarkConfig2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterWatermarkConfigᚄ,
 		true,
 		false,
 	)
@@ -105,7 +105,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigCreatePayload_trustCenter
 			return obj.TrustCenterWatermarkConfig, nil
 		},
 		nil,
-		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
+		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
 		true,
 		true,
 	)
@@ -201,7 +201,7 @@ func (ec *executionContext) _TrustCenterWatermarkConfigUpdatePayload_trustCenter
 			return obj.TrustCenterWatermarkConfig, nil
 		},
 		nil,
-		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
+		ec.marshalNTrustCenterWatermarkConfig2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterWatermarkConfig,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _AssessmentCreatePayload_assessment(ctx context.Cont
 			return obj.Assessment, nil
 		},
 		nil,
-		ec.marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessment,
+		ec.marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssessment,
 		true,
 		true,
 	)
@@ -136,7 +136,7 @@ func (ec *executionContext) _AssessmentUpdatePayload_assessment(ctx context.Cont
 			return obj.Assessment, nil
 		},
 		nil,
-		ec.marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessment,
+		ec.marshalNAssessment2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssessment,
 		true,
 		true,
 	)

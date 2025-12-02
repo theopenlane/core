@@ -38,7 +38,7 @@ func (ec *executionContext) _ReviewBulkCreatePayload_reviews(ctx context.Context
 			return obj.Reviews, nil
 		},
 		nil,
-		ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewᚄ,
+		ec.marshalOReview2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐReviewᚄ,
 		true,
 		false,
 	)
@@ -163,7 +163,7 @@ func (ec *executionContext) _ReviewCreatePayload_review(ctx context.Context, fie
 			return obj.Review, nil
 		},
 		nil,
-		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview,
+		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐReview,
 		true,
 		true,
 	)
@@ -317,7 +317,7 @@ func (ec *executionContext) _ReviewUpdatePayload_review(ctx context.Context, fie
 			return obj.Review, nil
 		},
 		nil,
-		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReview,
+		ec.marshalNReview2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐReview,
 		true,
 		true,
 	)

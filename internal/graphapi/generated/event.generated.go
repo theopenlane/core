@@ -38,7 +38,7 @@ func (ec *executionContext) _EventBulkCreatePayload_events(ctx context.Context, 
 			return obj.Events, nil
 		},
 		nil,
-		ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEventᚄ,
+		ec.marshalOEvent2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEventᚄ,
 		true,
 		false,
 	)
@@ -142,7 +142,7 @@ func (ec *executionContext) _EventCreatePayload_event(ctx context.Context, field
 			return obj.Event, nil
 		},
 		nil,
-		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
+		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvent,
 		true,
 		true,
 	)
@@ -246,7 +246,7 @@ func (ec *executionContext) _EventUpdatePayload_event(ctx context.Context, field
 			return obj.Event, nil
 		},
 		nil,
-		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvent,
+		ec.marshalNEvent2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvent,
 		true,
 		true,
 	)

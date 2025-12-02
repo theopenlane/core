@@ -38,7 +38,7 @@ func (ec *executionContext) _MappableDomainBulkCreatePayload_mappableDomains(ctx
 			return obj.MappableDomains, nil
 		},
 		nil,
-		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomainᚄ,
+		ec.marshalOMappableDomain2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappableDomainᚄ,
 		true,
 		false,
 	)
@@ -116,7 +116,7 @@ func (ec *executionContext) _MappableDomainCreatePayload_mappableDomain(ctx cont
 			return obj.MappableDomain, nil
 		},
 		nil,
-		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappableDomain,
 		true,
 		true,
 	)
@@ -194,7 +194,7 @@ func (ec *executionContext) _MappableDomainUpdatePayload_mappableDomain(ctx cont
 			return obj.MappableDomain, nil
 		},
 		nil,
-		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappableDomain,
+		ec.marshalNMappableDomain2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappableDomain,
 		true,
 		true,
 	)

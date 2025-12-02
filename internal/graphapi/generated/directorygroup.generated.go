@@ -38,7 +38,7 @@ func (ec *executionContext) _DirectoryGroupBulkCreatePayload_directoryGroups(ctx
 			return obj.DirectoryGroups, nil
 		},
 		nil,
-		ec.marshalODirectoryGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroupᚄ,
+		ec.marshalODirectoryGroup2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryGroupᚄ,
 		true,
 		false,
 	)
@@ -127,7 +127,7 @@ func (ec *executionContext) _DirectoryGroupCreatePayload_directoryGroup(ctx cont
 			return obj.DirectoryGroup, nil
 		},
 		nil,
-		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup,
+		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryGroup,
 		true,
 		true,
 	)
@@ -245,7 +245,7 @@ func (ec *executionContext) _DirectoryGroupUpdatePayload_directoryGroup(ctx cont
 			return obj.DirectoryGroup, nil
 		},
 		nil,
-		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryGroup,
+		ec.marshalNDirectoryGroup2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryGroup,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _ControlImplementationBulkCreatePayload_controlImple
 			return obj.ControlImplementations, nil
 		},
 		nil,
-		ec.marshalOControlImplementation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementationᚄ,
+		ec.marshalOControlImplementation2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlImplementationᚄ,
 		true,
 		false,
 	)
@@ -142,7 +142,7 @@ func (ec *executionContext) _ControlImplementationCreatePayload_controlImplement
 			return obj.ControlImplementation, nil
 		},
 		nil,
-		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementation,
+		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlImplementation,
 		true,
 		true,
 	)
@@ -246,7 +246,7 @@ func (ec *executionContext) _ControlImplementationUpdatePayload_controlImplement
 			return obj.ControlImplementation, nil
 		},
 		nil,
-		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlImplementation,
+		ec.marshalNControlImplementation2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlImplementation,
 		true,
 		true,
 	)

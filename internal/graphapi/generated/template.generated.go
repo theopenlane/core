@@ -38,7 +38,7 @@ func (ec *executionContext) _TemplateBulkCreatePayload_templates(ctx context.Con
 			return obj.Templates, nil
 		},
 		nil,
-		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateᚄ,
+		ec.marshalOTemplate2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplateᚄ,
 		true,
 		false,
 	)
@@ -142,7 +142,7 @@ func (ec *executionContext) _TemplateCreatePayload_template(ctx context.Context,
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplate,
 		true,
 		true,
 	)
@@ -246,7 +246,7 @@ func (ec *executionContext) _TemplateUpdatePayload_template(ctx context.Context,
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplate,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _NarrativeBulkCreatePayload_narratives(ctx context.C
 			return obj.Narratives, nil
 		},
 		nil,
-		ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeᚄ,
+		ec.marshalONarrative2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐNarrativeᚄ,
 		true,
 		false,
 	)
@@ -142,7 +142,7 @@ func (ec *executionContext) _NarrativeCreatePayload_narrative(ctx context.Contex
 			return obj.Narrative, nil
 		},
 		nil,
-		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
+		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐNarrative,
 		true,
 		true,
 	)
@@ -246,7 +246,7 @@ func (ec *executionContext) _NarrativeUpdatePayload_narrative(ctx context.Contex
 			return obj.Narrative, nil
 		},
 		nil,
-		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrative,
+		ec.marshalNNarrative2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐNarrative,
 		true,
 		true,
 	)

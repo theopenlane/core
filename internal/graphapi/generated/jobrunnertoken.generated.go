@@ -38,7 +38,7 @@ func (ec *executionContext) _JobRunnerTokenCreatePayload_jobRunnerToken(ctx cont
 			return obj.JobRunnerToken, nil
 		},
 		nil,
-		ec.marshalNJobRunnerToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerToken,
+		ec.marshalNJobRunnerToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunnerToken,
 		true,
 		true,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _JobRunnerTokenUpdatePayload_jobRunnerToken(ctx cont
 			return obj.JobRunnerToken, nil
 		},
 		nil,
-		ec.marshalNJobRunnerToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerToken,
+		ec.marshalNJobRunnerToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunnerToken,
 		true,
 		true,
 	)

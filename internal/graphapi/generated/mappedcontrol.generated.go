@@ -38,7 +38,7 @@ func (ec *executionContext) _MappedControlBulkCreatePayload_mappedControls(ctx c
 			return obj.MappedControls, nil
 		},
 		nil,
-		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControlᚄ,
+		ec.marshalOMappedControl2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappedControlᚄ,
 		true,
 		false,
 	)
@@ -140,7 +140,7 @@ func (ec *executionContext) _MappedControlCreatePayload_mappedControl(ctx contex
 			return obj.MappedControl, nil
 		},
 		nil,
-		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappedControl,
 		true,
 		true,
 	)
@@ -242,7 +242,7 @@ func (ec *executionContext) _MappedControlUpdatePayload_mappedControl(ctx contex
 			return obj.MappedControl, nil
 		},
 		nil,
-		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐMappedControl,
+		ec.marshalNMappedControl2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐMappedControl,
 		true,
 		true,
 	)

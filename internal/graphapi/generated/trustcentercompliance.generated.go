@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterComplianceBulkCreatePayload_trustCenterC
 			return obj.TrustCenterCompliances, nil
 		},
 		nil,
-		ec.marshalOTrustCenterCompliance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterComplianceᚄ,
+		ec.marshalOTrustCenterCompliance2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterComplianceᚄ,
 		true,
 		false,
 	)
@@ -118,7 +118,7 @@ func (ec *executionContext) _TrustCenterComplianceCreatePayload_trustCenterCompl
 			return obj.TrustCenterCompliance, nil
 		},
 		nil,
-		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
+		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterCompliance,
 		true,
 		true,
 	)
@@ -198,7 +198,7 @@ func (ec *executionContext) _TrustCenterComplianceUpdatePayload_trustCenterCompl
 			return obj.TrustCenterCompliance, nil
 		},
 		nil,
-		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterCompliance,
+		ec.marshalNTrustCenterCompliance2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterCompliance,
 		true,
 		true,
 	)

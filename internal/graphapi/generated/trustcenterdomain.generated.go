@@ -37,7 +37,7 @@ func (ec *executionContext) _TrustCenterDomainCreatePayload_customDomain(ctx con
 			return obj.CustomDomain, nil
 		},
 		nil,
-		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomDomain,
+		ec.marshalNCustomDomain2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomDomain,
 		true,
 		true,
 	)

@@ -6,9 +6,9 @@ import (
 
 	"entgo.io/ent"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/logx"
 	"github.com/theopenlane/core/pkg/objects"
-	"github.com/theopenlane/corejobs"
 	"github.com/theopenlane/ent/generated"
 	"github.com/theopenlane/ent/generated/hook"
 	"github.com/theopenlane/ent/generated/privacy"
@@ -126,7 +126,7 @@ func HookCreateTrustCenterDoc() ent.Hook {
 
 			if trustCenterDoc.WatermarkingEnabled {
 				logx.FromContext(ctx).Debug().Msg("watermarking enabled, queuing job")
-				if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+				if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 					TrustCenterDocumentID: trustCenterDoc.ID,
 				}, nil); err != nil {
 					return nil, err
@@ -251,7 +251,7 @@ func HookUpdateTrustCenterDoc() ent.Hook { // nolint:gocyclo
 
 			if mutationSetsOriginalFileID || len(docFiles) > 0 {
 				if trustCenterDoc.WatermarkingEnabled {
-					if _, err := m.Job.Insert(ctx, corejobs.WatermarkDocArgs{
+					if _, err := m.Job.Insert(ctx, jobspec.WatermarkDocArgs{
 						TrustCenterDocumentID: trustCenterDoc.ID,
 					}, nil); err != nil {
 						return nil, err

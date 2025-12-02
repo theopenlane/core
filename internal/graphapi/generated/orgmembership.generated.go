@@ -38,7 +38,7 @@ func (ec *executionContext) _OrgMembershipBulkCreatePayload_orgMemberships(ctx c
 			return obj.OrgMemberships, nil
 		},
 		nil,
-		ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembershipᚄ,
+		ec.marshalOOrgMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrgMembershipᚄ,
 		true,
 		false,
 	)
@@ -120,7 +120,7 @@ func (ec *executionContext) _OrgMembershipCreatePayload_orgMembership(ctx contex
 			return obj.OrgMembership, nil
 		},
 		nil,
-		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
+		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrgMembership,
 		true,
 		true,
 	)
@@ -202,7 +202,7 @@ func (ec *executionContext) _OrgMembershipUpdatePayload_orgMembership(ctx contex
 			return obj.OrgMembership, nil
 		},
 		nil,
-		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrgMembership,
+		ec.marshalNOrgMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrgMembership,
 		true,
 		true,
 	)

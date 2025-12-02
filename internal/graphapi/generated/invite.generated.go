@@ -38,7 +38,7 @@ func (ec *executionContext) _InviteBulkCreatePayload_invites(ctx context.Context
 			return obj.Invites, nil
 		},
 		nil,
-		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteᚄ,
+		ec.marshalOInvite2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInviteᚄ,
 		true,
 		false,
 	)
@@ -130,7 +130,7 @@ func (ec *executionContext) _InviteCreatePayload_invite(ctx context.Context, fie
 			return obj.Invite, nil
 		},
 		nil,
-		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInvite,
 		true,
 		true,
 	)
@@ -222,7 +222,7 @@ func (ec *executionContext) _InviteUpdatePayload_invite(ctx context.Context, fie
 			return obj.Invite, nil
 		},
 		nil,
-		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInvite,
+		ec.marshalNInvite2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInvite,
 		true,
 		true,
 	)

@@ -67,7 +67,7 @@ func (ec *executionContext) _SubmitTrustCenterNDAResponsePayload_documentData(ct
 			return obj.DocumentData, nil
 		},
 		nil,
-		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDocumentData,
+		ec.marshalNDocumentData2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDocumentData,
 		true,
 		true,
 	)
@@ -124,7 +124,7 @@ func (ec *executionContext) _TrustCenterNDACreatePayload_template(ctx context.Co
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplate,
 		true,
 		true,
 	)
@@ -199,7 +199,7 @@ func (ec *executionContext) _TrustCenterNDAUpdatePayload_template(ctx context.Co
 			return obj.Template, nil
 		},
 		nil,
-		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplate,
+		ec.marshalNTemplate2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplate,
 		true,
 		true,
 	)

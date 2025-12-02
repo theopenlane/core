@@ -38,7 +38,7 @@ func (ec *executionContext) _TFASettingCreatePayload_tfaSetting(ctx context.Cont
 			return obj.TfaSetting, nil
 		},
 		nil,
-		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting,
+		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTFASetting,
 		true,
 		true,
 	)
@@ -143,7 +143,7 @@ func (ec *executionContext) _TFASettingUpdatePayload_tfaSetting(ctx context.Cont
 			return obj.TfaSetting, nil
 		},
 		nil,
-		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTFASetting,
+		ec.marshalNTFASetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTFASetting,
 		true,
 		true,
 	)

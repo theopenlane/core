@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustcenterEntityBulkCreatePayload_trustcenterEntit
 			return obj.TrustcenterEntities, nil
 		},
 		nil,
-		ec.marshalOTrustcenterEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntityᚄ,
+		ec.marshalOTrustcenterEntity2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustcenterEntityᚄ,
 		true,
 		false,
 	)
@@ -95,7 +95,7 @@ func (ec *executionContext) _TrustcenterEntityCreatePayload_trustcenterEntity(ct
 			return obj.TrustcenterEntity, nil
 		},
 		nil,
-		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntity,
+		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustcenterEntity,
 		true,
 		true,
 	)
@@ -181,7 +181,7 @@ func (ec *executionContext) _TrustcenterEntityUpdatePayload_trustcenterEntity(ct
 			return obj.TrustcenterEntity, nil
 		},
 		nil,
-		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntity,
+		ec.marshalNTrustcenterEntity2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustcenterEntity,
 		true,
 		true,
 	)

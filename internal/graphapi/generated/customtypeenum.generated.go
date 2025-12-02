@@ -38,7 +38,7 @@ func (ec *executionContext) _CustomTypeEnumBulkCreatePayload_customTypeEnums(ctx
 			return obj.CustomTypeEnums, nil
 		},
 		nil,
-		ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumᚄ,
+		ec.marshalOCustomTypeEnum2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomTypeEnumᚄ,
 		true,
 		false,
 	)
@@ -119,7 +119,7 @@ func (ec *executionContext) _CustomTypeEnumCreatePayload_customTypeEnum(ctx cont
 			return obj.CustomTypeEnum, nil
 		},
 		nil,
-		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum,
+		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomTypeEnum,
 		true,
 		true,
 	)
@@ -229,7 +229,7 @@ func (ec *executionContext) _CustomTypeEnumUpdatePayload_customTypeEnum(ctx cont
 			return obj.CustomTypeEnum, nil
 		},
 		nil,
-		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnum,
+		ec.marshalNCustomTypeEnum2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomTypeEnum,
 		true,
 		true,
 	)

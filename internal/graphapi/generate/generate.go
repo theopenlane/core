@@ -8,6 +8,6 @@ package main
 //go:generate_output ../clientschema/schema.graphql
 //go:generate go run gen_schema.go
 
-//go:generate_input ../query/*.graphql ../query/simple/*.graphql ../schema/*.graphql ../clientschema/schema.graphql .gqlgenc.yml
+//go:generate_input ../query/*.graphql ../schema/*.graphql ../clientschema/schema.graphql .gqlgenc.yml
 //go:generate_output ../../pkg/openlaneclient/graphqlclient.go
 //go:generate go run gen_client.go

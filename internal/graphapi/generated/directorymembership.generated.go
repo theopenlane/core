@@ -38,7 +38,7 @@ func (ec *executionContext) _DirectoryMembershipBulkCreatePayload_directoryMembe
 			return obj.DirectoryMemberships, nil
 		},
 		nil,
-		ec.marshalODirectoryMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembershipᚄ,
+		ec.marshalODirectoryMembership2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryMembershipᚄ,
 		true,
 		false,
 	)
@@ -119,7 +119,7 @@ func (ec *executionContext) _DirectoryMembershipCreatePayload_directoryMembershi
 			return obj.DirectoryMembership, nil
 		},
 		nil,
-		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership,
+		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryMembership,
 		true,
 		true,
 	)
@@ -229,7 +229,7 @@ func (ec *executionContext) _DirectoryMembershipUpdatePayload_directoryMembershi
 			return obj.DirectoryMembership, nil
 		},
 		nil,
-		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectoryMembership,
+		ec.marshalNDirectoryMembership2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectoryMembership,
 		true,
 		true,
 	)

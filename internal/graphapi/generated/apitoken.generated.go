@@ -38,7 +38,7 @@ func (ec *executionContext) _APITokenBulkCreatePayload_apiTokens(ctx context.Con
 			return obj.APITokens, nil
 		},
 		nil,
-		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPITokenᚄ,
+		ec.marshalOAPIToken2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAPITokenᚄ,
 		true,
 		false,
 	)
@@ -136,7 +136,7 @@ func (ec *executionContext) _APITokenCreatePayload_apiToken(ctx context.Context,
 			return obj.APIToken, nil
 		},
 		nil,
-		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAPIToken,
 		true,
 		true,
 	)
@@ -234,7 +234,7 @@ func (ec *executionContext) _APITokenUpdatePayload_apiToken(ctx context.Context,
 			return obj.APIToken, nil
 		},
 		nil,
-		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAPIToken,
+		ec.marshalNAPIToken2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAPIToken,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _DirectorySyncRunBulkCreatePayload_directorySyncRuns
 			return obj.DirectorySyncRuns, nil
 		},
 		nil,
-		ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRunᚄ,
+		ec.marshalODirectorySyncRun2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectorySyncRunᚄ,
 		true,
 		false,
 	)
@@ -113,7 +113,7 @@ func (ec *executionContext) _DirectorySyncRunCreatePayload_directorySyncRun(ctx 
 			return obj.DirectorySyncRun, nil
 		},
 		nil,
-		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun,
+		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectorySyncRun,
 		true,
 		true,
 	)
@@ -217,7 +217,7 @@ func (ec *executionContext) _DirectorySyncRunUpdatePayload_directorySyncRun(ctx 
 			return obj.DirectorySyncRun, nil
 		},
 		nil,
-		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐDirectorySyncRun,
+		ec.marshalNDirectorySyncRun2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐDirectorySyncRun,
 		true,
 		true,
 	)

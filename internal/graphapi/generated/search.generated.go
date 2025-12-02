@@ -106,7 +106,7 @@ func (ec *executionContext) _SearchResults_actionPlans(ctx context.Context, fiel
 			return obj.ActionPlans, nil
 		},
 		nil,
-		ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐActionPlanConnection,
+		ec.marshalOActionPlanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐActionPlanConnection,
 		true,
 		false,
 	)
@@ -143,7 +143,7 @@ func (ec *executionContext) _SearchResults_assessments(ctx context.Context, fiel
 			return obj.Assessments, nil
 		},
 		nil,
-		ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentConnection,
+		ec.marshalOAssessmentConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssessmentConnection,
 		true,
 		false,
 	)
@@ -180,7 +180,7 @@ func (ec *executionContext) _SearchResults_assessmentResponses(ctx context.Conte
 			return obj.AssessmentResponses, nil
 		},
 		nil,
-		ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssessmentResponseConnection,
+		ec.marshalOAssessmentResponseConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssessmentResponseConnection,
 		true,
 		false,
 	)
@@ -217,7 +217,7 @@ func (ec *executionContext) _SearchResults_assets(ctx context.Context, field gra
 			return obj.Assets, nil
 		},
 		nil,
-		ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetConnection,
+		ec.marshalOAssetConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssetConnection,
 		true,
 		false,
 	)
@@ -254,7 +254,7 @@ func (ec *executionContext) _SearchResults_contacts(ctx context.Context, field g
 			return obj.Contacts, nil
 		},
 		nil,
-		ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐContactConnection,
+		ec.marshalOContactConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐContactConnection,
 		true,
 		false,
 	)
@@ -291,7 +291,7 @@ func (ec *executionContext) _SearchResults_controls(ctx context.Context, field g
 			return obj.Controls, nil
 		},
 		nil,
-		ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlConnection,
+		ec.marshalOControlConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlConnection,
 		true,
 		false,
 	)
@@ -328,7 +328,7 @@ func (ec *executionContext) _SearchResults_controlObjectives(ctx context.Context
 			return obj.ControlObjectives, nil
 		},
 		nil,
-		ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐControlObjectiveConnection,
+		ec.marshalOControlObjectiveConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐControlObjectiveConnection,
 		true,
 		false,
 	)
@@ -365,7 +365,7 @@ func (ec *executionContext) _SearchResults_customTypeEnums(ctx context.Context, 
 			return obj.CustomTypeEnums, nil
 		},
 		nil,
-		ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐCustomTypeEnumConnection,
+		ec.marshalOCustomTypeEnumConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐCustomTypeEnumConnection,
 		true,
 		false,
 	)
@@ -402,7 +402,7 @@ func (ec *executionContext) _SearchResults_entities(ctx context.Context, field g
 			return obj.Entities, nil
 		},
 		nil,
-		ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEntityConnection,
+		ec.marshalOEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEntityConnection,
 		true,
 		false,
 	)
@@ -439,7 +439,7 @@ func (ec *executionContext) _SearchResults_evidences(ctx context.Context, field 
 			return obj.Evidences, nil
 		},
 		nil,
-		ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐEvidenceConnection,
+		ec.marshalOEvidenceConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐEvidenceConnection,
 		true,
 		false,
 	)
@@ -476,7 +476,7 @@ func (ec *executionContext) _SearchResults_findings(ctx context.Context, field g
 			return obj.Findings, nil
 		},
 		nil,
-		ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐFindingConnection,
+		ec.marshalOFindingConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐFindingConnection,
 		true,
 		false,
 	)
@@ -513,7 +513,7 @@ func (ec *executionContext) _SearchResults_groups(ctx context.Context, field gra
 			return obj.Groups, nil
 		},
 		nil,
-		ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐGroupConnection,
+		ec.marshalOGroupConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐGroupConnection,
 		true,
 		false,
 	)
@@ -550,7 +550,7 @@ func (ec *executionContext) _SearchResults_internalPolicies(ctx context.Context,
 			return obj.InternalPolicies, nil
 		},
 		nil,
-		ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInternalPolicyConnection,
+		ec.marshalOInternalPolicyConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInternalPolicyConnection,
 		true,
 		false,
 	)
@@ -587,7 +587,7 @@ func (ec *executionContext) _SearchResults_invites(ctx context.Context, field gr
 			return obj.Invites, nil
 		},
 		nil,
-		ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐInviteConnection,
+		ec.marshalOInviteConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐInviteConnection,
 		true,
 		false,
 	)
@@ -624,7 +624,7 @@ func (ec *executionContext) _SearchResults_jobRunners(ctx context.Context, field
 			return obj.JobRunners, nil
 		},
 		nil,
-		ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobRunnerConnection,
+		ec.marshalOJobRunnerConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobRunnerConnection,
 		true,
 		false,
 	)
@@ -661,7 +661,7 @@ func (ec *executionContext) _SearchResults_jobTemplates(ctx context.Context, fie
 			return obj.JobTemplates, nil
 		},
 		nil,
-		ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐJobTemplateConnection,
+		ec.marshalOJobTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐJobTemplateConnection,
 		true,
 		false,
 	)
@@ -698,7 +698,7 @@ func (ec *executionContext) _SearchResults_narratives(ctx context.Context, field
 			return obj.Narratives, nil
 		},
 		nil,
-		ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐNarrativeConnection,
+		ec.marshalONarrativeConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐNarrativeConnection,
 		true,
 		false,
 	)
@@ -735,7 +735,7 @@ func (ec *executionContext) _SearchResults_organizations(ctx context.Context, fi
 			return obj.Organizations, nil
 		},
 		nil,
-		ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐOrganizationConnection,
+		ec.marshalOOrganizationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐOrganizationConnection,
 		true,
 		false,
 	)
@@ -772,7 +772,7 @@ func (ec *executionContext) _SearchResults_procedures(ctx context.Context, field
 			return obj.Procedures, nil
 		},
 		nil,
-		ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProcedureConnection,
+		ec.marshalOProcedureConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProcedureConnection,
 		true,
 		false,
 	)
@@ -809,7 +809,7 @@ func (ec *executionContext) _SearchResults_programs(ctx context.Context, field g
 			return obj.Programs, nil
 		},
 		nil,
-		ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐProgramConnection,
+		ec.marshalOProgramConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐProgramConnection,
 		true,
 		false,
 	)
@@ -846,7 +846,7 @@ func (ec *executionContext) _SearchResults_remediations(ctx context.Context, fie
 			return obj.Remediations, nil
 		},
 		nil,
-		ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRemediationConnection,
+		ec.marshalORemediationConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRemediationConnection,
 		true,
 		false,
 	)
@@ -883,7 +883,7 @@ func (ec *executionContext) _SearchResults_reviews(ctx context.Context, field gr
 			return obj.Reviews, nil
 		},
 		nil,
-		ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐReviewConnection,
+		ec.marshalOReviewConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐReviewConnection,
 		true,
 		false,
 	)
@@ -920,7 +920,7 @@ func (ec *executionContext) _SearchResults_risks(ctx context.Context, field grap
 			return obj.Risks, nil
 		},
 		nil,
-		ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐRiskConnection,
+		ec.marshalORiskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐRiskConnection,
 		true,
 		false,
 	)
@@ -957,7 +957,7 @@ func (ec *executionContext) _SearchResults_scans(ctx context.Context, field grap
 			return obj.Scans, nil
 		},
 		nil,
-		ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐScanConnection,
+		ec.marshalOScanConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐScanConnection,
 		true,
 		false,
 	)
@@ -994,7 +994,7 @@ func (ec *executionContext) _SearchResults_standards(ctx context.Context, field 
 			return obj.Standards, nil
 		},
 		nil,
-		ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐStandardConnection,
+		ec.marshalOStandardConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐStandardConnection,
 		true,
 		false,
 	)
@@ -1031,7 +1031,7 @@ func (ec *executionContext) _SearchResults_subcontrols(ctx context.Context, fiel
 			return obj.Subcontrols, nil
 		},
 		nil,
-		ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubcontrolConnection,
+		ec.marshalOSubcontrolConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubcontrolConnection,
 		true,
 		false,
 	)
@@ -1068,7 +1068,7 @@ func (ec *executionContext) _SearchResults_subprocessors(ctx context.Context, fi
 			return obj.Subprocessors, nil
 		},
 		nil,
-		ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubprocessorConnection,
+		ec.marshalOSubprocessorConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubprocessorConnection,
 		true,
 		false,
 	)
@@ -1105,7 +1105,7 @@ func (ec *executionContext) _SearchResults_subscribers(ctx context.Context, fiel
 			return obj.Subscribers, nil
 		},
 		nil,
-		ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐSubscriberConnection,
+		ec.marshalOSubscriberConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐSubscriberConnection,
 		true,
 		false,
 	)
@@ -1142,7 +1142,7 @@ func (ec *executionContext) _SearchResults_tagDefinitions(ctx context.Context, f
 			return obj.TagDefinitions, nil
 		},
 		nil,
-		ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTagDefinitionConnection,
+		ec.marshalOTagDefinitionConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTagDefinitionConnection,
 		true,
 		false,
 	)
@@ -1179,7 +1179,7 @@ func (ec *executionContext) _SearchResults_tasks(ctx context.Context, field grap
 			return obj.Tasks, nil
 		},
 		nil,
-		ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTaskConnection,
+		ec.marshalOTaskConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTaskConnection,
 		true,
 		false,
 	)
@@ -1216,7 +1216,7 @@ func (ec *executionContext) _SearchResults_templates(ctx context.Context, field 
 			return obj.Templates, nil
 		},
 		nil,
-		ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTemplateConnection,
+		ec.marshalOTemplateConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTemplateConnection,
 		true,
 		false,
 	)
@@ -1253,7 +1253,7 @@ func (ec *executionContext) _SearchResults_trustcenterEntities(ctx context.Conte
 			return obj.TrustcenterEntities, nil
 		},
 		nil,
-		ec.marshalOTrustcenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustcenterEntityConnection,
+		ec.marshalOTrustcenterEntityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustcenterEntityConnection,
 		true,
 		false,
 	)
@@ -1290,7 +1290,7 @@ func (ec *executionContext) _SearchResults_vulnerabilities(ctx context.Context, 
 			return obj.Vulnerabilities, nil
 		},
 		nil,
-		ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐVulnerabilityConnection,
+		ec.marshalOVulnerabilityConnection2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐVulnerabilityConnection,
 		true,
 		false,
 	)

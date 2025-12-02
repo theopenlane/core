@@ -38,7 +38,7 @@ func (ec *executionContext) _AssetBulkCreatePayload_assets(ctx context.Context, 
 			return obj.Assets, nil
 		},
 		nil,
-		ec.marshalOAsset2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAssetᚄ,
+		ec.marshalOAsset2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAssetᚄ,
 		true,
 		false,
 	)
@@ -146,7 +146,7 @@ func (ec *executionContext) _AssetCreatePayload_asset(ctx context.Context, field
 			return obj.Asset, nil
 		},
 		nil,
-		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAsset,
+		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAsset,
 		true,
 		true,
 	)
@@ -254,7 +254,7 @@ func (ec *executionContext) _AssetUpdatePayload_asset(ctx context.Context, field
 			return obj.Asset, nil
 		},
 		nil,
-		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐAsset,
+		ec.marshalNAsset2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐAsset,
 		true,
 		true,
 	)

@@ -38,7 +38,7 @@ func (ec *executionContext) _WorkflowDefinitionBulkCreatePayload_workflowDefinit
 			return obj.WorkflowDefinitions, nil
 		},
 		nil,
-		ec.marshalOWorkflowDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinitionᚄ,
+		ec.marshalOWorkflowDefinition2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowDefinitionᚄ,
 		true,
 		false,
 	)
@@ -125,7 +125,7 @@ func (ec *executionContext) _WorkflowDefinitionCreatePayload_workflowDefinition(
 			return obj.WorkflowDefinition, nil
 		},
 		nil,
-		ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition,
+		ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowDefinition,
 		true,
 		true,
 	)
@@ -241,7 +241,7 @@ func (ec *executionContext) _WorkflowDefinitionUpdatePayload_workflowDefinition(
 			return obj.WorkflowDefinition, nil
 		},
 		nil,
-		ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐWorkflowDefinition,
+		ec.marshalNWorkflowDefinition2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐWorkflowDefinition,
 		true,
 		true,
 	)

@@ -86,13 +86,12 @@ require (
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v83 v83.2.1
 	github.com/theopenlane/beacon v0.3.0
-	github.com/theopenlane/corejobs v0.0.0-20251127080748-9fd4f619deca
 	github.com/theopenlane/echo-prometheus v0.1.0
 	github.com/theopenlane/echox v0.2.4
 	github.com/theopenlane/emailtemplates v0.3.0
 	github.com/theopenlane/entx v0.17.1
 	github.com/theopenlane/go-client v0.1.0
-	github.com/theopenlane/gqlgen-plugins v0.12.1
+	github.com/theopenlane/gqlgen-plugins v0.12.2-0.20251202084142-b0b30b6ad859
 	github.com/theopenlane/httpsling v0.3.0
 	github.com/theopenlane/iam v0.22.5
 	github.com/theopenlane/newman v0.2.1
@@ -101,7 +100,6 @@ require (
 	github.com/tmc/langchaingo v0.1.14
 	github.com/urfave/cli/v3 v3.6.1
 	github.com/vektah/gqlparser/v2 v2.5.31
-	github.com/windmill-labs/windmill-go-client v1.587.1
 	github.com/xeipuuv/gojsonschema v1.2.0
 	github.com/zitadel/oidc/v3 v3.45.0
 	golang.org/x/crypto v0.45.0
@@ -121,7 +119,6 @@ require (
 	github.com/clipperhouse/displaywidth v0.6.1 // indirect
 	github.com/clipperhouse/stringish v0.1.1 // indirect
 	github.com/clipperhouse/uax29/v2 v2.3.0 // indirect
-	github.com/cloudflare/cloudflare-go/v6 v6.3.0 // indirect
 	github.com/di-wu/parser v0.3.0 // indirect
 	github.com/di-wu/xsd-datetime v1.0.0 // indirect
 	github.com/google/go-github/v79 v79.0.0 // indirect
@@ -131,7 +128,6 @@ require (
 	github.com/mfridman/interpolate v0.0.2 // indirect
 	github.com/nyaruka/phonenumbers v1.6.7 // indirect
 	github.com/openfga/go-sdk v0.7.3 // indirect
-	github.com/pdfcpu/pdfcpu v0.11.1 // indirect
 	github.com/pressly/goose/v3 v3.26.0 // indirect
 	github.com/riverqueue/river/rivertype v0.28.0 // indirect
 	github.com/scim2/filter-parser/v2 v2.2.0 // indirect
@@ -142,11 +138,9 @@ require (
 	go.opentelemetry.io/otel/sdk/metric v1.38.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	gocloud.dev v0.44.0 // indirect
-	golang.org/x/image v0.33.0 // indirect
 	golang.org/x/mod v0.30.0 // indirect
 	golang.org/x/text v0.31.0 // indirect
 	golang.org/x/xerrors v0.0.0-20240903120638-7835f813f4da // indirect
-	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
 
 require (
@@ -168,7 +162,6 @@ require (
 	github.com/agnivade/levenshtein v1.2.1 // indirect
 	github.com/alixaxel/pagerank v0.0.0-20200105181019-900657b89dcb // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
-	github.com/apapsch/go-jsonmerge/v2 v2.0.0 // indirect
 	github.com/apparentlymart/go-textseg/v15 v15.0.0 // indirect
 	github.com/aws/aws-sdk-go-v2/aws/protocol/eventstream v1.7.3 // indirect
 	github.com/aws/aws-sdk-go-v2/feature/ec2/imds v1.18.14 // indirect
@@ -230,7 +223,6 @@ require (
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/muhlemmer/gu v0.3.1 // indirect
 	github.com/nxadm/tail v1.4.11 // indirect
-	github.com/oapi-codegen/runtime v1.1.2 // indirect
 	github.com/oasdiff/yaml v0.0.0-20250309154309-f31be36b4037 // indirect
 	github.com/oasdiff/yaml3 v0.0.0-20250309153720-d2182401db90 // indirect
 	github.com/olekukonko/errors v1.1.0 // indirect
@@ -296,9 +288,6 @@ require (
 	github.com/grpc-ecosystem/grpc-gateway/v2 v2.27.3 // indirect
 	github.com/hashicorp/errwrap v1.1.0 // indirect
 	github.com/hashicorp/golang-lru/v2 v2.0.7 // indirect
-	github.com/hhrutter/lzw v1.0.0 // indirect
-	github.com/hhrutter/pkcs7 v0.2.0 // indirect
-	github.com/hhrutter/tiff v1.0.2 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/jackc/pgpassfile v1.0.0 // indirect
 	github.com/jackc/pgservicefile v0.0.0-20240606120523-5a60cdf6a761 // indirect

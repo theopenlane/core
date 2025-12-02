@@ -38,7 +38,7 @@ func (ec *executionContext) _TrustCenterSettingBulkCreatePayload_trustCenterSett
 			return obj.TrustCenterSettings, nil
 		},
 		nil,
-		ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSettingᚄ,
+		ec.marshalOTrustCenterSetting2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSettingᚄ,
 		true,
 		false,
 	)
@@ -117,7 +117,7 @@ func (ec *executionContext) _TrustCenterSettingCreatePayload_trustCenterSetting(
 			return obj.TrustCenterSetting, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
+		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSetting,
 		true,
 		true,
 	)
@@ -225,7 +225,7 @@ func (ec *executionContext) _TrustCenterSettingUpdatePayload_trustCenterSetting(
 			return obj.TrustCenterSetting, nil
 		},
 		nil,
-		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTrustCenterSetting,
+		ec.marshalNTrustCenterSetting2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTrustCenterSetting,
 		true,
 		true,
 	)

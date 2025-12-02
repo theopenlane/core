@@ -38,7 +38,7 @@ func (ec *executionContext) _HushBulkCreatePayload_hushes(ctx context.Context, f
 			return obj.Hushes, nil
 		},
 		nil,
-		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐHushᚄ,
 		true,
 		false,
 	)
@@ -140,7 +140,7 @@ func (ec *executionContext) _HushBulkUpdatePayload_hushes(ctx context.Context, f
 			return obj.Hushes, nil
 		},
 		nil,
-		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHushᚄ,
+		ec.marshalOHush2ᚕᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐHushᚄ,
 		true,
 		false,
 	)
@@ -242,7 +242,7 @@ func (ec *executionContext) _HushCreatePayload_hush(ctx context.Context, field g
 			return obj.Hush, nil
 		},
 		nil,
-		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐHush,
 		true,
 		true,
 	)
@@ -344,7 +344,7 @@ func (ec *executionContext) _HushUpdatePayload_hush(ctx context.Context, field g
 			return obj.Hush, nil
 		},
 		nil,
-		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐHush,
+		ec.marshalNHush2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐHush,
 		true,
 		true,
 	)

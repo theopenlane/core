@@ -40,7 +40,7 @@ func (ec *executionContext) _Subscription_taskCreated(ctx context.Context, field
 			return ec.resolvers.Subscription().TaskCreated(ctx)
 		},
 		nil,
-		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐTask,
+		ec.marshalNTask2ᚖgithubᚗcomᚋtheopenlaneᚋentᚋgeneratedᚐTask,
 		true,
 		true,
 	)
