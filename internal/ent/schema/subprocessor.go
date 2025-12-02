@@ -113,6 +113,7 @@ func (Subprocessor) Hooks() []ent.Hook {
 			ent.OpCreate,
 		),
 		hooks.HookSubprocessor(),
+		hooks.HookModuleCacheInvalidation(),
 	}
 }
 

@@ -60,7 +60,7 @@ func (w *ClearTrustCenterCacheWorker) Work(ctx context.Context, job *river.Job[C
 	logger := logx.FromContext(ctx)
 
 	if job.Args.CustomDomain == "" && job.Args.TrustCenterSlug == "" {
-		return errors.New("either the custom domain or trustcenter slug must be available")
+		return errors.New("either the custom domain or trustcenter slug must be available") //nolint:err113
 	}
 
 	var prefix string
@@ -70,41 +70,44 @@ func (w *ClearTrustCenterCacheWorker) Work(ctx context.Context, job *river.Job[C
 	}
 
 	if job.Args.CustomDomain != "" {
-		prefix = strings.TrimSuffix(job.Args.CustomDomain, "/") + "/"
+		prefix = strings.TrimSuffix(job.Args.CustomDomain, "/")
 	}
 
 	r2Config := w.Config.ObjectStorage.Providers.CloudflareR2
 	if !r2Config.Enabled {
-		return fmt.Errorf("R2 provider is not enabled")
+		return fmt.Errorf("R2 provider is not enabled") //nolint:err113
 	}
 
 	if r2Config.Bucket == "" {
-		return fmt.Errorf("R2 bucket is not configured")
+		return fmt.Errorf("R2 bucket is not configured") //nolint:err113
 	}
 
-	if r2Config.Endpoint == "" {
-		return fmt.Errorf("R2 endpoint is not configured")
+	if r2Config.Endpoint == "" && r2Config.Credentials.AccountID == "" {
+		return fmt.Errorf("R2 endpoint or account ID is not configured") //nolint:err113
 	}
 
-	creds := r2Config.Credentials
-	if creds.AccessKeyID == "" || creds.SecretAccessKey == "" {
-		return fmt.Errorf("R2 credentials are not configured")
+	endpoint := r2Config.Endpoint
+	if endpoint == "" {
+		endpoint = fmt.Sprintf("https://%s.r2.cloudflarestorage.com", r2Config.Credentials.AccountID)
 	}
 
 	awsCfg, err := config.LoadDefaultConfig(ctx,
+		config.WithRegion(r2Config.Region),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(
-			creds.AccessKeyID,
-			creds.SecretAccessKey,
+			r2Config.Credentials.AccessKeyID,
+			r2Config.Credentials.SecretAccessKey,
 			"",
 		)),
 	)
 	if err != nil {
-		return fmt.Errorf("failed to load AWS config: %w", err)
+		return fmt.Errorf("failed to load AWS config: %w", err) //nolint:err113
 	}
 
 	s3Client := s3.NewFromConfig(awsCfg, func(o *s3.Options) {
 		o.UsePathStyle = true
-		o.BaseEndpoint = aws.String(r2Config.Endpoint)
+		o.BaseEndpoint = aws.String(endpoint)
+		o.Region = r2Config.Region
+		o.Credentials = awsCfg.Credentials
 	})
 
 	deletedCount := 0
@@ -118,7 +121,7 @@ func (w *ClearTrustCenterCacheWorker) Work(ctx context.Context, job *river.Job[C
 		page, err := paginator.NextPage(ctx)
 		if err != nil {
 			logger.Error().Err(err).Str("prefix", prefix).Msg("failed to list objects")
-			return fmt.Errorf("failed to list objects: %w", err)
+			return fmt.Errorf("failed to list objects: %w", err) //nolint:err113
 		}
 
 		if len(page.Contents) == 0 {
@@ -151,15 +154,14 @@ func (w *ClearTrustCenterCacheWorker) Work(ctx context.Context, job *river.Job[C
 		deletedCount += len(result.Deleted)
 		if len(result.Errors) > 0 {
 			for _, err := range result.Errors {
-				logger.Warn().Str("key", aws.ToString(err.Key)).
+				logger.Err(errors.New("could not delete r2 object")).
+					Str("key", aws.ToString(err.Key)).
 					Str("code", aws.ToString(err.Code)).
 					Str("message", aws.ToString(err.Message)).
 					Msg("failed to delete object")
 			}
 		}
 	}
-
-	logger.Info().Str("prefix", prefix).Int("deleted_count", deletedCount).Msg("successfully cleared trust center cache")
 
 	return nil
 }

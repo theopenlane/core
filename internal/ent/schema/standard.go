@@ -184,6 +184,7 @@ func (Standard) Hooks() []ent.Hook {
 			hooks.OrgOwnedTuplesHook(),
 			ent.OpCreate,
 		),
+		hooks.HookModuleCacheInvalidation(),
 	}
 }
 

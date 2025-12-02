@@ -140,5 +140,6 @@ func (n Note) Policy() ent.Policy {
 func (Note) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookNoteFiles(),
+		hooks.HookModuleCacheInvalidation(),
 	}
 }
