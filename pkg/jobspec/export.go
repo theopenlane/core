@@ -2,7 +2,7 @@ package jobspec
 
 // ExportContentArgs for the worker to process and update the record for the updated content
 type ExportContentArgs struct {
-	// ID of the export
+	// ExportID is the ID of the export job
 	ExportID string `json:"export_id,omitempty"`
 	// UserID of the user who requested the export (for system admin context)
 	UserID string `json:"user_id,omitempty"`
