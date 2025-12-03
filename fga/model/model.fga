@@ -131,8 +131,8 @@ type organization
     define trust_center_subprocessor_creator: [group#member]
     define can_create_trust_center_subprocessor: can_edit or trust_center_subprocessor_creator
 
-
-    define can_create_trust_center_entity: can_edit
+    define trust_center_entity_creator: [group#member]
+    define can_create_trust_center_entity: can_edit or trust_center_entity_creator
 
     # additional relations
     define user_in_context: [user]
