@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"time"
 
 	echo "github.com/theopenlane/echox"
@@ -115,12 +116,42 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	reqCtx := ctx.Request().Context()
 
-	anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx)
-	if !ok {
-		return h.Unauthorized(ctx, ErrMissingQuestionnaireContext, openapi)
+	// check if the user is authenticated
+	au, err := auth.GetAuthenticatedUserFromContext(reqCtx)
+	if err != nil {
+		logx.FromContext(reqCtx).Error().Err(err).Msg("error getting authenticated user")
+		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	assessmentID := anonUser.AssessmentID
+	var (
+		assessmentID string
+		email        string
+		allowCtx     context.Context
+	)
+
+	allowCtx = privacy.DecisionContext(reqCtx, privacy.Allow)
+	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
+
+	if anonUser, ok := auth.AnonymousQuestionnaireUserFromContext(reqCtx); ok {
+		assessmentID = anonUser.AssessmentID
+		email = anonUser.SubjectEmail
+
+		allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
+
+	} else {
+
+		// for regular/normal authenticated users, we expect the assessment id to be passed
+		// in the request by the client.
+		//
+		// for anon users, it's embedded inside the jwt already
+		if req.AssessmentID == "" {
+			return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
+		}
+
+		assessmentID = req.AssessmentID
+		email = au.SubjectEmail
+	}
+
 	if assessmentID == "" {
 		return h.BadRequest(ctx, ErrMissingAssessmentID, openapi)
 	}
@@ -128,10 +159,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 	if len(req.Data) == 0 {
 		return h.BadRequest(ctx, ErrMissingQuestionnaireData, openapi)
 	}
-
-	allowCtx := privacy.DecisionContext(reqCtx, privacy.Allow)
-	allowCtx = contextx.With(allowCtx, auth.QuestionnaireContextKey{})
-	allowCtx = auth.WithAnonymousQuestionnaireUser(allowCtx, anonUser)
 
 	assessment, err := h.DBClient.Assessment.Query().
 		Where(assessment.IDEQ(assessmentID)).
@@ -147,7 +174,6 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
 	}
 
-	email := anonUser.SubjectEmail
 	if email == "" {
 		return h.BadRequest(ctx, ErrMissingEmail, openapi)
 	}
@@ -171,6 +197,7 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 
 	documentData, err := h.DBClient.DocumentData.Create().
 		SetOwnerID(assessment.OwnerID).
+		SetTemplateID(assessment.TemplateID).
 		SetData(req.Data).
 		Save(allowCtx)
 	if err != nil {
