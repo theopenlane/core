@@ -154,11 +154,11 @@ func (w *ClearTrustCenterCacheWorker) Work(ctx context.Context, job *river.Job[C
 		deletedCount += len(result.Deleted)
 		if len(result.Errors) > 0 {
 			for _, err := range result.Errors {
-				logger.Err(errors.New("could not delete r2 object")).
-					Str("key", aws.ToString(err.Key)).
-					Str("code", aws.ToString(err.Code)).
-					Str("message", aws.ToString(err.Message)).
-					Msg("failed to delete object")
+				logger.Err(errors.New("could not delete r2 object")). //nolint:err113
+											Str("key", aws.ToString(err.Key)).
+											Str("code", aws.ToString(err.Code)).
+											Str("message", aws.ToString(err.Message)).
+											Msg("failed to delete object")
 			}
 		}
 	}

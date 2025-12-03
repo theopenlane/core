@@ -179,7 +179,7 @@ func HookModuleCacheInvalidation() ent.Hook {
 
 			// tests have multiple trust centers because they bypass
 			// with privacy checks. But in reality, if coming in through
-			// graphapi ( which everthing does ), it is impossible to create
+			// graphapi ( which everything does ), it is impossible to create
 			// multiple.
 			//
 			// TODO(adelowo): fix tests sometime. Will be a fairly large change set.
