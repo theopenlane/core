@@ -80,9 +80,10 @@ func HookModuleCacheInvalidation() ent.Hook {
 			}
 
 			var (
-				trustCenterID    string
-				jobClient        riverqueue.JobClient
-				shouldClearCache bool
+				trustCenterIDs              []string
+				jobClient                   riverqueue.JobClient
+				shouldClearCache            bool
+				shouldUseTrustCenterFromOrg bool
 			)
 
 			switch mutationType {
@@ -95,10 +96,10 @@ func HookModuleCacheInvalidation() ent.Hook {
 				jobClient = docMut.Job
 
 				if tcID, exists := docMut.TrustCenterID(); exists {
-					trustCenterID = tcID
-				} else if m.Op() == ent.OpDelete || m.Op() == ent.OpDeleteOne {
+					trustCenterIDs = append(trustCenterIDs, tcID)
+				} else {
 					if oldTCID, err := docMut.OldTrustCenterID(ctx); err == nil {
-						trustCenterID = oldTCID
+						trustCenterIDs = append(trustCenterIDs, oldTCID)
 					}
 				}
 
@@ -144,7 +145,7 @@ func HookModuleCacheInvalidation() ent.Hook {
 
 					tcIDs := noteMut.TrustCenterIDs()
 					if len(tcIDs) > 0 {
-						trustCenterID = tcIDs[0]
+						trustCenterIDs = append(trustCenterIDs, tcIDs...)
 					}
 				}
 
@@ -155,7 +156,11 @@ func HookModuleCacheInvalidation() ent.Hook {
 					shouldClearCache = true
 
 					if tcID, exists := entityMut.TrustCenterID(); exists {
-						trustCenterID = tcID
+						trustCenterIDs = append(trustCenterIDs, tcID)
+					} else {
+						if oldTCID, err := entityMut.OldTrustCenterID(ctx); err == nil {
+							trustCenterIDs = append(trustCenterIDs, oldTCID)
+						}
 					}
 				}
 
@@ -163,29 +168,43 @@ func HookModuleCacheInvalidation() ent.Hook {
 				subMut := m.(*generated.SubprocessorMutation)
 				jobClient = subMut.Job
 				shouldClearCache = true
+				shouldUseTrustCenterFromOrg = true
 
 			case generated.TypeStandard:
 				stdMut := m.(*generated.StandardMutation)
 				jobClient = stdMut.Job
 				shouldClearCache = true
+				shouldUseTrustCenterFromOrg = true
 			}
 
-			if trustCenterID == "" {
+			// tests have multiple trust centers because they bypass
+			// with privacy checks. But in reality, if coming in through
+			// graphapi ( which everthing does ), it is impossible to create
+			// multiple.
+			//
+			// TODO(adelowo): fix tests sometime. Will be a fairly large change set.
+			// or we really could just do TrustCenter.First(). OnlyID won't work here really
+			if len(trustCenterIDs) == 0 && shouldUseTrustCenterFromOrg {
+				query := genericMut.Client().TrustCenter.Query()
 
 				var err error
-				trustCenterID, err = genericMut.Client().TrustCenter.Query().OnlyID(ctx)
+				trustCenterIDs, err = query.IDs(ctx)
 				if generated.IsNotFound(err) {
 					return next.Mutate(ctx, m)
 				}
 
 				if err != nil {
-					logx.FromContext(ctx).Error().Err(err).Msg("unable to fetch trustcenter")
+					logx.FromContext(ctx).Error().Err(err).
+						Str("mutation_type", mutationType).
+						Msg("unable to fetch trustcenter")
 					return nil, ErrTrustCenterIDRequired
 				}
 			}
 
-			if shouldClearCache && trustCenterID != "" {
-				_ = insertClearCacheJob(ctx, jobClient, genericMut, trustCenterID)
+			if shouldClearCache && len(trustCenterIDs) > 0 {
+				for _, tcID := range trustCenterIDs {
+					_ = insertClearCacheJob(ctx, jobClient, genericMut, tcID)
+				}
 			}
 
 			return next.Mutate(ctx, m)
