@@ -37,93 +37,23 @@ func HookTrustcenterCacheInvalidation() ent.Hook {
 
 			switch mutationType {
 			case generated.TypeTrustCenterDoc:
-				docMut, ok := m.(*generated.TrustCenterDocMutation)
+				var ok bool
+				trustCenterIDs, jobClient, shouldClearCache, ok = handleTrustCenterDocMutation(ctx, m)
 				if !ok {
 					return next.Mutate(ctx, m)
 				}
 
-				jobClient = docMut.Job
-
-				if tcID, exists := docMut.TrustCenterID(); exists {
-					trustCenterIDs = append(trustCenterIDs, tcID)
-				} else {
-					if oldTCID, err := docMut.OldTrustCenterID(ctx); err == nil {
-						trustCenterIDs = append(trustCenterIDs, oldTCID)
-					}
-				}
-
-				// check if document visibility is being changed
-				visibility, visibilityChanged := docMut.Visibility()
-
-				// do not trigger if only non-visible documents are added
-				if m.Op().Is(ent.OpCreate) {
-					if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
-						visibility == enums.TrustCenterDocumentVisibilityProtected {
-						shouldClearCache = true
-					}
-				}
-
-				// for update operations: trigger if visibility changed to/from NOT_VISIBLE
-				// or if visibility is currently public or private and it's being flipped
-				if m.Op() == ent.OpUpdate || m.Op() == ent.OpUpdateOne {
-					if visibilityChanged {
-						oldVisibility, err := docMut.OldVisibility(ctx)
-						if err == nil {
-							if oldVisibility == enums.TrustCenterDocumentVisibilityNotVisible ||
-								visibility == enums.TrustCenterDocumentVisibilityNotVisible {
-								shouldClearCache = true
-							}
-						}
-					}
-
-					if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
-						visibility == enums.TrustCenterDocumentVisibilityProtected {
-						shouldClearCache = true
-					}
-				}
-
-				if m.Op() == ent.OpDelete || m.Op() == ent.OpDeleteOne {
-					shouldClearCache = true
-				}
-
 			case generated.TypeNote:
-				noteMut, ok := m.(*generated.NoteMutation)
-				if ok {
-					jobClient = noteMut.Job
-					shouldClearCache = true
-
-					tcIDs := noteMut.TrustCenterIDs()
-					if len(tcIDs) > 0 {
-						trustCenterIDs = append(trustCenterIDs, tcIDs...)
-					}
-				}
+				trustCenterIDs, jobClient, shouldClearCache = handleNoteMutation(m)
 
 			case generated.TypeTrustcenterEntity:
-				entityMut, ok := m.(*generated.TrustcenterEntityMutation)
-				if ok {
-					jobClient = entityMut.Job
-					shouldClearCache = true
-
-					if tcID, exists := entityMut.TrustCenterID(); exists {
-						trustCenterIDs = append(trustCenterIDs, tcID)
-					} else {
-						if oldTCID, err := entityMut.OldTrustCenterID(ctx); err == nil {
-							trustCenterIDs = append(trustCenterIDs, oldTCID)
-						}
-					}
-				}
+				trustCenterIDs, jobClient, shouldClearCache = handleTrustcenterEntityMutation(ctx, m)
 
 			case generated.TypeSubprocessor:
-				subMut := m.(*generated.SubprocessorMutation)
-				jobClient = subMut.Job
-				shouldClearCache = true
-				shouldUseTrustCenterFromOrg = true
+				jobClient, shouldClearCache, shouldUseTrustCenterFromOrg = handleSubprocessorMutation(m)
 
 			case generated.TypeStandard:
-				stdMut := m.(*generated.StandardMutation)
-				jobClient = stdMut.Job
-				shouldClearCache = true
-				shouldUseTrustCenterFromOrg = true
+				jobClient, shouldClearCache, shouldUseTrustCenterFromOrg = handleStandardMutation(m)
 			}
 
 			// tests have multiple trust centers because they bypass
@@ -152,7 +82,7 @@ func HookTrustcenterCacheInvalidation() ent.Hook {
 
 			if shouldClearCache && len(trustCenterIDs) > 0 {
 				for _, tcID := range trustCenterIDs {
-					_ = insertClearCacheJob(ctx, jobClient, genericMut, tcID)
+					insertClearCacheJob(ctx, jobClient, genericMut, tcID)
 				}
 			}
 
@@ -161,7 +91,7 @@ func HookTrustcenterCacheInvalidation() ent.Hook {
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne))
 }
 
-func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m utils.GenericMutation, trustCenterID string) error {
+func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m utils.GenericMutation, trustCenterID string) {
 	client := m.Client()
 
 	tc, err := client.TrustCenter.Query().
@@ -170,7 +100,7 @@ func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m 
 		Only(ctx)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
-		return err
+		return
 	}
 
 	var customDomain string
@@ -195,19 +125,131 @@ func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m 
 	}
 
 	if args.CustomDomain == "" && args.TrustCenterSlug == "" {
-		return nil
+		return
 	}
 
 	if jobClient == nil {
 		logx.FromContext(ctx).Warn().Msg("no job client available, skipping cache invalidation job")
-		return nil
+		return
 	}
 
 	_, err = jobClient.Insert(ctx, args, nil)
 	if err != nil {
 		logx.FromContext(ctx).Warn().Err(err).Msg("failed to insert clear trust center cache job")
-		return nil
+		return
+	}
+}
+
+func handleTrustCenterDocMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool, bool) {
+	documentMutation, ok := m.(*generated.TrustCenterDocMutation)
+	if !ok {
+		return nil, nil, false, false
 	}
 
-	return nil
+	jobClient := documentMutation.Job
+	var trustCenterIDs []string
+
+	if tcID, exists := documentMutation.TrustCenterID(); exists {
+		trustCenterIDs = append(trustCenterIDs, tcID)
+	} else {
+		if oldTCID, err := documentMutation.OldTrustCenterID(ctx); err == nil {
+			trustCenterIDs = append(trustCenterIDs, oldTCID)
+		}
+	}
+
+	// check if document visibility is being changed
+	visibility, visibilityChanged := documentMutation.Visibility()
+	var shouldClearCache bool
+
+	if isDeleteOp(ctx, m) {
+		shouldClearCache = true
+	}
+
+	// do not trigger if only non-visible documents are added
+	if m.Op().Is(ent.OpCreate) {
+		if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
+			visibility == enums.TrustCenterDocumentVisibilityProtected {
+			shouldClearCache = true
+		}
+	}
+
+	// for update operations: trigger if visibility changed to/from NOT_VISIBLE
+	// or if visibility is currently public or private and it's being flipped
+	if m.Op() == ent.OpUpdate || m.Op() == ent.OpUpdateOne {
+		if visibilityChanged {
+			oldVisibility, err := documentMutation.OldVisibility(ctx)
+			if err == nil {
+				if oldVisibility == enums.TrustCenterDocumentVisibilityNotVisible ||
+					visibility == enums.TrustCenterDocumentVisibilityNotVisible {
+					shouldClearCache = true
+				}
+			}
+		}
+
+		if visibility == enums.TrustCenterDocumentVisibilityPubliclyVisible ||
+			visibility == enums.TrustCenterDocumentVisibilityProtected {
+			shouldClearCache = true
+		}
+	}
+
+	return trustCenterIDs, jobClient, shouldClearCache, true
+}
+
+func handleNoteMutation(m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	noteMut, ok := m.(*generated.NoteMutation)
+	if !ok {
+		return nil, nil, false
+	}
+
+	jobClient := noteMut.Job
+	shouldClearCache := true
+
+	var trustCenterIDs []string
+
+	tcIDs := noteMut.TrustCenterIDs()
+	if len(tcIDs) > 0 {
+		trustCenterIDs = append(trustCenterIDs, tcIDs...)
+	}
+
+	return trustCenterIDs, jobClient, shouldClearCache
+}
+
+func handleTrustcenterEntityMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	entityMut, ok := m.(*generated.TrustcenterEntityMutation)
+	if !ok {
+		return nil, nil, false
+	}
+
+	jobClient := entityMut.Job
+	shouldClearCache := true
+
+	var trustCenterIDs []string
+
+	if tcID, exists := entityMut.TrustCenterID(); exists {
+		trustCenterIDs = append(trustCenterIDs, tcID)
+	} else {
+		if oldTCID, err := entityMut.OldTrustCenterID(ctx); err == nil {
+			trustCenterIDs = append(trustCenterIDs, oldTCID)
+		}
+	}
+
+	return trustCenterIDs, jobClient, shouldClearCache
+}
+
+func handleSubprocessorMutation(m ent.Mutation) (riverqueue.JobClient, bool, bool) {
+	subMut := m.(*generated.SubprocessorMutation)
+	jobClient := subMut.Job
+	shouldClearCache := true
+	shouldUseTrustCenterFromOrg := true
+
+	return jobClient, shouldClearCache, shouldUseTrustCenterFromOrg
+}
+
+func handleStandardMutation(m ent.Mutation) (riverqueue.JobClient, bool, bool) {
+	stdMut := m.(*generated.StandardMutation)
+	jobClient := stdMut.Job
+	shouldClearCache := true
+	shouldUseTrustCenterFromOrg := true
+
+	return jobClient, shouldClearCache, shouldUseTrustCenterFromOrg
 }
