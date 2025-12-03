@@ -30,9 +30,9 @@ func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m 
 	}
 
 	var customDomain string
-	if tc.CustomDomainID != "" {
+	if tc.CustomDomainID != nil {
 		cd, err := client.CustomDomain.Query().
-			Where(customdomain.ID(tc.CustomDomainID)).
+			Where(customdomain.ID(*tc.CustomDomainID)).
 			Select(customdomain.FieldCnameRecord).
 			Only(ctx)
 		if err == nil && cd.CnameRecord != "" {
@@ -175,7 +175,7 @@ func HookModuleCacheInvalidation() ent.Hook {
 				var err error
 				trustCenterID, err = genericMut.Client().TrustCenter.Query().OnlyID(ctx)
 				if generated.IsNotFound(err) {
-					return nil, err
+					return next.Mutate(ctx, m)
 				}
 
 				if err != nil {
