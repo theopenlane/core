@@ -722,3 +722,163 @@ func (suite *HandlerTestSuite) TestSubmitQuestionnaireAlreadyCompleted() {
 	suite.db.Assessment.DeleteOneID(assessment.ID).Exec(allowCtx)
 	suite.db.Template.DeleteOneID(template.ID).Exec(allowCtx)
 }
+
+func (suite *HandlerTestSuite) TestSubmitQuestionnaireAuthenticatedUser() {
+	t := suite.T()
+
+	operation := suite.createImpersonationOperation("SubmitQuestionnaire", "Submit questionnaire response data")
+	suite.registerTestHandler("POST", "/questionnaire", operation, suite.h.SubmitQuestionnaire)
+
+	templateType := enums.Document
+	jsonConfig := map[string]any{
+		"title":       "Test Assessment Template",
+		"description": "A test questionnaire template",
+		"questions": []map[string]any{
+			{
+				"id":       "q1",
+				"question": "What is your name?",
+				"type":     "text",
+			},
+		},
+	}
+
+	template, err := suite.db.Template.Create().
+		SetName("Test Assessment Template Auth User").
+		SetTemplateType(templateType).
+		SetJsonconfig(jsonConfig).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	assessment, err := suite.db.Assessment.Create().
+		SetName("Test Assessment Auth User").
+		SetTemplateID(template.ID).
+		SetAssessmentType(enums.AssessmentTypeExternal).
+		SetOwnerID(testUser1.OrganizationID).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	assessmentResponse, err := suite.db.AssessmentResponse.Create().
+		SetAssessmentID(assessment.ID).
+		SetEmail(testUser1.UserInfo.Email).
+		SetOwnerID(testUser1.OrganizationID).
+		SetStatus(enums.AssessmentResponseStatusSent).
+		Save(testUser1.UserCtx)
+	require.NoError(t, err)
+
+	submissionData := models.SubmitQuestionnaireRequest{
+		AssessmentID: assessment.ID,
+		Data: map[string]any{
+			"q1": "Jane Doe",
+		},
+	}
+
+	submissionDataMissingID := models.SubmitQuestionnaireRequest{
+		Data: map[string]any{
+			"q1": "Jane Doe",
+		},
+	}
+
+	testCases := []struct {
+		name           string
+		requestBody    models.SubmitQuestionnaireRequest
+		expectedStatus int
+		expectSuccess  bool
+		expectedError  string
+		validateJSON   func(*testing.T, *models.SubmitQuestionnaireResponse)
+	}{
+		{
+			name:           "successful questionnaire submission authenticated user",
+			requestBody:    submissionData,
+			expectedStatus: http.StatusOK,
+			expectSuccess:  true,
+			validateJSON: func(t *testing.T, resp *models.SubmitQuestionnaireResponse) {
+				assert.NotEmpty(t, resp.DocumentDataID)
+				assert.Equal(t, "COMPLETED", resp.Status)
+				assert.NotEmpty(t, resp.CompletedAt)
+			},
+		},
+		{
+			name:           "missing assessment id authenticated user",
+			requestBody:    submissionDataMissingID,
+			expectedStatus: http.StatusBadRequest,
+			expectSuccess:  false,
+			expectedError:  "missing assessment ID",
+		},
+	}
+
+	var documentDataIDs []string
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+
+			bodyBytes, err := json.Marshal(tc.requestBody)
+			require.NoError(t, err)
+
+			req := httptest.NewRequest(http.MethodPost, "/questionnaire", bytes.NewReader(bodyBytes))
+			req.Header.Set("Content-Type", "application/json")
+
+			reqCtx := testUser1.UserCtx
+			reqCtx = auth.WithAuthenticatedUser(reqCtx, &auth.AuthenticatedUser{
+				SubjectID:      testUser1.ID,
+				SubjectEmail:   testUser1.UserInfo.Email,
+				OrganizationID: testUser1.OrganizationID,
+			})
+
+			recorder := httptest.NewRecorder()
+
+			suite.e.ServeHTTP(recorder, req.WithContext(reqCtx))
+
+			res := recorder.Result()
+			defer res.Body.Close()
+
+			assert.Equal(t, tc.expectedStatus, recorder.Code)
+
+			if tc.expectSuccess {
+				var out *models.SubmitQuestionnaireResponse
+
+				err := json.NewDecoder(res.Body).Decode(&out)
+				require.NoError(t, err, "error parsing response")
+				require.NotNil(t, out)
+
+				if tc.validateJSON != nil {
+					tc.validateJSON(t, out)
+				}
+
+				documentData, err := suite.db.DocumentData.Get(testUser1.UserCtx, out.DocumentDataID)
+				require.NoError(t, err)
+				assert.NotNil(t, documentData)
+				assert.Equal(t, assessment.OwnerID, documentData.OwnerID)
+
+				updatedResponse, err := suite.db.AssessmentResponse.Get(testUser1.UserCtx, assessmentResponse.ID)
+				require.NoError(t, err)
+				assert.Equal(t, enums.AssessmentResponseStatusCompleted, updatedResponse.Status)
+				assert.Equal(t, documentData.ID, updatedResponse.DocumentDataID)
+				assert.NotZero(t, updatedResponse.CompletedAt)
+
+				documentDataIDs = append(documentDataIDs, documentData.ID)
+
+			} else {
+				var errorResp map[string]interface{}
+				err := json.NewDecoder(res.Body).Decode(&errorResp)
+				if err == nil && tc.expectedError != "" {
+					if errorMsg, ok := errorResp["error"].(string); ok {
+						assert.Contains(t, errorMsg, tc.expectedError)
+					}
+				}
+			}
+		})
+	}
+
+	for _, docID := range documentDataIDs {
+		err := suite.db.DocumentData.DeleteOneID(docID).Exec(testUser1.UserCtx)
+		require.NoError(t, err)
+	}
+
+	err = suite.db.AssessmentResponse.DeleteOneID(assessmentResponse.ID).Exec(testUser1.UserCtx)
+	require.NoError(t, err)
+	err = suite.db.Assessment.DeleteOneID(assessment.ID).Exec(testUser1.UserCtx)
+	require.NoError(t, err)
+	err = suite.db.Template.DeleteOneID(template.ID).Exec(testUser1.UserCtx)
+	require.NoError(t, err)
+}
