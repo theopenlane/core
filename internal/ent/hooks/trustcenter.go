@@ -185,7 +185,7 @@ func HookTrustCenter() ent.Hook {
 				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
-			if trustCenter.CustomDomainID != "" {
+			if trustCenter.CustomDomainID != nil {
 				if _, err = m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
 					TrustCenterID: trustCenter.ID,
 				}, nil); err != nil {
@@ -289,13 +289,13 @@ func HookTrustCenterUpdate() ent.Hook {
 				return v, err
 			}
 
-			if mutationCustomDomainIDExists && previousCustomDomainID == "" && mutationCustomDomainID != "" {
+			if mutationCustomDomainIDExists && previousCustomDomainID == nil && mutationCustomDomainID != "" {
 				if _, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {
 					return nil, err
 				}
-			} else if mutationCustomDomainIDExists && mutationCustomDomainID != previousCustomDomainID {
+			} else if mutationCustomDomainIDExists && previousCustomDomainID != nil && mutationCustomDomainID != *previousCustomDomainID {
 				if _, err := m.Job.Insert(ctx, corejobs.UpdatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {

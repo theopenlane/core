@@ -63,6 +63,7 @@ func (TrustCenter) Fields() []ent.Field {
 			Optional(),
 		field.String("custom_domain_id").
 			Comment("custom domain id for the trust center").
+			Nillable().
 			Optional(),
 		field.String("preview_domain_id").
 			Comment("preview domain id for the trust center").
