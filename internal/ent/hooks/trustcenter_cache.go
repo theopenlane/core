@@ -17,60 +17,9 @@ import (
 	"github.com/theopenlane/core/pkg/logx"
 )
 
-func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m utils.GenericMutation, trustCenterID string) error {
-	client := m.Client()
-
-	tc, err := client.TrustCenter.Query().
-		Where(trustcenter.ID(trustCenterID)).
-		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).
-		Only(ctx)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
-		return err
-	}
-
-	var customDomain string
-	if tc.CustomDomainID != nil {
-		cd, err := client.CustomDomain.Query().
-			Where(customdomain.ID(*tc.CustomDomainID)).
-			Select(customdomain.FieldCnameRecord).
-			Only(ctx)
-		if err == nil && cd.CnameRecord != "" {
-			customDomain = cd.CnameRecord
-		}
-	}
-
-	args := corejobs.ClearTrustCenterCacheArgs{}
-
-	if customDomain != "" {
-		args.CustomDomain = customDomain
-	}
-
-	if tc.Slug != "" {
-		args.TrustCenterSlug = tc.Slug
-	}
-
-	if args.CustomDomain == "" && args.TrustCenterSlug == "" {
-		return nil
-	}
-
-	if jobClient == nil {
-		logx.FromContext(ctx).Warn().Msg("no job client available, skipping cache invalidation job")
-		return nil
-	}
-
-	_, err = jobClient.Insert(ctx, args, nil)
-	if err != nil {
-		logx.FromContext(ctx).Warn().Err(err).Msg("failed to insert clear trust center cache job")
-		return nil
-	}
-
-	return nil
-}
-
-// HookModuleCacheInvalidation handles cache invalidation for the trustcenter data
+// HookTrustcenterCacheInvalidation handles cache invalidation for the trustcenter data
 // cached in objectstorage
-func HookModuleCacheInvalidation() ent.Hook {
+func HookTrustcenterCacheInvalidation() ent.Hook {
 	return hook.If(func(next ent.Mutator) ent.Mutator {
 		return ent.MutateFunc(func(ctx context.Context, m ent.Mutation) (ent.Value, error) {
 			mutationType := m.Type()
@@ -210,4 +159,55 @@ func HookModuleCacheInvalidation() ent.Hook {
 			return next.Mutate(ctx, m)
 		})
 	}, hook.HasOp(ent.OpCreate|ent.OpUpdate|ent.OpUpdateOne|ent.OpDelete|ent.OpDeleteOne))
+}
+
+func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m utils.GenericMutation, trustCenterID string) error {
+	client := m.Client()
+
+	tc, err := client.TrustCenter.Query().
+		Where(trustcenter.ID(trustCenterID)).
+		Select(trustcenter.FieldCustomDomainID, trustcenter.FieldSlug).
+		Only(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("trust_center_id", trustCenterID).Msg("failed to query trust center for cache invalidation")
+		return err
+	}
+
+	var customDomain string
+	if tc.CustomDomainID != nil {
+		cd, err := client.CustomDomain.Query().
+			Where(customdomain.ID(*tc.CustomDomainID)).
+			Select(customdomain.FieldCnameRecord).
+			Only(ctx)
+		if err == nil && cd.CnameRecord != "" {
+			customDomain = cd.CnameRecord
+		}
+	}
+
+	args := corejobs.ClearTrustCenterCacheArgs{}
+
+	if customDomain != "" {
+		args.CustomDomain = customDomain
+	}
+
+	if tc.Slug != "" {
+		args.TrustCenterSlug = tc.Slug
+	}
+
+	if args.CustomDomain == "" && args.TrustCenterSlug == "" {
+		return nil
+	}
+
+	if jobClient == nil {
+		logx.FromContext(ctx).Warn().Msg("no job client available, skipping cache invalidation job")
+		return nil
+	}
+
+	_, err = jobClient.Insert(ctx, args, nil)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Msg("failed to insert clear trust center cache job")
+		return nil
+	}
+
+	return nil
 }

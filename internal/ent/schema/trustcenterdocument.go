@@ -139,7 +139,7 @@ func (TrustCenterDoc) Hooks() []ent.Hook {
 	return []ent.Hook{
 		hooks.HookCreateTrustCenterDoc(),
 		hooks.HookUpdateTrustCenterDoc(),
-		hooks.HookModuleCacheInvalidation(),
+		hooks.HookTrustcenterCacheInvalidation(),
 	}
 }
 
