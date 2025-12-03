@@ -12,8 +12,8 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
-	"github.com/theopenlane/core/pkg/corejobs"
 	"github.com/theopenlane/core/pkg/enums"
+	"github.com/theopenlane/core/pkg/jobspec"
 	"github.com/theopenlane/core/pkg/logx"
 )
 
@@ -114,7 +114,7 @@ func insertClearCacheJob(ctx context.Context, jobClient riverqueue.JobClient, m 
 		}
 	}
 
-	args := corejobs.ClearTrustCenterCacheArgs{}
+	args := jobspec.ClearTrustCenterCacheArgs{}
 
 	if customDomain != "" {
 		args.CustomDomain = customDomain
