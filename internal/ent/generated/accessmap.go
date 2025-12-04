@@ -521,7 +521,7 @@ var EdgeAccessMap = map[string]map[string]EdgeAccess{"api_token": {"owner": {
 	CheckViewAccess: false,
 }, "comments": {
 	ObjectType:      "comment",
-	SkipEditCheck:   false,
+	SkipEditCheck:   true,
 	CheckViewAccess: false,
 }, "control": {
 	ObjectType:      "control",

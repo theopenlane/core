@@ -16,26 +16,36 @@ extend input UpdateTaskInput {
 }
 
 extend input UpdateControlInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateSubcontrolInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateRiskInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateInternalPolicyInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateProcedureInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }

@@ -245,7 +245,7 @@ func checkEdgesEditAccess(ctx context.Context, m ent.Mutation, edges []string, a
 			}
 
 			if allow, err := utils.AuthzClient(ctx, m).CheckAccess(ctx, ac); err != nil || !allow {
-				logx.FromContext(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Msg("user does not have access to the object for edge permissions")
+				logx.FromContext(ctx).Error().Err(err).Str("edge", edge).Str("relation", ac.Relation).Str("object_id", ac.ObjectID).Str("object_type", edgeMap.ObjectType).Msg("user does not have access to the object for edge permissions")
 
 				return generated.ErrPermissionDenied
 			}

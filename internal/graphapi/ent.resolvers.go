@@ -4797,6 +4797,11 @@ func (r *Resolver) Group() gqlgenerated.GroupResolver { return &groupResolver{r}
 // Query returns gqlgenerated.QueryResolver implementation.
 func (r *Resolver) Query() gqlgenerated.QueryResolver { return &queryResolver{r} }
 
+// CreateDiscussionInput returns gqlgenerated.CreateDiscussionInputResolver implementation.
+func (r *Resolver) CreateDiscussionInput() gqlgenerated.CreateDiscussionInputResolver {
+	return &createDiscussionInputResolver{r}
+}
+
 // CreateEntityInput returns gqlgenerated.CreateEntityInputResolver implementation.
 func (r *Resolver) CreateEntityInput() gqlgenerated.CreateEntityInputResolver {
 	return &createEntityInputResolver{r}
@@ -4835,6 +4840,11 @@ func (r *Resolver) UpdateControlInput() gqlgenerated.UpdateControlInputResolver 
 // UpdateControlObjectiveInput returns gqlgenerated.UpdateControlObjectiveInputResolver implementation.
 func (r *Resolver) UpdateControlObjectiveInput() gqlgenerated.UpdateControlObjectiveInputResolver {
 	return &updateControlObjectiveInputResolver{r}
+}
+
+// UpdateDiscussionInput returns gqlgenerated.UpdateDiscussionInputResolver implementation.
+func (r *Resolver) UpdateDiscussionInput() gqlgenerated.UpdateDiscussionInputResolver {
+	return &updateDiscussionInputResolver{r}
 }
 
 // UpdateEntityInput returns gqlgenerated.UpdateEntityInputResolver implementation.
@@ -4899,6 +4909,7 @@ func (r *Resolver) UpdateTrustCenterInput() gqlgenerated.UpdateTrustCenterInputR
 
 type groupResolver struct{ *Resolver }
 type queryResolver struct{ *Resolver }
+type createDiscussionInputResolver struct{ *Resolver }
 type createEntityInputResolver struct{ *Resolver }
 type createGroupInputResolver struct{ *Resolver }
 type createMappedControlInputResolver struct{ *Resolver }
@@ -4907,6 +4918,7 @@ type createTrustCenterInputResolver struct{ *Resolver }
 type updateActionPlanInputResolver struct{ *Resolver }
 type updateControlInputResolver struct{ *Resolver }
 type updateControlObjectiveInputResolver struct{ *Resolver }
+type updateDiscussionInputResolver struct{ *Resolver }
 type updateEntityInputResolver struct{ *Resolver }
 type updateGroupInputResolver struct{ *Resolver }
 type updateInternalPolicyInputResolver struct{ *Resolver }

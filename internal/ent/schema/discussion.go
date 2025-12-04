@@ -68,6 +68,9 @@ func (d Discussion) Edges() []ent.Edge {
 			t:          Note.Type,
 			name:       "comments",
 			comment:    "the comments in the discussion",
+			annotations: []schema.Annotation{
+				accessmap.EdgeNoAuthCheck(),
+			},
 		}),
 		uniqueEdgeFrom(&edgeDefinition{
 			fromSchema: d,

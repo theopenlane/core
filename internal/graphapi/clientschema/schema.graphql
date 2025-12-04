@@ -11369,6 +11369,7 @@ input CreateDiscussionInput {
 	procedureID: ID
 	riskID: ID
 	internalPolicyID: ID
+	addComment: CreateNoteInput
 }
 """
 CreateDocumentDataInput is used for create DocumentData object.
@@ -83252,6 +83253,8 @@ input UpdateControlInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addDiscussion: CreateDiscussionInput
+	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
 }
@@ -83779,6 +83782,8 @@ input UpdateDiscussionInput {
 	clearRisk: Boolean
 	internalPolicyID: ID
 	clearInternalPolicy: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateDocumentDataInput is used for update DocumentData object.
@@ -84917,6 +84922,8 @@ input UpdateInternalPolicyInput {
 	addWorkflowObjectRefIDs: [ID!]
 	removeWorkflowObjectRefIDs: [ID!]
 	clearWorkflowObjectRefs: Boolean
+	addDiscussion: CreateDiscussionInput
+	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
 	RevisionBump: VersionBump
@@ -85913,6 +85920,8 @@ input UpdateProcedureInput {
 	clearDiscussions: Boolean
 	fileID: ID
 	clearFile: Boolean
+	addDiscussion: CreateDiscussionInput
+	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
 	RevisionBump: VersionBump
@@ -86503,6 +86512,8 @@ input UpdateRiskInput {
 	addDiscussionIDs: [ID!]
 	removeDiscussionIDs: [ID!]
 	clearDiscussions: Boolean
+	addDiscussion: CreateDiscussionInput
+	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
 }
@@ -86876,6 +86887,8 @@ input UpdateSubcontrolInput {
 	addScheduledJobIDs: [ID!]
 	removeScheduledJobIDs: [ID!]
 	clearScheduledJobs: Boolean
+	addDiscussion: CreateDiscussionInput
+	deleteDiscussion: ID
 	addComment: CreateNoteInput
 	deleteComment: ID
 }

@@ -41,6 +41,7 @@ type ResolverRoot interface {
 	Mutation() MutationResolver
 	Query() QueryResolver
 	Subscription() SubscriptionResolver
+	CreateDiscussionInput() CreateDiscussionInputResolver
 	CreateEntityInput() CreateEntityInputResolver
 	CreateGroupInput() CreateGroupInputResolver
 	CreateMappedControlInput() CreateMappedControlInputResolver
@@ -49,6 +50,7 @@ type ResolverRoot interface {
 	UpdateActionPlanInput() UpdateActionPlanInputResolver
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
+	UpdateDiscussionInput() UpdateDiscussionInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
@@ -53356,6 +53358,15 @@ type DirectorySyncRunBulkCreatePayload {
         """
         id: ID!
     ):  Discussion!
+}
+
+extend input CreateDiscussionInput{
+    addComment: CreateNoteInput
+}
+
+extend input UpdateDiscussionInput{
+    addComment: CreateNoteInput
+    deleteComment: ID
 }
 
 extend type Mutation{
@@ -143858,26 +143869,36 @@ extend input UpdateTaskInput {
 }
 
 extend input UpdateControlInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateSubcontrolInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateRiskInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateInternalPolicyInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }
 
 extend input UpdateProcedureInput {
+    addDiscussion: CreateDiscussionInput
+    deleteDiscussion: ID
     addComment: CreateNoteInput
     deleteComment: ID
 }

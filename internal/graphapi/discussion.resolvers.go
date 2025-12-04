@@ -12,6 +12,7 @@ import (
 	"github.com/theopenlane/core/internal/ent/generated/discussion"
 	"github.com/theopenlane/core/internal/graphapi/model"
 	"github.com/theopenlane/core/pkg/logx"
+	"github.com/theopenlane/gqlgen-plugins/graphutils"
 	"github.com/theopenlane/utils/rout"
 )
 
@@ -130,4 +131,68 @@ func (r *queryResolver) Discussion(ctx context.Context, id string) (*generated.D
 	}
 
 	return res, nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *createDiscussionInputResolver) AddComment(ctx context.Context, obj *generated.CreateDiscussionInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
+	}
+
+	obj.CommentIDs = append(obj.CommentIDs, comment.ID)
+
+	return nil
+}
+
+// AddComment is the resolver for the addComment field.
+func (r *updateDiscussionInputResolver) AddComment(ctx context.Context, obj *generated.UpdateDiscussionInput, data *generated.CreateNoteInput) error {
+	if data == nil {
+		return nil
+	}
+
+	// set the organization in the auth context if its not done for us
+	if err := setOrganizationInAuthContext(ctx, data.OwnerID); err != nil {
+		logx.FromContext(ctx).Error().Err(err).Msg("failed to set organization in auth context")
+
+		return rout.NewMissingRequiredFieldError("owner_id")
+	}
+
+	data.DiscussionID = graphutils.GetStringInputVariableByName(ctx, "id")
+	if data.DiscussionID == nil {
+		return newNotFoundError("discussion")
+	}
+
+	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
+	if err != nil {
+		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
+	}
+
+	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
+
+	return nil
+}
+
+// DeleteComment is the resolver for the deleteComment field.
+func (r *updateDiscussionInputResolver) DeleteComment(ctx context.Context, obj *generated.UpdateDiscussionInput, data *string) error {
+	if data == nil {
+		return nil
+	}
+
+	if err := withTransactionalMutation(ctx).Note.DeleteOneID(*data).Exec(ctx); err != nil {
+		return parseRequestError(ctx, err, action{action: ActionDelete, object: "comment"})
+	}
+
+	return nil
 }

@@ -10,6 +10,15 @@ extend type Query {
     ):  Discussion!
 }
 
+extend input CreateDiscussionInput{
+    addComment: CreateNoteInput
+}
+
+extend input UpdateDiscussionInput{
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend type Mutation{
     """
     Create a new discussion
