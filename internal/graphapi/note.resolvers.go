@@ -680,12 +680,9 @@ func (r *updateTrustCenterInputResolver) AddPost(ctx context.Context, obj *gener
 		return newNotFoundError("trust center")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
-
-	obj.AddPostIDs = append(obj.AddPostIDs, comment.ID)
 
 	return nil
 }
