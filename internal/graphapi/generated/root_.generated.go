@@ -66323,7 +66323,7 @@ input CreateRiskInput {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -112019,7 +112019,7 @@ type Risk implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -112580,7 +112580,7 @@ type RiskHistory implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskHistoryRiskStatus
   """
@@ -112712,10 +112712,11 @@ enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/
 RiskHistoryRiskStatus is enum for the field status
 """
 enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
-  OPEN
-  IN_PROGRESS
-  ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -113175,10 +113176,11 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 RiskRiskStatus is enum for the field status
 """
 enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
-  OPEN
-  IN_PROGRESS
-  ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -130731,7 +130733,7 @@ input UpdateRiskInput {
   """
   name: String
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   clearStatus: Boolean
