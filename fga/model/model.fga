@@ -451,7 +451,7 @@ type note
     define can_edit: [user, service] or owner or editor
     define can_delete: [user, service] or can_edit
     define audit_log_viewer: ([user, service] or audit_log_viewer from parent) and can_view
-    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk]
+    define parent: [program, control, procedure, internal_policy, subcontrol, control_objective, task, trust_center, risk, evidence]
     define editor: [organization#owner]
     define owner : [user, service]
 type evidence
