@@ -642,12 +642,9 @@ func (r *updateTaskInputResolver) AddComment(ctx context.Context, obj *generated
 		return newNotFoundError("task")
 	}
 
-	comment, err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Save(ctx)
-	if err != nil {
+	if err := withTransactionalMutation(ctx).Note.Create().SetInput(*data).Exec(ctx); err != nil {
 		return parseRequestError(ctx, err, action{action: ActionCreate, object: "comment"})
 	}
-
-	obj.AddCommentIDs = append(obj.AddCommentIDs, comment.ID)
 
 	return nil
 }
