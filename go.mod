@@ -29,7 +29,7 @@ require (
 	github.com/aws/aws-sdk-go-v2/credentials v1.19.3
 	github.com/aws/aws-sdk-go-v2/feature/s3/manager v1.20.13
 	github.com/aws/aws-sdk-go-v2/service/s3 v1.93.0
-	github.com/brianvoe/gofakeit/v7 v7.12.0
+	github.com/brianvoe/gofakeit/v7 v7.12.1
 	github.com/cenkalti/backoff/v5 v5.0.3
 	github.com/cloudflare/cloudflare-go/v6 v6.3.0
 	github.com/didasy/tldr v0.7.0
@@ -86,7 +86,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/rs/zerolog v1.34.0
 	github.com/samber/lo v1.52.0
-	github.com/spf13/cobra v1.10.1
+	github.com/spf13/cobra v1.10.2
 	github.com/stoewer/go-strcase v1.3.1
 	github.com/stretchr/testify v1.11.1
 	github.com/stripe/stripe-go/v83 v83.2.1
@@ -107,7 +107,7 @@ require (
 	github.com/vektah/gqlparser/v2 v2.5.31
 	github.com/windmill-labs/windmill-go-client v1.587.1
 	github.com/xeipuuv/gojsonschema v1.2.0
-	github.com/zitadel/oidc/v3 v3.45.0
+	github.com/zitadel/oidc/v3 v3.45.1
 	gocloud.dev v0.44.0
 	golang.org/x/crypto v0.45.0
 	golang.org/x/mod v0.30.0
