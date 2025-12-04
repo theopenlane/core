@@ -5,12 +5,15 @@ import (
 
 	"entgo.io/ent"
 
+	"github.com/samber/lo"
 	"github.com/theopenlane/riverboat/pkg/riverqueue"
 
 	"github.com/theopenlane/core/internal/ent/generated"
 	"github.com/theopenlane/core/internal/ent/generated/customdomain"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/generated/trustcenter"
+	"github.com/theopenlane/core/internal/ent/generated/trustcenterdoc"
+	"github.com/theopenlane/core/internal/ent/generated/trustcentersubprocessor"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
 	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/jobspec"
@@ -49,11 +52,17 @@ func HookTrustcenterCacheInvalidation() ent.Hook {
 			case generated.TypeTrustcenterEntity:
 				trustCenterIDs, jobClient, shouldClearCache = handleTrustcenterEntityMutation(ctx, m)
 
+			case generated.TypeTrustCenterSubprocessor:
+				trustCenterIDs, jobClient, shouldClearCache = handleTrustCenterSubprocessorMutation(ctx, m)
+
+			case generated.TypeTrustCenterCompliance:
+				trustCenterIDs, jobClient, shouldClearCache = handleTrustCenterComplianceMutation(ctx, m)
+
 			case generated.TypeSubprocessor:
-				jobClient, shouldClearCache, shouldUseTrustCenterFromOrg = handleSubprocessorMutation(m)
+				trustCenterIDs, jobClient, shouldClearCache = handleSubprocessorMutation(ctx, m)
 
 			case generated.TypeStandard:
-				jobClient, shouldClearCache, shouldUseTrustCenterFromOrg = handleStandardMutation(m)
+				trustCenterIDs, jobClient, shouldClearCache = handleStandardMutation(ctx, m)
 			}
 
 			// tests have multiple trust centers because they bypass
@@ -236,20 +245,197 @@ func handleTrustcenterEntityMutation(ctx context.Context, m ent.Mutation) ([]str
 	return trustCenterIDs, jobClient, shouldClearCache
 }
 
-func handleSubprocessorMutation(m ent.Mutation) (riverqueue.JobClient, bool, bool) {
-	subMut := m.(*generated.SubprocessorMutation)
+func handleTrustCenterSubprocessorMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	subMut, ok := m.(*generated.TrustCenterSubprocessorMutation)
+	if !ok {
+		return nil, nil, false
+	}
+
 	jobClient := subMut.Job
 	shouldClearCache := true
-	shouldUseTrustCenterFromOrg := true
 
-	return jobClient, shouldClearCache, shouldUseTrustCenterFromOrg
+	var trustCenterIDs []string
+
+	if tcID, exists := subMut.TrustCenterID(); exists {
+		trustCenterIDs = append(trustCenterIDs, tcID)
+	} else {
+		if oldTCID, err := subMut.OldTrustCenterID(ctx); err == nil {
+			trustCenterIDs = append(trustCenterIDs, oldTCID)
+		}
+	}
+
+	return trustCenterIDs, jobClient, shouldClearCache
 }
 
-func handleStandardMutation(m ent.Mutation) (riverqueue.JobClient, bool, bool) {
-	stdMut := m.(*generated.StandardMutation)
-	jobClient := stdMut.Job
-	shouldClearCache := true
-	shouldUseTrustCenterFromOrg := true
+func handleTrustCenterComplianceMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	complianceMut, ok := m.(*generated.TrustCenterComplianceMutation)
+	if !ok {
+		return nil, nil, false
+	}
 
-	return jobClient, shouldClearCache, shouldUseTrustCenterFromOrg
+	jobClient := complianceMut.Job
+	shouldClearCache := true
+
+	var trustCenterIDs []string
+
+	if tcID, exists := complianceMut.TrustCenterID(); exists {
+		trustCenterIDs = append(trustCenterIDs, tcID)
+	} else {
+		if oldTCID, err := complianceMut.OldTrustCenterID(ctx); err == nil {
+			trustCenterIDs = append(trustCenterIDs, oldTCID)
+		}
+	}
+
+	return trustCenterIDs, jobClient, shouldClearCache
+}
+
+func handleSubprocessorMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	subMut, ok := m.(*generated.SubprocessorMutation)
+	if !ok {
+		return nil, nil, false
+	}
+
+	jobClient := subMut.Job
+
+	if !hasSubprocessorChanges(ctx, m, subMut) {
+		return nil, jobClient, false
+	}
+
+	id, ok := subMut.ID()
+	if !ok {
+		return nil, jobClient, false
+	}
+
+	client := subMut.Client()
+
+	processors, err := client.TrustCenterSubprocessor.Query().
+		Where(trustcentersubprocessor.SubprocessorID(id)).
+		Select(trustcentersubprocessor.FieldTrustCenterID).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("subprocessor_id", id).Msg("failed to query trust center subprocessors")
+		return nil, jobClient, false
+	}
+
+	if len(processors) == 0 {
+		return nil, jobClient, false
+	}
+
+	ids := lo.Uniq(lo.FilterMap(processors, func(tcs *generated.TrustCenterSubprocessor, _ int) (string, bool) {
+		return tcs.TrustCenterID, tcs.TrustCenterID != ""
+	}))
+
+	return ids, jobClient, true
+}
+
+func hasSubprocessorChanges(ctx context.Context, m ent.Mutation, subMut *generated.SubprocessorMutation) bool {
+	if m.Op().Is(ent.OpCreate) {
+		_, nameExists := subMut.Name()
+		_, logoFileIDExists := subMut.LogoFileID()
+		_, logoRemoteURLExists := subMut.LogoRemoteURL()
+		return nameExists || logoFileIDExists || logoRemoteURLExists
+	}
+
+	if isDeleteOp(ctx, m) {
+		return true
+	}
+
+	if name, ok := subMut.Name(); ok {
+		oldName, err := subMut.OldName(ctx)
+		if err == nil && name != oldName {
+			return true
+		}
+	}
+
+	if subMut.LogoFileCleared() || subMut.LogoRemoteURLCleared() {
+		return true
+	}
+
+	if logoFileID, ok := subMut.LogoFileID(); ok {
+		if oldLogoFileID, err := subMut.OldLogoFileID(ctx); err == nil && oldLogoFileID != nil {
+			if logoFileID != *oldLogoFileID {
+				return true
+			}
+		}
+	}
+
+	if newRemoteURL, ok := subMut.LogoRemoteURL(); ok {
+		if oldRemoteURL, err := subMut.OldLogoRemoteURL(ctx); err == nil && oldRemoteURL != nil {
+			if newRemoteURL != *oldRemoteURL {
+				return true
+			}
+		}
+	}
+
+	return false
+}
+
+func handleStandardMutation(ctx context.Context, m ent.Mutation) ([]string, riverqueue.JobClient, bool) {
+	stdMut, ok := m.(*generated.StandardMutation)
+	if !ok {
+		return nil, nil, false
+	}
+
+	jobClient := stdMut.Job
+
+	if !hasStandardChanges(ctx, m, stdMut) {
+		return nil, jobClient, false
+	}
+
+	id, ok := stdMut.ID()
+	if !ok {
+		return nil, jobClient, false
+	}
+
+	client := stdMut.Client()
+	trustCenterDocs, err := client.TrustCenterDoc.Query().
+		Where(trustcenterdoc.StandardID(id)).
+		Select(trustcenterdoc.FieldTrustCenterID).
+		All(ctx)
+	if err != nil {
+		logx.FromContext(ctx).Warn().Err(err).Str("standard_id", id).Msg("failed to query trust center docs")
+		return nil, jobClient, false
+	}
+
+	if len(trustCenterDocs) == 0 {
+		return nil, jobClient, false
+	}
+
+	ids := lo.Uniq(lo.FilterMap(trustCenterDocs, func(tcd *generated.TrustCenterDoc, _ int) (string, bool) {
+		return tcd.TrustCenterID, tcd.TrustCenterID != ""
+	}))
+
+	return ids, jobClient, true
+}
+
+func hasStandardChanges(ctx context.Context, m ent.Mutation, stdMut *generated.StandardMutation) bool {
+	if m.Op().Is(ent.OpCreate) {
+		_, nameExists := stdMut.Name()
+		_, logoFileIDExists := stdMut.LogoFileID()
+		return nameExists || logoFileIDExists
+	}
+
+	if isDeleteOp(ctx, m) {
+		return true
+	}
+
+	if name, ok := stdMut.Name(); ok {
+		if oldName, err := stdMut.OldName(ctx); err == nil && oldName != name {
+			return true
+		}
+	}
+
+	if stdMut.LogoFileCleared() {
+		return true
+	}
+
+	if logoFileID, ok := stdMut.LogoFileID(); ok {
+		if oldLogoFileID, err := stdMut.OldLogoFileID(ctx); err == nil && oldLogoFileID != nil {
+			if logoFileID != *oldLogoFileID {
+				return true
+			}
+		}
+	}
+
+	return false
 }
