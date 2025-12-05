@@ -49,8 +49,13 @@ func HookEvidenceFiles() ent.Hook {
 			}
 
 			if !isDeleteOp(ctx, m) {
-				if !checkEvidenceHasURL(ctx, m) && !checkEvidenceHasFiles(ctx, m) {
+				hasURL := checkEvidenceHasURL(ctx, m)
+				hasFiles := checkEvidenceHasFiles(ctx, m)
+
+				if !hasURL && !hasFiles {
 					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+				} else {
+					m.SetStatus(enums.EvidenceStatusSubmitted)
 				}
 			}
 
@@ -92,20 +97,24 @@ func checkEvidenceHasFiles(ctx context.Context, m *generated.EvidenceMutation) b
 		return false
 	}
 
-	files, err := m.Client().Evidence.Query().
+	currentFileCount, err := m.Client().Evidence.Query().
 		Where(evidence.ID(id)).
 		QueryFiles().
 		Select(file.FieldID).
-		All(ctx)
-	if err != nil || len(files) == 0 {
+		Count(ctx)
+	if err != nil {
 		return false
 	}
 
 	fileIDs := m.RemovedFilesIDs()
-	return len(fileIDs) < len(files)
+	return len(fileIDs) < currentFileCount
 }
 
 func checkEvidenceHasURL(ctx context.Context, m *generated.EvidenceMutation) bool {
+	if m.FieldCleared(evidence.FieldURL) {
+		return false
+	}
+
 	url, ok := m.URL()
 	if ok {
 		return url != ""

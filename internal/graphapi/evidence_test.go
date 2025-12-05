@@ -511,7 +511,14 @@ func TestMutationCreateEvidence(t *testing.T) {
 			}
 
 			if tc.request.Status == nil {
-				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceStatusSubmitted))
+				// should be MISSING_ARTIFACT if the evidence has no url and file(s)
+				hasURL := tc.request.URL != nil && *tc.request.URL != ""
+				hasFiles := len(tc.files) > 0
+				if !hasURL && !hasFiles {
+					assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceStatusMissingArtifact))
+				} else {
+					assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, enums.EvidenceStatusSubmitted))
+				}
 			} else {
 				assert.Check(t, is.Equal(*resp.CreateEvidence.Evidence.Status, *tc.request.Status))
 			}
@@ -816,7 +823,7 @@ func TestEvidenceMissingArtifactStatus(t *testing.T) {
 				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
 			},
 			updateInput: &testclient.UpdateEvidenceInput{
-				URL: lo.ToPtr(""),
+				ClearURL: lo.ToPtr(true),
 			},
 			expectedStatus: enums.EvidenceStatusMissingArtifact,
 			description:    "Evidence updated to clear URL when no files should have MISSING_ARTIFACT status",
