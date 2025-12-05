@@ -2306,7 +2306,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: ACME challenge solver for Let's Encrypt certificate validation
+            summary: AcmeSolver
             tags:
                 - acme
                 - certificates
@@ -2324,7 +2324,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: JSON Web Key Set for JWT token validation
+            summary: JWKS
             tags:
                 - well-known
                 - authentication
@@ -2342,7 +2342,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Security contact information and vulnerability disclosure policy
+            summary: SecurityTxt
             tags:
                 - well-known
                 - security
@@ -2360,7 +2360,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: WebAuthn well-known configuration file
+            summary: WebAuthnWellKnown
             tags:
                 - well-known
                 - webauthn
@@ -2388,7 +2388,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: WebFinger endpoint for federated identity
+            summary: Webfinger
             tags:
                 - webfinger
     /api-docs:
@@ -2405,7 +2405,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Get OpenAPI 3.1.1 specification for this API
+            summary: APIDocs
             tags:
                 - documentation
     /authentication/options:
@@ -2437,7 +2437,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Begin WebAuthn authentication process and return credential request options
+            summary: WebauthnAuthentication
             tags:
                 - webauthn
                 - authentication
@@ -2480,7 +2480,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Complete WebAuthn authentication process by verifying the authentication response
+            summary: WebauthnAuthenticationVerification
             tags:
                 - webauthn
                 - authentication
@@ -2498,7 +2498,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Get CSRF token for form submissions
+            summary: CSRF
             tags:
                 - security
     /example/csv:
@@ -2516,7 +2516,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Generate and return an example CSV file for data import templates
+            summary: ExampleCSV
             tags:
                 - files
                 - examples
@@ -2534,7 +2534,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Get favicon.ico for the website
+            summary: Favicon
             tags:
                 - static
     /livez:
@@ -2551,7 +2551,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Health check endpoint to verify the service is alive
+            summary: Livez
             tags:
                 - health
     /oauth/register:
@@ -2606,7 +2606,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Register a user via OAuth provider authentication
+            summary: OAuthRegister
             tags:
                 - oauth
                 - authentication
@@ -2625,7 +2625,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Get user information for OAuth authenticated user
+            summary: UserInfo
             tags:
                 - oauth
                 - user
@@ -2701,7 +2701,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Get questionnaire template configuration for authenticated anonymous users
+            summary: GetQuestionnaire
             tags:
                 - questionnaire
         post:
@@ -2727,7 +2727,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Submit questionnaire response data for authenticated anonymous users
+            summary: SubmitQuestionnaire
             tags:
                 - questionnaire
     /ready:
@@ -2744,7 +2744,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Readiness check endpoint to verify the service is ready to accept traffic
+            summary: Ready
             tags:
                 - health
     /registration/options:
@@ -2778,7 +2778,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Begin WebAuthn registration process and return credential creation options
+            summary: WebauthnRegistration
             tags:
                 - webauthn
                 - authentication
@@ -2827,7 +2827,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Complete WebAuthn registration process by verifying the credential creation response
+            summary: WebauthnRegistrationVerification
             tags:
                 - webauthn
                 - authentication
@@ -2845,7 +2845,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Get robots.txt file for web crawlers
+            summary: Robots
             tags:
                 - static
     /scim/v2/Groups:
@@ -3302,7 +3302,7 @@ paths:
                     description: ""
             security:
                 - basic: []
-            summary: Create anonymous JWT token for trust center access
+            summary: TrustCenterAnonymousJWT
             tags:
                 - trustcenter
                 - authentication
@@ -3345,7 +3345,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Validate a user's TOTP code
+            summary: TFAValidation
             tags:
                 - tfa
     /v1/account/access:
@@ -3386,7 +3386,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Check Subject Access to Object
+            summary: AccountAccess
             tags:
                 - account
     /v1/account/features:
@@ -3421,7 +3421,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: List features a subject has in relation to the authenticated organization
+            summary: AccountFeatures
             tags:
                 - account
     /v1/account/features/{id}:
@@ -3463,7 +3463,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: List the features a subject has in relation to the organization ID provided
+            summary: AccountFeaturesByID
             tags:
                 - account
     /v1/account/roles:
@@ -3505,7 +3505,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Retrieve a list of roles of the subject in the organization
+            summary: AccountRoles
             tags:
                 - account
     /v1/account/roles/organization:
@@ -3540,7 +3540,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Retrieve a list of roles of the subject in the organization
+            summary: AccountRolesOrganization
             tags:
                 - account
     /v1/account/roles/organization/{id}:
@@ -3582,7 +3582,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Retrieve a list of roles of the subject in the organization ID provided
+            summary: AccountRolesOrganizationByID
             tags:
                 - account
     /v1/files/{id}/download:
@@ -3619,7 +3619,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Download files via proxy-signed URLs. Requires authentication.
+            summary: File Download
             tags:
                 - files
     /v1/forgot-password:
@@ -3657,7 +3657,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: ForgotPassword is a service for users to request a password reset email. The email address must be provided in the POST request and the user must exist in the database. This endpoint always returns 200 regardless of whether the user exists or not to avoid leaking information about users in the database
+            summary: ForgotPassword
             tags:
                 - forgotpassword
     /v1/github/callback:
@@ -3676,7 +3676,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Handle GitHub OAuth callback
+            summary: GitHubCallback
             tags:
                 - oauth
                 - github
@@ -3696,7 +3696,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Initiate GitHub OAuth login flow
+            summary: GitHubLogin
             tags:
                 - oauth
                 - github
@@ -3716,7 +3716,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Handle Google OAuth callback
+            summary: GoogleCallback
             tags:
                 - oauth
                 - google
@@ -3736,7 +3736,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Initiate Google OAuth login flow
+            summary: GoogleLogin
             tags:
                 - oauth
                 - google
@@ -3777,7 +3777,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.
+            summary: EndImpersonation
             tags:
                 - impersonation
     /v1/impersonation/start:
@@ -3821,7 +3821,7 @@ paths:
                     description: ""
             security:
                 - bearer: []
-            summary: Start an impersonation session to act as another user for support, administrative, or testing purposes. Requires appropriate permissions and logs all impersonation activity for audit purposes.
+            summary: StartImpersonation
             tags:
                 - impersonation
     /v1/integrations/{provider}/config:
@@ -3876,7 +3876,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Persist integration credentials or configuration
+            summary: ConfigureIntegrationProvider
             tags:
                 - integrations
     /v1/integrations/{provider}/operations/run:
@@ -3936,7 +3936,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Execute a provider operation using stored credentials
+            summary: RunIntegrationOperation
             tags:
                 - integrations
     /v1/integrations/{provider}/refresh:
@@ -3991,7 +3991,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Refresh integration token
+            summary: RefreshIntegrationToken
             tags:
                 - integrations
     /v1/integrations/oauth/callback:
@@ -4023,7 +4023,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Handle OAuth callback for integration
+            summary: IntegrationOAuthCallback
             tags:
                 - integrations
     /v1/integrations/oauth/start:
@@ -4070,7 +4070,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Start OAuth flow for integration
+            summary: StartIntegrationOAuth
             tags:
                 - integrations
     /v1/integrations/providers:
@@ -4091,7 +4091,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: List available integration providers and their metadata
+            summary: ListIntegrationProviders
             tags:
                 - integrations
     /v1/invite:
@@ -4131,7 +4131,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Accept an organization invitation
+            summary: OrganizationInviteAccept
             tags:
                 - organization
     /v1/login:
@@ -4176,7 +4176,7 @@ paths:
                     description: ""
             security:
                 - basic: []
-            summary: Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid
+            summary: Login
             tags:
                 - authentication
     /v1/password-reset:
@@ -4215,7 +4215,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned
+            summary: ResetPassword
             tags:
                 - password-reset
     /v1/products:
@@ -4431,7 +4431,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: List products available in the product catalog
+            summary: ProductCatalog
             tags:
                 - catalog
     /v1/refresh:
@@ -4477,7 +4477,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.
+            summary: Refresh
             tags:
                 - refresh
     /v1/register:
@@ -4521,7 +4521,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role
+            summary: Register
             tags:
                 - accountRegistration
     /v1/resend:
@@ -4559,7 +4559,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Resends an email verification email to the user (only valid if the email is not already verified)
+            summary: ResendEmail
             tags:
                 - resend
     /v1/runners:
@@ -4605,7 +4605,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Register a job runner node
+            summary: AgentNodeRegistration
             tags:
                 - runners
     /v1/sso/callback:
@@ -4657,7 +4657,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Complete SSO login flow callback
+            summary: SSOCallback
             tags:
                 - sso
     /v1/sso/login:
@@ -4702,7 +4702,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Initiate SSO login flow
+            summary: SSOLogin
             tags:
                 - sso
     /v1/sso/token/authorize:
@@ -4755,7 +4755,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Authorize SSO token request
+            summary: SSOTokenAuthorize
             tags:
                 - sso
     /v1/sso/token/callback:
@@ -4798,7 +4798,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Handle SSO token callback
+            summary: SSOTokenCallback
             tags:
                 - sso
     /v1/subscribe/verify:
@@ -4826,7 +4826,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Verify a subscription
+            summary: VerifySubscription
             tags:
                 - subscription
     /v1/switch:
@@ -4868,7 +4868,7 @@ paths:
                 - oauth2: []
                 - basic: []
                 - apiKey: []
-            summary: Switch the user's organization context
+            summary: Switch
             tags:
                 - organization
     /v1/verify:
@@ -4902,7 +4902,7 @@ paths:
                 default:
                     description: ""
             security: []
-            summary: Used to verify a user's email address - once clicked they will be redirected to the UI with a success or failure message
+            summary: VerifyEmail
             tags:
                 - email
 servers:
@@ -4915,71 +4915,71 @@ tags:
       name: Groups
     - description: Create a new user
       name: Users
-    - description: Check Subject Access to Object
+    - description: AccountAccess
       name: account
-    - description: Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role
+    - description: Register
       name: accountRegistration
-    - description: ACME challenge solver for Let's Encrypt certificate validation
+    - description: AcmeSolver
       name: acme
-    - description: Begin WebAuthn authentication process and return credential request options
+    - description: JWKS
       name: authentication
-    - description: List products available in the product catalog
+    - description: ProductCatalog
       name: catalog
-    - description: ACME challenge solver for Let's Encrypt certificate validation
+    - description: AcmeSolver
       name: certificates
-    - description: Get OpenAPI 3.1.1 specification for this API
+    - description: APIDocs
       name: documentation
-    - description: Used to verify a user's email address - once clicked they will be redirected to the UI with a success or failure message
+    - description: VerifyEmail
       name: email
-    - description: Generate and return an example CSV file for data import templates
+    - description: ExampleCSV
       name: examples
-    - description: Download files via proxy-signed URLs. Requires authentication.
+    - description: ExampleCSV
       name: files
-    - description: ForgotPassword is a service for users to request a password reset email. The email address must be provided in the POST request and the user must exist in the database. This endpoint always returns 200 regardless of whether the user exists or not to avoid leaking information about users in the database
+    - description: ForgotPassword
       name: forgotpassword
-    - description: Handle GitHub OAuth callback
+    - description: GitHubCallback
       name: github
-    - description: Handle Google OAuth callback
+    - description: GoogleCallback
       name: google
     - description: GraphQL Endpoint
       name: graphql
-    - description: Health check endpoint to verify the service is alive
+    - description: Livez
       name: health
-    - description: End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.
+    - description: EndImpersonation
       name: impersonation
-    - description: Execute a provider operation using stored credentials
+    - description: ConfigureIntegrationProvider
       name: integrations
-    - description: Get user information for OAuth authenticated user
+    - description: GitHubCallback
       name: oauth
-    - description: Accept an organization invitation
+    - description: OrganizationInviteAccept
       name: organization
-    - description: ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned
+    - description: ResetPassword
       name: password-reset
-    - description: Get questionnaire template configuration for authenticated anonymous users
+    - description: GetQuestionnaire
       name: questionnaire
-    - description: The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.
+    - description: Refresh
       name: refresh
-    - description: Resends an email verification email to the user (only valid if the email is not already verified)
+    - description: ResendEmail
       name: resend
-    - description: Register a job runner node
+    - description: AgentNodeRegistration
       name: runners
-    - description: Get CSRF token for form submissions
+    - description: CSRF
       name: security
-    - description: Authorize SSO token request
+    - description: SSOCallback
       name: sso
-    - description: Get favicon.ico for the website
+    - description: Favicon
       name: static
-    - description: Verify a subscription
+    - description: VerifySubscription
       name: subscription
-    - description: Validate a user's TOTP code
+    - description: TFAValidation
       name: tfa
-    - description: Create anonymous JWT token for trust center access
+    - description: TrustCenterAnonymousJWT
       name: trustcenter
-    - description: Get user information for OAuth authenticated user
+    - description: UserInfo
       name: user
-    - description: Begin WebAuthn authentication process and return credential request options
+    - description: WebAuthnWellKnown
       name: webauthn
-    - description: WebFinger endpoint for federated identity
+    - description: Webfinger
       name: webfinger
-    - description: JSON Web Key Set for JWT token validation
+    - description: JWKS
       name: well-known
