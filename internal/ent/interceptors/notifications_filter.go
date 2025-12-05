@@ -1,5 +1,3 @@
-// core/internal/ent/interceptors/notification_filter.go
-
 package interceptors
 
 import (

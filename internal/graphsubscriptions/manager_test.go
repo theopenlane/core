@@ -21,8 +21,8 @@ func TestSubscribeAndPublish(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-123"
 
-	// Create a channel
-	notificationChan := make(chan *generated.Notification, TaskChannelBufferSize)
+	// Create a channel with the interface type
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
 
 	// Subscribe
 	manager.Subscribe(userID, notificationChan)
@@ -45,8 +45,11 @@ func TestSubscribeAndPublish(t *testing.T) {
 	// Verify the notification was received
 	select {
 	case receivedNotification := <-notificationChan:
-		assert.Equal(t, notification.ID, receivedNotification.ID)
-		assert.Equal(t, notification.Title, receivedNotification.Title)
+		// Cast back to concrete type for assertions
+		concreteNotif, ok := receivedNotification.(*generated.Notification)
+		require.True(t, ok, "Should be able to cast to *generated.Notification")
+		assert.Equal(t, notification.ID, concreteNotif.ID)
+		assert.Equal(t, notification.Title, concreteNotif.Title)
 	case <-time.After(1 * time.Second):
 		t.Fatal("Timeout waiting for notification")
 	}
@@ -71,7 +74,7 @@ func TestUnsubscribe(t *testing.T) {
 	userID := "test-user-789"
 
 	// Create and subscribe a channel
-	notificationChan := make(chan *generated.Notification, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
 	manager.Subscribe(userID, notificationChan)
 
 	// Verify subscription exists
@@ -97,9 +100,9 @@ func TestMultipleSubscribers(t *testing.T) {
 	userID := "test-user-multi"
 
 	// Create multiple channels
-	chan1 := make(chan *generated.Notification, TaskChannelBufferSize)
-	chan2 := make(chan *generated.Notification, TaskChannelBufferSize)
-	chan3 := make(chan *generated.Notification, TaskChannelBufferSize)
+	chan1 := make(chan Notification, TaskChannelBufferSize)
+	chan2 := make(chan Notification, TaskChannelBufferSize)
+	chan3 := make(chan Notification, TaskChannelBufferSize)
 
 	// Subscribe all channels
 	manager.Subscribe(userID, chan1)
@@ -121,10 +124,12 @@ func TestMultipleSubscribers(t *testing.T) {
 	require.NoError(t, err)
 
 	// Verify all subscribers received the notification
-	for i, ch := range []chan *generated.Notification{chan1, chan2, chan3} {
+	for i, ch := range []chan Notification{chan1, chan2, chan3} {
 		select {
 		case receivedNotification := <-ch:
-			assert.Equal(t, notification.ID, receivedNotification.ID, "Subscriber %d should receive notification", i+1)
+			concreteNotif, ok := receivedNotification.(*generated.Notification)
+			require.True(t, ok, "Subscriber %d: should be able to cast to *generated.Notification", i+1)
+			assert.Equal(t, notification.ID, concreteNotif.ID, "Subscriber %d should receive notification", i+1)
 		case <-time.After(1 * time.Second):
 			t.Fatalf("Subscriber %d timeout waiting for notification", i+1)
 		}
@@ -135,7 +140,7 @@ func TestUnsubscribeNonExistent(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-nonexistent"
 
-	notificationChan := make(chan *generated.Notification, TaskChannelBufferSize)
+	notificationChan := make(chan Notification, TaskChannelBufferSize)
 
 	// Unsubscribe without subscribing should not panic
 	require.NotPanics(t, func() {
@@ -147,7 +152,7 @@ func TestConcurrentPublish(t *testing.T) {
 	manager := NewManager()
 	userID := "test-user-concurrent"
 
-	notificationChan := make(chan *generated.Notification, 100) // Larger buffer for concurrent test
+	notificationChan := make(chan Notification, 100) // Larger buffer for concurrent test
 	manager.Subscribe(userID, notificationChan)
 
 	numGoroutines := 10
@@ -194,7 +199,7 @@ func TestPublishToFullChannel(t *testing.T) {
 	userID := "test-user-full"
 
 	// Create a small buffer channel
-	notificationChan := make(chan *generated.Notification, 2)
+	notificationChan := make(chan Notification, 2)
 	manager.Subscribe(userID, notificationChan)
 
 	// Fill the channel

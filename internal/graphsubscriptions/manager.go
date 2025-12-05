@@ -5,27 +5,46 @@ import (
 	"sync"
 
 	"github.com/rs/zerolog/log"
-	"github.com/theopenlane/core/internal/ent/generated"
 )
 
 // TaskChannelBufferSize is the buffer size for task subscription channels
 const TaskChannelBufferSize = 10
 
+var (
+	// globalManager is the singleton subscription manager instance
+	globalManager *Manager
+	globalMu      sync.RWMutex
+)
+
 // Manager manages all active subscriptions for real-time updates
 type Manager struct {
 	mu          sync.RWMutex
-	subscribers map[string][]chan *generated.Notification // mxap of userID to list of notification channels
+	subscribers map[string][]chan Notification // map of userID to list of notification channels
 }
 
 // NewManager creates a new subscription manager
 func NewManager() *Manager {
-	return &Manager{
-		subscribers: make(map[string][]chan *generated.Notification),
+	m := &Manager{
+		subscribers: make(map[string][]chan Notification),
 	}
+
+	// Set as global manager
+	globalMu.Lock()
+	globalManager = m
+	globalMu.Unlock()
+
+	return m
+}
+
+// GetGlobalManager returns the global subscription manager instance
+func GetGlobalManager() *Manager {
+	globalMu.RLock()
+	defer globalMu.RUnlock()
+	return globalManager
 }
 
 // Subscribe adds a new subscriber for a user's notification creations
-func (sm *Manager) Subscribe(userID string, ch chan *generated.Notification) {
+func (sm *Manager) Subscribe(userID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
@@ -33,7 +52,7 @@ func (sm *Manager) Subscribe(userID string, ch chan *generated.Notification) {
 }
 
 // Unsubscribe removes a subscriber
-func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Notification) {
+func (sm *Manager) Unsubscribe(userID string, ch chan Notification) {
 	sm.mu.Lock()
 	defer sm.mu.Unlock()
 
@@ -58,7 +77,7 @@ func (sm *Manager) Unsubscribe(userID string, ch chan *generated.Notification) {
 }
 
 // Publish sends a notification to all subscribers for that user
-func (sm *Manager) Publish(userID string, notification *generated.Notification) error {
+func (sm *Manager) Publish(userID string, notification Notification) error {
 	sm.mu.RLock()
 	defer sm.mu.RUnlock()
 
