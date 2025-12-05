@@ -112712,6 +112712,9 @@ enum RiskHistoryRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/
 RiskHistoryRiskStatus is enum for the field status
 """
 enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+  OPEN
+  IN_PROGRESS
+  ONGOING
   IDENTIFIED
   MITIGATED
   ACCEPTED
@@ -113176,6 +113179,9 @@ enum RiskRiskLikelihood @goModel(model: "github.com/theopenlane/core/pkg/enums.R
 RiskRiskStatus is enum for the field status
 """
 enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskStatus") {
+  OPEN
+  IN_PROGRESS
+  ONGOING
   IDENTIFIED
   MITIGATED
   ACCEPTED

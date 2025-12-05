@@ -11,6 +11,9 @@ func TestToRiskStatus(t *testing.T) {
 		input    string
 		expected *RiskStatus
 	}{
+		{"open", &RiskOpen},
+		{"IN_PROGRESS", &RiskInProgress},
+		{"ongoing", &RiskOngoing},
 		{"identified", &RiskIdentified},
 		{"MITIGATED", &RiskMitigated},
 		{"accepted", &RiskAccepted},

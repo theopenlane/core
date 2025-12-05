@@ -10,6 +10,12 @@ import (
 type RiskStatus string
 
 var (
+	// RiskOpen indicates that the risk is open and has not been mitigated
+	RiskOpen RiskStatus = "OPEN"
+	// RiskInProgress indicates that the risk is being actively worked on
+	RiskInProgress RiskStatus = "IN_PROGRESS"
+	// RiskOngoing indicates that the risk is ongoing and has not been mitigated
+	RiskOngoing RiskStatus = "ONGOING"
 	// RiskIdentified indicates that the risk has been identified
 	RiskIdentified RiskStatus = "IDENTIFIED"
 	// RiskMitigated indicates that the risk has been mitigated
@@ -27,9 +33,10 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the RiskStatus enum.
-// Possible default values are "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", and "ARCHIVED"
+// Possible default values are "OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", and "ARCHIVED"
 func (RiskStatus) Values() (kinds []string) {
-	for _, s := range []RiskStatus{RiskIdentified, RiskMitigated, RiskAccepted, RiskClosed, RiskTransferred, RiskArchived} {
+	for _, s := range []RiskStatus{RiskOpen, RiskInProgress, RiskOngoing, RiskIdentified, RiskMitigated,
+		RiskAccepted, RiskClosed, RiskTransferred, RiskArchived} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -44,6 +51,12 @@ func (r RiskStatus) String() string {
 // ToRiskStatus returns the risk status enum based on string input
 func ToRiskStatus(r string) *RiskStatus {
 	switch r := strings.ToUpper(r); r {
+	case RiskOpen.String():
+		return &RiskOpen
+	case RiskInProgress.String():
+		return &RiskInProgress
+	case RiskOngoing.String():
+		return &RiskOngoing
 	case RiskIdentified.String():
 		return &RiskIdentified
 	case RiskMitigated.String():

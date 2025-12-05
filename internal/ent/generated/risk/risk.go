@@ -345,7 +345,7 @@ const DefaultStatus enums.RiskStatus = "IDENTIFIED"
 // StatusValidator is a validator for the "status" field enum values. It is called by the builders before save.
 func StatusValidator(s enums.RiskStatus) error {
 	switch s.String() {
-	case "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED":
+	case "OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", "ARCHIVED":
 		return nil
 	default:
 		return fmt.Errorf("risk: invalid enum value for status field: %q", s)
