@@ -195,11 +195,14 @@ func (h *Handler) SubmitQuestionnaire(ctx echo.Context, openapi *OpenAPIContext)
 		return h.BadRequest(ctx, ErrAssessmentResponseAlreadyCompleted, openapi)
 	}
 
-	documentData, err := h.DBClient.DocumentData.Create().
-		SetOwnerID(assessment.OwnerID).
-		SetTemplateID(assessment.TemplateID).
-		SetData(req.Data).
-		Save(allowCtx)
+	documentDataQuery := h.DBClient.DocumentData.Create().
+		SetOwnerID(assessment.OwnerID)
+
+	if assessment.TemplateID != "" {
+		documentDataQuery = documentDataQuery.SetTemplateID(assessment.TemplateID)
+	}
+
+	documentData, err := documentDataQuery.SetData(req.Data).Save(allowCtx)
 	if err != nil {
 		logx.FromContext(reqCtx).Err(err).Msg("could not create document data")
 		return h.InternalServerError(ctx, ErrProcessingRequest, openapi)
