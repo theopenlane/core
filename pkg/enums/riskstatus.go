@@ -16,8 +16,16 @@ var (
 	RiskInProgress RiskStatus = "IN_PROGRESS"
 	// RiskOngoing indicates that the risk is ongoing and has not been mitigated
 	RiskOngoing RiskStatus = "ONGOING"
+	// RiskIdentified indicates that the risk has been identified
+	RiskIdentified RiskStatus = "IDENTIFIED"
 	// RiskMitigated indicates that the risk has been mitigated
 	RiskMitigated RiskStatus = "MITIGATED"
+	// RiskAccepted indicates that the risk has been accepted
+	RiskAccepted RiskStatus = "ACCEPTED"
+	// RiskClosed indicates that the risk has been closed
+	RiskClosed RiskStatus = "CLOSED"
+	// RiskTransferred indicates that the risk has been transferred
+	RiskTransferred RiskStatus = "TRANSFERRED"
 	// RiskArchived indicates that the risk has been archived and is no longer active
 	RiskArchived RiskStatus = "ARCHIVED"
 	// RiskInvalid indicates that the risk status is invalid
@@ -25,9 +33,10 @@ var (
 )
 
 // Values returns a slice of strings that represents all the possible values of the RiskStatus enum.
-// Possible default values are "OPEN", "IN_PROGRESS",  "ONGOING", "MITIGATED", and "ARCHIVED"
+// Possible default values are "OPEN", "IN_PROGRESS", "ONGOING", "IDENTIFIED", "MITIGATED", "ACCEPTED", "CLOSED", "TRANSFERRED", and "ARCHIVED"
 func (RiskStatus) Values() (kinds []string) {
-	for _, s := range []RiskStatus{RiskOpen, RiskInProgress, RiskOngoing, RiskMitigated, RiskArchived} {
+	for _, s := range []RiskStatus{RiskOpen, RiskInProgress, RiskOngoing, RiskIdentified, RiskMitigated,
+		RiskAccepted, RiskClosed, RiskTransferred, RiskArchived} {
 		kinds = append(kinds, string(s))
 	}
 
@@ -48,8 +57,16 @@ func ToRiskStatus(r string) *RiskStatus {
 		return &RiskInProgress
 	case RiskOngoing.String():
 		return &RiskOngoing
+	case RiskIdentified.String():
+		return &RiskIdentified
 	case RiskMitigated.String():
 		return &RiskMitigated
+	case RiskAccepted.String():
+		return &RiskAccepted
+	case RiskClosed.String():
+		return &RiskClosed
+	case RiskTransferred.String():
+		return &RiskTransferred
 	case RiskArchived.String():
 		return &RiskArchived
 	default:

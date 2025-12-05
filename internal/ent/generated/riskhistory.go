@@ -54,7 +54,7 @@ type RiskHistory struct {
 	RiskCategoryID string `json:"risk_category_id,omitempty"`
 	// the name of the risk
 	Name string `json:"name,omitempty"`
-	// status of the risk - open, mitigated, ongoing, in-progress, and archived.
+	// status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
 	Status enums.RiskStatus `json:"status,omitempty"`
 	// type of the risk, e.g. strategic, operational, financial, external, etc.
 	RiskType string `json:"risk_type,omitempty"`

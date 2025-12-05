@@ -66323,7 +66323,7 @@ input CreateRiskInput {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -112019,7 +112019,7 @@ type Risk implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   """
@@ -112580,7 +112580,7 @@ type RiskHistory implements Node {
   """
   name: String!
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskHistoryRiskStatus
   """
@@ -112715,7 +112715,11 @@ enum RiskHistoryRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enum
   OPEN
   IN_PROGRESS
   ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -113178,7 +113182,11 @@ enum RiskRiskStatus @goModel(model: "github.com/theopenlane/core/pkg/enums.RiskS
   OPEN
   IN_PROGRESS
   ONGOING
+  IDENTIFIED
   MITIGATED
+  ACCEPTED
+  CLOSED
+  TRANSFERRED
   ARCHIVED
 }
 """
@@ -130731,7 +130739,7 @@ input UpdateRiskInput {
   """
   name: String
   """
-  status of the risk - open, mitigated, ongoing, in-progress, and archived.
+  status of the risk - identified, mitigated, accepted, closed, transferred, and archived.
   """
   status: RiskRiskStatus
   clearStatus: Boolean
