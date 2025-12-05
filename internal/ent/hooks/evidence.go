@@ -7,8 +7,11 @@ import (
 	"entgo.io/ent"
 
 	"github.com/theopenlane/core/internal/ent/generated"
+	"github.com/theopenlane/core/internal/ent/generated/evidence"
+	"github.com/theopenlane/core/internal/ent/generated/file"
 	"github.com/theopenlane/core/internal/ent/generated/hook"
 	"github.com/theopenlane/core/internal/ent/privacy/utils"
+	"github.com/theopenlane/core/pkg/enums"
 	"github.com/theopenlane/core/pkg/objects"
 )
 
@@ -45,6 +48,12 @@ func HookEvidenceFiles() ent.Hook {
 				m.AddFileIDs(fileIDs...)
 			}
 
+			if !isDeleteOp(ctx, m) {
+				if !checkEvidenceHasURL(ctx, m) && !checkEvidenceHasFiles(ctx, m) {
+					m.SetStatus(enums.EvidenceStatusMissingArtifact)
+				}
+			}
+
 			return next.Mutate(ctx, m)
 		})
 	}, ent.OpCreate|ent.OpUpdateOne|ent.OpUpdate)
@@ -62,4 +71,62 @@ func checkEvidenceFiles[T utils.GenericMutation](ctx context.Context, m T) (cont
 
 	// Use the generic helper to process files
 	return objects.ProcessFilesForMutation(ctx, adapter, key)
+}
+
+// checkEvidenceHasFiles checks if evidence has any attached files
+func checkEvidenceHasFiles(ctx context.Context, m *generated.EvidenceMutation) bool {
+	if len(objects.GetFileIDsFromContext(ctx)) > 0 {
+		return true
+	}
+
+	if len(m.FilesIDs()) > 0 {
+		return true
+	}
+
+	if m.Op().Is(ent.OpCreate) {
+		return false
+	}
+
+	id, ok := m.ID()
+	if !ok || id == "" {
+		return false
+	}
+
+	files, err := m.Client().Evidence.Query().
+		Where(evidence.ID(id)).
+		QueryFiles().
+		Select(file.FieldID).
+		All(ctx)
+	if err != nil || len(files) == 0 {
+		return false
+	}
+
+	fileIDs := m.RemovedFilesIDs()
+	return len(fileIDs) < len(files)
+}
+
+func checkEvidenceHasURL(ctx context.Context, m *generated.EvidenceMutation) bool {
+	url, ok := m.URL()
+	if ok {
+		return url != ""
+	}
+
+	if m.Op().Is(ent.OpCreate) {
+		return false
+	}
+
+	id, ok := m.ID()
+	if !ok || id == "" {
+		return false
+	}
+
+	evidence, err := m.Client().Evidence.Query().
+		Where(evidence.ID(id)).
+		Select(evidence.FieldURL).
+		Only(ctx)
+	if err != nil {
+		return false
+	}
+
+	return evidence.URL != ""
 }

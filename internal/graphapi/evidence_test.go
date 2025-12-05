@@ -746,3 +746,123 @@ func TestMutationDeleteEvidence(t *testing.T) {
 		})
 	}
 }
+
+func TestEvidenceMissingArtifactStatus(t *testing.T) {
+	pngFile, err := storage.NewUploadFile("testdata/uploads/logo.png")
+	assert.NilError(t, err)
+
+	testCases := []struct {
+		name           string
+		createInput    testclient.CreateEvidenceInput
+		createFiles    []*graphql.Upload
+		updateInput    *testclient.UpdateEvidenceInput
+		expectedStatus enums.EvidenceStatus
+		description    string
+	}{
+		{
+			name: "create evidence without files and without URL should set MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence without artifacts",
+			},
+			expectedStatus: enums.EvidenceStatusMissingArtifact,
+			description:    "Evidence created without files or URL should have MISSING_ARTIFACT status",
+		},
+		{
+			name: "create evidence with files should not set MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence with files",
+			},
+			createFiles: []*graphql.Upload{
+				{
+					File:        pngFile.RawFile,
+					Filename:    pngFile.OriginalName,
+					Size:        pngFile.Size,
+					ContentType: pngFile.ContentType,
+				},
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Evidence created with files should not have MISSING_ARTIFACT status",
+		},
+		{
+			name: "create evidence with URL should not set MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence with URL",
+				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Evidence created with URL should not have MISSING_ARTIFACT status",
+		},
+		{
+			name: "create evidence with both files and URL should not set MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence with files and URL",
+				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+			},
+			createFiles: []*graphql.Upload{
+				{
+					File:        pngFile.RawFile,
+					Filename:    pngFile.OriginalName,
+					Size:        pngFile.Size,
+					ContentType: pngFile.ContentType,
+				},
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Evidence created with both files and URL should not have MISSING_ARTIFACT status",
+		},
+		{
+			name: "update evidence to clear URL when no files should set MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence with URL only",
+				URL:  lo.ToPtr("https://example.com/evidence.pdf"),
+			},
+			updateInput: &testclient.UpdateEvidenceInput{
+				URL: lo.ToPtr(""),
+			},
+			expectedStatus: enums.EvidenceStatusMissingArtifact,
+			description:    "Evidence updated to clear URL when no files should have MISSING_ARTIFACT status",
+		},
+		{
+			name: "update evidence to add URL should clear MISSING_ARTIFACT",
+			createInput: testclient.CreateEvidenceInput{
+				Name: "Evidence without artifacts",
+			},
+			updateInput: &testclient.UpdateEvidenceInput{
+				URL: lo.ToPtr("https://example.com/evidence.pdf"),
+			},
+			expectedStatus: enums.EvidenceStatusSubmitted,
+			description:    "Evidence updated to add URL should not have MISSING_ARTIFACT status",
+		},
+	}
+
+	for _, tc := range testCases {
+		t.Run(tc.name, func(t *testing.T) {
+			if len(tc.createFiles) > 0 {
+				expectUploadNillable(t, suite.client.mockProvider, tc.createFiles)
+			}
+
+			createResp, err := suite.client.api.CreateEvidence(adminUser.UserCtx, tc.createInput, tc.createFiles)
+			assert.NilError(t, err)
+			assert.Assert(t, createResp != nil)
+
+			evidenceID := createResp.CreateEvidence.Evidence.ID
+
+			if tc.updateInput == nil {
+				assert.Check(t, is.Equal(tc.expectedStatus, *createResp.CreateEvidence.Evidence.Status), tc.description)
+			} else {
+				updateResp, err := suite.client.api.UpdateEvidence(adminUser.UserCtx, evidenceID, *tc.updateInput, nil)
+				assert.NilError(t, err)
+				assert.Assert(t, updateResp != nil)
+
+				assert.Check(t, is.Equal(tc.expectedStatus, *updateResp.UpdateEvidence.Evidence.Status), tc.description)
+			}
+
+			evidenceResp, err := suite.client.api.GetEvidenceByID(adminUser.UserCtx, evidenceID)
+			if err == nil && evidenceResp != nil {
+				for _, edge := range evidenceResp.Evidence.Files.Edges {
+					(&Cleanup[*generated.FileDeleteOne]{client: suite.client.db.File, ID: edge.Node.ID}).MustDelete(adminUser.UserCtx, t)
+				}
+			}
+			(&Cleanup[*generated.EvidenceDeleteOne]{client: suite.client.db.Evidence, ID: evidenceID}).MustDelete(adminUser.UserCtx, t)
+		})
+	}
+}
