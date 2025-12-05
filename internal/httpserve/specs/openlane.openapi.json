@@ -3187,7 +3187,7 @@
           }
         },
         "security": [],
-        "summary": "ACME challenge solver for Let's Encrypt certificate validation",
+        "summary": "AcmeSolver",
         "tags": [
           "acme",
           "certificates"
@@ -3214,7 +3214,7 @@
           }
         },
         "security": [],
-        "summary": "JSON Web Key Set for JWT token validation",
+        "summary": "JWKS",
         "tags": [
           "well-known",
           "authentication"
@@ -3241,7 +3241,7 @@
           }
         },
         "security": [],
-        "summary": "Security contact information and vulnerability disclosure policy",
+        "summary": "SecurityTxt",
         "tags": [
           "well-known",
           "security"
@@ -3268,7 +3268,7 @@
           }
         },
         "security": [],
-        "summary": "WebAuthn well-known configuration file",
+        "summary": "WebAuthnWellKnown",
         "tags": [
           "well-known",
           "webauthn"
@@ -3308,7 +3308,7 @@
           }
         },
         "security": [],
-        "summary": "WebFinger endpoint for federated identity",
+        "summary": "Webfinger",
         "tags": [
           "webfinger"
         ]
@@ -3334,7 +3334,7 @@
           }
         },
         "security": [],
-        "summary": "Get OpenAPI 3.1.1 specification for this API",
+        "summary": "APIDocs",
         "tags": [
           "documentation"
         ]
@@ -3385,7 +3385,7 @@
           }
         },
         "security": [],
-        "summary": "Begin WebAuthn authentication process and return credential request options",
+        "summary": "WebauthnAuthentication",
         "tags": [
           "webauthn",
           "authentication"
@@ -3448,7 +3448,7 @@
           }
         },
         "security": [],
-        "summary": "Complete WebAuthn authentication process by verifying the authentication response",
+        "summary": "WebauthnAuthenticationVerification",
         "tags": [
           "webauthn",
           "authentication"
@@ -3475,7 +3475,7 @@
           }
         },
         "security": [],
-        "summary": "Get CSRF token for form submissions",
+        "summary": "CSRF",
         "tags": [
           "security"
         ]
@@ -3505,7 +3505,7 @@
             "bearer": []
           }
         ],
-        "summary": "Generate and return an example CSV file for data import templates",
+        "summary": "ExampleCSV",
         "tags": [
           "files",
           "examples"
@@ -3532,7 +3532,7 @@
           }
         },
         "security": [],
-        "summary": "Get favicon.ico for the website",
+        "summary": "Favicon",
         "tags": [
           "static"
         ]
@@ -3558,7 +3558,7 @@
           }
         },
         "security": [],
-        "summary": "Health check endpoint to verify the service is alive",
+        "summary": "Livez",
         "tags": [
           "health"
         ]
@@ -3639,7 +3639,7 @@
           }
         },
         "security": [],
-        "summary": "Register a user via OAuth provider authentication",
+        "summary": "OAuthRegister",
         "tags": [
           "oauth",
           "authentication"
@@ -3670,7 +3670,7 @@
             "bearer": []
           }
         ],
-        "summary": "Get user information for OAuth authenticated user",
+        "summary": "UserInfo",
         "tags": [
           "oauth",
           "user"
@@ -3782,7 +3782,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Get questionnaire template configuration for authenticated anonymous users",
+        "summary": "GetQuestionnaire",
         "tags": [
           "questionnaire"
         ]
@@ -3828,7 +3828,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Submit questionnaire response data for authenticated anonymous users",
+        "summary": "SubmitQuestionnaire",
         "tags": [
           "questionnaire"
         ]
@@ -3854,7 +3854,7 @@
           }
         },
         "security": [],
-        "summary": "Readiness check endpoint to verify the service is ready to accept traffic",
+        "summary": "Ready",
         "tags": [
           "health"
         ]
@@ -3908,7 +3908,7 @@
           }
         },
         "security": [],
-        "summary": "Begin WebAuthn registration process and return credential creation options",
+        "summary": "WebauthnRegistration",
         "tags": [
           "webauthn",
           "authentication"
@@ -3978,7 +3978,7 @@
           }
         },
         "security": [],
-        "summary": "Complete WebAuthn registration process by verifying the credential creation response",
+        "summary": "WebauthnRegistrationVerification",
         "tags": [
           "webauthn",
           "authentication"
@@ -4005,7 +4005,7 @@
           }
         },
         "security": [],
-        "summary": "Get robots.txt file for web crawlers",
+        "summary": "Robots",
         "tags": [
           "static"
         ]
@@ -4769,7 +4769,7 @@
             "basic": []
           }
         ],
-        "summary": "Create anonymous JWT token for trust center access",
+        "summary": "TrustCenterAnonymousJWT",
         "tags": [
           "trustcenter",
           "authentication"
@@ -4843,7 +4843,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Validate a user's TOTP code",
+        "summary": "TFAValidation",
         "tags": [
           "tfa"
         ]
@@ -4909,7 +4909,7 @@
             "bearer": []
           }
         ],
-        "summary": "Check Subject Access to Object",
+        "summary": "AccountAccess",
         "tags": [
           "account"
         ]
@@ -4969,7 +4969,7 @@
             "apiKey": []
           }
         ],
-        "summary": "List features a subject has in relation to the authenticated organization",
+        "summary": "AccountFeatures",
         "tags": [
           "account"
         ]
@@ -5040,7 +5040,7 @@
             "apiKey": []
           }
         ],
-        "summary": "List the features a subject has in relation to the organization ID provided",
+        "summary": "AccountFeaturesByID",
         "tags": [
           "account"
         ]
@@ -5108,7 +5108,7 @@
             "bearer": []
           }
         ],
-        "summary": "Retrieve a list of roles of the subject in the organization",
+        "summary": "AccountRoles",
         "tags": [
           "account"
         ]
@@ -5168,7 +5168,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Retrieve a list of roles of the subject in the organization",
+        "summary": "AccountRolesOrganization",
         "tags": [
           "account"
         ]
@@ -5239,7 +5239,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Retrieve a list of roles of the subject in the organization ID provided",
+        "summary": "AccountRolesOrganizationByID",
         "tags": [
           "account"
         ]
@@ -5298,7 +5298,7 @@
             "bearer": []
           }
         ],
-        "summary": "Download files via proxy-signed URLs. Requires authentication.",
+        "summary": "File Download",
         "tags": [
           "files"
         ]
@@ -5358,7 +5358,7 @@
           }
         },
         "security": [],
-        "summary": "ForgotPassword is a service for users to request a password reset email. The email address must be provided in the POST request and the user must exist in the database. This endpoint always returns 200 regardless of whether the user exists or not to avoid leaking information about users in the database",
+        "summary": "ForgotPassword",
         "tags": [
           "forgotpassword"
         ]
@@ -5386,7 +5386,7 @@
           }
         },
         "security": [],
-        "summary": "Handle GitHub OAuth callback",
+        "summary": "GitHubCallback",
         "tags": [
           "oauth",
           "github"
@@ -5415,7 +5415,7 @@
           }
         },
         "security": [],
-        "summary": "Initiate GitHub OAuth login flow",
+        "summary": "GitHubLogin",
         "tags": [
           "oauth",
           "github"
@@ -5444,7 +5444,7 @@
           }
         },
         "security": [],
-        "summary": "Handle Google OAuth callback",
+        "summary": "GoogleCallback",
         "tags": [
           "oauth",
           "google"
@@ -5473,7 +5473,7 @@
           }
         },
         "security": [],
-        "summary": "Initiate Google OAuth login flow",
+        "summary": "GoogleLogin",
         "tags": [
           "oauth",
           "google"
@@ -5539,7 +5539,7 @@
             "bearer": []
           }
         ],
-        "summary": "End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.",
+        "summary": "EndImpersonation",
         "tags": [
           "impersonation"
         ]
@@ -5608,7 +5608,7 @@
             "bearer": []
           }
         ],
-        "summary": "Start an impersonation session to act as another user for support, administrative, or testing purposes. Requires appropriate permissions and logs all impersonation activity for audit purposes.",
+        "summary": "StartImpersonation",
         "tags": [
           "impersonation"
         ]
@@ -5656,7 +5656,7 @@
           }
         },
         "security": [],
-        "summary": "Handle OAuth callback for integration",
+        "summary": "IntegrationOAuthCallback",
         "tags": [
           "integrations"
         ]
@@ -5735,7 +5735,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Start OAuth flow for integration",
+        "summary": "StartIntegrationOAuth",
         "tags": [
           "integrations"
         ]
@@ -5773,7 +5773,7 @@
             "apiKey": []
           }
         ],
-        "summary": "List available integration providers and their metadata",
+        "summary": "ListIntegrationProviders",
         "tags": [
           "integrations"
         ]
@@ -5864,7 +5864,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Persist integration credentials or configuration",
+        "summary": "ConfigureIntegrationProvider",
         "tags": [
           "integrations"
         ]
@@ -5962,7 +5962,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Execute a provider operation using stored credentials",
+        "summary": "RunIntegrationOperation",
         "tags": [
           "integrations"
         ]
@@ -6053,7 +6053,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Refresh integration token",
+        "summary": "RefreshIntegrationToken",
         "tags": [
           "integrations"
         ]
@@ -6117,7 +6117,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Accept an organization invitation",
+        "summary": "OrganizationInviteAccept",
         "tags": [
           "organization"
         ]
@@ -6187,7 +6187,7 @@
             "basic": []
           }
         ],
-        "summary": "Login is oriented towards human users who use their email and password for authentication. Login verifies the password submitted for the user is correct by looking up the user by email and using the argon2 derived key verification process to confirm the password matches. Upon authentication an access token and a refresh token with the authorized claims of the user are returned. The user can use the access token to authenticate to our systems. The access token has an expiration and the refresh token can be used with the refresh endpoint to get a new access token without the user having to log in again. The refresh token overlaps with the access token to provide a seamless authentication experience and the user can refresh their access token so long as the refresh token is valid",
+        "summary": "Login",
         "tags": [
           "authentication"
         ]
@@ -6248,7 +6248,7 @@
           }
         },
         "security": [],
-        "summary": "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned",
+        "summary": "ResetPassword",
         "tags": [
           "password-reset"
         ]
@@ -6551,7 +6551,7 @@
           }
         },
         "security": [],
-        "summary": "List products available in the product catalog",
+        "summary": "ProductCatalog",
         "tags": [
           "catalog"
         ]
@@ -6628,7 +6628,7 @@
             "apiKey": []
           }
         ],
-        "summary": "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.",
+        "summary": "Refresh",
         "tags": [
           "refresh"
         ]
@@ -6694,7 +6694,7 @@
           }
         },
         "security": [],
-        "summary": "Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role",
+        "summary": "Register",
         "tags": [
           "accountRegistration"
         ]
@@ -6754,7 +6754,7 @@
           }
         },
         "security": [],
-        "summary": "Resends an email verification email to the user (only valid if the email is not already verified)",
+        "summary": "ResendEmail",
         "tags": [
           "resend"
         ]
@@ -6824,7 +6824,7 @@
           }
         },
         "security": [],
-        "summary": "Register a job runner node",
+        "summary": "AgentNodeRegistration",
         "tags": [
           "runners"
         ]
@@ -6901,7 +6901,7 @@
           }
         },
         "security": [],
-        "summary": "Complete SSO login flow callback",
+        "summary": "SSOCallback",
         "tags": [
           "sso"
         ]
@@ -6971,7 +6971,7 @@
           }
         },
         "security": [],
-        "summary": "Initiate SSO login flow",
+        "summary": "SSOLogin",
         "tags": [
           "sso"
         ]
@@ -7058,7 +7058,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Authorize SSO token request",
+        "summary": "SSOTokenAuthorize",
         "tags": [
           "sso"
         ]
@@ -7123,7 +7123,7 @@
           }
         },
         "security": [],
-        "summary": "Handle SSO token callback",
+        "summary": "SSOTokenCallback",
         "tags": [
           "sso"
         ]
@@ -7166,7 +7166,7 @@
           }
         },
         "security": [],
-        "summary": "Verify a subscription",
+        "summary": "VerifySubscription",
         "tags": [
           "subscription"
         ]
@@ -7239,7 +7239,7 @@
             "apiKey": []
           }
         ],
-        "summary": "Switch the user's organization context",
+        "summary": "Switch",
         "tags": [
           "organization"
         ]
@@ -7288,7 +7288,7 @@
           }
         },
         "security": [],
-        "summary": "Used to verify a user's email address - once clicked they will be redirected to the UI with a success or failure message",
+        "summary": "VerifyEmail",
         "tags": [
           "email"
         ]
@@ -7315,55 +7315,55 @@
       "name": "Users"
     },
     {
-      "description": "Check Subject Access to Object",
+      "description": "AccountAccess",
       "name": "account"
     },
     {
-      "description": "Register creates a new user in the database with the specified password, allowing the user to login to Openlane. This endpoint requires a 'strong' password and a valid register request, otherwise a 400 reply is returned. The password is stored in the database as an argon2 derived key so it is impossible for a hacker to get access to raw passwords. A personal organization is created for the user registering based on the organization data in the register request and the user is assigned the Owner role",
+      "description": "Register",
       "name": "accountRegistration"
     },
     {
-      "description": "ACME challenge solver for Let's Encrypt certificate validation",
+      "description": "AcmeSolver",
       "name": "acme"
     },
     {
-      "description": "Begin WebAuthn authentication process and return credential request options",
+      "description": "JWKS",
       "name": "authentication"
     },
     {
-      "description": "List products available in the product catalog",
+      "description": "ProductCatalog",
       "name": "catalog"
     },
     {
-      "description": "ACME challenge solver for Let's Encrypt certificate validation",
+      "description": "AcmeSolver",
       "name": "certificates"
     },
     {
-      "description": "Get OpenAPI 3.1.1 specification for this API",
+      "description": "APIDocs",
       "name": "documentation"
     },
     {
-      "description": "Used to verify a user's email address - once clicked they will be redirected to the UI with a success or failure message",
+      "description": "VerifyEmail",
       "name": "email"
     },
     {
-      "description": "Generate and return an example CSV file for data import templates",
+      "description": "ExampleCSV",
       "name": "examples"
     },
     {
-      "description": "Download files via proxy-signed URLs. Requires authentication.",
+      "description": "ExampleCSV",
       "name": "files"
     },
     {
-      "description": "ForgotPassword is a service for users to request a password reset email. The email address must be provided in the POST request and the user must exist in the database. This endpoint always returns 200 regardless of whether the user exists or not to avoid leaking information about users in the database",
+      "description": "ForgotPassword",
       "name": "forgotpassword"
     },
     {
-      "description": "Handle GitHub OAuth callback",
+      "description": "GitHubCallback",
       "name": "github"
     },
     {
-      "description": "Handle Google OAuth callback",
+      "description": "GoogleCallback",
       "name": "google"
     },
     {
@@ -7371,83 +7371,83 @@
       "name": "graphql"
     },
     {
-      "description": "Health check endpoint to verify the service is alive",
+      "description": "Livez",
       "name": "health"
     },
     {
-      "description": "End an active impersonation session and return to normal user context. Logs the end of impersonation for audit purposes.",
+      "description": "EndImpersonation",
       "name": "impersonation"
     },
     {
-      "description": "Execute a provider operation using stored credentials",
+      "description": "ConfigureIntegrationProvider",
       "name": "integrations"
     },
     {
-      "description": "Get user information for OAuth authenticated user",
+      "description": "GitHubCallback",
       "name": "oauth"
     },
     {
-      "description": "Accept an organization invitation",
+      "description": "OrganizationInviteAccept",
       "name": "organization"
     },
     {
-      "description": "ResetPassword allows the user (after requesting a password reset) to set a new password - the password reset token needs to be set in the request and not expired. If the request is successful, a confirmation of the reset is sent to the user and a 200 StatusOK is returned",
+      "description": "ResetPassword",
       "name": "password-reset"
     },
     {
-      "description": "Get questionnaire template configuration for authenticated anonymous users",
+      "description": "GetQuestionnaire",
       "name": "questionnaire"
     },
     {
-      "description": "The Refresh endpoint re-authenticates users and API keys using a refresh token rather than requiring a username and password or API key credentials a second time and returns a new access and refresh token pair with the current credentials of the user. This endpoint is intended to facilitate long-running connections to the systems that last longer than the duration of an access token; e.g. long sessions on the UI or (especially) long running publishers and subscribers (machine users) that need to stay authenticated semi-permanently.",
+      "description": "Refresh",
       "name": "refresh"
     },
     {
-      "description": "Resends an email verification email to the user (only valid if the email is not already verified)",
+      "description": "ResendEmail",
       "name": "resend"
     },
     {
-      "description": "Register a job runner node",
+      "description": "AgentNodeRegistration",
       "name": "runners"
     },
     {
-      "description": "Get CSRF token for form submissions",
+      "description": "CSRF",
       "name": "security"
     },
     {
-      "description": "Authorize SSO token request",
+      "description": "SSOCallback",
       "name": "sso"
     },
     {
-      "description": "Get favicon.ico for the website",
+      "description": "Favicon",
       "name": "static"
     },
     {
-      "description": "Verify a subscription",
+      "description": "VerifySubscription",
       "name": "subscription"
     },
     {
-      "description": "Validate a user's TOTP code",
+      "description": "TFAValidation",
       "name": "tfa"
     },
     {
-      "description": "Create anonymous JWT token for trust center access",
+      "description": "TrustCenterAnonymousJWT",
       "name": "trustcenter"
     },
     {
-      "description": "Get user information for OAuth authenticated user",
+      "description": "UserInfo",
       "name": "user"
     },
     {
-      "description": "Begin WebAuthn authentication process and return credential request options",
+      "description": "WebAuthnWellKnown",
       "name": "webauthn"
     },
     {
-      "description": "WebFinger endpoint for federated identity",
+      "description": "Webfinger",
       "name": "webfinger"
     },
     {
-      "description": "JSON Web Key Set for JWT token validation",
+      "description": "JWKS",
       "name": "well-known"
     }
   ]

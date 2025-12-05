@@ -346,7 +346,7 @@ func (rc *registrationContext) Request() *http.Request {
 // AddV1HandlerRoute adds a route with automatic OpenAPI context injection
 func (r *Router) AddV1HandlerRoute(config Config) error {
 	operation := openapi3.NewOperation()
-	operation.Summary = config.Description
+	operation.Summary = config.Name
 	operation.Description = config.Description
 	operation.Tags = config.Tags
 	operation.OperationID = config.OperationID
@@ -430,7 +430,7 @@ func (r *Router) AddV1HandlerRoute(config Config) error {
 // AddUnversionedHandlerRoute adds an unversioned route with automatic OpenAPI context injection
 func (r *Router) AddUnversionedHandlerRoute(config Config) error {
 	operation := openapi3.NewOperation()
-	operation.Summary = config.Description
+	operation.Summary = config.Name
 	operation.Description = config.Description
 	operation.Tags = config.Tags
 	operation.OperationID = config.OperationID

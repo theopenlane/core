@@ -1,6 +1,6 @@
 module github.com/theopenlane/core
 
-go 1.25.4
+go 1.25.5
 
 replace github.com/oNaiPs/go-generate-fast => github.com/golanglemonade/go-generate-fast v0.0.0-20250908221431-37f3149f009b
 
