@@ -2420,7 +2420,8 @@ func (td *TagDefinitionBuilder) MustNew(ctx context.Context, t *testing.T) *ent.
 	ctx = setContext(ctx, td.client.db)
 
 	if td.Name == "" {
-		td.Name = gofakeit.HipsterWord()
+		// ensure unique name by appending ULID
+		td.Name = gofakeit.HipsterWord() + ulids.New().String()
 	}
 
 	mutation := td.client.db.TagDefinition.Create().

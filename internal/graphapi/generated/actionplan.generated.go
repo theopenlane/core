@@ -232,6 +232,7 @@ type MutationResolver interface {
 	UpdateRiskComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.RiskUpdatePayload, error)
 	UpdateInternalPolicyComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.InternalPolicyUpdatePayload, error)
 	UpdateTrustCenterPost(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.TrustCenterUpdatePayload, error)
+	UpdateEvidenceComment(ctx context.Context, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) (*model.EvidenceUpdatePayload, error)
 	DeleteNote(ctx context.Context, id string) (*model.NoteDeletePayload, error)
 	CreateOnboarding(ctx context.Context, input generated.CreateOnboardingInput) (*model.OnboardingCreatePayload, error)
 	CreateOrganization(ctx context.Context, input generated.CreateOrganizationInput, avatarFile *graphql.Upload) (*model.OrganizationCreatePayload, error)
@@ -323,6 +324,7 @@ type MutationResolver interface {
 	CreateBulkSubprocessor(ctx context.Context, input []*generated.CreateSubprocessorInput) (*model.SubprocessorBulkCreatePayload, error)
 	CreateBulkCSVSubprocessor(ctx context.Context, input graphql.Upload) (*model.SubprocessorBulkCreatePayload, error)
 	UpdateSubprocessor(ctx context.Context, id string, input generated.UpdateSubprocessorInput, logoFile *graphql.Upload) (*model.SubprocessorUpdatePayload, error)
+	UpdateBulkSubprocessor(ctx context.Context, ids []string, input generated.UpdateSubprocessorInput) (*model.SubprocessorBulkUpdatePayload, error)
 	DeleteSubprocessor(ctx context.Context, id string) (*model.SubprocessorDeletePayload, error)
 	DeleteBulkSubprocessor(ctx context.Context, ids []string) (*model.SubprocessorBulkDeletePayload, error)
 	CreateSubscriber(ctx context.Context, input generated.CreateSubscriberInput) (*model.SubscriberCreatePayload, error)
@@ -385,6 +387,7 @@ type MutationResolver interface {
 	CreateBulkTrustCenterSubprocessor(ctx context.Context, input []*generated.CreateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkCreatePayload, error)
 	CreateBulkCSVTrustCenterSubprocessor(ctx context.Context, input graphql.Upload) (*model.TrustCenterSubprocessorBulkCreatePayload, error)
 	UpdateTrustCenterSubprocessor(ctx context.Context, id string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorUpdatePayload, error)
+	UpdateBulkTrustCenterSubprocessor(ctx context.Context, ids []string, input generated.UpdateTrustCenterSubprocessorInput) (*model.TrustCenterSubprocessorBulkUpdatePayload, error)
 	DeleteTrustCenterSubprocessor(ctx context.Context, id string) (*model.TrustCenterSubprocessorDeletePayload, error)
 	DeleteBulkTrustCenterSubprocessor(ctx context.Context, ids []string) (*model.TrustCenterSubprocessorBulkDeletePayload, error)
 	CreateTrustCenterWatermarkConfig(ctx context.Context, input generated.CreateTrustCenterWatermarkConfigInput, logoFile *graphql.Upload) (*model.TrustCenterWatermarkConfigCreatePayload, error)
@@ -4306,6 +4309,22 @@ func (ec *executionContext) field_Mutation_updateBulkScan_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_updateBulkSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateSubprocessorInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_updateBulkTask_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
 	var err error
 	args := map[string]any{}
@@ -4331,6 +4350,22 @@ func (ec *executionContext) field_Mutation_updateBulkTrustCenterDoc_args(ctx con
 	}
 	args["ids"] = arg0
 	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterDocInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterDocInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateBulkTrustCenterSubprocessor_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "ids", ec.unmarshalNID2ᚕstringᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["ids"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateTrustCenterSubprocessorInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateTrustCenterSubprocessorInput)
 	if err != nil {
 		return nil, err
 	}
@@ -4596,6 +4631,27 @@ func (ec *executionContext) field_Mutation_updateEvent_args(ctx context.Context,
 		return nil, err
 	}
 	args["input"] = arg1
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateEvidenceComment_args(ctx context.Context, rawArgs map[string]any) (map[string]any, error) {
+	var err error
+	args := map[string]any{}
+	arg0, err := graphql.ProcessArgField(ctx, rawArgs, "id", ec.unmarshalNID2string)
+	if err != nil {
+		return nil, err
+	}
+	args["id"] = arg0
+	arg1, err := graphql.ProcessArgField(ctx, rawArgs, "input", ec.unmarshalNUpdateNoteInput2githubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋentᚋgeneratedᚐUpdateNoteInput)
+	if err != nil {
+		return nil, err
+	}
+	args["input"] = arg1
+	arg2, err := graphql.ProcessArgField(ctx, rawArgs, "noteFiles", ec.unmarshalOUpload2ᚕᚖgithubᚗcomᚋ99designsᚋgqlgenᚋgraphqlᚐUploadᚄ)
+	if err != nil {
+		return nil, err
+	}
+	args["noteFiles"] = arg2
 	return args, nil
 }
 
@@ -15992,6 +16048,51 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustCenterPost(ctx cont
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateEvidenceComment(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateEvidenceComment,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateEvidenceComment(ctx, fc.Args["id"].(string), fc.Args["input"].(generated.UpdateNoteInput), fc.Args["noteFiles"].([]*graphql.Upload))
+		},
+		nil,
+		ec.marshalNEvidenceUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐEvidenceUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateEvidenceComment(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "evidence":
+				return ec.fieldContext_EvidenceUpdatePayload_evidence(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type EvidenceUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateEvidenceComment_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_deleteNote(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -20095,6 +20196,53 @@ func (ec *executionContext) fieldContext_Mutation_updateSubprocessor(ctx context
 	return fc, nil
 }
 
+func (ec *executionContext) _Mutation_updateBulkSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBulkSubprocessor,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateBulkSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateSubprocessorInput))
+		},
+		nil,
+		ec.marshalNSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐSubprocessorBulkUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBulkSubprocessor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "subprocessors":
+				return ec.fieldContext_SubprocessorBulkUpdatePayload_subprocessors(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_SubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type SubprocessorBulkUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBulkSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
 func (ec *executionContext) _Mutation_deleteSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	return graphql.ResolveField(
 		ctx,
@@ -22881,6 +23029,53 @@ func (ec *executionContext) fieldContext_Mutation_updateTrustCenterSubprocessor(
 	}()
 	ctx = graphql.WithFieldContext(ctx, fc)
 	if fc.Args, err = ec.field_Mutation_updateTrustCenterSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
+		ec.Error(ctx, err)
+		return fc, err
+	}
+	return fc, nil
+}
+
+func (ec *executionContext) _Mutation_updateBulkTrustCenterSubprocessor(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	return graphql.ResolveField(
+		ctx,
+		ec.OperationContext,
+		field,
+		ec.fieldContext_Mutation_updateBulkTrustCenterSubprocessor,
+		func(ctx context.Context) (any, error) {
+			fc := graphql.GetFieldContext(ctx)
+			return ec.resolvers.Mutation().UpdateBulkTrustCenterSubprocessor(ctx, fc.Args["ids"].([]string), fc.Args["input"].(generated.UpdateTrustCenterSubprocessorInput))
+		},
+		nil,
+		ec.marshalNTrustCenterSubprocessorBulkUpdatePayload2ᚖgithubᚗcomᚋtheopenlaneᚋcoreᚋinternalᚋgraphapiᚋmodelᚐTrustCenterSubprocessorBulkUpdatePayload,
+		true,
+		true,
+	)
+}
+
+func (ec *executionContext) fieldContext_Mutation_updateBulkTrustCenterSubprocessor(ctx context.Context, field graphql.CollectedField) (fc *graphql.FieldContext, err error) {
+	fc = &graphql.FieldContext{
+		Object:     "Mutation",
+		Field:      field,
+		IsMethod:   true,
+		IsResolver: true,
+		Child: func(ctx context.Context, field graphql.CollectedField) (*graphql.FieldContext, error) {
+			switch field.Name {
+			case "trustCenterSubprocessors":
+				return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_trustCenterSubprocessors(ctx, field)
+			case "updatedIDs":
+				return ec.fieldContext_TrustCenterSubprocessorBulkUpdatePayload_updatedIDs(ctx, field)
+			}
+			return nil, fmt.Errorf("no field named %q was found under type TrustCenterSubprocessorBulkUpdatePayload", field.Name)
+		},
+	}
+	defer func() {
+		if r := recover(); r != nil {
+			err = ec.Recover(ctx, r)
+			ec.Error(ctx, err)
+		}
+	}()
+	ctx = graphql.WithFieldContext(ctx, fc)
+	if fc.Args, err = ec.field_Mutation_updateBulkTrustCenterSubprocessor_args(ctx, field.ArgumentMap(ec.Variables)); err != nil {
 		ec.Error(ctx, err)
 		return fc, err
 	}
@@ -26851,6 +27046,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "updateEvidenceComment":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateEvidenceComment(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "deleteNote":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteNote(ctx, field)
@@ -27488,6 +27690,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				out.Invalids++
 			}
+		case "updateBulkSubprocessor":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBulkSubprocessor(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
 		case "deleteSubprocessor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_deleteSubprocessor(ctx, field)
@@ -27918,6 +28127,13 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 		case "updateTrustCenterSubprocessor":
 			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
 				return ec._Mutation_updateTrustCenterSubprocessor(ctx, field)
+			})
+			if out.Values[i] == graphql.Null {
+				out.Invalids++
+			}
+		case "updateBulkTrustCenterSubprocessor":
+			out.Values[i] = ec.OperationContext.RootResolverMiddleware(innerCtx, func(ctx context.Context) (res graphql.Marshaler) {
+				return ec._Mutation_updateBulkTrustCenterSubprocessor(ctx, field)
 			})
 			if out.Values[i] == graphql.Null {
 				out.Invalids++

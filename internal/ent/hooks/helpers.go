@@ -15,7 +15,7 @@ import (
 // isDeleteOp checks if the mutation is a deletion operation.
 // which includes soft delete, delete, and delete one.
 func isDeleteOp(ctx context.Context, m ent.Mutation) bool {
-	return entx.CheckIsSoftDelete(ctx) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
+	return entx.CheckIsSoftDeleteType(ctx, m.Type()) || m.Op().Is(ent.OpDelete) || m.Op().Is(ent.OpDeleteOne)
 }
 
 // transactionFromContext returns the transaction from the context if it exists

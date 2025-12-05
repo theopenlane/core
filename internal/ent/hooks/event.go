@@ -26,7 +26,7 @@ func EmitEventHook(e *Eventer) ent.Hook {
 		return ent.MutateFunc(func(ctx context.Context, mutation ent.Mutation) (ent.Value, error) {
 			// if this is a soft delete, skip emitting events, it will be handled by the duplicate update mutation that is triggered
 			// otherwise, you'll get double events for soft deletes
-			if entx.CheckIsSoftDelete(ctx) {
+			if entx.CheckIsSoftDeleteType(ctx, mutation.Type()) {
 				return next.Mutate(ctx, mutation)
 			}
 

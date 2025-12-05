@@ -11489,6 +11489,7 @@ input CreateEvidenceInput {
 	fileIDs: [ID!]
 	programIDs: [ID!]
 	taskIDs: [ID!]
+	commentIDs: [ID!]
 }
 """
 CreateExportInput is used for create Export object.
@@ -12425,6 +12426,7 @@ input CreateNoteInput {
 	procedureID: ID
 	riskID: ID
 	internalPolicyID: ID
+	evidenceID: ID
 	trustCenterID: ID
 	fileIDs: [ID!]
 }
@@ -23818,6 +23820,37 @@ type Evidence implements Node {
 		"""
 		where: TaskWhereInput
 	): TaskConnection!
+	comments(
+		"""
+		Returns the elements in the list that come after the specified cursor.
+		"""
+		after: Cursor
+
+		"""
+		Returns the first _n_ elements from the list.
+		"""
+		first: Int
+
+		"""
+		Returns the elements in the list that come before the specified cursor.
+		"""
+		before: Cursor
+
+		"""
+		Returns the last _n_ elements from the list.
+		"""
+		last: Int
+
+		"""
+		Ordering options for Notes returned from the connection.
+		"""
+		orderBy: [NoteOrder!]
+
+		"""
+		Filtering options for Notes returned from the connection.
+		"""
+		where: NoteWhereInput
+	): NoteConnection!
 }
 """
 Return response for createBulkEvidence mutation
@@ -24621,6 +24654,11 @@ input EvidenceWhereInput {
 	"""
 	hasTasks: Boolean
 	hasTasksWith: [TaskWhereInput!]
+	"""
+	comments edge predicates
+	"""
+	hasComments: Boolean
+	hasCommentsWith: [NoteWhereInput!]
 }
 """
 The `ExampleEvidence` scalar type represents example evidence that can be used to satisfy the control
@@ -42729,6 +42767,25 @@ type Mutation {
 		noteFiles: [Upload!]
 	): TrustCenterUpdatePayload!
 	"""
+	Update an existing evidence comment
+	"""
+	updateEvidenceComment(
+		"""
+		ID of the comment
+		"""
+		id: ID!
+
+		"""
+		New values for the comment
+		"""
+		input: UpdateNoteInput!
+
+		"""
+		Files to attach to the comment
+		"""
+		noteFiles: [Upload!]
+	): EvidenceUpdatePayload!
+	"""
 	Delete an existing note
 	"""
 	deleteNote(
@@ -43683,6 +43740,20 @@ type Mutation {
 		logoFile: Upload
 	): SubprocessorUpdatePayload!
 	"""
+	Update multiple existing subprocessors
+	"""
+	updateBulkSubprocessor(
+		"""
+		IDs of the subprocessors to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the subprocessors with
+		"""
+		input: UpdateSubprocessorInput!
+	): SubprocessorBulkUpdatePayload!
+	"""
 	Delete an existing subprocessor
 	"""
 	deleteSubprocessor(
@@ -44314,6 +44385,20 @@ type Mutation {
 		"""
 		input: UpdateTrustCenterSubprocessorInput!
 	): TrustCenterSubprocessorUpdatePayload!
+	"""
+	Update multiple existing trustCenterSubprocessors
+	"""
+	updateBulkTrustCenterSubprocessor(
+		"""
+		IDs of the trustCenterSubprocessors to update
+		"""
+		ids: [ID!]!
+
+		"""
+		values to update the trustCenterSubprocessors with
+		"""
+		input: UpdateTrustCenterSubprocessorInput!
+	): TrustCenterSubprocessorBulkUpdatePayload!
 	"""
 	Delete an existing trustCenterSubprocessor
 	"""
@@ -45806,6 +45891,7 @@ type Note implements Node {
 	procedure: Procedure
 	risk: Risk
 	internalPolicy: InternalPolicy
+	evidence: Evidence
 	trustCenter: TrustCenter
 	files(
 		"""
@@ -46317,6 +46403,11 @@ input NoteWhereInput {
 	"""
 	hasInternalPolicy: Boolean
 	hasInternalPolicyWith: [InternalPolicyWhereInput!]
+	"""
+	evidence edge predicates
+	"""
+	hasEvidence: Boolean
+	hasEvidenceWith: [EvidenceWhereInput!]
 	"""
 	trust_center edge predicates
 	"""
@@ -73649,6 +73740,19 @@ type SubprocessorBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkSubprocessor mutation
+"""
+type SubprocessorBulkUpdatePayload {
+	"""
+	Updated subprocessors
+	"""
+	subprocessors: [Subprocessor!]
+	"""
+	IDs of the updated subprocessors
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type SubprocessorConnection {
@@ -80634,6 +80738,19 @@ type TrustCenterSubprocessorBulkDeletePayload {
 	deletedIDs: [ID!]!
 }
 """
+Return response for updateBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkUpdatePayload {
+	"""
+	Updated trustCenterSubprocessors
+	"""
+	trustCenterSubprocessors: [TrustCenterSubprocessor!]
+	"""
+	IDs of the updated trustCenterSubprocessors
+	"""
+	updatedIDs: [ID!]
+}
+"""
 A connection to a list of items.
 """
 type TrustCenterSubprocessorConnection {
@@ -84159,6 +84276,11 @@ input UpdateEvidenceInput {
 	addTaskIDs: [ID!]
 	removeTaskIDs: [ID!]
 	clearTasks: Boolean
+	addCommentIDs: [ID!]
+	removeCommentIDs: [ID!]
+	clearComments: Boolean
+	addComment: CreateNoteInput
+	deleteComment: ID
 }
 """
 UpdateExportInput is used for update Export object.
@@ -85406,6 +85528,8 @@ input UpdateNoteInput {
 	clearRisk: Boolean
 	internalPolicyID: ID
 	clearInternalPolicy: Boolean
+	evidenceID: ID
+	clearEvidence: Boolean
 	trustCenterID: ID
 	clearTrustCenter: Boolean
 	addFileIDs: [ID!]

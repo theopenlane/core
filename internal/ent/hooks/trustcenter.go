@@ -109,6 +109,19 @@ func HookTrustCenter() ent.Hook {
 			}
 
 			if createPreview {
+				if trustCenter.PreviewDomainID != "" {
+					// delete the old preview if it exists
+					if _, err = m.Job.Insert(
+						ctx,
+						corejobs.DeletePreviewDomainArgs{
+							CustomDomainID:           trustCenter.PreviewDomainID,
+							TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+						}, nil,
+					); err != nil {
+						return nil, err
+					}
+				}
+
 				// create preview settings with same values but environment set to "preview"
 				previewSetting, err := m.Client().TrustCenterSetting.Create().
 					SetTrustCenterID(id).
@@ -172,7 +185,7 @@ func HookTrustCenter() ent.Hook {
 				return nil, fmt.Errorf("failed to create file access permissions: %w", err)
 			}
 
-			if trustCenter.CustomDomainID != "" {
+			if trustCenter.CustomDomainID != nil {
 				if _, err = m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
 					TrustCenterID: trustCenter.ID,
 				}, nil); err != nil {
@@ -230,7 +243,26 @@ func HookTrustCenterDelete() ent.Hook {
 				}
 			}
 
-			return next.Mutate(ctx, m)
+			// Store the domain IDs before deletion
+			previewDomainID := tc.PreviewDomainID
+
+			// Execute the trust center deletion first
+			retVal, err := next.Mutate(ctx, m)
+			if err != nil {
+				return nil, err
+			}
+
+			// If preview domain is set, kick off the delete preview job
+			if previewDomainID != "" {
+				if _, err := m.Job.Insert(ctx, corejobs.DeletePreviewDomainArgs{
+					CustomDomainID:           previewDomainID,
+					TrustCenterPreviewZoneID: trustCenterConfig.PreviewZoneID,
+				}, nil); err != nil {
+					return nil, err
+				}
+			}
+
+			return retVal, nil
 		})
 	}
 }
@@ -257,13 +289,13 @@ func HookTrustCenterUpdate() ent.Hook {
 				return v, err
 			}
 
-			if mutationCustomDomainIDExists && previousCustomDomainID == "" && mutationCustomDomainID != "" {
+			if mutationCustomDomainIDExists && previousCustomDomainID == nil && mutationCustomDomainID != "" {
 				if _, err := m.Job.Insert(ctx, corejobs.CreatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {
 					return nil, err
 				}
-			} else if mutationCustomDomainIDExists && mutationCustomDomainID != previousCustomDomainID {
+			} else if mutationCustomDomainIDExists && previousCustomDomainID != nil && mutationCustomDomainID != *previousCustomDomainID {
 				if _, err := m.Job.Insert(ctx, corejobs.UpdatePirschDomainArgs{
 					TrustCenterID: tcID,
 				}, nil); err != nil {

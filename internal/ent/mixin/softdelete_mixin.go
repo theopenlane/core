@@ -85,7 +85,7 @@ func (d SoftDeleteMixin) SoftDeleteHook(next ent.Mutator) ent.Mutator {
 		sd.SetOp(ent.OpUpdate)
 
 		// set that the transaction is a soft-delete
-		ctx = entx.IsSoftDelete(ctx)
+		ctx = entx.IsSoftDelete(ctx, m.Type())
 
 		sd.SetDeletedAt(time.Now())
 		sd.SetDeletedBy(actor)

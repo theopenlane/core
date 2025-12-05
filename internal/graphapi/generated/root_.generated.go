@@ -52,6 +52,7 @@ type ResolverRoot interface {
 	UpdateControlInput() UpdateControlInputResolver
 	UpdateControlObjectiveInput() UpdateControlObjectiveInputResolver
 	UpdateEntityInput() UpdateEntityInputResolver
+	UpdateEvidenceInput() UpdateEvidenceInputResolver
 	UpdateGroupInput() UpdateGroupInputResolver
 	UpdateInternalPolicyInput() UpdateInternalPolicyInputResolver
 	UpdateOrganizationInput() UpdateOrganizationInputResolver
@@ -1875,6 +1876,7 @@ type ComplexityRoot struct {
 
 	Evidence struct {
 		CollectionProcedure    func(childComplexity int) int
+		Comments               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.NoteOrder, where *generated.NoteWhereInput) int
 		ControlImplementations func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlImplementationOrder, where *generated.ControlImplementationWhereInput) int
 		ControlObjectives      func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlObjectiveOrder, where *generated.ControlObjectiveWhereInput) int
 		Controls               func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.ControlOrder, where *generated.ControlWhereInput) int
@@ -3750,8 +3752,10 @@ type ComplexityRoot struct {
 		UpdateBulkProcedure                   func(childComplexity int, ids []string, input generated.UpdateProcedureInput) int
 		UpdateBulkRisk                        func(childComplexity int, ids []string, input generated.UpdateRiskInput) int
 		UpdateBulkScan                        func(childComplexity int, ids []string, input generated.UpdateScanInput) int
+		UpdateBulkSubprocessor                func(childComplexity int, ids []string, input generated.UpdateSubprocessorInput) int
 		UpdateBulkTask                        func(childComplexity int, ids []string, input generated.UpdateTaskInput) int
 		UpdateBulkTrustCenterDoc              func(childComplexity int, ids []string, input generated.UpdateTrustCenterDocInput) int
+		UpdateBulkTrustCenterSubprocessor     func(childComplexity int, ids []string, input generated.UpdateTrustCenterSubprocessorInput) int
 		UpdateContact                         func(childComplexity int, id string, input generated.UpdateContactInput) int
 		UpdateControl                         func(childComplexity int, id string, input generated.UpdateControlInput) int
 		UpdateControlComment                  func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
@@ -3769,6 +3773,7 @@ type ComplexityRoot struct {
 		UpdateEntityType                      func(childComplexity int, id string, input generated.UpdateEntityTypeInput) int
 		UpdateEvent                           func(childComplexity int, id string, input generated.UpdateEventInput) int
 		UpdateEvidence                        func(childComplexity int, id string, input generated.UpdateEvidenceInput, evidenceFiles []*graphql.Upload) int
+		UpdateEvidenceComment                 func(childComplexity int, id string, input generated.UpdateNoteInput, noteFiles []*graphql.Upload) int
 		UpdateExport                          func(childComplexity int, id string, input generated.UpdateExportInput, exportFiles []*graphql.Upload) int
 		UpdateFinding                         func(childComplexity int, id string, input generated.UpdateFindingInput) int
 		UpdateFindingControl                  func(childComplexity int, id string, input generated.UpdateFindingControlInput) int
@@ -3923,6 +3928,7 @@ type ComplexityRoot struct {
 		CreatedAt      func(childComplexity int) int
 		CreatedBy      func(childComplexity int) int
 		DisplayID      func(childComplexity int) int
+		Evidence       func(childComplexity int) int
 		Files          func(childComplexity int, after *entgql.Cursor[string], first *int, before *entgql.Cursor[string], last *int, orderBy []*generated.FileOrder, where *generated.FileWhereInput) int
 		ID             func(childComplexity int) int
 		InternalPolicy func(childComplexity int) int
@@ -5982,6 +5988,11 @@ type ComplexityRoot struct {
 		DeletedIDs func(childComplexity int) int
 	}
 
+	SubprocessorBulkUpdatePayload struct {
+		Subprocessors func(childComplexity int) int
+		UpdatedIDs    func(childComplexity int) int
+	}
+
 	SubprocessorConnection struct {
 		Edges      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
@@ -6731,6 +6742,11 @@ type ComplexityRoot struct {
 
 	TrustCenterSubprocessorBulkDeletePayload struct {
 		DeletedIDs func(childComplexity int) int
+	}
+
+	TrustCenterSubprocessorBulkUpdatePayload struct {
+		TrustCenterSubprocessors func(childComplexity int) int
+		UpdatedIDs               func(childComplexity int) int
 	}
 
 	TrustCenterSubprocessorConnection struct {
@@ -16537,6 +16553,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Evidence.CollectionProcedure(childComplexity), true
+
+	case "Evidence.comments":
+		if e.complexity.Evidence.Comments == nil {
+			break
+		}
+
+		args, err := ec.field_Evidence_comments_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Evidence.Comments(childComplexity, args["after"].(*entgql.Cursor[string]), args["first"].(*int), args["before"].(*entgql.Cursor[string]), args["last"].(*int), args["orderBy"].([]*generated.NoteOrder), args["where"].(*generated.NoteWhereInput)), true
 
 	case "Evidence.controlImplementations":
 		if e.complexity.Evidence.ControlImplementations == nil {
@@ -28186,6 +28214,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.Mutation.UpdateBulkScan(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateScanInput)), true
 
+	case "Mutation.updateBulkSubprocessor":
+		if e.complexity.Mutation.UpdateBulkSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateSubprocessorInput)), true
+
 	case "Mutation.updateBulkTask":
 		if e.complexity.Mutation.UpdateBulkTask == nil {
 			break
@@ -28209,6 +28249,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateBulkTrustCenterDoc(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterDocInput)), true
+
+	case "Mutation.updateBulkTrustCenterSubprocessor":
+		if e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateBulkTrustCenterSubprocessor_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateBulkTrustCenterSubprocessor(childComplexity, args["ids"].([]string), args["input"].(generated.UpdateTrustCenterSubprocessorInput)), true
 
 	case "Mutation.updateContact":
 		if e.complexity.Mutation.UpdateContact == nil {
@@ -28413,6 +28465,18 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Mutation.UpdateEvidence(childComplexity, args["id"].(string), args["input"].(generated.UpdateEvidenceInput), args["evidenceFiles"].([]*graphql.Upload)), true
+
+	case "Mutation.updateEvidenceComment":
+		if e.complexity.Mutation.UpdateEvidenceComment == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateEvidenceComment_args(ctx, rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateEvidenceComment(childComplexity, args["id"].(string), args["input"].(generated.UpdateNoteInput), args["noteFiles"].([]*graphql.Upload)), true
 
 	case "Mutation.updateExport":
 		if e.complexity.Mutation.UpdateExport == nil {
@@ -29574,6 +29638,13 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.Note.DisplayID(childComplexity), true
+
+	case "Note.evidence":
+		if e.complexity.Note.Evidence == nil {
+			break
+		}
+
+		return e.complexity.Note.Evidence(childComplexity), true
 
 	case "Note.files":
 		if e.complexity.Note.Files == nil {
@@ -42413,6 +42484,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 
 		return e.complexity.SubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
 
+	case "SubprocessorBulkUpdatePayload.subprocessors":
+		if e.complexity.SubprocessorBulkUpdatePayload.Subprocessors == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkUpdatePayload.Subprocessors(childComplexity), true
+
+	case "SubprocessorBulkUpdatePayload.updatedIDs":
+		if e.complexity.SubprocessorBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.SubprocessorBulkUpdatePayload.UpdatedIDs(childComplexity), true
+
 	case "SubprocessorConnection.edges":
 		if e.complexity.SubprocessorConnection.Edges == nil {
 			break
@@ -45731,6 +45816,20 @@ func (e *executableSchema) Complexity(ctx context.Context, typeName, field strin
 		}
 
 		return e.complexity.TrustCenterSubprocessorBulkDeletePayload.DeletedIDs(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkUpdatePayload.trustCenterSubprocessors":
+		if e.complexity.TrustCenterSubprocessorBulkUpdatePayload.TrustCenterSubprocessors == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkUpdatePayload.TrustCenterSubprocessors(childComplexity), true
+
+	case "TrustCenterSubprocessorBulkUpdatePayload.updatedIDs":
+		if e.complexity.TrustCenterSubprocessorBulkUpdatePayload.UpdatedIDs == nil {
+			break
+		}
+
+		return e.complexity.TrustCenterSubprocessorBulkUpdatePayload.UpdatedIDs(childComplexity), true
 
 	case "TrustCenterSubprocessorConnection.edges":
 		if e.complexity.TrustCenterSubprocessorConnection.Edges == nil {
@@ -64553,6 +64652,7 @@ input CreateEvidenceInput {
   fileIDs: [ID!]
   programIDs: [ID!]
   taskIDs: [ID!]
+  commentIDs: [ID!]
 }
 """
 CreateExportInput is used for create Export object.
@@ -65459,6 +65559,7 @@ input CreateNoteInput {
   procedureID: ID
   riskID: ID
   internalPolicyID: ID
+  evidenceID: ID
   trustCenterID: ID
   fileIDs: [ID!]
 }
@@ -76347,6 +76448,37 @@ type Evidence implements Node {
     """
     where: TaskWhereInput
   ): TaskConnection!
+  comments(
+    """
+    Returns the elements in the list that come after the specified cursor.
+    """
+    after: Cursor
+
+    """
+    Returns the first _n_ elements from the list.
+    """
+    first: Int
+
+    """
+    Returns the elements in the list that come before the specified cursor.
+    """
+    before: Cursor
+
+    """
+    Returns the last _n_ elements from the list.
+    """
+    last: Int
+
+    """
+    Ordering options for Notes returned from the connection.
+    """
+    orderBy: [NoteOrder!]
+
+    """
+    Filtering options for Notes returned from the connection.
+    """
+    where: NoteWhereInput
+  ): NoteConnection!
 }
 """
 A connection to a list of items.
@@ -77114,6 +77246,11 @@ input EvidenceWhereInput {
   """
   hasTasks: Boolean
   hasTasksWith: [TaskWhereInput!]
+  """
+  comments edge predicates
+  """
+  hasComments: Boolean
+  hasCommentsWith: [NoteWhereInput!]
 }
 type Export implements Node {
   id: ID!
@@ -93074,6 +93211,7 @@ type Note implements Node {
   procedure: Procedure
   risk: Risk
   internalPolicy: InternalPolicy
+  evidence: Evidence
   trustCenter: TrustCenter
   files(
     """
@@ -93576,6 +93714,11 @@ input NoteWhereInput {
   """
   hasInternalPolicy: Boolean
   hasInternalPolicyWith: [InternalPolicyWhereInput!]
+  """
+  evidence edge predicates
+  """
+  hasEvidence: Boolean
+  hasEvidenceWith: [EvidenceWhereInput!]
   """
   trust_center edge predicates
   """
@@ -128249,6 +128392,9 @@ input UpdateEvidenceInput {
   addTaskIDs: [ID!]
   removeTaskIDs: [ID!]
   clearTasks: Boolean
+  addCommentIDs: [ID!]
+  removeCommentIDs: [ID!]
+  clearComments: Boolean
 }
 """
 UpdateExportInput is used for update Export object.
@@ -129485,6 +129631,8 @@ input UpdateNoteInput {
   clearRisk: Boolean
   internalPolicyID: ID
   clearInternalPolicy: Boolean
+  evidenceID: ID
+  clearEvidence: Boolean
   trustCenterID: ID
   clearTrustCenter: Boolean
   addFileIDs: [ID!]
@@ -144008,6 +144156,11 @@ extend input UpdateProcedureInput {
     deleteComment: ID
 }
 
+extend input UpdateEvidenceInput {
+    addComment: CreateNoteInput
+    deleteComment: ID
+}
+
 extend input UpdateTrustCenterInput {
     """
     adds a post for the trust center feed
@@ -144139,6 +144292,23 @@ extend type Mutation{
         """
         noteFiles: [Upload!]
     ): TrustCenterUpdatePayload!
+    """
+    Update an existing evidence comment
+    """
+    updateEvidenceComment(
+        """
+        ID of the comment
+        """
+        id: ID!
+        """
+        New values for the comment
+        """
+        input: UpdateNoteInput!
+        """
+        Files to attach to the comment
+        """
+        noteFiles: [Upload!]
+    ): EvidenceUpdatePayload!
     """
     Delete an existing note
     """
@@ -147221,6 +147391,19 @@ extend type Mutation{
         logoFile: Upload
     ): SubprocessorUpdatePayload!
     """
+    Update multiple existing subprocessors
+    """
+    updateBulkSubprocessor(
+        """
+        IDs of the subprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the subprocessors with
+        """
+        input: UpdateSubprocessorInput!
+    ): SubprocessorBulkUpdatePayload!
+    """
     Delete an existing subprocessor
     """
     deleteSubprocessor(
@@ -147278,6 +147461,20 @@ type SubprocessorBulkCreatePayload {
     Created subprocessors
     """
     subprocessors: [Subprocessor!]
+}
+
+"""
+Return response for updateBulkSubprocessor mutation
+"""
+type SubprocessorBulkUpdatePayload {
+    """
+    Updated subprocessors
+    """
+    subprocessors: [Subprocessor!]
+    """
+    IDs of the updated subprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """
@@ -148601,6 +148798,19 @@ extend type Mutation{
         input: UpdateTrustCenterSubprocessorInput!
     ): TrustCenterSubprocessorUpdatePayload!
     """
+    Update multiple existing trustCenterSubprocessors
+    """
+    updateBulkTrustCenterSubprocessor(
+        """
+        IDs of the trustCenterSubprocessors to update
+        """
+        ids: [ID!]!
+        """
+        values to update the trustCenterSubprocessors with
+        """
+        input: UpdateTrustCenterSubprocessorInput!
+    ): TrustCenterSubprocessorBulkUpdatePayload!
+    """
     Delete an existing trustCenterSubprocessor
     """
     deleteTrustCenterSubprocessor(
@@ -148658,6 +148868,20 @@ type TrustCenterSubprocessorBulkCreatePayload {
     Created trustCenterSubprocessors
     """
     trustCenterSubprocessors: [TrustCenterSubprocessor!]
+}
+
+"""
+Return response for updateBulkTrustCenterSubprocessor mutation
+"""
+type TrustCenterSubprocessorBulkUpdatePayload {
+    """
+    Updated trustCenterSubprocessors
+    """
+    trustCenterSubprocessors: [TrustCenterSubprocessor!]
+    """
+    IDs of the updated trustCenterSubprocessors
+    """
+    updatedIDs: [ID!]
 }
 
 """

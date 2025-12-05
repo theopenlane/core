@@ -291,8 +291,8 @@ func TestExtractTaskFromProps_WithRealInterface(t *testing.T) {
 		expected *taskFields
 	}{
 		{
-			name:  "empty props",
-			props: mockProps(make(map[string]interface{})),
+			name:    "empty props",
+			props:   mockProps(make(map[string]interface{})),
 			initial: &taskFields{},
 			expected: &taskFields{
 				title:    "",
@@ -392,8 +392,8 @@ func TestExtractPolicyFromProps_WithRealInterface(t *testing.T) {
 		expected *policyFields
 	}{
 		{
-			name:  "empty props",
-			props: mockProps(make(map[string]interface{})),
+			name:    "empty props",
+			props:   mockProps(make(map[string]interface{})),
 			initial: &policyFields{},
 			expected: &policyFields{
 				name:       "",
@@ -488,7 +488,7 @@ func TestFetchTaskFields_Integration(t *testing.T) {
 		expected    *taskFields
 	}{
 		{
-			name:  "all fields from props",
+			name: "all fields from props",
 			props: mockProps(map[string]interface{}{
 				"title":    "Task from props",
 				"id":       "task-prop-1",
@@ -557,7 +557,7 @@ func TestFetchPolicyFields_Integration(t *testing.T) {
 		expected    *policyFields
 	}{
 		{
-			name:  "all fields from props",
+			name: "all fields from props",
 			props: mockProps(map[string]interface{}{
 				"name":        "Policy from props",
 				"id":          "policy-prop-1",

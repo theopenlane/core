@@ -13,7 +13,6 @@ import (
 	"github.com/theopenlane/core/internal/ent/hooks"
 	"github.com/theopenlane/entx"
 	"github.com/theopenlane/iam/auth"
-	"github.com/theopenlane/utils/ulids"
 )
 
 func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
@@ -28,6 +27,11 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 
 	ctx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
 	ctx = generated.NewContext(ctx, suite.client)
+
+	// soft delete context
+	softDeleteCtx := auth.NewTestContextForSystemAdmin(user.ID, orgID)
+	softDeleteCtx = generated.NewContext(softDeleteCtx, suite.client)
+	softDeleteCtx = entx.IsSoftDelete(softDeleteCtx, generated.TypeStandard)
 
 	tests := []struct {
 		name           string
@@ -199,14 +203,37 @@ func (suite *HookTestSuite) TestAddOrDeleteStandardTuple() {
 			expectedErr:    nil,
 		},
 		{
+			name: "UpdateOne with system owned, with soft delete",
+			mutation: func() *generated.StandardMutation {
+				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).SetSystemOwned(true).Save(ctx)
+				require.NoError(t, err)
+
+				update := suite.client.Standard.UpdateOne(std)
+				err = update.Exec(softDeleteCtx)
+				require.NoError(t, err)
+
+				m := update.Mutation()
+				return m
+			}(),
+			ctx:            softDeleteCtx,
+			expectedAdd:    false,
+			expectedDelete: true,
+			expectedErr:    nil,
+		},
+		{
 			name: "UpdateOne with soft delete",
 			mutation: func() *generated.StandardMutation {
-				m := generated.StandardMutation{}
-				m.SetOp(ent.OpUpdateOne)
-				m.SetID(ulids.New().String())
-				return &m
+				std, err := suite.client.Standard.Create().SetName(gofakeit.Name()).Save(ctx)
+				require.NoError(t, err)
+
+				update := suite.client.Standard.UpdateOne(std)
+				err = update.Exec(softDeleteCtx)
+				require.NoError(t, err)
+
+				m := update.Mutation()
+				return m
 			}(),
-			ctx:            entx.IsSoftDelete(ctx),
+			ctx:            softDeleteCtx,
 			expectedAdd:    false,
 			expectedDelete: true,
 			expectedErr:    nil,

@@ -118,3 +118,23 @@ mutation UpdateSubprocessor($updateSubprocessorId: ID!, $input: UpdateSubprocess
     }
   }
 }
+
+mutation UpdateBulkSubprocessor($ids: [ID!]!, $input: UpdateSubprocessorInput!) {
+  updateBulkSubprocessor(ids: $ids, input: $input) {
+    subprocessors {
+      createdAt
+      createdBy
+      description
+      id
+      logoFileID
+      logoRemoteURL
+      name
+      ownerID
+      systemOwned
+      tags
+      updatedAt
+      updatedBy
+    }
+    updatedIDs
+  }
+}
