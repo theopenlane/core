@@ -54,9 +54,7 @@ func HookEvidenceFiles() ent.Hook {
 
 				if !hasURL && !hasFiles {
 					m.SetStatus(enums.EvidenceStatusMissingArtifact)
-				} else {
-					m.SetStatus(enums.EvidenceStatusSubmitted)
-				}
+				} 
 			}
 
 			return next.Mutate(ctx, m)
